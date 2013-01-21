@@ -45,6 +45,10 @@ urlpatterns = patterns('',
     url(r'^api/search/$', 'aligulac.views.api_search'),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
+    url(r'^404/$', 'aligulac.views.h404'),
+
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://aligulac.com:81/al/favicon.ico'}),
     url(r'^admin/', include(admin.site.urls)),
 )
+
+handler404 = 'aligulac.views.h404'

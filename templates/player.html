@@ -1,0 +1,208 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ player.tag }}{% endblock %}
+
+{% block content %}
+    <h2>{{ player.tag }}</h2>
+
+    <div class="ibox" style="width: 25em;">
+        <div class="iboxh">{{ player.tag }}</div>
+        <div class="iboxtable">
+            <div class="row">
+                <div class="rowel" style="width: 10em;">Race</div>
+                <div class="rower" style="width: 20em;"><img src="http://aligulac.com:81/al/{{ player.race }}.png" class="btm" />
+                    {{ player.race|racefull }}</div>
+            </div>
+            {% if player.country != "" %}
+            <div class="row">
+                <div class="rowel">Country</div>
+                <div class="rower"><img src="http://aligulac.com:81/al/flags/{{ player.country|lower }}.png" class="btm" />
+                    {{ countryfull }}</div>
+            </div>
+            {% endif %}
+            {% if player.name %}
+            <div class="row">
+                <div class="rowel">Full name</div>
+                <div class="rower">{{ player.name }}</div>
+            </div>
+            {% endif %}
+            {% if player.birthday %}
+            <div class="row">
+                <div class="rowel">Birthday</div>
+                <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
+            </div>
+            {% endif %}
+            {% if team %}
+            <div class="row">
+                <div class="rowel">Team</div>
+                <div class="rower"><a href="/teams/{{ team.id }}/">{{ team.name }}</a></div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="rowel">First match</div>
+                <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Last match</div>
+                <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
+            </div>
+            {% if player.tlpd_kr_id or player.tlpd_in_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+            <div class="row">
+                <div class="rowel">External</div>
+                <div class="rower">
+                    {% if player.sc2c_id %}
+                    <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
+                    {% endif %}
+                    {% if player.tlpd_kr_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
+                    {% endif %}
+                    {% if player.tlpd_in_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
+                    {% endif %}
+                    {% if player.sc2e_id %}
+                    <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
+                    {% endif %}
+                    {% if player.lp_name %}
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% if rating %}
+<p>Standings after {{ rating.period.end|date:"F jS, Y" }}:</p>
+
+<div class="table" style="width: 30em;">
+    <div class="row">
+        <div class="rowel" style="width: 15em;">Rating</div>
+        <div class="rower" style="width: 15em;">{{ rating.rating|ratscale }} 
+            ± {{ rating.dev|ratscaled }}
+            <span class="small">(#{{ rating.position }})</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Rating vP</div>
+        <div class="rower">{{ rating.rating|addf:rating.rating_vp|ratscale }} 
+            ± {{ rating|devrange:"P"|ratscaled }}
+            <span class="small">(#{{ rating.position_vp }})</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Rating vT</div>
+        <div class="rower">{{ rating.rating|addf:rating.rating_vt|ratscale }} 
+            ± {{ rating|devrange:"T"|ratscaled }}
+            <span class="small">(#{{ rating.position_vt }})</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Rating vZ</div>
+        <div class="rower">{{ rating.rating|addf:rating.rating_vz|ratscale }} 
+            ± {{ rating|devrange:"Z"|ratscaled }}
+            <span class="small">(#{{ rating.position_vz }})</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Total winrate</div>
+        <div class="rower">{{ totwin }}/{{ totloss|add:totwin }}
+            <span class="small">({{ totwin|pctg:totloss }}%)</div>
+    </div>
+</div>
+
+{% if not noimage %}
+    <script type="text/javascript">
+        // <![CDATA[  
+        function changeRange()
+        {
+            var before = document.getElementById("before").value;
+            var after = document.getElementById("after").value;
+
+            var pic = document.getElementById("plot");
+            pic.src = "/players/{{ player.id }}/plot/?before=" + before + "&after=" + after;
+
+            var a = document.getElementById("plotlink");
+            a.href = "/players/{{ player.id }}/plot/?big&before=" + before + "&after=" + after;
+        }
+        function resetRange()
+        {
+            var pic = document.getElementById("plot");
+            pic.src = "/players/{{ player.id }}/plot/";
+
+            var a = document.getElementById("plotlink");
+            a.href = "/players/{{ player.id }}/plot/?big";
+        }
+        // ]]>
+    </script>
+<div style="text-align: center;">
+    <a href="/players/{{ player.id }}/plot/?big" id="plotlink">
+        <img src="/players/{{ player.id }}/plot/" alt="history graph" class="longplot" id="plot" />
+    </a>
+</div>
+<p style="text-align: center;">Set plot range
+    between <input type="text" name="after" id="after" style="width: 6.5em;" value="{{ firstrating.period.end|date:"Y-m-d" }}" />
+    and <input type="text" name="before" id="before" style="width: 6.5em;" value="{{ rating.period.end|date:"Y-m-d" }}" />
+    <input type="button" value="Change" onclick="changeRange()" />
+    <input type="button" value="Reset" onclick="resetRange()" />
+</p>
+    <script type="text/javascript" src="/js/datepicker.js" /></script>
+    <script type="text/javascript">
+        // <![CDATA[  
+        var opts = {                            
+            formElements:{"before":"Y-ds-m-ds-d"},
+            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+        };
+        datePickerController.createDatePicker(opts);
+        var opts2 = {                            
+            formElements:{"after":"Y-ds-m-ds-d"},
+            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+        };
+        datePickerController.createDatePicker(opts2);
+        // ]]>
+    </script>
+{% endif %}
+{% else %}
+<p>{{ player.tag }} has no rating yet.</p>
+{% endif %}
+
+<h3>More information</h3>
+<ul>
+{% if rating %}
+<li><a href="/players/{{ player.id }}/historical/">Rating history</a></li>
+<li><a href="/players/{{ player.id }}/period/{{ recentchange.period.id }}/">Recent rating adjustments</a></li>
+{% endif %}
+<li><a href="/players/{{ player.id }}/results/">Match history</a></li>
+</ul>
+
+{% if matches %}
+<h3>Results for next list</h3>
+{% include "list_matches.html" with lm_list=matches lm_show_date=1 lm_adm=0 lm_header_info=1 lm_sorted=1 lm_player=player %}
+{% endif %}
+
+{% if teammems %}
+<h3>Team history</h3>
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 30em;">Team</div>
+        <div class="rowe" style="width: 30em;">Joined</div>
+        <div class="rowe" style="width: 30em;">Left</div>
+        <div class="rowe" style="width: 7em; text-align: right;">Current</div>
+    </div>
+    {% for tm in teammems %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe">
+            <a href="/teams/{{ tm.team.id }}/">{{ tm.team.name }}</a>
+        </div>
+        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+        <div class="rowe" style="text-align: right;">
+            {% if tm.current %}
+                <img src="http://aligulac.com:81/al/yes.png" alt="yes" class="btm" />
+            {% else %}
+                <img src="http://aligulac.com:81/al/no.png" alt="yes" class="btm" />
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

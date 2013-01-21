@@ -1,0 +1,75 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Manage events{% endblock %}
+
+{% block content %}
+    <h2>Manage events</h2>
+
+    <script type="text/javascript">
+    <!--
+    function toggle_visibility(id) 
+    {
+        var e = document.getElementById(id);
+        if (e.tagName == 'DIV')
+        {
+            if (e.style.display == 'block')
+                e.style.display = 'none';
+            else
+                e.style.display = 'block';
+        }
+        else if (e.tagName == 'SPAN')
+        {
+            if (e.style.display == 'inline')
+                e.style.display = 'none';
+            else
+                e.style.display = 'inline';
+        }
+    }
+
+    function set_focus(id)
+    {
+        document.getElementById(id).focus();
+    }
+    //-->
+    </script>
+
+    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+
+    <form method="post" action="/add/events/">
+        {% csrf_token %}
+        <input type="hidden" name="parent" value="" />
+        <p>
+            Add root event: 
+            <input type="text" name="name" style="width: 20em;" /> 
+            <input type="submit" name="op" value="Add" />
+        </p>
+    </form>
+
+    {% for node in nodes %}
+    <div class="table numtable" style="width: 67em; border-style: dotted; border-width: 0.05em;"> <div class="row row2">
+        <div class="rowe"> {{ node.2|indent|safe }}
+            {% if node.3 > 0 %}
+                <a href="" onclick="toggle_visibility('list-{{node.0}}'); return false;">{{ node.1 }}</a>
+            {% else %}
+                {{ node.1 }}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            <form method="post" action="/add/events/">
+                {% csrf_token %}
+                <input type="hidden" name="parent" value="{{node.0}}" />
+                <input type="text" id="inp-{{node.0}}" name="name" style="width: 20em;" />
+                <input type="submit" name="op" value="Add" />
+                <input type="submit" name="op" value="Close" />
+            </form>
+        </div>
+    </div> </div>
+    {% if node.3 > 0 %}
+        <div id="list-{{ node.0 }}" style="display: block;">
+    {% elif node.3 < 0 %}
+        {{ node.3|unfold|safe }}
+    {% endif %}
+    {% endfor %}
+{% endblock %}

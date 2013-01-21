@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    <h2>Search results</h2>
+    {% if players.count == 0  and teams.count == 0 %}
+        No such player or team '{{ query }}' found.
+    {% else %}
+        <p>Results for '{{ query }}':</p>
+        <ul>
+        {% for team in teams %}
+        <li><a href="/teams/{{ team.id }}">{{ team.name }}</a></li>
+        {% endfor %}
+        {% for player in players %}
+        <li><a href="/players/{{ player.id }}">{{ player.tag }}</a> 
+        <img src="http://aligulac.com:81/al/flags/{{ player.country|lower }}.png" alt="{{ player.country }}" />
+        <img src="http://aligulac.com:81/al/{{ player.race }}.png" alt="{{ player.race|racefull }}" /></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

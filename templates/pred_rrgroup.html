@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ p1.tag }} vs. {{ p2.tag }}{% endblock %}
+
+{% block content %}
+<h2>{{ sipl.count }}-player round robin</h2>
+{% endblock %}

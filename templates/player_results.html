@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ player.tag }} match history{% endblock %}
+
+{% block content %}
+<h2>{{ player.tag }} match history</h2>
+
+{% for g in groups %}
+{% include "list_matches.html" with lm_list=g lm_show_date=1 lm_adm=0 lm_header_event=1 lm_sorted=1 lm_player=player %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% block title %}Miscellaneous{% endblock %}
+
+{% block content %}
+    <h2>Miscellaneous administration</h2>
+
+    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+
+    <h3>Merge players</h3>
+    {% if merge_conf %}
+        <p><span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
+            <a href="/players/{{ source.id }}/">{{ source.tag }}</a>
+            {% if source.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ source.country|lower }}.png" alt="{{ source.country }}" />
+            {% endif %}
+            <img src="http://aligulac.com:81/al/{{ source.race }}.png" alt="{{ source.race }}" class="btm" />
+            into
+            <a href="/players/{{ target.id }}/">{{ target.tag }}</a>
+            {% if target.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ target.country|lower }}.png" alt="{{ target.country }}" />
+            {% endif %}
+            <img src="http://aligulac.com:81/al/{{ target.race }}.png" alt="{{ target.race }}" class="btm" />.
+        </p>
+        <form method="post" action="/add/misc/">
+            {% csrf_token %}
+            <input type="hidden" name="op" value="merge" />
+            <input type="hidden" name="player_source" value="{{ source.id }}" />
+            <input type="hidden" name="player_target" value="{{ target.id }}" />
+            <input type="hidden" name="conf" value="yes" />
+            <input type="submit" value="Merge" />
+        </form>
+    {% else %}
+        {% if merge_err %}
+            <p style="color: #ff0000; font-weight: bold;">{{ merge_err }}</p>
+        {% endif %}
+        {% if merge_succ %}
+            <p style="color: #009900; font-weight: bold;">{{ merge_succ }}</p>
+        {% endif %}
+        <form method="post" action="/add/misc/">
+            {% csrf_token %}
+            <input type="hidden" name="op" value="merge" />
+        <div class="table" style="width: 50em;">
+            <div class="row">
+                <div class="rowel" style="width: 10em;">Source ID</div>
+                <div class="rower" style="width: 40em;">
+                    <input type="text" name="player_source" style="width: 15em;" value="{{ player_source }}" />
+                    (will be deleted)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel" style="width: 10em;">Target ID</div>
+                <div class="rower" style="width: 40em;">
+                    <input type="text" name="player_target" style="width: 15em;" value="{{ player_target }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel" style="width: 10em;"></div>
+                <div class="rower" style="width: 40em;">
+                    <input type="submit" value="Merge" />
+                </div>
+            </div>
+        </div>
+        </form>
+    {% endif %}
+
+    <h3>Event tree NSM restoration</h3>
+    {% if treerestore_succ %}
+        <p style="color: #009900; font-weight: bold;">{{ treerestore_succ }}</p>
+    {% endif %}
+    <p>This restores the NSM (Nested Set Model) of the event tree. Use it if you have deleted an event, changed a parent, or
+    otherwise modified the tree structure via the admin interface (this does not include simple edits to a single event
+    object such as changing names). Also use this if there are concurrency bugs caused by several people working on the tree
+    at the same time.</p>
+    <p><strong>This could take some time. Please wait for the page to load after pressing the button.</strong></p>
+    <form method="post" action="/add/misc/">
+        {% csrf_token %}
+        <input type="hidden" name="op" value="treerestore" />
+        <input type="submit" value="Restore NSM" />
+    </form>
+{% endblock %}

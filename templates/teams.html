@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Teams{% endblock %}
+
+{% block content %}
+    <h2>Teams</h2>
+
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
+        <div class="rowe" style="width: 20em;">Name</div>
+        <div class="rowe" style="width: 10em; text-align: right;"><a href="/teams/?sort=ak">All-kill score</a></div>
+        <div class="rowe" style="width: 14em; text-align: right;"><a href="/teams/?sort=pl">Proleague score</a></div>
+        <div class="rowe" style="width: 20.5em;"></div>
+    </div>
+    {% for team in teams %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe" style="text-align: right;"> {{ forloop.counter }}.</div>
+        <div class="rowe">
+            <a href="/teams/{{ team.id }}">{{ team.name }}</a>
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {% if team.scoreak > 0.0 %}
+                {{ team.scoreak|pctg2 }}%
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {% if team.scorepl > 0.0 %}
+                {{ team.scorepl|pctg2 }}%
+            {% endif %}
+        </div>
+        <div class="rowe"></div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if inactive %}
+<h2>Disbanded teams</h2>
+<p>{% for team in inactive %}<a href="/teams/{{ team.id }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+{% endif %}
+{% endblock %}

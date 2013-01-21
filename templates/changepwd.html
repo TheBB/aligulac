@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% load markup %}
+
+{% block title %}Change password{% endblock %}
+
+{% block content %}
+    <h2>Change password</h2>
+
+    <p>To change the password for &quot;{{ user }}&quot;, fill in the form.</p>
+
+    {% if wrong_old %}
+    <p><strong>The old password didn't match. Your password was not changed.</strong></p>
+    {% endif %}
+
+    {% if no_match %}
+    <p><strong>The new passwords didn't match. Your password was not changed.</strong></p>
+    {% endif %}
+
+    <form method="post" action="/changepwd/">
+    {% csrf_token %}
+    <div class="table" style="width: 35em;">
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">Old password:</div>
+            <div class="rowe" style="width: 20em;"><input type="password" name="old" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">New password:</div>
+            <div class="rowe" style="width: 20em;"><input type="password" name="new" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">New password again:</div>
+            <div class="rowe" style="width: 20em;"><input type="password" name="newre" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;"></div>
+            <div class="rowe" style="width: 20em;"><input type="submit" value="Change" /></div>
+        </div>
+    </div>
+    </form>
+{% endblock %}

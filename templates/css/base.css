@@ -1,0 +1,295 @@
+body {
+    text-align: center; 
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    font-family: 'Donegal One', Times, serif;
+    font-size: 0.8em;
+}
+
+table#main {
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 67em;
+}
+
+td#heading {
+    font-family: 'Marcellus SC', Times, serif; 
+    font-size: 4em; 
+    letter-spacing: 1em; 
+    padding-left: 1em;
+    padding-top: 0.3em; 
+}
+
+td#subheading {
+    border-width: 0.2em;
+    border-style: none none solid none;
+    font-family: 'Donegal One', Times, serif;
+    letter-spacing: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+td#menu {
+    font-family: 'Donegal One', Times, serif;
+    font-variant: small-caps;
+    border-style: none none solid none;
+    border-width: 0em 0em 0.2em 0em;
+}
+
+td#content {
+    text-align: left;
+    padding-bottom: 4em;
+}
+
+td#footer {
+    border-width: 0.2em; 
+    border-style: solid none none none; 
+    font-size: 0.8em; 
+    padding-top: 1em;
+}
+
+a:link {
+    color: #0000aa;
+}
+
+a:visited {
+    color: #0000aa;
+}
+
+a:hover {
+    color: #5555ff;
+}
+
+a.menu {
+    color: #000000;
+    text-decoration: none;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+}
+
+a.menucur {
+    color: #880000;
+}
+
+a#title {
+    color: #000000;
+    text-decoration: none;
+}
+
+img.btm {
+    vertical-align: text-bottom;
+}
+
+div.table {
+    display: table;
+    border-collapse: collapse;
+}
+
+div.numtable {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+div.table a {
+    text-decoration: none;
+    color: #000088;
+}
+
+div.table a:hover {
+    color: #5555ff;
+}
+
+div.rowh a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+div.rowh a:hover {
+    color: #bbbbbb;
+    text-decoration: none;
+}
+
+div.rowh2 a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+div.rowh2 a:hover {
+    color: #bbbbbb;
+    text-decoration: underline;
+}
+
+div.rowevent a {
+    color: #000000;
+}
+
+div.rowevent a:hover {
+    color: #555555;
+}
+
+div.table div.rowh {
+    display: table-row;
+    background: #555555;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Marcellus SC';
+}
+
+div.table div.rowh2 {
+    display: table-row;
+    background: #888888;
+    color: #ffffff;
+    font-weight: bold;
+    font-variant: small-caps;
+}
+
+div.table div.rowe {
+    display: table-cell;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+div.table div.rowevent {
+    display: table-cell;
+    background: #eeeeee;
+    border-style: dashed;
+    border-width: 0.1em;
+}
+
+div.table div.rowel {
+    display: table-cell;
+    text-align: right;
+    padding: 0.2em;
+    padding-right: 1em;
+    border-style: none dotted none none;
+    border-width: 0.1em;
+}
+
+div.table div.rower {
+    display: table-cell;
+    text-align: left;
+    padding: 0.2em;
+    padding-left: 1em;
+}
+
+div.table div.row {
+    display: table-row;
+}
+
+div.table a.row {
+    display: table-row;
+    text-decoration: none;
+    color: #000000;
+}
+
+div.table div.row1 {
+    background: #d0d0d0;
+}
+
+div.table a.row1 {
+    background: #d0d0d0;
+}
+
+div.table div.row2 {
+    background: #eeeeee;
+}
+
+div.table a.row2 {
+    background: #eeeeee;
+}
+
+div.ibox {
+    border-style: solid;
+    border-width: 0.1em;
+    float: right;
+    margin-bottom: 1.5em;
+}
+
+div.ibox div.iboxh {
+    width: auto;
+    background: #555555;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Marcellus SC';
+    text-align: center;
+    padding: 0.15em;
+}
+
+div.ibox div.iboxtable {
+    display: table;
+    border-collapse: collapse;
+    font-size: 0.85em;
+}
+
+div.ibox div.iboxtable div.row {
+    display: table-row;
+    background: #eeeeee;
+}
+
+div.ibox div.iboxtable div.rowel {
+    display: table-cell;
+    text-align: right;
+    padding: 0.2em;
+    padding-right: 1em;
+    border-style: none dotted none none;
+    border-width: 0.1em;
+}
+
+div.ibox div.iboxtable div.rower {
+    display: table-cell;
+    text-align: left;
+    padding: 0.2em;
+    padding-left: 1em;
+}
+
+div.eventh {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 2.7em;
+    font-weight: 400;
+    padding-left: 0.6em;
+    padding-top: 0.2em;
+}
+
+div.events {
+    padding-left: 1em;
+    padding-bottom: 1em;
+}
+
+h2 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 2em;
+    font-weight: 400;
+    border-style: none none solid none;
+    border-width: 0.05em;
+}
+
+h3 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    text-decoration: underline;
+}
+
+span.small {
+    font-size: 0.8em;
+}
+
+img.longplot {
+    padding-top: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+div.postdetails {
+    margin-top: -2em;
+    text-align: right;
+    font-size: 0.8em;
+}
+
+div.faqpost {
+    text-align: justify;
+}
+
+div.faqpost img {
+    float: right;
+}

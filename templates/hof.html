@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Hall of Fame{% endblock %}
+
+{% block content %}
+    <h2>Hall of Fame</h2>
+
+    <p>This list ranks players by <em>periods of domination</em>. The relevant score is called PP
+    (<em>period-points</em>), and is the sum over a range of lists of the signed distance from a player to number one
+    or two on the list.</p>
+
+    <p>For most players, their PP is equal to the sum of the rating gaps for each list in which they were number one.
+    If a player has been number one more than once, the optimal range of lists is chosen, and it can include times when
+    a player was not the top dog, if it was sufficiently brief and negligible.</p>
+
+    <p>In short, this is a list of players who have been number one, rewarding both large rating gaps and long periods
+    of rule. Think of it as a king-of-the-hill hall of fame.</p>
+
+    <p>To avoid rating artifacts, these records are only counted after the release of the game (i.e. list 12, on August
+    11, 2010).</p>
+
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
+        <div class="rowe" style="width: 18em;">Name</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 8.5em; text-align: right;">PP</div>
+        <div class="rowe" style="width: 4em;"></div>
+        <div class="rowe" style="width: 15em;">Start</div>
+        <div class="rowe" style="width: 10em; text-align: right;">Length</div>
+        <div class="rowe" style="width: 7em;"></div>
+    </div>
+{% for h in high %}
+<div class="row {% cycle 'row2' 'row1' %}">
+    <div class="rowe" style="text-align: right;">{{ forloop.counter }}.</div>
+    <div class="rowe">
+        <a href="/players/{{ h.id }}/">{{ h.tag }}</a>
+    </div>
+    <div class="rowe">
+        {% if h.country != "" %}
+            <img src="http://aligulac.com:81/al/flags/{{ h.country|lower }}.png" alt="{{ h.country }}" />
+        {% endif %}
+    </div>
+    <div class="rowe">
+        <img src="http://aligulac.com:81/al/{{ h.race }}.png" class="btm" />
+    </div>
+    <div class="rowe" style="text-align: right;">
+        {{ h.dom_val|ratscaled }}
+    </div>
+    <div class="rowe"></div>
+    <div class="rowe">
+        <a href="/periods/{{ h.dom_start.id }}/">{{ h.dom_start.start|date:"F jS, Y" }}</a>
+    </div>
+    <div class="rowe" style="text-align: right;">
+        {{ h.dom_end.id|sub:h.dom_start.id }}
+    </div>
+    <div class="rowe"> </div>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

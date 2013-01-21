@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Database status{% endblock %}
+
+{% block content %}
+    <h2>Database status</h2>
+
+<div class="table" style="width: 67em;">
+    <div class="row">
+        <div class="rowel" style="width: 33.5em;">Games</div>
+        <div class="rower" style="width: 33.5em;">{{ ngames }}</div>
+    </div>
+    <div class="row">
+        <div class="rowel">Matches</div>
+        <div class="rower">{{ nmatches }}</div>
+    </div>
+    <div class="row">
+        <div class="rowel">Untreated matches from past lists</div>
+        <div class="rower">{{ nuntreated }} <span class="small">({{ nuntreated|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Matches with event info</div>
+        <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Matches with event object</div>
+        <div class="rower">{{ nfull }} <span class="small">({{ nfull|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Players</div>
+        <div class="rower">{{ nplayers }}</div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Koreans</div>
+        <div class="rower">{{ nkoreans }} <span class="small">({{ nkoreans|pctg3:nplayers }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Teams</div>
+        <div class="rower">{{ nteams }}</div>
+    </div>
+    <div class="row">
+        <div class="rowel">Active</div>
+        <div class="rower">{{ nactive }}</div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Disbanded</div>
+        <div class="rower">{{ ninactive }}</div>
+    </div>
+    <div class="row">
+        <div class="rowel">Top submitters (number of matches)</div>
+        <div class="rower">
+            {% for s in submitters %}
+            {{ s.0 }} ({{ s.1}}){% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% if not dump %}
+<p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
+{% else %}
+<p>You can download a MySQL dump <a href="http://aligulac.com:81/al/aligulac.sql">here</a> 
+({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS, Y, H:i e" }} (UTC {{ modified|date:"O" }})). It is free to use
+for non-commercial purposes if you credit this website when doing so.</p>
+{% endif %}
+{% endblock %}

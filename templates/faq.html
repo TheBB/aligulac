@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% load markup %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+    <h2>Frequently asked questions</h2>
+
+    {% for post in posts %}
+        <div class="faqpost">
+        <h3>{{ post.title }}</h3>
+        {{ post.text|markdown }}
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ event }}{% endblock %}
+
+{% block content %}
+    <h2>{{ event }}</h2>
+
+    <p><a href="/results/events/">Root</a> →
+    {% for e in path %}
+        {% if forloop.last %}{{ e.name }}{% else %}
+        <a href="/results/events/{{ e.id }}/">{{ e.name }}</a> →{% endif %}
+    {% endfor %}
+    {% if adm %}
+        [<a href="/admin/ratings/event/{{ event.id }}/">admin</a>]
+    {% endif %}
+
+    {% if children or siblings %}
+    <div class="table" style="width: 50em;">
+
+    {% if siblings %}
+    <div class="row">
+        <div class="rowel" style="width: 7em;">Same level:</div>
+        <div class="rower" style="width: 43em;">
+        {% if siblings.count > 9 %}
+            <form method="get" action="/results/events/">
+            <select name="goto">
+                {% for e in siblings %}
+                <option value="{{ e.id }}">{{ e.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go" />
+            </form>
+        {% else %}
+        {% for e in siblings %}
+            <a href="/results/events/{{ e.id }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if children %}
+    <div class="row">
+        <div class="rowel" style="width: 7em;">Next level:</div>
+        <div class="rower" style="width: 43em;">
+        {% if children.count > 9 %}
+            <form method="get" action="/results/events/">
+            <select name="goto">
+                {% for e in children %}
+                <option value="{{ e.id }}">{{ e.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go" />
+            </form>
+        {% else %}
+        {% for e in children %}
+            <a href="/results/events/{{ e.id }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    </div>
+    {% endif %}
+
+    {% if event.closed %}
+        <p>This event is <strong>closed</strong>. No more games will be added.</p>
+    {% else %}
+        <p>This event is still <strong>open</strong>. Games may be added.</p>
+    {% endif %}
+
+    {% if event.big %}
+        <p>This event is <strong>big</strong>, so the list of games has been cut-off. Go to an event on the next
+        level to see a complete list.</p>
+    {% endif %}
+
+{% if matches %}
+    {% for ml in matches %}
+        {% if ml %}
+        {% include "list_matches.html" with lm_list=ml lm_show_date=1 lm_adm=0 lm_header_event=1 %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <p>This event has no registered games... yet.</p>
+{% endif %}
+
+<p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>
+{% endblock %}

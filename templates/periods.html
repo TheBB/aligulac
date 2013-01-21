@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Historical overview{% endblock %}
+
+{% block content %}
+    <h2>Historical overview</h2>
+
+    <div class="table numtable" style="width: 67em;">
+        <div class="rowh">
+            <div class="rowe" style="width: 20em;">List date</div>
+            <div class="rowe" style="width: 7em;">OP</div>
+            <div class="rowe" style="width: 10em;">UP</div>
+            <div class="rowe" style="width: 8em; text-align: right;">Active</div>
+            <div class="rowe" style="width: 8em; text-align: right;">New</div>
+            <div class="rowe" style="width: 8em; text-align: right;">Games</div>
+            <div class="rowe" style="width: 6em;"></div>
+        </div>
+        {% for period in periods %}
+        <div class="row {% cycle 'row2' 'row1' %}">
+            <div class="rowe">
+                <a href="/periods/{{ period.id }}/">{{ period.end|date:"F jS, Y" }}</a>
+            </div>
+            <div class="rowe">
+                <img src="http://aligulac.com:81/al/{{ period|oprace }}.png" alt="{{ period|oprace }}" />
+                <span class="small">({{ period|oppctg }}%)</span>
+            </div>
+            <div class="rowe">
+                <img src="http://aligulac.com:81/al/{{ period|uprace }}.png" alt="{{ period|uprace }}" />
+                <span class="small">({{ period|uppctg }}%)</span>
+            </div>
+            <div class="rowe" style="text-align: right;">{{ period.num_retplayers|add:period.num_newplayers }}</div>
+            <div class="rowe" style="text-align: right;">{{ period.num_newplayers }}</div>
+            <div class="rowe" style="text-align: right;">{{ period.num_games }}</div>
+            <div class="rowe" style="width: 6em;"></div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

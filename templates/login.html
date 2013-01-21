@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% load markup %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    <p>To submit results, please log in with your submitter account. If you don't have a submitter
+    account, but still want to contribute, please let me know at: evfonn(at)gmail(dot).com.</p>
+
+    <form method="post" action="/add/">
+    {% csrf_token %}
+    <div class="table" style="width: 30em;">
+        <div class="row">
+            <div class="rowe" style="width: 10em; text-align: right;">Username:</div>
+            <div class="rowe" style="width: 20em;"><input type="text" name="username" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 10em; text-align: right;">Password:</div>
+            <div class="rowe" style="width: 20em;"><input type="password" name="password" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 10em; text-align: right;"></div>
+            <div class="rowe" style="width: 20em;"><input type="submit" value="Login" /></div>
+        </div>
+    </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% load ratings_extras %}
+
+<div class="table" style="width: 67em;">
+    {% for part in bigs %}
+    <div class="row">
+        {% for e in part %} 
+        <div class="rowevent" style="width: 34em;">
+            {% if e %}
+            <div class="eventh"><a href="/results/events/{{ e.id }}/">{{ e.name }}</a></div>
+            <div class="events">
+                {% if e|eventchildren|eventliststart %}
+                <span id="inv-{{e.id}}" style="display: none;">
+                    {% for f in e|eventchildren|eventliststart %}
+                    <a href="/results/events/{{ f.id }}/">{{ f.name }}</a>,
+                    {% endfor %}
+                    </span>
+                    <span id="clc-{{e.id}}" style="display: inline;">
+                    <a href="#" onclick="toggle_visibility('inv-{{e.id}}'); toggle_visibility('clc-{{e.id}}'); return false;">(...)</a>
+                    </span>
+                {% endif %}
+                {% for f in e|eventchildren|eventlistend %}
+                <a href="/results/events/{{ f.id }}/">{{ f.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+{% if smalls %}
+<p><strong>Smaller events:</strong>
+{% for e in smalls %}
+<a href="/results/events/{{ e.id }}/">{{ e.name }}</a>{% if not forloop.last %},{% endif %}
+{% endfor %}
+</p>
+{% endif %}

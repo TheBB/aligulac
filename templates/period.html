@@ -1,0 +1,125 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}List {{ period.id }}{% endblock %}
+
+{% block content %}
+    <h2>List {{ period.id }}: {{ period.end|date:"F jS, Y" }}</h2>
+
+    <div class="ibox" style="width: 25em;">
+        <div class="iboxh"> List {{ period.id }} </div>
+        <div class="iboxtable">
+            <div class="row">
+                <div class="rowel" style="width: 15em;">Start</div>
+                <div class="rower" style="width: 15em;">{{ period.start|date:"F jS, Y" }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">End</div>
+                <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Games</div>
+                <div class="rower">{{ period.num_games }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Active players</div>
+                <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Leading race</div>
+                <div class="rower">
+                    <img src="http://aligulac.com:81/al/{{ period|oprace }}.png" class="btm" alt="{{ period|oprace|racefull }}" /> 
+                    {{ period|oprace|racefull }} ({{ period|oppctg }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">Lagging race</div>
+                <div class="rower">
+                    <img src="http://aligulac.com:81/al/{{ period|uprace }}.png" class="btm" alt="{{ period|uprace|racefull }}" /> 
+                    {{ period|uprace|racefull}} ({{ period|uppctg }}%)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>Return to <a href="/periods/">historical overview</a>.</p>
+
+<div class="table" style="width: 30em;">
+    <div class="row">
+        <div class="rowel" style="width: 15em;">Best overall</div>
+        <div class="rower" style="width: 15em;">
+            <a href="/players/{{best.player.id}}/">{{ best.player.tag }}</a>
+            <span class="small">({{ best.rating|ratscale }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Best vs. Protoss</div>
+        <div class="rower">
+            <a href="/players/{{bestvp.player.id}}/">{{ bestvp.player.tag }}</a>
+            <span class="small">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Best vs. Terran</div>
+        <div class="rower">
+            <a href="/players/{{bestvt.player.id}}/">{{ bestvt.player.tag }}</a>
+            <span class="small">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Best vs. Zerg</div>
+        <div class="rower">
+            <a href="/players/{{bestvz.player.id}}/">{{ bestvz.player.tag }}</a>
+            <span class="small">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Most specialised vP</div>
+        <div class="rower">
+            <a href="/players/{{specvp.player.id}}/">{{ specvp.player.tag }}</a>
+            <span class="small">(+{{ specvp.rating_vp|ratscaled }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Most specialised vT</div>
+        <div class="rower">
+            <a href="/players/{{specvt.player.id}}/">{{ specvt.player.tag }}</a>
+            <span class="small">(+{{ specvt.rating_vt|ratscaled }})</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="rowel">Most specialised vZ</div>
+        <div class="rower">
+            <a href="/players/{{specvz.player.id}}/">{{ specvz.player.tag }}</a>
+            <span class="small">(+{{ specvz.rating_vz|ratscaled }})</span>
+        </div>
+    </div>
+</div>
+
+<form method="get" action="/periods/{{ period.id }}/">
+    <input type="hidden" name="page" value="{{ page }}" />
+    <input type="hidden" name="sort" value="{{ sort }}" />
+    <p>Show races:
+    <select name="race">
+        <option value="ptz" {% if race == "ptzrs" %}selected{% endif %}>All</option>
+        <option value="p" {% if race == "p" %}selected{% endif %}>Protoss</option>
+        <option value="t" {% if race == "t" %}selected{% endif %}>Terran</option>
+        <option value="z" {% if race == "z" %}selected{% endif %}>Zerg</option>
+        <option value="tz" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
+        <option value="pz" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
+        <option value="pt" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
+    </select>
+    and nationalities:
+    <select name="nats">
+        <option value="all" {% if nats == "all" %}selected{% endif %}>All</option>
+        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
+        <option value="kr" {% if nats == "kr" %}selected{% endif %}>Koreans</option>
+    </select>
+    <input type="submit" value="Filter" />
+    </p>
+</form>
+
+    {% include "ratinglist.html" %}
+
+{% endblock %}

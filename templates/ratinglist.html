@@ -1,0 +1,128 @@
+{% load ratings_extras %}
+
+{% include "periodpagenav.html" %}
+
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 18em;">Name</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9.5em; text-align: right;">
+            {% if sortable %}
+            <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">Rating↓</a>
+            {% else %}Rating{% endif %}
+        </div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9.5em; text-align: right;">
+            {% if sortable %}
+            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">Rating vP↓</a>
+            {% else %}Rating vP{% endif %}
+        </div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9.5em; text-align: right;">
+            {% if sortable %}
+            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">Rating vT↓</a>
+            {% else %}Rating vT{% endif %}
+        </div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9.5em; text-align: right;">
+            {% if sortable %}
+            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">Rating vZ↓</a>
+            {% else %}Rating vZ{% endif %}
+        </div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 2em;"></div>
+    </div>
+    {% for entry in entries %}
+    <div class="row {% cycle 'row2' 'row1' %}" href="/players/{{ entry.player.id }}/">
+        <div class="rowe" style="text-align: right;">
+            {% if localcount %}
+                {% if startcount %}
+                    {{ forloop.counter|add:startcount }}.
+                {% else %}
+                    {{ forloop.counter }}.
+                {% endif %}
+            {% else %}
+                {% if entry.position %}
+                    {{ entry.position }}.
+                {% else %}
+                    —
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: center;">
+            {% if entry.position %}
+            {% if entry.prev %}
+                {% if entry.prev.position < entry.position %}
+                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" class="btm" />
+                {% elif entry.prev.position > entry.position %}
+                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" class="btm" />
+                {% endif %}
+            {% else %}
+                <img src="http://aligulac.com:81/al/new.png" alt="new" style="vertical-align: text-bottom;" />
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe">
+            <a href="/players/{{ entry.player.id }}/">{{ entry.player.tag }}</a>
+        </div>
+        <div class="rowe">
+            {% if entry.player.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ entry.player.country|lower }}.png" alt="{{ entry.player.country }}" />
+            {% endif %}
+        </div>
+        <div class="rowe">
+            <img src="http://aligulac.com:81/al/{{ entry.player.race }}.png" alt="{{entry.player.race}}" class="btm" />
+        </div>
+        <div class="rowe" style="text-align: right;">{{ entry.rating|ratscale }}</div>
+        <div class="rowe">
+            {% if entry.prev %}
+                {% if entry.prev.rating > entry.rating %}
+                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                {% elif entry.prev.rating < entry.rating %}
+                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">{{ entry.rating_vp|addf:entry.rating|ratscale }}</div>
+        <div class="rowe">
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vp > entry.rating|addf:entry.rating_vp %}
+                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                {% elif entry.prev.rating|addf:entry.prev.rating_vp < entry.rating|addf:entry.rating_vp %}
+                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">{{ entry.rating_vt|addf:entry.rating|ratscale }}</div>
+        <div class="rowe">
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vt > entry.rating|addf:entry.rating_vt %}
+                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                {% elif entry.prev.rating|addf:entry.prev.rating_vt < entry.rating|addf:entry.rating_vt %}
+                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">{{ entry.rating_vz|addf:entry.rating|ratscale }}</div>
+        <div class="rowe">
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vz > entry.rating|addf:entry.rating_vz %}
+                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                {% elif entry.prev.rating|addf:entry.prev.rating_vz < entry.rating|addf:entry.rating_vz %}
+                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {% if entry.comp_rat %}
+                <a href="/players/{{ entry.player.id }}/period/{{ entry.period.id }}/">→</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% include "periodpagenav.html" %}

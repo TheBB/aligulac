@@ -1,0 +1,8 @@
+{% load markup %}
+
+{% for post in blogposts %}
+<h2>{{ post.title }}</h2>
+<div class="postdetails">By {{ post.author }} on {{ post.date|date:"F jS, Y, H:i e" }} 
+    (UTC {{ post.date|date:"O" }})</div>
+<div class="faqpost">{{ post.text|markdown }}</div>
+{% endfor %}

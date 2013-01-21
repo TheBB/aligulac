@@ -1,0 +1,93 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ p1.tag }} vs. {{ p2.tag }}{% endblock %}
+
+{% block content %}
+    <h2>{{ p1.tag }} vs. {{ p2.tag }}</h2>
+
+    <p>Verdict: 
+    {% if   max <= 0.55 %}Even chances.
+    {% elif max <= 0.65 %}Slight advantage for {{ fav.tag }}.
+    {% elif max <= 0.75 %}Advantage for {{ fav.tag }}.
+    {% elif max <= 0.90 %}Large advantage for {{ fav.tag }}.
+    {% else %}Overwhelming advantage for {{ fav.tag }}.{% endif %}</p>
+
+    <div class="table numtable" style="width: 67em;">
+        <div class="rowh2">
+            <div class="rowe" style="width: 26em; text-align: right;">
+                ({{ r1|ratscale }}) <a href="/players/{{ p1.id }}/">{{ p1.tag }}</a>
+            </div>
+            <div class="rowe" style="width: 5em;">
+                <img src="http://aligulac.com:81/al/flags/{{ p1.country|lower }}.png" alt="{{ p1.country }}" />
+                <img src="http://aligulac.com:81/al/{{ p1.race }}.png" alt="{{ p1.race|racefull }}" class="btm" />
+            </div>
+            <div class="rowe" style="width: 5em; text-align: center;">{{ s1 }}–{{ s2 }}</div>
+            <div class="rowe" style="width: 5em; text-align: right;">
+                <img src="http://aligulac.com:81/al/{{ p2.race }}.png" alt="{{ p2.race|racefull }}" class="btm" />
+                <img src="http://aligulac.com:81/al/flags/{{ p2.country|lower }}.png" alt="{{ p2.country }}" />
+            </div>
+            <div class="rowe" style="width: 26em;">
+                <a href="/players/{{ p2.id }}/">{{ p2.tag }}</a> ({{ r2|ratscale }})
+            </div>
+        </div>
+        {% for r in res %}
+        {% if r.0 or r.1 %}
+        <div class="row {% cycle 'row2' 'row1' %}">
+            <div class="rowe" style="text-align: right; padding-right: 2em;">
+                {% if r.0 %}{{ r.0.2|prob }}%{% endif %}
+            </div>
+            <div class="rowe" style="text-align: left;">
+                {% if r.0 %}{{ r.0.0 }}–{{ r.0.1 }}{% endif %}
+            </div>
+            <div class="rowe"></div>
+            <div class="rowe" style="text-align: right;">
+                {% if r.1 %}{{ r.1.0 }}–{{ r.1.1 }}{% endif %}
+            </div>
+            <div class="rowe" style="padding-left: 2em;">
+                {% if r.1 %}{{ r.1.2|prob }}%{% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="rowh">
+            <div class="rowe" style="text-align: right; padding-right: 2em;">{{ t1|prob }}%</div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe" style="padding-left: 2em;">{{ t2|prob }}%</div>
+        </div>
+    </div>
+
+    <h3>Update match progress</h3>
+
+    <form method="get" action="/predict/match/">
+    <input type="hidden" name="bo" value="{{ bo }}" />
+    <input type="hidden" name="ps" value="{{ ps }}" />
+    <div class="table" style="width: 30em;">
+        <div class="row">
+            <div class="rowel" style="width: 15em;">Score for {{ p1.tag }}</div>
+            <div class="rower" style="width: 15em;">
+                <input name="s1" type="text" style="width: 150px;" value="{{ s1 }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">Score for {{ p2.tag }}</div>
+            <div class="rower">
+                <input name="s2" type="text" style="width: 150px;" value="{{ s2 }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel"></div>
+            <div class="rower">
+                <input type="submit" value="Update" />
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <h3>Team Liquid postable</h3>
+    <textarea style="width: 100%;" rows="10">{{ postable }}</textarea>
+
+{% endblock %}

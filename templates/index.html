@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}Aligulac{% endblock %}</title>
+        <link href="/css/base.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/datepicker.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-36949125-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() { 
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+        <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Donegal+One&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <table id="main">
+            <tr>
+                <td id="heading"><a href="/" id="title" />ALIGULAC</a></td>
+            </tr>
+            <tr>
+                <td id="subheading">StarCraft 2 Progaming Statistics and Predictions</td>
+            </tr>
+            <tr>
+                <td id="menu">
+                    {% for m in menu %}
+                    {% if curpage == m.0 %}
+                        <a href="{{ m.1 }}" class="menu menucur">{{ m.0 }}</a>
+                    {% else %}
+                        <a href="{{ m.1 }}" class="menu">{{ m.0 }}</a>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% if submenu %}
+            <tr>
+                <td id="menu">
+                    {% for m in submenu %}
+                    {% if not m %} || {% else %}
+                    {% if cursubpage == m.0 %}
+                        <a href="{{ m.1 }}" class="menu menucur">{{ m.0 }}</a>
+                    {% else %}
+                        <a href="{{ m.1 }}" class="menu">{{ m.0 }}</a>
+                    {% endif %} {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td style="text-align: right;"> <form action="/search/" method="get">
+                    Find player: <input type="text" name="q" />
+                </form> </td>
+            </tr>
+            <tr>
+                <td id="content">
+                    {% block content %}
+                    <h2>Current top 10</h2>
+
+                    {% include "ratinglist.html" %}
+
+                    {% include "blogposts.html" %}
+                    {% endblock %}
+                </td>
+            </tr>
+            <tr>
+                <td id="footer">Powered by 
+                    <a href="http://www.djangoproject.com/">Django 1.4.2</a>, 
+                    <a href="http://python.org">Python 2.6.6</a>, 
+                    <a href="http://httpd.apache.org">Apache 2</a> and
+                    <a href="http://debian.org">Debian GNU/Linux 6.0.6</a>.<br/><br/>
+                    Icons by Mark James. Race icons by <a href="http://wiki.teamliquid.net/starcraft2/Main_Page">Liquipedia</a>.
+                    Date widget by <a href="http://www.frequency-decoder.com/">Frequency Decoder</a>.
+            </tr>
+        </table>
+    </body>
+</html>

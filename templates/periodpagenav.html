@@ -1,0 +1,61 @@
+{% if page %}
+<div class="table" style="min-width: 67em;">
+    <div class="row">
+        <div class="rowe" style="width: 1em; text-align: left;">
+            {% if period.id > 1 %}
+            <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/prev.png" alt="previous" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 21.5em; text-align: left;">
+            <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                previous period
+            </a>
+        </div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            {% if page > 1 %}
+            <a href="?page=1&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/first.png" alt="first" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            {% if page > 1 %}
+            <a href="?page={{ page|add:"-1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/prev.png" alt="previous" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 8em; text-align: center;">Page {{ page }}/{{ npages }}</div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            {% if page < npages %}
+            <a href="?page={{ page|add:"1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/next.png" alt="next" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            {% if page < npages %}
+            <a href="?page={{ npages }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/last.png" alt="last" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 21.5em; text-align: right;">
+            {% if period.id < nperiods %}
+            <a href="/periods/{{ period.id|add:"1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                next period
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            {% if period.id < nperiods %}
+            <a href="/periods/{{ period.id|add:"1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
+                <img src="http://aligulac.com:81/al/next.png" alt="previous" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

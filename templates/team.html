@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ team.name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ team.name }}</h2>
+
+    <p style="text-align: center;">
+    {% if team.id|haslogo %}
+        <img style="margin-bottom: 15px; float: right;" src="http://aligulac.com:81/al/teams/{{ team.id }}.png" alt="{{ team.name }}" title="{{ team.name }}" />
+    {% endif %}
+    </p>
+
+    {% if team.founded and team.disbanded %}
+    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
+    {% elif team.founded %}
+    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }}.</p>
+    {% elif team.disbanded %}
+    <p>{{ team.name }} was disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
+    {% endif %}
+
+    {% if active %}
+        <h3>Active roster</h3>
+        <p>{{ team.name }} has {{ active.count }} players who have played a ranked game within the last
+        two months.</p>
+        {% include "ratinglist.html" with entries=active %}
+    {% endif %}
+
+    {% if inactive %}
+        <h3>Inactive roster</h3>
+        <p>{{ team.name }} has {{ inactive.count }} players who have been temporarily removed from the
+        ranking due to inactivity.</p>
+        {% include "ratinglist.html" with entries=inactive %}
+    {% endif %}
+
+    {% if past %}
+        <h3>Past members</h3>
+
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 19em;">Name</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 6em;"></div>
+        <div class="rowe" style="width: 15em;">Joined</div>
+        <div class="rowe" style="width: 26em;">Left</div>
+    </div>
+    {% for tm in past %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe">
+            <a href="/players/{{ tm.player.id }}/">{{ tm.player.tag }}</a>
+        </div>
+        <div class="rowe">
+            {% if tm.player.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ tm.player.country|lower }}.png" alt="{{ tm.player.country }}" />
+            {% endif %}
+        </div>
+        <div class="rowe">
+            <img src="http://aligulac.com:81/al/{{ tm.player.race }}.png" alt="{{tm.player.race}}" class="btm" />
+        </div>
+        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+    </div>
+    {% endfor %}
+</div>
+    {% endif %}
+{% endblock %}

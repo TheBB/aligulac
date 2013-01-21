@@ -1,0 +1,168 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Submit results{% endblock %}
+
+{% block content %}
+    <h2>Submit results</h2>
+
+    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>,
+    <a href="/results/">full list</a>)</p>
+
+    {% if messages %}
+        {% if success %}
+            <p>The following entries were successfully submitted:</p>
+            {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=1 lm_header_event=1 lm_nocheck=1 %}
+            <p></p>
+        {% endif %}
+        {% if failure %}
+        <p style="color: #ff0000;"><strong>There were problems with the following entries:</strong></p>
+            <ul>
+                {% for f in failure %}<li>{{ f.1 }}: &quot;{{ f.0 }}&quot;</li>{% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+
+    <script type="text/javascript">
+    <!--
+    function toggle_to(id) 
+    {
+        document.getElementById('guide').style.display = (id=='guide') ? 'block' : 'none';
+        document.getElementById('examples').style.display = (id=='examples') ? 'block' : 'none';
+        document.getElementById('problems').style.display = (id=='problems') ? 'block' : 'none';
+    }
+    //-->
+    </script>
+
+    <p>Show: <a href="#" onclick="toggle_to('guide'); return false;">user guide</a>,
+             <a href="#" onclick="toggle_to('examples'); return false;">examples</a>,
+             <a href="#" onclick="toggle_to('problems'); return false;">common problems</a></p></div>
+
+    <div id="guide" style="display: none;">
+        <p>Use the format YYYY-MM-DD for the date. For the event, enter anything that can be used to identify the game in case duplicates
+        are discovered later. The event information will not be publicly viewable.</p>
+
+        <p>Each line corresponds to a match, and should be entered using this format:</p>
+
+        <pre><code>    &lt;Player A&gt;-&lt;Player B&gt; &lt;Score A&gt;-&lt;Score B&gt;</code></pre>
+
+        <p>The player information must uniquely identify the player, and should be space-separated list of any of the following:</p>
+
+        <ul>
+            <li>Player tag, e.g. &quot;DongRaeGu&quot; (enclose in parantheses if it contains a hyphen, e.g. &quot;(White-Ra)&quot;.)</li>
+            <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; or &quot;S&quot;</li>
+            <li>A two-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> country code. e.g.
+            &quot;KR&quot;</li>
+            <li>A player ID number, which you can get from the URL of the player page, e.g. &quot;4&quot;</li>
+        </ul>
+
+        <p>If you are adding a match by a random player or a race switcher you need to tell the system which race the player was playing in
+        that match. Do this by adding a &quot;R:&lt;race&gt;&quot; clause at the <strong>end</strong> of the player information. For example,
+        if MorroW plays Protoss, you can do this:</p>
+
+        <pre><code>    Morrow r:p-DongRaeGu 0-2</code></pre>
+
+        <p>Everything is based on case-insensitive search.</p>
+
+        <p>When submitted, the system will try to add as many of the matches as it can. Some entries might produce warnings, in which case
+        you will be notified about what to do. This happens when:</p>
+
+        <ul>
+            <li>a player is not uniquely identified. In this case, add more information. Use the ID number if necessary.</li>
+            <li>a player can't be found. In this case, add the switch &quot;<strong>!MAKE</strong>&quot; to the end of the respective
+            line(s).  This will make a player entry if needed. In this case, you <strong>must</strong> provide a player tag and race.
+            Please also provide a country code if possible, and make sure the player tag is spelled correctly (including
+            capitalisation).</li>
+            <li>a duplicate entry was found. If you are certain that the two players in question played more than one match within a
+            single day day with the same result (this can happen, but it's rare), add the switch &quot;<strong>!DUP</strong>&quot; to the
+            end of the respective line(s). This will force the match to be entered.</li>
+        </ul>
+    </div>
+
+    <div id="examples" style="display: none;">
+    <p>Here is a real-world example. I am interested in adding some SPL matches.</p>
+
+<pre><code>    Sos-Paralyze 0-1
+    Soulkey-yeOngJae 1-0
+    Flying-Soo 0-1
+    Zero-Best 1-0
+    Hon_Sin-Fantasy 1-0
+    Free-Rain 0-1
+    Soulkey-Soo 1-0</code></pre>
+
+    <p>From the above entries, I get the following warnings:</p>
+
+<pre><code>    Player A not unique, add more information: "Zero-Best 1-0"
+    Could not find player A, add !MAKE switch to create: "Hon_Sin-Fantasy 1-0"
+    Could not find player A, add !MAKE switch to create: "Free-Rain 0-1"
+    Player B not unique, add more information: "Free-Rain 0-1"</code></pre>
+
+    <p>So I add race and country information to Zero and Rain, and I also look around for possible alternate names to
+    Hon_Sin, to discover that he is already in the database under the name Sin. Free, however, is not in the database. I
+    confirm that he is Korean and Protoss, but his name is spelled &quot;free&quot;, with a lowercase F. Thus:</p>
+
+<pre><code>    Zero Z KR-Best 1-0
+    Sin-Fantasy 1-0
+    free P KR-Rain P KR 0-1 !MAKE</code></pre>
+
+    <p>Which works.</p>
+</div>
+
+    <div id="problems" style="display: block;">
+        <p>Here are the player IDs for some common problematic players.</p>
+        <ul>
+            <li>Liquid HerO (P): 11, CJ herO (P): 233</li>
+            <li>MVP Shine (Z): 62, Woongjin Shine (Z): 1664</li>
+            <li>MVP Killer (P): 113, Dignitas KiLLeR (Z): 169</li>
+            <li>Woongjin ZerO (Z): 1661, StarTale Zero (Z): 2209</li>
+        </ul>
+        <p>Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest and Top need to be designated by race and/or country.</p>
+        <p>Common country codes: Canada (CA), Germany (DE), Korea (KR), Poland (PL), Russia (RU), Sweden (SE), Ukraine (UA), USA (US)</p>
+    </div>
+
+    <form method="post" action="/add/">
+    {% csrf_token %}
+    <div class="table" style="width: 65em;">
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">Event:</div>
+            <div class="rowe" style="width: 50em;"><input type="text" name="event" style="width: 40em;" value="{{ event }}" /></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">Event object:</div>
+            <div class="rowe" style="width: 50em;">
+                <select name="eobj">
+                    {% for event in events %}
+                    <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;">Date:</div>
+            <div class="rowe" style="width: 50em;">
+                <input type="date" name="date" id="date" style="width: 6.5em;" value="{% if date %}{{ date }}{% else %}{% now "Y-m-d" %}{% endif %}" />
+                <script type="text/javascript" src="/js/datepicker.js" /></script>
+                <script type="text/javascript">
+                    // <![CDATA[  
+                    var opts = {                            
+                        formElements:{"date":"Y-ds-m-ds-d"},
+                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                    };           
+                    datePickerController.createDatePicker(opts);
+                    // ]]>
+                </script>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right; vertical-align: top;">Matches:</div>
+            <div class="rowe" style="width: 50em;"><textarea name="matches" rows="20" style="width: 700px;">{{ matches }}</textarea></div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right;"></div>
+            <div class="rowe" style="width: 50em;"><input type="submit" value="Submit" /></div>
+        </div>
+    </div>
+    </form>
+
+{% endblock %}

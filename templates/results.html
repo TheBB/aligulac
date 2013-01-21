@@ -1,0 +1,94 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Results {{ td|date:"Y-m-d" }}{% endblock %}
+
+{% block content %}
+    <script type="text/javascript" src="/js/datepicker.js" /></script>
+
+    <h2>{{ td|date:"F jS, Y" }}</h2>
+
+        <form method="get">
+        Skip to date: <input type="text" id="d" name="d" value="{{ td|date:"Y-m-d" }}" maxlength="4" style="width: 6.5em;" />
+        <input type="submit" value="Go" />
+        
+        <script type="text/javascript">
+            // <![CDATA[  
+            var opts = {                            
+                formElements:{"d":"Y-ds-m-ds-d"},
+                statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+            };           
+            datePickerController.createDatePicker(opts);
+            // ]]>
+        </script> 
+        </form> 
+
+<div class="table" style="width: 67em;">
+    <div class="row">
+        <div class="rowe" style="width: 22em;"></div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            <a href="/results/?d={{ td|prevmonth|date:"Y-m-d" }}">
+                <img src="http://aligulac.com:81/al/first.png" alt="previous month" class="btm" />
+            </a>
+        </div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
+                <img src="http://aligulac.com:81/al/prev.png" alt="previous day" class="btm" />
+            </a>
+        </div>
+        <div class="rowe" style="width: 8em; text-align: center;">
+            <a href="/results/">today</a>
+        </div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
+                <img src="http://aligulac.com:81/al/next.png" alt="next day" class="btm" />
+            </a>
+        </div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            <a href="/results/?d={{ td|nextmonth|date:"Y-m-d" }}">
+                <img src="http://aligulac.com:81/al/last.png" alt="next month" class="btm" />
+            </a>
+        </div>
+        <div class="rowe" style="width: 23em;"></div>
+    </div>
+</div>
+{% if matches %}
+    {% for ml in matches %}
+        {% include "list_matches.html" with lm_list=ml lm_show_date=0 lm_adm=0 lm_header_event=1 %}
+    {% endfor %}
+    <div class="table" style="width: 67em;">
+        <div class="row">
+            <div class="rowe" style="width: 22em;"></div>
+            <div class="rowe" style="width: 1em; text-align: left;">
+                <a href="/results/?d={{ td|prevmonth|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/first.png" alt="previous month" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: left;">
+                <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/prev.png" alt="previous day" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 8em; text-align: center;">
+                <a href="/results/">today</a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: right;">
+                <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/next.png" alt="next day" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: right;">
+                <a href="/results/?d={{ td|nextmonth|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/last.png" alt="next month" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 23em;"></div>
+        </div>
+    </div>
+{% else %}
+    <p>No registered results on this date.</p>
+{% endif %}
+
+<p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>
+{% endblock %}

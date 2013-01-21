@@ -1,0 +1,98 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}{{ player.tag }} rating history{% endblock %}
+
+{% block content %}
+
+<h2>{{ player.tag }}: Rating history</h2>
+
+<p>Return to <a href="/players/{{ player.id }}/">player page</a>.</p>
+
+<div class="table numtable" style="width: 67em;">
+    <div class="rowh">
+        <div class="rowe" style="width: 11em;">List</div>
+        <div class="rowe" style="width: 9em; text-align: right;">Rating</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9em; text-align: right;">Rating vP</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9em; text-align: right;">Rating vT</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9em; text-align: right;">Rating vZ</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 16em;"></div>
+    </div>
+    {% for rating in historical %}
+        {% if rating %}
+        <div href="/periods/{{ rating.period.id }}" class="row {% cycle 'row2' 'row1' %}">
+            <div class="rowe">
+                <a href="/periods/{{ rating.period.id }}/">{{ rating.period.end }}</a>
+            </div>
+            <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
+            <div class="rowe">
+                {% if rating.prev %}
+                    {% if rating.prev.rating > rating.rating %}
+                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                    {% elif rating.prev.rating < rating.rating %}
+                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="rowe" style="text-align: right;">
+                {{ rating.rating|addf:rating.rating_vp|ratscale }}</div>
+            <div class="rowe">
+                {% if rating.prev %}
+                    {% if rating.prev.rating|addf:rating.prev.rating_vp > rating.rating|addf:rating.rating_vp %}
+                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                    {% elif rating.prev.rating|addf:rating.prev.rating_vp < rating.rating|addf:rating.rating_vp %}
+                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="rowe" style="text-align: right;">
+                {{ rating.rating|addf:rating.rating_vt|ratscale }}</div>
+            <div class="rowe">
+                {% if rating.prev %}
+                    {% if rating.prev.rating|addf:rating.prev.rating_vt > rating.rating|addf:rating.rating_vt %}
+                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                    {% elif rating.prev.rating|addf:rating.prev.rating_vt < rating.rating|addf:rating.rating_vt %}
+                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="rowe" style="text-align: right;">
+                {{ rating.rating|addf:rating.rating_vz|ratscale }}</div>
+            <div class="rowe">
+                {% if rating.prev %}
+                    {% if rating.prev.rating|addf:rating.prev.rating_vz > rating.rating|addf:rating.rating_vz %}
+                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                    {% elif rating.prev.rating|addf:rating.prev.rating_vz < rating.rating|addf:rating.rating_vz %}
+                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="rowe" style="text-align: right;">
+                {% if rating.comp_rat %}
+                    <a href="/players/{{ player.id }}/period/{{ rating.period.id }}/">→</a>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="row" style="background: #555555;">
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+            <div class="rowe"></div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

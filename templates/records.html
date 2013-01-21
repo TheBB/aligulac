@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Records{% if race %} for {{ race|racefull }}{% endif %}{% endblock %}
+
+{% block content %}
+    <h2>Records{% if race %} for {{ race|racefull }}{% endif %}</h2>
+
+    <p>To avoid rating artifacts, these records are only counted after the release of the game (i.e. list 12, on August 11, 2010).</p>
+
+    <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
+    {% include "recordlist.html" with high=hightot rt="Rating" %}
+
+    <h3>Most dominant #1s</h3>
+    {% include "recordlist.html" with high=dom rt="Rating gap" scaled=1 %}
+
+    <h3>Highest ratings ever achieved by matchup</h3>
+    {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" %}
+    {% include "recordlist.html" with high=hight rt="Rating "|add:race|add:"vT" %}
+    {% include "recordlist.html" with high=highz rt="Rating "|add:race|add:"vZ" %}
+{% endblock %}

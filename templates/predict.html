@@ -1,0 +1,67 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+
+{% block title %}Predict{% endblock %}
+
+{% block content %}
+    <h2>Predict</h2>
+
+    {% if errs %}
+    <p>Please fix the following problems:</p>
+    <ul>
+        {% for e in errs %}
+        <li>{{ e }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="get" action="/predict/">
+    <div class="table" style="width: 50em;">
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Format</div>
+            <div class="rower" style="width: 40em;">
+                <select name="format" style="width: 20em;">
+                    {% for format in formats %}
+                    <option value="{{ forloop.counter0 }}" {% if forloop.counter0 == fmt %}selected{% endif %}>{{ format }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">Best of</div>
+            <div class="rower">
+                <input name="bo" style="width: 20em;" value="{{ bo }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel" style="vertical-align: top;">Players</div>
+            <div class="rower">
+                <textarea name="players" rows="10" style="width: 40em;">{{ pls }}</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel"></div>
+            <div class="rower">
+                <input type="submit" value="Submit" />
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <p>Enter one player per line. The player information must uniquely identify the player, and should be space-separated list of any of the
+    following:</p>
+
+    <ul>
+        <li>Player tag, e.g. &quot;DongRaeGu&quot;</li>
+        <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; or &quot;S&quot;</li>
+        <li>A two-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> country code. e.g. &quot;KR&quot;</li>
+        <li>A player ID number, which you can get from the URL of the player page, e.g. &quot;4&quot;</li>
+    </ul>
+
+    <p>Most players can be uniquely identified through their player tag alone. In the cases where they cannot, race and country should
+    suffice. Some problematic players include the two Korean Protoss players Hero and the Zergs Shine. In these cases, you must search and
+    pick out the player ID. (Yes, I know this is awkward.)</p>
+
+    <p>Note that everything is case insensitive.</p>
+{% endblock %}

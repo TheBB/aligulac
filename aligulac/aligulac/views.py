@@ -3,7 +3,8 @@ from datetime import datetime
 
 from django.contrib.auth import logout
 from django.shortcuts import render_to_response, redirect
-from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core.context_processors import csrf
 from django.db.models import Sum
 from django.contrib.auth.models import User
@@ -206,3 +207,8 @@ def changepwd(request):
     request.user.save()
 
     return redirect('/add/')
+
+def h404(request):
+    base = base_ctx()
+
+    return HttpResponseNotFound(render_to_string('404.html', base))

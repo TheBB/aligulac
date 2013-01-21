@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from aligulac import settings
 
 from django.contrib import admin
 admin.autodiscover()
@@ -48,3 +49,13 @@ urlpatterns = patterns('',
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://aligulac.com:81/al/favicon.ico'}),
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^css/(?P<path>.*)$', 'django.views.static.serve',\
+            {'document_root': '/home/efonn/projects/aligulac/aligulac/templates/css'}),
+        url(r'^js/(?P<path>.*)$', 'django.views.static.serve',\
+            {'document_root': '/home/efonn/projects/aligulac/aligulac/templates/js'}),
+                           )
+
+handler404 = 'aligulac.views.h404'

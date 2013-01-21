@@ -1,7 +1,7 @@
 import os, datetime
 from pyparsing import nestedExpr
 
-os.environ['HOME'] = '/root'
+os.environ['HOME'] = '/home/efonn/'
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg

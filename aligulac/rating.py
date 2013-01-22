@@ -62,18 +62,20 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
     for c in pi:
         W = append(W, 1)
         L = append(L, 1)
-        oppr = append(oppr, [myr], 0)
-        opps = append(opps, [mys], 0)
+        oppr = append(oppr, myr[0])
+        opps = append(opps, mys[0])
         oppc = append(oppc, played_cats[c])
 
     return (oppr, opps, oppc, W, L)
 
 def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
-
     if len(W) == 0:
         news = sqrt(mys**2 + _var_decay**2)
         ceilit(news)
         return(myr, news, [None] * (Ncats+1), [None] * (Ncats+1))
+
+    if pr:
+        print oppr
 
     (oppr, opps, oppc, W, L) = fix_ww(myr, mys, oppr, opps, oppc, W, L)
 
@@ -111,10 +113,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
             DM[j,1:] = -1
         DMex[j,lc+1] = 1
 
-    #mbar = oppr[:,0] + oppr[:,myc+1]
-    #sbar = sqrt(opps[:,0]**2 + opps[:,myc+1]**2 + 1)
     mbar = oppr
-    sbar = sqrt(opps[:,0]**2 + 1)
+    sbar = sqrt(opps**2 + 1)
     gen_phi = lambda j, x: norm.pdf(x, loc=mbar[j], scale=sbar[j])
     gen_Phi = lambda j, x: norm.cdf(x, loc=mbar[j], scale=sbar[j])
 

@@ -73,7 +73,7 @@
                 {% endif %}
             </div>
             <div class="rowe" style="text-align: right;">
-                {% if rating.comp_rat %}
+                {% if rating.decay == 0 %}
                     <a href="/players/{{ player.id }}/period/{{ rating.period.id }}/">→</a>
                 {% endif %}
             </div>

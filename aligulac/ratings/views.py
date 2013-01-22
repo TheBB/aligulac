@@ -203,7 +203,7 @@ def player(request, player_id):
     if rating.count() < 2:
         base['noimage'] = True
 
-    recentchange = Rating.objects.filter(player=player, comp_rat__isnull=False).order_by('-period')
+    recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
         base['recentchange'] = recentchange[0]
 
@@ -573,13 +573,13 @@ def rating_details(request, player_id, period_id):
 
     try:
         nextlink = Rating.objects.filter(player=player, period__id__gt=period_id,\
-                comp_rat__isnull=False).order_by('period__id')[0]
+                decay=0).order_by('period__id')[0]
     except:
         nextlink = None
 
     try:
         prevlink = Rating.objects.filter(player=player, period__id__lt=period_id,\
-                comp_rat__isnull=False).order_by('-period__id')[0]
+                decay=0).order_by('-period__id')[0]
     except:
         prevlink = None
 
@@ -591,7 +591,6 @@ def rating_details(request, player_id, period_id):
         for r in races:
             prevrat[1][r] = rating.prev.get_totalrating(r)
             prevdev[1][r] = rating.prev.get_totaldev(r)
-        prevnew = False
     else:
         prevrat = [0., {'P': 0., 'T': 0., 'Z': 0.}]
         prevdev = [0.6, {'P': 0.6, 'T': 0.6, 'Z': 0.6}]
@@ -669,7 +668,7 @@ def rating_details(request, player_id, period_id):
                 modded = True
 
         base.update({'tot_rating': tot_rating, 'ngames': ngames, 'nwins': nwins, 'nlosses': nlosses,\
-                     'prevrat': prevrat, 'pctg': pctg, 'prevnew': prevnew,\
+                     'prevrat': prevrat, 'pctg': pctg,\
                      'exppctg': exppctg, 'diff': diff, 'expwins': expwins, 'explosses': explosses,\
                      'prevdev': prevdev, 'modded': modded})
         return render_to_response('ratingdetails.html', base)

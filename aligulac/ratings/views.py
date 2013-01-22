@@ -1,15 +1,8 @@
 import os, datetime
 from pyparsing import nestedExpr
 
-os.environ['HOME'] = '/home/efonn/'
-
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.dates import MonthLocator, DateFormatter
-from matplotlib.ticker import MultipleLocator, NullLocator
-
 from aligulac.views import base_ctx
-from ratings.submitviews import get_player
+from ratings.tools import find_player
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -22,7 +15,6 @@ from countries import transformations, data
 
 from scipy.stats import norm
 from numpy import linspace, array
-from pychip import pchip
 from math import sqrt
 
 def group_by_events(matches):
@@ -275,6 +267,14 @@ def player_historical(request, player_id):
     return render_to_response('historical.html', base)
 
 def player_plot(request, player_id):
+    os.environ['MPLCONFIGDIR'] = '/home/efonn/.matplotlib/'
+
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from matplotlib.dates import MonthLocator, DateFormatter
+    from matplotlib.ticker import MultipleLocator, NullLocator
+    from pychip import pchip
+
     if 'big' in request.GET:
         fig = Figure(figsize=(20,4), facecolor='white')
     else:
@@ -442,24 +442,28 @@ def results_search(request):
         for line in request.GET['players'].splitlines():
             if line.strip() == '':
                 continue
-            pl = get_player(line.strip().split(' '), '', line, failures, make_switch=False, adm=False, errline=line)
-            if pl == None:
-                base['errs'].append(failures[-1][1])
+            pls = find_player(line.strip().split(' '), make=False)
+            if not pls.exists():
+                base['errs'].append('No players matching the query \'%s\'.' % line.strip())
             else:
-                players.append(pl)
+                players.append(pls)
 
         if len(base['errs']) > 0:
             return render_to_response('results_search.html', base)
 
         if len(players) > 1:
-            qa = Q(pla=players[0])
-            qb = Q(plb=players[0])
-            for p in players[1:]:
-                qa = qa | Q(pla=p)
-                qb = qb | Q(plb=p)
+            qa, qb = Q(), Q()
+            for pls in players:
+                for p in pls:
+                    qa |= Q(pla=p)
+                    qb |= Q(plb=p)
             matches = matches.filter(qa & qb)
-        elif len(players) > 0:
-            matches = matches.filter(Q(pla=players[0]) | Q(plb=players[0]))
+        elif len(players) == 1:
+            q = Q()
+            for p in players[0]:
+                q |= Q(pla=p) | Q(plb=p)
+            matches = matches.filter(q)
+
         base['count'] = matches.count()
         matches = matches.order_by('-date')
 

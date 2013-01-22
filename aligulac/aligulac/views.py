@@ -6,10 +6,12 @@ from django.shortcuts import render_to_response, redirect
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.context_processors import csrf
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from ratings.models import Rating, Period, Player, Team, Match
+from ratings.tools import find_player
+
 from blog.models import Post
 
 import simplejson
@@ -128,8 +130,8 @@ def search(request, q=''):
     if q == '':
         q = request.GET['q']
 
-    players = Player.objects.filter(tag__icontains=q)
-    teams = Team.objects.filter(name__icontains=q)
+    players = find_player(q.split(' '), make=False, soft=True)
+    teams = Team.objects.filter(Q(name__icontains=q) | Q(alias__name__icontains=q)).distinct()
 
     if players.count() == 1 and teams.count() == 0:
         return redirect('/players/' + str(players[0].id))

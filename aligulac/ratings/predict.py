@@ -3,7 +3,7 @@ import os
 os.environ['HOME'] = '/root'
 
 from aligulac.views import base_ctx
-from ratings.submitviews import get_player
+from ratings.tools import find_player
 from simul.playerlist import make_player
 from simul.formats import match
 from ratings.templatetags.ratings_extras import ratscale
@@ -25,7 +25,6 @@ def predict(request):
     base = base_ctx()
     base['curpage'] = 'Predict'
 
-    #formats = ['Best-of-N match', 'All-kill team match', 'Proleague-style team match']
     formats = ['Best-of-N match']
     base['formats'] = formats
 
@@ -55,11 +54,13 @@ def predict(request):
     for line in request.GET['players'].splitlines():
         if line.strip() == '':
             continue
-        dbplayer = get_player(line.strip().split(' '), '', line, failures, make_switch=False, adm=False, errline=line)
-        if dbplayer == None:
-            base['errs'].append(failures[-1][1])
+        dbplayer = find_player(line.strip().split(' '), make=False)
+        if dbplayer.count() > 1:
+            base['errs'].append('Player \'%s\' not unique, add more information.' % line)
+        elif not dbplayer.exists():
+            base['errs'].append('No such player \'%s\' found.' % line)
         else:
-            players.append(dbplayer)
+            players.append(dbplayer[0])
     base['pls'] = request.GET['players']
 
     if len(base['errs']) != 0:

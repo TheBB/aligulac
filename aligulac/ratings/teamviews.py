@@ -1,13 +1,6 @@
 import os
 from pyparsing import nestedExpr
 
-os.environ['HOME'] = '/root'
-
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.dates import MonthLocator, DateFormatter
-from matplotlib.ticker import MultipleLocator, NullLocator
-
 from aligulac.views import base_ctx
 
 from django.shortcuts import render_to_response, get_object_or_404

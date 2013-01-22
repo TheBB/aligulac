@@ -1,14 +1,8 @@
 import os
 from pyparsing import nestedExpr
 
-os.environ['HOME'] = '/root'
-
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from matplotlib.dates import MonthLocator, DateFormatter
-from matplotlib.ticker import MultipleLocator, NullLocator
-
 from aligulac.views import base_ctx
+from ratings.tools import find_player
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
@@ -54,52 +48,6 @@ def parse_match(s):
     collect = [[f for f in col if f != ''] for col in collect]
     return collect
 
-def get_player(pl, num, s, failure, make_switch=False, adm=True, errline=None):
-    if errline == None:
-        errline = num
-    set = Player.objects
-
-    for p in pl:
-        if p.isdigit():
-            set = set.filter(id=int(p))
-        elif len(p) == 1 and p.upper() in ['P','T','Z','R','S']:
-            set = set.filter(race=p.upper())
-        elif len(p) == 2 and p.upper() in data.cca2_to_ccn:
-            set = set.filter(country=p.upper())
-        elif len(p) != 0:
-            set = set.filter(tag__iexact=p)
-
-    if set.count() == 1:
-        return set[0]
-    elif set.count() > 1:
-        failure.append((s, 'Player \'%s\' not unique, add more information' % errline))
-        return None
-    elif make_switch and adm:
-        try:
-            tag = [f for f in pl if (len(f) > 2 or (len(f) == 2 and f.upper() not in data.cca2_to_ccn)) and not f.isdigit()][0]
-            race = [f for f in pl if len(f) == 1 and not f.isdigit()][0].upper()
-            try:
-                country = [f for f in pl if (len(f) == 2) and (not f.isdigit()) and (f.upper() in data.cca2_to_ccn)][0].upper()
-            except:
-                country = ''
-
-            p = Player()
-            p.tag = tag
-            p.race = race
-            p.country = country
-            p.save()
-
-            return p
-        except:
-            failure.append((s, 'Could not make player \'%s\', insufficient information' % errline))
-            return None
-    else:
-        if adm:
-            failure.append((s, 'Could not find player \'%s\', add !MAKE switch to create' % errline))
-        else:
-            failure.append((s, 'Could not find player \'%s\'' % errline))
-        return None
-
 def add_matches(request):
     if 'username' in request.POST and 'password' in request.POST:
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
@@ -130,20 +78,24 @@ def add_matches(request):
                 eventobj = None
         except:
             eventobj = None
+
         if eventobj != None:
             base['eobj'] = eventobj.id
 
+        # Loop through match entries
         for s in matches:
             if s.strip() == '':
                 continue
 
             try:
+                # Parse and collect the components
                 collect = parse_match(s.strip())
                 pla = collect[0]
                 plb = collect[1]
                 sca = int(collect[2][0])
                 scb = int(collect[2][1])
 
+                # Check for !DUP and !MAKE switches
                 dup_switch = False
                 make_switch = False
                 while collect[2][-1][0] == '!':
@@ -153,41 +105,61 @@ def add_matches(request):
                         dup_switch = True
                     collect[2] = collect[2][:-1]
 
+                # Check for race overrides
                 def get_race(lst):
                     if lst[-1][:2].upper() == 'R:':
                         r = lst[-1][2:].upper()
                         return r, lst[:-1]
                     else:
                         return None, lst
-
                 rca, pla = get_race(pla)
                 rcb, plb = get_race(plb)
-    
-                pla = get_player(pla, 'A', s, failure, make_switch)
+
+                # Find players
+                def get_player(lst, failure, make):
+                    try:
+                        pls = find_player(lst, make=make)
+                    except Exception as e:
+                        failure.append((s, e.message))
+                        return None
+                    if not pls.exists():
+                        failure.append((s, 'Could not find player \'%s\', add !MAKE switch to create'\
+                                % ' '.join(lst)))
+                        return None
+                    if pls.count() > 1:
+                        failure.append((s, 'Player \'%s\' not unique, provide more information'\
+                                % ' '.join(lst)))
+                        return None
+                    return pls[0]
+
+                pla = get_player(pla, failure, make_switch)
                 if pla == None:
                     continue
 
-                plb = get_player(plb, 'B', s, failure, make_switch)
+                plb = get_player(plb, failure, make_switch)
                 if plb == None:
                     continue
 
-                n1 = Match.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb).extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
-                n2 = Match.objects.filter(pla=plb, plb=pla, sca=scb, scb=sca).extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
+                n1 = Match.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb)\
+                        .extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
+                n2 = Match.objects.filter(pla=plb, plb=pla, sca=scb, scb=sca)\
+                        .extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
                 n1 = n1.exists()
                 n2 = n2.exists()
 
                 if (n1 or n2) and not dup_switch:
-                    failure.append((s, '%i duplicate(s) found, add !DUP switch to force' % (n1+n2)))
+                    failure.append((s, '%i duplicate(s) found, add !DUP switch to force: %s'\
+                            % ((n1+n2), s)))
                     continue
 
                 if pla.race in ['R', 'S'] and rca == None:
-                    failure.append((s, 'Player A is Random or Switcher, need race information'))
+                    failure.append((s, '%s is Random or Switcher, need race information' % pla.tag))
                     continue
 
                 if plb.race in ['R', 'S'] and rcb == None:
-                    failure.append((s, 'Player B is Random or Switcher, need race information'))
+                    failure.append((s, '%s is Random or Switcher, need race information' % plb.tag))
                     continue
-    
+
                 m = Match()
                 m.pla = pla
                 m.plb = plb
@@ -201,15 +173,15 @@ def add_matches(request):
                 m.set_period()
                 m.eventobj = eventobj
                 m.save()
-    
+
                 success.append(m)
 
             except Exception as e:
-                failure.append((s, 'Could not parse: %s' % e))
+                failure.append((s, e))
                 continue
 
-        base.update({'event': event, 'date': date, 'messages': True, 'matches': '\n'.join([f[0] for f in failure]),\
-                'success': success, 'failure': failure})
+        base.update({'event': event, 'date': date, 'messages': True,\
+                'matches': '\n'.join([f[0] for f in failure]), 'success': success, 'failure': failure})
 
     base.update(csrf(request))
     return render_to_response('add.html', base)

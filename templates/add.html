@@ -19,7 +19,7 @@
         {% if failure %}
         <p style="color: #ff0000;"><strong>There were problems with the following entries:</strong></p>
             <ul>
-                {% for f in failure %}<li>{{ f.1 }}: &quot;{{ f.0 }}&quot;</li>{% endfor %}
+                {% for f in failure %}<li>{{ f.1 }}.</li>{% endfor %}
             </ul>
         {% endif %}
     {% endif %}
@@ -50,10 +50,12 @@
         <p>The player information must uniquely identify the player, and should be space-separated list of any of the following:</p>
 
         <ul>
-            <li>Player tag, e.g. &quot;DongRaeGu&quot; (enclose in parantheses if it contains a hyphen, e.g. &quot;(White-Ra)&quot;.)</li>
+            <li>Player tag, e.g. &quot;DongRaeGu&quot;</li>
             <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; or &quot;S&quot;</li>
-            <li>A two-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> country code. e.g.
-            &quot;KR&quot;</li>
+            <li>A two- or three-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>
+            country code. e.g. &quot;KR&quot;, or the common English name of a country</li> 
+            <li>Team name, e.g. &quot;MVP&quot;</li>
+            <li>Player or team aliases (we add these to the database when we feel like they're needed), e.g. &quot;DRG&quot;</li>
             <li>A player ID number, which you can get from the URL of the player page, e.g. &quot;4&quot;</li>
         </ul>
 

@@ -180,25 +180,6 @@ def player(request, player_id):
     except:
         countryfull = ''
 
-    matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period_id=base['curp'].id+1)\
-            .select_related('pla__rating').select_related('plb__rating').select_related('period').order_by('-date', '-id')
-    if matches.exists():
-        for m in matches:
-            try:
-                if m.pla == player:
-                    m.sc_my, m.sc_op = m.sca, m.scb
-                    m.rc_my, m.rc_op = m.rca, m.rcb
-                    m.opp = m.plb
-                else:
-                    m.sc_my, m.sc_op = m.scb, m.sca
-                    m.rc_my, m.rc_op = m.rcb, m.rca
-                    m.opp = m.pla
-                temp = m.opp.rating_set.get(period__id=m.period.id-1)
-                m.rt_op = temp.get_totalrating(player.race)
-            except:
-                m.rt_op = 0
-        base.update({'matches': matches})
-
     rating = Rating.objects.filter(player=player).order_by('-period')
     if rating.count() < 2:
         base['noimage'] = True
@@ -215,6 +196,31 @@ def player(request, player_id):
         base.update({'player': player, 'countryfull': countryfull, 'totwin': totw, 'totloss': totl})
         return render_to_response('player.html', base)
     rating = rating[0]
+
+    matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period_id=base['curp'].id+1)\
+            .select_related('pla__rating').select_related('plb__rating')\
+            .select_related('period').order_by('-date', '-id')
+    if matches.exists():
+        for m in matches:
+            try:
+                if m.pla == player:
+                    m.sc_my, m.sc_op = m.sca, m.scb
+                    m.rc_my, m.rc_op = m.rca, m.rcb
+                    m.opp = m.plb
+                else:
+                    m.sc_my, m.sc_op = m.scb, m.sca
+                    m.rc_my, m.rc_op = m.rcb, m.rca
+                    m.opp = m.pla
+                temp = m.opp.rating_set.get(period__id=m.period.id-1)
+                m.rt_op = temp.get_totalrating(player.race)
+            except:
+                m.rt_op = 0
+
+            try:
+                m.rt_my = rating.prev.get_totalrating(m.rc_op)
+            except:
+                m.rt_my = 0
+        base.update({'matches': matches})
 
     def meandate(tm):
         if tm.start != None and tm.end != None:
@@ -547,15 +553,21 @@ def player_results(request, player_id):
             if m.pla == player:
                 m.sc_my, m.sc_op = m.sca, m.scb
                 m.rc_my, m.rc_op = m.rca, m.rcb
-                m.opp = m.plb
+                m.me, m.opp = m.pla, m.plb
             else:
                 m.sc_my, m.sc_op = m.scb, m.sca
                 m.rc_my, m.rc_op = m.rcb, m.rca
-                m.opp = m.pla
+                m.me, m.opp = m.plb, m.pla
             temp = m.opp.rating_set.get(period__id=m.period.id-1)
             m.rt_op = temp.get_totalrating(player.race)
         except:
             m.rt_op = 0
+
+        try:
+            temp = m.me.rating_set.get(period__id=m.period.id-1)
+            m.rt_my = temp.get_totalrating(m.rc_op)
+        except:
+            m.rt_my = 0
 
     base['groups'] = groups
     base['player'] = player
@@ -625,6 +637,11 @@ def rating_details(request, player_id, period_id):
         except:
             m.rt_op = 0
             m.dev_op = 0.6**2 + 0.6**2
+
+        try:
+            m.rt_my = rating.prev.get_totalrating(m.rc_op)
+        except:
+            m.rt_my = 0
 
         if m.treated:
             treated = True

@@ -20,20 +20,24 @@
 <div class="table numtable" style="width: 67em;">
     {% if lm_header_info %}
     <div class="rowh">
-        <div class="rowe" style="width: 10em;">{% if lm_show_date %}Date{% endif %}</div>
-        <div class="rowe" style="width: 21em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
+        <div class="rowe" style="width: 7em;">{% if lm_show_date %}Date{% endif %}</div>
+        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
+        <div class="rowe" style="width: 18em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
         <div class="rowe" style="width: 5em; text-align: center">Score</div>
-        <div class="rowe" style="width: 19em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
+        <div class="rowe" style="width: 18em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
         <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
         <div class="rowe" style="width: 5em;"></div>
     </div>
     {% endif %}
     {% for m in lm_list %}
     <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 10em;">
+        <div class="rowe" style="width: 7em;">
             {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
         </div>
-        <div class="rowe" style="width: 21em; text-align: right;">
+        <div class="rowe" style="text-align: right; width: 7em;">
+            {% if lm_sorted %}{{ m.rt_my|ratscale }}{% endif %}
+        </div>
+        <div class="rowe" style="width: 18em; text-align: right;">
             {% if lm_sorted %}
                 {% if m.sc_my > m.sc_op %}<strong>{% endif %}
                 <a href="/players/{{ lm_player.id }}/">{{ lm_player.tag }}</a>
@@ -59,7 +63,7 @@
                 {{ m.sca }}–{{ m.scb }}
             {% endif %}
         </div>
-        <div class="rowe" style="width: 19em;">
+        <div class="rowe" style="width: 18em;">
             {% if lm_sorted %}
                 {% if m.sc_op > m.sc_my %}<strong>{% endif %}
                 <img src="http://aligulac.com:81/al/{{ m.rc_op }}.png" alt="{{ m.rc_op }}" class="btm" />

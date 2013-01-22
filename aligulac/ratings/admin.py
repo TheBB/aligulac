@@ -1,4 +1,4 @@
-from ratings.models import Player, Team, Period, Match, Rating, Event
+from ratings.models import Player, Team, Period, Match, Rating, Event, Alias
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
 from django.db.models import Q, F
@@ -15,19 +15,23 @@ player_country.short_description = 'Country'
 class MembersInline(admin.TabularInline):
     model = Team.members.through
 
+class AliasesInline(admin.TabularInline):
+    model = Alias
+    fields = ['name']
+
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
             (None,          {'fields': ['tag','race']}),
             ('Optional',    {'fields': ['name','birthday','country']}),
             ('External',    {'fields': ['tlpd_kr_id','tlpd_in_id','lp_name','sc2c_id','sc2e_id']})
     ]
-    inlines = [MembersInline]
+    inlines = [MembersInline, AliasesInline]
     search_fields = ['tag']
     list_display = ('tag', 'race', player_country, 'name')
 
 class TeamAdmin(admin.ModelAdmin):
     fields = ['name', 'founded', 'disbanded', 'active']
-    inlines = [MembersInline]
+    inlines = [MembersInline, AliasesInline]
     search_fields = ['name']
 
 def match_period(m):
@@ -45,11 +49,7 @@ class MatchForm(forms.ModelForm):
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'pla', 'sca', 'scb', 'plb', match_period, 'treated', 'event', 'eventobj', 'submitter')
     list_filter = [('date', DateFieldListFilter)]
-    #list_editable = ['eventobj']
     form = MatchForm
-
-    #def get_changelist_form(self, request, **kwargs):
-        #return MatchForm
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'lft', 'rgt')

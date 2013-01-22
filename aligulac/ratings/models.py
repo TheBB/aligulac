@@ -30,7 +30,8 @@ class Event(models.Model):
     category = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
-        q = ' '.join([e.name for e in Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, noprint=False).order_by('lft')])
+        q = ' '.join([e.name for e in\
+                Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, noprint=False).order_by('lft')])
         if q != '':
             q += ' '
         q += self.name
@@ -142,6 +143,17 @@ class TeamMembership(models.Model):
     end = models.DateField('Date left', blank=True, null=True)
     current = models.BooleanField(default=True, null=False)
     playing = models.BooleanField(default=True, null=False)
+
+class Alias(models.Model):
+    name = models.CharField(max_length=100)
+    player = models.ForeignKey(Player, null=True)
+    team = models.ForeignKey(Team, null=True)
+
+    class Meta:
+        verbose_name_plural = 'aliases'
+
+    def __unicode__(self):
+        return self.name
 
 class Match(models.Model):
     period = models.ForeignKey(Period)

@@ -217,7 +217,7 @@ def player(request, player_id):
                 m.rt_op = 0
 
             try:
-                m.rt_my = rating.prev.get_totalrating(m.rc_op)
+                m.rt_my = rating.get_totalrating(m.rc_op)
             except:
                 m.rt_my = 0
         base.update({'matches': matches})

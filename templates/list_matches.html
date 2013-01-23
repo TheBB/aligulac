@@ -27,7 +27,9 @@
         <div class="rowe" style="width: 18em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
         <div class="rowe" style="width: 5em; text-align: center">Score</div>
         <div class="rowe" style="width: 18em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
-        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
+        {% if lm_sorted %}
+        <div class="rowe" style="width: 7em; text-align: right;">Rating</div>
+        {% endif %}
         <div class="rowe" style="width: 5em;"></div>
     </div>
     {% endif %}
@@ -86,9 +88,11 @@
                 {% if m.scb > m.sca %}</strong>{% endif %}
             {% endif %}
         </div>
+        {% if lm_sorted %}
         <div class="rowe" style="width: 7em; text-align: right;">
-            {% if lm_sorted %}{{ m.rt_op|ratscale }}{% endif %}
+            {{ m.rt_op|ratscale }}
         </div>
+        {% endif %}
         <div class="rowe" style="text-align: right; width: 5em;">
             {% if lm_adm %}
                 {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}

@@ -134,30 +134,54 @@ def pred_match(request):
     base['s1'] = s1
     base['s2'] = s2
 
-    L = len(sipl[0].name) + 7
-    postable = '[code]' + ' '*(4-len(sipl[0].name))\
-            + '(%i) %s %i-%i %s (%i)\n' % (ratscale(sipl[0].elo+sipl[0].elo_race[sipl[1].race]),\
-            sipl[0].name, s1, s2, sipl[1].name, ratscale(sipl[1].elo+sipl[1].elo_race[sipl[0].race]))
-    for i in range(0,len(r1)):
-        q = ''
-        if r1[i] != None:
-            q = '%6.2f%% %i-%i' % (100*r1[i][2], r1[i][0], r1[i][1])
-        q = ' '*(L-len(q)) + q + ' '*5
-        if r2[i] != None:
-            q += '%i-%i %6.2f%%' % (r2[i][0], r2[i][1], 100*r2[i][2])
-        postable += q + '\n'
-    q = '%6.2f%%' % (100*base['t1'])
-    q = ' '*(L-len(q)-4) + q + ' '*13
-    q += '%6.2f%%' % (100*base['t2'])
-    postable += q + '\n\n'
+    def fill(s, l, left=True):
+        if left:
+            return ' '*(l-len(s)) + s
+        else:
+            return s + ' '*(l-len(s))
 
-    postable += 'Most likely winner: ' + (sipl[0].name if base['t1'] > base['t2'] else sipl[1].name)\
-            + (' (%.2f%%)' % (100*max(base['t1'],base['t2']))) + '\n'
+    numlen = len(str(num))
+    strL = '({rat}) {name} {score: >{nl}}'.format(rat=ratscale(sipl[0].elo + sipl[0].elo_race[sipl[1].race]),\
+            name=sipl[0].name, score=s1, nl=numlen)
+    strR = '{score: <{nl}} {name} ({rat})'.format(rat=ratscale(sipl[1].elo + sipl[1].elo_race[sipl[0].race]),\
+            name=sipl[1].name, score=s2, nl=numlen)
+    totlen = max(len(strL), len(strR), 10+numlen)
+
+    strL = fill(strL, totlen, True)
+    strR = fill(strR, totlen, False)
+    postable = '[center][code]' + strL + '-' + strR
+    postable += '\n' + '-'*(8+1+2*totlen)
+
+    ilen = totlen - numlen - 1
+
+    for i in range(0, len(r1)):
+        try:
+            strL = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r1[i][2], sca=r1[i][0], scb=r1[i][1], nl=numlen)
+        except:
+            strL = ''
+        try:
+            strR = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r2[i][0], scb=r2[i][1], nl=numlen)
+        except:
+            strR = ''
+        postable += '\n' + fill(strL, ilen, True) + ' '*(3+2*numlen) + fill(strR, ilen, False)
+
+    postable += '\n' + '-'*(8+1+2*totlen)
+    
+    strL = fill('{pctg: >6.2f}%'.format(pctg=100*base['t1']), ilen-3-numlen, True)
+    strR = fill('{pctg: >6.2f}%'.format(pctg=100*base['t2']), ilen-3-numlen, False)
+
+    postable += '\n' + strL + ' '*(9+4*numlen) + strR
+
+    postable += '\n\n' + 'Median outcome'
     ls = obj.find_lsup()
-    postable += 'Median outcome: %s %i-%i %s' % (sipl[0].name, ls[1], ls[2], sipl[1].name)
-    postable += '[/code]\n'
+    strL = '{name} {sc}'.format(name=sipl[0].name, sc=ls[1])
+    strR = '{sc} {name}'.format(name=sipl[1].name, sc=ls[2])
+    postable += '\n' + strL + '-' + strR
+
+    postable += '[/code]'
+
     postable += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-              + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
+              + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
 
     base['postable'] = postable
     base['curpage'] = 'Predict'

@@ -21,7 +21,9 @@
     {% if lm_header_info %}
     <div class="rowh">
         <div class="rowe" style="width: 7em;">{% if lm_show_date %}Date{% endif %}</div>
-        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
+        {% if lm_sorted %}
+        <div class="rowe" style="width: 7em; text-align: right;">Rating</div>
+        {% endif %}
         <div class="rowe" style="width: 18em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
         <div class="rowe" style="width: 5em; text-align: center">Score</div>
         <div class="rowe" style="width: 18em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
@@ -34,9 +36,11 @@
         <div class="rowe" style="width: 7em;">
             {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
         </div>
+        {% if lm_sorted %}
         <div class="rowe" style="text-align: right; width: 7em;">
-            {% if lm_sorted %}{{ m.rt_my|ratscale }}{% endif %}
+            {{ m.rt_my|ratscale }}
         </div>
+        {% endif %}
         <div class="rowe" style="width: 18em; text-align: right;">
             {% if lm_sorted %}
                 {% if m.sc_my > m.sc_op %}<strong>{% endif %}

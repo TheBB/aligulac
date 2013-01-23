@@ -20,29 +20,25 @@
 <div class="table numtable" style="width: 67em;">
     {% if lm_header_info %}
     <div class="rowh">
-        <div class="rowe" style="width: 7em;">{% if lm_show_date %}Date{% endif %}</div>
-        {% if lm_sorted %}
-        <div class="rowe" style="width: 7em; text-align: right;">Rating</div>
-        {% endif %}
+        <div class="rowe" style="width: 5em;">{% if lm_show_date %}Date{% endif %}</div>
+        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
         <div class="rowe" style="width: 18em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
         <div class="rowe" style="width: 5em; text-align: center">Score</div>
         <div class="rowe" style="width: 18em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
-        {% if lm_sorted %}
-        <div class="rowe" style="width: 7em; text-align: right;">Rating</div>
-        {% endif %}
+        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
         <div class="rowe" style="width: 5em;"></div>
     </div>
     {% endif %}
     {% for m in lm_list %}
     <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 7em;">
+        <div class="rowe" style="width: 5em;">
             {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
         </div>
-        {% if lm_sorted %}
         <div class="rowe" style="text-align: right; width: 7em;">
-            {{ m.rt_my|ratscale }}
+            {% if lm_sorted %}
+                {{ m.rt_my|ratscale }}
+            {% endif %}
         </div>
-        {% endif %}
         <div class="rowe" style="width: 18em; text-align: right;">
             {% if lm_sorted %}
                 {% if m.sc_my > m.sc_op %}<strong>{% endif %}
@@ -88,11 +84,11 @@
                 {% if m.scb > m.sca %}</strong>{% endif %}
             {% endif %}
         </div>
-        {% if lm_sorted %}
         <div class="rowe" style="width: 7em; text-align: right;">
-            {{ m.rt_op|ratscale }}
+            {% if lm_sorted %}
+                {{ m.rt_op|ratscale }}
+            {% endif %}
         </div>
-        {% endif %}
         <div class="rowe" style="text-align: right; width: 5em;">
             {% if lm_adm %}
                 {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}

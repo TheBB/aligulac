@@ -73,15 +73,15 @@ def period(request, period_id, page='1'):
         page = 1
     period = get_object_or_404(Period, id=period_id, computed=True)
 
-    best = Rating.objects.filter(period=period, decay__lt=4).order_by('-rating')[0]
-    bestvp = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
-    bestvt = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
-    bestvz = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
-    specvp = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating_vp/dev_vp'}).order_by('-d')[0]
-    specvt = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating_vt/dev_vt'}).order_by('-d')[0]
-    specvz = Rating.objects.filter(period=period, decay__lt=4).extra(select={'d':'rating_vz/dev_vz'}).order_by('-d')[0]
+    best = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0]
+    bestvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
+    bestvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
+    bestvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
+    specvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vp/dev_vp'}).order_by('-d')[0]
+    specvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vt/dev_vt'}).order_by('-d')[0]
+    specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vz/dev_vz'}).order_by('-d')[0]
 
-    entries = Rating.objects.filter(period=period, decay__lt=4)
+    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)
 
     try:
         race = request.GET['race']
@@ -705,11 +705,11 @@ def records(request):
     base = base_ctx('Records', sub)
 
     if race in ['all', 'T', 'P', 'Z']:
-        high = Rating.objects.extra(select={'rat': 'rating'}).filter(period__id__gt=11, decay__lt=4)
-        highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'}).filter(period__id__gt=11, decay__lt=4)
-        hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).filter(period__id__gt=11, decay__lt=4)
-        highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).filter(period__id__gt=11, decay__lt=4)
-        dom = Rating.objects.extra(select={'rat': 'domination'}).filter(domination__gt=0.0, period__id__gt=11, decay__lt=4)
+        high = Rating.objects.extra(select={'rat': 'rating'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        dom = Rating.objects.extra(select={'rat': 'domination'}).filter(domination__gt=0.0, period__id__gt=11, decay__lt=4, dev__lte=0.2)
 
         if race in ['P','T','Z']:
             high = high.filter(player__race=request.GET['race'])

@@ -17,7 +17,7 @@ pteams = Team.objects.filter(active=True)
 teams = []
 for t in pteams:
     if Rating.objects.filter(player__teammembership__team=t, player__teammembership__current=True,\
-            player__teammembership__playing=True, period=cur, decay__lt=4).count() > 0:
+            player__teammembership__playing=True, period=cur, decay__lt=4, dev__lte=0.2).count() > 0:
         teams.append(t)
 nteams = len(teams)
 S = dict()
@@ -30,7 +30,7 @@ for (ta, tb) in combinations(teams, 2):
     dbpl = []
     for team in [ta, tb]:
         rats = Rating.objects.filter(player__teammembership__team=team, player__teammembership__current=True,\
-                player__teammembership__playing=True, period=cur, decay__lt=4).order_by('-rating')[:5]
+                player__teammembership__playing=True, period=cur, decay__lt=4, dev__lte=0.2).order_by('-rating')[:5]
         dbpl.append(rats[::-1])
     sipl = [[make_player(r.player) for r in rats] for rats in dbpl]
 

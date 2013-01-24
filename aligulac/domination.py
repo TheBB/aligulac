@@ -53,6 +53,8 @@ for player in Player.objects.all():
         for i in range(1,len(ratings)):
             if ratings[i].decay > 3:
                 continue
+            if ratings[i].dev > 0.2:
+                continue
             if ratings[i].domination > dom:
                 dom = ratings[i].domination
                 init = ratings[i].period

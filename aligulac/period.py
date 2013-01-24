@@ -180,12 +180,12 @@ Match.objects.filter(period=cur).update(treated=True)
 
 ratings = Rating.objects.filter(period=cur, decay__lt=4)
 for rat in ratings:
-    rat.position = Rating.objects.filter(period=cur, decay__lt=4, rating__gt=rat.rating).count() + 1
-    rat.position_vp = Rating.objects.filter(period=cur, decay__lt=4, rating__gt=rat.rating+rat.rating_vp-F('rating_vp')).\
+    rat.position = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating).count() + 1
+    rat.position_vp = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vp-F('rating_vp')).\
             exclude(Q(player=rat.player)).count() + 1
-    rat.position_vt = Rating.objects.filter(period=cur, decay__lt=4, rating__gt=rat.rating+rat.rating_vt-F('rating_vt')).\
+    rat.position_vt = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vt-F('rating_vt')).\
             exclude(Q(player=rat.player)).count() + 1
-    rat.position_vz = Rating.objects.filter(period=cur, decay__lt=4, rating__gt=rat.rating+rat.rating_vz-F('rating_vz')).\
+    rat.position_vz = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vz-F('rating_vz')).\
             exclude(Q(player=rat.player)).count() + 1
     rat.save()
 

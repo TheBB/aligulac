@@ -38,23 +38,15 @@
     {% for entry in entries %}
     <div class="row {% cycle 'row2' 'row1' %}" href="/players/{{ entry.player.id }}/">
         <div class="rowe" style="text-align: right;">
-            {% if localcount %}
-                {% if startcount %}
-                    {{ forloop.counter|add:startcount }}.
-                {% else %}
-                    {{ forloop.counter }}.
-                {% endif %}
+            {% if startcount %}
+                {{ forloop.counter|add:startcount }}.
             {% else %}
-                {% if entry.position %}
-                    {{ entry.position }}.
-                {% else %}
-                    —
-                {% endif %}
+                {{ forloop.counter }}.
             {% endif %}
         </div>
         <div class="rowe" style="text-align: center;">
-            {% if entry.position %}
-            {% if entry.prev %}
+            {% comment %}
+            {% if entry.position and entry.prev.position %}
                 {% if entry.prev.position < entry.position %}
                     <img src="http://aligulac.com:81/al/downarrow.png" alt="down" class="btm" />
                 {% elif entry.prev.position > entry.position %}
@@ -63,7 +55,7 @@
             {% else %}
                 <img src="http://aligulac.com:81/al/new.png" alt="new" style="vertical-align: text-bottom;" />
             {% endif %}
-            {% endif %}
+            {% endcomment %}
         </div>
         <div class="rowe">
             <a href="/players/{{ entry.player.id }}/">{{ entry.player.tag }}</a>

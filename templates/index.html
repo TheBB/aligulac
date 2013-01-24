@@ -63,7 +63,7 @@
                     {% block content %}
                     <h2>Current top 10</h2>
 
-                    {% include "ratinglist.html" %}
+                    {% include "ratinglist.html" with localcount=1 %}
 
                     {% include "blogposts.html" %}
                     {% endblock %}

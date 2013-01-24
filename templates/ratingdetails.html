@@ -46,21 +46,6 @@
         <div class="rowe" style="width: 9em; text-align: right;">New rtg.</div>
         <div class="rowe" style="width: 10em; text-align: right;">Adjustment</div>
     </div>
-    <div class="row row2">
-        <div class="rowe"></div>
-        <div class="rowe" style="text-align: right;">
-            {{ prevrat.0|ratscale }}
-        </div>
-        <div class="rowe" style="text-align: right;">{{ tot_rating.0|ratscale }}</div>
-        <div class="rowe" style="text-align: right;">{{ expwins.0|floatformat:1 }}–{{ explosses.0|floatformat:1 }}</div>
-        <div class="rowe" style="text-align: right;">{{ nwins.0 }}–{{ nlosses.0 }}</div>
-        <div class="rowe" style="text-align: right;">{{ rating.comp_rat|ratscale }}</div>
-        <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
-        <div class="rowe" style="text-align: right;">
-            {% if diff.0 < 0 %}<span style="color: #aa0000;">
-                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.0|ratscaled }}</span>
-        </div>
-    </div>
     <div class="row row1">
         <div class="rowe">vP</div>
         <div class="rowe" style="text-align: right;">
@@ -128,6 +113,21 @@
         <div class="rowe" style="text-align: right;">
             {% if diff.1.Z < 0 %}<span style="color: #aa0000;">
                 {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.1.Z|ratscaled }}</span>
+        </div>
+    </div>
+    <div class="row row2">
+        <div class="rowe"></div>
+        <div class="rowe" style="text-align: right;">
+            {{ prevrat.0|ratscale }}
+        </div>
+        <div class="rowe" style="text-align: right;">{{ tot_rating.0|ratscale }}</div>
+        <div class="rowe" style="text-align: right;">{{ expwins.0|floatformat:1 }}–{{ explosses.0|floatformat:1 }}</div>
+        <div class="rowe" style="text-align: right;">{{ nwins.0 }}–{{ nlosses.0 }}</div>
+        <div class="rowe" style="text-align: right;">{{ rating.comp_rat|ratscale }}</div>
+        <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
+        <div class="rowe" style="text-align: right;">
+            {% if diff.0 < 0 %}<span style="color: #aa0000;">
+                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.0|ratscaled }}</span>
         </div>
     </div>
 </div>

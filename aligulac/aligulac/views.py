@@ -116,7 +116,7 @@ def home(request):
     base = base_ctx()
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
-    entries = Rating.objects.filter(period=period, decay__lt=4).order_by('-rating')[0:10]
+    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0:10]
 
     blogs = Post.objects.order_by('-date')[0:3]
 

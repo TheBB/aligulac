@@ -81,25 +81,29 @@
         <div class="rowel" style="width: 15em;">Rating</div>
         <div class="rower" style="width: 15em;">{{ rating.rating|ratscale }} 
             ± {{ rating.dev|ratscaled }}
-            <span class="small">(#{{ rating.position }})</span></div>
+            {% comment %}<span class="small">(#{{ rating.position }})</span></div>{% endcomment %}
+        </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vP</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vp|ratscale }} 
             ± {{ rating|devrange:"P"|ratscaled }}
-            <span class="small">(#{{ rating.position_vp }})</span></div>
+            {% comment %}<span class="small">(#{{ rating.position_vp }})</span></div>{% endcomment %}
+        </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vT</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vt|ratscale }} 
             ± {{ rating|devrange:"T"|ratscaled }}
-            <span class="small">(#{{ rating.position_vt }})</span></div>
+            {% comment %}<span class="small">(#{{ rating.position_vt }})</span></div>{% endcomment %}
+        </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vZ</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vz|ratscale }} 
             ± {{ rating|devrange:"Z"|ratscaled }}
-            <span class="small">(#{{ rating.position_vz }})</span></div>
+            {% comment %}<span class="small">(#{{ rating.position_vz }})</span></div>{% endcomment %}
+        </div>
     </div>
     <div class="row">
         <div class="rowel">Total winrate</div>

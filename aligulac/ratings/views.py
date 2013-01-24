@@ -585,7 +585,7 @@ def rating_details(request, player_id, period_id):
     player = get_object_or_404(Player, id=player_id, rating__period=period)
     rating = get_object_or_404(Rating, player=player, period=period)
 
-    base = base_ctx('Ranking', 'Match history', request, context=player)
+    base = base_ctx('Ranking', 'Adjustments', request, context=player)
 
     try:
         nextlink = Rating.objects.filter(player=player, period__id__gt=period_id,\

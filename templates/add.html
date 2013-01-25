@@ -40,8 +40,7 @@
              <a href="#" onclick="toggle_to('problems'); return false;">common problems</a></p></div>
 
     <div id="guide" style="display: none;">
-        <p>Use the format YYYY-MM-DD for the date. For the event, enter anything that can be used to identify the game in case duplicates
-        are discovered later. The event information will not be publicly viewable.</p>
+        <p>Use the format YYYY-MM-DD for the date. For the event, use an event object whenever possible.</p>
 
         <p>Each line corresponds to a match, and should be entered using this format:</p>
 
@@ -77,7 +76,7 @@
             Please also provide a country code if possible, and make sure the player tag is spelled correctly (including
             capitalisation).</li>
             <li>a duplicate entry was found. If you are certain that the two players in question played more than one match within a
-            single day day with the same result (this can happen, but it's rare), add the switch &quot;<strong>!DUP</strong>&quot; to the
+            single day with the same result (this can happen, but it's rare), add the switch &quot;<strong>!DUP</strong>&quot; to the
             end of the respective line(s). This will force the match to be entered.</li>
         </ul>
     </div>
@@ -122,6 +121,10 @@
         <p>Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest and Top need to be designated by race and/or country.</p>
         <p>Common country codes: Canada (CA), Germany (DE), Korea (KR), Poland (PL), Russia (RU), Sweden (SE), Ukraine (UA), USA (US)</p>
     </div>
+
+    <p><strong>Use an event object instead of event text whenever possible. You do not need both. If you can't find the correct event
+        object, please consider <a href="/add/events/">making it</a>. If these are the final games associated with an event object, please
+        close it afterwards.</p>
 
     <form method="post" action="/add/">
     {% csrf_token %}

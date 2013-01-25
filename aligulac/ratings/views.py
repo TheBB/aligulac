@@ -74,12 +74,18 @@ def period(request, period_id, page='1'):
     period = get_object_or_404(Period, id=period_id, computed=True)
 
     best = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0]
-    bestvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
-    bestvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
-    bestvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
-    specvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vp/dev_vp'}).order_by('-d')[0]
-    specvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vt/dev_vt'}).order_by('-d')[0]
-    specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).extra(select={'d':'rating_vz/dev_vz'}).order_by('-d')[0]
+    bestvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
+    bestvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
+    bestvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
+    specvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating_vp/dev_vp'}).order_by('-d')[0]
+    specvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating_vt/dev_vt'}).order_by('-d')[0]
+    specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+            .extra(select={'d':'rating_vz/dev_vz'}).order_by('-d')[0]
 
     entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)
 
@@ -396,7 +402,11 @@ def results_search(request):
 
     if 'op' in request.POST and request.POST['op'] == 'Assign' and base['adm'] == True:
         num = 0
-        event = Event.objects.get(id=int(request.POST['event']))
+        if int(request.POST['event']) != 2:
+            event = Event.objects.get(id=int(request.POST['event']))
+        else:
+            event = None
+
         for key in request.POST:
             if request.POST[key] != 'y':
                 continue
@@ -650,18 +660,18 @@ def rating_details(request, player_id, period_id):
         if m.treated:
             treated = True
             tot_rating[0] += m.rt_op * (m.sca + m.scb)
-            tot_rating[1][m.opp.race] += m.rt_op * (m.sca + m.scb)
+            tot_rating[1][m.rc_op] += m.rt_op * (m.sca + m.scb)
             ngames[0] += m.sca + m.scb
-            ngames[1][m.opp.race] += m.sca + m.scb
+            ngames[1][m.rc_op] += m.sca + m.scb
             nwins[0] += m.sc_my
-            nwins[1][m.opp.race] += m.sc_my
+            nwins[1][m.rc_op] += m.sc_my
             nlosses[0] += m.sc_op
-            nlosses[1][m.opp.race] += m.sc_op
+            nlosses[1][m.rc_op] += m.sc_op
 
             scale = 1 + m.dev_op**2 + rating.get_totaldev(m.opp.race)**2
-            ew = (m.sca + m.scb) * norm.cdf(prevrat[1][m.opp.race] - m.rt_op, scale=sqrt(scale))
+            ew = (m.sca + m.scb) * norm.cdf(prevrat[1][m.rc_op] - m.rt_op, scale=sqrt(scale))
             expwins[0] += ew
-            expwins[1][m.opp.race] += ew
+            expwins[1][m.rc_op] += ew
         else:
             nontreated = True
 

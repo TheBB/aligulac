@@ -101,7 +101,7 @@ def db(request):
         if n > 0:
             submitters.append((u, n))
     submitters.sort(key=lambda t: t[1], reverse=True)
-    base['submitters'] = submitters[:3]
+    base['submitters'] = submitters[:10]
 
     dumpfile = '/usr/local/www/media/al/aligulac.sql'
     base['dump'] = os.path.exists(dumpfile)

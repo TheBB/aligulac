@@ -5,7 +5,7 @@ os.environ['HOME'] = '/root'
 from aligulac.views import base_ctx
 from ratings.tools import find_player
 from simul.playerlist import make_player
-from simul.formats import match
+from simul.formats import match, mslgroup
 from ratings.templatetags.ratings_extras import ratscale
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -25,7 +25,7 @@ def predict(request):
     base = base_ctx()
     base['curpage'] = 'Predict'
 
-    formats = ['Best-of-N match']
+    formats = ['Best-of-N match', 'Four-player Swiss group']
     base['formats'] = formats
 
     if 'format' not in request.GET:
@@ -71,9 +71,9 @@ def predict(request):
             base['errs'].append('Expected exactly two players')
         if len(bo) != 1:
             base['errs'].append('Expected exactly one \'best of\'')
-    elif fmt in [1, 2] :
-        if (len(players) % 2 != 0 or len(players) == 0):
-            base['errs'].append('Expected an even number of players (equal for each team)')
+    elif fmt == 1:
+        if len(players) != 4:
+            base['errs'].append('Expected exactly four player')
         if len(bo) != 1:
             base['errs'].append('Expected exactly one \'best of\'')
 
@@ -84,10 +84,14 @@ def predict(request):
     ps = '%2C'.join([str(p.id) for p in players])
     if fmt == 0:
         return redirect('/predict/match/?bo=%s&ps=%s' % (bo, ps))
+    elif fmt == 1:
+        return redirect('/predict/4pswiss/?bo=%s&ps=%s' % (bo, ps))
 
     return render_to_response('predict.html', base)
 
 def pred_match(request):
+    base = base_ctx('Predict', request=request)
+
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
     num = (int(request.GET['bo'])+1)/2
@@ -109,7 +113,6 @@ def pred_match(request):
     obj.modify(s1, s2)
     obj.compute()
 
-    base = base_ctx()
     base.update({'p1': dbpl[0], 'p2': dbpl[1], 'r1': sipl[0].elo + sipl[0].elo_race[sipl[1].race],\
                  'r2': sipl[1].elo + sipl[1].elo_race[sipl[0].race]})
     tally = obj.get_tally()
@@ -134,17 +137,79 @@ def pred_match(request):
     base['s1'] = s1
     base['s2'] = s2
 
+    match_postable(base, obj, r1, r2)
+    return render_to_response('pred_match.html', base)
+
+def pred_4pswiss(request):
+    base = base_ctx('Predict', request=request)
+
+    dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
+    sipl = [make_player(pl) for pl in dbpl]
+    num = (int(request.GET['bo'])+1)/2
+    obj = mslgroup.MSLGroup(num)
+    obj.set_players(sipl)
+
+    def update(request, obj, match, r1, r2):
+        if r1 in request.GET and r2 in request.GET:
+            try:
+                if obj.get_match(match).can_modify():
+                    obj.get_match(match).modify(int(request.GET[r1]), int(request.GET[r2]))
+            except:
+                pass
+
+    update(request, obj, 'first', 'f11', 'f12')
+    update(request, obj, 'second', 'f21', 'f22')
+    update(request, obj, 'winners', 's11', 's12')
+    update(request, obj, 'losers', 's21', 's22')
+    update(request, obj, 'final', 'fi1', 'fi2')
+
+    obj.compute()
+    tally = obj.get_tally()
+
+    players = list(sipl)
+    for p in players:
+        p.tally = tally[p]
+
+    for i in range(0, 4):
+        players.sort(key=lambda p: p.tally[i], reverse=True)
+
+    base['players'] = players
+    base['tally'] = tally
+
+    base['mod2nd'] = obj.get_match('winners').can_modify() and obj.get_match('losers').can_modify()
+    base['mod3rd'] = obj.get_match('final').can_modify()
+
+    base['first'] = [obj.get_match('first'), obj.get_match('second')]
+    details = [('first', base['first'][0]), ('second', base['first'][1])]
+    if base['mod2nd']:
+        base['second'] = [obj.get_match('winners'), obj.get_match('losers')]
+        details += [('winners', base['second'][0]), ('losers', base['second'][1])]
+    if base['mod3rd']:
+        base['third'] = obj.get_match('final')
+        details += [('final', base['third'])]
+
+    base['details'] = details
+    base['ps'] = request.GET['ps']
+    base['bo'] = request.GET['bo']
+
+    fpswiss_postable(base, obj, players)
+    return render_to_response('pred_4pswiss.html', base)
+
+def match_postable(base, obj, r1, r2):
     def fill(s, l, left=True):
         if left:
             return ' '*(l-len(s)) + s
         else:
             return s + ' '*(l-len(s))
+    
+    pa = obj.get_player(0)
+    pb = obj.get_player(1)
 
-    numlen = len(str(num))
-    strL = '({rat}) {name} {score: >{nl}}'.format(rat=ratscale(sipl[0].elo + sipl[0].elo_race[sipl[1].race]),\
-            name=sipl[0].name, score=s1, nl=numlen)
-    strR = '{score: <{nl}} {name} ({rat})'.format(rat=ratscale(sipl[1].elo + sipl[1].elo_race[sipl[0].race]),\
-            name=sipl[1].name, score=s2, nl=numlen)
+    numlen = len(str(obj._num))
+    strL = '({rat}) {name} {score: >{nl}}'.format(rat=ratscale(pa.elo + pa.elo_race[pb.race]),\
+            name=pa.name, score=obj._result[0], nl=numlen)
+    strR = '{score: <{nl}} {name} ({rat})'.format(rat=ratscale(pb.elo + pb.elo_race[pa.race]),\
+            name=pb.name, score=obj._result[1], nl=numlen)
     totlen = max(len(strL), len(strR), 10+numlen)
 
     strL = fill(strL, totlen, True)
@@ -156,11 +221,13 @@ def pred_match(request):
 
     for i in range(0, len(r1)):
         try:
-            strL = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r1[i][2], sca=r1[i][0], scb=r1[i][1], nl=numlen)
+            strL = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r1[i][2], sca=r1[i][0],\
+                    scb=r1[i][1], nl=numlen)
         except:
             strL = ''
         try:
-            strR = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r2[i][0], scb=r2[i][1], nl=numlen)
+            strR = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r2[i][0],\
+                    scb=r2[i][1], nl=numlen)
         except:
             strR = ''
         postable += '\n' + fill(strL, ilen, True) + ' '*(3+2*numlen) + fill(strR, ilen, False)
@@ -174,8 +241,8 @@ def pred_match(request):
 
     postable += '\n\n' + 'Median outcome'
     ls = obj.find_lsup()
-    strL = '{name} {sc}'.format(name=sipl[0].name, sc=ls[1])
-    strR = '{sc} {name}'.format(name=sipl[1].name, sc=ls[2])
+    strL = '{name} {sc}'.format(name=pa.name, sc=ls[1])
+    strR = '{sc} {name}'.format(name=pb.name, sc=ls[2])
     postable += '\n' + strL + '-' + strR
 
     postable += '[/code]'
@@ -184,29 +251,28 @@ def pred_match(request):
               + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
 
     base['postable'] = postable
-    base['curpage'] = 'Predict'
-    return render_to_response('pred_match.html', base)
 
-def pred_rrgroup(request):
-    dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
-    sipl = [make_player(pl) for pl in dbpl]
-    num = (int(request.GET['bo'])+1)/2
-    obj = rrgroup.RRGroup(len(sipl), num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
-    obj.set_players(sipl)
-    obj.compute()
+def fpswiss_postable(base, obj, players):
+    def fill(s, l):
+        return ' '*(l-len(s)) + s
 
-    base = base_ctx()
+    nl = max([len(p.dbpl.tag) for p in players])
 
-    for i in range(0,len(sipl)):
-        tally = obj.get_tally()[sipl[i]]
-        dbp = dbpl[i]
+    postable = '[center][code]'
+    postable += fill('Top 2      1st      2nd      3rd      4th',  47 + nl)
+    postable += '\n' + '-'*(47 + 8 + nl)
 
-    base['sipl'] = sipl
-    
-    return render_to_response('pred_rrgroup.html', base)
+    for p in players:
+        postable += '\n' + '{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'\
+                .format(top2=100*(p.tally[2]+p.tally[3]), p1=100*p.tally[3], p2=100*p.tally[2],\
+                        p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl)
 
-def binomial(n, k):
-    if k == 0:
-        return 1
-    else:
-        return float(n)/k * binomial(n-1, k-1)
+    postable += '[/code]'
+
+    postable += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
+              + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
+
+    base['postable'] = postable
+
+
+    base['postable'] = postable

@@ -27,7 +27,12 @@ class Event(models.Model):
     closed = models.BooleanField(default=False)
     big = models.BooleanField(default=False)
     noprint = models.BooleanField(default=False)
-    category = models.CharField(max_length=50, null=True, blank=True)
+
+    INDIVIDUAL = 'individual'
+    TEAM = 'team'
+    FREQUENT = 'frequent'
+    CATEGORIES = [(INDIVIDUAL, 'Individual'), (TEAM, 'Team'), (FREQUENT, 'Frequent')]
+    category = models.CharField(max_length=50, null=True, blank=True, choices=CATEGORIES)
 
     def __unicode__(self):
         q = ' '.join([e.name for e in\
@@ -166,7 +171,8 @@ class Match(models.Model):
     P = 'P'
     T = 'T'
     Z = 'Z'
-    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg')]
+    R = 'R'
+    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
     rca = models.CharField(max_length=1, choices=RACES, null=False, blank=False)
     rcb = models.CharField(max_length=1, choices=RACES, null=False, blank=False)
 
@@ -228,27 +234,34 @@ class Rating(models.Model):
         return self.player.tag + ' P' + str(self.period.id)
 
     def get_rating(self, race=None):
-        if race == None:
-            return self.rating
-        elif race == 'P':
+        if race == 'P':
             return self.rating_vp
         elif race == 'T':
             return self.rating_vt
         elif race == 'Z':
             return self.rating_vz
+        return self.rating
 
     def get_dev(self, race=None):
-        if race == None:
-            return self.dev
-        elif race == 'P':
+        if race == 'P':
             return self.dev_vp
         elif race == 'T':
             return self.dev_vt
         elif race == 'Z':
             return self.dev_vz
+        return self.dev
 
     def get_totalrating(self, race):
-        return self.get_rating(None) + self.get_rating(race)
+        if race in ['P','T','Z']:
+            return self.rating + self.get_rating(race)
+        else:
+            return self.rating
 
     def get_totaldev(self, race):
-        return sqrt(self.get_dev(None)**2 + self.get_dev(race)**2)
+        if race in ['P','T','Z']:
+            return sqrt(self.get_dev(None)**2 + self.get_dev(race)**2)
+        else:
+            d = self.get_dev(None)**2
+            for r in ['P','T','Z']:
+                d += self.get_dev(r)**2/9
+            return sqrt(dev)

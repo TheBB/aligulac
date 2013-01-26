@@ -9,13 +9,13 @@ def make_player(player):
     rats = Rating.objects.filter(player=player).order_by('-period__id')
     if rats.count == 0:
         pl = Player(player.tag, player.race, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 0.6)
-        pl.dbid = player.id
+        pl.dbpl = player
         return pl
     else:
         rat = rats[0]
         pl = Player(player.tag, player.race, rat.rating, rat.rating_vp, rat.rating_vt, rat.rating_vz,\
                     rat.dev, rat.dev_vp, rat.dev_vt, rat.dev_vz)
-        pl.dbid = player.id
+        pl.dbpl = player
         return pl
 
 class Player:

@@ -29,7 +29,7 @@ urlpatterns = patterns('',
 
     url(r'^predict/$', 'ratings.predict.predict'),
     url(r'^predict/match/$', 'ratings.predict.pred_match'),
-    url(r'^predict/rrgroup/$', 'ratings.predict.pred_rrgroup'),
+    url(r'^predict/4pswiss/$', 'ratings.predict.pred_4pswiss'),
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),
@@ -48,7 +48,8 @@ urlpatterns = patterns('',
 
     url(r'^404/$', 'aligulac.views.h404'),
 
-    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': 'http://aligulac.com:81/al/favicon.ico'}),
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to',\
+            {'url': 'http://aligulac.com:81/al/favicon.ico'}),
     url(r'^admin/', include(admin.site.urls)),
 )
 

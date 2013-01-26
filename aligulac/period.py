@@ -26,11 +26,6 @@ if len(prev) > 0:
     print "Previous period #%i not computed. Aborting." % prev[0].id
     sys.exit(1)
 
-post = Period.objects.filter(id__gt=period, computed=True)
-if len(post) > 0 and not 'override' in sys.argv:
-    print "Following period #%i already computed. Add 'override' to continue. Aborting." % post[0].id
-    sys.exit(1)
-
 prev = Period.objects.filter(id=period-1)
 if len(prev) > 0:
     prev = prev[0]
@@ -38,10 +33,8 @@ else:
     prev = None
 
 cur = Period.objects.get(id=period)
-cur.computed = False
-cur.save()
 
-Rating.objects.filter(period=cur).delete()
+#Rating.objects.filter(period=cur).delete()
 print 'Period %i: from %s to %s' % (cur.id, cur.start, cur.end)
 
 nrepeats = 0
@@ -57,6 +50,7 @@ opps = dict()
 W = dict()
 L = dict()
 prev_rats = dict()
+cur_rats = dict()
 
 pls = Player.objects.filter(Q(match_pla__period=cur) | Q(match_plb__period=cur)).distinct()
 for p in pls:
@@ -120,7 +114,11 @@ for p in pls:
             array(oppr[p.id]), array(opps[p.id]), array(oppc[p.id]), array(W[p.id]), array(L[p.id]),\
             p.tag, False)
 
-    r = Rating()
+    try:
+        r = Rating.objects.get(period=cur, player=p)
+    except:
+        r = Rating()
+
     r.player = p
     r.rating = newr[0]
     r.rating_vp = newr[1]
@@ -178,17 +176,6 @@ print 'Bookkeeping (this may take a while)...'
 
 Match.objects.filter(period=cur).update(treated=True)
 
-ratings = Rating.objects.filter(period=cur, decay__lt=4)
-for rat in ratings:
-    rat.position = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating).count() + 1
-    rat.position_vp = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vp-F('rating_vp')).\
-            exclude(Q(player=rat.player)).count() + 1
-    rat.position_vt = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vt-F('rating_vt')).\
-            exclude(Q(player=rat.player)).count() + 1
-    rat.position_vz = Rating.objects.filter(period=cur, decay__lt=4, dev__lte=0.2, rating__gt=rat.rating+rat.rating_vz-F('rating_vz')).\
-            exclude(Q(player=rat.player)).count() + 1
-    rat.save()
-
 def mean(a):
     return sum([f.rating for f in a])/len(a)
 
@@ -211,12 +198,9 @@ cur.save()
 top = Rating.objects.filter(period=cur, decay__lt=4).order_by('-rating')
 n1 = top[0]
 n2 = top[1]
+top.update(domination=F('rating')-n1.rating)
 n1.domination = n1.rating - n2.rating
 n1.save()
-for i in range(1,top.count()):
-    r = top[i]
-    r.domination = r.rating - n1.rating
-    r.save()
 
 os.system('./domination.py')
 

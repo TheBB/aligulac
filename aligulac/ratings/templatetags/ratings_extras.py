@@ -141,3 +141,21 @@ def devrange(value, arg):
     elif arg == 'Z':
         return sqrt(r + value.dev_vz**2)
 register.filter('devrange', devrange)
+
+def accessplayer(value, arg):
+    return value.get_player(int(arg)).dbpl.tag
+register.filter('accessplayer', accessplayer)
+
+def accessplayerid(value, arg):
+    return value.get_player(int(arg)).dbpl.id
+register.filter('accessplayerid', accessplayerid)
+
+def accessscore(value, arg):
+    return value._result[int(arg)]
+register.filter('accessscore', accessscore)
+
+def makematchlink(value):
+    return "/predict/match/?bo=%i&amp;ps=%i%%2C%i&amp;s1=%i&amp;s2=%i" % \
+            (2*value._num-1, value.get_player(0).dbpl.id, value.get_player(1).dbpl.id,\
+             value._result[0], value._result[1])
+register.filter('makematchlink', makematchlink)

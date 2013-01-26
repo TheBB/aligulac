@@ -1,8 +1,8 @@
 import itertools
 
-from formats.composite import Composite
-from formats.match import Match
-from formats.format import Tally as ParentTally
+from simul.formats.composite import Composite
+from simul.formats.match import Match
+from simul.formats.format import Tally as ParentTally
 
 class Tally(ParentTally):
 

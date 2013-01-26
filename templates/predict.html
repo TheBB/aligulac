@@ -23,7 +23,8 @@
             <div class="rower" style="width: 40em;">
                 <select name="format" style="width: 20em;">
                     {% for format in formats %}
-                    <option value="{{ forloop.counter0 }}" {% if forloop.counter0 == fmt %}selected{% endif %}>{{ format }}</option>
+                    <option value="{{ forloop.counter0 }}"
+                        {% if forloop.counter0 == fmt %}selected{% endif %}>{{ format }}</option>
                     {% endfor %}
                 </select>
             </div>

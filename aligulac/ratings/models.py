@@ -264,4 +264,4 @@ class Rating(models.Model):
             d = self.get_dev(None)**2
             for r in ['P','T','Z']:
                 d += self.get_dev(r)**2/9
-            return sqrt(dev)
+            return sqrt(d)

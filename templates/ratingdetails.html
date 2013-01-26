@@ -58,7 +58,7 @@
             {% if ngames.1.P > 0 %}{{ expwins.1.P|floatformat:1 }}–{{ explosses.1.P|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ nwins.1.P }}–{{ nlosses.1.P }}{% endif %}
+            {% if ngames.1.P > 0 %}{{ nwins.1.P|floatformat:1 }}–{{ nlosses.1.P|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
             {% if ngames.1.P > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vp|ratscale }}{% endif %}
@@ -81,7 +81,7 @@
             {% if ngames.1.T > 0 %}{{ expwins.1.T|floatformat:1 }}–{{ explosses.1.T|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ nwins.1.T }}–{{ nlosses.1.T }}{% endif %}
+            {% if ngames.1.T > 0 %}{{ nwins.1.T|floatformat:1 }}–{{ nlosses.1.T|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
             {% if ngames.1.T > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vt|ratscale }}{% endif %}
@@ -104,7 +104,7 @@
             {% if ngames.1.Z > 0 %}{{ expwins.1.Z|floatformat:1 }}–{{ explosses.1.Z|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ nwins.1.Z }}–{{ nlosses.1.Z }}{% endif %}
+            {% if ngames.1.Z > 0 %}{{ nwins.1.Z|floatformat:1 }}–{{ nlosses.1.Z|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
             {% if ngames.1.Z > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vz|ratscale }}{% endif %}
@@ -122,7 +122,7 @@
         </div>
         <div class="rowe" style="text-align: right;">{{ tot_rating.0|ratscale }}</div>
         <div class="rowe" style="text-align: right;">{{ expwins.0|floatformat:1 }}–{{ explosses.0|floatformat:1 }}</div>
-        <div class="rowe" style="text-align: right;">{{ nwins.0 }}–{{ nlosses.0 }}</div>
+        <div class="rowe" style="text-align: right;">{{ nwins.0|floatformat:1 }}–{{ nlosses.0|floatformat:1 }}</div>
         <div class="rowe" style="text-align: right;">{{ rating.comp_rat|ratscale }}</div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
         <div class="rowe" style="text-align: right;">

@@ -4,7 +4,6 @@ from numpy import *
 from scipy.stats import norm
 import scipy.optimize as opt
 
-_var_decay = 0.04
 _min_dev = 0.05
 
 def ceilit(arr):
@@ -70,12 +69,7 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
 
 def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     if len(W) == 0:
-        news = sqrt(mys**2 + _var_decay**2)
-        ceilit(news)
-        return(myr, news, [None] * (Ncats+1), [None] * (Ncats+1))
-
-    if pr:
-        print oppr
+        return(myr, mys, [None] * (Ncats+1), [None] * (Ncats+1))
 
     (oppr, opps, oppc, W, L) = fix_ww(myr, mys, oppr, opps, oppc, W, L)
 
@@ -150,7 +144,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         print 'Failed to converge for %s' % text
         return (myr, mys)
 
-    devs = -1/diag(D2logL(x, DMex, C+1))
+    devs = maximum(-1/diag(D2logL(x, DMex, C+1)), _min_dev)
     rats = extend(x)
     news = zeros(len(myr))
     newr = zeros(len(myr))
@@ -165,7 +159,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr[0] += m
 
     ind = setdiff1d(range(0,len(myr)), [0] + ind)
-    news[ind] = sqrt(mys[ind]**2 + _var_decay**2)
+    news[ind] = mys[ind]
     newr[ind] = myr[ind]
 
     news = (abs(news-_min_dev)+news-_min_dev)/2 + _min_dev

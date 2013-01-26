@@ -11,197 +11,230 @@ from ratings.models import Period, Player, Rating, Match
 
 from rating import update
 
-period = int(sys.argv[1])
+RACES = ['P', 'T', 'Z']
+EXRACES = ['M'] + RACES
+INIT_RATING = 0.0
+INIT_DEV = 0.6
+MIN_DEV = 0.05
+DEV_DECAY = 0.04
 
-if 'publish' in sys.argv:
-    cur = Period.objects.get(id=period)
-    cur.computed = True
-    cur.save()
+class CPlayer:
 
-    print 'Period %i published' % cur.id
-    sys.exit(0)
+    def __init__(self):
+        self.prev_rating = dict()
+        self.prev_dev = dict()
+        self.oppc = []
+        self.oppr = []
+        self.oppd = []
+        self.W = []
+        self.L = []
+        self.player = None
+        self.prev_rating_obj = None
 
-prev = Period.objects.filter(id__lt=period, computed=False)
-if len(prev) > 0:
-    print "Previous period #%i not computed. Aborting." % prev[0].id
-    sys.exit(1)
+    def get_rating_array(self):
+        ret = []
+        for r in EXRACES:
+            ret.append(self.prev_rating[r])
+        return array(ret)
 
-prev = Period.objects.filter(id=period-1)
-if len(prev) > 0:
-    prev = prev[0]
-else:
-    prev = None
+    def get_dev_array(self):
+        ret = []
+        for r in EXRACES:
+            ret.append(self.prev_dev[r])
+        return array(ret)
 
-cur = Period.objects.get(id=period)
+def get_new_players(cplayers, period):
+    """Collects information about all new players."""
 
-#Rating.objects.filter(period=cur).delete()
-print 'Period %i: from %s to %s' % (cur.id, cur.start, cur.end)
+    pls = Player.objects.filter(Q(match_pla__period=period) | Q(match_plb__period=period)).distinct()
+    for p in pls:
+        if p.id in cplayers:
+            continue
 
-nrepeats = 0
-nnew = 0
-nmatches = 0
-ngames = 0
+        cp = CPlayer()
+        cp.player = p
 
-rats = dict()
-devs = dict()
-oppc = dict()
-oppr = dict()
-opps = dict()
-W = dict()
-L = dict()
-prev_rats = dict()
-cur_rats = dict()
+        for r in RACES:
+            cp.prev_rating[r] = INIT_RATING
+            cp.prev_dev[r] = INIT_DEV
+        cp.prev_rating['M'] = INIT_RATING
+        cp.prev_dev['M'] = INIT_DEV
 
-pls = Player.objects.filter(Q(match_pla__period=cur) | Q(match_plb__period=cur)).distinct()
-for p in pls:
-    found = False
+        cplayers[p.id] = cp
 
-    if prev != None:
-        prev_rating = Rating.objects.filter(period=prev, player=p)
-        if len(prev_rating) > 0:
-            prev_rating = prev_rating[0]
-            rats[prev_rating.player.id] = prev_rating.ratings()
+def get_existing_players(cplayers, prev):
+    """Collects information about all players already rated."""
 
-            (k, dtemp, l, m) = update([], array(prev_rating.devs()), [], [], [], [], [], '')
-            devs[prev_rating.player.id] = list(dtemp)
+    rats = Rating.objects.filter(period=prev).select_related('player')
+    for rat in rats:
+        cp = CPlayer()
+        cp.player = rat.player
+        cp.prev_rating_obj = rat
 
-            found = True
-            nrepeats += 1
-            prev_rats[prev_rating.player.id] = prev_rating
+        for r in RACES:
+            cp.prev_rating[r] = rat.get_rating(r)
+            cp.prev_dev[r] = rat.get_dev(r)
+        cp.prev_rating['M'] = rat.get_rating()
+        cp.prev_dev['M'] = rat.get_dev()
 
-    if not found:
-        rats[p.id] = [0, 0, 0, 0]
-        devs[p.id] = [0.6, 0.6, 0.6, 0.6]
-        nnew += 1
+        cplayers[rat.player.id] = cp
 
-    oppc[p.id] = []
-    oppr[p.id] = []
-    opps[p.id] = []
-    W[p.id] = []
-    L[p.id] = []
+def decay_dev(cp):
+    """Decays the RD of a player."""
+    for r in EXRACES:
+        cp.prev_dev[r] = min(sqrt(cp.prev_dev[r]**2 + DEV_DECAY**2), INIT_DEV)
 
-ms = Match.objects.filter(period=cur)
-for m in ms:
-    m.treated = False
-    m.save()
+def get_matches(cplayers, period):
+    """Collects all results during a period."""
 
-    cata = ['P','T','Z'].index(m.rca)
-    catb = ['P','T','Z'].index(m.rcb)
-    
-    oppc[m.pla.id].append(catb)
-    oppc[m.plb.id].append(cata)
+    def add(cp_my, cp_op, rc_my, rc_op, sc_my, sc_op, weight=1.0):
+        cp_my.oppc.append(RACES.index(rc_op))
+        cp_my.oppr.append(cp_op.prev_rating['M'] + cp_op.prev_rating[rc_my])
+        cp_my.oppd.append(sqrt(cp_op.prev_dev['M']**2 + cp_op.prev_dev[rc_my]**2))
+        cp_my.W.append(weight * sc_my)
+        cp_my.L.append(weight * sc_op)
 
-    oppr[m.pla.id].append(rats[m.plb.id][0] + rats[m.plb.id][cata+1])
-    oppr[m.plb.id].append(rats[m.pla.id][0] + rats[m.pla.id][catb+1])
+    ret = 0
 
-    opps[m.pla.id].append(sqrt(devs[m.plb.id][0]**2 + devs[m.plb.id][cata+1]**2))
-    opps[m.plb.id].append(sqrt(devs[m.pla.id][0]**2 + devs[m.pla.id][catb+1]**2))
+    matches = Match.objects.filter(period=period).select_related('pla', 'plb')
+    for m in matches:
+        cpa = cplayers[m.pla.id]
+        cpb = cplayers[m.plb.id]
 
-    W[m.pla.id].append(m.sca)
-    L[m.pla.id].append(m.scb)
-    W[m.plb.id].append(m.scb)
-    L[m.plb.id].append(m.sca)
+        rcas = [m.rca] if m.rca in RACES else RACES
+        rcbs = [m.rcb] if m.rcb in RACES else RACES
+        weight = float(1)/len(rcas)/len(rcbs)
 
-    nmatches += 1
-    ngames += m.scb + m.sca
+        for ra in rcas:
+            for rb in rcbs:
+                add(cpa, cpb, ra, rb, m.sca, m.scb, weight)
+                add(cpb, cpa, rb, ra, m.scb, m.sca, weight)
 
-print '%i repeating and %i new players played %i games in %i matches' % (nrepeats, nnew, ngames, nmatches)
+        ret += m.sca + m.scb
 
-print 'Updating ratings for %i players...' % (nrepeats+nnew)
+    return ret
 
-for p in pls:
-    (newr, news, compr, comps) = update(array(rats[p.id]), array(devs[p.id]),\
-            array(oppr[p.id]), array(opps[p.id]), array(oppc[p.id]), array(W[p.id]), array(L[p.id]),\
-            p.tag, False)
+def array_to_dict(ar):
+    d = dict()
+    d['M'] = ar[0]
+    d['P'] = ar[1]
+    d['T'] = ar[2]
+    d['Z'] = ar[3]
+    return d
+
+if __name__ == '__main__':
+    # Get period
+    try:
+        period = Period.objects.get(id=int(sys.argv[1]))
+    except:
+        print('No such period.')
+        sys.exit(1)
+
+    print('Period {}: from {} to {}'.format(period.id, period.start, period.end))
+
+    # Check that all previous periods are computed
+    prev = Period.objects.filter(id__lt=period.id, computed=False)
+    if prev.exists():
+        print('Previous period #%i not computed. Aborting.' % prev[0].id)
+        sys.exit(1)
+
+    # Check that all previous matches are treated
+    matches = Match.objects.filter(period__id__lt=period.id, treated=False).order_by('period__id')
+    if matches.exists():
+        print('There are untreated matches from period #%i. Aborting.' % matches[0].period.id)
+        sys.exit(1)
 
     try:
-        r = Rating.objects.get(period=cur, player=p)
+        prev = Period.objects.get(id=period.id-1)
     except:
-        r = Rating()
+        prev = None
 
-    r.player = p
-    r.rating = newr[0]
-    r.rating_vp = newr[1]
-    r.rating_vt = newr[2]
-    r.rating_vz = newr[3]
-    r.dev = news[0]
-    r.dev_vp = news[1]
-    r.dev_vt = news[2]
-    r.dev_vz = news[3]
-    r.comp_rat = compr[0]
-    r.comp_rat_vp = compr[1]
-    r.comp_rat_vt = compr[2]
-    r.comp_rat_vz = compr[3]
-    r.com_dev = comps[0]
-    r.com_dev_vp = comps[1]
-    r.com_dev_vt = comps[2]
-    r.com_dev_vz = comps[3]
-    r.period = cur
-    r.decay = 0
+    # Get all cplayer objects
+    cplayers = dict()
+    if prev:
+        get_existing_players(cplayers, prev)
+    get_new_players(cplayers, period)
 
-    if p.id in prev_rats.keys():
-        r.prev = prev_rats[p.id]
+    # Update devs to after a period has passed
+    for cp in cplayers.values():
+        decay_dev(cp)
+    print('Initialized and decayed ratings for {} players.'.format(len(cplayers)))
 
-    r.save()
+    # Collect match information
+    num_games = get_matches(cplayers, period)
+    print('Gathered results from {} games.'.format(num_games))
 
-print 'Decaying existing ratings...'
+    # Update ratings
+    num_retplayers = 0
+    num_newplayers = 0
+    for cp in cplayers.values():
+        (newr, newd, compr, compd) = update(cp.get_rating_array(), cp.get_dev_array(),\
+                array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L), cp.player.tag,\
+                False)
+        cp.new_rating = array_to_dict(newr)
+        cp.new_dev = array_to_dict(newd)
+        cp.comp_rating = array_to_dict(compr)
+        cp.comp_dev = array_to_dict(compd)
 
-ndecay = 0
-if prev != None:
-    ratings = Rating.objects.filter(period=prev)
-    for rat in ratings:
-        if rat.player_id not in rats.keys():
-            (k, news, f, e) = update([], array(rat.devs()), [], [], [], [], [], '')
+        if len(cp.W) > 0 and cp.prev_rating_obj:
+            num_retplayers += 1
+        elif len(cp.W) > 0:
+            num_newplayers += 1
+    print('Updated ratings for {} players.'.format(len(cplayers)))
 
-            r = Rating()
-            r.player = rat.player
-            r.rating = rat.rating
-            r.rating_vp = rat.rating_vp
-            r.rating_vt = rat.rating_vt
-            r.rating_vz = rat.rating_vz
-            r.dev = news[0]
-            r.dev_vp = news[1]
-            r.dev_vt = news[2]
-            r.dev_vz = news[3]
-            r.period = cur
-            r.prev = rat
-            r.decay = rat.decay + 1
-            r.save()
+    # Save new ratings
+    print('Saving ratings. This can take some time...')
+    for cp in cplayers.values():
+        try:
+            rating = Rating.objects.get(player=cp.player, period=period)
+        except:
+            rating = Rating()
+            rating.player = cp.player
+            rating.period = period
 
-            ndecay += 1
+        if cp.prev_rating_obj:
+            rating.prev = cp.prev_rating_obj
 
-print 'Decayed %i ratings' % ndecay
+        if not cp.prev_rating_obj or len(cp.W) > 0:
+            rating.decay = 0
+        else:
+            rating.decay = cp.prev_rating_obj.decay + 1
 
-print 'Bookkeeping (this may take a while)...'
+        rating.set_rating(cp.new_rating)
+        rating.set_dev(cp.new_dev)
+        rating.set_comp_rating(cp.comp_rating)
+        rating.set_comp_dev(cp.comp_dev)
 
-Match.objects.filter(period=cur).update(treated=True)
+        rating.save()
 
-def mean(a):
-    return sum([f.rating for f in a])/len(a)
+    print('Bookkeeping. This can take some time...')
 
-rp = mean(Rating.objects.filter(period=cur, player__race='P', decay__lt=4).order_by('-rating')[:5])
-rt = mean(Rating.objects.filter(period=cur, player__race='T', decay__lt=4).order_by('-rating')[:5])
-rz = mean(Rating.objects.filter(period=cur, player__race='Z', decay__lt=4).order_by('-rating')[:5])
-sp = norm.cdf(rp-rt) + norm.cdf(rp-rz)
-st = norm.cdf(rt-rp) + norm.cdf(rt-rz)
-sz = norm.cdf(rz-rp) + norm.cdf(rz-rt)
-cur.dom_p = sp
-cur.dom_t = st
-cur.dom_z = sz
+    Match.objects.filter(period=period).update(treated=True)
 
-cur.num_retplayers = nrepeats
-cur.num_newplayers = nnew
-cur.num_games = ngames
-cur.computed = True
-cur.save()
+    def mean(a):
+        return sum([f.rating for f in a])/len(a)
 
-top = Rating.objects.filter(period=cur, decay__lt=4).order_by('-rating')
-n1 = top[0]
-n2 = top[1]
-top.update(domination=F('rating')-n1.rating)
-n1.domination = n1.rating - n2.rating
-n1.save()
+    rp = mean(Rating.objects.filter(period=period, player__race='P', decay__lt=4).order_by('-rating')[:5])
+    rt = mean(Rating.objects.filter(period=period, player__race='T', decay__lt=4).order_by('-rating')[:5])
+    rz = mean(Rating.objects.filter(period=period, player__race='Z', decay__lt=4).order_by('-rating')[:5])
+    sp = norm.cdf(rp-rt) + norm.cdf(rp-rz)
+    st = norm.cdf(rt-rp) + norm.cdf(rt-rz)
+    sz = norm.cdf(rz-rp) + norm.cdf(rz-rt)
+    period.dom_p = sp
+    period.dom_t = st
+    period.dom_z = sz
 
-os.system('./domination.py')
+    period.num_retplayers = 0
+    period.num_newplayers = 0
+    period.num_games = 0
+    period.computed = True
+    period.save()
 
-print 'Period %i computed and published' % cur.id
+    top = Rating.objects.filter(period=period, decay__lt=4).order_by('-rating')
+    n1 = top[0]
+    n2 = top[1]
+    top.update(domination=F('rating')-n1.rating)
+    n1.domination = n1.rating - n2.rating
+    n1.save()
+
+    os.system('./domination.py')

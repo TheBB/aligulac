@@ -265,3 +265,27 @@ class Rating(models.Model):
             for r in ['P','T','Z']:
                 d += self.get_dev(r)**2/9
             return sqrt(d)
+
+    def set_rating(self, d):
+        self.rating = d['M']
+        self.rating_vp = d['P']
+        self.rating_vt = d['T']
+        self.rating_vz = d['Z']
+
+    def set_dev(self, d):
+        self.dev = d['M']
+        self.dev_vp = d['P']
+        self.dev_vt = d['T']
+        self.dev_vz = d['Z']
+    
+    def set_comp_rating(self, d):
+        self.comp_rat = d['M']
+        self.comp_rat_vp = d['P']
+        self.comp_rat_vt = d['T']
+        self.comp_rat_vz = d['Z']
+
+    def set_comp_dev(self, d):
+        self.comp_dev = d['M']
+        self.comp_dev_vp = d['P']
+        self.comp_dev_vt = d['T']
+        self.comp_dev_vz = d['Z']

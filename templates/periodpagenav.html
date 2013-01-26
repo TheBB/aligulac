@@ -9,9 +9,11 @@
             {% endif %}
         </div>
         <div class="rowe" style="width: 21.5em; text-align: left;">
+            {% if period.id > 1 %}
             <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
                 previous period
             </a>
+            {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}

@@ -660,18 +660,23 @@ def rating_details(request, player_id, period_id):
         if m.treated:
             treated = True
             tot_rating[0] += m.rt_op * (m.sca + m.scb)
-            tot_rating[1][m.rc_op] += m.rt_op * (m.sca + m.scb)
             ngames[0] += m.sca + m.scb
-            ngames[1][m.rc_op] += m.sca + m.scb
             nwins[0] += m.sc_my
-            nwins[1][m.rc_op] += m.sc_my
             nlosses[0] += m.sc_op
-            nlosses[1][m.rc_op] += m.sc_op
 
             scale = 1 + m.dev_op**2 + rating.get_totaldev(m.opp.race)**2
-            ew = (m.sca + m.scb) * norm.cdf(prevrat[1][m.rc_op] - m.rt_op, scale=sqrt(scale))
-            expwins[0] += ew
-            expwins[1][m.rc_op] += ew
+
+            races = [m.rc_op] if m.rc_op in ['P','T','Z'] else ['P','T','Z']
+            weight = float(1)/len(races)
+            for sr in races:
+                ew = (m.sca + m.scb) * norm.cdf(prevrat[1][sr] - m.rt_op, scale=sqrt(scale))
+                expwins[0] += weight * ew
+                expwins[1][sr] += weight * ew
+
+                tot_rating[1][sr] += weight * m.rt_op * (m.sca + m.scb)
+                ngames[1][sr] += weight * (m.sca + m.scb)
+                nwins[1][sr] += weight * m.sc_my
+                nlosses[1][sr] += weight * m.sc_op
         else:
             nontreated = True
 

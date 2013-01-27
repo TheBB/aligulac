@@ -9,6 +9,7 @@ from django.core.context_processors import csrf
 from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
+from aligulac.settings import DEBUG
 from ratings.models import Rating, Period, Player, Team, Match
 from ratings.tools import find_player
 
@@ -28,7 +29,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             ('About', '/faq/'),\
             ('Admin', '/add/')]
 
-    base = {'curp': curp, 'menu': menu}
+    base = {'curp': curp, 'menu': menu, 'debug': DEBUG}
 
     if section == 'Records':
         base['submenu'] = [('HoF', '/records/?race=hof'),\

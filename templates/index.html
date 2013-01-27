@@ -26,7 +26,13 @@
                 <td id="heading"><a href="/" id="title" />ALIGULAC</a></td>
             </tr>
             <tr>
-                <td id="subheading">StarCraft 2 Progaming Statistics and Predictions</td>
+                <td id="subheading">
+                    {% if debug %}
+                        <span style="color: #ff0000; font-weight: bold;">DEVELOPMENT SERVER</span>
+                    {% else %}
+                        StarCraft 2 Progaming Statistics and Predictions
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td id="menu">

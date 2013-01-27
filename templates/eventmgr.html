@@ -48,8 +48,9 @@
     </form>
 
     {% for node in nodes %}
-    <div class="table numtable" style="width: 67em; border-style: dotted; border-width: 0.05em;"> <div class="row row2">
-        <div class="rowe"> {{ node.2|indent|safe }}
+    <div class="table numtable" style="width: 67em; border-style: dotted; border-width: 0.05em;" id="{{ node.0 }}"> 
+        <div class="row row2">
+            <div class="rowe"> {{ node.2|indent|safe }}
             {% if node.3 > 0 %}
                 <a href="" onclick="toggle_visibility('list-{{node.0}}'); return false;">{{ node.1 }}</a>
             {% else %}
@@ -57,7 +58,7 @@
             {% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            <form method="post" action="/add/events/">
+            <form method="post" action="/add/events/#{{ node.0 }}">
                 {% csrf_token %}
                 <input type="hidden" name="parent" value="{{node.0}}" />
                 <input type="text" id="inp-{{node.0}}" name="name" style="width: 20em;" />

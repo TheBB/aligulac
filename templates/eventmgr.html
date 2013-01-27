@@ -58,13 +58,69 @@
             {% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            <form method="post" action="/add/events/#{{ node.0 }}">
-                {% csrf_token %}
-                <input type="hidden" name="parent" value="{{node.0}}" />
-                <input type="text" id="inp-{{node.0}}" name="name" style="width: 20em;" />
-                <input type="submit" name="op" value="Add" />
-                <input type="submit" name="op" value="Close" />
-            </form>
+            <div id="link-{{ node.0 }}" style="display: block;">
+                <a href="#" onclick="toggle_visibility('form-{{ node.0 }}'); toggle_visibility('link-{{ node.0 }}'); return false;">modify</a>
+            </div>
+            <div id="form-{{ node.0 }}" style="display: none;">
+                <div class="table" style="width: 35em; margin-left: auto;">
+                    <div class="row">
+                        <div class="rowel" style="width: 5em;">Add</div>
+                        <div class="rower" style="width: 30em;">
+                            <form method="post" action="/add/events/#{{ node.0 }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent" value="{{node.0}}" />
+                                <select name="name" style="width: 25em;">
+                                    <option value="Group Stage, Playoffs">Group stage and playoffs</option>
+                                    <option value="Group A,Group B,Group C,Group D">Groups A through D</option>
+                                    <option value="Group A,Group B,Group C,Group D,Group E,Group F,Group G,Group H">Groups A through H</option>
+                                    <option value="Ro64,Ro32,Ro16,Ro8,Ro4,Final">Ro64→Final</option>
+                                    <option value="Ro32,Ro16,Ro8,Ro4,Final">Ro32→Final</option>
+                                    <option value="Ro16,Ro8,Ro4,Final">Ro16→Final</option>
+                                    <option value="Ro8,Ro4,Final">Ro8→Final</option>
+                                    <option value="Ro4,Final">Ro4→Final</option>
+                                    <option value="Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final">Ro64→Final + 3rd place</option>
+                                    <option value="Ro32,Ro16,Ro8,Ro4,Third place match,Final">Ro32→Final + 3rd place</option>
+                                    <option value="Ro16,Ro8,Ro4,Third place match,Final">Ro16→Final + 3rd place</option>
+                                    <option value="Ro8,Ro4,Third place match,Final">Ro8→Final + 3rd place</option>
+                                    <option value="Ro4,Third place match,Final">Ro4→Final + 3rd place</option>
+                                    <option value="Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Final">Ro64→Final + early rounds</option>
+                                    <option value="Early rounds,Ro32,Ro16,Ro8,Ro4,Final">Ro32→Final + early rounds</option>
+                                    <option value="Early rounds,Ro16,Ro8,Ro4,Final">Ro16→Final + early rounds</option>
+                                    <option value="Early rounds,Ro8,Ro4,Final">Ro8→Final + early rounds</option>
+                                    <option value="Early rounds,Ro4,Final">Ro4→Final + early rounds</option>
+                                    <option value="Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final">Ro64→Final + 3rd place and early rounds</option>
+                                    <option value="Early rounds,Ro32,Ro16,Ro8,Ro4,Third place match,Final">Ro32→Final + 3rd place and early rounds</option>
+                                    <option value="Early rounds,Ro16,Ro8,Ro4,Third place match,Final">Ro16→Final + 3rd place and early rounds</option>
+                                    <option value="Early rounds,Ro8,Ro4,Third place match,Final">Ro8→Final + 3rd place and early rounds</option>
+                                    <option value="Early rounds,Ro4,Third place match,Final">Ro4→Final + 3rd place and early rounds</option>
+                                </select>
+                                <input type="submit" name="op" value="Add" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="rowel" style="width: 5em;">Add</div>
+                        <div class="rower" style="width: 30em;">
+                            <form method="post" action="/add/events/#{{ node.0 }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent" value="{{node.0}}" />
+                                <input type="text" id="inp-{{node.0}}" name="name" style="width: 25em;" />
+                                <input type="submit" name="op" value="Add" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="rowel" style="width: 5em;">Close</div>
+                        <div class="rower" style="width: 30em;">
+                            <form method="post" action="/add/events/#{{ node.4 }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent" value="{{node.0}}" />
+                                <input type="submit" name="op" value="Close" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div> </div>
     {% if node.3 > 0 %}

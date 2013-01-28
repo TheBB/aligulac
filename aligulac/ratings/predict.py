@@ -269,6 +269,9 @@ def match_postable(base, obj, r1, r2):
     postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
               + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
 
+    postable_reddit += '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
+            + '[^Make ^another](http://aligulac.com/predict/)^.'
+
     base['postable_tl'] = postable_tl
     base['postable_reddit'] = postable_reddit
 
@@ -294,6 +297,9 @@ def fpswiss_postable(base, obj, players):
     postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
               + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
     postable_tl = '[center][code]' + postable_tl
+
+    postable_reddit += '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
+            + '[^Make ^another](http://aligulac.com/predict/)^.'
 
     base['postable_tl'] = postable_tl
     base['postable_reddit'] = postable_reddit

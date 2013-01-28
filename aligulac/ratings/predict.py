@@ -289,9 +289,13 @@ def fpswiss_postable(base, obj, players):
                 .format(top2=100*(p.tally[2]+p.tally[3]), p1=100*p.tally[3], p2=100*p.tally[2],\
                         p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl)
 
-    postable_reddit = ['    ' + k for k in postable.split('\n')]
-    postable_reddit[1] = postable_reddit[1][:-4]
-    postable_reddit = '\n'.join(postable_reddit)
+    postable_reddit = postable.split('\n')
+    for i in range(0, len(postable_reddit)):
+        if i == 1:
+            postable_reddit[i] = '----' + postable_reddit[i][:-4]
+        else:
+            postable_reddit[i] = '    ' + postable_reddit[i]
+    postable_reddit = '\n'.join(['    ' + k for k in postable_reddit])
 
     postable_tl = postable + '[/code][/center]'
     postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\

@@ -55,154 +55,92 @@
         {% endfor %}
     </div>
 
-    <h3>Update group progress</h3>
-
-    <script type="text/javascript">
-    <!--
-    function toggle_to(id) 
-    {
-        document.getElementById('round1').style.display = (id=='round1') ? 'block' : 'none';
-        document.getElementById('round2').style.display = (id=='round2') ? 'block' : 'none';
-        document.getElementById('round3').style.display = (id=='round3') ? 'block' : 'none';
-    }
-    //-->
-    </script>
-
-    {% if mod2nd %}
-    <p>Show: <a href="#" onclick="toggle_to('round1'); return false;">First round</a> 
-        → <a href="#" onclick="toggle_to('round2'); return false;">Second round</a>
-        {% if mod3rd %}
-        → <a href="#" onclick="toggle_to('round3'); return false;">Final match</a>
-        {% endif %}
-    </p>
-    {% endif %}
-
-    <div id="round1" {% if mod2nd %}style="display: none;"{% endif %}>
-        <form method="get" action="/predict/4pswiss/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-        <div class="table" style="width: 30em;">
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ first.0|accessplayer:"0" }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="f11" type="text" style="width: 150px;" value="{{ first.0|accessscore:"0" }}" />
-                </div>
-            </div>
-            <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-                <div class="rowel">Score for {{ first.0|accessplayer:"1" }}</div>
-                <div class="rower">
-                    <input name="f12" type="text" style="width: 150px;" value="{{ first.0|accessscore:"1" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ first.1|accessplayer:"0" }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="f21" type="text" style="width: 150px;" value="{{ first.1|accessscore:"0" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Score for {{ first.1|accessplayer:"1" }}</div>
-                <div class="rower">
-                    <input name="f22" type="text" style="width: 150px;" value="{{ first.1|accessscore:"1" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel"></div>
-                <div class="rower">
-                    <input type="submit" value="Update" />
-                </div>
-            </div>
-        </div>
-        </form>
-    </div>
-
-    {% if mod2nd %}
-    <div id="round2" {% if mod3rd %}style="display: none;"{% endif %}>
-        <form method="get" action="/predict/4pswiss/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-        <input type="hidden" name="f11" value="{{ first.0|accessscore:"0" }}" />
-        <input type="hidden" name="f12" value="{{ first.0|accessscore:"1" }}" />
-        <input type="hidden" name="f21" value="{{ first.1|accessscore:"0" }}" />
-        <input type="hidden" name="f22" value="{{ first.1|accessscore:"1" }}" />
-        <div class="table" style="width: 30em;">
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ second.0|accessplayer:"0" }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="s11" type="text" style="width: 150px;" value="{{ second.0|accessscore:"0" }}" />
-                </div>
-            </div>
-            <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-                <div class="rowel">Score for {{ second.0|accessplayer:"1" }}</div>
-                <div class="rower">
-                    <input name="s12" type="text" style="width: 150px;" value="{{ second.0|accessscore:"1" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ second.1|accessplayer:"0" }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="s21" type="text" style="width: 150px;" value="{{ second.1|accessscore:"0" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Score for {{ second.1|accessplayer:"1" }}</div>
-                <div class="rower">
-                    <input name="s22" type="text" style="width: 150px;" value="{{ second.1|accessscore:"1" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel"></div>
-                <div class="rower">
-                    <input type="submit" value="Update" />
-                </div>
-            </div>
-        </div>
-        </form>
-    </div>
-    {% endif %}
-
-    {% if mod3rd %}
-    <div id="round3">
-        <form method="get" action="/predict/4pswiss/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-        <input type="hidden" name="f11" value="{{ first.0|accessscore:"0" }}" />
-        <input type="hidden" name="f12" value="{{ first.0|accessscore:"1" }}" />
-        <input type="hidden" name="f21" value="{{ first.1|accessscore:"0" }}" />
-        <input type="hidden" name="f22" value="{{ first.1|accessscore:"1" }}" />
-        <input type="hidden" name="s11" value="{{ second.0|accessscore:"0" }}" />
-        <input type="hidden" name="s12" value="{{ second.0|accessscore:"1" }}" />
-        <input type="hidden" name="s21" value="{{ second.1|accessscore:"0" }}" />
-        <input type="hidden" name="s22" value="{{ second.1|accessscore:"1" }}" />
-        <div class="table" style="width: 30em;">
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ third|accessplayer:"0" }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="fi1" type="text" style="width: 150px;" value="{{ third|accessscore:"0" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Score for {{ third|accessplayer:"1" }}</div>
-                <div class="rower">
-                    <input name="fi2" type="text" style="width: 150px;" value="{{ third|accessscore:"1" }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel"></div>
-                <div class="rower">
-                    <input type="submit" value="Update" />
-                </div>
-            </div>
-        </div>
-        </form>
-    </div>
-    {% endif %}
-
     <p>Show match predictions for: 
         {% for m in details %}
         <a target="new" href="{{ m.1|makematchlink|safe }}">{{ m.0 }}</a>{% if not forloop.last %},{% endif %}
         {% endfor %}
     </p>
+
+    <h3>Update group progress</h3>
+
+    <form method="get" action="/predict/4pswiss/">
+        <input type="hidden" name="bo" value="{{ bo }}" />
+        <input type="hidden" name="ps" value="{{ ps }}" />
+
+    <p>To modify a result, click the score in the table below. <input type="submit" value="Update results" /></p>
+
+    <script type="text/javascript">
+    <!--
+    function toggle_visibility(id)
+    {
+        document.getElementById("fix" + id).style.display = 'none';
+        document.getElementById("inp" + id).style.display = 'inline';
+    }
+    //-->
+    </script>
+
+<div class="table numtable" style="width: 67em;">
+    {% for m in matches %}
+    {% if forloop.counter == 1 or forloop.counter == 3 or forloop.counter == 5 %}
+    <div class="rowh">
+        <div class="rowe" style="width: 30em;">
+            {% if forloop.counter == 1 %}Initial round
+            {% elif forloop.counter == 3 %}Winners' and losers' matches
+            {% else %}Final match{% endif %}
+        </div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+    </div>
+    {% endif %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe" style="width: 28.5em; text-align: right;">
+            {% if m.canmod %}
+            {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
+            <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
+            {% if m.pla.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
+            {% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.pla.race }}.png" alt="{{ m.pla.race }}" class="btm" />
+            {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 10em; text-align: center;">
+            {% if m.canmod %}
+            <span id="fix{{ forloop.counter }}">
+                <a href="#" onclick="toggle_visibility('{{ forloop.counter }}'); return false;">
+                    {{ m.sca }}–{{ m.scb }}
+                </a>
+            </span>
+            <span id="inp{{ forloop.counter }}" style="display: none;">
+                <input type="text" name="{{ forloop.counter }}1" style="text-align: right; width: 2em;"
+                    value="{{ m.sca }}" /> –
+                <input type="text" name="{{ forloop.counter }}2" style="width: 2em;" 
+                    value="{{ m.scb }}" />
+            </span>
+            {% else %}
+                N/A
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 24.5em; text-align: left;">
+            {% if m.canmod %}
+            {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.plb.race }}.png" alt="{{ m.plb.race }}" class="btm" />
+            {% if m.plb.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
+            {% endif %}
+            <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
+            {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 4em; text-align: right;">
+            <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</form>
 
     <h3>Team Liquid postable</h3>
     <textarea style="width: 100%;" rows="10">{{ postable }}</textarea>

@@ -20,6 +20,7 @@ from countries import transformations, data
 from scipy.stats import norm
 
 from math import sqrt
+from collections import namedtuple
 
 def predict(request):
     base = base_ctx()
@@ -157,11 +158,11 @@ def pred_4pswiss(request):
             except:
                 pass
 
-    update(request, obj, 'first', 'f11', 'f12')
-    update(request, obj, 'second', 'f21', 'f22')
-    update(request, obj, 'winners', 's11', 's12')
-    update(request, obj, 'losers', 's21', 's22')
-    update(request, obj, 'final', 'fi1', 'fi2')
+    update(request, obj, 'first',   '11', '12')
+    update(request, obj, 'second',  '21', '22')
+    update(request, obj, 'winners', '31', '32')
+    update(request, obj, 'losers',  '41', '42')
+    update(request, obj, 'final',   '51', '52')
 
     obj.compute()
     tally = obj.get_tally()
@@ -175,6 +176,14 @@ def pred_4pswiss(request):
 
     base['players'] = players
     base['tally'] = tally
+
+    MatchObj = namedtuple('MatchObj', 'obj pla plb modded canmod fixed sca scb')
+    matches = []
+    for mname in ['first', 'second', 'winners', 'losers', 'final']:
+        match = obj.get_match(mname)
+        matches.append(MatchObj(match, match.get_player(0).dbpl, match.get_player(1).dbpl,\
+                match.is_modified(), match.can_modify(), match.is_fixed(), match._result[0], match._result[1]))
+    base['matches'] = matches
 
     base['mod2nd'] = obj.get_match('winners').can_modify() and obj.get_match('losers').can_modify()
     base['mod3rd'] = obj.get_match('final').can_modify()

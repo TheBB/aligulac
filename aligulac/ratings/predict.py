@@ -185,19 +185,6 @@ def pred_4pswiss(request):
                 match.is_modified(), match.can_modify(), match.is_fixed(), match._result[0], match._result[1]))
     base['matches'] = matches
 
-    base['mod2nd'] = obj.get_match('winners').can_modify() and obj.get_match('losers').can_modify()
-    base['mod3rd'] = obj.get_match('final').can_modify()
-
-    base['first'] = [obj.get_match('first'), obj.get_match('second')]
-    details = [('first', base['first'][0]), ('second', base['first'][1])]
-    if base['mod2nd']:
-        base['second'] = [obj.get_match('winners'), obj.get_match('losers')]
-        details += [('winners', base['second'][0]), ('losers', base['second'][1])]
-    if base['mod3rd']:
-        base['third'] = obj.get_match('final')
-        details += [('final', base['third'])]
-
-    base['details'] = details
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 

@@ -55,12 +55,6 @@
         {% endfor %}
     </div>
 
-    <p>Show match predictions for: 
-        {% for m in details %}
-        <a target="new" href="{{ m.1|makematchlink|safe }}">{{ m.0 }}</a>{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </p>
-
     <h3>Update group progress</h3>
 
     <form method="get" action="/predict/4pswiss/">

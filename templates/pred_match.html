@@ -60,34 +60,32 @@
         </div>
     </div>
 
-    <h3>Update match progress</h3>
+    <script type="text/javascript">
+    <!--
+    function postable(id)
+    {
+        var ids = ['tl', 'reddit'];
+        for (i = 0; i < ids.length; i++)
+        {
+            if (id == ids[i])
+                document.getElementById(ids[i]).style.display = 'block';
+            else
+                document.getElementById(ids[i]).style.display = 'none';
+        }
+    }
+    //-->
+    </script>
 
-    <form method="get" action="/predict/match/">
-    <input type="hidden" name="bo" value="{{ bo }}" />
-    <input type="hidden" name="ps" value="{{ ps }}" />
-    <div class="table" style="width: 30em;">
-        <div class="row">
-            <div class="rowel" style="width: 15em;">Score for {{ p1.tag }}</div>
-            <div class="rower" style="width: 15em;">
-                <input name="s1" type="text" style="width: 150px;" value="{{ s1 }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">Score for {{ p2.tag }}</div>
-            <div class="rower">
-                <input name="s2" type="text" style="width: 150px;" value="{{ s2 }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel"></div>
-            <div class="rower">
-                <input type="submit" value="Update" />
-            </div>
-        </div>
+    <h3>Postable</h3>
+
+    <div id="tl">
+        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
     </div>
-    </form>
+    <div id="reddit" style="display: none;">
+        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+    </div>
 
-    <h3>Team Liquid postable</h3>
-    <textarea style="width: 100%;" rows="10">{{ postable }}</textarea>
+    <p>Formats: <a href="#" onclick="postable('tl'); return false;">Team Liquid</a>,
+    <a href="#" onclick="postable('reddit'); return false;">Reddit</a>.</p>
 
 {% endblock %}

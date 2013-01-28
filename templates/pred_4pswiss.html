@@ -67,8 +67,9 @@
         <input type="hidden" name="bo" value="{{ bo }}" />
         <input type="hidden" name="ps" value="{{ ps }}" />
 
-    <p>To modify a result, click the score in the table below. <input type="submit" value="Update results" /></p>
-
+        <p>To modify a result, click the score in the table below. To view detailed predictions for each match,
+        click the arrow.</p>
+        
     <script type="text/javascript">
     <!--
     function toggle_visibility(id)
@@ -140,9 +141,38 @@
     {% endfor %}
 </div>
 
+    <div style="text-align: right;">
+        <input type="submit" value="Update results" />
+    </div>
+
 </form>
 
-    <h3>Team Liquid postable</h3>
-    <textarea style="width: 100%;" rows="10">{{ postable }}</textarea>
+    <script type="text/javascript">
+    <!--
+    function postable(id)
+    {
+        var ids = ['tl', 'reddit'];
+        for (i = 0; i < ids.length; i++)
+        {
+            if (id == ids[i])
+                document.getElementById(ids[i]).style.display = 'block';
+            else
+                document.getElementById(ids[i]).style.display = 'none';
+        }
+    }
+    //-->
+    </script>
+
+    <h3>Postable</h3>
+
+    <div id="tl">
+        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+    </div>
+    <div id="reddit" style="display: none;">
+        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+    </div>
+
+    <p>Formats: <a href="#" onclick="postable('tl'); return false;">Team Liquid</a>,
+    <a href="#" onclick="postable('reddit'); return false;">Reddit</a>.</p>
 
 {% endblock %}

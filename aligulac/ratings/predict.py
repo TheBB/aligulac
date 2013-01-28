@@ -223,7 +223,7 @@ def match_postable(base, obj, r1, r2):
 
     strL = fill(strL, totlen, True)
     strR = fill(strR, totlen, False)
-    postable = '[center][code]' + strL + '-' + strR
+    postable = strL + '-' + strR
     postable += '\n' + '-'*(8+1+2*totlen)
 
     ilen = totlen - numlen - 1
@@ -248,18 +248,29 @@ def match_postable(base, obj, r1, r2):
 
     postable += '\n' + strL + ' '*(9+4*numlen) + strR
 
+    postable_reddit = postable.split('\n')
+    for i in range(0, len(postable_reddit)):
+        if i == 1 or i == len(postable_reddit) - 2:
+            postable_reddit[i] = '----' + postable_reddit[i][:-7]
+        else:
+            postable_reddit[i] = '    ' + postable_reddit[i]
+    postable_reddit = '\n'.join(['    ' + k for k in postable_reddit])
+
     postable += '\n\n' + 'Median outcome'
     ls = obj.find_lsup()
     strL = '{name} {sc}'.format(name=pa.name, sc=ls[1])
     strR = '{sc} {name}'.format(name=pb.name, sc=ls[2])
     postable += '\n' + strL + '-' + strR
 
-    postable += '[/code]'
+    postable_reddit += '\n\n    Median outcome: ' + strL + '-' + strR
 
-    postable += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
+    postable_tl = '[center][code]' + postable
+    postable_tl += '[/code][/center]'
+    postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
               + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
 
-    base['postable'] = postable
+    base['postable_tl'] = postable_tl
+    base['postable_reddit'] = postable_reddit
 
 def fpswiss_postable(base, obj, players):
     def fill(s, l):
@@ -267,8 +278,7 @@ def fpswiss_postable(base, obj, players):
 
     nl = max([len(p.dbpl.tag) for p in players])
 
-    postable = '[center][code]'
-    postable += fill('Top 2      1st      2nd      3rd      4th',  47 + nl)
+    postable = fill('Top 2      1st      2nd      3rd      4th',  47 + nl)
     postable += '\n' + '-'*(47 + 8 + nl)
 
     for p in players:
@@ -276,12 +286,14 @@ def fpswiss_postable(base, obj, players):
                 .format(top2=100*(p.tally[2]+p.tally[3]), p1=100*p.tally[3], p2=100*p.tally[2],\
                         p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl)
 
-    postable += '[/code]'
+    postable_reddit = ['    ' + k for k in postable.split('\n')]
+    postable_reddit[1] = postable_reddit[1][:-4]
+    postable_reddit = '\n'.join(postable_reddit)
 
-    postable += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-              + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
+    postable_tl = postable + '[/code][/center]'
+    postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
+              + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
+    postable_tl = '[center][code]' + postable_tl
 
-    base['postable'] = postable
-
-
-    base['postable'] = postable
+    base['postable_tl'] = postable_tl
+    base['postable_reddit'] = postable_reddit

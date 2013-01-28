@@ -254,7 +254,7 @@ def match_postable(base, obj, r1, r2):
     postable_tl = '[center][code]' + postable
     postable_tl += '[/code][/center]'
     postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-              + '[url=http://aligulac.com/predict/]Make another[/url].[/small][/center]'
+              + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
 
     postable_reddit += '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
             + '[^Make ^another](http://aligulac.com/predict/)^.'

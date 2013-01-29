@@ -129,7 +129,9 @@
             {% endif %}
         </div>
         <div class="rowe" style="width: 4em; text-align: right;">
+            {% if m.canmod %}
             <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

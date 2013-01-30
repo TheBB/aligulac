@@ -101,9 +101,11 @@
         {% csrf_token %}
     {% endif %}
 
+    <table class="results">
     {% for m in matches %}
         {% include "list_matches.html" with lm_list=m lm_show_date=1 lm_adm=adm lm_header_event=1 %}
     {% endfor %}
+    </table>
 
     {% if adm %}
     <script type="text/javascript">

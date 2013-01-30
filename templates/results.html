@@ -53,10 +53,13 @@
         <div class="rowe" style="width: 22.5em;"></div>
     </div>
 </div>
+
 {% if matches %}
+    <table class="results">
     {% for ml in matches %}
         {% include "list_matches.html" with lm_list=ml lm_show_date=0 lm_adm=0 lm_header_event=1 %}
     {% endfor %}
+    </table>
     <div class="table" style="width: 67em;">
         <div class="row">
             <div class="rowe" style="width: 22.5em;"></div>

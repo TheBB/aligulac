@@ -13,7 +13,9 @@
     {% if messages %}
         {% if success %}
             <p>The following entries were successfully submitted:</p>
+            <table class="results">
             {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=1 lm_header_event=1 lm_nocheck=1 %}
+            </table>
             <p></p>
         {% endif %}
         {% if failure %}

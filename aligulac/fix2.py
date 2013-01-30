@@ -6,9 +6,10 @@ from BeautifulSoup import BeautifulSoup
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
-db = 'sc2-korean'
-tabulator = 11951
-pages = 350
+db = 'sc2-international'
+tabulator = 8160
+firstpage = 1
+lastpage = 500
 _user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0'
 get_tbl_url = 'http://www.teamliquid.net/tlpd/{db}/games'
 page_url = 'http://www.teamliquid.net/tlpd/tabulator/update.php?tabulator_id={tabulator}&'\
@@ -21,14 +22,18 @@ def get_url(url):
 
 if tabulator == None:
     s = get_url(get_tbl_url.format(db=db))
-    soup = BeautifulSoup(get_url(get_tbl_url.format(db=db)))
+    print s
+    soup = BeautifulSoup(s)
     temp = soup.findAll(lambda t: (u'title', u'Next page') in t.attrs)[-1]
     tabulator = int(temp['onclick'].split(',')[1])
     print 'Tabulator: ', tabulator
 
-for pagenum in range(1, pages+1):
+for pagenum in range(firstpage, lastpage+1):
+    s = 'http://teamliquid.net/'
+    print s
+    request = Request(s, headers={'User-Agent': _user_agent})
+    result = urlopen(request)
     s = get_url(page_url.format(page=pagenum, tabulator=tabulator))
-    print page_url.format(page=pagenum, tabulator=tabulator)
 
     soup = BeautifulSoup(s)
     table = soup.findAll(lambda t: (u'id', u'tblt_table') in t.attrs)[0]

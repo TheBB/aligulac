@@ -7,9 +7,9 @@ from BeautifulSoup import BeautifulSoup
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
 db = 'sc2-international'
-tabulator = 8160
-firstpage = 1
-lastpage = 500
+tabulator = 3685
+firstpage = 1201
+lastpage = 1745
 _user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0'
 get_tbl_url = 'http://www.teamliquid.net/tlpd/{db}/games'
 page_url = 'http://www.teamliquid.net/tlpd/tabulator/update.php?tabulator_id={tabulator}&'\
@@ -43,14 +43,20 @@ for pagenum in range(firstpage, lastpage+1):
         date = '20' + row.contents[3].contents[0].strip()
         event = row.contents[5].contents[1].contents[0].strip()
 
-        rca = row.contents[9].contents[2]['title'][-2]
-        pla = row.contents[9].contents[2].contents[0].strip()
-        ida = int(row.contents[9].contents[2]['href'].split('/')[-1].split('_')[0])
+        try:
+            rca = row.contents[9].contents[2]['title'][-2]
+            pla = row.contents[9].contents[2].contents[0].strip()
+            ida = int(row.contents[9].contents[2]['href'].split('/')[-1].split('_')[0])
 
-        rcb = row.contents[11].contents[2]['title'][-2]
-        plb = row.contents[11].contents[2].contents[0].strip()
-        idb = int(row.contents[11].contents[2]['href'].split('/')[-1].split('_')[0])
+            rcb = row.contents[11].contents[2]['title'][-2]
+            plb = row.contents[11].contents[2].contents[0].strip()
+            idb = int(row.contents[11].contents[2]['href'].split('/')[-1].split('_')[0])
         
-        with open('tlpd_out', 'a') as f:
-            f.write(','.join(['"'+str(p)+'"' for p in [mid, date, event, pla, rca, ida, plb, rcb, idb]]))
-            f.write('\n')
+            with open('tlpd_out', 'a') as f:
+                try:
+                    f.write(','.join(['"'+str(p)+'"' for p in [mid, date, event, pla, rca, ida, plb, rcb, idb]]))
+                    f.write('\n')
+                except:
+                    print 'Skipped funky name on page', pagenum
+        except:
+            print 'Missing player on page', pagenum

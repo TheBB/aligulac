@@ -60,6 +60,33 @@
         </div>
     </div>
 
+    <h3>Update match progress</h3>
+
+    <form method="get" action="/predict/match/">
+        <input type="hidden" name="bo" value="{{ bo }}" />
+        <input type="hidden" name="ps" value="{{ ps }}" />
+        <div class="table" style="width: 30em;">
+            <div class="row">
+                <div class="rowel" style="width: 15em;">Score for {{ p1.tag }}</div>
+                <div class="rower" style="width: 15em;">
+                    <input name="s1" type="text" style="width: 150px;" value="{{ s1 }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">Score for {{ p2.tag }}</div>
+                <div class="rower">
+                    <input name="s2" type="text" style="width: 150px;" value="{{ s2 }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel"></div>
+                <div class="rower">
+                    <input type="submit" value="Update" />
+                </div>
+            </div>
+        </div>
+    </form>
+
     <script type="text/javascript">
     <!--
     function postable(id)

@@ -78,11 +78,13 @@
     {% endif %}
 
 {% if matches %}
+    <table class="results">
     {% for ml in matches %}
         {% if ml %}
         {% include "list_matches.html" with lm_list=ml lm_show_date=1 lm_adm=0 lm_header_event=1 %}
         {% endif %}
     {% endfor %}
+    </table>
 {% else %}
     <p>This event has no registered games... yet.</p>
 {% endif %}

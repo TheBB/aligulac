@@ -1,45 +1,69 @@
 {% load ratings_extras %}
 
+<script type="text/javascript">
+<!--
+function lm_toggle(id)
+{
+    var d = document.getElementById('lm-' + id);
+    if (d.style.display == 'none')
+    {
+        d.style.display = 'table-row-group';
+        document.getElementById('lma-' + id).innerHTML = 'hide';
+    }
+    else
+    {
+        d.style.display = 'none';
+        document.getElementById('lma-' + id).innerHTML = 'show';
+    }
+}
+//-->
+</script>
+
 {% if lm_header_event %}
-<div class="table numtable" style="width: 67em;">
-    <div class="rowh">
-        <div class="rowe" style="width: 67em;">
-            {% if lm_list.0.eventobj %} ▸
-                {% for p in lm_list.0.eventobj.get_path %}
-                <a href="/results/events/{{ p.id }}/">{{ p.name }}</a>
-                {% endfor %}
-            {% elif lm_list.0.event %}
-                {{ lm_list.0.event }}
-            {% else %}
-                Unknown event(s)
-            {% endif %}
-        </div>
-    </div>
-</div>
+<tr class="header">
+    <td colspan="6">
+        {% if lm_list.0.eventobj %} ▸
+            {% for p in lm_list.0.eventobj.get_path %}
+            <a href="/results/events/{{ p.id }}/">{{ p.name }}</a>
+            {% endfor %}
+        {% elif lm_list.0.event %}
+            {{ lm_list.0.event }}
+        {% else %}
+            Unknown event(s)
+        {% endif %}
+    </td>
+    <td class="lm_right">
+        <a id="lma-{{ lm_list.0.id }}" href="#" onclick="lm_toggle('{{ lm_list.0.id }}'); return false;">hide</a>
+    </td>
+</tr>
 {% endif %}
-<div class="table numtable" style="width: 67em;">
-    {% if lm_header_info %}
-    <div class="rowh">
-        <div class="rowe" style="width: 5em;">{% if lm_show_date %}Date{% endif %}</div>
-        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
-        <div class="rowe" style="width: 18em; text-align: right;">{% if not lm_sorted %}Player A{% endif %}</div>
-        <div class="rowe" style="width: 5em; text-align: center">Score</div>
-        <div class="rowe" style="width: 18em;">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</div>
-        <div class="rowe" style="width: 7em; text-align: right;">{% if lm_sorted %}Rating{% endif %}</div>
-        <div class="rowe" style="width: 5em;"></div>
-    </div>
-    {% endif %}
+
+{% if lm_header_info %}
+    <tr class="header">
+        <td class="lm_date">{% if lm_show_date %}Date{% endif %}</td>
+        <td class="lm_rta">{% if lm_sorted %}Rating{% endif %}</td>
+        <td class="lm_pla">{% if not lm_sorted %}Player A{% endif %}</td>
+        <td class="lm_score">Score</td>
+        <td class="lm_plb">{% if lm_sorted %}Opponent{% else %}Player B{% endif %}</td>
+        <td class="lm_rtb">{% if lm_sorted %}Rating{% endif %}</td>
+        <td class="lm_right"></td>
+    </tr>
+{% endif %}
+{% if lm_header_event %} <tbody id="lm-{{ lm_list.0.id }}"> {% endif %}
     {% for m in lm_list %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 5em;">
+    <tr class="{% cycle 'row2' 'row1' %}" {% if lm_header_info %}
+                                              {% if m.eventobj %}title="{{ m.eventobj }}"
+                                              {% elif m.event %}title="{{ m.event }}"
+                                              {% else %}title="Unknown event"{% endif %} {% endif %}>
+        <td class="lm_date">
             {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right; width: 7em;">
+        </td>
+        <td class="lm_rta">
             {% if lm_sorted %}
                 {{ m.rt_my|ratscale }}
             {% endif %}
-        </div>
-        <div class="rowe" style="width: 18em; text-align: right;">
+        </td>
+        <td class="lm_pla">
             {% if lm_sorted %}
                 {% if m.sc_my > m.sc_op %}<strong>{% endif %}
                 <a href="/players/{{ lm_player.id }}/">{{ lm_player.tag }}</a>
@@ -57,15 +81,15 @@
                 <img src="http://aligulac.com:81/al/{{ m.rca }}.png" alt="{{ m.rca }}" class="btm" />
                 {% if m.sca > m.scb %}</strong>{% endif %}
             {% endif %}
-        </div>
-        <div class="rowe" style="width: 5em; text-align: center;">
+        </td>
+        <<tdd class="lm_score">
             {% if lm_sorted %}
                 {{ m.sc_my }}-{{ m.sc_op }}
             {% else %}
                 {{ m.sca }}–{{ m.scb }}
             {% endif %}
-        </div>
-        <div class="rowe" style="width: 18em;">
+        </td>
+        <td class="lm_plb">
             {% if lm_sorted %}
                 {% if m.sc_op > m.sc_my %}<strong>{% endif %}
                 <img src="http://aligulac.com:81/al/{{ m.rc_op }}.png" alt="{{ m.rc_op }}" class="btm" />
@@ -83,13 +107,13 @@
                 <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
                 {% if m.scb > m.sca %}</strong>{% endif %}
             {% endif %}
-        </div>
-        <div class="rowe" style="width: 7em; text-align: right;">
+        </td>
+        <td class="lm_rtb">
             {% if lm_sorted %}
                 {{ m.rt_op|ratscale }}
             {% endif %}
-        </div>
-        <div class="rowe" style="text-align: right; width: 5em;">
+        </td>
+        <td class="lm_right">
             {% if lm_adm %}
                 {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}
                 <a href="/admin/ratings/match/{{ m.id }}/">→</a>
@@ -100,7 +124,7 @@
                     <img src="http://aligulac.com:81/al/no.png" alt="yes" class="btm" />
                 {% endif %}
             {% endif %}
-        </div>
-    </div>
+        </td>
+    </tr>
     {% endfor %}
-</div>
+{% if lm_header_event %} </tbody> {% endif %}

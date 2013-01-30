@@ -178,7 +178,9 @@
 
 {% if matches %}
 <h3>Results for next list</h3>
+<table class="results">
 {% include "list_matches.html" with lm_list=matches lm_show_date=1 lm_adm=0 lm_header_info=1 lm_sorted=1 lm_player=player %}
+</table>
 {% endif %}
 
 {% if teammems %}

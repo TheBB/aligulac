@@ -51,10 +51,10 @@ function lm_toggle(id)
 {% endif %}
 {% if lm_header_event %} <tbody id="lm-{{ lm_list.0.id }}"> {% endif %}
     {% for m in lm_list %}
-    <tr class="{% cycle 'row2' 'row1' %}" {% if lm_header_info %}
-                                              {% if m.eventobj %}title="{{ m.eventobj }}"
-                                              {% elif m.event %}title="{{ m.event }}"
-                                              {% else %}title="Unknown event"{% endif %} {% endif %}>
+    <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if lm_header_info %}
+                                                        {% if m.eventobj %}title="{{ m.eventobj }}"
+                                                        {% elif m.event %}title="{{ m.event }}"
+                                                        {% else %}title="Unknown event"{% endif %} {% endif %}>
         <td class="lm_date">
             {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
         </td>

@@ -1,4 +1,4 @@
-table.results tr {
+table.results tr.nonheader {
     font-family: Verdana, Geneva, sans-serif;
 }
 

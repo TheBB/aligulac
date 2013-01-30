@@ -185,6 +185,16 @@ def pred_4pswiss(request):
                 match.is_modified(), match.can_modify(), match.is_fixed(), match._result[0], match._result[1]))
     base['matches'] = matches
 
+    MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
+    meanres = []
+    for mname in ['first', 'second', 'winners', 'losers', 'final']:
+        match = obj.get_match(mname)
+        match.compute()
+        lsup = match.find_lsup()
+        meanres.append(MeanRes(match.get_player(0).dbpl, match.get_player(1).dbpl, lsup[1], lsup[2]))
+        match.broadcast_instance((0, [lsup[4], lsup[3]], match))
+    base['meanres'] = meanres
+
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 

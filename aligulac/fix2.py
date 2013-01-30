@@ -29,10 +29,6 @@ if tabulator == None:
     print 'Tabulator: ', tabulator
 
 for pagenum in range(firstpage, lastpage+1):
-    s = 'http://teamliquid.net/'
-    print s
-    request = Request(s, headers={'User-Agent': _user_agent})
-    result = urlopen(request)
     s = get_url(page_url.format(page=pagenum, tabulator=tabulator))
 
     soup = BeautifulSoup(s)

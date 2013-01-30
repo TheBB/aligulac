@@ -30,6 +30,7 @@ if tabulator == None:
 
 for pagenum in range(firstpage, lastpage+1):
     s = get_url(page_url.format(page=pagenum, tabulator=tabulator))
+    print page_url.format(page=pagenum, tabulator=tabulator)
 
     soup = BeautifulSoup(s)
     table = soup.findAll(lambda t: (u'id', u'tblt_table') in t.attrs)[0]

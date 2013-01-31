@@ -1,3 +1,14 @@
+{% comment %}
+This is the rating list subroutine, used on every page that needs players listed by rating. It expects the
+arguments:
+
+- entries: A list of rating objects.
+- sortable: True if the list should be sortable, false otherwise. If given, the page, race and nats arguments
+            should also be provided.
+- startcount: The count for the first player on the list. (Usually 1, except when showing other pages, for
+              example.)
+{% endcomment %}
+
 {% load ratings_extras %}
 
 {% include "periodpagenav.html" %}

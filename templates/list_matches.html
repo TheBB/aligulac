@@ -1,3 +1,24 @@
+{% comment %}
+This is a very useful subroutine that is called from many different template files. It prints a list of
+matches. It expects a number of "arguments", all prefixed with lm_, to avoid naming collision.
+
+- lm_list: The list of matches to print.
+- lm_header_event: True if the title row should be event information, false otherwise.
+- lm_header_info: True if the title row should be column headings, false otherwise.
+- lm_sorted: True if the player on the left should be consistent, false to show the order in the database. Set
+             this to true if the list is included on a player page, so one player will always be shown on one
+             side. If true, the lm_player argument must be given.
+- lm_player: The player that should be shown to the left. Has no effect unless lm_sorted is true.
+- lm_show_date: Set to true to show the date of each match, false otherwise.
+- lm_adm: Set to true to show admin links on the far right. (A checkbox and a link to the admin interface.)
+
+NB! The calling code is responsible for starting and ending the HTML table:
+
+<table class="restable">
+    {% include "list_matches.html" with .... %}
+</table>
+{% endcomment %}
+
 {% load ratings_extras %}
 
 <script type="text/javascript">

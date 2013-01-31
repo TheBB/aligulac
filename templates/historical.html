@@ -1,3 +1,7 @@
+{% comment %}
+This shows the rating history of a player. It's called from ratings.views.player_historical.
+{% endcomment %}
+
 {% extends "index.html" %}
 
 {% load ratings_extras %}
@@ -10,6 +14,9 @@
 
 <p>Return to <a href="/players/{{ player.id }}/">player page</a>.</p>
 
+{% comment %}
+Could the ratinglist.html template be extended and called from here?
+{% endcomment %}
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
         <div class="rowe" style="width: 11em;">List</div>

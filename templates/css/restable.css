@@ -22,6 +22,11 @@ table.results a {
     color: #000088;
 }
 
+table.results a:hover {
+    text-decoration: none;
+    color: #5555ff;
+}
+
 tr.header a {
     color: #ffffff;
     text-decoration: none;
@@ -47,7 +52,7 @@ table.results {
 }
 
 td.lm_date {
-    width: 5em;
+    width: 7em;
 }
 
 td.lm_rta {
@@ -56,7 +61,7 @@ td.lm_rta {
 }
 
 td.lm_pla {
-    width: 21em;
+    width: 19em;
     text-align: right;
 }
 

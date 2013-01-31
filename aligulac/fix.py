@@ -1,55 +1,79 @@
 #!/usr/bin/python
+import os
+import sys
 import csv
+from urllib2 import urlopen, Request
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
-with open('tlpd_out', 'rb') as csvfile:
+from BeautifulSoup import BeautifulSoup
+
+from django.db.models import Q
+
+from ratings.models import Player, Match
+from ratings.tools import find_player
+
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0'
+kr_url = 'http://www.teamliquid.net/tlpd/sc2-korean/players/{id}'
+in_url = 'http://www.teamliquid.net/tlpd/sc2-international/players/{id}'
+
+players = set()
+
+matches = []
+with open('tlpd.dump', 'rb') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-
-    date = None
-    pls = [None, None]
-    sca, scb = 0, 0
-    prevrow = None
-
-    completed = []
-
     for row in reader:
-        if date == row[1] and row[5] in pls and row[8] in pls:
-            if row[5] == pls[0]:
-                sca += 1
-            else:
-                scb += 1
-        else:
-            if prevrow != None:
-                write = prevrow[1:4] + [prevrow[5]]
-                if prevrow[5] == pls[0]:
-                    write += [str(sca)]
-                else:
-                    write += [str(scb)]
-                write += [prevrow[6], prevrow[8]]
-                if prevrow[5] == pls[0]:
-                    write += [str(scb)]
-                else:
-                    write += [str(sca)]
-                completed += [write]
+        matches.append(row)
 
-            date = row[1]
-            pls = [row[5], row[8]]
-            sca, scb = 1, 0
+def do_guy(id, tag):
+    search = Player.objects.filter(Q(tlpd_kr_id=id) | Q(tlpd_in_id=id))
+    if search.exists():
+        return search[0]
 
-        prevrow = row
+    print in_url.format(id=id)
 
-    write = prevrow[1:4] + [prevrow[5]]
-    if prevrow[5] == pls[0]:
-        write += [str(sca)]
+    tag = raw_input('Tag? ')
+
+    if tag.isdigit():
+        p = Player.objects.get(id=int(tag))
+        p.tlpd_in_id = id
+        p.save()
+        return p
+
+    race = raw_input('Race? ')
+    country = raw_input('Country? ')
+
+    p = Player()
+    p.tag = tag
+    p.race = race.upper()
+    p.country = country.upper()
+    p.tlpd_in_id = id
+    p.save()
+
+    return p
+
+num = 0
+
+for match in matches:
+    num += 1
+
+    pla = do_guy(int(match[3]), match[2])
+    plb = do_guy(int(match[6]), match[5])
+
+    q = Q(pla=pla, plb=plb) | Q(plb=pla, pla=plb)
+    search = Match.objects.filter(q).extra(where=['abs(datediff(date,\'%s\')) < 2' % match[0]])
+    if search.count() > 0:
+        print search
     else:
-        write += [str(scb)]
-    write += [prevrow[6], prevrow[8]]
-    if prevrow[5] == pls[0]:
-        write += [str(scb)]
-    else:
-        write += [str(sca)]
-    completed += [write]
+        m = Match()
+        m.pla = pla
+        m.plb = plb
+        m.sca = int(match[4])
+        m.scb = int(match[7])
+        m.rca = pla.race
+        m.rcb = plb.race
+        m.date = match[0]
+        m.event = match[1] + ' (TLPD)'
+        m.set_period()
+        m.save()
 
-with open('tlpd_international_proc', 'wb') as f:
-    writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    for r in completed:
-        writer.writerow(r)
+        print 'Match %i:' % num, m

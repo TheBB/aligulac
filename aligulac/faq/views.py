@@ -9,6 +9,5 @@ def faq(request):
 
     base = base_ctx('About', 'FAQ', request)
     base.update({'posts': posts})
-    base['curpage'] = 'FAQ'
 
     return render_to_response('faq.html', base)

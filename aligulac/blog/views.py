@@ -9,6 +9,5 @@ def blog(request):
 
     base = base_ctx('About', 'Blog', request)
     base.update({'blogposts': posts})
-    base['curpage'] = 'Blog'
 
     return render_to_response('blog.html', base)

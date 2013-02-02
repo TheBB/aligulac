@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the template for reviewing publicly submitted matches. It's called from
+ratings.submitviews.review.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Review results{% endblock %}
+
+{% block content %}
+    <h2>Review results</h2>
+
+    {% if adm %}
+    <p>You are logged in as: {{ user }}.
+    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% endif  %}
+
+    {% if messages %}
+    <p>Some problems:</p>
+        <ul>
+            {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+
+
+    {% if groups %}
+    <form method="post" action="/add/review/">
+    {% csrf_token %}
+
+    <table class="results">
+    {% for g in groups %}
+        {% if g %}
+        {% include "list_matches.html" with lm_list=g.prematch_set.all lm_show_date=1 lm_adm=1 lm_header_event=1 lm_autohide=1 %}
+        {% endif %}
+    {% endfor %}
+    </table>
+    {% else %}
+    <p>There are no results awaiting review.</p>
+    {% endif %}
+
+    {% if groups %}
+    <p>To all the checked submissions, do the following:</p>
+
+    <div class="table">
+        <div class="row">
+            <div class="rowe" style="width: 10em; text-align: right;">Event:</div>
+            <div class="rowe" style="width: 55em;">
+                <input type="text" name="event" style="width: 40em;" value="{{ event }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="text-align: right;">Event object:</div>
+            <div class="rowe">
+                <select name="eobj">
+                    {% for event in events %}
+                    <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="text-align: right;">Action:</div>
+            <div class="rowe">
+                <select name="act" style="width: 20em;">
+                    <option value="approve">Approve</option>
+                    <option value="reject">Reject (delete)</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="text-align: right;"></div>
+            <div class="rowe"><input type="submit" value="Go" /></div>
+        </div>
+    </div>
+
+    </form>
+    {% endif %}
+
+{% endblock %}

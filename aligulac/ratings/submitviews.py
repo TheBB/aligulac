@@ -260,6 +260,8 @@ def add_matches(request):
                 m.submitter = request.user
                 m.set_period()
                 m.eventobj = eventobj
+                m.offline = offline
+                m.game = game
                 m.save()
 
                 success.append(m)
@@ -393,6 +395,9 @@ def review(request):
                     m.eventobj = eobj
                     m.submitter = request.user
                     m.set_period()
+                    m.online
+                    m.offline = pm.group.offline
+                    m.game = pm.group.game
                     m.save()
 
                     group = pm.group

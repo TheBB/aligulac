@@ -82,6 +82,18 @@ function lm_toggle(id)
 
 {% if lm_adm and lm_list.0.group %}
 <tr class="nonheader row1">
+    <td colspan="1" style="vertical-align: top;">Date:</td>
+    <td colspan="6">{{ lm_list.0.group.date|date:"F jS, Y" }}</td>
+</tr>
+<tr class="nonheader row1">
+    <td colspan="1" style="vertical-align: top;">Game:</td>
+    <td colspan="6">{{ lm_list.0.group.game }}</td>
+</tr>
+<tr class="nonheader row1">
+    <td colspan="1" style="vertical-align: top;">Offline:</td>
+    <td colspan="6">{% if lm_list.0.group.offline %}Yes{% else %}No{% endif %}</td>
+</tr>
+<tr class="nonheader row1">
     <td colspan="1">Source:</td>
     <td colspan="6"><a href="{{ lm_list.0.group.source }}">{{ lm_list.0.group.source }}</a></td>
 </tr>

@@ -173,13 +173,19 @@ class Match(models.Model):
     Z = 'Z'
     R = 'R'
     RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
-    rca = models.CharField(max_length=1, choices=RACES, null=False, blank=False)
-    rcb = models.CharField(max_length=1, choices=RACES, null=False, blank=False)
+    rca = models.CharField(max_length=1, choices=RACES, null=True, blank=True, verbose_name='Race A')
+    rcb = models.CharField(max_length=1, choices=RACES, null=True, blank=True, verbose_name='Race B')
 
     treated = models.BooleanField(default=False)
     event = models.CharField(max_length=200, default='', blank=True)
     eventobj = models.ForeignKey(Event, null=True, blank=True)
     submitter = models.ForeignKey(User, null=True, blank=True)
+
+    WOL = 'WoL'
+    HOTS = 'HotS'
+    GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm')]
+    game = models.CharField(max_length=10, default='wol', blank=False, null=False, choices=GAMES)
+    offline = models.BooleanField(default=False, null=False)
 
     class Meta:
         verbose_name_plural = 'matches'
@@ -189,7 +195,53 @@ class Match(models.Model):
         self.period = pers[0]
 
     def __unicode__(self):
-        return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) + '-' + str(self.scb) + ' ' + self.plb.tag
+        return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
+                '-' + str(self.scb) + ' ' + self.plb.tag
+
+class PreMatchGroup(models.Model):
+    date = models.DateField()
+    event = models.CharField(max_length=200, default='', null=False, blank=True)
+    source = models.CharField(max_length=500, default='', null=True, blank=True)
+    contact = models.CharField(max_length=200, default='', null=True, blank=True)
+    notes = models.TextField(default='', null=True, blank=True)
+
+    WOL = 'WoL'
+    HOTS = 'HotS'
+    GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm')]
+    game = models.CharField(max_length=10, default='wol', blank=False, null=False, choices=GAMES)
+    offline = models.BooleanField(default=False, null=False)
+
+    def __unicode__(self):
+        return str(self.date) + ' ' + self.event
+
+class PreMatch(models.Model):
+    group = models.ForeignKey(PreMatchGroup, null=False, blank=False)
+
+    pla = models.ForeignKey(Player, related_name='prematch_pla', verbose_name='Player A', null=True, blank=True)
+    plb = models.ForeignKey(Player, related_name='prematch_plb', verbose_name='Player B', null=True, blank=True)
+    sca = models.SmallIntegerField('Score for player A')
+    scb = models.SmallIntegerField('Score for player B')
+
+    P = 'P'
+    T = 'T'
+    Z = 'Z'
+    R = 'R'
+    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
+    rca = models.CharField(max_length=1, choices=RACES, null=False, blank=False, verbose_name='Race A')
+    rcb = models.CharField(max_length=1, choices=RACES, null=False, blank=False, verbose_name='Race B')
+
+    pla_string = models.CharField(max_length=200, default='', null=True, blank=True)
+    plb_string = models.CharField(max_length=200, default='', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'prematches'
+
+    def __unicode__(self):
+        ret = '(' + self.group.event + ') '
+        ret += self.pla.tag if self.pla else self.pla_string
+        ret += ' ' + str(self.sca) + '-' + str(self.scb) + ' '
+        ret += self.plb.tag if self.plb else self.plb_string
+        return ret
 
 class Rating(models.Model):
     period = models.ForeignKey(Period)

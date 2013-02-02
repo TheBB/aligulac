@@ -717,7 +717,7 @@ def records(request):
         race = 'hof'
         sub = 'HoF'
 
-    base = base_ctx('Records', sub)
+    base = base_ctx('Records', sub, request)
 
     if race in ['all', 'T', 'P', 'Z']:
         high = Rating.objects.extra(select={'rat': 'rating'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)

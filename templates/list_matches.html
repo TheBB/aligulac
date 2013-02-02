@@ -10,6 +10,7 @@ matches. It expects a number of "arguments", all prefixed with lm_, to avoid nam
              side. If true, the lm_player argument must be given.
 - lm_player: The player that should be shown to the left. Has no effect unless lm_sorted is true.
 - lm_show_date: Set to true to show the date of each match, false otherwise.
+- lm_autohide: Set to true to automatically collapse the matches under the header, false otherwise.
 - lm_adm: Set to true to show admin links on the far right. (A checkbox and a link to the admin interface.)
 
 NB! The calling code is responsible for starting and ending the HTML table:
@@ -47,6 +48,8 @@ function lm_toggle(id)
             {% for p in lm_list.0.eventobj.get_path %}
             <a href="/results/events/{{ p.id }}/">{{ p.name }}</a>
             {% endfor %}
+        {% elif lm_list.0.group %}
+            {{ lm_list.0.group.event }}{% if lm_adm %} [{{ lm_list.count }} matches]{% endif %}
         {% elif lm_list.0.event %}
             {{ lm_list.0.event }}
         {% else %}
@@ -54,7 +57,9 @@ function lm_toggle(id)
         {% endif %}
     </td>
     <td class="lm_right">
-        <a id="lma-{{ lm_list.0.id }}" href="#" onclick="lm_toggle('{{ lm_list.0.id }}'); return false;">hide</a>
+        <a id="lma-{{ lm_list.0.id }}" href="#" onclick="lm_toggle('{{ lm_list.0.id }}'); return false;">
+            {% if lm_autohide %}show{% else %}hide{% endif %}
+        </a>
     </td>
 </tr>
 {% endif %}
@@ -70,82 +75,125 @@ function lm_toggle(id)
         <td class="lm_right"></td>
     </tr>
 {% endif %}
-{% if lm_header_event %} <tbody id="lm-{{ lm_list.0.id }}"> {% endif %}
-    {% for m in lm_list %}
-    <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if lm_header_info %}
-                                                        {% if m.eventobj %}title="{{ m.eventobj }}"
-                                                        {% elif m.event %}title="{{ m.event }}"
-                                                        {% else %}title="Unknown event"{% endif %} {% endif %}>
-        <td class="lm_date">
-            {% if lm_show_date %}{{ m.date|date:"Y-m-d" }}{% endif %}
-        </td>
-        <td class="lm_rta">
-            {% if lm_sorted %}
-                {{ m.rt_my|ratscale }}
+
+{% if lm_header_event %} 
+<tbody id="lm-{{ lm_list.0.id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+{% endif %}
+
+{% if lm_adm and lm_list.0.group %}
+<tr class="nonheader row1">
+    <td colspan="1">Source:</td>
+    <td colspan="6"><a href="{{ lm_list.0.group.source }}">{{ lm_list.0.group.source }}</a></td>
+</tr>
+<tr class="nonheader row1">
+    <td colspan="1">Contact:</td>
+    <td colspan="6">{{ lm_list.0.group.contact }}</td>
+</tr>
+<tr class="nonheader row1">
+    <td colspan="1" style="vertical-align: top;">Notes:</td>
+    <td colspan="6"><code><pre>{{ lm_list.0.group.notes }}</pre></code></td>
+</tr>
+{% endif %}
+
+{% for m in lm_list %}
+<tr class="nonheader {% cycle 'row2' 'row1' %}" {% if lm_header_info %}
+                                                    {% if m.eventobj %}title="{{ m.eventobj }}"
+                                                    {% elif m.event %}title="{{ m.event }}"
+                                                    {% else %}title="Unknown event"{% endif %} {% endif %}>
+    <td class="lm_date">
+        {% if lm_show_date %}
+        {% if m.date %}{{ m.date|date:"Y-m-d" }}{% else %}{{ m.group.date|date:"Y-m-d" }}{% endif %}
+        {% endif %}
+    </td>
+    <td class="lm_rta">
+        {% if lm_sorted %}
+            {{ m.rt_my|ratscale }}
+        {% endif %}
+    </td>
+    <td class="lm_pla">
+        {% if lm_sorted %}
+            {% if m.sc_my > m.sc_op %}<strong>{% endif %}
+            <a href="/players/{{ lm_player.id }}/">{{ lm_player.tag }}</a>
+            {% if lm_player.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ lm_player.country|lower }}.png" alt="{{ lm_player.country }}" />
             {% endif %}
-        </td>
-        <td class="lm_pla">
-            {% if lm_sorted %}
-                {% if m.sc_my > m.sc_op %}<strong>{% endif %}
-                <a href="/players/{{ lm_player.id }}/">{{ lm_player.tag }}</a>
-                {% if lm_player.country != "" %}
-                    <img src="http://aligulac.com:81/al/flags/{{ lm_player.country|lower }}.png" alt="{{ lm_player.country }}" />
-                {% endif %}
-                <img src="http://aligulac.com:81/al/{{ m.rc_my }}.png" alt="{{ m.rc_my }}" class="btm" />
-                {% if m.sc_my > m.sc_op %}</strong>{% endif %}
-            {% else %}
-                {% if m.sca > m.scb %}<strong>{% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.rc_my }}.png" alt="{{ m.rc_my }}" class="btm" />
+            {% if m.sc_my > m.sc_op %}</strong>{% endif %}
+        {% else %}
+            {% if m.sca > m.scb %}<strong>{% endif %}
+            {% if m.pla %}
                 <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
                 {% if m.pla.country != "" %}
                     <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
                 {% endif %}
                 <img src="http://aligulac.com:81/al/{{ m.rca }}.png" alt="{{ m.rca }}" class="btm" />
-                {% if m.sca > m.scb %}</strong>{% endif %}
-            {% endif %}
-        </td>
-        <td class="lm_score">
-            {% if lm_sorted %}
-                {{ m.sc_my }}-{{ m.sc_op }}
             {% else %}
-                {{ m.sca }}–{{ m.scb }}
-            {% endif %}
-        </td>
-        <td class="lm_plb">
-            {% if lm_sorted %}
-                {% if m.sc_op > m.sc_my %}<strong>{% endif %}
-                <img src="http://aligulac.com:81/al/{{ m.rc_op }}.png" alt="{{ m.rc_op }}" class="btm" />
-                {% if m.plb.country != "" %}
-                    <img src="http://aligulac.com:81/al/flags/{{ m.opp.country|lower }}.png" alt="{{ m.opp.country }}" />
+                {% if adm %}
+                <input type="text" name="match-{{ m.id }}-pla" style="width: 15em; text-align: right;"
+                        value="{{ m.pla_string }}" />
+                {% else %}
+                {{ m.pla_string }}
                 {% endif %}
-                <a href="/players/{{ m.opp.id }}/">{{ m.opp.tag }}</a>
-                {% if m.sc_op > m.sc_my %}</strong>{% endif %}
-            {% else %}
-                {% if m.scb > m.sca %}<strong>{% endif %}
+            {% endif %}
+            {% if m.sca > m.scb %}</strong>{% endif %}
+        {% endif %}
+    </td>
+    <td class="lm_score">
+        {% if lm_sorted %}
+            {{ m.sc_my }}-{{ m.sc_op }}
+        {% else %}
+            {{ m.sca }}–{{ m.scb }}
+        {% endif %}
+    </td>
+    <td class="lm_plb">
+        {% if lm_sorted %}
+            {% if m.sc_op > m.sc_my %}<strong>{% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.rc_op }}.png" alt="{{ m.rc_op }}" class="btm" />
+            {% if m.plb.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.opp.country|lower }}.png" alt="{{ m.opp.country }}" />
+            {% endif %}
+            <a href="/players/{{ m.opp.id }}/">{{ m.opp.tag }}</a>
+            {% if m.sc_op > m.sc_my %}</strong>{% endif %}
+        {% else %}
+            {% if m.scb > m.sca %}<strong>{% endif %}
+            {% if m.plb %}
                 <img src="http://aligulac.com:81/al/{{ m.rcb }}.png" alt="{{ m.rcb }}" class="btm" />
                 {% if m.plb.country != "" %}
                     <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
                 {% endif %}
                 <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
-                {% if m.scb > m.sca %}</strong>{% endif %}
-            {% endif %}
-        </td>
-        <td class="lm_rtb">
-            {% if lm_sorted %}
-                {{ m.rt_op|ratscale }}
-            {% endif %}
-        </td>
-        <td class="lm_right">
-            {% if lm_adm %}
-                {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}
-                <a href="/admin/ratings/match/{{ m.id }}/">→</a>
             {% else %}
-                {% if m.treated %}
-                    <img src="http://aligulac.com:81/al/yes.png" alt="yes" class="btm" />
+                {% if adm %}
+                <input type="text" name="match-{{ m.id }}-plb" style="width: 15em;" value="{{ m.plb_string }}" />
                 {% else %}
-                    <img src="http://aligulac.com:81/al/no.png" alt="yes" class="btm" />
+                {{ m.plb_string }}
                 {% endif %}
             {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
+            {% if m.scb > m.sca %}</strong>{% endif %}
+        {% endif %}
+    </td>
+    <td class="lm_rtb">
+        {% if lm_sorted %}
+            {{ m.rt_op|ratscale }}
+        {% endif %}
+    </td>
+    <td class="lm_right">
+        {% if lm_adm %}
+            {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}
+            {% if m.group %}
+                <a href="/admin/ratings/prematch/{{ m.id }}/">→</a>
+            {% else %}
+                <a href="/admin/ratings/match/{{ m.id }}/">→</a>
+            {% endif %}
+        {% else %}
+            {% if m.treated %}
+                <img src="http://aligulac.com:81/al/yes.png" alt="yes" class="btm" />
+            {% else %}
+                <img src="http://aligulac.com:81/al/no.png" alt="yes" class="btm" />
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
 {% if lm_header_event %} </tbody> {% endif %}

@@ -34,4 +34,6 @@ os.system('mysqldump -u aligulac -pv3ll3mp3t4 aligulac ' +\
         '--ignore-table=aligulac.django_site ' +\
         '--ignore-table=aligulac.faq_post ' +\
         '--ignore-table=aligulac.blog_post ' +\
+        '--ignore-table=aligulac.ratings_prematch ' +\
+        '--ignore-table=aligulac.ratings_premathgroup ' +\
         '> /usr/local/www/media/al/aligulac.sql')

@@ -27,9 +27,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             ('Results', '/results/'),\
             ('Predict', '/predict/'),\
             ('About', '/faq/'),\
-            ('Admin', '/add/')]
+            ('Submit', '/add/')]
 
     base = {'curp': curp, 'menu': menu, 'debug': DEBUG}
+
+    if request != None:
+        base['adm'] = request.user.is_authenticated()
 
     if section == 'Records':
         base['submenu'] = [('HoF', '/records/?race=hof'),\
@@ -41,9 +44,10 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('By Date', '/results/'),\
                            ('By Event', '/results/events/'),\
                            ('Search', '/results/search/')]
-    elif section == 'Admin':
-        base['submenu'] = [('Misc', '/add/misc/'),\
-                           ('Matches', '/add/'),\
+    elif section == 'Submit' and base['adm']:
+        base['submenu'] = [('Matches', '/add/'),\
+                           ('Review', '/add/review/'),\
+                           ('Misc', '/add/misc/'),\
                            ('Events', '/add/events/')]
     elif section == 'Ranking':
         base['submenu'] = [('Current', '/periods/%i' % curp.id),\
@@ -58,9 +62,6 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     if subpage != None:
         base['cursubpage'] = subpage
-
-    if request != None:
-        base['adm'] = request.user.is_authenticated()
 
     if context != None:
         if type(context) == Player:
@@ -114,7 +115,7 @@ def db(request):
     return render_to_response('db.html', base)
 
 def home(request):
-    base = base_ctx()
+    base = base_ctx(request=request)
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
     entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0:10]
@@ -126,7 +127,7 @@ def home(request):
     return render_to_response('index.html', base)
 
 def search(request, q=''):
-    base = base_ctx()
+    base = base_ctx(request=request)
 
     if q == '':
         q = request.GET['q']
@@ -180,11 +181,15 @@ def api_search(request, q=''):
 
 def logoutv(request):
     logout(request)
-
     return redirect('/add/')
 
+def loginv(request):
+    base = base_ctx(request=request)
+    base.update(csrf(request))
+    return render_to_response('login.html', base)
+
 def changepwd(request):
-    base = base_ctx()
+    base = base_ctx(request=request)
 
     if not request.user.is_authenticated():
         base.update(csrf(request))
@@ -212,6 +217,6 @@ def changepwd(request):
     return redirect('/add/')
 
 def h404(request):
-    base = base_ctx()
+    base = base_ctx(request=request)
 
     return HttpResponseNotFound(render_to_string('404.html', base))

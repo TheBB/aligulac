@@ -1,4 +1,4 @@
-from ratings.models import Player, Team, Period, Match, Rating, Event, Alias
+from ratings.models import Player, Team, Period, Match, Rating, Event, Alias, PreMatchGroup, PreMatch
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
 from django.db.models import Q, F
@@ -59,3 +59,5 @@ admin.site.register(Player, PlayerAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(PreMatchGroup)
+admin.site.register(PreMatch)

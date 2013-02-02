@@ -224,9 +224,9 @@ if __name__ == '__main__':
     period.dom_t = st
     period.dom_z = sz
 
-    period.num_retplayers = 0
-    period.num_newplayers = 0
-    period.num_games = 0
+    period.num_retplayers = num_retplayers
+    period.num_newplayers = num_newplayers
+    period.num_games = num_games
     period.computed = True
     period.save()
 

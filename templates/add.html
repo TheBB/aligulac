@@ -12,21 +12,29 @@ ratings.submitviews.add_matches.
 {% block content %}
     <h2>Submit results</h2>
 
-    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>,
-    <a href="/results/">full list</a>)</p>
+    {% if adm %}
+    <p>You are logged in as: {{ user }}.
+    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% else %}
+    <p>You are not logged in. The submitted results will be pending review before being accepted.
+    (<a href="/login/">login</a>)</p>
+    {% endif %}
 
     {% if messages %}
         {% if success %}
-            <p>The following entries were successfully submitted:</p>
+        <p>The following entries were successfully submitted{% if adm %}:{% else %}They are pending review
+        before being visible.{% endif %}</p>
             <table class="results">
-            {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=1 lm_header_event=1 lm_nocheck=1 %}
+            {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=adm lm_header_event=1 lm_nocheck=1 %}
             </table>
             <p></p>
         {% endif %}
         {% if failure %}
         <p style="color: #ff0000;"><strong>There were problems with the following entries:</strong></p>
             <ul>
-                {% for f in failure %}<li>{{ f.1 }}.</li>{% endfor %}
+                {% for f in failure %}
+                <li>{% if f.0 %}'{{ f.0 }}': {% endif %}{{ f.1 }}.</li>
+                {% endfor %}
             </ul>
         {% endif %}
     {% endif %}
@@ -36,110 +44,167 @@ ratings.submitviews.add_matches.
     function toggle_to(id) 
     {
         document.getElementById('guide').style.display = (id=='guide') ? 'block' : 'none';
+        document.getElementById('syntax').style.display = (id=='syntax') ? 'block' : 'none';
         document.getElementById('examples').style.display = (id=='examples') ? 'block' : 'none';
         document.getElementById('problems').style.display = (id=='problems') ? 'block' : 'none';
     }
     //-->
     </script>
 
-    <p>Show: <a href="#" onclick="toggle_to('guide'); return false;">user guide</a>,
+    <p>Show: <a href="#" onclick="toggle_to('guide'); return false;">guide</a>,
+             <a href="#" onclick="toggle_to('syntax'); return false;">match syntax</a>,
              <a href="#" onclick="toggle_to('examples'); return false;">examples</a>,
              <a href="#" onclick="toggle_to('problems'); return false;">common problems</a></p></div>
 
-    <div id="guide" style="display: none;">
-        <p>Use the format YYYY-MM-DD for the date. For the event, use an event object whenever possible.</p>
+    <div id="guide" style="display: block;">
+        <ul>
+            {% if not adm %}
+            <li><strong>Event:</strong> Anything that can be used to identify the tournament the games were
+            played in. Please provide as much information as possible. (Rounds, day number, week number,
+            etc.)</li>
+            {% else %}
+            <li><strong>Event:</strong> Anything that can be used to identify the tournament the games were
+            played in.</li>
+            {% endif %}
+            {% if adm %}
+            <li><strong>Event object:</strong> The event the games were played in. 
+                <span style="color: #ff0000;">Use an event object instead of event text whenever possible. You
+                    do not need both. If you can't find the correct event object, please consider 
+                    <a href="/add/events/">making it</a>. If these are the final games associated with an
+                    event object, please close it afterwards.</span></li>
+            {% endif %}
+            <li><strong>Date played:</strong> The date the games were played (as accurate as possible). This
+            will be used to check for possible duplicates.</li>
+            <li><strong>Game:</strong> Indicate which version of SC2 the games were played on.</li>
+            <li><strong>Type:</strong> Use <strong>offline</strong> for games that were played at a live
+            tournament, otherwise use <strong>online</strong>.</li>
+            {% if not adm %}
+            <li><strong>Source:</strong> (Optional) An URL to a credible source where the results can be
+            double checked (for example: official tournament brackets, Liquipedia page or Team Liquid live
+            report thread).</li>
+            <li><strong>Contact:</strong> (Optional) A way to contact you if we have questions about your
+            submission. E-mail, Team Liquid username, Reddit username etc. are fine.</li>
+            <li><strong>Notes:</strong> (Optional) Any extra information you have that may or may not be of
+            use.</li>
+            {% endif %}
+            <li><strong>Matches:</strong> A list of the results you want to add. Please see 
+            <a href="#" onclick="toggle_to('syntax'); return false;">match syntax</a> for more
+            information.</li>
+        </ul>
 
+        <p>Please check out <a href="#" onclick="toggle_to('problems'); return false;">common
+            problems</a> if you are unsure about a player.</p>
+    </div>
+
+    <div id="syntax" style="display: none;">
         <p>Each line corresponds to a match, and should be entered using this format:</p>
 
         <pre><code>    &lt;Player A&gt;-&lt;Player B&gt; &lt;Score A&gt;-&lt;Score B&gt;</code></pre>
 
-        <p>The player information must uniquely identify the player, and should be space-separated list of any of the following:</p>
+        {% if adm %}
+        <p>The player information must uniquely identify the player, and should be space-separated list of any
+        of the following:</p>
+        {% else %}
+        <p>The player information does not have to uniquely identify the player, and should be a
+        space-separated list of any of the following:</p>
+        {% endif %}
 
         <ul>
-            <li>Player tag, e.g. &quot;DongRaeGu&quot;</li>
-            <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; or &quot;S&quot;</li>
-            <li>A two- or three-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>
-            country code. e.g. &quot;KR&quot;, or the common English name of a country</li> 
-            <li>Team name, e.g. &quot;MVP&quot;</li>
-            <li>Player or team aliases (we add these to the database when we feel like they're needed), e.g. &quot;DRG&quot;</li>
-            <li>A player ID number, which you can get from the URL of the player page, e.g. &quot;4&quot;</li>
+            <li>Player tag, e.g. &quot;DongRaeGu&quot;.</li>
+            <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; (Random) or
+            &quot;S&quot; (Race Switcher).</li>
+            <li>A two- or three-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1
+                alpha-2</a> country code. e.g. &quot;KR&quot; or &quot;KOR&quot;, or the common English name
+            of a country (the latter will only work if the country name does not contain spaces.</li> 
+            <li>Team name, e.g. &quot;MVP&quot;.</li>
+            <li>Player or team aliases, e.g. &quot;DRG&quot;. The most common ones should be recognized.</li>
+            <li>A player ID number, which you can get from the URL of the 
+            <a href="http://127.0.0.1:8000/players/4/">player page</a>, e.g. &quot;4&quot;.</li>
         </ul>
 
-        <p>If you are adding a match by a random player or a race switcher you need to tell the system which race the player was playing in
-        that match. Do this by adding a &quot;R:&lt;race&gt;&quot; clause at the <strong>end</strong> of the player information. For example,
-        if MorroW plays Protoss, you can do this:</p>
+        <p>If you are adding a match by a race switcher you need to tell the system which race the player was
+        playing in that match. Do this by adding a &quot;R:&lt;race&gt;&quot; clause at the
+        <strong>end</strong> of the player information. For example, if MorroW plays Protoss, you can do
+        this:</p>
 
         <pre><code>    Morrow r:p-DongRaeGu 0-2</code></pre>
 
-        <p>Everything is based on case-insensitive search.</p>
+        <p>Please also provide race information about random players whenever this is known, though it's not
+        required.</p>
 
-        <p>When submitted, the system will try to add as many of the matches as it can. Some entries might produce warnings, in which case
-        you will be notified about what to do. This happens when:</p>
+        <p>Everything is based on case-insensitive search. There is no recognizable difference between
+        &quot;Mvp&quot; (the player) and &quot;MVP&quot; (the team).</p>
+
+        {% if adm %}
+        <p>When submitted, the system will try to add as many of the matches as it can. Some entries might
+        produce warnings, in which case you will be notified about what to do. This happens when:</p>
 
         <ul>
-            <li>a player is not uniquely identified. In this case, add more information. Use the ID number if necessary.</li>
-            <li>a player can't be found. In this case, add the switch &quot;<strong>!MAKE</strong>&quot; to the end of the respective
-            line(s).  This will make a player entry if needed. In this case, you <strong>must</strong> provide a player tag and race.
-            Please also provide a country code if possible, and make sure the player tag is spelled correctly (including
-            capitalisation).</li>
-            <li>a duplicate entry was found. If you are certain that the two players in question played more than one match within a
-            single day with the same result (this can happen, but it's rare), add the switch &quot;<strong>!DUP</strong>&quot; to the
-            end of the respective line(s). This will force the match to be entered.</li>
+            <li>a player is not uniquely identified. In this case, add more information. Use the ID number if
+            necessary.</li> 
+            <li>a player can't be found. In this case, add the switch &quot;<strong>!MAKE</strong>&quot; to
+            the end of the respective line(s).  This will make a player entry if needed. In this case, you
+            <strong>must</strong> provide a player tag and race.  Please also provide a country code if
+            possible, and make sure the player tag is spelled correctly (including capitalisation).</li>
+            <li>a duplicate entry was found. If you are certain that the two players in question played more
+            than one match within a single day with the same result (this can happen, but it's rare), add the
+            switch &quot;<strong>!DUP</strong>&quot; to the end of the respective line(s). This will force the
+            match to be entered.</li>
         </ul>
+        {% else %}
+        <p>When submitted, the system will try to find as many players as it can. If a player can't be found,
+        or if the information provided applies to more than one player, that's fine. We will fix it when
+        reviewing the submission.</p>
+        {% endif %}
+
+        <p>Most players are uniquely identifiable through their nickname alone. For a list of the most common
+        exceptions, please look at <a href="#" onclick="toggle_to('problems'); return false;">common
+            problems</a>.</p>
     </div>
 
     <div id="examples" style="display: none;">
-    <p>Here is a real-world example. I am interested in adding some SPL matches.</p>
+    <p>Here are some real-world examples. From the GSL:</p>
 
-<pre><code>    Sos-Paralyze 0-1
-    Soulkey-yeOngJae 1-0
-    Flying-Soo 0-1
-    Zero-Best 1-0
-    Hon_Sin-Fantasy 1-0
-    Free-Rain 0-1
-    Soulkey-Soo 1-0</code></pre>
+<pre><code>    MarineKing-Roro 2-1
+    Keen-IM Mvp 2-1
+    MarineKing-Keen 2-0
+    Roro-IM Mvp 2-0
+    Keen-Roro 0-2</code></pre>
 
-    <p>From the above entries, I get the following warnings:</p>
+    <p>Some players have to be identified by race and/or country, such as Creator:</p>
 
-<pre><code>    Player A not unique, add more information: "Zero-Best 1-0"
-    Could not find player A, add !MAKE switch to create: "Hon_Sin-Fantasy 1-0"
-    Could not find player A, add !MAKE switch to create: "Free-Rain 0-1"
-    Player B not unique, add more information: "Free-Rain 0-1"</code></pre>
+<pre><code>    Creator P KR-Byul 2-0</code></pre>
+    
+    <p>Some players have aliases to help entering their names, such as BBoongBBoong:</p>
 
-    <p>So I add race and country information to Zero and Rain, and I also look around for possible alternate names to
-    Hon_Sin, to discover that he is already in the database under the name Sin. Free, however, is not in the database. I
-    confirm that he is Korean and Protoss, but his name is spelled &quot;free&quot;, with a lowercase F. Thus:</p>
+<pre><code>    Hyun-B4 0-2</code></pre>
 
-<pre><code>    Zero Z KR-Best 1-0
-    Sin-Fantasy 1-0
-    free P KR-Rain P KR 0-1 !MAKE</code></pre>
+    <p>Some players are more easily identified by team, such as Mvp and HerO:</p>
 
-    <p>Which works.</p>
+<pre><code>    Liquid Hero-IM Mvp 2-0</code></pre>
 </div>
 
-    <div id="problems" style="display: block;">
-        <p>Here are the player IDs for some common problematic players.</p>
+    <div id="problems" style="display: none;">
         <ul>
-            <li>Liquid HerO (P): 11, CJ herO (P): 233</li>
-            <li>MVP Shine (Z): 62, Khan Shine (Z): 1664</li>
-            <li>MVP Killer (P): 113, Clarity KiLLeR (Z): 169</li>
-            <li>Woongjin ZerO (Z): 1661, StarTale Zero (Z): 2209</li>
+            <li>Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer and Clarity KiLLeR should be
+            identified by team.</li>
+            <li>Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need to be identified by
+            race and/or country.</p>
         </ul>
-        <p>Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest and Top need to be designated by race and/or country.</p>
-        <p>Common country codes: Canada (CA), Germany (DE), Korea (KR), Poland (PL), Russia (RU), Sweden (SE), Ukraine (UA), USA (US)</p>
+        <p>Common country codes: Canada (CA), France (FR), Germany (DE), Korea (KR), Poland (PL), Russia (RU),
+        Sweden (SE), Ukraine (UA), USA (US).</p>
     </div>
-
-    <p><strong>Use an event object instead of event text whenever possible. You do not need both. If you can't find the correct event
-        object, please consider <a href="/add/events/">making it</a>. If these are the final games associated with an event object, please
-        close it afterwards.</p>
 
     <form method="post" action="/add/">
     {% csrf_token %}
     <div class="table" style="width: 65em;">
         <div class="row">
             <div class="rowe" style="width: 15em; text-align: right;">Event:</div>
-            <div class="rowe" style="width: 50em;"><input type="text" name="event" style="width: 40em;" value="{{ event }}" /></div>
+            <div class="rowe" style="width: 50em;">
+                <input type="text" name="event" style="width: 40em;" value="{{ event }}" />
+            </div>
         </div>
+        {% if adm %}
         <div class="row">
             <div class="rowe" style="width: 15em; text-align: right;">Event object:</div>
             <div class="rowe" style="width: 50em;">
@@ -150,10 +215,12 @@ ratings.submitviews.add_matches.
                 </select>
             </div>
         </div>
+        {% endif %}
         <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right;">Date:</div>
+            <div class="rowe" style="width: 15em; text-align: right;">Date played:</div>
             <div class="rowe" style="width: 50em;">
-                <input type="text" name="date" id="date" style="width: 6.5em;" value="{% if date %}{{ date }}{% else %}{% now "Y-m-d" %}{% endif %}" />
+                <input type="text" name="date" id="date" style="width: 6.5em;" 
+                        value="{% if date %}{{ date }}{% else %}{% now "Y-m-d" %}{% endif %}" />
                 <script type="text/javascript" src="/js/datepicker.js" /></script>
                 <script type="text/javascript">
                     // <![CDATA[  
@@ -167,8 +234,48 @@ ratings.submitviews.add_matches.
             </div>
         </div>
         <div class="row">
+            <div class="rowe" style="text-align: right;">Game:</div>
+            <div class="rowe">
+                <select name="game" style="width: 15em;">
+                    <option value="WoL" {% if game == 'WoL' %}selected{% endif %}>Wings of Liberty</option>
+                    <option value="HotS" {% if game == 'HotS' %}selected{% endif %}>Heart of the Swarm</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="text-align: right;">Type:</div>
+            <div class="rowe">
+                <select name="type" style="width: 15em;">
+                    <option value="online" {% if type == 'online' %}selected{% endif %}>Online</option>
+                    <option value="offline" {% if type == 'offline' %}selected{% endif %}>Offline</option>
+                </select>
+            </div>
+        </div>
+        {% if not adm %}
+        <div class="row">
+            <div class="rowe" style="text-align: right;">Source:</div>
+            <div class="rowe">
+                <input type="text" name="source" style="width: 40em;" value="{{ source }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="text-align: right;">Contact:</div>
+            <div class="rowe">
+                <input type="text" name="contact" style="width: 40em;" value="{{ contact }}" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 15em; text-align: right; vertical-align: top;">Notes:</div>
+            <div class="rowe" style="width: 50em;">
+                <textarea name="notes" rows="5" style="width: 700px;">{{ notes }}</textarea>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
             <div class="rowe" style="width: 15em; text-align: right; vertical-align: top;">Matches:</div>
-            <div class="rowe" style="width: 50em;"><textarea name="matches" rows="20" style="width: 700px;">{{ matches }}</textarea></div>
+            <div class="rowe" style="width: 50em;">
+                <textarea name="matches" rows="20" style="width: 700px;">{% if not matches %}Player A-Player B 3-2{% else %}{{ matches }}{% endif %}</textarea>
+            </div>
         </div>
         <div class="row">
             <div class="rowe" style="width: 15em; text-align: right;"></div>

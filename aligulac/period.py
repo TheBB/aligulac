@@ -7,6 +7,9 @@ This script will recompute the ratings for a given period.
 
 The script will yield an error message if there are untreated matches from previous periods, or if previous
 periods are marked as not computed.
+
+If you recompute all the ratings, consider commenting the last line (call to domination.py), see the comment
+for more details.
 '''
 
 import sys, os
@@ -271,4 +274,6 @@ if __name__ == '__main__':
     period.save()
 
     # Recompute the hall of fame
-    os.system('./domination.py')
+    # NOTE: If you compute several periods after one another, it might be wise to comment this and run it only
+    # after the last rating computation, as it takes time to run and adds up quickly.
+    # os.system('./domination.py')

@@ -1,4 +1,11 @@
 #!/usr/bin/python
+
+'''
+This script deletes an event, and transfers all the children to the parent event.
+
+./deleteevent.py <event_id>
+'''
+
 import os, datetime, re, sys
 from urllib2 import urlopen, Request
 

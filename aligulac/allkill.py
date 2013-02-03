@@ -1,4 +1,9 @@
 #!/usr/bin/python
+
+'''
+This script recomputes the team allkill rankings.
+'''
+
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 

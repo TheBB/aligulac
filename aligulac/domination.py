@@ -1,4 +1,9 @@
 #!/usr/bin/python
+
+'''
+This script recomputes the Hall of Fame.
+'''
+
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 

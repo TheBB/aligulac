@@ -1,4 +1,9 @@
 #!/usr/bin/python
+
+'''
+This script performs automatic backups and database dumps.
+'''
+
 import os
 import datetime
 

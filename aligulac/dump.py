@@ -36,7 +36,7 @@ password = DATABASES['default']['PASSWORD']
 database = DATABASES['default']['NAME']
 
 # Basic mysqldump call
-command = 'mysqldump -u {username} -p{password} {database}'.format(\
+command = 'mysqldump -u {username} -p{password} {database}'.format(\
         username=username, password=password, database=database)
 
 # Backup dump

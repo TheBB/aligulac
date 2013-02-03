@@ -6,6 +6,9 @@ from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
 
+def filter_active_ratings(queryset):
+    return queryset.filter(decay__lt=4, dev__lt=0.2)
+
 def sort_matches(matches, player, add_ratings=False):
     sc_my, sc_op = 0, 0
 

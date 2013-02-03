@@ -82,4 +82,17 @@ This is the page for miscellaneous administrative functions. Called from ratings
         <input type="hidden" name="op" value="treerestore" />
         <input type="submit" value="Restore NSM" />
     </form>
+
+    <h3>Event names update</h3>
+    {% if namerestore_succ %}
+        <p style="color: #009900; font-weight: bold;">{{ namerestore_succ }}</p>
+    {% endif %}
+    <p>This updates the cache of the full event names (which includes all the parent names). You should do
+    this after renaming events or changing parents.</p>
+    <p><strong>This could take some time. Please wait for the page to load after pressing the button.</strong></p>
+    <form method="post" action="/add/misc/">
+        {% csrf_token %}
+        <input type="hidden" name="op" value="namerestore" />
+        <input type="submit" value="Update event names" />
+    </form>
 {% endblock %}

@@ -12,17 +12,9 @@ ratings.submitviews.add_matches.
 {% block content %}
     <h2>Submit results</h2>
 
-    {% if adm %}
-    <p>You are logged in as: {{ user }}.
-    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
-    {% else %}
-    <p>You are not logged in. The submitted results will be pending review before being accepted.
-    (<a href="/login/">login</a>)</p>
-    {% endif %}
-
     {% if messages %}
         {% if success %}
-        <p>The following entries were successfully submitted{% if adm %}:{% else %}They are pending review
+        <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
         before being visible.{% endif %}</p>
             <table class="results">
             {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=adm lm_header_event=1 lm_nocheck=1 %}
@@ -37,6 +29,14 @@ ratings.submitviews.add_matches.
                 {% endfor %}
             </ul>
         {% endif %}
+    {% endif %}
+
+    {% if adm %}
+    <p>You are logged in as: {{ user }}.
+    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% else %}
+    <p>You are not logged in. The submitted results will be pending review before being accepted.
+    (<a href="/login/">login</a>)</p>
     {% endif %}
 
     <script type="text/javascript">
@@ -79,9 +79,9 @@ ratings.submitviews.add_matches.
             <li><strong>Type:</strong> Use <strong>offline</strong> for games that were played at a live
             tournament, otherwise use <strong>online</strong>.</li>
             {% if not adm %}
-            <li><strong>Source:</strong> (Optional) An URL to a credible source where the results can be
-            double checked (for example: official tournament brackets, Liquipedia page or Team Liquid live
-            report thread).</li>
+            <li><strong>Source:</strong> An URL to a credible source where the results can be double checked
+            (for example: official tournament brackets, Liquipedia page or Team Liquid live report
+            thread).</li>
             <li><strong>Contact:</strong> (Optional) A way to contact you if we have questions about your
             submission. E-mail, Team Liquid username, Reddit username etc. are fine.</li>
             <li><strong>Notes:</strong> (Optional) Any extra information you have that may or may not be of
@@ -155,6 +155,11 @@ ratings.submitviews.add_matches.
         <p>When submitted, the system will try to find as many players as it can. If a player can't be found,
         or if the information provided applies to more than one player, that's fine. We will fix it when
         reviewing the submission.</p>
+
+        <p>The system will also try to avoid duplicates. If your match appears to be a duplicate of another
+        match in the database (same players, score and close in time), you will get a warning. To avoid this,
+        add the switch &quot;<strong>!DUP</strong>&quot; to the end of the match description. This will force
+        the match to be entered.</p>
         {% endif %}
 
         <p>Most players are uniquely identifiable through their nickname alone. For a list of the most common
@@ -237,8 +242,8 @@ ratings.submitviews.add_matches.
             <div class="rowe" style="text-align: right;">Game:</div>
             <div class="rowe">
                 <select name="game" style="width: 15em;">
-                    <option value="WoL" {% if game == 'WoL' %}selected{% endif %}>Wings of Liberty</option>
-                    <option value="HotS" {% if game == 'HotS' %}selected{% endif %}>Heart of the Swarm</option>
+                    <option value="WoL" {% ifequal game "WoL" %}selected{% endifequal %}>Wings of Liberty</option>
+                    <option value="HotS" {% ifequal game "HotS" %}selected{% endifequal %}>Heart of the Swarm</option>
                 </select>
             </div>
         </div>
@@ -246,8 +251,8 @@ ratings.submitviews.add_matches.
             <div class="rowe" style="text-align: right;">Type:</div>
             <div class="rowe">
                 <select name="type" style="width: 15em;">
-                    <option value="online" {% if type == 'online' %}selected{% endif %}>Online</option>
-                    <option value="offline" {% if type == 'offline' %}selected{% endif %}>Offline</option>
+                    <option value="online" {% ifequal type "online" %}selected{% endifequal %}>Online</option>
+                    <option value="offline" {% ifequal type "offline" %}selected{% endifequal %}>Offline</option>
                 </select>
             </div>
         </div>

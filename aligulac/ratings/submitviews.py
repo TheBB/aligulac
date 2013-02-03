@@ -3,7 +3,7 @@ import urllib, urllib2
 from pyparsing import nestedExpr
 
 from aligulac.views import base_ctx
-from ratings.tools import find_player
+from ratings.tools import find_player, find_duplicates, group_by_events
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
@@ -14,28 +14,6 @@ from django.core.context_processors import csrf
 
 from countries import transformations, data
 from aligulac.settings import RECAPTCHA_PRIVATE_KEY
-
-def recaptcha_check(request, challenge, response):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-
-    url = 'http://www.google.com/recaptcha/api/verify'
-    data = {'privatekey': RECAPTCHA_PRIVATE_KEY,\
-            'remoteip': ip,\
-            'challenge': challenge,\
-            'response': response}
-
-    data = urllib.urlencode(data)
-    req = urllib2.Request(url, data)
-    response = urllib2
-    req = urllib2.Request(url, data)
-    response = urllib2.urlopen(req)
-    lines = response.readlines()
-
-    return lines[0] == 'true', ip
 
 def parse_match(s):
     res = nestedExpr('(',')').parseString('('+s.encode()+')').asList()[0]
@@ -91,8 +69,8 @@ def add_matches(request):
             game = 'WoL'
 
         base['game'] = game
-        base['offline'] = 'offline' if offline else 'online'
-        base['matches'] = matches
+        base['type'] = 'offline' if offline else 'online'
+        base['matches'] = '\n'.join(matches)
         base['date'] = date
         base['event'] = event
 
@@ -118,10 +96,15 @@ def add_matches(request):
         except:
             pass
 
-        # Check captcha
+        # Check various requirements for non-admins
         if not base['adm'] and len(matches) > 100:
             base.update({'messages': True, 'success': [],\
-                'failure': [(None, 'Please do not submit more than 100 results at a time')]})
+                    'failure': [(None, 'Please do not submit more than 100 results at a time')]})
+            base.update(csrf(request))
+            return render_to_response('add.html', base)
+        if not base['adm'] and source.strip() == '':
+            base.update({'messages': True, 'success': [],\
+                    'failure': [(None, 'Please include a source')]})
             base.update(csrf(request))
             return render_to_response('add.html', base)
 
@@ -151,13 +134,15 @@ def add_matches(request):
                 # Check for !DUP and !MAKE switches if user is logged in
                 dup_switch = False
                 make_switch = False
-                if base['adm']:
-                    while collect[2][-1][0] == '!':
-                        if collect[2][-1] == '!MAKE':
-                            make_switch = True
-                        elif collect[2][-1] == '!DUP':
-                            dup_switch = True
-                        collect[2] = collect[2][:-1]
+                while collect[2][-1][0] == '!':
+                    if collect[2][-1] == '!MAKE':
+                        make_switch = True
+                    elif collect[2][-1] == '!DUP':
+                        dup_switch = True
+                    collect[2] = collect[2][:-1]
+
+                if not base['adm']:
+                    make_switch = False
 
                 # Check for race overrides
                 def get_race(lst):
@@ -200,10 +185,17 @@ def add_matches(request):
                 if plb_obj == None and base['adm']:
                     continue
 
+                # If both players are known, check for duplicates
+                if pla_obj and plb_obj:
+                    n = find_duplicates(pla_obj, plb_obj, sca, scb, date)
+                    if n > 0 and not dup_switch:
+                        failure.append((s, '%i possible duplicates found, add !DUP switch to force' % n))
+                        continue
+
                 # If the user is not logged in, we now have enough information to create a prematch.
                 if not base['adm']:
                     pm = PreMatch(group=pmgroup, sca=sca, scb=scb, pla=pla_obj, plb=plb_obj,\
-                            pla_string=' '.join(pla), plb_string=' '.join(plb))
+                            pla_string=' '.join(pla), plb_string=' '.join(plb), date=pmgroup.date)
                     if rca:
                         pm.rca = rca
                     elif pla_obj:
@@ -220,22 +212,6 @@ def add_matches(request):
 
                     pm.save()
                     success.append(pm)
-                    continue
-
-                # This code will execute only if the user is logged in. First, check for duplicates
-                pla = pla_obj
-                plb = plb_obj
-                n1 = Match.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb)\
-                        .extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
-                n2 = Match.objects.filter(pla=plb, plb=pla, sca=scb, scb=sca)\
-                        .extra(where=['abs(datediff(date,\'%s\')) < 2' % date])
-                n1 = n1.exists()
-                n2 = n2.exists()
-
-                # Abort if a possible duplicate is found
-                if (n1 or n2) and not dup_switch:
-                    failure.append((s, '%i duplicate(s) found, add !DUP switch to force.'\
-                            % (n1+n2)))
                     continue
 
                 # Abort if race information is incorrect
@@ -353,6 +329,7 @@ def review(request):
         delete = True if request.POST['act'] == 'reject' else False
 
         messages = []
+        success = []
 
         for key in sorted(request.POST.keys()):
             if request.POST[key] != 'y':
@@ -391,14 +368,15 @@ def review(request):
                     m.rca = pm.rca
                     m.rcb = pm.rcb
                     m.date = pm.group.date
-                    m.event = etext
+                    m.event = etext if etext.strip() != '' else pm.group.event
                     m.eventobj = eobj
                     m.submitter = request.user
                     m.set_period()
-                    m.online
                     m.offline = pm.group.offline
                     m.game = pm.group.game
                     m.save()
+                    
+                    success.append(m)
 
                     group = pm.group
                     pm.delete()
@@ -406,6 +384,9 @@ def review(request):
                         group.delete()
 
         base['messages'] = messages
+
+        success = group_by_events(success)
+        base['success'] = success
 
     groups = PreMatchGroup.objects.filter(prematch__isnull=False)\
             .select_related('prematch').order_by('id', 'event').distinct()
@@ -506,6 +487,12 @@ def manage(request):
         for r in roots:
             nextleft = r.reorganize(nextleft) + 1 
         base['treerestore_succ'] = 'The NSM has been restored.'
+        return render_to_response('manage.html', base)
+
+    if 'op' in request.POST and request.POST['op'] == 'namerestore':
+        for event in Event.objects.all():
+            event.update_name()
+        base['namerestore_succ'] = 'The names have been updated.'
         return render_to_response('manage.html', base)
 
     return render_to_response('manage.html', base)

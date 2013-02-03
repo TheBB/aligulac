@@ -56,13 +56,13 @@ This is the results search function. Called from ratings.views.results_search.
                 <textarea name="players" rows="6" style="width: 35em;">{{ pls }}</textarea>
             </div>
         </div>
-        {% if adm %}
         <div class="row">
-            <div class="rowel">Event text</div>
+            <div class="rowel">Event</div>
             <div class="rower">
                 <input type="text" name="eventtext" style="width: 35em;" value="{{ eventtext }}"/>
             </div>
         </div>
+        {% if adm %}
         <div class="row">
             <div class="rowel"></div>
             <div class="rower">
@@ -99,6 +99,11 @@ This is the results search function. Called from ratings.views.results_search.
 
     <p>Found {{ count }} matches.</p>
 
+    {% if sc_my %}
+    <p>In these games, <a href="/players/{{ left.id }}/">{{ left.tag }}</a> is {{ sc_my }}–{{ sc_op }} against
+    <a href="/players/{{ right.id }}/">{{ right.tag }}</a>.</p>
+    {% endif %}
+
     {% if adm %}
         <form method="post"
             action="/results/search/?op=search&amp;after={{after}}&amp;before={{before}}&amp;players={{pls|urlencode}}&amp;eventtext={{eventtext|urlencode}}&amp;unassigned={{unassigned_get}}">
@@ -107,7 +112,11 @@ This is the results search function. Called from ratings.views.results_search.
 
     <table class="results">
     {% for m in matches %}
+        {% if sort_player %}
+        {% include "list_matches.html" with lm_list=m lm_show_date=1 lm_adm=adm lm_header_event=1 lm_sorted=1 lm_player=sort_player %}
+        {% else %}
         {% include "list_matches.html" with lm_list=m lm_show_date=1 lm_adm=adm lm_header_event=1 %}
+        {% endif %}
     {% endfor %}
     </table>
 

@@ -2,7 +2,7 @@ import os, datetime
 from pyparsing import nestedExpr
 
 from aligulac.views import base_ctx
-from ratings.tools import find_player
+from ratings.tools import find_player, sort_matches, group_by_events
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -16,29 +16,6 @@ from countries import transformations, data
 from scipy.stats import norm
 from numpy import linspace, array
 from math import sqrt
-
-def group_by_events(matches):
-    ret = []
-
-    events = []
-    for e in [m.eventobj for m in matches if m.eventobj != None]:
-        if e not in events:
-            events.append(e)
-
-    for e in events:
-        ret.append([m for m in matches if m.eventobj == e])
-
-    events = []
-    for e in [m.event for m in matches if m.eventobj == None]:
-        if e not in events:
-            events.append(e)
-
-    for e in events:
-        ret.append([m for m in matches if m.eventobj == None and m.event == e])
-
-    ret = sorted(ret, key=lambda l: l[0].date, reverse=True)
-
-    return ret
 
 def collect(lst, n=2):
     ret, part = [], []
@@ -195,29 +172,12 @@ def player(request, player_id):
         return render_to_response('player.html', base)
     rating = rating[0]
 
-    matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period_id=base['curp'].id+1)\
+    matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\
-            .select_related('period').order_by('-date', '-id')
-    if matches.exists():
-        for m in matches:
-            try:
-                if m.pla == player:
-                    m.sc_my, m.sc_op = m.sca, m.scb
-                    m.rc_my, m.rc_op = m.rca, m.rcb
-                    m.opp = m.plb
-                else:
-                    m.sc_my, m.sc_op = m.scb, m.sca
-                    m.rc_my, m.rc_op = m.rcb, m.rca
-                    m.opp = m.pla
-                temp = m.opp.rating_set.get(period__id=m.period.id-1)
-                m.rt_op = temp.get_totalrating(player.race)
-            except:
-                m.rt_op = 0
+            .select_related('period').order_by('-date', '-id')[0:10]
 
-            try:
-                m.rt_my = rating.get_totalrating(m.rc_op)
-            except:
-                m.rt_my = 0
+    if matches.exists():
+        sort_matches(matches, player, add_ratings=True)
         base.update({'matches': matches})
 
     def meandate(tm):
@@ -442,9 +402,12 @@ def results_search(request):
             base['unassigned_get'] = 'yes'
             matches = matches.filter(eventobj__isnull=True)
 
-        if 'eventtext' in request.GET and request.GET['eventtext'].strip() != '' and base['adm']:
-            base['eventtext'] = request.GET['eventtext'].strip()
-            matches = matches.filter(event__icontains=request.GET['eventtext'])
+        if 'eventtext' in request.GET and request.GET['eventtext'].strip() != '':
+            queries = [f.strip() for f in request.GET['eventtext'].strip().split(' ') if f.strip() != '']
+            for query in queries:
+                q = Q(eventobj__isnull=True, event__icontains=query) |\
+                    Q(eventobj__isnull=False, eventobj__fullname__icontains=query)
+                matches = matches.filter(q)
 
         players, failures = [], []
         base['errs'] = []
@@ -461,17 +424,18 @@ def results_search(request):
         if len(base['errs']) > 0:
             return render_to_response('results_search.html', base)
 
-        if len(players) > 1:
+        pls = []
+        for p in players:
+            pls += p
+
+        if len(pls) > 1:
             qa, qb = Q(), Q()
-            for pls in players:
-                for p in pls:
-                    qa |= Q(pla=p)
-                    qb |= Q(plb=p)
+            for p in pls:
+                qa |= Q(pla=p)
+                qb |= Q(plb=p)
             matches = matches.filter(qa & qb)
-        elif len(players) == 1:
-            q = Q()
-            for p in players[0]:
-                q |= Q(pla=p) | Q(plb=p)
+        elif len(pls) == 1:
+            q = Q(pla=pls[0]) | Q(plb=pls[0])
             matches = matches.filter(q)
 
         base['count'] = matches.count()
@@ -480,6 +444,11 @@ def results_search(request):
         if base['count'] > 1000:
             base['errs'].append('Too many results (%i). Please add restrictions.' % base['count'])
             return render_to_response('results_search.html', base)
+
+        if len(pls) == 2:
+            base['sort_player'] = pls[0]
+            sc_my, sc_op = sort_matches(matches, pls[0], add_ratings=False)
+            base.update({'sc_my': sc_my, 'sc_op': sc_op, 'left': pls[0], 'right': pls[1]})
 
         matches = group_by_events(matches)
         base['matches'] = matches
@@ -550,38 +519,9 @@ def player_results(request, player_id):
     prev_date = None
     prev_event = 'qwerty'
     prev_eventobj = -1
-    groups = []
-    for m in matches:
-        if m.eventobj_id != None:
-            objid = m.eventobj_id
-        else:
-            objid = -1
-        if m.date != prev_date or m.event != prev_event or objid != prev_eventobj:
-            groups.append([])
-            prev_date = m.date
-            prev_event = m.event
-            prev_eventobj = objid
-        groups[-1].append(m)
 
-        try:
-            if m.pla == player:
-                m.sc_my, m.sc_op = m.sca, m.scb
-                m.rc_my, m.rc_op = m.rca, m.rcb
-                m.me, m.opp = m.pla, m.plb
-            else:
-                m.sc_my, m.sc_op = m.scb, m.sca
-                m.rc_my, m.rc_op = m.rcb, m.rca
-                m.me, m.opp = m.plb, m.pla
-            temp = m.opp.rating_set.get(period__id=m.period.id-1)
-            m.rt_op = temp.get_totalrating(player.race)
-        except:
-            m.rt_op = 0
-
-        try:
-            temp = m.me.rating_set.get(period__id=m.period.id-1)
-            m.rt_my = temp.get_totalrating(m.rc_op)
-        except:
-            m.rt_my = 0
+    sort_matches(matches, player, add_ratings=True)
+    groups = group_by_events(matches)
 
     base['groups'] = groups
     base['player'] = player
@@ -634,29 +574,10 @@ def rating_details(request, player_id, period_id):
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)
 
+    sort_matches(matches, player, add_ratings=True)
+
     treated = False
     for m in matches:
-        try:
-            if m.pla == player:
-                m.sc_my, m.sc_op = m.sca, m.scb
-                m.rc_my, m.rc_op = m.rca, m.rcb
-                m.opp = m.plb
-            else:
-                m.sc_my, m.sc_op = m.scb, m.sca
-                m.rc_my, m.rc_op = m.rcb, m.rca
-                m.opp = m.pla
-            temp = m.opp.rating_set.get(period__id=period_id-1)
-            m.rt_op = temp.get_totalrating(player.race)
-            m.dev_op = temp.get_totaldev(player.race)
-        except:
-            m.rt_op = 0
-            m.dev_op = 0.6**2 + 0.6**2
-
-        try:
-            m.rt_my = rating.prev.get_totalrating(m.rc_op)
-        except:
-            m.rt_my = 0
-
         if m.treated:
             treated = True
             tot_rating[0] += m.rt_op * (m.sca + m.scb)
@@ -664,7 +585,7 @@ def rating_details(request, player_id, period_id):
             nwins[0] += m.sc_my
             nlosses[0] += m.sc_op
 
-            scale = 1 + m.dev_op**2 + rating.get_totaldev(m.opp.race)**2
+            scale = 1 + m.dev_op**2 + m.dev_my**2
 
             races = [m.rc_op] if m.rc_op in ['P','T','Z'] else ['P','T','Z']
             weight = float(1)/len(races)
@@ -720,11 +641,16 @@ def records(request):
     base = base_ctx('Records', sub, request)
 
     if race in ['all', 'T', 'P', 'Z']:
-        high = Rating.objects.extra(select={'rat': 'rating'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
-        highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
-        hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
-        highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
-        dom = Rating.objects.extra(select={'rat': 'domination'}).filter(domination__gt=0.0, period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        high = Rating.objects.extra(select={'rat': 'rating'})\
+                .filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'})\
+                .filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).\
+                filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).\
+                filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+        dom = Rating.objects.extra(select={'rat': 'domination'}).\
+                filter(domination__gt=0.0, period__id__gt=11, decay__lt=4, dev__lte=0.2)
 
         if race in ['P','T','Z']:
             high = high.filter(player__race=request.GET['race'])

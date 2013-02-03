@@ -1,8 +1,80 @@
-from ratings.models import Player
+from math import sqrt
+
+from ratings.models import Player, Match, PreMatch
 from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
+
+def sort_matches(matches, player, add_ratings=False):
+    sc_my, sc_op = 0, 0
+
+    for m in matches:
+        if m.pla == player:
+            m.sc_my, m.sc_op = m.sca, m.scb
+            m.rc_my, m.rc_op = m.rca, m.rcb
+            m.me, m.opp = m.pla, m.plb
+        else:
+            m.sc_my, m.sc_op = m.scb, m.sca
+            m.rc_my, m.rc_op = m.rcb, m.rca
+            m.me, m.opp = m.plb, m.pla
+
+        sc_my += m.sc_my
+        sc_op += m.sc_op
+
+        if add_ratings:
+            try:
+                temp = m.opp.rating_set.get(period__id=m.period.id-1)
+                m.rt_op = temp.get_totalrating(player.race)
+                m.dev_op = temp.get_totaldev(player.race)
+            except:
+                m.rt_op = 0
+                m.dev_op = sqrt(2)*0.6
+
+            try:
+                temp = m.me.rating_set.get(period__id=m.period.id-1)
+                m.rt_my = temp.get_totalrating(m.rc_op)
+                m.dev_my = temp.get_totaldev(m.rc_op)
+            except:
+                m.rt_my = 0
+                m.dev_my = sqrt(2)*0.6
+
+    return sc_my, sc_op
+
+def group_by_events(matches):
+    ret = []
+
+    events = []
+    for e in [m.eventobj for m in matches if m.eventobj != None]:
+        if e not in events:
+            events.append(e)
+
+    for e in events:
+        ret.append([m for m in matches if m.eventobj == e])
+
+    events = []
+    for e in [m.event for m in matches if m.eventobj == None]:
+        if e not in events:
+            events.append(e)
+
+    for e in events:
+        ret.append([m for m in matches if m.eventobj == None and m.event == e])
+
+    ret = sorted(ret, key=lambda l: l[0].date, reverse=True)
+
+    return ret
+
+def find_duplicates(pla, plb, sca, scb, date, incl_prematches=True):
+    n = Match.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb).extra(
+            where=['abs(datediff(date,\'%s\')) < 2' % date]).count()
+    n += Match.objects.filter(pla=plb, plb=pla, sca=scb, scb=sca).extra(
+            where=['abs(datediff(date,\'%s\')) < 2' % date]).count()
+    if incl_prematches:
+        n += PreMatch.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb).extra(
+                where=['abs(datediff(date,\'%s\')) < 2' % date]).count()
+        n += PreMatch.objects.filter(pla=plb, plb=pla, sca=scb, scb=sca).extra(
+                where=['abs(datediff(date,\'%s\')) < 2' % date]).count()
+    return n
 
 def find_player(lst, make=False, soft=False):
     qset = Player.objects.all()

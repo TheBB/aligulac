@@ -11,7 +11,8 @@ This is the basic records page, called from ratings.views.records.
 {% block content %}
     <h2>Records{% if race %} for {{ race|racefull }}{% endif %}</h2>
 
-    <p>To avoid rating artifacts, these records are only counted after the release of the game (i.e. list 12, on August 11, 2010).</p>
+    <p>To avoid rating artifacts, these records are only counted after 15 periods (i.e. list 15, on September
+    22nd, 2010).</p>
 
     <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
     {% include "recordlist.html" with high=hightot rt="Rating" %}

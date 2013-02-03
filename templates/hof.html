@@ -12,18 +12,19 @@ This is the Hall of Fame template. It's called from ratings.views.records.
     <h2>Hall of Fame</h2>
 
     <p>This list ranks players by <em>periods of domination</em>. The relevant score is called PP
-    (<em>period-points</em>), and is the sum over a range of lists of the signed distance from a player to number one
-    or two on the list.</p>
+    (<em>period-points</em>), and is the sum over a range of lists of the signed distance from a player to
+    number eight on the list.</p>
 
-    <p>For most players, their PP is equal to the sum of the rating gaps for each list in which they were number one.
-    If a player has been number one more than once, the optimal range of lists is chosen, and it can include times when
-    a player was not the top dog, if it was sufficiently brief and negligible.</p>
+    <p>For most players, their PP is equal to the sum of the rating gaps for each list in which they were
+    in the top eight.  If a player has been there one more than once, the optimal range of lists is chosen,
+    and it can include times when the player was not in the top eight, if these are sufficiently brief and
+    negligible.</p>
 
-    <p>In short, this is a list of players who have been number one, rewarding both large rating gaps and long periods
-    of rule. Think of it as a king-of-the-hill hall of fame.</p>
+    <p>In short, this is a list of players who have ever been top eight, rewarding both large rating gaps and
+    long periods of rule. Think of it as a king-of-the-hill hall of fame.</p>
 
-    <p>To avoid rating artifacts, these records are only counted after the release of the game (i.e. list 12, on August
-    11, 2010).</p>
+    <p>To avoid rating artifacts, these records are only counted after 15 periods (i.e. list 15, on September
+    22nd, 2010).</p>
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
@@ -33,9 +34,9 @@ This is the Hall of Fame template. It's called from ratings.views.records.
         <div class="rowe" style="width: 1em;"></div>
         <div class="rowe" style="width: 8.5em; text-align: right;">PP</div>
         <div class="rowe" style="width: 4em;"></div>
-        <div class="rowe" style="width: 15em;">Start</div>
-        <div class="rowe" style="width: 10em; text-align: right;">Length</div>
-        <div class="rowe" style="width: 7em;"></div>
+        <div class="rowe" style="width: 20em;">Start</div>
+        <div class="rowe" style="width: 10em;">Length</div>
+        <div class="rowe" style="width: 2em;"></div>
     </div>
 {% for h in high %}
 <div class="row {% cycle 'row2' 'row1' %}">
@@ -58,8 +59,9 @@ This is the Hall of Fame template. It's called from ratings.views.records.
     <div class="rowe">
         <a href="/periods/{{ h.dom_start.id }}/">{{ h.dom_start.start|date:"F jS, Y" }}</a>
     </div>
-    <div class="rowe" style="text-align: right;">
-        {{ h.dom_end.id|sub:h.dom_start.id }}
+    <div class="rowe">
+        {{ h.dom_end.id|sub:h.dom_start.id|add:h.dom_end.id|sub:h.dom_start.id }} weeks
+        {% if h.dom_end.id > curp.id %}*{% endif %}
     </div>
     <div class="rowe"> </div>
 </div>

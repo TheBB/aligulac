@@ -643,15 +643,15 @@ def records(request):
 
     if race in ['all', 'T', 'P', 'Z']:
         high = Rating.objects.extra(select={'rat': 'rating'})\
-                .filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+                .filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
         highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'})\
-                .filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+                .filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
         hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).\
-                filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+                filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
         highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).\
-                filter(period__id__gt=11, decay__lt=4, dev__lte=0.2)
+                filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
         dom = Rating.objects.extra(select={'rat': 'domination'}).\
-                filter(domination__gt=0.0, period__id__gt=11, decay__lt=4, dev__lte=0.2)
+                filter(domination__gt=0.0, period__id__gt=14, decay__lt=4, dev__lte=0.2)
 
         if race in ['P','T','Z']:
             high = high.filter(player__race=request.GET['race'])

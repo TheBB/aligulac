@@ -2,6 +2,8 @@
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
+from django.db.models import F, Avg
+
 from itertools import combinations
 from random import shuffle
 
@@ -13,8 +15,24 @@ from simul.formats.match import Match
 from numpy import *
 from rating import update
 
+limit = 8
+mean = False
+first_period=14
+
+Rating.objects.all().update(domination=None)
+
+print 'Evaluating domination scores...'
+for period in Period.objects.filter(computed=True, id__gt=first_period):
+    bench = Rating.objects.filter(period=period, decay__lt=4, dev__lt=0.2).order_by('-rating')[limit-1].rating
+    if mean:
+        objs = Rating.objects.filter(period=period, decay__lt=4, dev__lt=0.2, rating__gte=bench)
+        bench = objs.aggregate(Avg('rating'))['rating__avg']
+    print '%i: %f' % (period.id, bench)
+    Rating.objects.filter(period=period, decay__lt=4, dev__lt=0.2).update(domination=F('rating')-bench)
+
+print 'Evaluating Hall of Fame...'
 for player in Player.objects.all():
-    ratings = list(Rating.objects.filter(player=player, period__id__gt=11).order_by('period__id'))
+    ratings = list(Rating.objects.filter(player=player, period__id__gt=first_period).order_by('period__id'))
 
     if len(ratings) == 0:
         continue
@@ -38,7 +56,7 @@ for player in Player.objects.all():
     init = None
     fin = None
     for i1, i2 in combinations(inds, 2):
-        d = sum([r.domination for r in ratings[i1:i2+1] if r.decay < 4])
+        d = sum([r.domination for r in ratings[i1:i2+1] if r.domination != None])
         if d > dom:
             dom = d
             init = ratings[i1].period

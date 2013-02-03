@@ -7,38 +7,61 @@ This script performs automatic backups and database dumps.
 import os
 import datetime
 
+from aligulac.settings import DATABASES
+
+# These tables should not be included in the public dump
+ignore_tables = ['auth_group',\
+                 'auth_group_permissions',\
+                 'auth_permission',\
+                 'auth_user',\
+                 'auth_user_groups',\
+                 'auth_user_user_permissions',\
+                 'django_admin_log',\
+                 'django_content_type',\
+                 'django_session',\
+                 'django_site',\
+                 'faq_post',\
+                 'blog_post',\
+                 'ratings_prematch',\
+                 'ratings_prematchgroup']
+
+# Locations for public dump, backup dump and backup list
+public_location = '/usr/local/www/media/al/aligulac.sql'
+backup_location = '/usr/local/www/aligulac/backup/{filename}.sql'
+backup_list = '/usr/local/www/aligulac/backup/files'
+
+# To access the database
+username = DATABASES['default']['USER']
+password = DATABASES['default']['PASSWORD']
+database = DATABASES['default']['NAME']
+
+# Basic mysqldump call
+command = 'mysqldump -u {username} -p{password} {database}'.format(\
+        username=username, password=password, database=database)
+
+# Backup dump
 dt = datetime.datetime.now()
+os.system(command + ' > ' + backup_location.format(filename = dt.isoformat()))
 
-os.system('mysqldump -u aligulac -pv3ll3mp3t4 aligulac ' +\
-        '> /usr/local/www/aligulac/backup/%s.sql' % dt.isoformat())
-
-with open('/usr/local/www/aligulac/backup/files', 'r') as f:
+# Store the new file in the backup list
+with open(backup_list, 'r') as f:
     files = f.readlines()
-
 files = [f.strip() for f in files if f.strip() != '']
-files.append('%s.sql' % dt.isoformat())
+files.append('{filename}'.format(filename=dt.isoformat()))
 
+# If there are more than 40 stored backups, delete the earliest one
 if len(files) > 40:
-    os.system('rm /usr/local/www/aligulac/backup/%s' % files[0])
+    os.system('rm ' + backup_location.format(filename=files[0]))
     files = files[1:]
 
-with open('/usr/local/www/aligulac/backup/files', 'w') as f:
+# Write the backup list
+with open(backup_list, 'w') as f:
     for item in files:
         f.write('%s\n' % item)
 
-os.system('mysqldump -u aligulac -pv3ll3mp3t4 aligulac ' +\
-        '--ignore-table=aligulac.auth_group ' +\
-        '--ignore-table=aligulac.auth_group_permissions ' +\
-        '--ignore-table=aligulac.auth_permission ' +\
-        '--ignore-table=aligulac.auth_user ' +\
-        '--ignore-table=aligulac.auth_user_groups ' +\
-        '--ignore-table=aligulac.auth_user_user_permissions ' +\
-        '--ignore-table=aligulac.django_admin_log ' +\
-        '--ignore-table=aligulac.django_content_type ' +\
-        '--ignore-table=aligulac.django_session ' +\
-        '--ignore-table=aligulac.django_site ' +\
-        '--ignore-table=aligulac.faq_post ' +\
-        '--ignore-table=aligulac.blog_post ' +\
-        '--ignore-table=aligulac.ratings_prematch ' +\
-        '--ignore-table=aligulac.ratings_premathgroup ' +\
-        '> /usr/local/www/media/al/aligulac.sql')
+# Public dump
+public_command = command
+for table in ignore_tables:
+    public_command += ' --ignore-table={database}.{table}'.format(database=database, table=table)
+public_command += ' > ' + public_location
+os.system(public_command)

@@ -17,8 +17,12 @@ This is the basic records page, called from ratings.views.records.
     <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
     {% include "recordlist.html" with high=hightot rt="Rating" %}
 
+    {% comment %}
+    This has been removed since a change to dominations.py accidentally broke this.
+    Need to add another domination field to the database to properly track rating gaps.
     <h3>Most dominant #1s</h3>
     {% include "recordlist.html" with high=dom rt="Rating gap" scaled=1 %}
+    {% endcomment %}
 
     <h3>Highest ratings ever achieved by matchup</h3>
     {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" %}

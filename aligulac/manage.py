@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+'''
+This is an auto-generated Django file.
+'''
+
 import os
 import sys
 

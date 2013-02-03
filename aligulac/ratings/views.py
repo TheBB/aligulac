@@ -403,6 +403,7 @@ def results_search(request):
             matches = matches.filter(eventobj__isnull=True)
 
         if 'eventtext' in request.GET and request.GET['eventtext'].strip() != '':
+            base['eventtext'] = request.GET['eventtext'].strip()
             queries = [f.strip() for f in request.GET['eventtext'].strip().split(' ') if f.strip() != '']
             for query in queries:
                 q = Q(eventobj__isnull=True, event__icontains=query) |\

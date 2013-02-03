@@ -27,6 +27,7 @@ class Event(models.Model):
     closed = models.BooleanField(default=False)
     big = models.BooleanField(default=False)
     noprint = models.BooleanField(default=False)
+    fullname = models.CharField(max_length=500, default='')
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -35,12 +36,16 @@ class Event(models.Model):
     category = models.CharField(max_length=50, null=True, blank=True, choices=CATEGORIES)
 
     def __unicode__(self):
-        q = ' '.join([e.name for e in\
-                Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, noprint=False).order_by('lft')])
+        return self.fullname
+
+    def update_name(self):
+        ancestors = Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, noprint=False).order_by('lft')
+        q = ' '.join([e.name for e in ancestors])
         if q != '':
             q += ' '
         q += self.name
-        return q
+        self.fullname = q
+        self.save()
 
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
@@ -54,6 +59,7 @@ class Event(models.Model):
         new.rgt = new.lft + 1
         Event.objects.filter(lft__gt=new.rgt-2).update(lft=F('lft')+2)
         Event.objects.filter(rgt__gt=new.rgt-2).update(rgt=F('rgt')+2)
+        new.update_name()
         new.save()
         return new
 
@@ -62,6 +68,7 @@ class Event(models.Model):
         new = Event(name=name)
         new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
         new.rgt = new.lft + 1
+        new.update_name()
         new.save()
         return new
 
@@ -221,6 +228,7 @@ class PreMatch(models.Model):
     plb = models.ForeignKey(Player, related_name='prematch_plb', verbose_name='Player B', null=True, blank=True)
     sca = models.SmallIntegerField('Score for player A')
     scb = models.SmallIntegerField('Score for player B')
+    date = models.DateField()
 
     P = 'P'
     T = 'T'

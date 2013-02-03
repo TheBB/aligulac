@@ -118,7 +118,7 @@ function lm_toggle(id)
         {% endif %}
     </td>
     <td class="lm_rta">
-        {% if lm_sorted %}
+        {% if lm_sorted and m.rt_my %}
             {{ m.rt_my|ratscale }}
         {% endif %}
     </td>
@@ -185,7 +185,7 @@ function lm_toggle(id)
         {% endif %}
     </td>
     <td class="lm_rtb">
-        {% if lm_sorted %}
+        {% if lm_sorted and m.rt_op %}
             {{ m.rt_op|ratscale }}
         {% endif %}
     </td>

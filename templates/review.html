@@ -17,13 +17,22 @@ ratings.submitviews.review.
     (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
     {% endif  %}
 
+    {% if success %}
+    <p>The following matches were successfully approved:</p>
+        <table class="results">
+        {% for g in success %}
+        {% include "list_matches.html" with lm_list=g lm_show_date=0 lm_adm=adm lm_header_event=1 lm_nocheck=1 %}
+        {% endfor %}
+        </table>
+        <p></p>
+    {% endif %}
+
     {% if messages %}
-    <p>Some problems:</p>
+    <p style="color: #ff0000;"><strong>The following problems occured:</strong></p>
         <ul>
             {% for m in messages %}<li>{{ m }}</li>{% endfor %}
         </ul>
     {% endif %}
-
 
     {% if groups %}
     <form method="post" action="/add/review/">

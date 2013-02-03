@@ -99,7 +99,9 @@ This is the results search function. Called from ratings.views.results_search.
 
     <p>Found {{ count }} matches.</p>
 
-    {% if sc_my %}
+    {{ pls }}
+
+    {% if sc_my or sc_op %}
     <p>In these games, <a href="/players/{{ left.id }}/">{{ left.tag }}</a> is {{ sc_my }}–{{ sc_op }} against
     <a href="/players/{{ right.id }}/">{{ right.tag }}</a>.</p>
     {% endif %}

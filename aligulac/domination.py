@@ -15,7 +15,7 @@ from simul.formats.match import Match
 from numpy import *
 from rating import update
 
-limit = 8
+limit = 10
 mean = False
 first_period=14
 

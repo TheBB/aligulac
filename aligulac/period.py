@@ -97,7 +97,7 @@ def get_existing_players(cplayers, prev):
         cp.prev_dev['M'] = rating.get_dev()
 
         # Add to the dict
-        cplayers[rat.player.id] = cp
+        cplayers[rating.player.id] = cp
 
 def decay_dev(cp):
     """Decays the RD of a player."""
@@ -164,7 +164,7 @@ if __name__ == '__main__':
         print('No such period.')
         sys.exit(1)
 
-    print('Period {}: from {} to {}'.format(period.id, period.start, period.end))
+    print('Period {0}: from {1} to {2}'.format(period.id, period.start, period.end))
 
     # Check that all previous periods are computed
     prev = Period.objects.filter(id__lt=period.id, computed=False)
@@ -193,11 +193,11 @@ if __name__ == '__main__':
     # Update RDs since a period has passed
     for cp in cplayers.values():
         decay_dev(cp)
-    print('Initialized and decayed ratings for {} players.'.format(len(cplayers)))
+    print('Initialized and decayed ratings for {0} players.'.format(len(cplayers)))
 
     # Collect match information
     num_games = get_matches(cplayers, period)
-    print('Gathered results from {} games.'.format(num_games))
+    print('Gathered results from {0} games.'.format(num_games))
 
     # Update ratings
     num_retplayers = 0
@@ -216,7 +216,7 @@ if __name__ == '__main__':
             num_retplayers += 1
         elif len(cp.W) > 0:
             num_newplayers += 1
-    print('Updated ratings for {} players.'.format(len(cplayers)))
+    print('Updated ratings for {0} players.'.format(len(cplayers)))
 
     # Write ratings to database
     print('Saving ratings. This can take some time...')

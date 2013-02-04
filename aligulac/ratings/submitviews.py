@@ -215,22 +215,22 @@ def add_matches(request):
                     continue
 
                 # Abort if race information is incorrect
-                if pla.race == 'S' and rca == None:
-                    failure.append((s, '%s is Random or Switcher, need race information' % pla.tag))
+                if pla_obj.race == 'S' and rca == None:
+                    failure.append((s, '%s is Random or Switcher, need race information' % pla_obj.tag))
                     continue
 
-                if plb.race == 'S' and rcb == None:
-                    failure.append((s, '%s is Random or Switcher, need race information' % plb.tag))
+                if plb_obj.race == 'S' and rcb == None:
+                    failure.append((s, '%s is Random or Switcher, need race information' % plb_obj.tag))
                     continue
 
                 # Add match
                 m = Match()
-                m.pla = pla
-                m.plb = plb
+                m.pla = pla_obj
+                m.plb = plb_obj
                 m.sca = sca
                 m.scb = scb
-                m.rca = pla.race if rca == None else rca
-                m.rcb = plb.race if rcb == None else rcb
+                m.rca = pla_obj.race if rca == None else rca
+                m.rcb = plb_obj.race if rcb == None else rcb
                 m.date = date
                 m.event = event
                 m.submitter = request.user

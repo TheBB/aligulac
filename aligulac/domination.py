@@ -21,7 +21,7 @@ limit = 10              # The benchmark position on the rating list. Above here,
 mean = False            # Set to True to use the mean of the top N players as a benchmark, False to just
                         # use the rating of the Nth player.
 
-first_period = 15       # Before this it doesn't count.
+first_period = 25       # Before this it doesn't count.
 
 # First, clear everything
 Rating.objects.update(domination=None)

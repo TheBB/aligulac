@@ -282,7 +282,28 @@ class Rating(models.Model):
 
     decay = models.IntegerField(default=0)
     domination = models.FloatField(null=True, blank=True)
-    prev = models.ForeignKey('Rating', related_name='prev_rating', null=True, blank=True)
+    #prev = models.ForeignKey('Rating', related_name='prev_rating', null=True, blank=True)
+
+    def get_prev(self):
+        try:
+            if self.prev:
+                return self.prev
+        except:
+            pass
+
+        try:
+            self.prev = Rating.objects.get(period__id=self.period.id-1, player=self.player)
+            return self.prev
+        except:
+            pass
+        
+        return None
+
+    def get_next(self):
+        try:
+            return Rating.objects.get(period__id=self.period.id+1, player=self.player)
+        except:
+            return None
 
     def ratings(self):
         return [self.rating, self.rating_vp, self.rating_vt, self.rating_vz]

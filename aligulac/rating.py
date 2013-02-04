@@ -6,13 +6,13 @@ from numpy import *
 from scipy.stats import norm
 import scipy.optimize as opt
 
-MIN_DEV = 0.05
-INIT_DEV = 0.6
+from aligulac.settings import RATINGS_MIN_DEV, RATINGS_INIT_DEV
+
 
 def ceilit(arr):
     """Prevents RDs from going above INIT_DEV."""
     for i in range(0,len(arr)):
-        arr[i] = min(arr[i], INIT_DEV)
+        arr[i] = min(arr[i], RATINGS_INIT_DEV)
 
 def check_max(func, x, i, name, disp):
     """Auxiliary function to perform numerical optimization. Will check the return flags and return the
@@ -82,8 +82,8 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
     for c in pi:
         W = append(W, 1)
         L = append(L, 1)
-        oppr = append(oppr, myr[1+played_cats[c]])
-        opps = append(opps, mys[1+played_cats[c]])
+        oppr = append(oppr, myr[0] + myr[1+played_cats[c]])
+        opps = append(opps, sqrt(mys[0]**2 + mys[1+played_cats[c]]**2))
         oppc = append(oppc, played_cats[c])
 
     # Return the new arrays
@@ -184,7 +184,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 
     # Extend to restricted format
-    devs = maximum(-1/diag(D2logL(x, DMex, C+1)), MIN_DEV)
+    devs = maximum(-1/diag(D2logL(x, DMex, C+1)), RATINGS_MIN_DEV)
     rats = extend(x)
 
     # Compute new RD and rating for the indices that can change
@@ -207,7 +207,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr[ind] = myr[ind]
 
     # Keep new RDs between MIN_DEV and INIT_DEV
-    news = (abs(news-MIN_DEV)+news-MIN_DEV)/2 + MIN_DEV
+    news = (abs(news-RATINGS_MIN_DEV)+news-RATINGS_MIN_DEV)/2 + RATINGS_MIN_DEV
     ceilit(news)
 
     # Ensure that mean relative rating is zero

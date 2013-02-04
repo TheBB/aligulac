@@ -1,6 +1,7 @@
 import os, datetime
 from pyparsing import nestedExpr
 
+from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
 from ratings.tools import find_player, sort_matches, group_by_events
 
@@ -174,7 +175,9 @@ def player(request, player_id):
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\
-            .select_related('period').order_by('-date', '-id')[0:10]
+            .select_related('period')\
+            .extra(where=['abs(datediff(date,\'%s\')) < 90' % datetime.datetime.now()])\
+            .order_by('-date', '-id')[0:10]
 
     if matches.exists():
         sort_matches(matches, player, add_ratings=True)
@@ -552,15 +555,16 @@ def rating_details(request, player_id, period_id):
 
     races = ['P','T','Z']
 
-    if rating.prev != None:
-        prevrat = [rating.prev.get_rating(), {}]
-        prevdev = [rating.prev.get_dev(), {}]
+    prev = rating.get_prev()
+    if prev != None:
+        prevrat = [prev.get_rating(), {}]
+        prevdev = [prev.get_dev(), {}]
         for r in races:
-            prevrat[1][r] = rating.prev.get_totalrating(r)
-            prevdev[1][r] = rating.prev.get_totaldev(r)
+            prevrat[1][r] = prev.get_totalrating(r)
+            prevdev[1][r] = prev.get_totaldev(r)
     else:
         prevrat = [0., {'P': 0., 'T': 0., 'Z': 0.}]
-        prevdev = [0.6, {'P': 0.6, 'T': 0.6, 'Z': 0.6}]
+        prevdev = [RATINGS_INIT_DEV, {'P': RATINGS_INIT_DEV, 'T': RATINGS_INIT_DEV, 'Z': RATINGS_INIT_DEV}]
 
     tot_rating = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
     ngames = [0, {'P': 0, 'T': 0, 'Z': 0}]
@@ -643,15 +647,15 @@ def records(request):
 
     if race in ['all', 'T', 'P', 'Z']:
         high = Rating.objects.extra(select={'rat': 'rating'})\
-                .filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
+                .filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
         highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'})\
-                .filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
+                .filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
         hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).\
-                filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
+                filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
         highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).\
-                filter(period__id__gt=14, decay__lt=4, dev__lte=0.2)
+                filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
         dom = Rating.objects.extra(select={'rat': 'domination'}).\
-                filter(domination__gt=0.0, period__id__gt=14, decay__lt=4, dev__lte=0.2)
+                filter(domination__gt=0.0, period__id__gt=24, decay__lt=4, dev__lte=0.2)
 
         if race in ['P','T','Z']:
             high = high.filter(player__race=request.GET['race'])

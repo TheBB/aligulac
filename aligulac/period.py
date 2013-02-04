@@ -21,16 +21,13 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
+from aligulac.settings import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY
 
 from rating import update
 
 # Parameters for rating computation
 RACES = 'PTZ'
 EXRACES = 'M' + RACES       # 'M' is 'MEAN'
-INIT_RATING = 0.0
-INIT_DEV = 0.6
-MIN_DEV = 0.05
-DEV_DECAY = 0.04
 
 # This is a meta class holding information about rating computation
 class CPlayer:
@@ -74,8 +71,8 @@ def get_new_players(cplayers, period):
 
         # Fill in the previous rating information
         for r in EXRACES:
-            cp.prev_rating[r] = INIT_RATING
-            cp.prev_dev[r] = INIT_DEV
+            cp.prev_rating[r] = 0.0
+            cp.prev_dev[r] = RATINGS_INIT_DEV
 
         # Add to the dict
         cplayers[player.id] = cp
@@ -102,7 +99,7 @@ def get_existing_players(cplayers, prev):
 def decay_dev(cp):
     """Decays the RD of a player."""
     for r in EXRACES:
-        cp.prev_dev[r] = min(sqrt(cp.prev_dev[r]**2 + DEV_DECAY**2), INIT_DEV)
+        cp.prev_dev[r] = min(sqrt(cp.prev_dev[r]**2 + RATINGS_DEV_DECAY**2), RATINGS_INIT_DEV)
 
 def get_matches(cplayers, period):
     """
@@ -220,18 +217,11 @@ if __name__ == '__main__':
 
     # Write ratings to database
     print('Saving ratings. This can take some time...')
+    Rating.objects.filter(period=period).delete()
     for cp in cplayers.values():
-        # Grab the current rating object if it exists, or make a new one
-        try:
-            rating = Rating.objects.get(player=cp.player, period=period)
-        except:
-            rating = Rating()
-            rating.player = cp.player
-            rating.period = period
-
-        # Link to previous rating
-        if cp.prev_rating_obj:
-            rating.prev = cp.prev_rating_obj
+        rating = Rating()
+        rating.player = cp.player
+        rating.period = period
 
         # Set the decay of the rating (number of periods since last game was played)
         if not cp.prev_rating_obj or len(cp.W) > 0:

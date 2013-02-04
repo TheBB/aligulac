@@ -5,6 +5,7 @@ from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
+from aligulac.settings import RATINGS_INIT_DEV
 
 def filter_active_ratings(queryset):
     return queryset.filter(decay__lt=4, dev__lt=0.2)
@@ -32,7 +33,7 @@ def sort_matches(matches, player, add_ratings=False):
                 m.dev_op = temp.get_totaldev(player.race)
             except:
                 m.rt_op = 0
-                m.dev_op = sqrt(2)*0.6
+                m.dev_op = sqrt(2)*RATINGS_INIT_DEV
 
             try:
                 temp = m.me.rating_set.get(period__id=m.period.id-1)
@@ -40,7 +41,7 @@ def sort_matches(matches, player, add_ratings=False):
                 m.dev_my = temp.get_totaldev(m.rc_op)
             except:
                 m.rt_my = 0
-                m.dev_my = sqrt(2)*0.6
+                m.dev_my = sqrt(2)*RATINGS_INIT_DEV
 
     return sc_my, sc_op
 

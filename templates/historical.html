@@ -38,10 +38,10 @@ Could the ratinglist.html template be extended and called from here?
             </div>
             <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
             <div class="rowe">
-                {% if rating.prev %}
-                    {% if rating.prev.rating > rating.rating %}
+                {% if rating.get_prev %}
+                    {% if rating.get_prev.rating > rating.rating %}
                         <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.rating < rating.rating %}
+                    {% elif rating.get_prev.rating < rating.rating %}
                         <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -49,10 +49,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vp|ratscale }}</div>
             <div class="rowe">
-                {% if rating.prev %}
-                    {% if rating.prev.rating|addf:rating.prev.rating_vp > rating.rating|addf:rating.rating_vp %}
+                {% if rating.get_prev %}
+                    {% if rating.get_prev.rating|addf:rating.get_prev.rating_vp > rating.rating|addf:rating.rating_vp %}
                         <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.rating|addf:rating.prev.rating_vp < rating.rating|addf:rating.rating_vp %}
+                    {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vp < rating.rating|addf:rating.rating_vp %}
                         <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -60,10 +60,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vt|ratscale }}</div>
             <div class="rowe">
-                {% if rating.prev %}
-                    {% if rating.prev.rating|addf:rating.prev.rating_vt > rating.rating|addf:rating.rating_vt %}
+                {% if rating.get_prev %}
+                    {% if rating.get_prev.rating|addf:rating.get_prev.rating_vt > rating.rating|addf:rating.rating_vt %}
                         <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.rating|addf:rating.prev.rating_vt < rating.rating|addf:rating.rating_vt %}
+                    {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vt < rating.rating|addf:rating.rating_vt %}
                         <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -71,10 +71,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vz|ratscale }}</div>
             <div class="rowe">
-                {% if rating.prev %}
-                    {% if rating.prev.rating|addf:rating.prev.rating_vz > rating.rating|addf:rating.rating_vz %}
+                {% if rating.get_prev %}
+                    {% if rating.get_prev.rating|addf:rating.get_prev.rating_vz > rating.rating|addf:rating.rating_vz %}
                         <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.rating|addf:rating.prev.rating_vz < rating.rating|addf:rating.rating_vz %}
+                    {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vz < rating.rating|addf:rating.rating_vz %}
                         <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}

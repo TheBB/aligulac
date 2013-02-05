@@ -85,28 +85,36 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rowel" style="width: 15em;">Rating</div>
         <div class="rower" style="width: 15em;">{{ rating.rating|ratscale }} 
             ± {{ rating.dev|ratscaled }}
-            {% comment %}<span class="small">(#{{ rating.position }})</span></div>{% endcomment %}
+            {% if rating.position %}
+                <span class="small">(#{{ rating.position }})</span>
+            {% endif %}
         </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vP</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vp|ratscale }} 
             ± {{ rating|devrange:"P"|ratscaled }}
-            {% comment %}<span class="small">(#{{ rating.position_vp }})</span></div>{% endcomment %}
+            {% if rating.position_vp %}
+                <span class="small">(#{{ rating.position_vp }})</span>
+            {% endif %}
         </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vT</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vt|ratscale }} 
             ± {{ rating|devrange:"T"|ratscaled }}
-            {% comment %}<span class="small">(#{{ rating.position_vt }})</span></div>{% endcomment %}
+            {% if rating.position_vt %}
+                <span class="small">(#{{ rating.position_vt }})</span>
+            {% endif %}
         </div>
     </div>
     <div class="row">
         <div class="rowel">Rating vZ</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vz|ratscale }} 
             ± {{ rating|devrange:"Z"|ratscaled }}
-            {% comment %}<span class="small">(#{{ rating.position_vz }})</span></div>{% endcomment %}
+            {% if rating.position_vz %}
+                <span class="small">(#{{ rating.position_vz }})</span>
+            {% endif %}
         </div>
     </div>
     <div class="row">

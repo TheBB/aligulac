@@ -56,17 +56,15 @@ arguments:
             {% endif %}
         </div>
         <div class="rowe" style="text-align: center;">
-            {% comment %}
-            {% if entry.position and entry.prev.position %}
+            {% if entry.position and entry.get_prev.position and rl_pos_arrow %}
                 {% if entry.prev.position < entry.position %}
                     <img src="http://aligulac.com:81/al/downarrow.png" alt="down" class="btm" />
-                {% elif entry.prev.position > entry.position %}
+                {% elif entry.get_prev.position > entry.position %}
                     <img src="http://aligulac.com:81/al/uparrow.png" alt="up" class="btm" />
                 {% endif %}
-            {% else %}
+            {% elif rl_pos_arrow %}
                 <img src="http://aligulac.com:81/al/new.png" alt="new" style="vertical-align: text-bottom;" />
             {% endif %}
-            {% endcomment %}
         </div>
         <div class="rowe">
             <a href="/players/{{ entry.player.id }}/">{{ entry.player.tag }}</a>

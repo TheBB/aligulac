@@ -21,6 +21,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
+from ratings.tools import filter_active_ratings
 from aligulac.settings import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY
 
 from rating import update
@@ -262,6 +263,19 @@ if __name__ == '__main__':
     period.num_games = num_games
     period.computed = True
     period.save()
+
+    # Write ranks
+    ratings = list(filter_active_ratings(Rating.objects.filter(period=period)))
+    for index, rating in enumerate(sorted(ratings, key=lambda r: r.rating, reverse=True)):
+        rating.position = index + 1
+    for index, rating in enumerate(sorted(ratings, key=lambda r: r.rating + r.rating_vp, reverse=True)):
+        rating.position_vp = index + 1
+    for index, rating in enumerate(sorted(ratings, key=lambda r: r.rating + r.rating_vt, reverse=True)):
+        rating.position_vt = index + 1
+    for index, rating in enumerate(sorted(ratings, key=lambda r: r.rating + r.rating_vz, reverse=True)):
+        rating.position_vz = index + 1
+    for rating in ratings:
+        rating.save()
 
     # Recompute the hall of fame
     # NOTE: If you compute several periods after one another, it might be wise to comment this and run it only

@@ -29,14 +29,14 @@ This shows a team page. Called from ratings.teamviews.team.
         <h3>Active roster</h3>
         <p>{{ team.name }} has {{ active.count }} players who have played a ranked game within the last
         two months.</p>
-        {% include "ratinglist.html" with entries=active %}
+        {% include "ratinglist.html" with entries=active rl_pos_arrow=0 %}
     {% endif %}
 
     {% if inactive %}
         <h3>Inactive roster</h3>
         <p>{{ team.name }} has {{ inactive.count }} players who have been temporarily removed from the
         ranking due to inactivity.</p>
-        {% include "ratinglist.html" with entries=inactive %}
+        {% include "ratinglist.html" with entries=inactive rl_pos_arrow=0 %}
     {% endif %}
 
     {% if past %}

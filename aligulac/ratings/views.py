@@ -229,8 +229,7 @@ def player(request, player_id):
     teammems = sorted(teammems, key=meandate, reverse=True)
     teammems = sorted(teammems, key=lambda t: t.current, reverse=True)
 
-    base.update({'player': player, 'countryfull': countryfull, 'rating': rating,\
-            'teammems': teammems, 'highs': highs})
+    base.update({'player': player, 'countryfull': countryfull, 'rating': rating, 'teammems': teammems})
     return render_to_response('player.html', base)
 
 def player_historical(request, player_id):

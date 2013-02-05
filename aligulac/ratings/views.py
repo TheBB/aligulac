@@ -474,17 +474,17 @@ def events(request, event_id=None):
         ind_bigs = collect(Event.objects.filter(parent__isnull=True, big=True, category='individual').\
                 select_related('event').order_by('lft'), 2)
         ind_smalls = Event.objects.filter(parent__isnull=True, big=False, category='individual').\
-                select_related('event').order_by('lft')
+                select_related('event').order_by('name')
 
         team_bigs = collect(Event.objects.filter(parent__isnull=True, big=True, category='team').\
                 select_related('event').order_by('lft'), 2)
         team_smalls = Event.objects.filter(parent__isnull=True, big=False, category='team').\
-                select_related('event').order_by('lft')
+                select_related('event').order_by('name')
 
         freq_bigs = collect(Event.objects.filter(parent__isnull=True, big=True, category='frequent').\
                 select_related('event').order_by('lft'), 2)
         freq_smalls = Event.objects.filter(parent__isnull=True, big=False, category='frequent').\
-                select_related('event').order_by('lft')
+                select_related('event').order_by('name')
 
         base.update({'ind_bigs': ind_bigs, 'ind_smalls': ind_smalls, 'team_bigs': team_bigs, 'team_smalls': team_smalls,\
                 'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})

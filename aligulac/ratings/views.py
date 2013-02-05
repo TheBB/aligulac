@@ -145,27 +145,42 @@ def player(request, player_id):
     matches_a = Match.objects.filter(pla=player)
     matches_b = Match.objects.filter(plb=player)
 
-    a = matches_a.aggregate(Sum('sca'), Sum('scb'))
-    b = matches_b.aggregate(Sum('sca'), Sum('scb'))
-    total = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    try:
+        a = matches_a.aggregate(Sum('sca'), Sum('scb'))
+        b = matches_b.aggregate(Sum('sca'), Sum('scb'))
+        base['total'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    except:
+        pass
 
-    a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
-    b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
-    vp = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    try:
+        a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
+        b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
+        base['vp'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    except:
+        pass
 
-    a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
-    b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
-    vt = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    try:
+        a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
+        b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
+        base['vt'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    except:
+        pass
 
-    a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
-    b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
-    vz = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    try:
+        a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+        b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
+        base['vz'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+    except:
+        pass
 
     # Career highs
-    highs = (Rating.objects.filter(player=player).order_by('-rating')[0],\
-             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0],\
-             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0],\
-             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0])
+    try:
+        base['highs'] = (Rating.objects.filter(player=player).order_by('-rating')[0],\
+                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0],\
+                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0],\
+                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0])
+    except:
+        pass
 
     try:
         countryfull = transformations.cc_to_cn(player.country)
@@ -185,7 +200,7 @@ def player(request, player_id):
         base['firstrating'] = firstrating[0]
 
     if not rating.exists():
-        base.update({'player': player, 'countryfull': countryfull, 'totwin': totw, 'totloss': totl})
+        base.update({'player': player, 'countryfull': countryfull})
         return render_to_response('player.html', base)
     rating = rating[0]
 
@@ -215,7 +230,7 @@ def player(request, player_id):
     teammems = sorted(teammems, key=lambda t: t.current, reverse=True)
 
     base.update({'player': player, 'countryfull': countryfull, 'rating': rating,\
-            'total': total, 'vp': vp, 'vt': vt, 'vz': vz, 'teammems': teammems, 'highs': highs})
+            'teammems': teammems, 'highs': highs})
     return render_to_response('player.html', base)
 
 def player_historical(request, player_id):

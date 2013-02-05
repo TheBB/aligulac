@@ -90,8 +90,10 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </div>
         <div class="rower" style="width: 10em">
+            {% if total %}
             {{ total.0 }}/{{ total.1|add:total.0 }}
             <span class="small">({{ total.0|pctg:total.1 }}%)
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -103,8 +105,10 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </div>
         <div class="rower">
+            {% if vp %}
             {{ vp.0 }}/{{ vp.1|add:vp.0 }}
             <span class="small">({{ vp.0|pctg:vp.1 }}%)
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -116,8 +120,10 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </div>
         <div class="rower">
+            {% if vt %}
             {{ vt.0 }}/{{ vt.1|add:vt.0 }}
             <span class="small">({{ vt.0|pctg:vt.1 }}%)
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -129,8 +135,10 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </div>
         <div class="rower">
+            {% if vz %}
             {{ vz.0 }}/{{ vz.1|add:vz.0 }}
             <span class="small">({{ vz.0|pctg:vz.1 }}%)
+            {% endif %}
         </div>
     </div>
 </div>

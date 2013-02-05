@@ -54,6 +54,7 @@ class MatchAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'lft', 'rgt')
     exclude = ('lft', 'rgt')
+    search_fields = ['fullname']
 
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Team, TeamAdmin)

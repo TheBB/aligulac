@@ -39,6 +39,7 @@ def team(request, team_id):
     base['inactive'] = Rating.objects.filter(player__teammembership__team=team,\
             player__teammembership__current=True, player__teammembership__playing=True,\
             period=base['curp']).exclude(decay__lt=4, dev__lte=0.2).order_by('-rating')
+    base['nonplaying'] = TeamMembership.objects.filter(team=team, current=True, playing=False).order_by('player__tag')
     base['past'] = TeamMembership.objects.filter(team=team, current=False).order_by('-end', 'player__tag')
 
     return render_to_response('team.html', base)

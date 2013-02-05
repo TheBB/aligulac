@@ -22,6 +22,13 @@ from scipy.stats import norm
 from math import sqrt
 from collections import namedtuple
 
+TL_HEADER = '[center][code]'
+TL_FOOTER = '[/code][/center][small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
+          + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
+REDDIT_HEADER = ''
+REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
+              + '[^Make ^another](http://aligulac.com/predict/)^.'
+
 def predict(request):
     base = base_ctx()
     base['curpage'] = 'Predict'
@@ -201,106 +208,87 @@ def pred_4pswiss(request):
     fpswiss_postable(base, obj, players)
     return render_to_response('pred_4pswiss.html', base)
 
-def match_postable(base, obj, r1, r2):
-    def fill(s, l, left=True):
-        if left:
-            return ' '*(l-len(s)) + s
-        else:
-            return s + ' '*(l-len(s))
+def left_center_right(strings, gap=2, justify=True, indent=0):
+    left_width = max([len(s[0]) for s in strings if s != None]) + 4
+    center_width = max([len(s[1]) for s in strings if s != None])
+    right_width = max([len(s[2]) for s in strings if s != None]) + 4
     
+    if justify:
+        left_width = max(left_width, right_width)
+        right_width = left_width
+
+    left_width += indent
+
+    out = ''
+    for s in strings:
+        if s == None:
+            out += ' '*indent
+            out += '-'*(left_width + right_width + center_width + 2*gap - indent) + '\n'
+            continue
+        
+        out += ' '*(left_width-len(s[0])) + s[0]
+
+        R = (center_width-len(s[1]))/2
+        L = center_width-len(s[1])-R
+        out += ' '*(L+gap) + s[1] + ' '*(R+gap)
+
+        out += s[2] + ' '*(right_width-len(s[2]))
+
+        out += '\n'
+
+    return out[:-1]
+
+def match_postable(base, obj, r1, r2):
     pa = obj.get_player(0)
     pb = obj.get_player(1)
 
     numlen = len(str(obj._num))
-    strL = '({rat}) {name} {score: >{nl}}'.format(rat=ratscale(pa.elo + pa.elo_race[pb.race]),\
-            name=pa.name, score=obj._result[0], nl=numlen)
-    strR = '{score: <{nl}} {name} ({rat})'.format(rat=ratscale(pb.elo + pb.elo_race[pa.race]),\
-            name=pb.name, score=obj._result[1], nl=numlen)
-    totlen = max(len(strL), len(strR), 10+numlen)
 
-    strL = fill(strL, totlen, True)
-    strR = fill(strR, totlen, False)
-    postable = strL + '-' + strR
-    postable += '\n' + '-'*(8+1+2*totlen)
-
-    ilen = totlen - numlen - 1
-
+    strings = [('({rat}) {name}'.format(rat=ratscale(pa.elo + pa.elo_race[pb.race]), name=pa.name),\
+                '{sca: >{nl}}-{scb: <{nl}}'.format(sca=obj._result[0], scb=obj._result[1], nl=numlen),\
+                '{name} ({rat})'.format(rat=ratscale(pb.elo + pb.elo_race[pa.race]), name=pb.name))]
+    strings.append(None)
+    
     for i in range(0, len(r1)):
         try:
-            strL = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r1[i][2], sca=r1[i][0],\
-                    scb=r1[i][1], nl=numlen)
+            L = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r1[i][2], sca=r1[i][0], scb=r1[i][1], nl=numlen)
         except:
-            strL = ''
+            L = ''
+        
         try:
-            strR = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r2[i][0],\
-                    scb=r2[i][1], nl=numlen)
+            R = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r1[i][0], scb=r1[i][1], nl=numlen)
         except:
-            strR = ''
-        postable += '\n' + fill(strL, ilen, True) + ' '*(3+2*numlen) + fill(strR, ilen, False)
+            R = ''
 
-    postable += '\n' + '-'*(8+1+2*totlen)
-    
-    strL = fill('{pctg: >6.2f}%'.format(pctg=100*base['t1']), ilen-3-numlen, True)
-    strR = fill('{pctg: >6.2f}%'.format(pctg=100*base['t2']), ilen-3-numlen, False)
+        strings.append((L, '', R))
 
-    postable += '\n' + strL + ' '*(9+4*numlen) + strR
+    strings += [None, ('{pctg: >6.2f}%'.format(pctg=100*base['t1']), '',\
+                       '{pctg: >6.2f}%'.format(pctg=100*base['t2']))]
 
-    postable_reddit = postable.split('\n')
-    for i in range(0, len(postable_reddit)):
-        if i == 1 or i == len(postable_reddit) - 2:
-            postable_reddit[i] = '----' + postable_reddit[i][:-7]
-        else:
-            postable_reddit[i] = '    ' + postable_reddit[i]
-    postable_reddit = '\n'.join(['    ' + k for k in postable_reddit])
-
-    postable += '\n\n' + 'Median outcome'
     ls = obj.find_lsup()
-    strL = '{name} {sc}'.format(name=pa.name, sc=ls[1])
-    strR = '{sc} {name}'.format(name=pb.name, sc=ls[2])
-    postable += '\n' + strL + '-' + strR
 
-    postable_reddit += '\n\n    Median outcome: ' + strL + '-' + strR
+    postable_tl = left_center_right(strings)
+    postable_tl += '\n\nMedian outcome: {pla} {sca}-{scb} {plb}'\
+            .format(pla=pa.name, sca=ls[1], plb=pb.name, scb=ls[2])
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
 
-    postable_tl = '[center][code]' + postable
-    postable_tl += '[/code][/center]'
-    postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-              + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
-
-    postable_reddit += '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
-            + '[^Make ^another](http://aligulac.com/predict/)^.'
-
-    base['postable_tl'] = postable_tl
-    base['postable_reddit'] = postable_reddit
+    postable_reddit = left_center_right(strings, justify=False, indent=4)
+    postable_reddit += '\n\n    Median outcome: {pla} {sca}-{scb} {plb}'\
+            .format(pla=pa.name, sca=ls[1], plb=pb.name, scb=ls[2])
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
 
 def fpswiss_postable(base, obj, players):
-    def fill(s, l):
-        return ' '*(l-len(s)) + s
-
     nl = max([len(p.dbpl.tag) for p in players])
 
-    postable = fill('Top 2      1st      2nd      3rd      4th',  47 + nl)
-    postable += '\n' + '-'*(47 + 8 + nl)
+    strings = [('Top 2      1st      2nd      3rd      4th', '', ''), None]
 
     for p in players:
-        postable += '\n' + '{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'\
+        strings.append(('{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'\
                 .format(top2=100*(p.tally[2]+p.tally[3]), p1=100*p.tally[3], p2=100*p.tally[2],\
-                        p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl)
+                        p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl), '', ''))
 
-    postable_reddit = postable.split('\n')
-    for i in range(0, len(postable_reddit)):
-        if i == 1:
-            postable_reddit[i] = '----' + postable_reddit[i][:-4]
-        else:
-            postable_reddit[i] = '    ' + postable_reddit[i]
-    postable_reddit = '\n'.join(['    ' + k for k in postable_reddit])
+    postable_tl = left_center_right(strings, justify=False, gap=0)
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
 
-    postable_tl = postable + '[/code][/center]'
-    postable_tl += '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-              + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
-    postable_tl = '[center][code]' + postable_tl
-
-    postable_reddit += '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
-            + '[^Make ^another](http://aligulac.com/predict/)^.'
-
-    base['postable_tl'] = postable_tl
-    base['postable_reddit'] = postable_reddit
+    postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER

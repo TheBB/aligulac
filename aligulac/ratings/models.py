@@ -205,6 +205,20 @@ class Match(models.Model):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
                 '-' + str(self.scb) + ' ' + self.plb.tag
 
+    def get_winner(self):
+        if self.sca > self.scb:
+            return self.pla
+        elif self.scb > self.sca:
+            return self.plb
+        else:
+            return None
+
+    def get_winner_score(self):
+        return max(self.sca, self.scb)
+    
+    def get_loser_score(self):
+        return min(self.sca, self.scb)
+
 class PreMatchGroup(models.Model):
     date = models.DateField()
     event = models.CharField(max_length=200, default='', null=False, blank=True)

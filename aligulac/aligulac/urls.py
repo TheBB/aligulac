@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^add/$', 'ratings.submitviews.add_matches'),
     url(r'^add/review/$', 'ratings.submitviews.review'),
     url(r'^add/events/$', 'ratings.submitviews.manage_events'),
+    url(r'^add/integrity/$', 'ratings.submitviews.integrity'),
     url(r'^add/misc/$', 'ratings.submitviews.manage'),
 
     url(r'^login/$', 'aligulac.views.loginv'),

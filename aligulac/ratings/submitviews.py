@@ -1,8 +1,9 @@
-import os
+import os, pickle
 import urllib, urllib2
 from pyparsing import nestedExpr
 
 from aligulac.views import base_ctx
+from aligulac.settings import M_WARNINGS, M_APPROVED
 from ratings.tools import find_player, find_duplicates, group_by_events
 
 from django.shortcuts import render_to_response, get_object_or_404
@@ -13,7 +14,9 @@ from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
 from countries import transformations, data
-from aligulac.settings import RECAPTCHA_PRIVATE_KEY
+
+class Integrity:
+    pass
 
 def parse_match(s):
     res = nestedExpr('(',')').parseString('('+s.encode()+')').asList()[0]
@@ -496,3 +499,26 @@ def manage(request):
         return render_to_response('manage.html', base)
 
     return render_to_response('manage.html', base)
+
+def integrity(request):
+    base = base_ctx('Submit', 'Integrity', request)
+
+    if not base['adm']:
+        base.update(csrf(request))
+        return render_to_response('login.html', base)
+
+    base['user'] = request.user.username
+    base.update(csrf(request))
+
+    with open(M_WARNINGS, 'r') as f:
+        warnings = pickle.load(f)
+
+    matches = []
+    for w in warnings:
+        block = []
+        for id in w:
+            block.append(Match.objects.get(id=id))
+        matches.append(block)
+    base['matches'] = matches
+
+    return render_to_response('integrity.html', base)

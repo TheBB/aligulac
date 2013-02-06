@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% comment %}
+This page shows the results by date. Called from ratings.views.results.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Integrity warnings{% endblock %}
+
+{% block content %}
+    {% if adm %}
+    <p>You are logged in as: {{ user }}.
+    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% else %}
+    <p>You are not logged in. The submitted results will be pending review before being accepted.
+    (<a href="/login/">login</a>)</p>
+    {% endif %}
+
+{% for g in matches %}
+{% empty %}
+    <p>There are currently no warnings pending resolution.</p>
+{% endfor %}
+
+{% comment %}
+{% if matches %}
+    <table class="results">
+    {% for ml in matches %}
+        {% include "list_matches.html" with lm_list=ml lm_show_date=0 lm_adm=0 lm_header_event=1 %}
+    {% endfor %}
+    </table>
+    <div class="table" style="width: 67em;">
+        <div class="row">
+            <div class="rowe" style="width: 22.5em;"></div>
+            <div class="rowe" style="width: 1em; text-align: left;">
+                <a href="/results/?d={{ td|prevmonth|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/first.png" alt="previous month" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: left;">
+                <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/prev.png" alt="previous day" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 8em; text-align: center;">
+                <a href="/results/">today</a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: right;">
+                <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/next.png" alt="next day" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 1em; text-align: right;">
+                <a href="/results/?d={{ td|nextmonth|date:"Y-m-d" }}">
+                    <img src="http://aligulac.com:81/al/last.png" alt="next month" class="btm" />
+                </a>
+            </div>
+            <div class="rowe" style="width: 22.5em;"></div>
+        </div>
+    </div>
+{% endif %}
+{% endcomment %}
+
+{% endblock %}

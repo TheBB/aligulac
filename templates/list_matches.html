@@ -22,24 +22,6 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% load ratings_extras %}
 
-<script type="text/javascript">
-<!--
-function lm_toggle(id)
-{
-    var d = document.getElementById('lm-' + id);
-    if (d.style.display == 'none')
-    {
-        d.style.display = 'table-row-group';
-        document.getElementById('lma-' + id).innerHTML = 'hide';
-    }
-    else
-    {
-        d.style.display = 'none';
-        document.getElementById('lma-' + id).innerHTML = 'show';
-    }
-}
-//-->
-</script>
 
 {% if lm_header_event %}
 <tr class="header">
@@ -108,7 +90,7 @@ function lm_toggle(id)
 {% endif %}
 
 {% for m in lm_list %}
-<tr class="nonheader {% cycle 'row2' 'row1' %}" {% if lm_header_info %}
+<tr class="nonheader {% cycle 'row2' 'row1' %}" {% if not lm_header_event %}
                                                     {% if m.eventobj %}title="{{ m.eventobj }}"
                                                     {% elif m.event %}title="{{ m.event }}"
                                                     {% else %}title="Unknown event"{% endif %} {% endif %}>

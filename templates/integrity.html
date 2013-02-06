@@ -8,7 +8,11 @@ This page shows the results by date. Called from ratings.views.results.
 
 {% block title %}Integrity warnings{% endblock %}
 
+
 {% block content %}
+
+<h2>Integrity warnings</h3>
+
     {% if adm %}
     <p>You are logged in as: {{ user }}.
     (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
@@ -17,48 +21,31 @@ This page shows the results by date. Called from ratings.views.results.
     (<a href="/login/">login</a>)</p>
     {% endif %}
 
-{% for g in matches %}
-{% empty %}
-    <p>There are currently no warnings pending resolution.</p>
-{% endfor %}
 
-{% comment %}
 {% if matches %}
-    <table class="results">
-    {% for ml in matches %}
-        {% include "list_matches.html" with lm_list=ml lm_show_date=0 lm_adm=0 lm_header_event=1 %}
-    {% endfor %}
-    </table>
-    <div class="table" style="width: 67em;">
-        <div class="row">
-            <div class="rowe" style="width: 22.5em;"></div>
-            <div class="rowe" style="width: 1em; text-align: left;">
-                <a href="/results/?d={{ td|prevmonth|date:"Y-m-d" }}">
-                    <img src="http://aligulac.com:81/al/first.png" alt="previous month" class="btm" />
-                </a>
-            </div>
-            <div class="rowe" style="width: 1em; text-align: left;">
-                <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                    <img src="http://aligulac.com:81/al/prev.png" alt="previous day" class="btm" />
-                </a>
-            </div>
-            <div class="rowe" style="width: 8em; text-align: center;">
-                <a href="/results/">today</a>
-            </div>
-            <div class="rowe" style="width: 1em; text-align: right;">
-                <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                    <img src="http://aligulac.com:81/al/next.png" alt="next day" class="btm" />
-                </a>
-            </div>
-            <div class="rowe" style="width: 1em; text-align: right;">
-                <a href="/results/?d={{ td|nextmonth|date:"Y-m-d" }}">
-                    <img src="http://aligulac.com:81/al/last.png" alt="next month" class="btm" />
-                </a>
-            </div>
-            <div class="rowe" style="width: 22.5em;"></div>
-        </div>
-    </div>
+<p>There are {{ num }} possibly duplicated matches in the database. Showing the first {{ matches|length }}.</p>
+
+<table class="results">
+{% for g in matches %}
+<form method="post" action="/add/integrity/" >
+    {% csrf_token %}
+    <input type="hidden" name="warning" value="{{ g.0 }}" />
+    <tr class="header">
+        <td colspan="4">
+            {{ g.1.0.pla.tag }} vs. {{ g.1.0.plb.tag }}
+        </td>
+        <td colspan="3" style="text-align: right;">
+            <input type="submit" name="false" value="False alarm" />
+            <input type="submit" name="del_ok" value="Delete marked and approve" />
+            <input type="submit" name="del" value="Delete marked" />
+        </td>
+    </tr>
+    {% include "list_matches.html" with lm_list=g.1 lm_show_date=1 lm_adm=1 %}
+</form>
+{% endfor %}
+</table>
+{% else %}
+    <p>There are currently no warnings pending resolution.</p>
 {% endif %}
-{% endcomment %}
 
 {% endblock %}

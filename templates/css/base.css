@@ -293,3 +293,88 @@ div.faqpost {
 div.faqpost img {
     float: right;
 }
+table.results tr.nonheader {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+tr.row2 {
+    background: #eeeeee;
+}
+
+tr.row1 {
+    background: #d0d0d0;
+}
+
+tr.header {
+    background: #555555;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Marcellus SC';
+}
+
+table.results a {
+    text-decoration: none;
+    color: #000088;
+}
+
+table.results a:hover {
+    text-decoration: none;
+    color: #5555ff;
+}
+
+tr.header a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+tr.header a:hover {
+    color: #bbbbbb;
+    text-decoration: none;
+}
+
+table.results {
+    border-collapse: collapse;
+}
+
+table.results td {
+    padding: 0.4em;
+}
+
+/* RESULTS TABLE LAYOUT */
+
+table.results {
+    width: 67em;
+}
+
+td.lm_date {
+    width: 7em;
+}
+
+td.lm_rta {
+    width: 4em;
+    text-align: right;
+}
+
+td.lm_pla {
+    width: 19em;
+    text-align: right;
+}
+
+td.lm_score {
+    width: 5em;
+    text-align: center;
+}
+
+td.lm_plb {
+    width: 21em;
+}
+
+td.lm_rtb {
+    width: 4em;
+    text-align: right;
+}
+
+td.lm_right {
+    width: 5em;
+    text-align: right;
+}

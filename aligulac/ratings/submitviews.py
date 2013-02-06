@@ -512,13 +512,42 @@ def integrity(request):
 
     with open(M_WARNINGS, 'r') as f:
         warnings = pickle.load(f)
+    with open(M_APPROVED, 'r') as f:
+        approved = pickle.load(f)
+
+    if 'del' in request.POST or 'del_ok' in request.POST:
+        for key in request.POST:
+            if request.POST[key] != 'y':
+                continue
+            if key[0:6] == 'match-':
+                try:
+                    Match.objects.get(id=int(key.split('-')[-1])).delete()
+                except:
+                    pass
+
+    if 'del_ok' in request.POST or 'false' in request.POST:
+        warning = tuple([int(f) for f in request.POST['warning'].split(',')])
+        warnings.remove(warning)
+        approved.add(warning)
+
+        with open(M_WARNINGS, 'w') as f:
+            pickle.dump(warnings, f)
+        with open(M_APPROVED, 'w') as f:
+            pickle.dump(approved, f)
 
     matches = []
     for w in warnings:
         block = []
         for id in w:
-            block.append(Match.objects.get(id=id))
-        matches.append(block)
+            try:
+                block.append(Match.objects.get(id=id))
+            except:
+                pass
+        matches.append((','.join(str(k) for k in list(w)), block))
+
+        if len(matches) == 50:
+            break
     base['matches'] = matches
+    base['num'] = len(warnings)
 
     return render_to_response('integrity.html', base)

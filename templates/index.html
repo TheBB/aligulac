@@ -9,7 +9,6 @@ Changes here will mostly be visible on the entire site.
         <meta charset="utf-8" />
         <title>{% block title %}Aligulac{% endblock %}</title>
         <link href="/css/base.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/restable.css" rel="stylesheet" type="text/css"/>
         <link href="/css/datepicker.css" rel="stylesheet" type="text/css"/>
         <script type="text/javascript">
             var _gaq = _gaq || [];
@@ -21,6 +20,24 @@ Changes here will mostly be visible on the entire site.
                 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
+        </script>
+        <script type="text/javascript">
+        <!--
+        function lm_toggle(id)
+        {
+            var d = document.getElementById('lm-' + id);
+            if (d.style.display == 'none')
+            {
+                d.style.display = 'table-row-group';
+                document.getElementById('lma-' + id).innerHTML = 'hide';
+            }
+            else
+            {
+                d.style.display = 'none';
+                document.getElementById('lma-' + id).innerHTML = 'show';
+            }
+        }
+        //-->
         </script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Donegal+One&subset=latin,latin-ext' rel='stylesheet' type='text/css'>

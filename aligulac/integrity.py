@@ -14,11 +14,17 @@ from django.db.models import Q, F
 from ratings.models import Player, Match, Rating, Event, Period
 from aligulac.settings import M_WARNINGS, M_APPROVED
 
-with open(M_WARNINGS, 'r') as f:
-    warnings = pickle.load(f)
+try:
+    with open(M_WARNINGS, 'r') as f:
+        warnings = pickle.load(f)
+except:
+    warnings = set()
 
-with open(M_APPROVED, 'r') as f:
-    approved = pickle.load(f)
+try:
+    with open(M_APPROVED, 'r') as f:
+        approved = pickle.load(f)
+except:
+    approved = set()
 
 def check_matches(matches):
     winners = set([m.get_winner() for m in matches])

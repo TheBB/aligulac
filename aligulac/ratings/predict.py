@@ -407,7 +407,7 @@ def match_postable(base, obj, r1, r2):
             L = ''
         
         try:
-            R = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r1[i][0], scb=r1[i][1], nl=numlen)
+            R = '{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(pctg=100*r2[i][2], sca=r2[i][0], scb=r2[i][1], nl=numlen)
         except:
             R = ''
 

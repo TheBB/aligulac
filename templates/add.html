@@ -242,8 +242,8 @@ ratings.submitviews.add_matches.
             <div class="rowe" style="text-align: right;">Game:</div>
             <div class="rowe">
                 <select name="game" style="width: 15em;">
-                    <option value="WoL" {% ifequal game "WoL" %}selected{% endifequal %}>Wings of Liberty</option>
-                    <option value="HotS" {% ifequal game "HotS" %}selected{% endifequal %}>Heart of the Swarm</option>
+                    <option value="WoL"{% ifequal game "WoL" %} selected{% endifequal %}>Wings of Liberty</option>
+                    <option value="HotS"{% ifequal game "HotS" %} selected{% endifequal %}>Heart of the Swarm</option>
                 </select>
             </div>
         </div>
@@ -251,8 +251,8 @@ ratings.submitviews.add_matches.
             <div class="rowe" style="text-align: right;">Type:</div>
             <div class="rowe">
                 <select name="type" style="width: 15em;">
-                    <option value="online" {% ifequal type "online" %}selected{% endifequal %}>Online</option>
-                    <option value="offline" {% ifequal type "offline" %}selected{% endifequal %}>Offline</option>
+                    <option value="online"{% ifequal type "online" %} selected{% endifequal %}>Online</option>
+                    <option value="offline"{% ifequal type "offline" %} selected{% endifequal %}>Offline</option>
                 </select>
             </div>
         </div>

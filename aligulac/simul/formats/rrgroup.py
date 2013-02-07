@@ -126,7 +126,7 @@ class RRGroup(Composite):
             self._matches[m].set_players(list(pair))
             m += 1
 
-    def compute_mc(self, N=50000):
+    def compute_mc(self, N=3000):
         for m in self._matches:
             m.compute()
 

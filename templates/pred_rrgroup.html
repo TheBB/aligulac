@@ -80,10 +80,10 @@ This is the prediction page for single elimination brackets. It's called from ra
                 <img src="http://aligulac.com:81/al/{{ p.dbpl.race }}.png" alt="{{ p.dbpl.race }}" class="btm" />
             </div>
             <div class="rowe" style="text-align: right;">
-                {{ p.mtally.exp_mscore.0 }}–{{ p.mtally.exp_mscore.1 }}
+                {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
             </div>
             <div class="rowe" style="text-align: right;">
-                {{ p.mtally.exp_sscore.0 }}–{{ p.mtally.exp_sscore.1 }}
+                {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
             </div>
             <div class="rowe"></div>
         </div>

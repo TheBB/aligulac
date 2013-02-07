@@ -163,3 +163,10 @@ register.filter('makematchlink', makematchlink)
 def pow(value, arg):
     return int(value)**int(arg)
 register.filter('pow', pow)
+
+def mscore(value):
+    exp = 0
+    for i in range(0,len(value.mwins)):
+        exp += i * value.mwins[i]
+    return (value, value._nplayers-1-exp)
+register.filter('mscore', mscore)

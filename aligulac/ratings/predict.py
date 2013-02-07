@@ -5,7 +5,7 @@ os.environ['HOME'] = '/root'
 from aligulac.views import base_ctx
 from ratings.tools import find_player
 from simul.playerlist import make_player
-from simul.formats import match, mslgroup, sebracket
+from simul.formats import match, mslgroup, sebracket, rrgroup
 from ratings.templatetags.ratings_extras import ratscale
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -33,7 +33,8 @@ def predict(request):
     base = base_ctx()
     base['curpage'] = 'Predict'
 
-    formats = ['Best-of-N match', 'Four-player Swiss group', 'Single elimination bracket']
+    formats = ['Best-of-N match', 'Four-player Swiss group', 'Single elimination bracket',\
+               'Round robin group']
     base['formats'] = formats
 
     if 'format' not in request.GET:
@@ -91,6 +92,11 @@ def predict(request):
             nrounds = int(log(len(players),2))
             if len(bo) != nrounds and len(bo) != 1:
                 base['errs'].append('Expected exactly 1 or %i \'best of\'' % nrounds)
+    elif fmt == 3:
+        if len(players) < 3:
+            base['errs'].append('Expected at least three players')
+        if len(bo) != 1:
+            base['errs'].append('Expected exactly one \'best of \'')
 
     if len(base['errs']) != 0:
         return render_to_response('predict.html', base)
@@ -103,6 +109,8 @@ def predict(request):
         return redirect('/predict/4pswiss/?bo=%s&ps=%s' % (bo, ps))
     elif fmt == 2:
         return redirect('/predict/sebracket/?bo=%s&ps=%s' % (bo, ps))
+    elif fmt == 3:
+        return redirect('/predict/rrgroup/?bo=%s&ps=%s' % (bo, ps))
 
     return render_to_response('predict.html', base)
 
@@ -283,6 +291,74 @@ def pred_sebracket(request):
     sebracket_postable(base, obj, players)
     return render_to_response('pred_sebracket.html', base)
 
+def pred_rrgroup(request):
+    base = base_ctx('Predict', request=request)
+
+    dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
+    sipl = [make_player(pl) for pl in dbpl]
+    num = (int(request.GET['bo'])+1)/2
+    nplayers = len(sipl)
+    obj = rrgroup.RRGroup(len(sipl), num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
+    obj.set_players(sipl)
+
+    MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
+    meanres = []
+    for i in range(0, (nplayers-1)*nplayers/2):
+        match = obj.get_match(i)
+        match.compute()
+        lsup = match.find_lsup()
+        meanres.append(MeanRes(match.get_player(0).dbpl, match.get_player(1).dbpl, lsup[1], lsup[2]))
+        match.modify(lsup[1], lsup[2])
+    base['meanres'] = meanres
+    obj.compute()
+
+    mtally = obj.get_tally()
+    for p in sipl:
+        p.mtally = mtally[p]
+
+    base['mplayers'] = obj.table
+
+    def update(request, obj, match, r1, r2):
+        if r1 in request.GET and r2 in request.GET:
+            try:
+                if obj.get_match(match).can_modify():
+                    obj.get_match(match).modify(int(request.GET[r1]), int(request.GET[r2]))
+            except:
+                pass
+        else:
+            obj.get_match(match).modify(0, 0)
+
+    for i in range(0, (nplayers-1)*nplayers/2):
+        update(request, obj, i, 'm%i-1' % i, 'm%i-2' % i)
+
+    obj.compute()
+    tally = obj.get_tally()
+
+    players = list(sipl)
+    for p in players:
+        p.tally = tally[p][::-1]
+
+    for i in range(len(players[0].tally)-1, -1, -1):
+        players.sort(key=lambda p: p.tally[i], reverse=True)
+
+    base['players'] = players
+
+    MatchObj = namedtuple('MatchObj', 'obj pla plb modded canmod fixed sca scb')
+    matches = []
+    for i in range(0, (nplayers-1)*nplayers/2):
+        match = obj.get_match(i)
+        matches.append(MatchObj(match, match.get_player(0).dbpl, match.get_player(1).dbpl,\
+                    match.is_modified(), match.can_modify(), match.is_fixed(),\
+                    match._result[0], match._result[1]))
+    base['matches'] = matches
+
+
+    base['ps'] = request.GET['ps']
+    base['bo'] = request.GET['bo']
+
+    rrgroup_postable(base, obj, players)
+    return render_to_response('pred_rrgroup.html', base)
+
 def left_center_right(strings, gap=2, justify=True, indent=0):
     left_width = max([len(s[0]) for s in strings if s != None]) + 4
     center_width = max([len(s[1]) for s in strings if s != None])
@@ -390,3 +466,40 @@ def sebracket_postable(base, obj, players):
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+
+def rrgroup_postable(base, obj, players):
+    nl = max([len(p.dbpl.tag) for p in players])
+
+    s =   ''
+    for i in range(0, len(players)):
+        if i == len(players)-1:
+            s += ordinal(i+1) 
+        else:
+            s +=  '{s: <9}'.format(s=ordinal(i+1))
+    strings = [(s, '', ''), None]
+
+    for p in players:
+        s = '{name: >{nl}}  '.format(name=p.dbpl.tag, nl=nl)
+        for t in p.tally:
+            s += ' {p: >7.2f}%'.format(p=100*t)
+        strings.append((s, '', ''))
+
+    postable_tl = left_center_right(strings, justify=False, gap=0)
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
+
+    postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+
+def ordinal(value):
+    """
+    Converts an integer to its ordinal as a string. 1 is '1st', 2 is '2nd',
+    3 is '3rd', etc. Works for any integer.
+    """
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        return value
+    suffixes = ('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th')
+    if value % 100 in (11, 12, 13): # special case
+        return u"%d%s" % (value, suffixes[0])
+    return u"%d%s" % (value, suffixes[value % 10])

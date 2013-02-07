@@ -87,7 +87,10 @@ class RRGroup(Composite):
         return int(round(i*(len(self._schema_out) - float(i+3)/2))) + j - 1
 
     def get_match(self, key):
-        ex = 'No such match found \'' + key + '\''
+        ex = 'No such match found \'' + str(key) + '\''
+
+        if type(key) == int:
+            return self._matches[key]
 
         key = key.lower().split(' ')
         if len(key) < 2:
@@ -155,6 +158,7 @@ class RRGroup(Composite):
     def compute_instances(self, instances, base):
         table = self.compute_table(instances, base)
         if table != False:
+            self.table = table
             for i in range(0,len(table)):
                 tally = self._tally[table[i]]
                 for (shift, prob) in table[i].temp_spread:

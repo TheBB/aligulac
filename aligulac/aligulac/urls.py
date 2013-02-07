@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     url(r'^predict/match/$', 'ratings.predict.pred_match'),
     url(r'^predict/4pswiss/$', 'ratings.predict.pred_4pswiss'),
     url(r'^predict/sebracket/$', 'ratings.predict.pred_sebracket'),
+    url(r'^predict/rrgroup/$', 'ratings.predict.pred_rrgroup'),
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),

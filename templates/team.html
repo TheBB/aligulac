@@ -43,7 +43,8 @@ This shows a team page. Called from ratings.teamviews.team.
         <h3>Non-playing members</h3>
         <p>{% for p in nonplaying %}
         <a href="/players/{{ p.player.id }}/">{{ p.player.tag }}</a>{% if forloop.revcounter > 2 %}, 
-        {% elif forloop.revcounter == 2 %} and {% endif %}{% endfor %} are assigned to {{ team.name }} in a
+        {% elif forloop.revcounter == 2 %} and {% endif %}{% endfor %} 
+        {% if nonplaying|length > 1 %}are{% else %}is{% endif %} assigned to {{ team.name }} in a
         non-playing capacity.</p>
     {% endif %}
 

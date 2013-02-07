@@ -36,7 +36,8 @@ teams = Team.objects.filter(active=True)
 allowed_teams = []
 for team in teams:
     ratings = Rating.objects.filter(period=current_period, player__teammembership__team=team,\
-            player__teammembership__current=True, player__teammembership__playing=True)
+            player__teammembership__current=True, player__teammembership__playing=True)\
+            .exclude(player__race='S').exclude(player__race='R')
     if filter_active_ratings(ratings).count() >= nplayers_needed:
         allowed_teams.append(team)
 nteams = len(allowed_teams)
@@ -54,7 +55,8 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
     players = []
     for team in [team_a, team_b]:
         ratings = Rating.objects.filter(period=current_period, player__teammembership__team=team,\
-                player__teammembership__current=True, player__teammembership__playing=True)
+                player__teammembership__current=True, player__teammembership__playing=True)\
+                .exclude(player__race='S').exclude(player__race='R')
         ratings = list(filter_active_ratings(ratings).order_by('-rating')[:nplayers_max])
         if proleague:
             # First six in random order, then strongest player for ace match

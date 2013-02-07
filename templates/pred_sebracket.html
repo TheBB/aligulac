@@ -1,0 +1,204 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the prediction page for single elimination brackets. It's called from ratings.predict.pred_sebracket.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Single elimination bracket{% endblock %}
+
+{% block content %}
+    <h2>Single elimination bracket</h2>
+
+    <div class="table numtable" style="width: 67em;">
+        <div class="rowh">
+            <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
+            <div class="rowe" style="width: 10em;">Player</div>
+            <div class="rowe" style="width: 1em;"></div>
+            <div class="rowe" style="width: 1em;"></div>
+            {% for t in players.0.tally %}
+            <div class="rowe" style="width: 8em; text-align: right;">
+                {% if forloop.first %}Win{%else %}Top {{ 2|pow:forloop.counter0 }}{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% for p in players %}
+        <div class="row {% cycle 'row2' 'row1' %}">
+            <div class="rowe" style="text-align: right;">
+                {{ forloop.counter }}.
+            </div>
+            <div class="rowe">
+                <a href="/players/{{ p.dbpl.id }}/">{{ p.dbpl.tag }}</a>
+            </div>
+            <div class="rowe" style="width: 1em;">
+                {% if p.dbpl.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ p.dbpl.country|lower }}.png" 
+                    alt="{{ p.dbpl.country }}" />
+                {% endif %}
+            </div>
+            <div class="rowe" style="width: 1em;">
+                <img src="http://aligulac.com:81/al/{{ p.dbpl.race }}.png" alt="{{ p.dbpl.race }}" class="btm" />
+            </div>
+            {% for t in p.tally %}
+            <div class="rowe" style="text-align: right;">
+                {% if t > 0 %}{{ t|prob }}%{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3>Median outcome</h3>
+
+<div class="table numtable" style="width: 67em;">
+    {% for m in meanres %}
+    {% if not m.pla %}
+    <div class="rowh">
+        <div class="rowe" style="width: 30em;">{{ m }}</div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+    </div>
+    {% else %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe" style="width: 31em; text-align: right;">
+            {% if m.sca > m.scb %}<strong>{% endif %}
+            <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
+            {% if m.pla.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
+            {% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.pla.race }}.png" alt="{{ m.pla.race }}" class="btm" />
+            {% if m.sca > m.scb %}</strong>{% endif %}
+        </div>
+        <div class="rowe" style="width: 5em; text-align: center;">
+            {{ m.sca }}–{{ m.scb }}
+        </div>
+        <div class="rowe" style="width: 31em; text-align: left;">
+            {% if m.scb > m.sca %}<strong>{% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.plb.race }}.png" alt="{{ m.plb.race }}" class="btm" />
+            {% if m.plb.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
+            {% endif %}
+            <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
+            {% if m.scb > m.sca %}</strong>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+    <h3>Update bracket progress</h3>
+
+    <form method="get" action="/predict/sebracket/">
+        <input type="hidden" name="bo" value="{{ bo }}" />
+        <input type="hidden" name="ps" value="{{ ps }}" />
+
+        <p>To modify a result, click the score in the table below. To view detailed predictions for each match,
+        click the arrow.</p>
+        
+    <script type="text/javascript">
+    <!--
+    function toggle_visibility(id)
+    {
+        document.getElementById("fix" + id).style.display = 'none';
+        document.getElementById("inp" + id).style.display = 'inline';
+    }
+    //-->
+    </script>
+
+<div class="table numtable" style="width: 67em;">
+    {% for m in matches %}
+    {% if not m.obj %}
+    <div class="rowh">
+        <div class="rowe" style="width: 30em;">{{ m }}</div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+        <div class="rowe"></div>
+    </div>
+    {% else %}
+    <div class="row {% cycle 'row2' 'row1' %}">
+        <div class="rowe" style="width: 28.5em; text-align: right;">
+            {% if m.canmod %}
+            {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
+            <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
+            {% if m.pla.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
+            {% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.pla.race }}.png" alt="{{ m.pla.race }}" class="btm" />
+            {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 10em; text-align: center;">
+            {% if m.canmod %}
+            <span id="fix{{ forloop.counter }}">
+                <a href="#" onclick="toggle_visibility('{{ forloop.counter }}'); return false;">
+                    {{ m.sca }}–{{ m.scb }}
+                </a>
+            </span>
+            <span id="inp{{ forloop.counter }}" style="display: none;">
+                <input type="text" name="m{{ m.id }}-1" style="text-align: right; width: 2em;"
+                    value="{{ m.sca }}" /> –
+                <input type="text" name="m{{ m.id }}-2" style="width: 2em;" 
+                    value="{{ m.scb }}" />
+            </span>
+            {% else %}
+                N/A
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 24.5em; text-align: left;">
+            {% if m.canmod %}
+            {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
+            <img src="http://aligulac.com:81/al/{{ m.plb.race }}.png" alt="{{ m.plb.race }}" class="btm" />
+            {% if m.plb.country != "" %}
+                <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
+            {% endif %}
+            <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
+            {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 4em; text-align: right;">
+            {% if m.canmod %}
+            <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+    <div style="text-align: right;">
+        <input type="submit" value="Update results" />
+    </div>
+
+</form>
+
+    <script type="text/javascript">
+    <!--
+    function postable(id)
+    {
+        var ids = ['tl', 'reddit'];
+        for (i = 0; i < ids.length; i++)
+        {
+            if (id == ids[i])
+                document.getElementById(ids[i]).style.display = 'block';
+            else
+                document.getElementById(ids[i]).style.display = 'none';
+        }
+    }
+    //-->
+    </script>
+
+    <h3>Postable</h3>
+
+    <div id="tl">
+        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+    </div>
+    <div id="reddit" style="display: none;">
+        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+    </div>
+
+    <p>Formats: <a href="#" onclick="postable('tl'); return false;">Team Liquid</a>,
+    <a href="#" onclick="postable('reddit'); return false;">Reddit</a>.</p>
+
+{% endblock %}

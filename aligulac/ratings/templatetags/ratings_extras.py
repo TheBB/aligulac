@@ -159,3 +159,7 @@ def makematchlink(value):
             (2*value._num-1, value.get_player(0).dbpl.id, value.get_player(1).dbpl.id,\
              value._result[0], value._result[1])
 register.filter('makematchlink', makematchlink)
+
+def pow(value, arg):
+    return int(value)**int(arg)
+register.filter('pow', pow)

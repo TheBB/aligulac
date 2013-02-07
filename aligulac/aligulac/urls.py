@@ -9,7 +9,6 @@ urlpatterns = patterns('',
 
     url(r'^periods/$', 'ratings.views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.views.period'),
-    url(r'^periods/(?P<period_id>\d+)/page-(?P<page>\d+)/$', 'ratings.views.period'),
 
     url(r'^players/(?P<player_id>\d+)/$', 'ratings.views.player'),
     url(r'^players/(?P<player_id>\d+)/period/(?P<period_id>\d+)/$', 'ratings.views.rating_details'),
@@ -30,6 +29,7 @@ urlpatterns = patterns('',
     url(r'^predict/$', 'ratings.predict.predict'),
     url(r'^predict/match/$', 'ratings.predict.pred_match'),
     url(r'^predict/4pswiss/$', 'ratings.predict.pred_4pswiss'),
+    url(r'^predict/sebracket/$', 'ratings.predict.pred_sebracket'),
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),

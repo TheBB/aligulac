@@ -66,8 +66,115 @@ dump. Called from aligulac.views.db.
 {% if not dump %}
 <p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
 {% else %}
-<p>You can download a MySQL dump <a href="http://aligulac.com:81/al/aligulac.sql">here</a> 
-({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS, Y, H:i e" }} (UTC {{ modified|date:"O" }})). It is free to use
-for non-commercial purposes if you credit this website when doing so.</p>
+<p>You can download a MySQL dump <a href="http://aligulac.com:81/al/aligulac.sql">here</a> ({{
+megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS, Y, H:i e" }} 
+(UTC {{ modified|date:"O" }})). It is free to use for non-commercial purposes if you credit this website when
+doing so.</p>
+
+<p>The dump contains six tables, all prefixed with <code>ratings_</code> (this is a Django thing). Some
+columns are foreign keys to tables that have been removed from the dump. This includes anything to do with
+ratings (which take up an awful lot of space) and user accounts.</p>
+
+<p><strong>ratings_player</strong><br/>
+Contains player information.</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - tag varchar(30) NOT NULL          in-game name of the player
+    - name varchar(100)                 real name
+    - country varchar(2)                ISO-3166-1 alpha-2 country code
+    - birthday date                     birthday
+    - race varchar(1) NOT NULL          P, T or Z for normal races, R for random and S for race switcher
+    - sc2c_id int(11)                   external sc2charts.net ID
+    - sc2e_id int(11)                   external sc2earnings.com ID
+    - tlpd_kr_id int(11)                Korean TLPD ID
+    - tlpd_in_id int(11)                international TLPD ID
+    - lp_name varchar(200)              title of Liquipedia page (the part after http://wiki.teamliquid.net/starcraft2/)
+    - dom_val double                    their PP score (see Hall of Fame)
+    - dom_start_id int(11)              foreign key to a table removed from the dump
+    - dom_end_id int(11)                foreign key to a table removed from the dump
+    </pre>
+</code>
+
+<p><strong>ratings_match</strong><br/>
+Contains game information.</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - period_id int(11) NOT NULL        foreign key to a table removed from the dump
+    - date date NOT NULL                date the match was played (approximate in many cases)
+    - pla_id int(11) NOT NULL           foreign key to ratings_player (player A)
+    - plb_id int(11) NOT NULL           foreign key to ratings_player (player B)
+    - sca smallint(6) NOT NULL          games won by player A
+    - scb smallint(6) NOT NULL          games won by player B
+    - rca varchar(1) NOT NULL           race played by player A (may not correspond to pla.race)
+    - rcb varchar(1) NOT NULL           race played by player B (may not correspond to plb.race)
+    - treated tinyint(4)                boolean (true means the match has been rated, false means it hasn't)
+    - event varchar(200)                tournament, round, group etc.
+    - eventobj_id int(11)               foreign key to ratings_event (serves the same function as event)
+    - submitter_id int(11)              foreign key to a table removed from the dump
+    - game varchar(10) NOT NULL         game version used (WoL, HotS, LotV)
+    - offline tinyint(4) NOT NULL       boolean (true of the match was played offline, false if not)
+    </pre>
+</code>
+
+<p><strong>ratings_event</strong><br/>
+Contains event information. Events are organized in a tree according to the Nested Set Model (NSM(, encoded by
+the columns <code>lft</code> and <code>rgt</code>. The <code>parent</code> field provides some redundancy
+here.  «Event» in this case means anything from organizer, season, tournament, round (incl. qualifiers),
+group, days and weeks, etc.</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - name varchar(100) NOT NULL        name of this node
+    - fullname varchar(500) NOT NULL    full name (concatenation of ancestor names)
+    - parent_id int(11)                 foreign key to this table
+    - lft int(11) NOT NULL              NSM model left
+    - rgt int(11) NOT NULL              NSM model right
+    - closed tinyint(4) NOT NULL        boolean (true if the event is over)
+    - big tinyint(4)                    boolean (true if the event contains many games)
+    - noprint tinyint(4)                boolean (false if this event should be skipped in the fullname of descendants)
+    - category varchar(50)              event category (team, individual or frequent), only set for root nodes
+    </pre>
+</code>
+
+<p><strong>ratings_team</strong><br/>
+Contains team information.</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - name varchar(100) NOT NULL        team name
+    - scoreak double                    all-kill rating
+    - scorepl double                    proleague-style rating
+    - founded date                      date founded
+    - disbanded date                    date disbanded
+    - active tinyint(4)                 boolean (true of this team is active)
+    </pre>
+</code>
+
+<p><strong>ratings_teammembership</strong><br/>
+Links teams and players together in a many-to-many relationship.</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - player_id int(11) NOT NULL        foreign key to ratings_player
+    - team_id int(11) NOT NULL          foreign key to ratings_team
+    - start date                        start date of this membership (when the player joined the team)
+    - end date                          end date of this membership (when the player left the team)
+    - current tinyint(4) NOT NULL       boolean (true if the contract is not over), needed since many end dates aren't known
+    - playing tinyint(4) NOT NULL       boolean (false if the contract is non-playing, e.g. for coaches)
+    </pre>
+</code>
+
+<p><strong>ratings_alias</strong><br/>
+Contains aliases for teams and players (common nicknames and shortened names).</p>
+<code>
+    <pre>
+    - id int(11) NOT NULL               primary key
+    - name varchar(30) NOT NULL         the alias
+    - player_id int(11)                 foreign key to ratings_player (alias applies to this player)
+    - team_id int(11)                   foreign key to ratings_team (alias applies to this team)
+    </pre>
+</code>
 {% endif %}
 {% endblock %}

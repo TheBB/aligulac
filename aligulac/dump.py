@@ -23,7 +23,9 @@ ignore_tables = ['auth_group',\
                  'faq_post',\
                  'blog_post',\
                  'ratings_prematch',\
-                 'ratings_prematchgroup']
+                 'ratings_prematchgroup',\
+                 'ratings_rating',\
+                 'ratings_period']
 
 # Locations for public dump, backup dump and backup list
 public_location = '/usr/local/www/media/al/aligulac.sql'

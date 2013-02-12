@@ -8,11 +8,12 @@ import sys, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
 from ratings.models import Match
+from ratings.tools import cdf
 
-from scipy.stats import norm
 from math import floor, sqrt
 from random import choice
 import numpy
+from numpy import array
 import pylab
 
 num_slots = 30
@@ -46,7 +47,7 @@ for m in Match.objects.all():
         rtb = 0
         dvb = sqrt(2)*0.6
 
-    prob = norm.cdf(rta-rtb, scale=sqrt(1+dva**2+dvb**2))
+    prob = cdf(rta-rtb, scale=sqrt(1+dva**2+dvb**2))
 
     if prob < 0.5:
         prob = 1-prob
@@ -77,19 +78,22 @@ for i in range(0,num_slots):
 a = numpy.polynomial.polynomial.polyfit(zones,[100*f for f in fracs], 1, w=games)
 
 p1, = pylab.plot(zones, [100*f for f in fracs], '#000000', marker='o', linewidth=2)
-p2, = pylab.plot(zones, [z for z in zones], '#ff0000', linestyle='--')
-p3, = pylab.plot([zones[0],zones[-1]], [a[0]+a[1]*zones[0],a[0]+a[1]*zones[-1]],\
+p2, = pylab.plot(zones + [100], [z for z in zones] + [100], '#ff0000', linestyle='--')
+p3, = pylab.plot([zones[0],100], [a[0]+a[1]*zones[0],a[0]+a[1]*100],\
                  '#0000ff', linestyle='--')
+
+z = 1.96
+fr = array(fracs)
+gm = array(games)
+ci_mean = (fr + z**2/2/gm) / (1 + z**2/gm)
+ci_width = z * numpy.sqrt(fr*(1-fr)/gm + z**2/4/gm**2) / (1 + z**2/gm)
+pylab.fill_between(zones, 100*(ci_mean-ci_width), 100*(ci_mean+ci_width), facecolor='#dddddd', edgecolor='#bbbbbb')
 
 pylab.axis([50,100,50,100])
 pylab.grid()
 pylab.xlabel('Predicted winrate')
 pylab.ylabel('Actual winrate')
 
-ax = pylab.twinx()
-ax.set_ylabel('Games')
-p4, = ax.plot(zones, games, '#000000', linestyle='-')
-
 pylab.title('Actual vs. predicted winrate (' + str(sum(games)) + ' games)')
-pylab.legend([p2,p3,p4], ['ideal','fitted','games'], loc=9)
+pylab.legend([p2,p3], ['ideal','fitted'], loc=9)
 pylab.show()

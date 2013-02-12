@@ -6,6 +6,37 @@ from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
 from aligulac.settings import RATINGS_INIT_DEV
+from numpy import tanh, pi
+from math import sqrt, exp
+
+def prob_of_winning(rating_a=None, rating_b=None):
+    if rating_a and rating_b:
+        rtg_a = rating_a.get_totalrating(rating_b.player.race)
+        dev_a = rating_a.get_totaldev(rating_b.player.race)
+    elif rating_a:
+        rtg_a = rating_a.get_totalrating('R')
+        dev_a = rating_a.get_totaldev('R')
+    else:
+        rtg_a = 0
+        dev_a = sqrt(2) * RATINGS_INIT_DEV
+
+    if rating_b and rating_a:
+        rtg_b = rating_b.get_totalrating(rating_a.player.race)
+        dev_b = rating_b.get_totaldev(rating_a.player.race)
+    elif rating_b:
+        rtg_b = rating_b.get_totalrating('R')
+        dev_b = rating_b.get_totaldev('R')
+    else:
+        rtg_b = 0
+        dev_b = sqrt(2) * RATINGS_INIT_DEV
+
+    return cdf(rtg_a-rtg_b, scale=sqrt(1.0+dev_a**2+dev_b**2))
+
+def pdf(x, loc=0.0, scale=1.0):
+    return pi/4/sqrt(3)/scale * (1 - tanh(pi/2/sqrt(3)*(x-loc)/scale)**2)
+
+def cdf(x, loc=0.0, scale=1.0):
+    return 0.5 + 0.5*tanh(pi/2/sqrt(3)*(x-loc)/scale)
 
 def filter_active_ratings(queryset):
     return queryset.filter(decay__lt=4, dev__lt=0.2)

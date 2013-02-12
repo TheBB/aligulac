@@ -1,7 +1,7 @@
-from scipy.stats import norm
 from math import sqrt
 
 from ratings.models import Rating, Player
+from ratings.tools import cdf
 
 debug = False
 
@@ -45,7 +45,7 @@ class Player:
         op_elo = opponent.elo + opponent.elo_race[self.race]
         my_dev = self.dev**2 + self.dev_race[opponent.race]**2
         op_dev = opponent.dev**2 + opponent.dev_race[self.race]**2
-        return norm.cdf(my_elo - op_elo, scale=sqrt(1+my_dev+op_dev))
+        return cdf(my_elo - op_elo, scale=sqrt(1+my_dev+op_dev))
 
     def copy(self):
         return Player(copy=self)

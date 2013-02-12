@@ -17,8 +17,6 @@ from django.core.context_processors import csrf
 
 from countries import transformations, data
 
-from scipy.stats import norm
-
 from math import sqrt, log
 from collections import namedtuple
 

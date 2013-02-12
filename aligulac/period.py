@@ -14,7 +14,6 @@ for more details.
 
 import sys, os
 from numpy import *
-from scipy.stats import norm
 
 # This is required for Django imports to work correctly
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
@@ -25,6 +24,7 @@ from ratings.tools import filter_active_ratings
 from aligulac.settings import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY
 
 from rating import update
+from ratings.tools import cdf
 
 # Parameters for rating computation
 RACES = 'PTZ'
@@ -201,6 +201,8 @@ if __name__ == '__main__':
     num_retplayers = 0
     num_newplayers = 0
     for cp in cplayers.values():
+        #if cp.player.id != 351:
+            #continue
         (newr, newd, compr, compd) = update(cp.get_rating_array(), cp.get_dev_array(),\
                 array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L),\
                 cp.player.tag, False)
@@ -250,9 +252,9 @@ if __name__ == '__main__':
     rp = mean(Rating.objects.filter(period=period, player__race='P', decay__lt=4).order_by('-rating')[:5])
     rt = mean(Rating.objects.filter(period=period, player__race='T', decay__lt=4).order_by('-rating')[:5])
     rz = mean(Rating.objects.filter(period=period, player__race='Z', decay__lt=4).order_by('-rating')[:5])
-    sp = norm.cdf(rp-rt) + norm.cdf(rp-rz)
-    st = norm.cdf(rt-rp) + norm.cdf(rt-rz)
-    sz = norm.cdf(rz-rp) + norm.cdf(rz-rt)
+    sp = cdf(rp-rt) + cdf(rp-rz)
+    st = cdf(rt-rp) + cdf(rt-rz)
+    sz = cdf(rz-rp) + cdf(rz-rt)
     period.dom_p = sp
     period.dom_t = st
     period.dom_z = sz

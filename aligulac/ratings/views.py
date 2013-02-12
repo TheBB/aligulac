@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, sort_matches, group_by_events
+from ratings.tools import find_player, sort_matches, group_by_events, cdf
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -14,7 +14,6 @@ from django.core.context_processors import csrf
 
 from countries import transformations, data
 
-from scipy.stats import norm
 from numpy import linspace, array
 from math import sqrt
 
@@ -625,7 +624,7 @@ def rating_details(request, player_id, period_id):
             races = [m.rc_op] if m.rc_op in ['P','T','Z'] else ['P','T','Z']
             weight = float(1)/len(races)
             for sr in races:
-                ew = (m.sca + m.scb) * norm.cdf(prevrat[1][sr] - m.rt_op, scale=sqrt(scale))
+                ew = (m.sca + m.scb) * cdf(prevrat[1][sr] - m.rt_op, scale=sqrt(scale))
                 expwins[0] += weight * ew
                 expwins[1][sr] += weight * ew
 

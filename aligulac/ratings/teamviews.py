@@ -12,8 +12,6 @@ from django.core.context_processors import csrf
 
 from countries import transformations, data
 
-from scipy.stats import norm
-
 def teams(request):
     base = base_ctx('Teams', request=request)
 

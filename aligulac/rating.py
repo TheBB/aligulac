@@ -3,11 +3,12 @@ This is where the rating magic happens. Imported by period.py.
 '''
 
 from numpy import *
-from scipy.stats import norm
 import scipy.optimize as opt
 
 from aligulac.settings import RATINGS_MIN_DEV, RATINGS_INIT_DEV
+from ratings.tools import pdf, cdf
 
+LOG_CAP = 1e-10
 
 def ceilit(arr):
     """Prevents RDs from going above INIT_DEV."""
@@ -21,9 +22,9 @@ def check_max(func, x, i, name, disp):
         ret = func(x)
         if ret[i] == 0:
             return ret[0]
-        print 'OPT.' + name + ': did not converge'
-    except:
-        print 'OPT.' + name + ': error'
+        print ' >> OPT.' + name + ': did not converge'
+    except Exception as e:
+        print ' >> OPT.' + name + ': error: ', e
     return None
 
 def maximize(L, DL, D2L, x, method=None, disp=False):
@@ -143,13 +144,15 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     mbar = oppr
     sbar = sqrt(opps**2 + 1)
-    gen_phi = lambda j, x: norm.pdf(x, loc=mbar[j], scale=sbar[j])
-    gen_Phi = lambda j, x: norm.cdf(x, loc=mbar[j], scale=sbar[j])
+    gen_phi = lambda j, x: pdf(x, loc=mbar[j], scale=sbar[j])
+    gen_Phi = lambda j, x: max(min(cdf(x, loc=mbar[j], scale=sbar[j]), 1-LOG_CAP), LOG_CAP)
 
     # Objective function
     def logL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
+        if pr:
+            print ':::', x, Mv, Phi
         return sum(W*log(Phi) + L*log(1-Phi))
 
     # Derivative
@@ -167,7 +170,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
         alpha = phi/Phi
         beta = phi/(1-Phi)
-        Mvbar = (Mv-mbar)/sbar**2
+        Mvbar = pi/sqrt(3)/sbar * tanh(pi/2/sqrt(3)*(Mv-mbar)/sbar)
+        #Mvbar = (Mv-mbar)/sbar**2
         coeff = - W*alpha*(alpha+Mvbar) - L*beta*(beta-Mvbar)
         ret = zeros((C,C))
         for j in range(0,M):
@@ -176,7 +180,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats]))[0:-1]
-    x = maximize(logL, DlogL, lambda x: D2logL(x,DM,C), x)
+    x = maximize(logL, DlogL, lambda x: D2logL(x,DM,C), x, method=None, disp=pr)
 
     # If maximization failed, return the current rating and print an error message
     if x == None:
@@ -223,5 +227,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     for c in played_cats:
         devsex[c+1] = devs[played_cats.index(c)+1]
         ratsex[c+1] = rats[played_cats.index(c)+1]
-    
+
+    if pr:
+        print '------------ Finished'
+
     return (newr, news, ratsex, devsex)

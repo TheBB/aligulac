@@ -45,7 +45,7 @@ function togvis_div(id)
  */
 function switch_to(id, all)
 {
-    for (i = 0; i < ids.length; i++)
+    for (i = 0; i < all.length; i++)
     {
         if (all[i] == id)
             document.getElementById(all[i]).style.display = 'block';

@@ -144,31 +144,34 @@ def player(request, player_id):
     matches_a = Match.objects.filter(pla=player)
     matches_b = Match.objects.filter(plb=player)
 
+    def ntz(n):
+        return n if n is not None else 0
+
     try:
         a = matches_a.aggregate(Sum('sca'), Sum('scb'))
         b = matches_b.aggregate(Sum('sca'), Sum('scb'))
-        base['total'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+        base['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
     except:
         pass
 
     try:
         a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
         b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
-        base['vp'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+        base['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
     except:
         pass
 
     try:
         a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
         b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
-        base['vt'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+        base['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
     except:
         pass
 
     try:
         a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
         b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
-        base['vz'] = (a['sca__sum'] + b['scb__sum'], a['scb__sum'] + b['sca__sum'])
+        base['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
     except:
         pass
 

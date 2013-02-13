@@ -1,4 +1,16 @@
 /* ======================================================================
+ * GENERAL STUFF
+ * ======================================================================
+ */
+
+/* Trims whitespace
+ */
+function trim(s)
+{
+    return s.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
+/* ======================================================================
  * VISIBILITY TOGGLING
  * ======================================================================
  */
@@ -39,7 +51,7 @@ function togvis_div(id)
 function togHTML(id, a, b)
 {
     var d = document.getElementById(id);
-    if (d.innerHTML == a)
+    if (trim(d.innerHTML) == a)
         d.innerHTML = b;
     else
         d.innerHTML = a;

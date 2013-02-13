@@ -39,7 +39,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% endif %}
     </td>
     <td class="lm_right">
-        <a id="lma-{{ lm_list.0.id }}" href="#" onclick="lm_toggle('{{ lm_list.0.id }}'); return false;">
+        <a id="lma-{{ lm_list.0.id }}" href="#" 
+            onclick="togvis_tbody('lm-{{lm_list.0.id}}');togHTML('lma-{{lm_list.0.id}}','hide','show');return false;">
             {% if lm_autohide %}show{% else %}hide{% endif %}
         </a>
     </td>

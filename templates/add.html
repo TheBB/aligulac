@@ -41,20 +41,14 @@ ratings.submitviews.add_matches.
 
     <script type="text/javascript">
     <!--
-    function toggle_to(id) 
-    {
-        document.getElementById('guide').style.display = (id=='guide') ? 'block' : 'none';
-        document.getElementById('syntax').style.display = (id=='syntax') ? 'block' : 'none';
-        document.getElementById('examples').style.display = (id=='examples') ? 'block' : 'none';
-        document.getElementById('problems').style.display = (id=='problems') ? 'block' : 'none';
-    }
+        togs = ['guide','syntax','examples','problems'];
     //-->
     </script>
 
-    <p>Show: <a href="#" onclick="toggle_to('guide'); return false;">guide</a>,
-             <a href="#" onclick="toggle_to('syntax'); return false;">match syntax</a>,
-             <a href="#" onclick="toggle_to('examples'); return false;">examples</a>,
-             <a href="#" onclick="toggle_to('problems'); return false;">common problems</a></p></div>
+    <p>Show: <a href="#" onclick="switch_to('guide',togs); return false;">guide</a>,
+             <a href="#" onclick="switch_to('syntax',togs); return false;">match syntax</a>,
+             <a href="#" onclick="switch_to('examples',togs); return false;">examples</a>,
+             <a href="#" onclick="switch_to('problems',togs); return false;">common problems</a></p></div>
 
     <div id="guide" style="display: block;">
         <ul>
@@ -88,11 +82,11 @@ ratings.submitviews.add_matches.
             use.</li>
             {% endif %}
             <li><strong>Matches:</strong> A list of the results you want to add. Please see 
-            <a href="#" onclick="toggle_to('syntax'); return false;">match syntax</a> for more
+            <a href="#" onclick="switch_to('syntax',togs); return false;">match syntax</a> for more
             information.</li>
         </ul>
 
-        <p>Please check out <a href="#" onclick="toggle_to('problems'); return false;">common
+        <p>Please check out <a href="#" onclick="switch_to('problems',togs); return false;">common
             problems</a> if you are unsure about a player.</p>
     </div>
 
@@ -163,7 +157,7 @@ ratings.submitviews.add_matches.
         {% endif %}
 
         <p>Most players are uniquely identifiable through their nickname alone. For a list of the most common
-        exceptions, please look at <a href="#" onclick="toggle_to('problems'); return false;">common
+        exceptions, please look at <a href="#" onclick="switch_to('problems',togs); return false;">common
             problems</a>.</p>
     </div>
 

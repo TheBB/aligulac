@@ -207,17 +207,7 @@ This is the prediction page for single elimination brackets. It's called from ra
 
     <script type="text/javascript">
     <!--
-    function postable(id)
-    {
-        var ids = ['tl', 'reddit'];
-        for (i = 0; i < ids.length; i++)
-        {
-            if (id == ids[i])
-                document.getElementById(ids[i]).style.display = 'block';
-            else
-                document.getElementById(ids[i]).style.display = 'none';
-        }
-    }
+        var togs = ['tl', 'reddit'];
     //-->
     </script>
 
@@ -230,7 +220,7 @@ This is the prediction page for single elimination brackets. It's called from ra
         <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
     </div>
 
-    <p>Formats: <a href="#" onclick="postable('tl'); return false;">Team Liquid</a>,
-    <a href="#" onclick="postable('reddit'); return false;">Reddit</a>.</p>
+    <a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
+    <a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
 
 {% endblock %}

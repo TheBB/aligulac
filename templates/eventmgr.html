@@ -11,34 +11,6 @@ This is the template for the event manager admin page. It's called from ratings.
 {% block content %}
     <h2>Manage events</h2>
 
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility(id) 
-    {
-        var e = document.getElementById(id);
-        if (e.tagName == 'DIV')
-        {
-            if (e.style.display == 'block')
-                e.style.display = 'none';
-            else
-                e.style.display = 'block';
-        }
-        else if (e.tagName == 'SPAN')
-        {
-            if (e.style.display == 'inline')
-                e.style.display = 'none';
-            else
-                e.style.display = 'inline';
-        }
-    }
-
-    function set_focus(id)
-    {
-        document.getElementById(id).focus();
-    }
-    //-->
-    </script>
-
     <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
 
     <form method="post" action="/add/events/">
@@ -56,14 +28,15 @@ This is the template for the event manager admin page. It's called from ratings.
         <div class="row row2">
             <div class="rowe"> {{ node.2|indent|safe }}
             {% if node.3 > 0 %}
-                <a href="" onclick="toggle_visibility('list-{{node.0}}'); return false;">{{ node.1 }}</a>
+                <a href="" onclick="togvis_div('list-{{node.0}}'); return false;">{{ node.1 }}</a>
             {% else %}
                 {{ node.1 }}
             {% endif %}
+            (<a href="/admin/ratings/event/{{ node.0 }}/">a</a>)
         </div>
         <div class="rowe" style="text-align: right;">
             <div id="link-{{ node.0 }}" style="display: block;">
-                <a href="#" onclick="toggle_visibility('form-{{ node.0 }}'); toggle_visibility('link-{{ node.0 }}'); return false;">modify</a>
+                <a href="#" onclick="togvis_div('form-{{ node.0 }}'); togvis_div('link-{{ node.0 }}'); return false;">modify</a>
             </div>
             <div id="form-{{ node.0 }}" style="display: none;">
                 <div class="table" style="width: 35em; margin-left: auto;">

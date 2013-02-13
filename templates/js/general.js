@@ -41,6 +41,13 @@ function togvis_div(id)
     togvis(id, 'block');
 }
 
+/* Toggles visibility of span elements.
+ */
+function togvis_span(id)
+{
+    togvis(id, 'inline');
+}
+
 /* Makes all elements given in the all array invisible except for the one given by id
  */
 function switch_to(id, all)

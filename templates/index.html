@@ -3,13 +3,15 @@ This template defines both the main site layout and the front page. It's extende
 Changes here will mostly be visible on the entire site.
 {% endcomment %}
 
+{% load ratings_extras %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <title>{% block title %}Aligulac{% endblock %}</title>
-        <link href="/css/base.css" rel="stylesheet" type="text/css"/>
-        <link href="/css/datepicker.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ "base"|css }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-36949125-1']);

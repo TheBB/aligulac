@@ -13,7 +13,7 @@ This shows a team page. Called from ratings.teamviews.team.
 
     <p style="text-align: center;">
     {% if team.id|haslogo %}
-        <img style="margin-bottom: 15px; float: right;" src="http://aligulac.com:81/al/teams/{{ team.id }}.png" alt="{{ team.name }}" title="{{ team.name }}" />
+    <img style="margin-bottom: 15px; float: right;" src="{{ team.id|imgfolder:"teams"|static }}" alt="{{ team.name }}" title="{{ team.name }}" />
     {% endif %}
     </p>
 
@@ -66,11 +66,11 @@ This shows a team page. Called from ratings.teamviews.team.
         </div>
         <div class="rowe">
             {% if tm.player.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ tm.player.country|lower }}.png" alt="{{ tm.player.country }}" />
+                <img src="{{ tm.player.country|lower|imgfolder:"flags"|static }}" alt="{{ tm.player.country }}" />
             {% endif %}
         </div>
         <div class="rowe">
-            <img src="http://aligulac.com:81/al/{{ tm.player.race }}.png" alt="{{tm.player.race}}" class="btm" />
+            <img src="{{ tm.player.race|imgfolder|static }}" alt="{{tm.player.race}}" class="btm" />
         </div>
         <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
         <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>

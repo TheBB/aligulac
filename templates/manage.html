@@ -4,6 +4,8 @@
 This is the page for miscellaneous administrative functions. Called from ratings.submitviews.manage.
 {% endcomment %}
 
+{% load ratings_extras %}
+
 {% block title %}Miscellaneous{% endblock %}
 
 {% block content %}
@@ -16,15 +18,15 @@ This is the page for miscellaneous administrative functions. Called from ratings
         <p><span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
             <a href="/players/{{ source.id }}/">{{ source.tag }}</a>
             {% if source.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ source.country|lower }}.png" alt="{{ source.country }}" />
+                <img src="{{ source.country|lower|imgfolder:"flags"|static }}" alt="{{ source.country }}" />
             {% endif %}
-            <img src="http://aligulac.com:81/al/{{ source.race }}.png" alt="{{ source.race }}" class="btm" />
+            <img src="{{ source.race|imgfolder|static }}" alt="{{ source.race }}" class="btm" />
             into
             <a href="/players/{{ target.id }}/">{{ target.tag }}</a>
             {% if target.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ target.country|lower }}.png" alt="{{ target.country }}" />
+                <img src="{{ target.country|lower|imgfolder:"flags"|static }}" alt="{{ target.country }}" />
             {% endif %}
-            <img src="http://aligulac.com:81/al/{{ target.race }}.png" alt="{{ target.race }}" class="btm" />.
+            <img src="{{ target.race|imgfolder|static }}" alt="{{ target.race }}" class="btm" />
         </p>
         <form method="post" action="/add/misc/">
             {% csrf_token %}

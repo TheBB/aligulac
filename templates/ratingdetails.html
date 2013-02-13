@@ -18,7 +18,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if prevlink %}
             <a href="/players/{{ prevlink.player.id }}/period/{{ prevlink.period.id }}/">
-                <img src="http://aligulac.com:81/al/prev.png" alt="previous" class="btm" />
+                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -26,7 +26,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if nextlink %}
             <a href="/players/{{ nextlink.player.id }}/period/{{ nextlink.period.id }}/">
-                <img src="http://aligulac.com:81/al/next.png" alt="next" class="btm" />
+                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>

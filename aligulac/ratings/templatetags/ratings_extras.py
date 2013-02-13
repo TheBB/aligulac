@@ -6,6 +6,25 @@ from math import sqrt
 
 register = template.Library()
 
+def css(value):
+    return 'http://css.aligulac.com/' + value + '.css'
+register.filter('css', css)
+
+def js(value):
+    return 'http://js.aligulac.com/' + value + '.js'
+register.filter('js', js)
+
+def static(value):
+    return 'http://static.aligulac.com/' + value
+register.filter('static', static)
+
+def imgfolder(value, arg=''):
+    if arg != '':
+        return str(arg) + '/' + str(value) + '.png'
+    else:
+        return str(value) + '.png'
+register.filter('imgfolder', imgfolder)
+
 def ratscale(value):
     return int(round((float(value) + 1.0)*1000))
 register.filter('ratscale', ratscale)

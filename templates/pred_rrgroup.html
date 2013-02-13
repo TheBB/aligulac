@@ -34,12 +34,11 @@ This is the prediction page for single elimination brackets. It's called from ra
             </div>
             <div class="rowe" style="width: 1em;">
                 {% if p.dbpl.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ p.dbpl.country|lower }}.png" 
-                    alt="{{ p.dbpl.country }}" />
+                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em;">
-                <img src="http://aligulac.com:81/al/{{ p.dbpl.race }}.png" alt="{{ p.dbpl.race }}" class="btm" />
+                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
             </div>
             {% for t in p.tally %}
             <div class="rowe" style="text-align: right;">
@@ -72,12 +71,11 @@ This is the prediction page for single elimination brackets. It's called from ra
             </div>
             <div class="rowe" style="width: 1em;">
                 {% if p.dbpl.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ p.dbpl.country|lower }}.png" 
-                    alt="{{ p.dbpl.country }}" />
+                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em;">
-                <img src="http://aligulac.com:81/al/{{ p.dbpl.race }}.png" alt="{{ p.dbpl.race }}" class="btm" />
+                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
             </div>
             <div class="rowe" style="text-align: right;">
                 {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
@@ -158,9 +156,9 @@ This is the prediction page for single elimination brackets. It's called from ra
             {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
             <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
             {% if m.pla.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
+                <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
             {% endif %}
-            <img src="http://aligulac.com:81/al/{{ m.pla.race }}.png" alt="{{ m.pla.race }}" class="btm" />
+            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
             {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
             {% endif %}
         </div>
@@ -184,9 +182,9 @@ This is the prediction page for single elimination brackets. It's called from ra
         <div class="rowe" style="width: 24.5em; text-align: left;">
             {% if m.canmod %}
             {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
-            <img src="http://aligulac.com:81/al/{{ m.plb.race }}.png" alt="{{ m.plb.race }}" class="btm" />
+            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
             {% if m.plb.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
+                <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
             {% endif %}
             <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
             {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}

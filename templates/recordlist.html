@@ -23,11 +23,11 @@ This is the subroutine for printing a record list, used by records.html.
     </div>
     <div class="rowe">
         {% if h.player.country != "" %}
-            <img src="http://aligulac.com:81/al/flags/{{ h.player.country|lower }}.png" alt="{{ h.player.country }}" />
+            <img src="{{ h.player.country|lower|imgfolder:"flags"|static }}" alt="{{ h.player.country }}" />
         {% endif %}
     </div>
     <div class="rowe">
-        <img src="http://aligulac.com:81/al/{{ h.player.race }}.png" class="btm" />
+        <img src="{{ h.player.race|imgfolder|static }}" class="btm" />
     </div>
     <div class="rowe" style="text-align: right;">
         {% if scaled %}{{ h.rat|ratscaled }}{% else %}{{ h.rat|ratscale }}{% endif %}

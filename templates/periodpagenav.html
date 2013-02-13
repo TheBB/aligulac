@@ -8,13 +8,15 @@ expects the arguments:
 - npages: The number of available pages.
 {% endcomment %}
 
+{% load ratings_extras %}
+
 {% if page %}
 <div class="table" style="min-width: 67em;">
     <div class="row">
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if period.id > 1 %}
             <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/prev.png" alt="previous" class="btm" />
+                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -28,14 +30,14 @@ expects the arguments:
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page=1&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/first.png" alt="first" class="btm" />
+                <img src="{{ "first.png"|static }}" alt="first" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page={{ page|add:"-1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/prev.png" alt="previous" class="btm" />
+                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -43,14 +45,14 @@ expects the arguments:
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ page|add:"1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/next.png" alt="next" class="btm" />
+                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ npages }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/last.png" alt="last" class="btm" />
+                <img src="{{ "last.png"|static }}" alt="last" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -64,7 +66,7 @@ expects the arguments:
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if period.id < nperiods %}
             <a href="/periods/{{ period.id|add:"1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="http://aligulac.com:81/al/next.png" alt="previous" class="btm" />
+                <img src="{{ "next.png"|static }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>

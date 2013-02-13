@@ -26,11 +26,11 @@ aligulac.views.search.
         {% if players %}
             <h3>Players</h3>
             <ul>
-            {% for player in players %}
-            <li><a href="/players/{{ player.id }}">{{ player.tag }}</a> 
-            <img src="http://aligulac.com:81/al/flags/{{ player.country|lower }}.png" alt="{{ player.country }}" />
-            <img src="http://aligulac.com:81/al/{{ player.race }}.png" alt="{{ player.race|racefull }}" /></li>
-            {% endfor %}
+                {% for player in players %}
+                <li><a href="/players/{{ player.id }}">{{ player.tag }}</a> 
+                <img src="{{ player.country|lower|imgfolder:"flags"|static }}" alt="{{ player.country }}" />
+                <img src="{{ player.race|imgfolder|static }}" alt="{{ player.race|racefull }}" /></li>
+                {% endfor %}
             </ul>
         {% endif %}
     {% endif %}

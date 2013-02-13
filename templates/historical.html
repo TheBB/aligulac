@@ -40,9 +40,9 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.get_prev %}
                     {% if rating.get_prev.rating > rating.rating %}
-                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                        <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.get_prev.rating < rating.rating %}
-                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                        <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
             </div>
@@ -51,9 +51,9 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.get_prev %}
                     {% if rating.get_prev.rating|addf:rating.get_prev.rating_vp > rating.rating|addf:rating.rating_vp %}
-                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                        <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vp < rating.rating|addf:rating.rating_vp %}
-                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                        <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
             </div>
@@ -62,9 +62,9 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.get_prev %}
                     {% if rating.get_prev.rating|addf:rating.get_prev.rating_vt > rating.rating|addf:rating.rating_vt %}
-                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                        <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vt < rating.rating|addf:rating.rating_vt %}
-                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                        <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
             </div>
@@ -73,9 +73,9 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.get_prev %}
                     {% if rating.get_prev.rating|addf:rating.get_prev.rating_vz > rating.rating|addf:rating.rating_vz %}
-                        <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                        <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.get_prev.rating|addf:rating.get_prev.rating_vz < rating.rating|addf:rating.rating_vz %}
-                        <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                        <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
             </div>

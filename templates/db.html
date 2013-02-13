@@ -66,7 +66,7 @@ dump. Called from aligulac.views.db.
 {% if not dump %}
 <p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
 {% else %}
-<p>You can download a MySQL dump <a href="http://aligulac.com:81/al/aligulac.sql">here</a> 
+<p>You can download a MySQL dump <a href="{{ "aligulac.sql"|static }}">here</a> 
 ({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS, Y, H:i e" }} 
 (UTC {{ modified|date:"O" }})). It is free to use for non-commercial purposes if you credit this website when
 doing so.</p>

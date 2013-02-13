@@ -24,13 +24,13 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
                 ({{ r1|ratscale }}) <a href="/players/{{ p1.id }}/">{{ p1.tag }}</a>
             </div>
             <div class="rowe" style="width: 5em;">
-                <img src="http://aligulac.com:81/al/flags/{{ p1.country|lower }}.png" alt="{{ p1.country }}" />
-                <img src="http://aligulac.com:81/al/{{ p1.race }}.png" alt="{{ p1.race|racefull }}" class="btm" />
+                <img src="{{ p1.country|lower|imgfolder:"flags"|static }}" alt="{{ p1.country }}" />
+                <img src="{{ p1.race|imgfolder|static }}" alt="{{ p1.race|racefull }}" class="btm" />
             </div>
             <div class="rowe" style="width: 5em; text-align: center;">{{ s1 }}–{{ s2 }}</div>
             <div class="rowe" style="width: 5em; text-align: right;">
-                <img src="http://aligulac.com:81/al/{{ p2.race }}.png" alt="{{ p2.race|racefull }}" class="btm" />
-                <img src="http://aligulac.com:81/al/flags/{{ p2.country|lower }}.png" alt="{{ p2.country }}" />
+                <img src="{{ p2.race|imgfolder|static }}" alt="{{ p2.race|racefull }}" class="btm" />
+                <img src="{{ p2.country|lower|imgfolder:"flags"|static }}" alt="{{ p2.country }}" />
             </div>
             <div class="rowe" style="width: 26em;">
                 <a href="/players/{{ p2.id }}/">{{ p2.tag }}</a> ({{ r2|ratscale }})

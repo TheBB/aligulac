@@ -46,11 +46,11 @@ This is the Hall of Fame template. It's called from ratings.views.records.
     </div>
     <div class="rowe">
         {% if h.country != "" %}
-            <img src="http://aligulac.com:81/al/flags/{{ h.country|lower }}.png" alt="{{ h.country }}" />
+            <img src="{{ h.country|lower|imgfolder:"flags"|static }}" alt="{{ h.country }}" />
         {% endif %}
     </div>
     <div class="rowe">
-        <img src="http://aligulac.com:81/al/{{ h.race }}.png" class="btm" />
+        <img src="{{ h.race|imgfolder|static }}" class="btm" />
     </div>
     <div class="rowe" style="text-align: right;">
         {{ h.dom_val|ratscaled }}

@@ -58,12 +58,12 @@ arguments:
         <div class="rowe" style="text-align: center;">
             {% if entry.position and entry.get_prev.position and rl_pos_arrow %}
                 {% if entry.prev.position < entry.position %}
-                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" class="btm" />
+                <img src="{{ "downarrow.png"|static }}" alt="down" class="btm" />
                 {% elif entry.get_prev.position > entry.position %}
-                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" class="btm" />
+                <img src="{{ "uparrow.png"|static }}" alt="up" class="btm" />
                 {% endif %}
             {% elif rl_pos_arrow %}
-                <img src="http://aligulac.com:81/al/new.png" alt="new" style="vertical-align: text-bottom;" />
+            <img src="{{ "new.png"|static }}" alt="new" style="vertical-align: text-bottom;" />
             {% endif %}
         </div>
         <div class="rowe">
@@ -71,19 +71,19 @@ arguments:
         </div>
         <div class="rowe">
             {% if entry.player.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ entry.player.country|lower }}.png" alt="{{ entry.player.country }}" />
+            <img src="{{ entry.player.country|lower|imgfolder:"flags"|static }}" alt="{{ entry.player.country }}" />
             {% endif %}
         </div>
         <div class="rowe">
-            <img src="http://aligulac.com:81/al/{{ entry.player.race }}.png" alt="{{entry.player.race}}" class="btm" />
+            <img src="{{ entry.player.race|imgfolder|static }}" alt="{{entry.player.race}}" class="btm" />
         </div>
         <div class="rowe" style="text-align: right;">{{ entry.rating|ratscale }}</div>
         <div class="rowe">
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating > entry.rating %}
-                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                 {% elif entry.get_prev.rating < entry.rating %}
-                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                 {% endif %}
             {% endif %}
         </div>
@@ -91,9 +91,9 @@ arguments:
         <div class="rowe">
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vp > entry.rating|addf:entry.rating_vp %}
-                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vp < entry.rating|addf:entry.rating_vp %}
-                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                 {% endif %}
             {% endif %}
         </div>
@@ -101,9 +101,9 @@ arguments:
         <div class="rowe">
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vt > entry.rating|addf:entry.rating_vt %}
-                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vt < entry.rating|addf:entry.rating_vt %}
-                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                 {% endif %}
             {% endif %}
         </div>
@@ -111,9 +111,9 @@ arguments:
         <div class="rowe">
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vz > entry.rating|addf:entry.rating_vz %}
-                    <img src="http://aligulac.com:81/al/downarrow.png" alt="down" style="vertical-align: text-bottom;" />
+                <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vz < entry.rating|addf:entry.rating_vz %}
-                    <img src="http://aligulac.com:81/al/uparrow.png" alt="up" style="vertical-align: text-bottom;" />
+                <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" />
                 {% endif %}
             {% endif %}
         </div>

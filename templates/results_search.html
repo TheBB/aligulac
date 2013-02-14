@@ -127,18 +127,6 @@ This is the results search function. Called from ratings.views.results_search.
     </table>
 
     {% if adm %}
-    <script type="text/javascript">
-    <!--
-    function mark_all(val)
-    {
-        var list = document.getElementsByTagName("input");
-        for (var i = 0; i < list.length; i++)
-            if (list[i].getAttribute("type") == "checkbox")
-                list[i].checked = val;
-    }
-    //-->
-    </script>
-
     <p><span style="color: #ff0000;"><strong>CAREFUL:</strong></span>
     To all checked matches, assign event object:</p>
     <select name="event">
@@ -148,8 +136,8 @@ This is the results search function. Called from ratings.views.results_search.
     </select>
     <input type="Submit" name="op" value="Assign" /></form>
     <p>
-        <input type="button" onclick="mark_all(true);" value="Check all" />
-        <input type="button" onclick="mark_all(false);" value="Uncheck all" />
+        <input type="button" onclick="mark_all(true, '');" value="Check all" />
+        <input type="button" onclick="mark_all(false, '');" value="Uncheck all" />
     </p>
     {% endif %}
 

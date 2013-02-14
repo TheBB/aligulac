@@ -24,7 +24,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% if lm_header_event %}
 <tr class="header">
-    <td colspan="6">
+    <td colspan="5">
         {% if lm_list.0.eventobj %} ▸
             {% for p in lm_list.0.eventobj.get_path %}
             <a href="/results/events/{{ p.id }}/">{{ p.name }}</a>
@@ -37,11 +37,16 @@ NB! The calling code is responsible for starting and ending the HTML table:
             Unknown event(s)
         {% endif %}
     </td>
-    <td class="lm_right">
+    <td colspan="2" style="text-align: right;">
         <a id="lma-{{ lm_list.0.id }}" href="#" 
             onclick="togvis_tbody('lm-{{lm_list.0.id}}');togHTML('lma-{{lm_list.0.id}}','hide','show');return false;">
             {% if lm_autohide %}show{% else %}hide{% endif %}
         </a>
+
+        {% if lm_adm and not lm_nocheck %}
+        <a href="#" onclick="mark_all(true, 'match-{{lm_list.0.id}}-'); return false;">chk</a>
+        <a href="#" onclick="mark_all(false, 'match-{{lm_list.0.id}}-'); return false;">unchk</a>
+        {% endif %}
     </td>
 </tr>
 {% endif %}
@@ -173,7 +178,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
     </td>
     <td class="lm_right">
         {% if lm_adm %}
-            {% if not lm_nocheck %}<input type="checkbox" name="match-{{ m.id }}" value="y" />{% endif %}
+            {% if not lm_nocheck %}<input type="checkbox" name="match-{{ lm_list.0.id }}-{{ m.id }}" value="y" />{% endif %}
             {% if m.group %}
                 <a href="/admin/ratings/prematch/{{ m.id }}/">→</a>
             {% else %}

@@ -395,9 +395,9 @@ def results_search(request):
     base = base_ctx('Results', 'Search', request)
     base.update(csrf(request))
 
-    if 'op' in request.POST and request.POST['op'] == 'Assign' and base['adm'] == True:
+    if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
         num = 0
-        if int(request.POST['event']) != 2:
+        if request.POST['event'] != 'nochange' and int(request.POST['event']) != 2:
             event = Event.objects.get(id=int(request.POST['event']))
         else:
             event = None
@@ -407,11 +407,14 @@ def results_search(request):
                 continue
             if key[0:6] == 'match-':
                 match = Match.objects.get(id=int(key.split('-')[-1]))
-                match.eventobj = event
+                if request.POST['event'] != 'nochange':
+                    match.eventobj = event
+                if request.POST['date'].strip() != '':
+                    match.date = request.POST['date']
                 match.save()
                 num += 1
 
-        base['message'] = 'Assigned %i matches to event \'%s\'.' % (num, str(event))
+        base['message'] = 'Modified %i matches.' % num
 
     if 'op' in request.GET and request.GET['op'] == 'search':
         matches = Match.objects.all()

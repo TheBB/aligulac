@@ -114,8 +114,12 @@ This is the results search function. Called from ratings.views.results_search.
         <form method="post"
             action="/results/search/?op=search&amp;after={{after}}&amp;before={{before}}&amp;players={{pls|urlencode}}&amp;eventtext={{eventtext|urlencode}}&amp;unassigned={{unassigned_get}}">
         {% csrf_token %}
-    {% endif %}
 
+        <p>
+            <input type="button" onclick="mark_all(true, 'match-');" value="Check all" />
+            <input type="button" onclick="mark_all(false, 'match-');" value="Uncheck all" />
+        </p>
+    {% endif %}
     <table class="results">
     {% for m in matches %}
         {% if sort_player %}
@@ -125,20 +129,53 @@ This is the results search function. Called from ratings.views.results_search.
         {% endif %}
     {% endfor %}
     </table>
-
     {% if adm %}
-    <p><span style="color: #ff0000;"><strong>CAREFUL:</strong></span>
-    To all checked matches, assign event object:</p>
-    <select name="event">
-        {% for event in events %}
-        <option value="{{ event.id }}">{{ event }}</option>
-        {% endfor %}
-    </select>
-    <input type="Submit" name="op" value="Assign" /></form>
-    <p>
-        <input type="button" onclick="mark_all(true, '');" value="Check all" />
-        <input type="button" onclick="mark_all(false, '');" value="Uncheck all" />
-    </p>
+        <p>
+            <input type="button" onclick="mark_all(true, 'match-');" value="Check all" />
+            <input type="button" onclick="mark_all(false, 'match-');" value="Uncheck all" />
+        </p>
+
+        <p>The following modifications will me made to all checked matches:</p>
+        <table class="bigform">
+            <tr>
+                <td class="form_left">
+                    <label for="event">Event object</label>
+                </td>
+                <td class="form_right">
+                    <select name="event" id="event">
+                        <option value="nochange" selected>No change</option>
+                        {% for event in events %}
+                        <option value="{{ event.id }}">{{ event }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">
+                    <label for="date">Date</label>
+                </td>
+                <td class="form_right">
+                    <input type="text" class="date" name="date" id="date" value="" />
+                    <script type="text/javascript">
+                        // <![CDATA[  
+                        var opts = {                            
+                            formElements:{"date":"Y-ds-m-ds-d"},
+                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                        };
+                        datePickerController.createDatePicker(opts);
+                        // ]]>
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    <input type="Submit" name="op" value="Modify" />
+                </td>
+            </tr>
+        </table>
+
+        </form>
     {% endif %}
 
     {% endif %}

@@ -39,7 +39,7 @@ def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5*tanh(pi/2/sqrt(3)*(x-loc)/scale)
 
 def filter_active_ratings(queryset):
-    return queryset.filter(decay__lt=4, dev__lt=0.2)
+    return queryset.filter(decay__lt=5, dev__lt=0.2)
 
 def sort_matches(matches, player, add_ratings=False):
     sc_my, sc_op = 0, 0

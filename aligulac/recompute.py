@@ -15,17 +15,15 @@ from django.db.models import Q
 
 pers = Period.objects.filter(Q(needs_recompute=True) | Q(match__treated=False))\
         .filter(start__lte=datetime.date.today()).distinct().order_by('id')
-if not pers.exists():
-    print 'Nothing to do.'
-    sys.exit(0)
+if pers.exists():
+    earliest = pers[0]
+    latest = Period.objects.filter(start__lte=datetime.date.today()).order_by('-id')[0]
 
-earliest = pers[0]
-latest = Period.objects.filter(start__lte=datetime.date.today()).order_by('-id')[0]
+    for i in range(earliest.id, latest.id+1):
+        os.system(PATH_TO_DIR + 'period.py %i' % i)
 
-for i in range(earliest.id, latest.id+1):
-    os.system(PATH_TO_DIR + 'period.py %i' % i)
+    os.system(PATH_TO_DIR + 'domination.py')
 
-os.system(PATH_TO_DIR + 'domination.py')
 os.system(PATH_TO_DIR + 'teamranks.py ak')
 os.system(PATH_TO_DIR + 'teamranks.py pl')
 

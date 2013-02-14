@@ -714,11 +714,11 @@ def records(request):
                     return ret
             return ret
 
-        high = sift(high.order_by('-rat')[0:30])
-        highp = sift(highp.order_by('-rat')[0:30])
-        hight = sift(hight.order_by('-rat')[0:30])
-        highz = sift(highz.order_by('-rat')[0:30])
-        dom = sift(dom.order_by('-rat')[0:30])
+        high = sift(high.order_by('-rat')[0:200])
+        highp = sift(highp.order_by('-rat')[0:200])
+        hight = sift(hight.order_by('-rat')[0:200])
+        highz = sift(highz.order_by('-rat')[0:200])
+        dom = sift(dom.order_by('-rat')[0:200])
 
         base.update({'hightot': high, 'highp': highp, 'hight': hight, 'highz': highz, 'dom': dom})
         return render_to_response('records.html', base)

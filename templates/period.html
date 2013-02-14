@@ -47,7 +47,10 @@ This template shows a rating list for a given period.
         </div>
     </div>
 
-    <p>Return to <a href="/periods/">historical overview</a>.</p>
+    {% if period.is_preview %}
+    <p>This is a <strong>preview</strong> of the next rating list. It will not be finalized until 
+    {{ period.end|date:"F jS" }}.</p>
+    {% endif %}
 
 <div class="table" style="width: 30em;">
     <div class="row">

@@ -13,6 +13,12 @@ dump. Called from aligulac.views.db.
     <h2>Database status</h2>
 
 <div class="table" style="width: 67em;">
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel" style="width: 33.5em;">Last ratings update</div>
+        <div class="rower" style="width: 33.5em;">
+           {{ updated|date:"F jS Y, H:i e" }} (UTC {{ updated|date:"O" }})
+        </div>
+    </div>
     <div class="row">
         <div class="rowel" style="width: 33.5em;">Games</div>
         <div class="rower" style="width: 33.5em;">{{ ngames }}</div>
@@ -22,7 +28,7 @@ dump. Called from aligulac.views.db.
         <div class="rower">{{ nmatches }}</div>
     </div>
     <div class="row">
-        <div class="rowel">Untreated matches from past lists</div>
+        <div class="rowel">Unrated matches</div>
         <div class="rower">{{ nuntreated }} <span class="small">({{ nuntreated|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
@@ -67,7 +73,7 @@ dump. Called from aligulac.views.db.
 <p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
 {% else %}
 <p>You can download a MySQL dump <a href="{{ "aligulac.sql"|static }}">here</a> 
-({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS, Y, H:i e" }} 
+({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS Y, H:i e" }} 
 (UTC {{ modified|date:"O" }})). It is free to use for non-commercial purposes if you credit this website when
 doing so.</p>
 

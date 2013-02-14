@@ -100,6 +100,11 @@ Changes here will mostly be visible on the entire site.
 
                     {% include "ratinglist.html" with localcount=1 rl_pos_arrow=1 %}
 
+                    {% if curp.is_preview %}
+                    <p>The above list is a preview of the next rating list, which will be finalized on 
+                    {{ curp.end|date:"F jS" }}.</p>
+                    {% endif %}
+
                     {% include "blogposts.html" %}
                     {% endblock %}
                 </td>

@@ -37,7 +37,12 @@ This is the page showing the details of a rating adjustment. It's called from ra
 
 {% if matches %}
 {% if treated %}
+{% if period.is_preview %}
+<p>This period started on {{ period.start|date:"F jS, Y" }} and will end on {{ period.end|date:"F jS" }}. The
+numbers given below are projected adjustments and can change before then.</p>
+{% else %}
 <p>This period started on {{ period.start|date:"F jS, Y" }} and ended on {{ period.end|date:"F jS, Y" }}.</p>
+{% endif %}
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">

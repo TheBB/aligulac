@@ -1,14 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max, F, Q
+from django.db.models.signals import pre_save, pre_delete
 from countries import transformations, data
 
 from math import sqrt
+import datetime
 
 class Period(models.Model):
     start = models.DateField('Start date')
     end = models.DateField('End date')
     computed = models.BooleanField(default=False)
+    needs_recompute = models.BooleanField(default=False)
     num_retplayers = models.IntegerField('Returning players')
     num_newplayers = models.IntegerField('New players', default=0)
     num_games = models.IntegerField(default=0)
@@ -18,6 +21,9 @@ class Period(models.Model):
 
     def __unicode__(self):
         return 'Period #' + str(self.id) + ': ' + str(self.start) + ' to ' + str(self.end)
+
+    def is_preview(self):
+        return self.end >= datetime.date.today()
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
@@ -196,6 +202,63 @@ class Match(models.Model):
 
     class Meta:
         verbose_name_plural = 'matches'
+
+    def populate_orig(self):
+        try:
+            self.orig_pla = self.pla
+            self.orig_plb = self.plb
+            self.orig_rca = self.rca
+            self.orig_rcb = self.rcb
+            self.orig_sca = self.sca
+            self.orig_scb = self.scb
+            self.orig_date = self.date
+            self.orig_period = self.period
+        except:
+            self.orig_pla = None
+            self.orig_plb = None
+            self.orig_rca = None
+            self.orig_rcb = None
+            self.orig_sca = None
+            self.orig_scb = None
+            self.orig_date = None
+            self.orig_period = None
+
+    def changed_effect(self):
+        return self.orig_pla != self.pla or self.orig_plb != self.plb or\
+               self.orig_rca != self.rca or self.orig_rcb != self.rcb or\
+               self.orig_sca != self.sca or self.orig_scb != self.scb
+
+    def changed_date(self):
+        return self.orig_date != self.date
+
+    def changed_period(self):
+        return self.orig_period != self.period
+
+    def __init__(self, *args, **kwargs):
+        super(Match, self).__init__(*args, **kwargs)
+        self.populate_orig()
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        if self.changed_date():
+            self.set_period()
+
+        if self.changed_period() or self.changed_effect():
+            try:
+                self.orig_period.needs_recompute = True
+                self.orig_period.save()
+            except:
+                pass
+
+            try:
+                self.period.needs_recompute = True
+                self.period.save()
+            except:
+                pass
+            
+            self.treated = False
+
+        super(Match, self).save(force_insert, force_update, *args, **kwargs)
+        self.populate_orig()
 
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)

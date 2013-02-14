@@ -35,6 +35,7 @@ Could the ratinglist.html template be extended and called from here?
         <div href="/periods/{{ rating.period.id }}" class="row {% cycle 'row2' 'row1' %}">
             <div class="rowe">
                 <a href="/periods/{{ rating.period.id }}/">{{ rating.period.end }}</a>
+                {% if rating.period.is_preview %}*{% endif %}
             </div>
             <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
             <div class="rowe">

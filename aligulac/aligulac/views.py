@@ -9,7 +9,7 @@ from django.core.context_processors import csrf
 from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
-from aligulac.settings import DEBUG
+from aligulac.settings import DEBUG, PATH_TO_DIR
 from ratings.models import Rating, Period, Player, Team, Match
 from ratings.tools import find_player
 
@@ -87,7 +87,7 @@ def db(request):
     nmatches = Match.objects.all().count()
     npartial = Match.objects.exclude(eventobj__isnull=True, event='').count()
     nfull = Match.objects.filter(eventobj__isnull=False).count()
-    nuntreated = Match.objects.filter(treated=False, period__computed=True).count()
+    nuntreated = Match.objects.filter(treated=False).count()
     nplayers = Player.objects.all().count()
     nkoreans = Player.objects.filter(country='KR').count()
     nteams = Team.objects.all().count()
@@ -112,6 +112,8 @@ def db(request):
         stat = os.stat(dumpfile)
         base['megabytes'] = float(stat.st_size)/1048576
         base['modified'] = datetime.fromtimestamp(stat.st_mtime)
+
+    base['updated'] = datetime.fromtimestamp(os.stat(PATH_TO_DIR + 'update').st_mtime)
 
     return render_to_response('db.html', base)
 

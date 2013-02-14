@@ -170,12 +170,6 @@ if __name__ == '__main__':
         print('Previous period #%i not computed. Aborting.' % prev[0].id)
         sys.exit(1)
 
-    # Check that all previous matches are treated
-    matches = Match.objects.filter(period__id__lt=period.id, treated=False).order_by('period__id')
-    if matches.exists():
-        print('There are untreated matches from period #%i. Aborting.' % matches[0].period.id)
-        sys.exit(1)
-
     # Find the previous period if it exists
     try:
         prev = Period.objects.get(id=period.id-1)

@@ -63,7 +63,7 @@ dump. Called from aligulac.views.db.
         <div class="rowel">Top submitters (number of matches)</div>
         <div class="rower">
             {% for s in submitters %}
-            {{ s.0 }} ({{ s.1}}){% if not forloop.last %},{% endif %}
+            {{ s.0.username }} ({{ s.1}}){% if not forloop.last %},{% endif %}
             {% endfor %}
         </div>
     </div>

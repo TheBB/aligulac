@@ -99,7 +99,7 @@ def db(request):
             'nactive': nactive, 'ninactive': ninactive})
 
     submitters = []
-    for u in User.objects.exclude(username='admin'):
+    for u in User.objects.all():
         n = Match.objects.filter(submitter=u).count()
         if n > 0:
             submitters.append((u, n))

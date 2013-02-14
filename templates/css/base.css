@@ -340,11 +340,17 @@ table.results td {
     padding: 0.4em;
 }
 
-/* RESULTS TABLE LAYOUT */
+/* =====================================================================
+ * TABLES
+ * =====================================================================
+ */
 
 table.results {
     width: 67em;
+    border-collapse: collapse;
 }
+
+/* ========== MATCHLIST TABLE ========= */
 
 td.lm_date {
     width: 7em;
@@ -377,4 +383,77 @@ td.lm_rtb {
 td.lm_right {
     width: 5em;
     text-align: right;
+}
+
+/* ========== RATINGLIST TABLE ========= */
+
+td.rl_number {
+    width: 2.5em;
+    text-align: right;
+}
+
+td.rl_icon {
+    width: 1em;
+    text-align: center;
+}
+
+td.rl_arrow {
+    width: 2em;
+    text-align: right;
+}
+
+td.rl_name {
+    width: 18em;
+}
+
+td.rl_rating {
+    width: 9em;
+    text-align: right;
+}
+
+/* ========= FORMS ========= */
+
+table.bigform {
+    width: 67em;
+}
+
+td.form_left {
+    width: 15em;
+    text-align: right;
+    border-style: none dotted none none;
+    border-width: 0.1em;
+    padding-right: 1em;
+}
+
+td.form_right {
+    width: 52em;
+    padding-left: 1em;
+}
+
+td.va_top {
+    vertical-align: top;
+}
+
+textarea {
+    width: 35em;
+}
+
+textarea.wide {
+    width: 50em;
+}
+
+input.text {
+    width: 35em;
+}
+
+input.date {
+    width: 6.5em;
+}
+
+input.player {
+    width: 15em;
+}
+
+select.small {
+    width: 15em;
 }

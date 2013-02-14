@@ -25,13 +25,16 @@ This is the results search function. Called from ratings.views.results_search.
     {% endif %}
 
     <form method="get" action="/results/search/">
-        <input type="hidden" name="op" value="search" />
-    <div class="table" style="width: 50em;">
-        <div class="row">
-            <div class="rowel" style="width: 15em;">Date</div>
-            <div class="rower" style="width: 35em;">
-                between <input type="text" name="after" id="after" style="width: 6.5em;" value="{{ after }}" />
-                and <input type="text" name="before" id="before" style="width: 6.5em;" value="{{ before }}" />
+    <input type="hidden" name="op" value="search" />
+
+    <table class="bigform">
+        <tr>
+            <td class="form_left">
+                <label for="after">Date</label>
+            </td>
+            <td class="form_right">
+                between <input type="text" class="date" name="after"  id="after"  value="{{ after }}"  />
+                and     <input type="text" class="date" name="before" id="before" value="{{ before }}" />
                 inclusive
                 <script type="text/javascript">
                     // <![CDATA[  
@@ -47,36 +50,40 @@ This is the results search function. Called from ratings.views.results_search.
                     datePickerController.createDatePicker(opts2);
                     // ]]>
                 </script>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel" style="vertical-align: top;">Involving players</div>
-            <div class="rower">
-                <textarea name="players" rows="6" style="width: 35em;">{{ pls }}</textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">Event</div>
-            <div class="rower">
-                <input type="text" name="eventtext" style="width: 35em;" value="{{ eventtext }}"/>
-            </div>
-        </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left va_top">
+                <label for="players">Involving players</label>
+            </td>
+            <td class="form_right">
+                <textarea name="players" id="players" rows="6">{{ pls }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                <label for="eventtext">Event</label>
+            </td>
+            <td class="form_right">
+                <input type="text" class="text" id="eventtext" name="eventtext" value="{{ eventtext }}"/>
+            </td>
+        </tr>
         {% if adm %}
-        <div class="row">
-            <div class="rowel"></div>
-            <div class="rower">
+        <tr class="row">
+            <td class="form_left"></td>
+            <td class="form_right">
                 <input type="checkbox" name="unassigned" id="unassigned" value="yes" {% if unassigned %}checked{% endif %} />
                 <label for="unassigned">Only show unassigned matches</label>
-            </div>
-        </div>
+            </td>
+        </tr>
         {% endif %}
-        <div class="row">
-            <div class="rowel"></div>
-            <div class="rower">
+        <tr>
+            <td class="form_left"></td>
+            <td class="form_right">
                 <input type="submit" value="Search" />
-            </div>
-        </div>
-    </div>
+            </td>
+        </tr>
+    </table>
     </form>
 
     {% if not matches %}

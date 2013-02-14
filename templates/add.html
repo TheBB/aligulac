@@ -196,29 +196,35 @@ ratings.submitviews.add_matches.
 
     <form method="post" action="/add/">
     {% csrf_token %}
-    <div class="table" style="width: 65em;">
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right;">Event:</div>
-            <div class="rowe" style="width: 50em;">
-                <input type="text" name="event" style="width: 40em;" value="{{ event }}" />
-            </div>
-        </div>
+    <table class="bigform">
+        <tr>
+            <td class="form_left">
+                Event
+            </td>
+            <td class="form_right">
+                <input type="text" class="text" name="event" value="{{ event }}" />
+            </td>
+        </tr>
         {% if adm %}
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right;">Event object:</div>
-            <div class="rowe" style="width: 50em;">
+        <tr>
+            <td class="form_left">
+                Event object
+            </td>
+            <td class="form_right">
                 <select name="eobj">
                     {% for event in events %}
                     <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
                     {% endfor %}
                 </select>
-            </div>
-        </div>
+            </td>
+        </tr>
         {% endif %}
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right;">Date played:</div>
-            <div class="rowe" style="width: 50em;">
-                <input type="text" name="date" id="date" style="width: 6.5em;" 
+        <tr>
+            <td class="form_left">
+                Date played
+            </td>
+            <td class="form_right">
+                <input type="text" name="date" class="date" id="date"
                         value="{% if date %}{{ date }}{% else %}{% now "Y-m-d" %}{% endif %}" />
                 <script type="text/javascript" src="/js/datepicker.js" /></script>
                 <script type="text/javascript">
@@ -230,57 +236,71 @@ ratings.submitviews.add_matches.
                     datePickerController.createDatePicker(opts);
                     // ]]>
                 </script>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Game:</div>
-            <div class="rowe">
-                <select name="game" style="width: 15em;">
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                Game
+            </td>
+            <td class="form_right">
+                <select name="game" class="small">
                     <option value="WoL"{% ifequal game "WoL" %} selected{% endifequal %}>Wings of Liberty</option>
                     <option value="HotS"{% ifequal game "HotS" %} selected{% endifequal %}>Heart of the Swarm</option>
                 </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Type:</div>
-            <div class="rowe">
-                <select name="type" style="width: 15em;">
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                Type
+            </td>
+            <td class="form_right">
+                <select name="type" class="small">
                     <option value="online"{% ifequal type "online" %} selected{% endifequal %}>Online</option>
                     <option value="offline"{% ifequal type "offline" %} selected{% endifequal %}>Offline</option>
                 </select>
-            </div>
-        </div>
+            </td>
+        </tr>
         {% if not adm %}
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Source:</div>
-            <div class="rowe">
-                <input type="text" name="source" style="width: 40em;" value="{{ source }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Contact:</div>
-            <div class="rowe">
-                <input type="text" name="contact" style="width: 40em;" value="{{ contact }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right; vertical-align: top;">Notes:</div>
-            <div class="rowe" style="width: 50em;">
-                <textarea name="notes" rows="5" style="width: 700px;">{{ notes }}</textarea>
-            </div>
-        </div>
+        <tr>
+            <td class="form_left">
+                Source
+            </td>
+            <td class="form_right">
+                <input type="text" class="text" name="source"value="{{ source }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                Contact
+            </td>
+            <td class="form_right">
+                <input type="text" class="text" name="contact" value="{{ contact }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left va_top">
+                Notes
+            </td>
+            <td class="form_right">
+                <textarea name="notes" class="wide" rows="5">{{ notes }}</textarea>
+            </td>
+        </tr>
         {% endif %}
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right; vertical-align: top;">Matches:</div>
-            <div class="rowe" style="width: 50em;">
-                <textarea name="matches" rows="20" style="width: 700px;">{% if not matches %}Player A-Player B 3-2{% else %}{{ matches }}{% endif %}</textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="width: 15em; text-align: right;"></div>
-            <div class="rowe" style="width: 50em;"><input type="submit" value="Submit" /></div>
-        </div>
-    </div>
+        <tr>
+            <td class="form_left va_top">
+                Matches
+            </td>
+            <td class="form_right">
+                <textarea name="matches" class="wide" rows="20">{% if not matches %}Player A-Player B 3-2{% else %}{{ matches }}{% endif %}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left"></td>
+            <td class="form_right">
+                <input type="submit" value="Submit" />
+            </td>
+        </tr>
+    </table>
     </form>
 
 {% endblock %}

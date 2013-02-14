@@ -15,13 +15,12 @@ matches. It expects a number of "arguments", all prefixed with lm_, to avoid nam
 
 NB! The calling code is responsible for starting and ending the HTML table:
 
-<table class="restable">
+<table class="results">
     {% include "list_matches.html" with .... %}
 </table>
 {% endcomment %}
 
 {% load ratings_extras %}
-
 
 {% if lm_header_event %}
 <tr class="header">
@@ -124,7 +123,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 <img src="{{ m.rca|imgfolder|static }}" alt="{{ m.rc_my }}" class="btm" />
             {% else %}
                 {% if adm %}
-                <input type="text" name="match-{{ m.id }}-pla" style="width: 15em; text-align: right;"
+                <input type="text" class="player" name="match-{{ m.id }}-pla" style="text-align: right;"
                         value="{{ m.pla_string }}" />
                 {% else %}
                 {{ m.pla_string }}
@@ -159,7 +158,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
             {% else %}
                 {% if adm %}
-                <input type="text" name="match-{{ m.id }}-plb" style="width: 15em;" value="{{ m.plb_string }}" />
+                <input type="text" class="player" name="match-{{ m.id }}-plb" value="{{ m.plb_string }}" />
                 {% else %}
                 {{ m.plb_string }}
                 {% endif %}

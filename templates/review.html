@@ -50,39 +50,47 @@ ratings.submitviews.review.
     {% endif %}
 
     {% if groups %}
-    <p>To all the checked submissions, do the following:</p>
+    <p>To all checked submissions, do the following:</p>
 
-    <div class="table">
-        <div class="row">
-            <div class="rowe" style="width: 10em; text-align: right;">Event:</div>
-            <div class="rowe" style="width: 55em;">
-                <input type="text" name="event" style="width: 40em;" value="{{ event }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Event object:</div>
-            <div class="rowe">
-                <select name="eobj">
+    <table class="bigform">
+        <tr>
+            <td class="form_left">
+                <label for="event">Event</label>
+            </td>
+            <td class="form_right">
+                <input type="text" name="event" id="event" style="width: 40em;" value="{{ event }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                <label for="eobj">Event object</label>
+            </td>
+            <td class="form_right">
+                <select name="eobj" id="eobj">
                     {% for event in events %}
                     <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
                     {% endfor %}
                 </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;">Action:</div>
-            <div class="rowe">
-                <select name="act" style="width: 20em;">
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
+                <label for="act">Action</label>
+            </td>
+            <td class="form_right">
+                <select name="act" id="act">
                     <option value="approve">Approve</option>
                     <option value="reject">Reject (delete)</option>
                 </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowe" style="text-align: right;"></div>
-            <div class="rowe"><input type="submit" value="Go" /></div>
-        </div>
-    </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left"></td>
+            <td class="form_right">
+                <input type="submit" value="Go" />
+            </td>
+        </tr>
+    </table>
 
     </form>
     {% endif %}

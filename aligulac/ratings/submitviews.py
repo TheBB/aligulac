@@ -370,7 +370,10 @@ def review(request):
                     m.scb = pm.scb
                     m.rca = pm.rca
                     m.rcb = pm.rcb
-                    m.date = pm.group.date
+                    if request.POST['date'].strip() == '':
+                        m.date = pm.group.date
+                    else:
+                        m.date = request.POST['date']
                     m.event = etext if etext.strip() != '' else pm.group.event
                     m.eventobj = eobj
                     m.submitter = request.user

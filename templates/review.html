@@ -75,6 +75,23 @@ ratings.submitviews.review.
         </tr>
         <tr>
             <td class="form_left">
+                <label for="date">Date</label>
+            </td>
+            <td class="form_right">
+                <input type="text" class="date" name="date" id="date" value="" />
+                <script type="text/javascript">
+                    // <![CDATA[  
+                    var opts = {                            
+                        formElements:{"date":"Y-ds-m-ds-d"},
+                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                    };
+                    datePickerController.createDatePicker(opts);
+                    // ]]>
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">
                 <label for="act">Action</label>
             </td>
             <td class="form_right">

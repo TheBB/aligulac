@@ -42,7 +42,10 @@ def racefull(value):
 register.filter('racefull', racefull)
 
 def pctg(value, arg):
-    return int(round(100*float(value)/(float(value)+float(arg))))
+    if float(value) + float(arg) > 0:
+        return int(round(100*float(value)/(float(value)+float(arg))))
+    else:
+        return 0
 register.filter('pctg', pctg)
 
 def pctg2(value):

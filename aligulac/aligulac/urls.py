@@ -66,3 +66,4 @@ if settings.DEBUG:
                            )
 
 handler404 = 'aligulac.views.h404'
+handler500 = 'aligulac.views.h500'

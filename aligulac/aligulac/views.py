@@ -221,3 +221,8 @@ def h404(request):
     base = base_ctx(request=request)
 
     return HttpResponseNotFound(render_to_string('404.html', base))
+
+def h500(request):
+    base = base_ctx(request=request)
+
+    return HttpResponseNotFound(render_to_string('500.html', base))

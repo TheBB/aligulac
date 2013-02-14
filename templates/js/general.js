@@ -52,7 +52,7 @@ function togvis_span(id)
  */
 function switch_to(id, all)
 {
-    for (i = 0; i < all.length; i++)
+    for (var i = 0; i < all.length; i++)
     {
         if (all[i] == id)
             document.getElementById(all[i]).style.display = 'block';
@@ -75,4 +75,21 @@ function togHTML(id, a, b)
         d.innerHTML = b;
     else
         d.innerHTML = a;
+}
+
+/* ======================================================================
+ * CHECKBOX TOGGLING
+ * ======================================================================
+ */
+
+/* Sets all checkboxes to checked=val. If the prefix argument is nonempty, the name of the checkbox must have
+ * that as prefix.
+ */
+function mark_all(val, prefix)
+{
+    var list = document.getElementsByTagName('input');
+    for (var i = 0; i < list.length; i++)
+        if (list[i].getAttribute('type') == 'checkbox')
+            if (prefix == '' || list[i].name.indexOf(prefix) === 0)
+                list[i].checked = val;
 }

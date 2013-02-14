@@ -29,4 +29,4 @@ os.system(PATH_TO_DIR + 'domination.py')
 os.system(PATH_TO_DIR + 'teamranks.py ak')
 os.system(PATH_TO_DIR + 'teamranks.py pl')
 
-touch(PATH_TO_DIR + 'update')
+os.system('touch ' + PATH_TO_DIR + 'update')

@@ -484,7 +484,7 @@ def results_search(request):
             base['errs'].append('Too many results (%i). Please add restrictions.' % base['count'])
             return render_to_response('results_search.html', base)
 
-        if len(pls) <= 2:
+        if 1 <= len(pls) <= 2:
             base['sort_player'] = pls[0]
             sc_my, sc_op = sort_matches(matches, pls[0], add_ratings=False)
             if len(pls) == 2:

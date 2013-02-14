@@ -258,6 +258,7 @@ if __name__ == '__main__':
     period.num_newplayers = num_newplayers
     period.num_games = num_games
     period.computed = True
+    period.needs_recompute = False
     period.save()
 
     # Write ranks

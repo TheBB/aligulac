@@ -150,7 +150,7 @@ def add_matches(request):
                 # Check for race overrides
                 def get_race(lst):
                     if lst[-1][:2].upper() == 'R:':
-                        r = lst[-1][2:].upper() if list[-1][2:].upper() in 'PTZR' else None
+                        r = lst[-1][2:].upper() if lst[-1][2:].upper() in 'PTZR' else None
                         return r, lst[:-1]
                     else:
                         return None, lst
@@ -245,7 +245,7 @@ def add_matches(request):
 
                 success.append(m)
 
-            except Exception as e:
+            except ValueError as e:
                 failure.append((s, 'Could not parse: ' + e.message))
                 continue
 

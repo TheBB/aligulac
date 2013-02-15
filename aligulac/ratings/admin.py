@@ -47,9 +47,13 @@ class MatchForm(forms.ModelForm):
         self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('-id')
 
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ('date', 'pla', 'sca', 'scb', 'plb', match_period, 'treated', 'event', 'eventobj', 'submitter')
-    list_filter = [('date', DateFieldListFilter)]
+    list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
+    #list_filter = [('date', DateFieldListFilter)]
     form = MatchForm
+
+    def get_res(self, obj):
+        return '%s %i-%i %s' % (str(obj.pla), obj.sca, obj.scb, str(obj.plb))
+    get_res.short_description = 'Result'
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'lft', 'rgt')

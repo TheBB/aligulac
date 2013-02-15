@@ -40,6 +40,9 @@ This is the template for the event manager admin page. It's called from ratings.
     <p>If you experience problems or inconsistencies, the first thing you should do is to open the 
     <a href="/add/misc/">misc</a> page and restore the NSM and event names.</p>
 
+    <p><strong>Naming conventions:</strong> Ro («round of») with capital R and small o, followed immediately by
+    the number. Third place matches should be named exactly that (not «3rd»).</p>
+
     <form method="post" action="/add/events/">
         {% csrf_token %}
         <input type="hidden" name="parent" value="" />

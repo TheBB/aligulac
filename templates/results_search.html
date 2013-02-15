@@ -168,6 +168,30 @@ This is the results search function. Called from ratings.views.results_search.
                 </td>
             </tr>
             <tr>
+                <td class="form_left">
+                    <label for="type">Type</label>
+                </td>
+                <td class="form_right">
+                    <select name="type" id="type">
+                        <option value="nochange" selected>No change</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">
+                    <label for="game">Game version</label>
+                </td>
+                <td class="form_right">
+                    <select name="game" id="game">
+                        <option value="nochange" selected>No change</option>
+                        <option value="WoL">Wings of Liberty</option>
+                        <option value="HotS">Heart of the Swarm</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td class="form_left"></td>
                 <td class="form_right">
                     <input type="Submit" name="op" value="Modify" />

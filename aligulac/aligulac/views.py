@@ -87,6 +87,7 @@ def db(request):
     nmatches = Match.objects.all().count()
     npartial = Match.objects.exclude(eventobj__isnull=True, event='').count()
     nfull = Match.objects.filter(eventobj__isnull=False).count()
+    nuncatalogued = Match.objects.filter(eventobj__isnull=True).count()
     nuntreated = Match.objects.filter(treated=False).count()
     nplayers = Player.objects.all().count()
     nkoreans = Player.objects.filter(country='KR').count()
@@ -95,6 +96,7 @@ def db(request):
     ninactive = Team.objects.filter(active=False).count()
 
     base.update({'ngames': ngames, 'nmatches': nmatches, 'npartial': npartial, 'nfull': nfull, 'nuntreated': nuntreated,\
+            'nuncatalogued': nuncatalogued,\
             'nplayers': nplayers, 'nkoreans': nkoreans, 'nteams': nteams,\
             'nactive': nactive, 'ninactive': ninactive})
 

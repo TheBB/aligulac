@@ -35,9 +35,13 @@ dump. Called from aligulac.views.db.
         <div class="rowel">Matches with event info</div>
         <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg3:nmatches }}%)</span></div>
     </div>
-    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+    <div class="row">
         <div class="rowel">Matches with event object</div>
         <div class="rower">{{ nfull }} <span class="small">({{ nfull|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Uncatalogued matches</div>
+        <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
         <div class="rowel">Players</div>

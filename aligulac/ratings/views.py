@@ -58,11 +58,11 @@ def period(request, period_id, page='1'):
     bestvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
             .extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
     specvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
-            .extra(select={'d':'rating_vp/dev_vp'}).order_by('-d')[0]
+            .extra(select={'d':'rating_vp/dev_vp*rating'}).order_by('-d')[0]
     specvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
-            .extra(select={'d':'rating_vt/dev_vt'}).order_by('-d')[0]
+            .extra(select={'d':'rating_vt/dev_vt*rating'}).order_by('-d')[0]
     specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
-            .extra(select={'d':'rating_vz/dev_vz'}).order_by('-d')[0]
+            .extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
 
     entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)
 

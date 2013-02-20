@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max, F, Q
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import pre_delete
 from countries import transformations, data
 
 from math import sqrt
@@ -281,6 +281,15 @@ class Match(models.Model):
     
     def get_loser_score(self):
         return min(self.sca, self.scb)
+
+def mark_period(sender, **kwargs):
+    obj = kwargs['instance']
+    try:
+        obj.period.needs_recompute = True
+        obj.period.save()
+    except:
+        pass
+pre_delete.connect(mark_period, sender=Match)
 
 class PreMatchGroup(models.Model):
     date = models.DateField()

@@ -27,7 +27,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <td colspan="5">
         {% if lm_list.0.eventobj %} ▸
             {% for p in lm_list.0.eventobj.get_path %}
-            <a href="/results/events/{{ p.id }}/">{{ p.name }}</a>
+            <a href="/results/events/{{ p.id }}-{{ p.fullname|urlfilter }}/">{{ p.name }}</a>
             {% endfor %}
         {% elif lm_list.0.group %}
             {{ lm_list.0.group.event }}{% if lm_adm %} [{{ lm_list.count }} matches]{% endif %}
@@ -112,7 +112,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <td class="lm_pla">
         {% if lm_sorted %}
             {% if m.sc_my > m.sc_op %}<strong>{% endif %}
-            <a href="/players/{{ lm_player.id }}/">{{ lm_player.tag }}</a>
+                <a href="/players/{{ lm_player.id }}-{{ lm_player.tag|urlfilter }}/">{{ lm_player.tag }}</a>
             {% if lm_player.country != "" %}
                 <img src="{{ lm_player.country|lower|imgfolder:"flags"|static }}" alt="{{ lm_player.country }}" />
             {% endif %}
@@ -121,7 +121,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% else %}
             {% if m.sca > m.scb %}<strong>{% endif %}
             {% if m.pla %}
-                <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
+                <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
                 {% if m.pla.country != "" %}
                     <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ lm_player.country }}" />
                 {% endif %}
@@ -151,7 +151,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% if m.opp.country != "" %}
                 <img src="{{ m.opp.country|lower|imgfolder:"flags"|static }}" alt="{{ m.opp.country }}" />
             {% endif %}
-            <a href="/players/{{ m.opp.id }}/">{{ m.opp.tag }}</a>
+            <a href="/players/{{ m.opp.id }}-{{ m.opp.tag|urlfilter }}/">{{ m.opp.tag }}</a>
             {% if m.sc_op > m.sc_my %}</strong>{% endif %}
         {% else %}
             {% if m.scb > m.sca %}<strong>{% endif %}
@@ -160,7 +160,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 {% if m.plb.country != "" %}
                     <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
                 {% endif %}
-                <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
+                <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
             {% else %}
                 {% if adm %}
                 <input type="text" class="player" name="match-{{ m.id }}-plb" value="{{ m.plb_string }}" />

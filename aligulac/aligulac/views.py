@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from aligulac.settings import DEBUG, PATH_TO_DIR
 from ratings.models import Rating, Period, Player, Team, Match
 from ratings.tools import find_player
+from ratings.templatetags.ratings_extras import urlfilter
 
 from blog.models import Post
 
@@ -68,15 +69,17 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         if type(context) == Player:
             rating = Rating.objects.filter(player=context, comp_rat__isnull=False).order_by('-period')
 
-            base['submenu'] += [None, ('%s:' % context.tag, '/players/%i' % context.id)]
+            base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
+
+            base['submenu'] += [None, ('%s:' % context.tag, base_url)]
 
             if rating.exists():
-                base['submenu'].append(('Rating history', '/players/%i/historical/' % context.id))
+                base['submenu'].append(('Rating history', base_url + 'historical/'))
 
-            base['submenu'].append(('Match history', '/players/%i/results/' % context.id))
+            base['submenu'].append(('Match history', base_url + 'results/'))
 
             if rating.exists():
-                base['submenu'].append(('Adjustments', '/players/%i/period/%i' % (context.id, rating[0].period.id)))
+                base['submenu'].append(('Adjustments', base_url + 'period/%i' % rating[0].period.id))
 
     return base
 
@@ -141,9 +144,9 @@ def search(request, q=''):
     teams = Team.objects.filter(Q(name__icontains=q) | Q(alias__name__icontains=q)).distinct()
 
     if players.count() == 1 and teams.count() == 0:
-        return redirect('/players/' + str(players[0].id))
+        return redirect('/players/%i/' % players[0].id)
     elif players.count() == 0 and teams.count() == 1:
-        return redirect('/teams/' + str(teams[0].id))
+        return redirect('/teams/%i/' % teams[0].id)
 
     base.update({'players': players, 'query': q, 'teams': teams})
 

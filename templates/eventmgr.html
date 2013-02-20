@@ -62,7 +62,8 @@ This is the template for the event manager admin page. It's called from ratings.
             {% else %}
                 {{ node.1 }}
             {% endif %}
-            (<a href="/admin/ratings/event/{{ node.0 }}/">a</a>, <a href="/results/events/{{ node.0 }}/">e</a>)
+            (<a href="/admin/ratings/event/{{ node.0 }}/">a</a>, 
+            <a href="/results/events/{{ node.0 }}-{{ node.5|urlfilter }}/">e</a>)
         </div>
         <div class="rowe" style="text-align: right;">
             <div id="link-{{ node.0 }}" style="display: block;">

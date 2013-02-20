@@ -192,3 +192,9 @@ def mscore(value):
         exp += i * value.mwins[i]
     return (value, value._nplayers-1-exp)
 register.filter('mscore', mscore)
+
+def urlfilter(value):
+    value = value.replace(' ', '-')
+    value = value.replace('/', '')
+    return value
+register.filter('urlfilter', urlfilter)

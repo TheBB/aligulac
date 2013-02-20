@@ -42,7 +42,7 @@ def filter_active_ratings(queryset):
     return queryset.filter(decay__lt=5, dev__lt=0.2)
 
 def sort_matches(matches, player, add_ratings=False):
-    sc_my, sc_op = 0, 0
+    sc_my, sc_op, msc_my, msc_op = 0, 0, 0, 0
 
     for m in matches:
         if m.pla == player:
@@ -56,6 +56,10 @@ def sort_matches(matches, player, add_ratings=False):
 
         sc_my += m.sc_my
         sc_op += m.sc_op
+        if m.sc_my > m.sc_op:
+            msc_my += 1
+        elif m.sc_op > m.sc_my:
+            msc_op += 1
 
         if add_ratings:
             try:
@@ -74,7 +78,7 @@ def sort_matches(matches, player, add_ratings=False):
                 m.rt_my = 0
                 m.dev_my = sqrt(2)*RATINGS_INIT_DEV
 
-    return sc_my, sc_op
+    return sc_my, sc_op, msc_my, msc_op
 
 def group_by_events(matches):
     ret = []

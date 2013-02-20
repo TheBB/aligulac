@@ -21,7 +21,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
     <div class="table numtable" style="width: 67em;">
         <div class="rowh2">
             <div class="rowe" style="width: 26em; text-align: right;">
-                ({{ r1|ratscale }}) <a href="/players/{{ p1.id }}/">{{ p1.tag }}</a>
+                ({{ r1|ratscale }}) <a href="/players/{{ p1.id }}-{{ p1.tag|urlfilter }}/">{{ p1.tag }}</a>
             </div>
             <div class="rowe" style="width: 5em;">
                 <img src="{{ p1.country|lower|imgfolder:"flags"|static }}" alt="{{ p1.country }}" />
@@ -33,7 +33,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
                 <img src="{{ p2.country|lower|imgfolder:"flags"|static }}" alt="{{ p2.country }}" />
             </div>
             <div class="rowe" style="width: 26em;">
-                <a href="/players/{{ p2.id }}/">{{ p2.tag }}</a> ({{ r2|ratscale }})
+                <a href="/players/{{ p2.id }}-{{ p2.tag|urlfilter }}/">{{ p2.tag }}</a> ({{ r2|ratscale }})
             </div>
         </div>
         {% for r in res %}

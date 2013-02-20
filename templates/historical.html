@@ -12,7 +12,7 @@ This shows the rating history of a player. It's called from ratings.views.player
 
 <h2>{{ player.tag }}: Rating history</h2>
 
-<p>Return to <a href="/players/{{ player.id }}/">player page</a>.</p>
+<p>Return to <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">player page</a>.</p>
 
 {% comment %}
 Could the ratinglist.html template be extended and called from here?
@@ -82,7 +82,7 @@ Could the ratinglist.html template be extended and called from here?
             </div>
             <div class="rowe" style="text-align: right;">
                 {% if rating.decay == 0 %}
-                    <a href="/players/{{ player.id }}/period/{{ rating.period.id }}/">→</a>
+                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ rating.period.id }}/">→</a>
                 {% endif %}
             </div>
         </div>

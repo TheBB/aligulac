@@ -47,7 +47,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% if team %}
             <div class="row">
                 <div class="rowel">Team</div>
-                <div class="rower"><a href="/teams/{{ team.id }}/">{{ team.name }}</a></div>
+                <div class="rower"><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></div>
             </div>
             {% endif %}
             <div class="row">
@@ -214,7 +214,7 @@ This is the template for the main player page, called from ratings.views.player.
             pic.src = "/players/{{ player.id }}/plot/?before=" + before + "&after=" + after;
 
             var a = document.getElementById("plotlink");
-            a.href = "/players/{{ player.id }}/plot/?big&before=" + before + "&after=" + after;
+            a.href = "/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big&before=" + before + "&after=" + after;
         }
         function resetRange()
         {
@@ -222,12 +222,12 @@ This is the template for the main player page, called from ratings.views.player.
             pic.src = "/players/{{ player.id }}/plot/";
 
             var a = document.getElementById("plotlink");
-            a.href = "/players/{{ player.id }}/plot/?big";
+            a.href = "/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big";
         }
         // ]]>
     </script>
 <div style="text-align: center;">
-    <a href="/players/{{ player.id }}/plot/?big" id="plotlink">
+    <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big" id="plotlink">
         <img src="/players/{{ player.id }}/plot/" alt="history graph" class="longplot" id="plot" />
     </a>
 </div>
@@ -259,10 +259,10 @@ This is the template for the main player page, called from ratings.views.player.
 <h3>More information</h3>
 <ul>
 {% if rating %}
-<li><a href="/players/{{ player.id }}/historical/">Rating history</a></li>
-<li><a href="/players/{{ player.id }}/period/{{ recentchange.period.id }}/">Recent rating adjustments</a></li>
+<li><a href="/players/{{ player.id }}-{{ player.tag }}/historical/">Rating history</a></li>
+<li><a href="/players/{{ player.id }}-{{ player.tag }}/period/{{ recentchange.period.id }}/">Recent rating adjustments</a></li>
 {% endif %}
-<li><a href="/players/{{ player.id }}/results/">Match history</a></li>
+<li><a href="/players/{{ player.id }}-{{ player.tag }}/results/">Match history</a></li>
 </ul>
 
 {% if matches %}
@@ -284,7 +284,7 @@ This is the template for the main player page, called from ratings.views.player.
     {% for tm in teammems %}
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe">
-            <a href="/teams/{{ tm.team.id }}/">{{ tm.team.name }}</a>
+            <a href="/teams/{{ tm.team.id }}-{{ tm.team.name|urlfilter }}/">{{ tm.team.name }}</a>
         </div>
         <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
         <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>

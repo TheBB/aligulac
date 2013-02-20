@@ -490,7 +490,7 @@ def results_search(request):
 
         if 1 <= len(pls) <= 2:
             base['sort_player'] = pls[0]
-            sc_my, sc_op = sort_matches(matches, pls[0], add_ratings=False)
+            sc_my, sc_op, ta, tb = sort_matches(matches, pls[0], add_ratings=False)
             if len(pls) == 2:
                 base.update({'sc_my': sc_my, 'sc_op': sc_op, 'left': pls[0], 'right': pls[1]})
 
@@ -555,19 +555,52 @@ def events(request, event_id=None):
 
 def player_results(request, player_id):
     player = get_object_or_404(Player, id=int(player_id))
-    matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('-date', '-eventobj__lft', 'event', '-id')\
-            .select_related('pla__rating').select_related('plb__rating').select_related('period')
+    matches = Match.objects.filter(Q(pla=player) | Q(plb=player))
 
     base = base_ctx('Ranking', 'Match history', request, context=player)
+
+    if 'race' in request.GET:
+        q = None
+        for r in request.GET['race']:
+            try:
+                q |= Q(pla=player, rcb=r)
+                q |= Q(plb=player, rca=r)
+            except:
+                q = Q(pla=player, rcb=r)
+                q |= Q(plb=player, rca=r)
+        matches = matches.filter(q)
+        base['race'] = request.GET['race']
+    else:
+        base['race'] = 'ptzr'
+
+    if 'nats' in request.GET:
+        if request.GET['nats'] == 'foreigners':
+            matches = matches.exclude(Q(pla=player, plb__country='KR') | Q(plb=player, pla__country='KR'))
+        elif request.GET['nats'] == 'kr':
+            matches = matches.filter(Q(pla=player, plb__country='KR') | Q(plb=player, pla__country='KR'))
+        base['nats'] = request.GET['nats']
+    else:
+        base['nats'] = 'all'
+
+    if 'bo' in request.GET:
+        if request.GET['bo'] == '3':
+            matches = matches.filter(Q(sca__gte=2) | Q(scb__gte=2))
+        elif request.GET['bo'] == '5':
+            matches = matches.filter(Q(sca__gte=3) | Q(scb__gte=3))
+        base['bo'] = request.GET['bo']
+    else:
+        base['bo'] = 'all'
+    
+    matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
+    matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
 
     prev_date = None
     prev_event = 'qwerty'
     prev_eventobj = -1
 
-    sort_matches(matches, player, add_ratings=True)
-    groups = group_by_events(matches)
+    base['sc_my'], base['sc_op'], base['msc_my'], base['msc_op'] = sort_matches(matches, player, add_ratings=True)
 
-    base['groups'] = groups
+    base['matches'] = matches
     base['player'] = player
     return render_to_response('player_results.html', base)
 

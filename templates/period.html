@@ -56,49 +56,49 @@ This template shows a rating list for a given period.
     <div class="row">
         <div class="rowel" style="width: 15em;">Best overall</div>
         <div class="rower" style="width: 15em;">
-            <a href="/players/{{best.player.id}}/">{{ best.player.tag }}</a>
+            <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{ best.player.tag }}</a>
             <span class="small">({{ best.rating|ratscale }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Best vs. Protoss</div>
         <div class="rower">
-            <a href="/players/{{bestvp.player.id}}/">{{ bestvp.player.tag }}</a>
+            <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{ bestvp.player.tag }}</a>
             <span class="small">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Best vs. Terran</div>
         <div class="rower">
-            <a href="/players/{{bestvt.player.id}}/">{{ bestvt.player.tag }}</a>
+            <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{ bestvt.player.tag }}</a>
             <span class="small">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Best vs. Zerg</div>
         <div class="rower">
-            <a href="/players/{{bestvz.player.id}}/">{{ bestvz.player.tag }}</a>
+            <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{ bestvz.player.tag }}</a>
             <span class="small">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Most specialised vP</div>
         <div class="rower">
-            <a href="/players/{{specvp.player.id}}/">{{ specvp.player.tag }}</a>
+            <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{ specvp.player.tag }}</a>
             <span class="small">(+{{ specvp.rating_vp|ratscaled }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Most specialised vT</div>
         <div class="rower">
-            <a href="/players/{{specvt.player.id}}/">{{ specvt.player.tag }}</a>
+            <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{ specvt.player.tag }}</a>
             <span class="small">(+{{ specvt.rating_vt|ratscaled }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Most specialised vZ</div>
         <div class="rower">
-            <a href="/players/{{specvz.player.id}}/">{{ specvz.player.tag }}</a>
+            <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{ specvz.player.tag }}</a>
             <span class="small">(+{{ specvz.rating_vz|ratscaled }})</span>
         </div>
     </div>
@@ -109,13 +109,13 @@ This template shows a rating list for a given period.
     <input type="hidden" name="sort" value="{{ sort }}" />
     <p>Show races:
     <select name="race">
-        <option value="ptz" {% if race == "ptzrs" %}selected{% endif %}>All</option>
+        <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>All</option>
         <option value="p" {% if race == "p" %}selected{% endif %}>Protoss</option>
         <option value="t" {% if race == "t" %}selected{% endif %}>Terran</option>
         <option value="z" {% if race == "z" %}selected{% endif %}>Zerg</option>
-        <option value="tz" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
-        <option value="pz" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
-        <option value="pt" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
+        <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
+        <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
+        <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
     </select>
     and nationalities:
     <select name="nats">

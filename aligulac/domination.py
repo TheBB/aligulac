@@ -15,7 +15,7 @@ from django.db.models import F, Avg
 from ratings.models import Period, Player, Rating
 from ratings.tools import filter_active_ratings
 
-limit = 10              # The benchmark position on the rating list. Above here, players will gain points.
+limit =  7              # The benchmark position on the rating list. Above here, players will gain points.
                         # Below, players will lose points.
 
 mean = False            # Set to True to use the mean of the top N players as a benchmark, False to just

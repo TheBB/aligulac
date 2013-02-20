@@ -11,9 +11,37 @@ This is the template for the match history of a player. It's called from ratings
 {% block content %}
 <h2>{{ player.tag }} match history</h2>
 
+<form method="get" action="/players/{{ player.id }}/results/">
+    <p>Filter by opponent race:
+    <select name="race">
+        <option value="ptzr"        {% if race == "ptzr" %}selected{% endif %}>All</option>
+        <option value="p"           {% if race == "p" %}selected{% endif %}>Protoss</option>
+        <option value="t"           {% if race == "t" %}selected{% endif %}>Terran</option>
+        <option value="z"           {% if race == "z" %}selected{% endif %}>Zerg</option>
+        <option value="tzr"         {% if race == "tzr" %}selected{% endif %}>No Protoss</option>
+        <option value="pzr"         {% if race == "pzr" %}selected{% endif %}>No Terran</option>
+        <option value="ptr"         {% if race == "ptr" %}selected{% endif %}>No Zerg</option>
+    </select>
+    nationality:
+    <select name="nats">
+        <option value="all"         {% if nats == "all" %}selected{% endif %}>All</option>
+        <option value="foreigners"  {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
+        <option value="kr"          {% if nats == "kr" %}selected{% endif %}>Koreans</option>
+    </select>
+    and match format:
+    <select name="bo">
+        <option value="all"         {% if bo == "all" %}selected{% endif %}>All</option>
+        <option value="3"           {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
+        <option value="5"           {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
+    </select>
+    <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<p>In these games, {{ player.tag }} is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg:sc_op }}%) in games
+and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg:msc_op }}%) in matches.</p>
+
 <table class="results">
-{% for g in groups %}
-{% include "list_matches.html" with lm_list=g lm_show_date=1 lm_adm=0 lm_header_event=1 lm_sorted=1 lm_player=player %}
-{% endfor %}
+{% include "list_matches.html" with lm_list=matches lm_show_date=1 lm_adm=0 lm_header_info=1 lm_sorted=1 lm_player=player %}
 </table>
 {% endblock %}

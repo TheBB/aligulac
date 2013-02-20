@@ -23,7 +23,7 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe" style="text-align: right;"> {{ forloop.counter }}.</div>
         <div class="rowe">
-            <a href="/teams/{{ team.id }}">{{ team.name }}</a>
+            <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}">{{ team.name }}</a>
         </div>
         <div class="rowe" style="text-align: right;">
             {% if team.scoreak > 0.0 %}
@@ -42,6 +42,6 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
 
 {% if inactive %}
 <h2>Disbanded teams</h2>
-<p>{% for team in inactive %}<a href="/teams/{{ team.id }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<p>{% for team in inactive %}<a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 {% endif %}
 {% endblock %}

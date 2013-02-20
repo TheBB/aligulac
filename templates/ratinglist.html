@@ -67,7 +67,7 @@ arguments:
             {% endif %}
         </td>
         <td class="rl_name">
-            <a href="/players/{{ entry.player.id }}/">{{ entry.player.tag }}</a>
+            <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/">{{ entry.player.tag }}</a>
         </td>
         <td class="rl_icon">
             {% if entry.player.country != "" %}
@@ -119,7 +119,7 @@ arguments:
         </td>
         <td class="rl_arrow">
             {% if entry.decay == 0 %}
-                <a href="/players/{{ entry.player.id }}/period/{{ entry.period.id }}/">→</a>
+                <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/period/{{ entry.period.id }}/">→</a>
             {% endif %}
         </td>
     </tr>

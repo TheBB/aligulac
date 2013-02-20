@@ -15,10 +15,10 @@ ratings.views.events.
     <p><a href="/results/events/">Root</a> →
     {% for e in path %}
         {% if forloop.last %}{{ e.name }}{% else %}
-        <a href="/results/events/{{ e.id }}/">{{ e.name }}</a> →{% endif %}
+        <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a> →{% endif %}
     {% endfor %}
     {% if adm %}
-        [<a href="/admin/ratings/event/{{ event.id }}/">admin</a>]
+        [<a href="/admin/ratings/event/{{ event.id }}-{{ e.fullname|urlfilter }}/">admin</a>]
     {% endif %}
 
     {% if children or siblings %}
@@ -39,7 +39,7 @@ ratings.views.events.
             </form>
         {% else %}
         {% for e in siblings %}
-            <a href="/results/events/{{ e.id }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
+            <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
         {% endif %}
         </div>
@@ -61,7 +61,7 @@ ratings.views.events.
             </form>
         {% else %}
         {% for e in children %}
-            <a href="/results/events/{{ e.id }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
+            <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
         {% endif %}
         </div>

@@ -10,18 +10,18 @@ urlpatterns = patterns('',
     url(r'^periods/$', 'ratings.views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.views.period'),
 
-    url(r'^players/(?P<player_id>\d+)/$', 'ratings.views.player'),
-    url(r'^players/(?P<player_id>\d+)/period/(?P<period_id>\d+)/$', 'ratings.views.rating_details'),
-    url(r'^players/(?P<player_id>\d+)/plot/$', 'ratings.views.player_plot'),
-    url(r'^players/(?P<player_id>\d+)/results/$', 'ratings.views.player_results'),
-    url(r'^players/(?P<player_id>\d+)/historical/$', 'ratings.views.player_historical'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/$', 'ratings.views.player'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/period/(?P<period_id>\d+)/$', 'ratings.views.rating_details'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/plot/$', 'ratings.views.player_plot'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/results/$', 'ratings.views.player_results'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/historical/$', 'ratings.views.player_historical'),
 
     url(r'^teams/$', 'ratings.teamviews.teams'),
-    url(r'^teams/(?P<team_id>\d+)/$', 'ratings.teamviews.team'),
+    url(r'^teams/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.teamviews.team'),
 
     url(r'^results/$', 'ratings.views.results'),
     url(r'^results/events/$', 'ratings.views.events'),
-    url(r'^results/events/(?P<event_id>\d+)/$', 'ratings.views.events'),
+    url(r'^results/events/(?P<event_id>\d+)(-[^ /]*)?/$', 'ratings.views.events'),
     url(r'^results/search/$', 'ratings.views.results_search'),
 
     url(r'^records/$', 'ratings.views.records'),
@@ -48,13 +48,15 @@ urlpatterns = patterns('',
     url(r'^changepwd/$', 'aligulac.views.changepwd'),
 
     url(r'^api/search/$', 'aligulac.views.api_search'),
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     url(r'^404/$', 'aligulac.views.h404'),
+    url(r'^500/$', 'aligulac.views.h500'),
 
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to',\
             {'url': 'http://aligulac.com:81/al/favicon.ico'}),
+
     url(r'^admin/', include(admin.site.urls)),
+    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )
 
 if settings.DEBUG:

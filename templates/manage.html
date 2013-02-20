@@ -16,13 +16,13 @@ This is the page for miscellaneous administrative functions. Called from ratings
     <h3>Merge players</h3>
     {% if merge_conf %}
         <p><span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
-            <a href="/players/{{ source.id }}/">{{ source.tag }}</a>
+            <a href="/players/{{ source.id }}-{{ source.tag|urlfilter }}/">{{ source.tag }}</a>
             {% if source.country != "" %}
                 <img src="{{ source.country|lower|imgfolder:"flags"|static }}" alt="{{ source.country }}" />
             {% endif %}
             <img src="{{ source.race|imgfolder|static }}" alt="{{ source.race }}" class="btm" />
             into
-            <a href="/players/{{ target.id }}/">{{ target.tag }}</a>
+            <a href="/players/{{ target.id }}-{{ target.tag|urlfilter }}/">{{ target.tag }}</a>
             {% if target.country != "" %}
                 <img src="{{ target.country|lower|imgfolder:"flags"|static }}" alt="{{ target.country }}" />
             {% endif %}

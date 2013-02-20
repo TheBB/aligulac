@@ -42,7 +42,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
 <div class="row {% cycle 'row2' 'row1' %}">
     <div class="rowe" style="text-align: right;">{{ forloop.counter }}.</div>
     <div class="rowe">
-        <a href="/players/{{ h.id }}/">{{ h.tag }}</a>
+        <a href="/players/{{ h.id }}-{{ h.tag|urlfilter }}/">{{ h.tag }}</a>
     </div>
     <div class="rowe">
         {% if h.country != "" %}

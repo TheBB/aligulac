@@ -30,7 +30,7 @@ This is the prediction page for single elimination brackets. It's called from ra
                 {{ forloop.counter }}.
             </div>
             <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}/">{{ p.dbpl.tag }}</a>
+                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
             </div>
             <div class="rowe" style="width: 1em;">
                 {% if p.dbpl.country != "" %}
@@ -67,7 +67,7 @@ This is the prediction page for single elimination brackets. It's called from ra
                 {{ forloop.counter }}.
             </div>
             <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}/">{{ p.dbpl.tag }}</a>
+                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
             </div>
             <div class="rowe" style="width: 1em;">
                 {% if p.dbpl.country != "" %}
@@ -154,7 +154,7 @@ This is the prediction page for single elimination brackets. It's called from ra
         <div class="rowe" style="width: 28.5em; text-align: right;">
             {% if m.canmod %}
             {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
-            <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
+            <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
             {% if m.pla.country != "" %}
                 <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
             {% endif %}
@@ -186,7 +186,7 @@ This is the prediction page for single elimination brackets. It's called from ra
             {% if m.plb.country != "" %}
                 <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
             {% endif %}
-            <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
+            <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
             {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
             {% endif %}
         </div>

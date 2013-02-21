@@ -18,7 +18,7 @@ ratings.views.events.
         <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a> →{% endif %}
     {% endfor %}
     {% if adm %}
-        [<a href="/admin/ratings/event/{{ event.id }}-{{ e.fullname|urlfilter }}/">admin</a>]
+        [<a href="/admin/ratings/event/{{ event.id }}/">admin</a>]
     {% endif %}
 
     {% if children or siblings %}

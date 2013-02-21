@@ -114,7 +114,7 @@ class Player(models.Model):
     for code in data.ccn_to_cca2.values():
         countries.append((code, transformations.cc_to_cn(code)))
     countries.sort(key=lambda a: a[1])
-    country = models.CharField('Country', max_length=2, choices=countries, blank=True, null=True)
+    country = models.CharField('Country', max_length=2, choices=countries, blank=True, null=False, default='')
 
     birthday = models.DateField(blank=True, null=True)
 

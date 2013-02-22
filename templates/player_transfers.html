@@ -10,8 +10,8 @@
 		<td class="rl_name" style="width: 15em;">Player</td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
-        <td class="rl_name" style="width: 10em;"></td>
-		<td class="rl_name" style="width: 26em;">Team</td>
+        <td class="rl_name" style="width: 12em; text-align: right;"></td>
+		<td class="rl_name" style="width: 24em;">Team</td>
 		<td class="lm_date" style="width: 14em;">Date</td>
 	</tr>
 	{% for trade in trades %}
@@ -27,10 +27,11 @@
     <td class="rl_icon">
         <img src="{{ trade.player.race|imgfolder|static }}" alt="{{ trade.player.race }}" class="btm" />
     </td>
-    <td></td>
-    <td>
+    <td style="text-align: right;">
         {% if not trade.start or trade.end > trade.start %}left
         {% elif not trade.end or trade.start > trade.end %}joined{% endif %} 
+    </td>
+    <td>
         <a href="/teams/{{ trade.team.id }}-{{ trade.team.name|urlfilter }}/">{{ trade.team.name }}</a></td>
 	<td class="lm_date">{{ trade.cdate }}</td>
 	</tr>

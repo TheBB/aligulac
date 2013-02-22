@@ -555,24 +555,28 @@ def events(request, event_id=None):
         base['ngames'] = 0
 
     # Matchup wins and losses
+    nti = lambda x: 0 if x is None else x
     qseta = matches.filter(rca='P', rcb='T').aggregate(Sum('sca'), Sum('scb'))
     qsetb = matches.filter(rcb='P', rca='T').aggregate(Sum('sca'), Sum('scb'))
-    base['pvt_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
-    base['pvt_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+    base['pvt_wins'] = nti(qseta['sca__sum']) + nti(qsetb['scb__sum'])
+    base['pvt_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
 
     qseta = matches.filter(rca='P', rcb='Z').aggregate(Sum('sca'), Sum('scb'))
     qsetb = matches.filter(rcb='P', rca='Z').aggregate(Sum('sca'), Sum('scb'))
-    base['pvz_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
-    base['pvz_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+    base['pvz_wins'] = nti(qseta['sca__sum']) + nti(qsetb['scb__sum'])
+    base['pvz_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
 
     qseta = matches.filter(rca='T', rcb='Z').aggregate(Sum('sca'), Sum('scb'))
     qsetb = matches.filter(rcb='T', rca='Z').aggregate(Sum('sca'), Sum('scb'))
-    base['tvz_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
-    base['tvz_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+    base['tvz_wins'] = nti(qseta['sca__sum']) + nti(qsetb['scb__sum'])
+    base['tvz_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
 
     # Dates
-    base['earliest'] = matches.order_by('date')[0].date
-    base['latest'] = matches.order_by('-date')[0].date
+    try:
+        base['earliest'] = matches.order_by('date')[0].date
+        base['latest'] = matches.order_by('-date')[0].date
+    except:
+        pass
 
     # This is too slow. What to do?
     # base['nplayers'] = Player.objects.filter(

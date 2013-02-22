@@ -17,7 +17,11 @@ ratings.views.events.
         <div class="iboxtable">
             <div class="row">
                 <div class="rowel" style="width: 7em;">Dates</div>
-                <div class="rower" style="width: 18em;">{{ earliest }} to {{ latest }}</div>
+                <div class="rower" style="width: 18em;">
+                    {% if earliest and latest %}
+                    {{ earliest }} to {{ latest }}
+                    {% endif %}
+                </div>
             </div>
             <div class="row">
                 <div class="rowel">Games</div>
@@ -30,22 +34,19 @@ ratings.views.events.
             <div class="row">
                 <div class="rowel">PvT</div>
                 <div class="rower">
-                    {{ pvt_wins }}–{{ pvt_loss }}
-                    ({{ pvt_wins|pctg:pvt_loss }}%)
+                    {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg:pvt_loss }}%)
                 </div>
             </div>
             <div class="row">
                 <div class="rowel">PvZ</div>
                 <div class="rower">
-                    {{ pvz_wins }}–{{ pvz_loss }}
-                    ({{ pvz_wins|pctg:pvz_loss }}%)
+                    {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg:pvz_loss }}%)
                 </div>
             </div>
             <div class="row">
                 <div class="rowel">TvZ</div>
                 <div class="rower">
-                    {{ tvz_wins }}–{{ tvz_loss }}
-                    ({{ tvz_wins|pctg:tvz_loss }}%)
+                    {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
         </div>

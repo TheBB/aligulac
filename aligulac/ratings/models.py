@@ -136,6 +136,8 @@ class Player(models.Model):
     dom_start = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_start')
     dom_end = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_end')
 
+    goodynum = models.IntegerField(blank=True, null=True, default=None)
+
     def __unicode__(self):
         if self.country != None and self.country != '':
             return self.tag + ' (' + self.race + ', ' + self.country + ')'

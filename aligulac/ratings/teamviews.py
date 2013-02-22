@@ -13,7 +13,7 @@ from django.core.context_processors import csrf
 from countries import transformations, data
 
 def teams(request):
-    base = base_ctx('Teams', request=request)
+    base = base_ctx('Teams', 'Ranking', request)
 
     base['teams'] = Team.objects.filter(active=True)
     if 'sort' in request.GET and request.GET['sort'] == 'pl':
@@ -26,7 +26,7 @@ def teams(request):
     return render_to_response('teams.html', base)
 
 def team(request, team_id):
-    base = base_ctx('Teams', request=request)
+    base = base_ctx('Teams', None, request)
 
     team = get_object_or_404(Team, id=team_id)
     base['team'] = team

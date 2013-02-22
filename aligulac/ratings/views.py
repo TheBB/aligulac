@@ -816,7 +816,7 @@ def records(request):
         return render_to_response('hof.html', base)
 
 def player_transfers(request):
-	base = base_ctx()
+	base = base_ctx('Teams', 'Transfers', request)
 	
 	trades = TeamMembership.objects.filter(Q(start__isnull=False) | Q(end__isnull=False))
 	trades = trades.extra(select={'cdate':'CASE\

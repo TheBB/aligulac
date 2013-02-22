@@ -51,6 +51,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                            ('Events', '/add/events/'),\
                            ('Integrity', '/add/integrity/'),\
                            ('Misc', '/add/misc/')]
+    elif section == 'Teams':
+        base['submenu'] = [('Ranking', '/teams/'),\
+                           ('Transfers', '/player_transfers/')]
     elif section == 'Ranking':
         base['submenu'] = [('Current', '/periods/%i' % curp.id),\
                            ('History', '/periods/')]

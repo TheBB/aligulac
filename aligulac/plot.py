@@ -23,7 +23,7 @@ table_l = [0]*num_slots
 games = 0
 
 num = 0
-for m in Match.objects.all():
+for m in Match.objects.filter(pla__country='KR', plb__country='KR', date__gte='2012-01-01'):
     num += 1
     if num % 1000 == 0:
         print num

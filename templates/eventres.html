@@ -12,6 +12,45 @@ ratings.views.events.
 {% block content %}
     <h2>{{ event }}</h2>
 
+    <div class="ibox" style="margin-left: 2em;">
+        <div class="iboxh">Quick numbers</div>
+        <div class="iboxtable">
+            <div class="row">
+                <div class="rowel" style="width: 7em;">Dates</div>
+                <div class="rower" style="width: 18em;">{{ earliest }} to {{ latest }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Games</div>
+                <div class="rower">{{ ngames }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Matches</div>
+                <div class="rower">{{ nmatches }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">PvT</div>
+                <div class="rower">
+                    {{ pvt_wins }}–{{ pvt_loss }}
+                    ({{ pvt_wins|pctg:pvt_loss }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">PvZ</div>
+                <div class="rower">
+                    {{ pvz_wins }}–{{ pvz_loss }}
+                    ({{ pvz_wins|pctg:pvz_loss }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">TvZ</div>
+                <div class="rower">
+                    {{ tvz_wins }}–{{ tvz_loss }}
+                    ({{ tvz_wins|pctg:tvz_loss }}%)
+                </div>
+            </div>
+        </div>
+    </div>
+
     <p><a href="/results/events/">Root</a> →
     {% for e in path %}
         {% if forloop.last %}{{ e.name }}{% else %}
@@ -22,12 +61,12 @@ ratings.views.events.
     {% endif %}
 
     {% if children or siblings %}
-    <div class="table" style="width: 50em;">
+    <div class="table" style="width: 35em;">
 
     {% if siblings %}
     <div class="row">
         <div class="rowel" style="width: 7em;">Same level:</div>
-        <div class="rower" style="width: 43em;">
+        <div class="rower" style="width: 28em;">
         {% if siblings.count > 9 %}
             <form method="get" action="/results/events/">
             <select name="goto">
@@ -48,8 +87,8 @@ ratings.views.events.
 
     {% if children %}
     <div class="row">
-        <div class="rowel" style="width: 7em;">Next level:</div>
-        <div class="rower" style="width: 43em;">
+        <div class="rowel">Next level:</div>
+        <div class="rower">
         {% if children.count > 9 %}
             <form method="get" action="/results/events/">
             <select name="goto">

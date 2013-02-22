@@ -503,6 +503,7 @@ def results_search(request):
     return render_to_response('results_search.html', base)
 
 def events(request, event_id=None):
+    # Redirect to proper URL if there's a ?goto=... present
     if 'goto' in request.GET:
         return redirect('/results/events/' + request.GET['goto'])
 
@@ -511,6 +512,7 @@ def events(request, event_id=None):
     try:
         event = Event.objects.get(id=int(event_id))
     except:
+        # This is executed for invalid event IDs or the root table
         ind_bigs = collect(Event.objects.filter(parent__isnull=True, big=True, category='individual').\
                 select_related('event').order_by('lft'), 2)
         ind_smalls = Event.objects.filter(parent__isnull=True, big=False, category='individual').\
@@ -526,21 +528,65 @@ def events(request, event_id=None):
         freq_smalls = Event.objects.filter(parent__isnull=True, big=False, category='frequent').\
                 select_related('event').order_by('name')
 
-        base.update({'ind_bigs': ind_bigs, 'ind_smalls': ind_smalls, 'team_bigs': team_bigs, 'team_smalls': team_smalls,\
-                'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
+        base.update({'ind_bigs': ind_bigs,   'ind_smalls': ind_smalls,\
+                     'team_bigs': team_bigs, 'team_smalls': team_smalls,\
+                     'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
         return render_to_response('events.html', base)
 
+    # Get parent, ancestors and siblings
     base['event'] = event
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
     base['children'] = Event.objects.filter(parent=event).order_by('lft')
     if event.parent != None:
-        base['siblings'] = Event.objects.filter(parent=event.parent).exclude(id=event.id).order_by('lft')
+        base['siblings'] = event.parent.event_set.exclude(id=event.id).order_by('lft')
 
+    # Number of matches (set event to big if too large)
+    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
+    if matches.count() > 200 and not event.big:
+        event.big = True
+        event.save()
+
+    # Statistics
+    base['nmatches'] = matches.count()
+    if base['nmatches'] > 0:
+        qset = matches.aggregate(Sum('sca'), Sum('scb'))
+        base['ngames'] = qset['sca__sum'] + qset['scb__sum']
+    else:
+        base['ngames'] = 0
+
+    # Matchup wins and losses
+    qseta = matches.filter(rca='P', rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    qsetb = matches.filter(rcb='P', rca='T').aggregate(Sum('sca'), Sum('scb'))
+    base['pvt_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
+    base['pvt_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+
+    qseta = matches.filter(rca='P', rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    qsetb = matches.filter(rcb='P', rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['pvz_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
+    base['pvz_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+
+    qseta = matches.filter(rca='T', rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    qsetb = matches.filter(rcb='T', rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['tvz_wins'] = qseta['sca__sum'] + qsetb['scb__sum']
+    base['tvz_loss'] = qsetb['sca__sum'] + qseta['scb__sum']
+
+    # Dates
+    base['earliest'] = matches.order_by('date')[0].date
+    base['latest'] = matches.order_by('-date')[0].date
+
+    # This is too slow. What to do?
+    # base['nplayers'] = Player.objects.filter(
+    #         Q(match_pla__eventobj__lft__gte=event.lft, match_pla__eventobj__rgt__lte=event.rgt)\
+    #       | Q(match_plb__eventobj__lft__gte=event.lft, match_plb__eventobj__rgt__lte=event.rgt))\
+    #         .distinct().count()
+
+    # Match list
     subtree = Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)
     if event.closed:
         subtree = subtree.order_by('lft')
     else:
         subtree = subtree.order_by('-lft')
+
     matches = []
     for e in subtree:
         if event.big and len(matches) == 20:

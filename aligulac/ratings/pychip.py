@@ -30,7 +30,7 @@
 #
 
 import numpy as N
-import pylab as P
+#import pylab as P
 import scipy.interpolate as interpolate
 
 #=========================================================
@@ -79,7 +79,7 @@ def x_is_okay(x, xvec):
         print "x_is_okay()"
         print "Certain 'xvec' values are beyond the upper end of 'x'"
         print "x_max = ", x[-1]
-        indices = P.compress(check, range(m))
+        indices = N.compress(check, range(m))
         print "out-of-range xvec's = ", xvec[indices]
         print "out-of-range xvec indices = ", indices
         return False
@@ -91,7 +91,7 @@ def x_is_okay(x, xvec):
         print "x_is_okay()"
         print "Certain 'xvec' values are beyond the lower end of 'x'"
         print "x_min = ", x[0]
-        indices = P.compress(check, range(m))
+        indices = N.compress(check, range(m))
         print "out-of-range xvec's = ", xvec[indices]
         print "out-of-range xvec indices = ", indices
         return False
@@ -278,74 +278,3 @@ def CubicHermiteSpline(x, y, x_new):
     y_new = (h00 * y0) + (h10 * h * m0) + (h01 * y1) + (h11 * h * m1)
 
     return y_new
-
-#==============================================================
-def main():
-
-    ############################################################
-    # Sine wave test
-    ############################################################
-
-    # Create a example vector containing a sine wave.
-    x = N.arange(30.0)/10.
-    y = N.sin(x)
-
-    # Interpolate the data above to the grid defined by "xvec"
-    xvec = N.arange(250.)/100.
-
-    # Initialize the interpolator slopes
-    m = pchip_init(x,y)
-
-    # Call the monotonic piece-wise Hermite cubic interpolator
-    yvec2 = pchip_eval(x, y, m, xvec)
-
-    P.figure(1)
-    P.plot(x,y, 'ro')
-    P.title("pchip() Sin test code")
-
-    # Plot the interpolated points
-    P.plot(xvec, yvec2, 'b')
-
-    #########################################################################
-    # Step function test...
-    #########################################################################
-
-    P.figure(2)
-    P.title("pchip() step function test")
-
-    # Create a step function (will demonstrate monotonicity)
-    x = N.arange(7.0) - 3.0
-    y = N.array([-1.0, -1,-1,0,1,1,1])
-
-    # Interpolate using monotonic piecewise Hermite cubic spline
-    xvec = N.arange(599.)/100. - 3.0
-
-    # Create the pchip slopes slopes and then interpolate
-    m    = pchip_init(x,y)
-    yvec = pchip_eval(x, y, m, xvec)
-
-    # Call the SCIPY cubic spline interpolator for comparison
-    function = interpolate.interp1d(x, y, kind='cubic')
-    yvec2    = function(xvec)
-
-    # Non-montonic cubic Hermite spline interpolator using
-    # Catmul-Rom method for computing slopes...
-    yvec3 = []
-    for xx in xvec:
-        yvec3.append(CubicHermiteSpline(x,y,xx))
-    yvec3 = N.array(yvec3)
-
-    # Plot the results
-    P.plot(x,    y,     'ro')
-    P.plot(xvec, yvec,  'b')
-    P.plot(xvec, yvec2, 'k')
-    P.plot(xvec, yvec3, 'g')
-    P.xlabel("X")
-    P.ylabel("Y")
-    P.title("Comparing pypchip() vs. Scipy interp1d() vs. non-monotonic CHS")
-    legends = ["Data", "pypchip()", "interp1d", "CHS"]
-    P.legend(legends, loc="upper left")
-
-    P.show()
-
-###################################################################

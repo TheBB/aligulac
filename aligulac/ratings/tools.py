@@ -43,7 +43,7 @@ def filter_active_ratings(queryset):
 
 def sort_matches(matches, player, add_ratings=False):
     sc_my, sc_op, msc_my, msc_op = 0, 0, 0, 0
-
+    
     for m in matches:
         if m.pla == player:
             m.sc_my, m.sc_op = m.sca, m.scb

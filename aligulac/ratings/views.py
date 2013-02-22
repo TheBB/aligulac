@@ -814,3 +814,19 @@ def records(request):
         base['high'] = Player.objects.filter(dom_val__isnull=False, dom_start__isnull=False,\
                 dom_end__isnull=False, dom_val__gt=0).order_by('-dom_val')
         return render_to_response('hof.html', base)
+
+def player_transfers(request):
+	base = base_ctx()
+	
+	trades = TeamMembership.objects.filter(Q(start__isnull=False) | Q(end__isnull=False))
+	trades = trades.extra(select={'cdate':'CASE\
+											WHEN start IS NULL THEN end\
+											WHEN end IS NULL THEN start\
+											WHEN start > end THEN start\
+											ELSE end\
+											END'})
+	trades = trades.order_by('-cdate')[0:25]
+
+	base["trades"] = trades
+	
+	return render_to_response('player_transfers.html', base)

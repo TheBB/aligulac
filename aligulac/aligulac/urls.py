@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/results/$', 'ratings.views.player_results'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/historical/$', 'ratings.views.player_historical'),
 
+    url(r'^player_transfers/', 'ratings.views.player_transfers'),
+
     url(r'^teams/$', 'ratings.teamviews.teams'),
     url(r'^teams/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.teamviews.team'),
 

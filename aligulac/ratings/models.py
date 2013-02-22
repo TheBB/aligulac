@@ -163,6 +163,9 @@ class TeamMembership(models.Model):
     end = models.DateField('Date left', blank=True, null=True)
     current = models.BooleanField(default=True, null=False)
     playing = models.BooleanField(default=True, null=False)
+	
+    def __unicode__(self):
+        return 'Player: ' + self.player.tag + ' Team: ' + self.team.name + ' (' + str(self.start) + ' - ' + str(self.end) + ')'
 
 class Alias(models.Model):
     name = models.CharField(max_length=100)

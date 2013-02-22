@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% load ratings_extras %}
+
+{% block title %}Recent player transfers{% endblock %}
+
+{% block content %}
+<h2>Recent player transfers</h2>
+<table class="results">
+	<tr class="header">
+		<td class="lm_date">Player</td>
+		<td class="lm_date">Team</td>
+		<td class="lm_date">Date</td>
+	</tr>
+	{% for trade in trades %}
+	<tr class="nonheader {% cycle 'row2' 'row1' %}">
+	<td><a href="/players/{{ trade.player.id }}-{{ trade.player.tag|urlfilter }}/">{{ trade.player.tag }}</a> <img src="{{ trade.player.country|lower|imgfolder:"flags"|static }}" alt="{{ trade.player.country }}" /> <img src="{{ trade.player.race|imgfolder|static }}" alt="{{ trade.player.race }}" class="btm" /></td>
+	<td>{% if not trade.start or trade.end > trade.start %}left{% elif not trade.end or trade.start > trade.end %}joined{% endif %} <a href="/teams/{{ trade.team.id }}/">{{ trade.team.name }}</a></td>
+	<td>{{ trade.cdate }}</td>
+	</td></tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

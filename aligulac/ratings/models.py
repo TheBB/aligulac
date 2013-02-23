@@ -62,6 +62,20 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
+    def add_rounds_to_childs(self):
+        Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
+
+    def add_events_to_parents(self):
+        Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+
+    def change_type(self, type):
+        self.type = type
+        self.save()
+        if type == 'event' or type == 'round':
+            self.add_rounds_to_childs()
+        if type == 'event' or type == 'category':
+            self.add_events_to_parents()
+
     def add_child(self, name, type):
         new = Event(name=name, parent=self)
         if Event.objects.filter(parent=self).exists():
@@ -74,6 +88,10 @@ class Event(models.Model):
         new.type = type
         new.update_name()
         new.save()
+        if type == 'event' or type == 'round':
+            new.add_rounds_to_childs()
+        if type == 'event' or type == 'category':
+            self.add_events_to_parents()
         return new
 
     @staticmethod
@@ -84,6 +102,10 @@ class Event(models.Model):
         new.type = type
         new.update_name()
         new.save()
+        if type == 'event' or type == 'round':
+            new.add_rounds_to_childs()
+        if type == 'event' or type == 'category':
+            self.add_events_to_parents()
         return new
 
     def close(self):

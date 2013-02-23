@@ -508,7 +508,8 @@ def events(request, event_id=None):
         return redirect('/results/events/' + request.GET['goto'])
 
     base = base_ctx('Results', 'By Event', request)
-
+    base.update(csrf(request))
+	
     try:
         event = Event.objects.get(id=int(event_id))
     except:
@@ -600,6 +601,11 @@ def events(request, event_id=None):
             matches.append(mset)
     base['matches'] = matches
     base['subtree'] = subtree
+
+    if request.POST:
+        if request.POST['op'] == 'Add':
+            type = request.POST['type']
+            event.change_type(type)
 
     return render_to_response('eventres.html', base)
 

@@ -32,6 +32,8 @@ for i in range(earliest.id, latest.id+1):
     os.system(PATH_TO_DIR + 'period.py %i' % i)
 
 if not 'debug' in sys.argv:
+    os.system(PATH_TO_DIR + 'smoothing.py')
+
     os.system(PATH_TO_DIR + 'domination.py')
 
     os.system(PATH_TO_DIR + 'teamranks.py ak')
@@ -46,4 +48,3 @@ if not 'debug' in sys.argv:
     while Player.objects.filter(Q(match_pla__plb__goodynum=g)|Q(match_plb__pla__goodynum=g))\
                         .filter(goodynum__isnull=True).distinct().update(goodynum=g+1) > 0:
         g += 1
-

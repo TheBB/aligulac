@@ -346,26 +346,43 @@ class Rating(models.Model):
     period = models.ForeignKey(Period)
     player = models.ForeignKey(Player)
 
+    # Standard rating numbers
     rating = models.FloatField()
     rating_vp = models.FloatField()
     rating_vt = models.FloatField()
     rating_vz = models.FloatField()
 
+    # Standard rating deviations
     dev = models.FloatField()
     dev_vp = models.FloatField()
     dev_vt = models.FloatField()
     dev_vz = models.FloatField()
 
+    # Computed performance ratings
     comp_rat = models.FloatField(null=True, blank=True)
     comp_rat_vp = models.FloatField(null=True, blank=True)
     comp_rat_vt = models.FloatField(null=True, blank=True)
     comp_rat_vz = models.FloatField(null=True, blank=True)
 
+    # Computed performance rating deviations
     comp_dev = models.FloatField(null=True, blank=True)
     comp_dev_vp = models.FloatField(null=True, blank=True)
     comp_dev_vt = models.FloatField(null=True, blank=True)
     comp_dev_vz = models.FloatField(null=True, blank=True)
 
+    # Backwards filtered rating numbers
+    bf_rating = models.FloatField()
+    bf_rating_vp = models.FloatField()
+    bf_rating_vt = models.FloatField()
+    bf_rating_vz = models.FloatField()
+
+    # Backwards filtered rating deviations
+    bf_dev = models.FloatField(null=True, blank=True)
+    bf_dev_vp = models.FloatField(null=True, blank=True)
+    bf_dev_vt = models.FloatField(null=True, blank=True)
+    bf_dev_vz = models.FloatField(null=True, blank=True)
+
+    # Ranks among all players (if player is active)
     position = models.IntegerField()
     position_vp = models.IntegerField()
     position_vt = models.IntegerField()
@@ -373,7 +390,6 @@ class Rating(models.Model):
 
     decay = models.IntegerField(default=0)
     domination = models.FloatField(null=True, blank=True)
-    #prev = models.ForeignKey('Rating', related_name='prev_rating', null=True, blank=True)
 
     def get_prev(self):
         try:

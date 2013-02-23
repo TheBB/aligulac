@@ -318,12 +318,12 @@ def player_plot(request, player_id):
 
     if len(ratings) > 0:
         t = [r.period.end.toordinal() for r in ratings]
-        rtg = [1000*(1.0+r.rating) for r in ratings]
-        rtgp = [1000*(1.0+r.rating+r.dev) for r in ratings]
-        rtgm = [1000*(1.0+r.rating-r.dev) for r in ratings]
-        rvp = [1000*(1.0+r.rating+r.rating_vp) for r in ratings]
-        rvt = [1000*(1.0+r.rating+r.rating_vt) for r in ratings]
-        rvz = [1000*(1.0+r.rating+r.rating_vz) for r in ratings]
+        rtg = [1000*(1.0+r.bf_rating) for r in ratings]
+        rtgp = [1000*(1.0+r.bf_rating+1.96*r.bf_dev) for r in ratings]
+        rtgm = [1000*(1.0+r.bf_rating-1.96*r.bf_dev) for r in ratings]
+        rvp = [1000*(1.0+r.bf_rating+r.bf_rating_vp) for r in ratings]
+        rvt = [1000*(1.0+r.bf_rating+r.bf_rating_vt) for r in ratings]
+        rvz = [1000*(1.0+r.bf_rating+r.bf_rating_vz) for r in ratings]
 
         newt = linspace(t[0], t[-1], 7*len(t))
         rtgnew = pchip(array(t), array(rtg), array(newt))
@@ -338,7 +338,7 @@ def player_plot(request, player_id):
         ax.plot_date(t[:-1], rvtnew[:-1], 'b--', lw=1)
         ax.plot_date(t[:-1], rvznew[:-1], 'r--', lw=1)
         ax.fill_between(t[:-1], rtgnewm[:-1], rtgnewp[:-1], facecolor='#dddddd', edgecolor='#bbbbbb')
-        ax.plot_date(t[:-1], rtgnew[:-1], 'k', lw=1.3)
+        ax.plot_date(t[:-1], rtgnew[:-1], 'k', lw=1.5)
     
         ax.set_xlim(t[0], t[-2])
         btm = min(rtg+rvp+rvt+rvz)-200

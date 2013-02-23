@@ -27,9 +27,17 @@ dump. Called from aligulac.views.db.
         <div class="rowel">Matches</div>
         <div class="rower">{{ nmatches }}</div>
     </div>
-    <div class="row">
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Unrated matches</div>
         <div class="rower">{{ nuntreated }} <span class="small">({{ nuntreated|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Wings of Liberty</div>
+        <div class="rower">{{ nwol }} <span class="small">({{ nwol|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Heart of the Swarm</div>
+        <div class="rower">{{ nhots }} <span class="small">({{ nhots|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
         <div class="rowel">Matches with event info</div>

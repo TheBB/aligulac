@@ -91,20 +91,26 @@ def db(request):
 
     ngames = Match.objects.all().aggregate(Sum('sca'))['sca__sum'] + Match.objects.all().aggregate(Sum('scb'))['scb__sum']
     nmatches = Match.objects.all().count()
+    nuntreated = Match.objects.filter(treated=False).count()
+
+    nwol = Match.objects.filter(game='WoL').count()
+    nhots = Match.objects.filter(game='HotS').count()
+
     npartial = Match.objects.exclude(eventobj__isnull=True, event='').count()
     nfull = Match.objects.filter(eventobj__isnull=False).count()
     nuncatalogued = Match.objects.filter(eventobj__isnull=True).count()
-    nuntreated = Match.objects.filter(treated=False).count()
+
     nplayers = Player.objects.all().count()
     nkoreans = Player.objects.filter(country='KR').count()
     nteams = Team.objects.all().count()
     nactive = Team.objects.filter(active=True).count()
     ninactive = Team.objects.filter(active=False).count()
 
-    base.update({'ngames': ngames, 'nmatches': nmatches, 'npartial': npartial, 'nfull': nfull, 'nuntreated': nuntreated,\
-            'nuncatalogued': nuncatalogued,\
-            'nplayers': nplayers, 'nkoreans': nkoreans, 'nteams': nteams,\
-            'nactive': nactive, 'ninactive': ninactive})
+    base.update({'ngames': ngames, 'nmatches': nmatches, 'nuntreated': nuntreated,\
+                 'nwol': nwol, 'nhots': nhots,\
+                 'npartial': npartial, 'nfull': nfull, 'nuncatalogued': nuncatalogued,\
+                 'nplayers': nplayers, 'nkoreans': nkoreans,\
+                 'nteams': nteams, 'nactive': nactive, 'ninactive': ninactive})
 
     submitters = []
     for u in User.objects.all():

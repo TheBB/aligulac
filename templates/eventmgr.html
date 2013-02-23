@@ -116,9 +116,9 @@ This is the template for the event manager admin page. It's called from ratings.
                                 {% csrf_token %}
                                 <input type="hidden" name="parent" value="{{node.0}}" />
                                 <input type="text" id="inp-{{node.0}}" name="name" style="width: 25em;" /><br>
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Category" />Category
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Event" checked/>Event
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Round" />Round<br>
+								<input type="radio" id="inp-{{node.0}}" name="type" value="Category" {% if node.6 == "Category" %}checked{% endif %} />Category
+								<input type="radio" id="inp-{{node.0}}" name="type" value="Event" />Event
+								<input type="radio" id="inp-{{node.0}}" name="type" value="Round" {% if node.6 == "Event" or node.6 == "Round" %} checked {% endif %} />Round<br>
                                 <input type="submit" name="op" value="Add" />
                             </form>
                         </div>

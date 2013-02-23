@@ -415,12 +415,14 @@ def manage_events(request):
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))
                 for q in request.POST['name'].strip().split(','):
-                    parent.add_child(q.strip())
+                    type = request.POST['type']
+                    parent.add_child(q.strip(), type)
             except:
                 for q in request.POST['name'].strip().split(','):
                     if q.strip() == '':
                         continue
-                    Event.add_root(q.strip())
+                    type = request.POST['type']
+                    Event.add_root(q.strip(), type)
         elif request.POST['op'] == 'Close':
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))

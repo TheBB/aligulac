@@ -539,7 +539,8 @@ def events(request, event_id=None):
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
     base['children'] = Event.objects.filter(parent=event).order_by('lft')
     if event.parent != None:
-        base['siblings'] = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        base['siblings'] = siblings
 
     # Number of matches (set event to big if too large)
     matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
@@ -606,6 +607,9 @@ def events(request, event_id=None):
         if request.POST['op'] == 'Add':
             type = request.POST['type']
             event.change_type(type)
+            if 'siblings' in request.POST.keys():
+                for sibling in siblings:
+                    sibling.change_type(type)
 
     return render_to_response('eventres.html', base)
 

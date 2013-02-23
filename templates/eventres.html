@@ -123,7 +123,8 @@ ratings.views.events.
 		{% csrf_token %}
 		<input type="radio" name="type" value="category" />Category
 		<input type="radio" name="type" value="event" />Event
-		<input type="radio" name="type" value="round" />Round
+		<input type="radio" name="type" value="round" />Round<br>
+		<input type="checkbox" name="siblings" value="siblings" />Apply to all events on the same level
 		<input type="submit" name="op" value="Add" />
 	</form>
 	{% endif %}

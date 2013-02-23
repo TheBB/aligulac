@@ -371,16 +371,16 @@ class Rating(models.Model):
     comp_dev_vz = models.FloatField(null=True, blank=True)
 
     # Backwards filtered rating numbers
-    bf_rating = models.FloatField()
-    bf_rating_vp = models.FloatField()
-    bf_rating_vt = models.FloatField()
-    bf_rating_vz = models.FloatField()
+    bf_rating = models.FloatField(default=0)
+    bf_rating_vp = models.FloatField(default=0)
+    bf_rating_vt = models.FloatField(default=0)
+    bf_rating_vz = models.FloatField(default=0)
 
     # Backwards filtered rating deviations
-    bf_dev = models.FloatField(null=True, blank=True)
-    bf_dev_vp = models.FloatField(null=True, blank=True)
-    bf_dev_vt = models.FloatField(null=True, blank=True)
-    bf_dev_vz = models.FloatField(null=True, blank=True)
+    bf_dev = models.FloatField(null=True, blank=True, default=1)
+    bf_dev_vp = models.FloatField(null=True, blank=True, default=1)
+    bf_dev_vt = models.FloatField(null=True, blank=True, default=1)
+    bf_dev_vz = models.FloatField(null=True, blank=True, default=1)
 
     # Ranks among all players (if player is active)
     position = models.IntegerField()

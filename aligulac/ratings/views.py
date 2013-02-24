@@ -542,6 +542,29 @@ def events(request, event_id=None):
         siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
         base['siblings'] = siblings
 
+    # Make modifications if neccessary
+    if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
+        if request.POST['type'] != 'nochange':
+            event.change_type(request.POST['type'])
+            if 'siblings' in request.POST.keys() and siblings:
+                for sibling in siblings:
+                    sibling.change_type(request.POST['type'])
+
+        num = 0
+        if request.POST['date'].strip() != '' or request.POST['offline'] != 'nochange'\
+                or request.POST['game'] != 'nochange':
+            for match in matches:
+                if request.POST['date'].strip() != '':
+                    match.date = request.POST['date']
+                if request.POST['offline'] != 'nochange':
+                    match.offline = (request.POST['offline'] == 'offline')
+                if request.POST['game'] != 'nochange':
+                    match.game = request.POST['game']
+                match.save()
+                num += 1
+
+            base['message'] = 'Modified %i matches.' % num
+
     # Number of matches (set event to big if too large)
     matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
     if matches.count() > 200 and not event.big:
@@ -619,25 +642,6 @@ def events(request, event_id=None):
             matchesArray.append(mset)
     base['matches'] = matchesArray
     base['subtree'] = subtree
-
-    if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
-        if request.POST['type'] != 'nochange':
-            event.change_type(request.POST['type'])
-            if 'siblings' in request.POST.keys() and siblings:
-                for sibling in siblings:
-                    sibling.change_type(request.POST['type'])
-        num = 0
-        for match in matches:
-            if request.POST['date'].strip() != '':
-                match.date = request.POST['date']
-            if request.POST['offline'] != 'nochange':
-                match.offline = (request.POST['offline'] == 'offline')
-            if request.POST['game'] != 'nochange':
-                match.game = request.POST['game']
-            match.save()
-            num += 1
-
-        base['message'] = 'Modified %i matches.' % num
 
     return render_to_response('eventres.html', base)
 

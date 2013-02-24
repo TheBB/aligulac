@@ -227,8 +227,8 @@ if __name__ == '__main__':
             rating.decay = cp.prev_rating_obj.decay + 1
 
         # Set the actual ratings
-        rating.set_rating(cp.new_rating)
-        rating.set_dev(cp.new_dev)
+        rating.set_rating(cp.new_rating, write_bf=True)
+        rating.set_dev(cp.new_dev, write_bf=True)
         rating.set_comp_rating(cp.comp_rating)
         rating.set_comp_dev(cp.comp_dev)
 

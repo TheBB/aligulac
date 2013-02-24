@@ -625,7 +625,7 @@ def events(request, event_id=None):
         for match in matches:
             if request.POST['type'] != 'nochange':
                 event.change_type(request.POST['type'])
-                if 'siblings' in request.POST.keys():
+                if 'siblings' in request.POST.keys() and siblings:
                     for sibling in siblings:
                         sibling.change_type(type)
             if request.POST['date'].strip() != '':

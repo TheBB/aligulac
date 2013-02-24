@@ -119,12 +119,12 @@ This is the template for the event manager admin page. It's called from ratings.
                                 {% csrf_token %}
                                 <input type="hidden" name="parent" value="{{node.0}}" />
                                 <input type="text" id="inp-{{node.0}}" name="name" style="width: 25em;" /><br>
-                                <input type="radio" id="inp-{{node.0}}-category" name="type" value="category" {% if node.6 == 'category' %}checked{% endif %}/>
+                                <input type="radio" id="inp-{{node.0}}-category" name="type" value="category"/>
                                 <label for="inp-{{node.0}}-category">Category</label>
-                                <input type="radio" id="inp-{{node.0}}-event" name="type" value="event" checked/>
+                                <input type="radio" id="inp-{{node.0}}-event" name="type" value="event" {% if node.6 == 'category' %}checked{% endif %}/>
                                 <label for="inp-{{node.0}}-event">Event</label>
-                                <input type="radio" id="inp-{{node.0}}-round" name="type" value="round" />
-                                <label for="inp-{{node.0}}-round" {% if node.6 == 'event' or node.6 == 'round' %}checked {% endif %}>Round</label>
+                                <input type="radio" id="inp-{{node.0}}-round" name="type" value="round" {% if node.6 == 'event' or node.6 == 'round' %}checked{% endif %}/>
+                                <label for="inp-{{node.0}}-round">Round</label>
                                 <input type="submit" name="op" value="Add" />
                             </form>
                         </div>

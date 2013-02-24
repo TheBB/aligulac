@@ -34,7 +34,7 @@ This is the subroutine for printing a record list, used by records.html.
     </div>
     <div class="rowe"></div>
     <div class="rowe">
-        <a href="/periods/{{ h.period.id }}-{{ h.player.tag|urlfilter }}/">{{ h.period.end|date:"F jS, Y" }}</a>
+        <a href="/periods/{{ h.period.id }}/">{{ h.period.end|date:"F jS, Y" }}</a>
     </div>
     <div class="rowe" style="text-align: right;">
         <a href="/players/{{ h.player.id }}-{{ h.player.tag|urlfilter }}/period/{{ h.period.id }}/">→</a>

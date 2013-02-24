@@ -542,6 +542,12 @@ def events(request, event_id=None):
         siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
         base['siblings'] = siblings
 
+    # Number of matches (set event to big if too large)
+    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
+    if matches.count() > 200 and not event.big:
+        event.big = True
+        event.save()
+    
     # Make modifications if neccessary
     if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
         if request.POST['type'] != 'nochange':
@@ -550,27 +556,16 @@ def events(request, event_id=None):
                 for sibling in siblings:
                     sibling.change_type(request.POST['type'])
 
-        num = 0
-        if request.POST['date'].strip() != '' or request.POST['offline'] != 'nochange'\
-                or request.POST['game'] != 'nochange':
-            for match in matches:
-                if request.POST['date'].strip() != '':
-                    match.date = request.POST['date']
-                if request.POST['offline'] != 'nochange':
-                    match.offline = (request.POST['offline'] == 'offline')
-                if request.POST['game'] != 'nochange':
-                    match.game = request.POST['game']
-                match.save()
-                num += 1
+        if request.POST['date'].strip() != '':
+            matches.update(date=request.POST['date'])
+            base['message'] = 'Modified all matches.'
+        if request.POST['offline'] != 'nochange':
+            matches.update(offline=(request.POST['offline'] == 'offline'))
+            base['message'] = 'Modified all matches.'
+        if request.POST['game'] != 'nochange':
+            matches.update(game=request.POST['game'])
+            base['message'] = 'Modified all matches.'
 
-            base['message'] = 'Modified %i matches.' % num
-
-    # Number of matches (set event to big if too large)
-    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
-    if matches.count() > 200 and not event.big:
-        event.big = True
-        event.save()
-    
     # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:
         base['game'] = matches[0].game

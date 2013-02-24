@@ -23,6 +23,18 @@ ratings.views.events.
                     {% endif %}
                 </div>
             </div>
+            {% if game %}
+            <div class="row">
+                <div class="rowel">Game</div>
+                <div class="rower">{{ game }}</div>
+            </div>
+            {% endif %}
+            {% if offline != None %}
+            <div class="row">
+                <div class="rowel">On/Offline</div>
+                <div class="rower">{{ offline|yesno:"Offline,Online" }} </div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="rowel">Games</div>
                 <div class="rower">{{ ngames }}</div>

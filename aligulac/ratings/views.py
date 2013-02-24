@@ -547,6 +547,20 @@ def events(request, event_id=None):
     if matches.count() > 200 and not event.big:
         event.big = True
         event.save()
+    
+    # Determine WoL/HotS and Online/Offline
+    if matches.values("game").distinct().count() == 1:
+        base['game'] = matches[0].game
+        if base['game'] == 'WoL':
+            base['game'] = 'Wings of Liberty'
+        elif base['game'] == 'HotS':
+            base['game'] = 'Heart of the Swarm'
+        #elif base['game'] = 'LotV':
+            #base['game'] = 'Legacy of the Void'
+
+    base['offline'] = None
+    if matches.values("offline").distinct().count() == 1:
+        base['offline'] = matches[0].offline
 
     # Statistics
     base['nmatches'] = matches.count()

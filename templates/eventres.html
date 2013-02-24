@@ -13,7 +13,7 @@ ratings.views.events.
     <h2>{{ event }}</h2>
 
     <div class="ibox" style="margin-left: 2em;">
-        <div class="iboxh">Quick numbers</div>
+        <div class="iboxh">Details</div>
         <div class="iboxtable">
             <div class="row">
                 <div class="rowel" style="width: 7em;">Dates</div>
@@ -29,17 +29,15 @@ ratings.views.events.
                 <div class="rower">{{ game }}</div>
             </div>
             {% endif %}
-            {% if offline != None %}
             <div class="row">
-                <div class="rowel">On/Offline</div>
-                <div class="rower">{{ offline|yesno:"Offline,Online" }} </div>
+                <div class="rowel">On-/Offline</div>
+                <div class="rower">{{ offline|yesno:"Offline,Online,Both" }} </div>
             </div>
-            {% endif %}
             {% if adm %}
             	{% if eventtype %}
             	<div class="row">
 	                <div class="rowel">Type</div>
-                	<div class="rower">{{ eventtype }} </div>
+                	<div class="rower">{{ eventtype|capfirst }}</div>
             	</div>
             	{% endif %}
             {% endif %}
@@ -188,7 +186,8 @@ ratings.views.events.
 						<option value="event" />Event</option>
 						<option value="round" />Round</option>
                     </select>
-					<input type="checkbox" name="siblings" value="siblings" />Apply to all events on the same level
+                    <input type="checkbox" name="siblings" value="siblings" />
+                    <label for="type">Apply to all events on the same level</label>
                 </td>
             </tr>
             <tr>

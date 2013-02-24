@@ -621,13 +621,13 @@ def events(request, event_id=None):
     base['subtree'] = subtree
 
     if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
+        if request.POST['type'] != 'nochange':
+            event.change_type(request.POST['type'])
+            if 'siblings' in request.POST.keys() and siblings:
+                for sibling in siblings:
+                    sibling.change_type(type)
         num = 0
         for match in matches:
-            if request.POST['type'] != 'nochange':
-                event.change_type(request.POST['type'])
-                if 'siblings' in request.POST.keys() and siblings:
-                    for sibling in siblings:
-                        sibling.change_type(type)
             if request.POST['date'].strip() != '':
                 match.date = request.POST['date']
             if request.POST['offline'] != 'nochange':

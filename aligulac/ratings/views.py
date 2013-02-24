@@ -629,11 +629,11 @@ def events(request, event_id=None):
                     for sibling in siblings:
                         sibling.change_type(type)
             if request.POST['date'].strip() != '':
-                matches.date = request.POST['date']
+                match.date = request.POST['date']
             if request.POST['offline'] != 'nochange':
                 match.offline = (request.POST['offline'] == 'offline')
             if request.POST['game'] != 'nochange':
-                matches.game = request.POST['game']
+                match.game = request.POST['game']
             match.save()
             num += 1
 

@@ -432,7 +432,7 @@ def manage_events(request):
 
     from django.db import connection
     cur = connection.cursor()
-    cur.execute('''SELECT e.id, e.name, (COUNT(p.id)-1), e.parent_id, e.fullname AS depth 
+    cur.execute('''SELECT e.id, e.name, (COUNT(p.id)-1), e.parent_id, e.fullname, e.type AS depth 
                    FROM ratings_event AS e, ratings_event AS p
                    WHERE e.lft BETWEEN p.lft AND p.rgt AND e.id != 2 AND e.closed=0 
                    GROUP BY e.id ORDER BY e.lft''')
@@ -447,7 +447,7 @@ def manage_events(request):
             pass
         if i == len(nodes) - 1:
             fold = -totfold
-        foldnodes.append((nodes[i][0], nodes[i][1], nodes[i][2], fold, nodes[i][3], nodes[i][4]))
+        foldnodes.append((nodes[i][0], nodes[i][1], nodes[i][2], fold, nodes[i][3], nodes[i][4], nodes[i][5]))
         totfold += fold
 
     base['nodes'] = foldnodes

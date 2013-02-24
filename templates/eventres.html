@@ -121,9 +121,9 @@ ratings.views.events.
 	Add type:
 	<form method="post" action="/results/events/{{ event.id }}/">
 		{% csrf_token %}
-		<input type="radio" name="type" value="category" />Category
-		<input type="radio" name="type" value="event" />Event
-		<input type="radio" name="type" value="round" />Round
+        <input type="radio" name="type" value="category" {% if event.type == 'category' %}checked{% endif %}/>Category
+        <input type="radio" name="type" value="event" {% if event.type == 'event' %}checked{% endif %}/>Event
+        <input type="radio" name="type" value="round" {% if event.type == 'round' %}checked{% endif %}/>Round
 		<input type="submit" name="op" value="Add" />
 	</form>
 	{% endif %}

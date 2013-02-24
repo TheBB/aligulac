@@ -603,7 +603,7 @@ def events(request, event_id=None):
     base['subtree'] = subtree
 
     if request.POST:
-        if request.POST['op'] == 'Add':
+        if request.POST['op'] == 'Add' and base['adm']:
             type = request.POST['type']
             event.change_type(type)
 

@@ -49,8 +49,10 @@ This is the template for the event manager admin page. It's called from ratings.
         <p>
             Add root event: 
             <input type="text" name="name" style="width: 20em;" />
-			<input type="radio" name="type" value="Category" checked/>Category
-			<input type="radio" name="type" value="Event" />Event
+            <input type="radio" name="type" id="root-type-category" value="category" checked/>
+            <label for="root-type-category">Category</label>
+            <input type="radio" name="type" id="root-type-event" value="event" />
+            <label for="root-type-event">Event</label>
             <input type="submit" name="op" value="Add" />
         </p>
     </form>
@@ -65,7 +67,8 @@ This is the template for the event manager admin page. It's called from ratings.
                 {{ node.1 }}
             {% endif %}
             (<a href="/admin/ratings/event/{{ node.0 }}/">a</a>, 
-            <a href="/results/events/{{ node.0 }}-{{ node.5|urlfilter }}/">e</a>)
+            <a href="/results/events/{{ node.0 }}-{{ node.5|urlfilter }}/">e</a>,
+            {{ node.6 }})
         </div>
         <div class="rowe" style="text-align: right;">
             <div id="link-{{ node.0 }}" style="display: block;">
@@ -79,7 +82,7 @@ This is the template for the event manager admin page. It's called from ratings.
                             <form method="post" action="/add/events/#{{ node.0 }}">
                                 {% csrf_token %}
                                 <input type="hidden" name="parent" value="{{node.0}}" />
-								<input type="hidden" name="type" value="Round" />
+								<input type="hidden" name="type" value="round" />
                                 <select name="name" style="width: 25em;">
                                     <option value="Group Stage, Playoffs">Group stage and playoffs</option>
                                     <option value="Group A,Group B,Group C,Group D">Groups A through D</option>
@@ -116,9 +119,12 @@ This is the template for the event manager admin page. It's called from ratings.
                                 {% csrf_token %}
                                 <input type="hidden" name="parent" value="{{node.0}}" />
                                 <input type="text" id="inp-{{node.0}}" name="name" style="width: 25em;" /><br>
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Category" />Category
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Event" checked/>Event
-								<input type="radio" id="inp-{{node.0}}" name="type" value="Round" />Round<br>
+                                <input type="radio" id="inp-{{node.0}}-category" name="type" value="category" />
+                                <label for="inp-{{node.0}}-category">Category</label>
+                                <input type="radio" id="inp-{{node.0}}-event" name="type" value="event" checked/>
+                                <label for="inp-{{node.0}}-event">Event</label>
+                                <input type="radio" id="inp-{{node.0}}-round" name="type" value="round" />
+                                <label for="inp-{{node.0}}-round">Round</label>
                                 <input type="submit" name="op" value="Add" />
                             </form>
                         </div>

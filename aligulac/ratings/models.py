@@ -63,7 +63,7 @@ class Event(models.Model):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
     def add_rounds_to_childs(self):
-        Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
+        Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).update(type='round')
 
     def add_events_to_parents(self):
         Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
@@ -88,10 +88,7 @@ class Event(models.Model):
         new.type = type
         new.update_name()
         new.save()
-        if type == 'event' or type == 'round':
-            new.add_rounds_to_childs()
-        if type == 'event' or type == 'category':
-            self.add_events_to_parents()
+        new.change_type(type)
         return new
 
     @staticmethod
@@ -99,13 +96,9 @@ class Event(models.Model):
         new = Event(name=name)
         new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
         new.rgt = new.lft + 1
-        new.type = type
         new.update_name()
         new.save()
-        if type == 'event' or type == 'round':
-            new.add_rounds_to_childs()
-        if type == 'event' or type == 'category':
-            self.add_events_to_parents()
+        new.change_type(type)
         return new
 
     def close(self):

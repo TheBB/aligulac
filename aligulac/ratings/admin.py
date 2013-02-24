@@ -56,7 +56,7 @@ class MatchAdmin(admin.ModelAdmin):
     get_res.short_description = 'Result'
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'lft', 'rgt')
+    list_display = ('__unicode__', 'type', 'lft', 'rgt')
     exclude = ('lft', 'rgt')
     search_fields = ['fullname']
 

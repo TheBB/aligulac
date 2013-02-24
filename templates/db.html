@@ -153,6 +153,10 @@ group, days and weeks, etc.</p>
     - big tinyint(4)                    boolean (true if the event contains many games)
     - noprint tinyint(4)                boolean (false if this event should be skipped in the fullname of descendants)
     - category varchar(50)              event category (team, individual or frequent), only set for root nodes
+    - type varchar(50)                  event type (category, event (i.e. tournament) or round), you can
+                                        assume that ancestors of events are always categories, and descendants
+                                        of events are always rounds, and that in each subtree from root to
+                                        leaf there is at most one event
     </pre>
 </code>
 

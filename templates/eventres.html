@@ -139,7 +139,8 @@ ratings.views.events.
         <label for="event">Event</label>
         <input type="radio" id="round" name="type" value="round" {% if event.type == 'round' %}checked{% endif %}/>
         <label for="round">Round</label>
-        <input type="checkbox" name="siblings" value="siblings" />Apply to all events on the same level
+        <input type="checkbox" id="siblings" name="siblings" value="siblings" />
+        <label for="siblings">Apply to all siblings</label>
         <input type="submit" name="op" value="Add" />
 	</form>
 	{% endif %}

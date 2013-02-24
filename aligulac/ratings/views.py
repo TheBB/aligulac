@@ -411,8 +411,8 @@ def results_search(request):
                     match.eventobj = event
                 if request.POST['date'].strip() != '':
                     match.date = request.POST['date']
-                if request.POST['offline'] != 'nochange':
-                    match.offline = (request.POST['offline'] == 'offline')
+                if request.POST['type'] != 'nochange':
+                    match.offline = (request.POST['type'] == 'offline')
                 if request.POST['game'] != 'nochange':
                     match.game = request.POST['game']
                 match.save()

@@ -23,6 +23,18 @@ ratings.views.events.
                     {% endif %}
                 </div>
             </div>
+            {% if game %}
+            <div class="row">
+                <div class="rowel">Game</div>
+                <div class="rower">{{ game }}</div>
+            </div>
+            {% endif %}
+            {% if offline != None %}
+            <div class="row">
+                <div class="rowel">On/Offline</div>
+                <div class="rower">{{ offline|yesno:"Offline,Online" }} </div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="rowel">Games</div>
                 <div class="rower">{{ ngames }}</div>
@@ -121,10 +133,14 @@ ratings.views.events.
 	Add type:
 	<form method="post" action="/results/events/{{ event.id }}/">
 		{% csrf_token %}
-        <input type="radio" name="type" value="category" {% if event.type == 'category' %}checked{% endif %}/>Category
-        <input type="radio" name="type" value="event" {% if event.type == 'event' %}checked{% endif %}/>Event
-        <input type="radio" name="type" value="round" {% if event.type == 'round' %}checked{% endif %}/>Round
-		<input type="submit" name="op" value="Add" />
+        <input type="radio" id="category" name="type" value="category" {% if event.type == 'category' %}checked{% endif %}/>
+        <label for="category">Category</label>
+        <input type="radio" id="event" name="type" value="event" {% if event.type == 'event' %}checked{% endif %}/>
+        <label for="event">Event</label>
+        <input type="radio" id="round" name="type" value="round" {% if event.type == 'round' %}checked{% endif %}/>
+        <label for="round">Round</label>
+        <input type="checkbox" name="siblings" value="siblings" />Apply to all events on the same level
+        <input type="submit" name="op" value="Add" />
 	</form>
 	{% endif %}
 	

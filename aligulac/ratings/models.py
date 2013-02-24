@@ -62,19 +62,13 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
-    def add_rounds_to_childs(self):
-        Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).update(type='round')
-
-    def add_events_to_parents(self):
-        Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
-
     def change_type(self, type):
         self.type = type
-        self.save()
         if type == 'event' or type == 'round':
-            self.add_rounds_to_childs()
+            Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
         if type == 'event' or type == 'category':
-            self.add_events_to_parents()
+            Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+        self.save()
 
     def add_child(self, name, type):
         new = Event(name=name, parent=self)
@@ -85,7 +79,6 @@ class Event(models.Model):
         new.rgt = new.lft + 1
         Event.objects.filter(lft__gt=new.rgt-2).update(lft=F('lft')+2)
         Event.objects.filter(rgt__gt=new.rgt-2).update(rgt=F('rgt')+2)
-        new.type = type
         new.update_name()
         new.save()
         new.change_type(type)

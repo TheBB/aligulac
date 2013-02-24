@@ -539,13 +539,28 @@ def events(request, event_id=None):
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
     base['children'] = Event.objects.filter(parent=event).order_by('lft')
     if event.parent != None:
-        base['siblings'] = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        base['siblings'] = siblings
 
     # Number of matches (set event to big if too large)
     matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
     if matches.count() > 200 and not event.big:
         event.big = True
         event.save()
+    
+    # Determine WoL/HotS and Online/Offline
+    if matches.values("game").distinct().count() == 1:
+        base['game'] = matches[0].game
+        if base['game'] == 'WoL':
+            base['game'] = 'Wings of Liberty'
+        elif base['game'] == 'HotS':
+            base['game'] = 'Heart of the Swarm'
+        #elif base['game'] = 'LotV':
+            #base['game'] = 'Legacy of the Void'
+
+    base['offline'] = None
+    if matches.values("offline").distinct().count() == 1:
+        base['offline'] = matches[0].offline
 
     # Statistics
     base['nmatches'] = matches.count()
@@ -606,6 +621,9 @@ def events(request, event_id=None):
         if request.POST['op'] == 'Add' and base['adm']:
             type = request.POST['type']
             event.change_type(type)
+            if 'siblings' in request.POST.keys():
+                for sibling in siblings:
+                    sibling.change_type(type)
 
     return render_to_response('eventres.html', base)
 

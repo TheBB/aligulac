@@ -412,17 +412,27 @@ def manage_events(request):
 
     if 'parent' in request.POST:
         if request.POST['op'] == 'Add':
+            if 'big' in request.POST.keys():
+                big = True
+            else:
+                big = False
+            if 'noprint' in request.POST.keys():
+                noprint = True
+            else:
+                noprint = False
+                
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))
                 for q in request.POST['name'].strip().split(','):
                     type = request.POST['type']
-                    parent.add_child(q.strip(), type)
+                    parent.add_child(q.strip(), type, big, noprint)
             except:
                 for q in request.POST['name'].strip().split(','):
                     if q.strip() == '':
                         continue
                     type = request.POST['type']
-                    Event.add_root(q.strip(), type)
+                    Event.add_root(q.strip(), type, big, noprint)
+
         elif request.POST['op'] == 'Close':
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))

@@ -53,6 +53,8 @@ This is the template for the event manager admin page. It's called from ratings.
             <label for="root-type-category">Category</label>
             <input type="radio" name="type" id="root-type-event" value="event" />
             <label for="root-type-event">Event</label>
+            <input type="checkbox" id="root-big" name="big" value="big"/>
+            <label for="root-big">Big</label>
             <input type="submit" name="op" value="Add" />
         </p>
     </form>
@@ -107,6 +109,11 @@ This is the template for the event manager admin page. It's called from ratings.
                                     <option value="Early rounds,Ro16,Ro8,Ro4,Third place match,Final">Ro16→Final + 3rd place and early rounds</option>
                                     <option value="Early rounds,Ro8,Ro4,Third place match,Final">Ro8→Final + 3rd place and early rounds</option>
                                     <option value="Early rounds,Ro4,Third place match,Final">Ro4→Final + 3rd place and early rounds</option>
+                                    <option value="WB,LB,Final">WB, LB, Final</option>
+                                    <option value="Round 1,Round 2">LB: Round 1->Round 2</option>
+                                    <option value="Round 1,Round 2,Round 3,Round 4">LB: Round 1->Round 4</option>
+                                    <option value="Round 1,Round 2,Round 3,Round 4,Round 5,Round 6">LB: Round 1->Round 6</option>
+                                    <option value="Round 1,Round 2,Round 3,Round 4,Round 5,Round 6,Round 7,Round 8">LB: Round 1->Round 8</option>
                                 </select>
                                 <input type="submit" name="op" value="Add" />
                             </form>
@@ -125,6 +132,8 @@ This is the template for the event manager admin page. It's called from ratings.
                                 <label for="inp-{{node.0}}-event">Event</label>
                                 <input type="radio" id="inp-{{node.0}}-round" name="type" value="round" {% if node.6 == 'event' or node.6 == 'round' %}checked{% endif %}/>
                                 <label for="inp-{{node.0}}-round">Round</label>
+                                <input type="checkbox" id="inp-{{node.0}}-noprint" name="noprint" value="noprint"/>
+                                <label for="inp-{{node.0}}-noprint">No Print</label>                                
                                 <input type="submit" name="op" value="Add" />
                             </form>
                         </div>

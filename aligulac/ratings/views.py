@@ -411,8 +411,8 @@ def results_search(request):
                     match.eventobj = event
                 if request.POST['date'].strip() != '':
                     match.date = request.POST['date']
-                if request.POST['type'] != 'nochange':
-                    match.offline = (request.POST['type'] == 'offline')
+                if request.POST['offline'] != 'nochange':
+                    match.offline = (request.POST['offline'] == 'offline')
                 if request.POST['game'] != 'nochange':
                     match.game = request.POST['game']
                 match.save()
@@ -548,7 +548,7 @@ def events(request, event_id=None):
         event.big = True
         event.save()
     
-    # Determine WoL/HotS and Online/Offline
+    # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:
         base['game'] = matches[0].game
         if base['game'] == 'WoL':
@@ -557,6 +557,9 @@ def events(request, event_id=None):
             base['game'] = 'Heart of the Swarm'
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
+    
+    if event.type:
+        base['eventtype'] = event.type
 
     base['offline'] = None
     if matches.values("offline").distinct().count() == 1:
@@ -606,24 +609,35 @@ def events(request, event_id=None):
         subtree = subtree.order_by('lft')
     else:
         subtree = subtree.order_by('-lft')
-
-    matches = []
+        
+    matchesArray = []
     for e in subtree:
-        if event.big and len(matches) == 20:
+        if event.big and len(matchesArray) == 20:
             break
         mset = Match.objects.filter(eventobj=e).order_by('-date', '-id')
         if mset.exists():
-            matches.append(mset)
-    base['matches'] = matches
+            matchesArray.append(mset)
+    base['matches'] = matchesArray
     base['subtree'] = subtree
 
-    if request.POST:
-        if request.POST['op'] == 'Add' and base['adm']:
-            type = request.POST['type']
-            event.change_type(type)
-            if 'siblings' in request.POST.keys():
-                for sibling in siblings:
-                    sibling.change_type(type)
+    if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
+        num = 0
+        for match in matches:
+            if request.POST['type'] != 'nochange':
+                event.change_type(request.POST['type'])
+                if 'siblings' in request.POST.keys():
+                    for sibling in siblings:
+                        sibling.change_type(type)
+            if request.POST['date'].strip() != '':
+                matches.date = request.POST['date']
+            if request.POST['offline'] != 'nochange':
+                match.offline = (request.POST['offline'] == 'offline')
+            if request.POST['game'] != 'nochange':
+                matches.game = request.POST['game']
+            match.save()
+            num += 1
+
+        base['message'] = 'Modified %i matches.' % num
 
     return render_to_response('eventres.html', base)
 

@@ -142,6 +142,13 @@ def home(request):
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
     entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0:10]
+    for entry in entries:
+        if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
+            if not Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
+            else:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname
+            entry.teamid = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].id
 
     blogs = Post.objects.order_by('-date')[0:3]
 

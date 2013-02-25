@@ -7,6 +7,7 @@ arguments:
             should also be provided.
 - startcount: The count for the first player on the list. (Usually 1, except when showing other pages, for
               example.)
+- displayteams: Display teams
 {% endcomment %}
 
 {% load ratings_extras %}
@@ -20,7 +21,7 @@ arguments:
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
         <td class="rl_name">Name</td>
-        <td class="rl_team">Team</td>
+        <td class="rl_team">{% if displayteams %}Team{% endif %}</td>
         <td class="rl_rating">
             {% if sortable %}
             <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">Rating↓</a>
@@ -79,10 +80,12 @@ arguments:
             <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/">{{ entry.player.tag }}</a>
         </td>
         <td class="rl_team">
-        	{% if entry.team %}
-            	<a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/"> {{ entry.team }} </a>
-            {% else %}
-            	Teamless
+        	{% if displayteams %}
+        		{% if entry.team %}
+	            	<a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/"> {{ entry.team }} </a>
+            	{% else %}
+	            	Teamless
+            	{% endif %}
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>

@@ -23,13 +23,9 @@ dump. Called from aligulac.views.db.
         <div class="rowel" style="width: 33.5em;">Games</div>
         <div class="rower" style="width: 33.5em;">{{ ngames }}</div>
     </div>
-    <div class="row">
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Matches</div>
         <div class="rower">{{ nmatches }}</div>
-    </div>
-    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Unrated matches</div>
-        <div class="rower">{{ nuntreated }} <span class="small">({{ nuntreated|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
         <div class="rowel">Wings of Liberty</div>
@@ -40,24 +36,20 @@ dump. Called from aligulac.views.db.
         <div class="rower">{{ nhots }} <span class="small">({{ nhots|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
-        <div class="rowel">Matches with event info</div>
-        <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg3:nmatches }}%)</span></div>
-    </div>
-    <div class="row">
-        <div class="rowel">Matches with event object</div>
-        <div class="rower">{{ nfull }} <span class="small">({{ nfull|pctg3:nmatches }}%)</span></div>
-    </div>
-    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Uncatalogued matches</div>
-        <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg3:nmatches }}%)</span></div>
-    </div>
-    <div class="row">
         <div class="rowel">Matches played online</div>
         <div class="rower">{{ nonline }} <span class="small">({{ nonline|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Matches played offline</div>
         <div class="rower">{{ noffline }} <span class="small">({{ noffline|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Matches with event info</div>
+        <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Uncatalogued matches</div>
+        <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
         <div class="rowel">Players</div>

@@ -17,9 +17,10 @@ arguments:
     <tr class="header">
         <td class="rl_number">#</td>
         <td class="rl_arrow"></td>
+        <td class="rl_icon"></td>
+        <td class="rl_icon"></td>
         <td class="rl_name">Name</td>
-        <td class="rl_icon"></td>
-        <td class="rl_icon"></td>
+        <td class="rl_team">Team</td>
         <td class="rl_rating">
             {% if sortable %}
             <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">Rating↓</a>
@@ -66,9 +67,6 @@ arguments:
             <img src="{{ "new.png"|static }}" alt="new" style="vertical-align: text-bottom;" />
             {% endif %}
         </td>
-        <td class="rl_name">
-            <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/">{{ entry.player.tag }}</a>
-        </td>
         <td class="rl_icon">
             {% if entry.player.country != "" %}
             <img src="{{ entry.player.country|lower|imgfolder:"flags"|static }}" alt="{{ entry.player.country }}" />
@@ -76,6 +74,16 @@ arguments:
         </td>
         <td class="rl_icon">
             <img src="{{ entry.player.race|imgfolder|static }}" alt="{{entry.player.race}}" class="btm" />
+        </td>
+        <td class="rl_name">
+            <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/">{{ entry.player.tag }}</a>
+        </td>
+        <td class="rl_team">
+        	{% if entry.team %}
+            	<a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/"> {{ entry.team }} </a>
+            {% else %}
+            	Teamless
+            {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>
         <td class="rl_icon">

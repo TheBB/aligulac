@@ -111,12 +111,17 @@ def period(request, period_id, page='1'):
 
     entries = entries[(page-1)*psize:page*psize]
 
+    teams = {}
+    for entry in entries:
+        if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
+            entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
+            entry.teamid = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].id
+
     base = base_ctx('Ranking', 'Current', request)
     base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,\
             'best': best, 'bestvp': bestvp, 'bestvt': bestvt, 'bestvz': bestvz, 'specvp': specvp,\
             'specvt': specvt, 'specvz': specvz, 'sortable': True, 'startcount': (page-1)*psize,
             'localcount': True, 'sort': sort, 'race': race, 'nats': nats})
-
     if period.id != base['curp'].id:
         base['curpage'] = ''
 

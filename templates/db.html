@@ -52,6 +52,14 @@ dump. Called from aligulac.views.db.
         <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg3:nmatches }}%)</span></div>
     </div>
     <div class="row">
+        <div class="rowel">Matches played online</div>
+        <div class="rower">{{ nonline }} <span class="small">({{ nonline|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Matches played offline</div>
+        <div class="rower">{{ noffline }} <span class="small">({{ noffline|pctg3:nmatches }}%)</span></div>
+    </div>
+    <div class="row">
         <div class="rowel">Players</div>
         <div class="rower">{{ nplayers }}</div>
     </div>

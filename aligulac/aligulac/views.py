@@ -95,6 +95,9 @@ def db(request):
 
     nwol = Match.objects.filter(game='WoL').count()
     nhots = Match.objects.filter(game='HotS').count()
+    
+    nonline = Match.objects.filter(offline = False).count()
+    noffline = Match.objects.filter(offline = True).count()
 
     npartial = Match.objects.exclude(eventobj__isnull=True, event='').count()
     nfull = Match.objects.filter(eventobj__isnull=False).count()
@@ -107,7 +110,7 @@ def db(request):
     ninactive = Team.objects.filter(active=False).count()
 
     base.update({'ngames': ngames, 'nmatches': nmatches, 'nuntreated': nuntreated,\
-                 'nwol': nwol, 'nhots': nhots,\
+                 'nwol': nwol, 'nhots': nhots, 'nonline': nonline, 'noffline': noffline,\
                  'npartial': npartial, 'nfull': nfull, 'nuncatalogued': nuncatalogued,\
                  'nplayers': nplayers, 'nkoreans': nkoreans,\
                  'nteams': nteams, 'nactive': nactive, 'ninactive': ninactive})

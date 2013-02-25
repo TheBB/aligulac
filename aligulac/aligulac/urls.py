@@ -51,6 +51,10 @@ urlpatterns = patterns('',
 
     url(r'^api/search/$', 'aligulac.views.api_search'),
 
+    url(r'reports/$', 'ratings.views.balance'),
+    url(r'reports/balance/$', 'ratings.views.balance'),
+    url(r'reports/balance/plot/$', 'ratings.views.balance_plot'),
+
     url(r'^404/$', 'aligulac.views.h404'),
     url(r'^500/$', 'aligulac.views.h500'),
 

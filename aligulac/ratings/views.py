@@ -14,7 +14,8 @@ from django.core.context_processors import csrf
 
 from countries import transformations, data
 
-from numpy import linspace, array
+import numpy
+from numpy import linspace, array, zeros
 from math import sqrt
 
 def collect(lst, n=2):
@@ -355,6 +356,82 @@ def player_plot(request, player_id):
 
         for tl in axt.get_xticklabels():
             tl.set_visible(False)
+
+    response = HttpResponse(content_type='image/png')
+    canvas = FigureCanvasAgg(fig)
+    canvas.print_png(response)
+    return response
+
+def balance_plot(request):
+    os.environ['MPLCONFIGDIR'] = '/home/efonn/.matplotlib/'
+
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from matplotlib.dates import MonthLocator, DateFormatter
+    from matplotlib.ticker import MultipleLocator, NullLocator
+    from scipy import interpolate
+
+    first = (2010,7)
+    last = Match.objects.order_by('-date')[0].date
+    last = (last.year, last.month)
+
+    N = (last[0]-first[0])*12 + last[1]-first[1] + 1
+
+    def nti(x):
+        return 0 if x is None else x
+
+    def add_to_array(qset, rc1, rc2, ar, col):
+        temp = qset.filter(rca=rc1, rcb=rc2).aggregate(Sum('sca'), Sum('scb'))
+        ar[0, col] += nti(temp['sca__sum'])
+        ar[1, col] += nti(temp['scb__sum'])
+        temp = qset.filter(rca=rc2, rcb=rc1).aggregate(Sum('sca'), Sum('scb'))
+        ar[0, col] += nti(temp['scb__sum'])
+        ar[1, col] += nti(temp['sca__sum'])
+
+    races = request.GET['matchup'].upper().split('V')
+    scores = zeros((2,N))
+    time = zeros(N)
+
+    ind = 0
+    while first[0] < last[0] or (first[0] == last[0] and first[1] <= last[1]):
+        matches = Match.objects.filter(date__gte='%i-%i-01' % first)
+        if first[1] < 12:
+            matches = matches.filter(date__lt='%i-%i-01' % (first[0], first[1]+1))
+        else:
+            matches = matches.filter(date__lt='%i-%i-01' % (first[0]+1, 1))
+
+        add_to_array(matches, races[0], races[1], scores, ind)
+        time[ind] = matches[0].date.toordinal() + 15
+        first = (first[0], first[1]+1)
+        if first[1] == 13:
+            first = (first[0]+1, 1)
+        ind += 1
+
+    z = 1.96
+    newtime = linspace(time[0], time[-1], 4*len(time))
+
+    if 'big' in request.GET:
+        fig = Figure(figsize=(20,4), facecolor='white')
+    else:
+        fig = Figure(figsize=(10,2), facecolor='white')
+    rect = 0.05, 0.11, 0.90, 0.85
+    ax = fig.add_axes(rect)
+
+    def plot_rate(wins, losses, time, newtime, ax, fc, ec, lc):
+        n = wins+losses
+        f = wins/n
+        width = z*numpy.sqrt(f*(1-f)/n+z**2/4/n**2)/(1+z**2/n)
+        f = interpolate.splev(newtime, interpolate.splrep(time, f, s=0), der=0)
+        width = interpolate.splev(newtime, interpolate.splrep(time, width), der=0)
+        ax.fill_between(newtime, (f-width), (f+width), facecolor=fc, edgecolor=ec)
+        ax.plot_date(newtime, f, lc, lw=2)
+
+    plot_rate(scores[0,:], scores[1,:], time, newtime, ax, '#ddffdd', '#bbddbb', '#33aa33')
+    ax.plot_date([newtime[0], newtime[-1]], [0.5, 0.5], 'k--', lw=1)
+
+    ax.set_xlim(time[0], time[-1])
+    ax.set_ylim(0.3, 0.7)
+    ax.xaxis.set_major_formatter(DateFormatter('%b %y'))
 
     response = HttpResponse(content_type='image/png')
     canvas = FigureCanvasAgg(fig)
@@ -867,3 +944,8 @@ def player_transfers(request):
 	base["trades"] = trades
 	
 	return render_to_response('player_transfers.html', base)
+
+def balance(request):
+    base = base_ctx('Reports', 'Balance', request)
+
+    return render_to_response('reports_balance.html', base)

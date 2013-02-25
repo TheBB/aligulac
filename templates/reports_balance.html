@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the template for the main player page, called from ratings.views.player.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Balance report{% endblock %}
+
+{% block content %}
+<h2>Balance report</h2>
+
+<p>These graphs show the historical month-by-month winrates for each non-mirror matchup in the database. The
+shaded area represents a 95% confidence interval for the winrate in that month as given by the Wilson
+interval.</p>
+
+<p>Note that this yields information about <em>metagame</em> balance near the <em>top of the skill
+    ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout
+the whole player population.</p>
+
+<p>The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up,
+that means Protoss is doing well and Terran poorly.</p>
+
+<h3>Protoss vs. Terran</h3>
+<div style="text-align: center;">
+    <a href="/reports/balance/plot/?matchup=pvt&big">
+        <img src="/reports/balance/plot/?matchup=pvt" alt="Protoss vs. Terran" class="longplot" id="pvtplot" />
+    </a>
+</div>
+
+<h3>Protoss vs. Zerg</h3>
+<div style="text-align: center;">
+    <a href="/reports/balance/plot/?matchup=pvt&big">
+        <img src="/reports/balance/plot/?matchup=pvz" alt="Protoss vs. Zerg" class="longplot" id="pvzplot" />
+    </a>
+</div>
+
+<h3>Terran vs. Zerg</h3>
+<div style="text-align: center;">
+    <a href="/reports/balance/plot/?matchup=pvt&big">
+        <img src="/reports/balance/plot/?matchup=tvz" alt="Terran vs. Zerg" class="longplot" id="tvzplot" />
+    </a>
+</div>
+
+{% endblock %}

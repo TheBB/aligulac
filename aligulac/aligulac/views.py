@@ -26,6 +26,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             ('Teams', '/teams/'),\
             ('Records', '/records/'),\
             ('Results', '/results/'),\
+            ('Reports', '/reports/'),\
             ('Predict', '/predict/'),\
             ('About', '/faq/'),\
             ('Submit', '/add/')]
@@ -61,6 +62,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),
                            ('Database', '/db/')]
+    elif section == 'Reports':
+        pass
 
     if section != None:
         base['curpage'] = section

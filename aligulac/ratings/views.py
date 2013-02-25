@@ -114,7 +114,10 @@ def period(request, period_id, page='1'):
     teams = {}
     for entry in entries:
         if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
-            entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
+            if not Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
+            else:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname
             entry.teamid = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].id
 
     base = base_ctx('Ranking', 'Current', request)

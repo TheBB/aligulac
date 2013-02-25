@@ -166,6 +166,7 @@ class Player(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    shortname = models.CharField(max_length=25, null=True, blank=True)
     members = models.ManyToManyField(Player, through='TeamMembership')
     scoreak = models.FloatField(default=0.0)
     scorepl = models.FloatField(default=0.0)

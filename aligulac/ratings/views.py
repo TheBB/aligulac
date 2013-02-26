@@ -168,6 +168,17 @@ def player(request, player_id):
     except:
         pass
 
+    try:
+        base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
+    except:
+        pass
+
+    try:
+        base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
+    except:
+        pass
+
+
     # Winrates
     matches_a = Match.objects.filter(pla=player)
     matches_b = Match.objects.filter(plb=player)

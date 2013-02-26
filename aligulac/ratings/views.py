@@ -132,6 +132,26 @@ def period(request, period_id, page='1'):
 def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
+    base.update(csrf(request)) 
+    
+    # Make modifications for external links
+    if 'op' in request.POST and request.POST['op'] == 'Change' and base['adm'] == True:
+        sc2c = request.POST['SC2C']
+        if sc2c == '':
+            sc2c = None
+        tlpdkr = request.POST['TLPDKR']
+        if tlpdkr == '':
+            tlpdkr = None
+        tlpdin = request.POST['TLPDIN']
+        if tlpdin == '':
+            tlpdin = None
+        sc2e = request.POST['SC2E']
+        if sc2e == '':
+            sc2e = None
+        lp = request.POST['LP']
+        if lp == '':
+            lp = None
+        player.update_external_links(sc2c, tlpdkr, tlpdin, sc2e, lp)
 
     try:
         base['team'] = Team.objects.filter(active=True, teammembership__player=player, teammembership__current=True)[0]

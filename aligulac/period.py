@@ -18,6 +18,7 @@ from numpy import *
 # This is required for Django imports to work correctly
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
+from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
 from ratings.tools import filter_active_ratings
@@ -58,17 +59,17 @@ class CPlayer:
             ret.append(self.prev_dev[r])
         return array(ret)
 
-def get_new_players(cplayers, period):
+def get_new_players(cplayers, period, prev):
     """Collects information about all new players, and adds them to the cplayers dict if not already there."""
 
-    players = Player.objects.filter(Q(match_pla__period=period) | Q(match_plb__period=period)).distinct()
-    for player in players:
-        # Skip if player is already added
-        if player.id in cplayers:
-            continue
+    players = Player.objects.filter(Q(match_pla__period=period) | Q(match_plb__period=period))
+    if prev is not None:
+        players = players.exclude(rating__period=prev)
 
+    for player in players.distinct():
         cp = CPlayer()
         cp.player = player
+        cp.prev_rating_obj = None
 
         # Fill in the previous rating information
         for r in EXRACES:
@@ -180,23 +181,20 @@ if __name__ == '__main__':
     cplayers = dict()
     if prev:
         get_existing_players(cplayers, prev)
-    get_new_players(cplayers, period)
+    get_new_players(cplayers, period, prev)
 
     # Update RDs since a period has passed
     for cp in cplayers.values():
         decay_dev(cp)
-    print('Initialized and decayed ratings for {0} players.'.format(len(cplayers)))
 
     # Collect match information
     num_games = get_matches(cplayers, period)
-    print('Gathered results from {0} games.'.format(num_games))
+    print('Initialized: {0} players and {1} games. Updating...'.format(len(cplayers), num_games))
 
     # Update ratings
     num_retplayers = 0
     num_newplayers = 0
     for cp in cplayers.values():
-        #if cp.player.id != 351:
-            #continue
         (newr, newd, compr, compd) = update(cp.get_rating_array(), cp.get_dev_array(),\
                 array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L),\
                 cp.player.tag, False)
@@ -210,32 +208,60 @@ if __name__ == '__main__':
             num_retplayers += 1
         elif len(cp.W) > 0:
             num_newplayers += 1
-    print('Updated ratings for {0} players.'.format(len(cplayers)))
+
+    # Get a table of existing rating objects
+    existing = set()
+    for i in Rating.objects.filter(period=period).values('player_id'):
+        existing.add(i['player_id'])
 
     # Write ratings to database
-    print('Saving ratings. This can take some time...')
-    Rating.objects.filter(period=period).delete()
+    print('Saving ratings and bookkeping...')
+
+    update_qvals, insert_qvals = [], []
     for cp in cplayers.values():
-        rating = Rating()
-        rating.player = cp.player
-        rating.period = period
+        tup = (cp.new_rating['M'],  cp.new_rating['P'],  cp.new_rating['T'],  cp.new_rating['Z'],
+               cp.new_dev['M'],     cp.new_dev['P'],     cp.new_dev['T'],     cp.new_dev['Z'],
+               cp.comp_rating['M'], cp.comp_rating['P'], cp.comp_rating['T'], cp.comp_rating['Z'],
+               cp.comp_dev['M'],    cp.comp_dev['P'],    cp.comp_dev['T'],    cp.comp_dev['Z'])
 
-        # Set the decay of the rating (number of periods since last game was played)
-        if not cp.prev_rating_obj or len(cp.W) > 0:
-            rating.decay = 0
+        if cp.player.id not in existing:
+            to = insert_qvals
+            tup += tup[0:8]
         else:
-            rating.decay = cp.prev_rating_obj.decay + 1
+            to = update_qvals
 
-        # Set the actual ratings
-        rating.set_rating(cp.new_rating, write_bf=True)
-        rating.set_dev(cp.new_dev, write_bf=True)
-        rating.set_comp_rating(cp.comp_rating)
-        rating.set_comp_dev(cp.comp_dev)
+        if len(cp.W) == 0 and cp.prev_rating_obj is not None:
+            tup += (cp.prev_rating_obj.decay+1,)
+        else:
+            tup += (0,)
 
-        # Write
-        rating.save()
+        tup += (cp.player.id, period.id)
+        to.append(tup)
 
-    print('Bookkeeping. This can take some time...')
+    cursor = connection.cursor()
+    cursor.executemany('''UPDATE ratings_rating 
+                          SET rating=%s,    rating_vp=%s,    rating_vt=%s,    rating_vz=%s,
+                              dev=%s,       dev_vp=%s,       dev_vt=%s,       dev_vz=%s,
+                              comp_rat=%s,  comp_rat_vp=%s,  comp_rat_vt=%s,  comp_rat_vz=%s,
+                              comp_dev=%s,  comp_dev_vp=%s,  comp_dev_vt=%s,  comp_dev_vz=%s,
+                              decay=%s
+                          WHERE player_id=%s AND period_id=%s''', update_qvals)
+    cursor.executemany('''INSERT INTO ratings_rating 
+                          (rating,     rating_vp,     rating_vt,     rating_vz,
+                           dev,        dev_vp,        dev_vt,        dev_vz,
+                           comp_rat,   comp_rat_vp,   comp_rat_vt,   comp_rat_vz,
+                           comp_dev,   comp_dev_vp,   comp_dev_vt,   comp_dev_vz,
+                           bf_rating,  bf_rating_vp,  bf_rating_vt,  bf_rating_vz,
+                           bf_dev,     bf_dev_vp,     bf_dev_vt,     bf_dev_vz,
+                           decay,      player_id,     period_id)
+                          VALUES
+                          (%s, %s, %s, %s,
+                           %s, %s, %s, %s,
+                           %s, %s, %s, %s,
+                           %s, %s, %s, %s,
+                           %s, %s, %s, %s,
+                           %s, %s, %s, %s,
+                           %s, %s, %s)''', insert_qvals)
 
     # Set all matches to treated
     Match.objects.filter(period=period).update(treated=True)

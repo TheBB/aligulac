@@ -30,6 +30,7 @@ latest = Period.objects.filter(start__lte=datetime.date.today()).order_by('-id')
 
 for i in range(earliest.id, latest.id+1):
     os.system(PATH_TO_DIR + 'period.py %i' % i)
+    print('--')
 
 if not 'debug' in sys.argv:
     os.system(PATH_TO_DIR + 'smoothing.py')

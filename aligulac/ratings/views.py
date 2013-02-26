@@ -631,6 +631,39 @@ def player_results(request, player_id):
     
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
+    
+    for match in matches:
+        try:
+            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
+        except:
+            pass
+        try:
+            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
+        except:
+            pass
+        
+        if player == match.plb:
+            temppl = match.pla
+            tempsc = match.sca
+            temprc = match.rca
+            try:
+                temprt = match.rta
+            except:
+                temprt = ''
+
+            match.pla = match.plb
+            match.sca = match.scb
+            match.rca = match.rcb
+            try:
+                match.rta = match.rtb
+            except:
+                match.rta = ''
+
+            match.plb = temppl
+            match.scb = tempsc
+            match.rcb = temprc
+            match.rtb = temprt
+            
 
     prev_date = None
     prev_event = 'qwerty'

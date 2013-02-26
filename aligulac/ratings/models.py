@@ -163,9 +163,18 @@ class Player(models.Model):
             return self.tag + ' (' + self.race + ', ' + self.country + ')'
         else:
             return self.tag + ' (' + self.race + ')'
+    
+    def update_external_links(self, sc2c_id, tlpd_kr_id, tlpd_in_id, sc2e_id, lp_name):
+        self.sc2c_id = sc2c_id
+        self.tlpd_kr_id = tlpd_kr_id
+        self.tlpd_in_id = tlpd_in_id
+        self.sc2e_id = sc2e_id
+        self.lp_name = lp_name
+        self.save()
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    shortname = models.CharField(max_length=25, null=True, blank=True)
     members = models.ManyToManyField(Player, through='TeamMembership')
     scoreak = models.FloatField(default=0.0)
     scorepl = models.FloatField(default=0.0)

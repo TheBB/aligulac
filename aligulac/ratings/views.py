@@ -111,12 +111,19 @@ def period(request, period_id, page='1'):
 
     entries = entries[(page-1)*psize:page*psize]
 
+    for entry in entries:
+        if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
+            if not Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
+            else:
+                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname
+            entry.teamid = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].id
+
     base = base_ctx('Ranking', 'Current', request)
     base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,\
             'best': best, 'bestvp': bestvp, 'bestvt': bestvt, 'bestvz': bestvz, 'specvp': specvp,\
             'specvt': specvt, 'specvz': specvz, 'sortable': True, 'startcount': (page-1)*psize,
             'localcount': True, 'sort': sort, 'race': race, 'nats': nats})
-
     if period.id != base['curp'].id:
         base['curpage'] = ''
 
@@ -125,6 +132,26 @@ def period(request, period_id, page='1'):
 def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
+    base.update(csrf(request)) 
+    
+    # Make modifications for external links
+    if 'op' in request.POST and request.POST['op'] == 'Change' and base['adm'] == True:
+        sc2c = request.POST['SC2C']
+        if sc2c == '':
+            sc2c = None
+        tlpdkr = request.POST['TLPDKR']
+        if tlpdkr == '':
+            tlpdkr = None
+        tlpdin = request.POST['TLPDIN']
+        if tlpdin == '':
+            tlpdin = None
+        sc2e = request.POST['SC2E']
+        if sc2e == '':
+            sc2e = None
+        lp = request.POST['LP']
+        if lp == '':
+            lp = None
+        player.update_external_links(sc2c, tlpdkr, tlpdin, sc2e, lp)
 
     try:
         base['team'] = Team.objects.filter(active=True, teammembership__player=player, teammembership__current=True)[0]
@@ -140,6 +167,17 @@ def player(request, player_id):
         base['last'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('-date')[0]
     except:
         pass
+
+    try:
+        base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
+    except:
+        pass
+
+    try:
+        base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
+    except:
+        pass
+
 
     # Winrates
     matches_a = Match.objects.filter(pla=player)
@@ -754,6 +792,15 @@ def player_results(request, player_id):
         base['bo'] = request.GET['bo']
     else:
         base['bo'] = 'all'
+    
+    if 'offline' in request.GET:
+        if request.GET['offline'] == 'online':
+            matches = matches.filter(offline=0)
+        elif request.GET['offline'] == 'offline':
+            matches = matches.filter(offline=1)
+        base['offline'] = request.GET['offline']
+    else:
+        base['offline'] = 'both'
     
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')

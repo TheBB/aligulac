@@ -9,6 +9,22 @@ This is the template for the main player page, called from ratings.views.player.
 {% block title %}{{ player.tag }}{% endblock %}
 
 {% block content %}
+      
+    <script type="text/javascript">
+    <!--
+    function toggle_visibility()
+    {
+        document.getElementById("external").style.display = 'none';
+        document.getElementById("editsc2c").style.display = 'table-row';
+        document.getElementById("edittlpdkr").style.display = 'table-row';
+        document.getElementById("edittlpdin").style.display = 'table-row';
+        document.getElementById("editsc2e").style.display = 'table-row';
+        document.getElementById("editlp").style.display = 'table-row';
+        document.getElementById("editadd").style.display = 'table-row';
+    }
+    //-->
+    </script>
+    
     <h2>{{ player.tag }}</h2>
 
     <div class="ibox" style="width: 25em;">
@@ -58,6 +74,14 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rowel">Last match</div>
                 <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
             </div>
+            <div class="row">
+                <div class="rowel">Matches played</div>
+                <div class="rower">{{ totalmatches }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">Offline matches</div>
+                <div class="rower">{{ offlinematches|pctg3:totalmatches }}%</div>
+            </div>
             {% if player.goodynum or player.goodynum == 0 %}
             <div class="row">
                 <div class="rowel">GoOdy number</div>
@@ -65,26 +89,60 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if player.tlpd_kr_id or player.tlpd_in_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
-            <div class="row">
-                <div class="rowel">External</div>
-                <div class="rower">
-                    {% if player.sc2c_id %}
-                    <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
-                    {% endif %}
-                    {% if player.tlpd_kr_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
-                    {% endif %}
-                    {% if player.tlpd_in_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
-                    {% endif %}
-                    {% if player.sc2e_id %}
-                    <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
-                    {% endif %}
-                    {% if player.lp_name %}
-                    <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
-                    {% endif %}
+            	<div class="row" id="external">
+	                <div class="rowel">External {% if adm %}(<a href="#" onclick="toggle_visibility(); return false;">Change</a>){% endif %}</div>
+                	<div class="rower">
+	                    {% if player.sc2c_id %}
+                    	<a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
+                    	{% endif %}
+                    	{% if player.tlpd_kr_id %}
+                    	<a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
+                    	{% endif %}
+                    	{% if player.tlpd_in_id %}
+                    	<a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
+                    	{% endif %}
+                    	{% if player.sc2e_id %}
+                    	<a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
+                    	{% endif %}
+                    	{% if player.lp_name %}
+                    	<a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
+                    	{% endif %}
+                	</div>
+            	</div>
+            {% elif adm %}
+            	<div class="row" id="external">
+	                <div class="rowel"><a href="#" onclick="toggle_visibility(); return false;">Add external links</a></div>
+	                <div class="rower"></div>
+	            </div>
+            {% endif %}
+            {% if adm %}
+            	<div class="row" id="editsc2c" style="display: none;">
+	                <div class="rowel">sc2charts.net</div>
+	            	<form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
+	            	{% csrf_token %}
+                	<div class="rower"><input type="number" name="SC2C" {% if player.sc2c_id %}value="{{ player.sc2c_id }}"{% endif %} /></div>
                 </div>
-            </div>
+            	<div class="row" id="edittlpdkr" style="display: none;">
+	                <div class="rowel">TLPD Korea</div>
+                	<div class="rower"><input type="number" name="TLPDKR" {% if player.tlpd_kr_id %}value="{{ player.tlpd_kr_id }}"{% endif %} /></div>
+                </div>
+            	<div class="row" id="edittlpdin" style="display: none;">
+	                <div class="rowel">TLPD Int.</div>
+                	<div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
+                </div>
+            	<div class="row" id="editsc2e" style="display: none;">
+	                <div class="rowel">sc2earnings.com</div>
+                	<div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>
+                </div>
+            	<div class="row" id="editlp" style="display: none;">
+	                <div class="rowel">Liquipedia</div>
+                	<div class="rower"><input type="text" name="LP" {% if player.lp_name %}value="{{ player.lp_name }}"{% endif %} /></div>
+               	</div>
+            	<div class="row" id="editadd" style="display: none;"">
+	                <div class="rowel"></div>
+                	<div class="rower"><input type="submit" name="op" value="Change" /></div>
+               	</div>
+	            </form>
             {% endif %}
         </div>
     </div>

@@ -406,8 +406,12 @@ td.rl_name {
     width: 18em;
 }
 
+td.rl_name {
+    width: 8em;
+}
+
 td.rl_rating {
-    width: 9em;
+    width: 6em;
     text-align: right;
 }
 

@@ -61,6 +61,9 @@ class Event(models.Model):
 
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+    
+    def get_event(self):
+        return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
     def change_type(self, type):
         self.type = type

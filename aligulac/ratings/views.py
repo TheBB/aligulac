@@ -636,28 +636,22 @@ def player_results(request, player_id):
         try:
             match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
         except:
-            pass
+            match.rta = ''
         try:
             match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
         except:
-            pass
+            match.rtb = ''
         
         if player == match.plb:
             temppl = match.pla
             tempsc = match.sca
             temprc = match.rca
-            try:
-                temprt = match.rta
-            except:
-                temprt = ''
+            temprt = match.rta
 
             match.pla = match.plb
             match.sca = match.scb
             match.rca = match.rcb
-            try:
-                match.rta = match.rtb
-            except:
-                match.rta = ''
+            match.rta = match.rtb
 
             match.plb = temppl
             match.scb = tempsc

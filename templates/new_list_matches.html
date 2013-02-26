@@ -67,12 +67,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
  -->
 {% for m in lm_list %}
 {% if lm_header_event %}
-{% ifchanged m.eventobj.name %}
+{% ifchanged m.eventobj.get_event %}
 <tr class="header">
     <td colspan="5">
         {% if m.eventobj %} ▸
-            {% for p in m.eventobj.get_path %}
-            	<a href="/results/events/{{ p.id }}-{{ p.fullname|urlfilter }}/">{{ p.name }}</a>
+            {% for event in m.eventobj.get_event %}
+            	<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
             {% endfor %}
         {% elif m.event %}
         	{{ m.event }}

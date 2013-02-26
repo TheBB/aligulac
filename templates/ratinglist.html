@@ -17,7 +17,7 @@ arguments:
 <table class="results">
     <tr class="header">
         <td class="rl_number">#</td>
-        <td class="rl_arrow"></td>
+        <td class="rl_icon"></td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
         <td class="rl_name">Name</td>
@@ -30,20 +30,20 @@ arguments:
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">Rating vP↓</a>
-            {% else %}Rating vP{% endif %}
+            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">vP↓</a>
+            {% else %}vP{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">Rating vT↓</a>
-            {% else %}Rating vT{% endif %}
+            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">vT↓</a>
+            {% else %}vT{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">Rating vZ↓</a>
-            {% else %}Rating vZ{% endif %}
+            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">vZ↓</a>
+            {% else %}vZ{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_arrow"></td>
@@ -80,12 +80,8 @@ arguments:
             <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/">{{ entry.player.tag }}</a>
         </td>
         <td class="rl_team">
-        	{% if displayteams %}
-        		{% if entry.team %}
-	            	<a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/"> {{ entry.team }} </a>
-            	{% else %}
-	            	Teamless
-            	{% endif %}
+            {% if displayteams and entry.team %}
+                <a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/">{{ entry.team.shortname }}</a>
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>

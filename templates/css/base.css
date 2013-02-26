@@ -388,7 +388,7 @@ td.lm_right {
 /* ========== RATINGLIST TABLE ========= */
 
 td.rl_number {
-    width: 2.5em;
+    width: 2em;
     text-align: right;
 }
 
@@ -406,7 +406,7 @@ td.rl_name {
     width: 18em;
 }
 
-td.rl_name {
+td.rl_team {
     width: 8em;
 }
 

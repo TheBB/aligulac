@@ -68,11 +68,9 @@ urlpatterns = patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',\
-            #{'document_root': '/home/efonn/projects/aligulac/templates/css'}),
-            {'document_root': settings.PATH_TO_DIR + '/templates/css'}),
+            {'document_root': settings.PATH_TO_DIR + '../templates/css'}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',\
-            #{'document_root': '/home/efonn/projects/aligulac/templates/js'}),
-            {'document_root': settings.PATH_TO_DIR + '/templates/js'}),
+            {'document_root': settings.PATH_TO_DIR + '../templates/js'}),
                            )
 
 handler404 = 'aligulac.views.h404'

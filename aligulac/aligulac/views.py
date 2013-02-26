@@ -168,7 +168,7 @@ def search(request, q=''):
     if players.count() == 1 and teams.count() == 0:
         return redirect('/players/%i-%s/' % (players[0].id, urlfilter(players[0].tag)))
     elif players.count() == 0 and teams.count() == 1:
-        return redirect('/teams/%i-%s/' % (teams[0].id, urlfilter(tams[0].name)))
+        return redirect('/teams/%i-%s/' % (teams[0].id, urlfilter(teams[0].name)))
 
     base.update({'players': players, 'query': q, 'teams': teams})
 

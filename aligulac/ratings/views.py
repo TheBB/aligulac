@@ -111,7 +111,6 @@ def period(request, period_id, page='1'):
 
     entries = entries[(page-1)*psize:page*psize]
 
-    teams = {}
     for entry in entries:
         if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
             if not Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname:

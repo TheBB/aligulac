@@ -8,14 +8,14 @@ from math import sqrt
 register = template.Library()
 
 def css(value):
-    if not settings.DEBUG:
+    if settings.DEBUG:
         return 'http://css.aligulac.com/' + value + '.css'
     else:
         return '/css/' + value + '.css'
 register.filter('css', css)
 
 def js(value):
-    if not settings.DEBUG:
+    if settings.DEBUG:
         return 'http://js.aligulac.com/' + value + '.js'
     else:
         return '/js/' + value + '.js'

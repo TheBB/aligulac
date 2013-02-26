@@ -81,7 +81,7 @@ arguments:
         </td>
         <td class="rl_team">
             {% if displayteams and entry.team %}
-                <a href="/teams/{{ entry.teamid }}-{{ entry.team|urlfilter }}/">{{ entry.team.shortname }}</a>
+                <a href="/teams/{{ entry.teamid }}-{{ entry.teamfull|urlfilter }}/">{{ entry.team }}</a>
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>

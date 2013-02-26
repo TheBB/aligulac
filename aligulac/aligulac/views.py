@@ -141,14 +141,14 @@ def home(request):
     base = base_ctx(request=request)
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
-    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0:10]
+    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')\
+            .select_related('team', 'teammembership')[0:10]
     for entry in entries:
-        if Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True):
-            if not Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname:
-                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].name
-            else:
-                entry.team = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].shortname
-            entry.teamid = Team.objects.filter(teammembership__player=entry.player.id, teammembership__current=True)[0].id
+        teams = entry.player.teammembership_set.filter(current=True)
+        if teams.exists():
+            entry.team = teams[0].team.shortname
+            entry.teamfull = teams[0].team.name
+            entry.teamid = teams[0].team.id
 
     blogs = Post.objects.order_by('-date')[0:3]
 

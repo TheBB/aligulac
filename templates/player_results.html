@@ -28,11 +28,17 @@ This is the template for the match history of a player. It's called from ratings
         <option value="foreigners"  {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
         <option value="kr"          {% if nats == "kr" %}selected{% endif %}>Koreans</option>
     </select>
-    and match format:
+    match format:
     <select name="bo">
         <option value="all"         {% if bo == "all" %}selected{% endif %}>All</option>
         <option value="3"           {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
         <option value="5"           {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
+    </select>
+    and On/Offline:
+    <select name="offline">
+        <option value="both"        {% if offline == "both" %}selected{% endif %}>Both</option>
+        <option value="online"      {% if offline == "online" %}selected{% endif %}>Online</option>
+        <option value="offline"     {% if offline == "offline" %}selected{% endif %}>Offline</option>
     </select>
     <input type="submit" value="Filter" />
     </p>

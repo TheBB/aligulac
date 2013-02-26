@@ -782,6 +782,15 @@ def player_results(request, player_id):
     else:
         base['bo'] = 'all'
     
+    if 'offline' in request.GET:
+        if request.GET['offline'] == 'online':
+            matches = matches.filter(offline=0)
+        elif request.GET['offline'] == 'offline':
+            matches = matches.filter(offline=1)
+        base['offline'] = request.GET['offline']
+    else:
+        base['offline'] = 'both'
+    
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
 

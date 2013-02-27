@@ -562,15 +562,11 @@ def events(request, event_id=None):
         subtree = subtree.order_by('lft')
     else:
         subtree = subtree.order_by('-lft')
-        
-    matchesArray = []
-    for e in subtree:
-        if event.big and len(matchesArray) == 20:
-            break
-        mset = Match.objects.filter(eventobj=e).order_by('-date', '-id')
-        if mset.exists():
-            matchesArray.append(mset)
-    base['matches'] = matchesArray
+       
+    if event.big:
+        matches = matches[0:200]
+    
+    base['matches'] = matches
     base['subtree'] = subtree
 
     return render_to_response('eventres.html', base)

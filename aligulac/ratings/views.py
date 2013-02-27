@@ -309,27 +309,23 @@ def player_historical(request, player_id):
 def results(request):
     base = base_ctx('Results', 'By Date', request)
 
-    from django.db import connection
-    cur = connection.cursor()
-
     try:
         ints = [int(x) for x in request.GET['d'].split('-')]
         td = datetime.date(ints[0], ints[1], ints[2])
     except:
         td = datetime.date.today()
 
-    cur.execute('''SELECT DISTINCT date, event FROM ratings_match WHERE date=\'%i-%i-%i\' AND eventobj_id IS
-                NULL ORDER BY id DESC''' % (td.year, td.month, td.day))
-    rows_str = cur.fetchall()
+    matches = Match.objects.filter(date=td).order_by('eventobj', '-id')
 
-    cur.execute('''SELECT DISTINCT m.date, m.eventobj_id FROM ratings_match AS m, ratings_event AS e WHERE date=\'%i-%i-%i\'
-                   AND eventobj_id IS NOT NULL AND e.id=m.eventobj_id ORDER BY e.lft DESC, m.id DESC'''\
-                           % (td.year, td.month, td.day))
-    rows_obj = cur.fetchall()
-
-    matches = []
-    matches += [Match.objects.filter(date=r[0], eventobj_id=r[1]).order_by('-id') for r in rows_obj]
-    matches += [Match.objects.filter(date=r[0], event=r[1], eventobj__isnull=True).order_by('-id') for r in rows_str]
+    for match in matches:
+        try:
+            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
+        except:
+            match.rta = ''
+        try:
+            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
+        except:
+            match.rtb = ''  
 
     base['matches'] = matches
     base['td'] = td
@@ -660,7 +656,6 @@ def player_results(request, player_id):
             match.scb = tempsc
             match.rcb = temprc
             match.rtb = temprt
-            
 
     prev_date = None
     prev_event = 'qwerty'

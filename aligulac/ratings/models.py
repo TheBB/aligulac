@@ -62,8 +62,24 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
     
-    def get_event(self):
+    def get_path_event(self):
         return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+
+    def get_path_round(self):
+        return Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+
+    def get_name(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
+
+    def get_name_event(self):
+        return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
+
+    #doesn't work yet
+    def get_name_round(self):
+        round_name = ''
+        for round in Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft'):
+            round_name += round.name + ' '
+        return round_name
 
     def change_type(self, type):
         self.type = type

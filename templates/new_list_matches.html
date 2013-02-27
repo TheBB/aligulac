@@ -3,12 +3,10 @@ This is a very useful subroutine that is called from many different template fil
 matches. It expects a number of "arguments", all prefixed with lm_, to avoid naming collision.
 
 - lm_list: The list of matches to print.
-- lm_header_event: True if the title row should be event information, false otherwise.
 - lm_header_info: True if the title row should be column headings, false otherwise.
-- lm_sorted: True if the player on the left should be consistent, false to show the order in the database. Set
-             this to true if the list is included on a player page, so one player will always be shown on one
-             side. If true, the lm_player argument must be given.
-- lm_player: The player that should be shown to the left. Has no effect unless lm_sorted is true.
+- lm_header_event: "full" if full event information should be shown in headers, "event" if only event information
+					should be shown in headers, false otherwise.
+- lm_rating: Display ratings if True.
 - lm_show_date: Set to true to show the date of each match, false otherwise.
 - lm_autohide: Set to true to automatically collapse the matches under the header, false otherwise.
 - lm_adm: Set to true to show admin links on the far right. (A checkbox and a link to the admin interface.)
@@ -66,39 +64,68 @@ NB! The calling code is responsible for starting and ending the HTML table:
 {% endif %}
  -->
 {% for m in lm_list %}
-{% if lm_header_event %}
-{% ifchanged m.eventobj.get_event %}
-<tr class="header">
-    <td colspan="5">
-        {% if m.eventobj %} ▸
-            {% for event in m.eventobj.get_event %}
-            	<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
-            {% endfor %}
-        {% elif m.event %}
-        	{{ m.event }}
-        {% else %}
-            Unknown event(s)
-        {% endif %}
-    </td>
-    <td colspan="2" style="text-align: right;"> 
-        <a id="lma-{{ m.id }}" href="#" 
-            onclick="togvis_tbody('lm-{{m.id}}');togHTML('lma-{{m.id}}','hide','show');return false;">
-            {% if lm_autohide %}show{% else %}hide{% endif %}
-        </a>
-
-        {% if lm_adm and not lm_nocheck %}
-        <a href="#" onclick="mark_all(true, 'match-{{m.id}}-'); return false;">chk</a>
-        <a href="#" onclick="mark_all(false, 'match-{{m.id}}-'); return false;">unchk</a>
-        {% endif %}
-    </td>
-    </td>
-</tr>
-{% endifchanged %}
+{% if lm_header_event == "full" %}
+	{% ifchanged m.eventobj.get_name %}
+		<tr class="header">
+		    <td colspan="5">
+	        	{% if m.eventobj %} ▸
+            		{% for event in m.eventobj.get_path %}
+	            		<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
+           			{% endfor %}
+       			{% elif m.event %}
+		        	{{ m.event }}
+       			{% else %}
+		            Unknown event(s)
+       			{% endif %}
+    		</td>
+    		<td colspan="2" style="text-align: right;"> 
+		        <a id="lma-{{ m.id }}" href="#" 
+            		onclick="togvis_tbody('lm-{{m.id}}');togHTML('lma-{{m.id}}','hide','show');return false;">
+            		{% if lm_autohide %}show{% else %}hide{% endif %}
+        		</a>
+		
+        		{% if lm_adm and not lm_nocheck %}
+        			<a href="#" onclick="mark_all(true, 'match-{{m.id}}-'); return false;">chk</a>
+        			<a href="#" onclick="mark_all(false, 'match-{{m.id}}-'); return false;">unchk</a>
+        		{% endif %}
+    		</td>
+		</tr>
+	{% endifchanged %}
+{% elif lm_header_event == "event" %}
+	{% ifchanged m.eventobj.get_name_event %}
+		<tr class="header">
+		    <td colspan="5">
+	        	{% if m.eventobj %} ▸
+            		{% for event in m.eventobj.get_path_event %}
+	            		<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
+           			{% endfor %}
+       			{% elif m.event %}
+		        	{{ m.event }}
+       			{% else %}
+		            Unknown event(s)
+       			{% endif %}
+    		</td>
+    		<td colspan="2" style="text-align: right;"> 
+		        <a id="lma-{{ m.id }}" href="#" 
+            		onclick="togvis_tbody('lm-{{m.id}}');togHTML('lma-{{m.id}}','hide','show');return false;">
+            		{% if lm_autohide %}show{% else %}hide{% endif %}
+        		</a>
+		
+        		{% if lm_adm and not lm_nocheck %}
+        			<a href="#" onclick="mark_all(true, 'match-{{m.id}}-'); return false;">chk</a>
+        			<a href="#" onclick="mark_all(false, 'match-{{m.id}}-'); return false;">unchk</a>
+        		{% endif %}
+    		</td>
+		</tr>
+	{% endifchanged %}
 {% endif %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if not lm_header_event %}
                                                     {% if m.eventobj %}title="{{ m.eventobj }}"
-                                                    {% elif m.event %}title="{{ m.event }}"
-                                                    {% else %}title="Unknown event"
+                                                    	{% elif m.event %}title="{{ m.event }}"
+                                                    	{% else %}title="Unknown event"
+                                                    {% endif %}
+                                                {% elif lm_header_event == "event" %}
+                                                    {% if m.eventobj %}title="{{ m.eventobj.get_name_round }}"
                                                     {% endif %}
                                                 {% endif %}>
     <td class="lm_date">
@@ -138,7 +165,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% endif %} -->
             {% if m.sca > m.scb %}</strong>{% endif %}
         <!-- {% endif %} -->
-    </td>
+	</td>
     <td class="lm_score">
         <!-- {% if lm_sorted %}
             {{ m.sc_my }}-{{ m.sc_op }}

@@ -58,9 +58,7 @@ This page shows the results by date. Called from ratings.views.results.
 
 {% if matches %}
     <table class="results">
-    {% for ml in matches %}
-        {% include "list_matches.html" with lm_list=ml lm_show_date=0 lm_adm=0 lm_header_event=1 %}
-    {% endfor %}
+        {% include "new_list_matches.html" with lm_list=matches lm_show_date=0 lm_adm=0 lm_header_event="full" lm_rating=1 %}
     </table>
     <div class="table" style="width: 67em;">
         <div class="row">

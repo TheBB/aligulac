@@ -7,7 +7,7 @@ from ratings.tools import find_player, sort_matches, group_by_events, cdf
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event
+from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -174,7 +174,10 @@ def player(request, player_id):
         base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
     except:
         pass
-
+    try: 
+        base['aliases'] = Alias.objects.filter(player=player)
+    except:
+        pass
 
     # Winrates
     matches_a = Match.objects.filter(pla=player)

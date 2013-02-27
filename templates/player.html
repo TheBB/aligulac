@@ -54,6 +54,12 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower">{{ player.name }}</div>
             </div>
             {% endif %}
+            {% if aliases %}
+            <div class="row">
+                <div class="rowel">AKA</div>
+                <div class="rower">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+            </div>
+            {% endif %}
             {% if player.birthday %}
             <div class="row">
                 <div class="rowel">Birthday</div>

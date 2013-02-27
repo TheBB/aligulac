@@ -423,12 +423,13 @@ def results_search(request):
             return render_to_response('results_search.html', base)
 
         if 1 <= len(pls) <= 2:
-            base['sort_player'] = pls[0]
+            matches = order_player(matches, pls[0])
+            
             sc_my, sc_op, ta, tb = sort_matches(matches, pls[0], add_ratings=False)
             if len(pls) == 2:
                 base.update({'sc_my': sc_my, 'sc_op': sc_op, 'left': pls[0], 'right': pls[1]})
 
-        matches = group_by_events(matches)
+        #matches = group_by_events(matches)
         base['matches'] = matches
 
         if base['adm']:

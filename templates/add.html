@@ -17,7 +17,7 @@ ratings.submitviews.add_matches.
         <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
         before being visible.{% endif %}</p>
             <table class="results">
-            {% include "list_matches.html" with lm_list=success lm_show_date=0 lm_adm=adm lm_header_event=1 lm_nocheck=1 %}
+            {% include "new_list_matches.html" with lm_list=success lm_show_date=0 lm_adm=adm lm_header_event="full" lm_nocheck=1 %}
             </table>
             <p></p>
         {% endif %}

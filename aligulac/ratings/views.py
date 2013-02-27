@@ -609,7 +609,7 @@ def player_results(request, player_id):
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
 
-    base['matches'] = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
+    base['matches'] = display_matches(matches, event_headers=True, fix_left=player, ratings=True)
     
     base['sc_my'] = sum([m.pla_score for m in base['matches']])
     base['sc_op'] = sum([m.plb_score for m in base['matches']])
@@ -617,6 +617,7 @@ def player_results(request, player_id):
     base['msc_op'] = sum([1 if m.plb_score > m.pla_score else 0 for m in base['matches']])
     
     base['player'] = player
+    
     return render_to_response('player_results.html', base)
 
 def rating_details(request, player_id, period_id):

@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, sort_matches, group_by_events, cdf
+from ratings.tools import find_player, sort_matches, add_ratings, order_player, group_by_events, cdf
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -251,36 +251,10 @@ def player(request, player_id):
             .extra(where=['abs(datediff(date,\'%s\')) < 90' % datetime.datetime.now()])\
             .order_by('-date', '-id')[0:10]
 
-    for match in matches:
-        try:
-            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
-        except:
-            match.rta = ''
-        try:
-            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
-        except:
-            match.rtb = ''
-        
-        if player == match.plb:
-            temppl = match.pla
-            tempsc = match.sca
-            temprc = match.rca
-            temprt = match.rta
-
-            match.pla = match.plb
-            match.sca = match.scb
-            match.rca = match.rcb
-            match.rta = match.rtb
-
-            match.plb = temppl
-            match.scb = tempsc
-            match.rcb = temprc
-            match.rtb = temprt
+    matches = add_ratings(matches)
+    matches = order_player(matches, player)
 
     base["matches"] = matches
-    #if matches.exists():
-        #sort_matches(matches, player, add_ratings=True)
-        #base.update({'matches': matches})
 
     def meandate(tm):
         if tm.start != None and tm.end != None:
@@ -344,15 +318,7 @@ def results(request):
 
     matches = Match.objects.filter(date=td).order_by('eventobj', '-id')
 
-    for match in matches:
-        try:
-            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
-        except:
-            match.rta = ''
-        try:
-            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
-        except:
-            match.rtb = ''  
+    matches = add_ratings(matches)
 
     base['matches'] = matches
     base['td'] = td
@@ -658,31 +624,8 @@ def player_results(request, player_id):
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
     
-    for match in matches:
-        try:
-            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
-        except:
-            match.rta = ''
-        try:
-            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
-        except:
-            match.rtb = ''
-        
-        if player == match.plb:
-            temppl = match.pla
-            tempsc = match.sca
-            temprc = match.rca
-            temprt = match.rta
-
-            match.pla = match.plb
-            match.sca = match.scb
-            match.rca = match.rcb
-            match.rta = match.rtb
-
-            match.plb = temppl
-            match.scb = tempsc
-            match.rcb = temprc
-            match.rtb = temprt
+    matches = add_ratings(matches)
+    matches = order_player(matches, player)
 
     prev_date = None
     prev_event = 'qwerty'
@@ -742,7 +685,8 @@ def rating_details(request, player_id, period_id):
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)
 
-    sort_matches(matches, player, add_ratings=True)
+    matches = add_ratings(matches)
+    matches = order_player(matches, player)
 
     treated = False
     for m in matches:

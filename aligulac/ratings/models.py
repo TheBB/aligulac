@@ -62,8 +62,15 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
     
-    def get_event(self):
-        return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+    def get_event(self, fullpath=False):
+        try:
+            return self.parentevents
+        except:
+            qset = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False)
+            if not fullpath:
+                qset = qset.filter(type__in=['category', 'event'])
+            self.parentevent = list(qset.order_by('lft'))
+            return self.parentevent
 
     def change_type(self, type):
         self.type = type
@@ -318,6 +325,15 @@ class Match(models.Model):
     
     def get_loser_score(self):
         return min(self.sca, self.scb)
+
+    def event_check(self, fullpath=False):
+        if self.eventobj:
+            if fullpath:
+                return self.eventobj_id
+            else:
+                return self.eventobj.get_event(fullpath)[-1].id
+        else:
+            return self.event
 
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']

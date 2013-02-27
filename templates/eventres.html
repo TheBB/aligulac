@@ -34,12 +34,12 @@ ratings.views.events.
                 <div class="rower">{{ offline|yesno:"Offline,Online,Both" }}</div>
             </div>
             {% if adm %}
-            	{% if eventtype %}
-            	<div class="row">
-	                <div class="rowel">Type</div>
-                	<div class="rower">{{ eventtype|capfirst }}</div>
-            	</div>
-            	{% endif %}
+                {% if eventtype %}
+                <div class="row">
+                    <div class="rowel">Type</div>
+                    <div class="rower">{{ eventtype|capfirst }}</div>
+                </div>
+                {% endif %}
             {% endif %}
             <div class="row">
                 <div class="rowel">Games</div>
@@ -134,33 +134,29 @@ ratings.views.events.
     {% else %}
         <p>This event is still <strong>open</strong>. Games may be added.</p>
     {% endif %}
-	
+    
     {% if event.big %}
         <p>This event is <strong>big</strong>, so the list of games has been cut-off. Go to an event on the next
         level to see a complete list.</p>
     {% endif %}
     
     {% if message %}
-    	{{ message }}
+        {{ message }}
     {% endif %}
 
-	{% if matches %}
-	    <table class="results">
-	    {% for ml in matches %}
-        	{% if ml %}
-        	{% include "list_matches.html" with lm_list=ml lm_show_date=1 lm_adm=0 lm_header_event=1 %}
-        	{% endif %}
-    	{% endfor %}
-    	</table>
-	{% else %}
-	    <p>This event has no registered games... yet.</p>
-	{% endif %}
+    {% if matches %}
+        <table class="results">
+        {% include "matchlist.html" with lm_list=matches lm_adm=0 %}
+        </table>
+    {% else %}
+        <p>This event has no registered games... yet.</p>
+    {% endif %}
 
     {% if adm %}
         <p>The following modifications will be made to <strong>all</strong> matches in this event:</p>
-		<form method="post" action="/results/events/{{ event.id }}/">
-		{% csrf_token %}
-		
+        <form method="post" action="/results/events/{{ event.id }}/">
+        {% csrf_token %}
+        
         <table class="bigform">
             <!-- <tr>
                 <td class="form_left">
@@ -182,9 +178,9 @@ ratings.views.events.
                 <td class="form_right">
                     <select name="type" id="type">
                         <option value="nochange" selected>No change</option>
-						<option value="category" />Category</option>
-						<option value="event" />Event</option>
-						<option value="round" />Round</option>
+                        <option value="category" />Category</option>
+                        <option value="event" />Event</option>
+                        <option value="round" />Round</option>
                     </select>
                     <input type="checkbox" id="siblings" name="siblings" value="siblings" />
                     <label for="siblings">Apply to all events on the same level</label>

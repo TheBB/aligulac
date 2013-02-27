@@ -4,7 +4,7 @@ from pyparsing import nestedExpr
 
 from aligulac.views import base_ctx
 from aligulac.settings import M_WARNINGS, M_APPROVED
-from ratings.tools import find_player, find_duplicates, group_by_events
+from ratings.tools import find_player, find_duplicates, group_by_events, display_matches
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
@@ -249,6 +249,8 @@ def add_matches(request):
                 failure.append((s, 'Could not parse: ' + e.message))
                 continue
 
+        success = display_matches(success, fullpath=True)
+
         base.update({'messages': True, 'matches': '\n'.join([f[0] for f in failure]),\
                 'success': success, 'failure': failure})
 
@@ -391,11 +393,12 @@ def review(request):
 
         base['messages'] = messages
 
-        success = group_by_events(success)
-        base['success'] = success
+        base['success'] = display_matches(success, fullpath=True)
 
     groups = PreMatchGroup.objects.filter(prematch__isnull=False)\
             .select_related('prematch').order_by('id', 'event').distinct()
+    for g in groups:
+        g.prematches = display_matches(g.prematch_set.all(), event_headers=False)
     base['groups'] = groups
 
     base.update(csrf(request))
@@ -560,7 +563,7 @@ def integrity(request):
                 block.append(Match.objects.get(id=id))
             except:
                 pass
-        matches.append((','.join(str(k) for k in list(w)), block))
+        matches.append((','.join(str(k) for k in list(w)), display_matches(block, event_headers=False)))
 
         if len(matches) == 50:
             break

@@ -1,4 +1,5 @@
 from math import sqrt
+from collections import namedtuple
 
 from ratings.models import Player, Match, PreMatch
 from countries import data
@@ -191,3 +192,82 @@ def find_player(lst, make=False, soft=False):
         return Player.objects.filter(id=p.id)
 
     return qset.distinct()
+
+def display_matches(matches, fullpath=False, event_headers=True, date=True, fix_left=None, ratings=False):
+    class M:
+        pass
+    ret = []
+
+    prev_check = -1
+    group_id = 0
+
+    for idx, m in enumerate(matches):
+        r = M()
+        r.match_id = m.id
+
+        r.treated = m.treated if type(m) == Match else False
+
+        if date and type(m) == Match:
+            r.date = m.date
+
+        r.pla_id = m.pla_id
+        r.plb_id = m.plb_id
+        r.pla_tag = m.pla.tag if m.pla else m.pla_string
+        r.plb_tag = m.plb.tag if m.plb else m.plb_string
+        r.pla_race = m.rca
+        r.plb_race = m.rcb
+        r.pla_country = m.pla.country if m.pla else ''
+        r.plb_country = m.plb.country if m.plb else ''
+        r.pla_score = m.sca
+        r.plb_score = m.scb
+
+        if ratings:
+            try:
+                rta = m.pla.rating_set.get(period__id=m.period_id-1)
+                r.pla_rating = rta.get_totalrating(m.rcb)
+                r.pla_dev = rta.get_totaldev(m.rcb)
+            except:
+                r.pla_rating = 0
+                r.pla_dev = sqrt(2)*RATINGS_INIT_DEV
+
+            try:
+                rtb = m.plb.rating_set.get(period__id=m.period_id-1)
+                r.plb_rating = rtb.get_totalrating(m.rca)
+                r.plb_dev = rtb.get_totaldev(m.rca)
+            except:
+                r.plb_rating = 0
+                r.plb_dev = sqrt(2)*RATINGS_INIT_DEV
+
+        if fix_left is not None and fix_left.id == r.plb_id:
+            r.pla_id,       r.plb_id      = r.plb_id,       r.pla_id
+            r.pla_tag,      r.plb_tag     = r.plb_tag,      r.pla_tag
+            r.pla_race,     r.plb_race    = r.plb_race,     r.pla_race
+            r.pla_country,  r.plb_country = r.plb_country,  r.pla_country
+            r.pla_score,    r.plb_score   = r.plb_score,    r.pla_score
+            if ratings:
+                r.pla_rating,  r.plb_rating = r.plb_rating,  r.pla_rating
+                r.pla_dev,     r.plb_dev    = r.plb_dev,     r.pla_dev
+
+        if type(m) == Match:
+            check = m.event_check(fullpath)
+            if check != prev_check and event_headers:
+                group_id += 1
+                r.print_header = True
+                if m.eventobj:
+                    r.header_path = m.eventobj.get_event(fullpath)
+                else:
+                    r.header_text = m.event
+            prev_check = check
+            r.group_id = group_id
+        else:
+            r.group_id = m.group_id
+
+        if not event_headers and type(m) == Match:
+            if m.eventobj:
+                r.eventtext = m.eventobj.fullname
+            elif m.event:
+                r.eventtext = m.event
+
+        ret.append(r)
+
+    return ret

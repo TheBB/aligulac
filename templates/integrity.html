@@ -11,16 +11,15 @@ This page shows the results by date. Called from ratings.views.results.
 
 {% block content %}
 
-<h2>Integrity warnings</h3>
+<h2>Integrity warnings</h2>
 
-    {% if adm %}
-    <p>You are logged in as: {{ user }}.
-    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
-    {% else %}
-    <p>You are not logged in. The submitted results will be pending review before being accepted.
-    (<a href="/login/">login</a>)</p>
-    {% endif %}
-
+{% if adm %}
+<p>You are logged in as: {{ user }}.
+(<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+{% else %}
+<p>You are not logged in. The submitted results will be pending review before being accepted.
+(<a href="/login/">login</a>)</p>
+{% endif %}
 
 {% if matches %}
 <p>There are {{ num }} possibly duplicated matches in the database. Showing the first {{ matches|length }}.</p>
@@ -32,7 +31,7 @@ This page shows the results by date. Called from ratings.views.results.
     <input type="hidden" name="warning" value="{{ g.0 }}" />
     <tr class="header">
         <td colspan="4">
-            {{ g.1.0.pla.tag }} vs. {{ g.1.0.plb.tag }}
+            {{ g.1.0.pla_tag }} vs. {{ g.1.0.plb_tag }}
         </td>
         <td colspan="3" style="text-align: right;">
             <input type="submit" name="false" value="False alarm" />
@@ -40,7 +39,7 @@ This page shows the results by date. Called from ratings.views.results.
             <input type="submit" name="del" value="Delete marked" />
         </td>
     </tr>
-    {% include "list_matches.html" with lm_list=g.1 lm_show_date=1 lm_adm=1 %}
+    {% include "matchlist.html" with lm_list=g.1 lm_adm=1 lm_check=1 %}
 </form>
 {% endfor %}
 </table>

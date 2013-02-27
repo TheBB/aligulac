@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, sort_matches, group_by_events, cdf
+from ratings.tools import find_player, sort_matches, display_matches, group_by_events, cdf
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -174,6 +174,7 @@ def player(request, player_id):
         base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
     except:
         pass
+
     try: 
         base['aliases'] = Alias.objects.filter(player=player)
     except:
@@ -252,8 +253,7 @@ def player(request, player_id):
             .order_by('-date', '-id')[0:10]
 
     if matches.exists():
-        sort_matches(matches, player, add_ratings=True)
-        base.update({'matches': matches})
+        base['matches'] = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
 
     def meandate(tm):
         if tm.start != None and tm.end != None:
@@ -309,29 +309,15 @@ def player_historical(request, player_id):
 def results(request):
     base = base_ctx('Results', 'By Date', request)
 
-    from django.db import connection
-    cur = connection.cursor()
-
     try:
         ints = [int(x) for x in request.GET['d'].split('-')]
         td = datetime.date(ints[0], ints[1], ints[2])
     except:
         td = datetime.date.today()
 
-    cur.execute('''SELECT DISTINCT date, event FROM ratings_match WHERE date=\'%i-%i-%i\' AND eventobj_id IS
-                NULL ORDER BY id DESC''' % (td.year, td.month, td.day))
-    rows_str = cur.fetchall()
+    matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
 
-    cur.execute('''SELECT DISTINCT m.date, m.eventobj_id FROM ratings_match AS m, ratings_event AS e WHERE date=\'%i-%i-%i\'
-                   AND eventobj_id IS NOT NULL AND e.id=m.eventobj_id ORDER BY e.lft DESC, m.id DESC'''\
-                           % (td.year, td.month, td.day))
-    rows_obj = cur.fetchall()
-
-    matches = []
-    matches += [Match.objects.filter(date=r[0], eventobj_id=r[1]).order_by('-id') for r in rows_obj]
-    matches += [Match.objects.filter(date=r[0], event=r[1], eventobj__isnull=True).order_by('-id') for r in rows_str]
-
-    base['matches'] = matches
+    base['matches'] = display_matches(matches, fullpath=True, date=False)
     base['td'] = td
 
     return render_to_response('results.html', base)
@@ -427,20 +413,22 @@ def results_search(request):
             matches = matches.filter(q)
 
         base['count'] = matches.count()
-        matches = matches.order_by('-date')
 
         if base['count'] > 1000:
             base['errs'].append('Too many results (%i). Please add restrictions.' % base['count'])
             return render_to_response('results_search.html', base)
 
-        if 1 <= len(pls) <= 2:
-            base['sort_player'] = pls[0]
-            sc_my, sc_op, ta, tb = sort_matches(matches, pls[0], add_ratings=False)
-            if len(pls) == 2:
-                base.update({'sc_my': sc_my, 'sc_op': sc_op, 'left': pls[0], 'right': pls[1]})
+        matches = matches.order_by('-date', 'eventobj__lft', 'event', 'id')
 
-        matches = group_by_events(matches)
-        base['matches'] = matches
+        if 1 <= len(pls) <= 2:
+            base['matches'] = display_matches(matches, date=True, fix_left=pls[0])
+            base['sc_my'] = sum([m.pla_score for m in base['matches']])
+            base['sc_op'] = sum([m.plb_score for m in base['matches']])
+            base['left'] = pls[0]
+            if len(pls) == 2:
+                base['right'] = pls[1]
+        else:
+            base['matches'] = display_matches(matches, date=True)
 
         if base['adm']:
             base['events'] = Event.objects.filter(closed=False, rgt=F('lft')+1).order_by('lft')
@@ -566,22 +554,8 @@ def events(request, event_id=None):
     #       | Q(match_plb__eventobj__lft__gte=event.lft, match_plb__eventobj__rgt__lte=event.rgt))\
     #         .distinct().count()
 
-    # Match list
-    subtree = Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)
-    if event.closed:
-        subtree = subtree.order_by('lft')
-    else:
-        subtree = subtree.order_by('-lft')
-        
-    matchesArray = []
-    for e in subtree:
-        if event.big and len(matchesArray) == 20:
-            break
-        mset = Match.objects.filter(eventobj=e).order_by('-date', '-id')
-        if mset.exists():
-            matchesArray.append(mset)
-    base['matches'] = matchesArray
-    base['subtree'] = subtree
+    matches = matches.order_by('-eventobj__lft')[0:200]
+    base['matches'] = display_matches(matches, fullpath=True)
 
     return render_to_response('eventres.html', base)
 
@@ -634,41 +608,14 @@ def player_results(request, player_id):
     
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
+
+    base['matches'] = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
     
-    for match in matches:
-        try:
-            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
-        except:
-            match.rta = ''
-        try:
-            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
-        except:
-            match.rtb = ''
-        
-        if player == match.plb:
-            temppl = match.pla
-            tempsc = match.sca
-            temprc = match.rca
-            temprt = match.rta
-
-            match.pla = match.plb
-            match.sca = match.scb
-            match.rca = match.rcb
-            match.rta = match.rtb
-
-            match.plb = temppl
-            match.scb = tempsc
-            match.rcb = temprc
-            match.rtb = temprt
-            
-
-    prev_date = None
-    prev_event = 'qwerty'
-    prev_eventobj = -1
-
-    base['sc_my'], base['sc_op'], base['msc_my'], base['msc_op'] = sort_matches(matches, player, add_ratings=True)
-
-    base['matches'] = matches
+    base['sc_my'] = sum([m.pla_score for m in base['matches']])
+    base['sc_op'] = sum([m.plb_score for m in base['matches']])
+    base['msc_my'] = sum([1 if m.pla_score > m.plb_score else 0 for m in base['matches']])
+    base['msc_op'] = sum([1 if m.plb_score > m.pla_score else 0 for m in base['matches']])
+    
     base['player'] = player
     return render_to_response('player_results.html', base)
 
@@ -707,45 +654,46 @@ def rating_details(request, player_id, period_id):
         prevrat = [0., {'P': 0., 'T': 0., 'Z': 0.}]
         prevdev = [RATINGS_INIT_DEV, {'P': RATINGS_INIT_DEV, 'T': RATINGS_INIT_DEV, 'Z': RATINGS_INIT_DEV}]
 
-    tot_rating = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
-    ngames = [0, {'P': 0, 'T': 0, 'Z': 0}]
-    nwins = [0, {'P': 0, 'T': 0, 'Z': 0}]
-    nlosses = [0, {'P': 0, 'T': 0, 'Z': 0}]
-    expwins = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
-
-    nontreated = False
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period=period)\
             .select_related('pla__rating').select_related('plb__rating').order_by('-date', '-id')
     if not matches.exists():
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)
 
-    sort_matches(matches, player, add_ratings=True)
+    matches = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
+
+    tot_rating = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
+    ngames = [0, {'P': 0, 'T': 0, 'Z': 0}]
+    nwins = [0, {'P': 0, 'T': 0, 'Z': 0}]
+    nlosses = [0, {'P': 0, 'T': 0, 'Z': 0}]
+    expwins = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
 
     treated = False
+    nontreated = False
     for m in matches:
-        if m.treated:
-            treated = True
-            tot_rating[0] += m.rt_op * (m.sca + m.scb)
-            ngames[0] += m.sca + m.scb
-            nwins[0] += m.sc_my
-            nlosses[0] += m.sc_op
-
-            scale = 1 + m.dev_op**2 + m.dev_my**2
-
-            races = [m.rc_op] if m.rc_op in ['P','T','Z'] else ['P','T','Z']
-            weight = float(1)/len(races)
-            for sr in races:
-                ew = (m.sca + m.scb) * cdf(prevrat[1][sr] - m.rt_op, scale=sqrt(scale))
-                expwins[0] += weight * ew
-                expwins[1][sr] += weight * ew
-
-                tot_rating[1][sr] += weight * m.rt_op * (m.sca + m.scb)
-                ngames[1][sr] += weight * (m.sca + m.scb)
-                nwins[1][sr] += weight * m.sc_my
-                nlosses[1][sr] += weight * m.sc_op
-        else:
+        if not m.treated:
             nontreated = True
+            continue
+        treated = True
+
+        tot_rating[0] += m.plb_rating * (m.pla_score + m.plb_score)
+        ngames[0] += m.pla_score + m.plb_score
+        nwins[0] += m.pla_score
+        nlosses[0] += m.plb_score
+
+        scale = sqrt(1 + m.pla_dev**2 + m.pla_dev**2)
+
+        races = [m.plb_race] if m.plb_race in ['P','T','Z'] else ['P','T','Z']
+        weight = float(1)/len(races)
+        for sr in races:
+            ew = (m.pla_score + m.plb_score) * cdf(m.pla_rating - m.plb_rating, scale=scale)
+            expwins[0] += weight * ew
+            expwins[1][sr] += weight * ew
+
+            tot_rating[1][sr] += weight * m.plb_rating * (m.pla_score + m.plb_score)
+            ngames[1][sr] += weight * (m.pla_score + m.plb_score)
+            nwins[1][sr] += weight * m.pla_score
+            nlosses[1][sr] += weight * m.plb_score
 
     base.update({'period': period, 'player': player, 'rating': rating, 'matches': matches, 'treated': treated,\
             'nontreated': nontreated, 'prevlink': prevlink, 'nextlink': nextlink})

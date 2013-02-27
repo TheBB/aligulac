@@ -148,11 +148,11 @@ numbers given below are projected adjustments and can change before then.</p>
     
 <p>Exact game details:</p>
     <table class="results">
-    {% include "list_matches.html" with lm_list=matches lm_show_date=1 lm_adm=0 lm_header_info=1 lm_sorted=1 lm_player=player lm_prevrat=prevrat %}
+    {% include "matchlist.html" with lm_list=matches lm_header_info=1 %}
     </table>
     {% if nontreated %} 
         <p><strong>Note:</strong> Some games have not been included in the rating calculations because they
-        were submitted to the database too late. They will be included in the next update. This happens every
+        were just recently submitted or modified. They will be included in the next update. This happens every
         six hours. The time of the last update can be found <a href="/db/">here</a>.</p>
     {% endif %}
 {% else %}

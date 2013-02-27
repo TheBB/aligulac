@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, sort_matches, display_matches, group_by_events, cdf
+from ratings.tools import find_player, display_matches, cdf
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max

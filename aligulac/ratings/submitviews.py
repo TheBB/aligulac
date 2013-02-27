@@ -4,7 +4,7 @@ from pyparsing import nestedExpr
 
 from aligulac.views import base_ctx
 from aligulac.settings import M_WARNINGS, M_APPROVED
-from ratings.tools import find_player, find_duplicates, group_by_events, display_matches
+from ratings.tools import find_player, find_duplicates, display_matches
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse

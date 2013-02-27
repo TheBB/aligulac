@@ -251,9 +251,36 @@ def player(request, player_id):
             .extra(where=['abs(datediff(date,\'%s\')) < 90' % datetime.datetime.now()])\
             .order_by('-date', '-id')[0:10]
 
-    if matches.exists():
-        sort_matches(matches, player, add_ratings=True)
-        base.update({'matches': matches})
+    for match in matches:
+        try:
+            match.rta = Rating.objects.filter(period=match.period.id-1, player=match.pla)[0].get_totalrating(match.rcb)
+        except:
+            match.rta = ''
+        try:
+            match.rtb = Rating.objects.filter(period=match.period.id-1, player=match.plb)[0].get_totalrating(match.rca)
+        except:
+            match.rtb = ''
+        
+        if player == match.plb:
+            temppl = match.pla
+            tempsc = match.sca
+            temprc = match.rca
+            temprt = match.rta
+
+            match.pla = match.plb
+            match.sca = match.scb
+            match.rca = match.rcb
+            match.rta = match.rtb
+
+            match.plb = temppl
+            match.scb = tempsc
+            match.rcb = temprc
+            match.rtb = temprt
+
+    base["matches"] = matches
+    #if matches.exists():
+        #sort_matches(matches, player, add_ratings=True)
+        #base.update({'matches': matches})
 
     def meandate(tm):
         if tm.start != None and tm.end != None:

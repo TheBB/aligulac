@@ -682,6 +682,7 @@ def rating_details(request, player_id, period_id):
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)
 
+    sort_matches(matches, player, add_ratings=True)
     matches = add_ratings(matches)
     matches = order_player(matches, player)
 

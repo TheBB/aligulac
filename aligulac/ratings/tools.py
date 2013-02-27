@@ -81,6 +81,43 @@ def sort_matches(matches, player, add_ratings=False):
 
     return sc_my, sc_op, msc_my, msc_op
 
+def add_ratings(matches):
+    for match in matches:
+        try:
+            match.rta = match.pla.rating_set.get(period__id=match.period.id-1).get_totalrating(match.rcb)
+        except:
+            match.rta = ''
+        try:
+            match.rtb = match.plb.rating_set.get(period__id=match.period.id-1).get_totalrating(match.rca)
+        except:
+            match.rtb = ''
+    
+    return matches
+
+def order_player(matches, player):
+    for match in matches:
+        if player == match.plb:
+            temppl = match.pla
+            tempsc = match.sca
+            temprc = match.rca
+
+            match.pla = match.plb
+            match.sca = match.scb
+            match.rca = match.rcb
+
+            match.plb = temppl
+            match.scb = tempsc
+            match.rcb = temprc
+            
+            try:
+                temprt = match.rta
+                match.rta = match.rtb
+                match.rtb = temprt
+            except:
+                pass
+            
+    return matches
+
 def group_by_events(matches):
     ret = []
 

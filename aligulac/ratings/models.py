@@ -81,7 +81,6 @@ class Event(models.Model):
     def get_name_event(self):
         return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
 
-    #doesn't work yet
     def get_name_round(self):
         round_name = ''
         for round in Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft'):

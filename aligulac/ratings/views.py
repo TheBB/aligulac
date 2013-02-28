@@ -541,8 +541,19 @@ def events(request, event_id=None):
             for q in request.POST['subevent'].strip().split(','):
                 type = request.POST['type']
                 parent.add_child(q.strip(), type, noprint, closed)
+                
+        elif 'move' in request.POST and request.POST['move'] == 'Move':
+            eventid = request.POST['moveevent']
+            event.set_parent(Event.objects.get(id=eventid))
+            
+            roots = list(Event.objects.filter(parent=event).order_by('lft'))
+            nextleft = 0
+            for r in roots:
+                nextleft = r.reorganize(nextleft) + 1
 
-                        
+    #used for moving events
+    base['surroundingevents'] = event.get_parent(1).get_children()
+
     # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:
         base['game'] = matches[0].game

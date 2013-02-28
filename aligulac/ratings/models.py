@@ -70,12 +70,31 @@ class Event(models.Model):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False,
                                     type__in=['category','event']).order_by('lft')
     
+    def get_parent(self, levels=1):
+        if levels == 1:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[0]
+            except:
+                return self
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[0].get_parent(levels-1)
+            except:
+                return self
+    
+    def get_children(self):
+        return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
+    
     def change_type(self, type):
         self.type = type
         if type == 'event' or type == 'round':
             Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
         if type == 'event' or type == 'category':
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+        self.save()
+    
+    def set_parent(self, parent):
+        self.parent = parent
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):

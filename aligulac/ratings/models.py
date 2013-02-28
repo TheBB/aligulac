@@ -196,6 +196,41 @@ class Player(models.Model):
         self.sc2e_id = sc2e_id
         self.lp_name = lp_name
         self.save()
+        
+    def set_tag(self, tag):
+        self.tag = tag
+        self.save()
+    
+    def set_country(self, country):
+        self.country = country
+        self.save()
+    
+    def set_name(self, name):
+        self.name = name
+        self.save()
+    
+    def set_birthday(self, birthday):
+        self.birthday = birthday
+        self.save()
+    
+    #set alias. Takes an array of arguments, which are compared to existing
+    #aliases. New aliases from "aliases" are added, aliases from "oldaliases"
+    #that are not in "aliases" are removed.
+    def set_aliases(self, aliases):
+        if aliases:
+            oldaliases = []
+            for alias in Alias.objects.filter(player=self):
+                oldaliases.append(alias.name)
+            newaliases = [x for x in aliases if x not in oldaliases]
+            removealiases = [x for x in oldaliases if x not in aliases]
+            for alias in newaliases:
+                Alias.add_player_alias(self, alias)
+            for alias in removealiases:
+                Alias.objects.filter(player=self, name=alias).delete()
+        #aliases is None, so delete all aliases
+        else:
+            Alias.objects.filter(player=self).delete()
+                
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -231,6 +266,11 @@ class Alias(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @staticmethod
+    def add_player_alias(player, name):
+        new = Alias(player=player, name=name)
+        new.save()
 
 class Match(models.Model):
     period = models.ForeignKey(Period)

@@ -132,7 +132,20 @@ def player(request, player_id):
     base.update(csrf(request)) 
     
     # Make modifications for external links
-    if 'op' in request.POST and request.POST['op'] == 'Change' and base['adm'] == True:
+    if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
+        tag = request.POST['tag']
+        country = request.POST['country']
+        name = request.POST['fullname']
+        if name == '':
+            name = None
+        akas = request.POST['AKA']
+        if akas != '':
+            aka = [s for s in akas.split(',')]
+        else:
+            aka = None
+        birthday = request.POST['birthday']
+        if birthday == '':
+            birthday = None
         sc2c = request.POST['SC2C']
         if sc2c == '':
             sc2c = None
@@ -148,7 +161,20 @@ def player(request, player_id):
         lp = request.POST['LP']
         if lp == '':
             lp = None
+
+        if tag != '':
+            player.set_tag(tag)        
+        player.set_country(country)
+        player.set_name(name)
+        player.set_birthday(birthday)
+        player.set_aliases(aka)
         player.update_external_links(sc2c, tlpdkr, tlpdin, sc2e, lp)
+
+    countries = []
+    for k, v in data.ccn_to_cn.iteritems():
+        countries.append([k, v, data.ccn_to_cca2[k]])
+    countries.sort(key=lambda a: a[1])
+    base['countries'] = countries
 
     try:
         base['team'] = Team.objects.filter(active=True, teammembership__player=player, teammembership__current=True)[0]

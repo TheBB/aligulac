@@ -7,7 +7,7 @@ from tools import filter_active_ratings, filter_inactive_ratings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q, Sum
-from models import Player, Team, Rating, TeamMembership
+from models import Player, Team, Rating, TeamMembership, Match, Alias
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -28,10 +28,60 @@ def teams(request):
 
 def team(request, team_id):
     base = base_ctx('Teams', None, request)
+    base.update(csrf(request)) 
 
     team = get_object_or_404(Team, id=team_id)
     base['team'] = team
 
+    # Make modifications
+    if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
+
+        name = request.POST['name']
+
+        akas = request.POST['AKA']
+        if akas != '':
+            aka = [s for s in akas.split(',')]
+        else:
+            aka = None
+
+        shortname = request.POST['shortname']
+        if shortname == '':
+            shortname = None
+
+        homepage = request.POST['homepage']
+        if homepage == '':
+            homepage = None
+
+        lp_name = request.POST['lp_name']
+        if lp_name == '':
+            lp_name = None
+
+        if name!= '':
+            team.set_name(name)
+        team.set_aliases(aka)
+        team.set_shortname(shortname)
+        team.set_homepage(homepage)
+        team.set_lp_name(lp_name)
+
+    players = TeamMembership.objects.filter(team__name=team, current=True, playing=True)
+    base['players'] = players 
+    base['zerg'] = players.filter(player__race__exact='Z') 
+    base['protoss'] = players.filter(player__race__exact='P') 
+    base['terran'] = players.filter(player__race__exact='T')
+
+    try: 
+        base['aliases'] = Alias.objects.filter(team=team)
+    except:
+        pass
+        
+    total = 0
+    offline = 0
+    if players:
+        for p in players:
+            total += Match.objects.filter(Q(pla=p.player) | Q(plb=p.player)).count()
+            offline += Match.objects.filter((Q(pla=p.player) | Q(plb=p.player)), offline=True).count()
+        base['offline'] = round((100*float(offline)/float(total)),2)
+     
     base['active'] = Rating.objects.filter(player__teammembership__team=team,\
             player__teammembership__current=True, player__teammembership__playing=True,\
             period=base['curp']).order_by('-rating')

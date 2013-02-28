@@ -223,9 +223,46 @@ class Team(models.Model):
     founded = models.DateField(null=True, blank=True)
     disbanded = models.DateField(null=True, blank=True)
     active = models.BooleanField(default=True)
+    homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
+    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200) 
 
     def __unicode__(self):
         return self.name
+
+    def set_name(self, name):
+        self.name = name
+        self.save()
+    
+    def set_shortname(self, shortname):
+        self.shortname = shortname
+        self.save()
+    
+    #set alias. Takes an array of arguments, which are compared to existing
+    #aliases. New aliases from "aliases" are added, aliases from "oldaliases"
+    #that are not in "aliases" are removed.
+    def set_aliases(self, aliases):
+        if aliases:
+            oldaliases = []
+            for alias in Alias.objects.filter(team=self):
+                oldaliases.append(alias.name)
+            newaliases = [x for x in aliases if x not in oldaliases]
+            removealiases = [x for x in oldaliases if x not in aliases]
+            for alias in newaliases:
+                Alias.add_team_alias(self, alias)
+            for alias in removealiases:
+                Alias.objects.filter(team=self, name=alias).delete()
+        #aliases is None, so delete all aliases
+        else:
+            Alias.objects.filter(team=self).delete()
+    
+    def set_homepage(self, homepage):
+        self.homepage = homepage
+        self.save()
+    
+    def set_lp_name(self, lp_name):
+        self.lp_name = lp_name
+        self.save()    
+
 
 class TeamMembership(models.Model):
     player = models.ForeignKey(Player)
@@ -252,6 +289,11 @@ class Alias(models.Model):
     @staticmethod
     def add_player_alias(player, name):
         new = Alias(player=player, name=name)
+        new.save()
+
+    @staticmethod
+    def add_team_alias(team, name):
+        new = Alias(team=team, name=name)
         new.save()
 
 class Match(models.Model):

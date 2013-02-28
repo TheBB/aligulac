@@ -30,7 +30,7 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('tag', 'race', player_country, 'name')
 
 class TeamAdmin(admin.ModelAdmin):
-    fields = ['name', 'shortname', 'founded', 'disbanded', 'active']
+    fields = ['name', 'shortname', 'founded', 'disbanded', 'lp_name', 'homepage', 'active']
     inlines = [MembersInline, AliasesInline]
     search_fields = ['name']
 

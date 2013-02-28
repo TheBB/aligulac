@@ -343,7 +343,7 @@ def results(request):
 
     matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
 
-    base['matches'] = display_matches(matches, date=False)
+    base['matches'] = display_matches(matches, date=False, ratings=True)
     base['td'] = td
 
     return render_to_response('results.html', base)
@@ -508,23 +508,41 @@ def events(request, event_id=None):
         event.save()
     
     # Make modifications if neccessary
-    if 'op' in request.POST and request.POST['op'] == 'Modify' and base['adm'] == True:
-        if request.POST['type'] != 'nochange':
-            event.change_type(request.POST['type'])
-            if 'siblings' in request.POST.keys() and siblings:
-                for sibling in siblings:
-                    sibling.change_type(request.POST['type'])
+    if base['adm'] == True:
+        if 'op' in request.POST and request.POST['op'] == 'Modify':
+            if request.POST['type'] != 'nochange':
+                event.change_type(request.POST['type'])
+                if 'siblings' in request.POST.keys() and siblings:
+                    for sibling in siblings:
+                        sibling.change_type(request.POST['type'])
+                        
+            if request.POST['date'].strip() != '':
+                matches.update(date=request.POST['date'])
+                base['message'] = 'Modified all matches.'
+                if request.POST['offline'] != 'nochange':
+                    matches.update(offline=(request.POST['offline'] == 'offline'))
+                    base['message'] = 'Modified all matches.'
+                    if request.POST['game'] != 'nochange':
+                        matches.update(game=request.POST['game'])
+                        base['message'] = 'Modified all matches.'
+                        
+        elif 'add' in request.POST and request.POST['add'] == 'Add':
+            if 'noprint' in request.POST.keys():
+                noprint = True
+            else:
+                noprint = False
 
-        if request.POST['date'].strip() != '':
-            matches.update(date=request.POST['date'])
-            base['message'] = 'Modified all matches.'
-        if request.POST['offline'] != 'nochange':
-            matches.update(offline=(request.POST['offline'] == 'offline'))
-            base['message'] = 'Modified all matches.'
-        if request.POST['game'] != 'nochange':
-            matches.update(game=request.POST['game'])
-            base['message'] = 'Modified all matches.'
+            if 'closed' in request.POST.keys():
+                closed = True
+            else:
+                closed = False
+                
+            parent = event
+            for q in request.POST['subevent'].strip().split(','):
+                type = request.POST['type']
+                parent.add_child(q.strip(), type, noprint, closed)
 
+                        
     # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:
         base['game'] = matches[0].game

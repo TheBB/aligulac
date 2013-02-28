@@ -598,7 +598,7 @@ def events(request, event_id=None):
     #       | Q(match_plb__eventobj__lft__gte=event.lft, match_plb__eventobj__rgt__lte=event.rgt))\
     #         .distinct().count()
 
-    matches = matches.order_by('-eventobj__lft')[0:200]
+    matches = matches.order_by('-date', '-eventobj__lft', '-id')[0:200]
     base['matches'] = display_matches(matches)
 
     return render_to_response('eventres.html', base)

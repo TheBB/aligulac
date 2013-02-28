@@ -278,7 +278,7 @@ class Match(models.Model):
     WOL = 'WoL'
     HOTS = 'HotS'
     GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm')]
-    game = models.CharField(max_length=10, default='wol', blank=False, null=False, choices=GAMES)
+    game = models.CharField(max_length=10, default='WoL', blank=False, null=False, choices=GAMES)
     offline = models.BooleanField(default=False, null=False)
 
     class Meta:

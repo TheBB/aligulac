@@ -184,6 +184,13 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
         r.match = m
         r.match_id = m.id
 
+        if type(m) == Match:
+            r.game = m.game
+            r.offline = m.offline
+        else:
+            r.game = m.group.game
+            r.offline = m.group.offline
+
         r.treated = m.treated if type(m) == Match else False
 
         if date and type(m) == Match:

@@ -153,11 +153,11 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
         {% else %}
-            {% if m.treated %}
-                <img src="{{ "yes.png"|static }}" alt="yes" class="btm" />
-            {% else %}
+            {% if not m.treated %}
                 <img src="{{ "no.png"|static }}" alt="yes" class="btm" />
             {% endif %}
+            <img src="{{ m.game|imgfolder|static }}" alt="{{ m.game }}" class="btm" />
+            <img src="{{ m.offline|yesno:"offline,online"|imgfolder|static }}" alt="{{ m.offline|yesno:"offline,online" }}" class="btm" />
         {% endif %}
     </td>
 </tr>

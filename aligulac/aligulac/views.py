@@ -141,9 +141,8 @@ def home(request):
     base = base_ctx(request=request)
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
-    entries = Rating.objects.filter(period=period).order_by('-rating')\
-            .select_related('team', 'teammembership')[0:10]
-    entries = filter_active_ratings(entries)
+    entries = filter_active_ratings(Rating.objects.filter(period=period).order_by('-rating'))
+    entries = entries.select_related('team', 'teammembership')[0:10]
     for entry in entries:
         teams = entry.player.teammembership_set.filter(current=True)
         if teams.exists():

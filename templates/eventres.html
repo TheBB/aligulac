@@ -241,40 +241,40 @@ ratings.views.events.
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
         
-		<input type="hidden" name="parent" value="{{ event }}" />
+        <input type="hidden" name="parent" value="{{ event }}" />
         <table class="bigform">
             <tr>
                 <td class="form_left">
                     <label for="subevent">Event name</label>
                 </td>
                 <td class="form_right">
-                    {{ event }} <input type="text" name="subevent"/>
+                    {{ event }} <input type="text" name="subevent" id="subevent" />
                 </td>
             </tr>
             <tr>
-            	<td class="form_left">
-            		<label for="type">Type</label>
-            	</td>
-            	<td class="form_right">
-					<input type="radio" id="category" name="type" value="category"/>
-					<label for="category">Category</label>
-					<input type="radio" id="event" name="type" value="event" {% if event.type == 'category' %}checked{% endif %}/>
-					<label for="event">Event</label>
-					<input type="radio" id="round" name="type" value="round" {% if event.type == 'event' or event.type == 'round' %}checked{% endif %}/>
-					<label for="round">Round</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="form_left">
-					<label for="noprint"></label>
-				</td>
-				<td class="form_right">
-					<input type="checkbox" id="noprint" name="noprint" value="noprint"/>
-					<label for="noprint">No Print</label>
-					<input type="checkbox" id="closed" name="closed" value="closed" checked/>
-					<label for="noprint">Closed</label>
-				</td>
-			</tr>                                
+                <td class="form_left">
+                    Type
+                </td>
+                <td class="form_right">
+                    <input type="radio" id="category" name="type" value="category"/>
+                    <label for="category">Category</label>
+                    <input type="radio" id="event" name="type" value="event" {% if event.type == 'category' %}checked{% endif %}/>
+                    <label for="event">Event</label>
+                    <input type="radio" id="round" name="type" value="round" {% if event.type == 'event' or event.type == 'round' %}checked{% endif %}/>
+                    <label for="round">Round</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">
+                    <label for="noprint"></label>
+                </td>
+                <td class="form_right">
+                    <input type="checkbox" id="noprint" name="noprint" value="noprint"/>
+                    <label for="noprint">No Print</label>
+                    <input type="checkbox" id="closed" name="closed" value="closed" checked/>
+                    <label for="noprint">Closed</label>
+                </td>
+            </tr>                                
             <tr>
                 <td class="form_left"></td>
                 <td class="form_right">

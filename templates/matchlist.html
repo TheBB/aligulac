@@ -16,7 +16,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% load ratings_extras %}
 
-{% if lm_header_info %}
+{% if lm_header == "info" %}
     <tr class="header">
         <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
         <td class="lm_rta">Rating</td>
@@ -28,26 +28,22 @@ NB! The calling code is responsible for starting and ending the HTML table:
     </tr>
 {% endif %}
 
-{% comment %}
-{% if lm_adm and lm_list.0.group %}
-<tr class="nonheader row1">
-    <td colspan="1" style="vertical-align: top;">Notes:</td>
-    <td colspan="6"><code><pre>{{ lm_list.0.group.notes }}</pre></code></td>
-</tr>
-{% endif %}
-{% endcomment %}
-
 {% for m in lm_list %}
-{% if m.print_header %}
+
+{% comment %}Check for headers.{% endcomment %}
+{% if lm_header == "full" %}
+    {% ifchanged m.match.event_check_fullpath %}
     {% if not forloop.first %}</tbody>{% endif %}
     <tr class="header">
         <td colspan="5">
-            {% if m.header_path %} ▸
-                {% for event in m.header_path %}
+            {% if m.match.eventobj %} ▸
+                {% for event in m.match.eventobj.get_path %}
                     <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
                 {% endfor %}
-            {% elif m.header_text %}
-                {{ m.header_text }}
+            {% elif m.match.event %}
+                {{ m.match.event }}
+            {% elif m.match.group.event %}
+                {{ m.match.group.event }}
             {% else %}
                 Unknown event(s)
             {% endif %}
@@ -59,12 +55,44 @@ NB! The calling code is responsible for starting and ending the HTML table:
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.group_id}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.group_id}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_fullpath}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_fullpath}}-'); return false;">unchk</a>
             {% endif %}
         </td>
     </tr>
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+    {% endifchanged %}
+{% elif lm_header == "partial" %}
+    {% ifchanged m.match.event_check_partpath %}
+    {% if not forloop.first %}</tbody>{% endif %}
+    <tr class="header">
+        <td colspan="5">
+            {% if m.match.eventobj %}
+                {% for event in m.match.eventobj.get_event_path %}
+                    <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
+                {% endfor %}
+            {% elif m.match.event %}
+                {{ m.match.event }}
+            {% elif m.match.group.event %}
+                {{ m.match.group.event }}
+            {% else %}
+                Unknown event(s)
+            {% endif %}
+        </td>
+        <td colspan="2" style="text-align: right;"> 
+            <a id="lma-{{ m.match_id }}" href="#" 
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
+                {% if lm_autohide %}show{% else %}hide{% endif %}
+            </a>
+    
+            {% if lm_adm and lm_check %}
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_partpath}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_partpath}}-'); return false;">unchk</a>
+            {% endif %}
+        </td>
+    </tr>
+    <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+    {% endifchanged %}
 {% endif %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
     <td class="lm_date">
@@ -113,15 +141,15 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <td class="lm_right">
         {% if lm_adm %}
             {% if lm_check %}
-            <input type="checkbox" name="match-{{ m.group_id }}-{{ m.match_id }}" value="y" />
+                {% if lm_header == "info" %}
+                <input type="checkbox" name="match-{{ m.match_id }}" value="y" />
+                {% elif lm_header == "partial" %}
+                <input type="checkbox" name="match-{{ m.match.event_check_partpath }}-{{ m.match_id }}" value="y" />
+                {% else %}
+                <input type="checkbox" name="match-{{ m.match.event_check_fullpath }}-{{ m.match_id }}" value="y" />
+                {% endif %}
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
-            {% comment %}
-            {% if m.group %}
-                <a href="/admin/ratings/prematch/{{ m.id }}/">→</a>
-            {% else %}
-            {% endif %}
-            {% endcomment %}
         {% else %}
             {% if m.treated %}
                 <img src="{{ "yes.png"|static }}" alt="yes" class="btm" />
@@ -133,4 +161,4 @@ NB! The calling code is responsible for starting and ending the HTML table:
 </tr>
 {% endfor %}
 
-{% if lm_header_event %} </tbody> {% endif %}
+{% if lm_header == "full" %} </tbody> {% endif %}

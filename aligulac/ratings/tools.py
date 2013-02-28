@@ -168,7 +168,7 @@ def find_player(lst, make=False, soft=False):
 
     return qset.distinct()
 
-def display_matches(matches, fullpath=False, event_headers=True, date=True, fix_left=None, ratings=False):
+def display_matches(matches, date=True, fix_left=None, ratings=False):
     class M:
         pass
     ret = []
@@ -178,6 +178,7 @@ def display_matches(matches, fullpath=False, event_headers=True, date=True, fix_
 
     for idx, m in enumerate(matches):
         r = M()
+        r.match = m
         r.match_id = m.id
 
         r.treated = m.treated if type(m) == Match else False
@@ -224,20 +225,6 @@ def display_matches(matches, fullpath=False, event_headers=True, date=True, fix_
                 r.pla_dev,     r.plb_dev    = r.plb_dev,     r.pla_dev
 
         if type(m) == Match:
-            check = m.event_check(fullpath)
-            if check != prev_check and event_headers:
-                group_id += 1
-                r.print_header = True
-                if m.eventobj:
-                    r.header_path = m.eventobj.get_event(fullpath)
-                else:
-                    r.header_text = m.event
-            prev_check = check
-            r.group_id = group_id
-        else:
-            r.group_id = m.group_id
-
-        if not event_headers and type(m) == Match:
             if m.eventobj:
                 r.eventtext = m.eventobj.fullname
             elif m.event:

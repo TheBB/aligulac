@@ -279,7 +279,7 @@ def player(request, player_id):
             .order_by('-date', '-id')[0:10]
 
     if matches.exists():
-        base['matches'] = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
+        base['matches'] = display_matches(matches, fix_left=player, ratings=True)
 
     def meandate(tm):
         if tm.start != None and tm.end != None:
@@ -343,7 +343,7 @@ def results(request):
 
     matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
 
-    base['matches'] = display_matches(matches, fullpath=True, date=False)
+    base['matches'] = display_matches(matches, date=False)
     base['td'] = td
 
     return render_to_response('results.html', base)
@@ -581,7 +581,7 @@ def events(request, event_id=None):
     #         .distinct().count()
 
     matches = matches.order_by('-eventobj__lft')[0:200]
-    base['matches'] = display_matches(matches, fullpath=True)
+    base['matches'] = display_matches(matches)
 
     return render_to_response('eventres.html', base)
 
@@ -635,7 +635,7 @@ def player_results(request, player_id):
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')
 
-    base['matches'] = display_matches(matches, event_headers=True, fix_left=player, ratings=True)
+    base['matches'] = display_matches(matches, fix_left=player, ratings=True)
     
     base['sc_my'] = sum([m.pla_score for m in base['matches']])
     base['sc_op'] = sum([m.plb_score for m in base['matches']])
@@ -687,7 +687,7 @@ def rating_details(request, player_id, period_id):
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)
 
-    matches = display_matches(matches, event_headers=False, fix_left=player, ratings=True)
+    matches = display_matches(matches, fix_left=player, ratings=True)
 
     tot_rating = [0.0, {'P': 0.0, 'T': 0.0, 'Z': 0.0}]
     ngames = [0, {'P': 0, 'T': 0, 'Z': 0}]

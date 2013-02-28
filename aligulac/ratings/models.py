@@ -61,31 +61,41 @@ class Event(models.Model):
 
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+
+    def get_event_fullname(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'])\
+                            .order_by('-lft')[0].fullname
+
+    def get_event_path(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False,
+                                    type__in=['category','event']).order_by('lft')
     
-    def get_event(self, fullpath=False):
-        try:
-            return self.parentevents
-        except:
-            qset = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False)
-            if not fullpath:
-                qset = qset.filter(type__in=['category', 'event'])
-            self.parentevent = list(qset.order_by('lft'))
-            return self.parentevent
+    #def get_event(self, fullpath=False):
+        #try:
+            #return self.parentevents
+        #except:
+            #qset = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False)
+            #if not fullpath:
+                #qset = qset.filter(type__in=['category', 'event'])
+            #self.parentevent = list(qset.order_by('lft'))
+            #return self.parentevent
 
-    def get_path_round(self):
-        return Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+    #def get_path_round(self):
+        #return Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False)\
+                #.order_by('lft')
 
-    def get_name(self):
-        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
+    #def get_name(self):
+        #return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
 
-    def get_name_event(self):
-        return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
+    #def get_name_event(self):
+        #return Event.objects.filter(type__in=['category', 'event'], lft__lte=self.lft, 
+                                    #rgt__gte=self.rgt, noprint=False).order_by('-lft')[0]
 
-    def get_name_round(self):
-        round_name = ''
-        for round in Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft'):
-            round_name += round.name + ' '
-        return round_name
+    #def get_name_round(self):
+        #round_name = ''
+        #for round in Event.objects.filter(type__in=['round'], lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft'):
+            #round_name += round.name + ' '
+        #return round_name
 
     def change_type(self, type):
         self.type = type
@@ -230,7 +240,6 @@ class Player(models.Model):
         #aliases is None, so delete all aliases
         else:
             Alias.objects.filter(player=self).delete()
-                
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -381,6 +390,12 @@ class Match(models.Model):
     def get_loser_score(self):
         return min(self.sca, self.scb)
 
+    def event_check_fullpath(self):
+        return self.event if self.eventobj is None else self.eventobj.fullname
+
+    def event_check_partpath(self):
+        return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
+
     def event_check(self, fullpath=False):
         if self.eventobj:
             if fullpath:
@@ -444,6 +459,12 @@ class PreMatch(models.Model):
         ret += ' ' + str(self.sca) + '-' + str(self.scb) + ' '
         ret += self.plb.tag if self.plb else self.plb_string
         return ret
+
+    def event_check_fullpath(self):
+        return self.group.event
+
+    def event_check_partpath(self):
+        return self.group.event
 
 class Rating(models.Model):
     period = models.ForeignKey(Period)

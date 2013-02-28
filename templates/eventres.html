@@ -146,7 +146,7 @@ ratings.views.events.
 
     {% if matches %}
         <table class="results">
-        {% include "matchlist.html" with lm_list=matches lm_adm=0 %}
+        {% include "matchlist.html" with lm_list=matches lm_adm=0 lm_header="full" %}
         </table>
     {% else %}
         <p>This event has no registered games... yet.</p>

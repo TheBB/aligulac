@@ -82,19 +82,12 @@ This shows a team page. Called from ratings.teamviews.team.
         {% if players %}
             <div class="row">
                 <div class="rowel" style="width: 10em;">Players</div>
-                <div class="rower" style="width: 20em;">{{ players.count }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 10em;"><img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" /></div>
-                <div class="rower" style="width: 20em;">{{ zerg.count }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 10em;"><img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" /></div>
-                <div class="rower" style="width: 20em;">{{ protoss.count }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 10em;"><img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" /></div>
-                <div class="rower" style="width: 20em;">{{ terran.count }}</div>
+                <div class="rower" style="width: 20em;">
+                    {{ players.count }}
+                    ({{ protoss.count }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
+                    {{ terran.count }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
+                    {{ zerg.count }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
+                </div>
             </div>
             <div class="row">
                 <div class="rowel" style="width: 10em;">Offline matches</div>

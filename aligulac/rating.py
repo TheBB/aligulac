@@ -250,8 +250,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr[0] += m
 
     # Extend the performance ratings to global indices
-    devsex = [0] * (Ncats + 1)
-    ratsex = [0] * (Ncats + 1)
+    devsex = [None] * (Ncats + 1)
+    ratsex = [None] * (Ncats + 1)
     devsex[0] = devs[0]
     ratsex[0] = rats[0]
     for c in played_cats:

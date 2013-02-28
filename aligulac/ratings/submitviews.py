@@ -428,7 +428,7 @@ def manage_events(request):
                 parent = Event.objects.get(id=int(request.POST['parent']))
                 for q in request.POST['name'].strip().split(','):
                     type = request.POST['type']
-                    parent.add_child(q.strip(), type, big, noprint)
+                    parent.add_child(q.strip(), type, noprint)
             except:
                 for q in request.POST['name'].strip().split(','):
                     if q.strip() == '':

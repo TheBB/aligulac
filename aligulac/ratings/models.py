@@ -78,18 +78,19 @@ class Event(models.Model):
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
         self.save()
 
-    def add_child(self, name, type, big = False, noprint = False):
+    def add_child(self, name, type, noprint = False, closed = False):
         new = Event(name=name, parent=self)
         if Event.objects.filter(parent=self).exists():
             new.lft = Event.objects.filter(parent=self).aggregate(Max('rgt'))['rgt__max'] + 1
         else:
             new.lft = self.lft + 1
         new.rgt = new.lft + 1
-        new.big = big
         new.noprint = noprint
         Event.objects.filter(lft__gt=new.rgt-2).update(lft=F('lft')+2)
         Event.objects.filter(rgt__gt=new.rgt-2).update(rgt=F('rgt')+2)
         new.update_name()
+        if closed:
+            new.close()
         new.save()
         new.change_type(type)
         return new

@@ -43,9 +43,14 @@ if not 'debug' in sys.argv:
     os.system('touch ' + PATH_TO_DIR + 'update')
 
     # Goody numbers
-    print('Goody numbers...')
-    Player.objects.exclude(id=193).update(goodynum=None)
+    print('MC numbers...')
+    Player.objects.exclude(id=36).update(goodynum=None)
     g = 0
-    while Player.objects.filter(Q(match_pla__plb__goodynum=g)|Q(match_plb__pla__goodynum=g))\
-                        .filter(goodynum__isnull=True).distinct().update(goodynum=g+1) > 0:
+    while True:
+        upd  = Player.objects.filter(match_pla__offline=True, match_pla__plb__goodynum=g)\
+                             .filter(goodynum__isnull=True).distinct().update(goodynum=g+1)
+        upd += Player.objects.filter(match_plb__offline=True, match_plb__pla__goodynum=g)\
+                             .filter(goodynum__isnull=True).distinct().update(goodynum=g+1)
+        if upd == 0:
+            break
         g += 1

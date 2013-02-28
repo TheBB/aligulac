@@ -16,10 +16,14 @@ ratings.views.events.
         <div class="iboxh">Details</div>
         <div class="iboxtable">
             <div class="row">
-                <div class="rowel" style="width: 7em;">Dates</div>
+                <div class="rowel" style="width: 7em;">Date{% ifnotequal earliest latest %}s{% endifnotequal %}</div>
                 <div class="rower" style="width: 18em;">
                     {% if earliest and latest %}
-                    {{ earliest }} to {{ latest }}
+	                	{% ifequal earliest latest %}
+                		{{ earliest }}
+                		{% else %}
+	                    {{ earliest }} to {{ latest }}
+                		{% endifequal %}
                     {% endif %}
                 </div>
             </div>

@@ -14,28 +14,19 @@ This is the template for the main player page, called from ratings.views.player.
     <!--
     function toggle_visibility()
     {
-        if (document.getElementById("country"))
-            {document.getElementById("country").style.display = 'none'};
-        if (document.getElementById("fullname"))
-            {document.getElementById("fullname").style.display = 'none'};
-        if (document.getElementById("AKA"))
-            {document.getElementById("AKA").style.display = 'none'};
-        if (document.getElementById("birthday"))
-            {document.getElementById("birthday").style.display = 'none'};
-        if (document.getElementById("external"))
-            {document.getElementById("external").style.display = 'none'};
-        
-        document.getElementById("edittag").style.display = 'table-row';
-        document.getElementById("editcountry").style.display = 'table-row';
-        document.getElementById("editfullname").style.display = 'table-row';
-        document.getElementById("editAKA").style.display = 'table-row';
-        document.getElementById("editbirthday").style.display = 'table-row';
-        document.getElementById("editsc2c").style.display = 'table-row';
-        document.getElementById("edittlpdkr").style.display = 'table-row';
-        document.getElementById("edittlpdin").style.display = 'table-row';
-        document.getElementById("editsc2e").style.display = 'table-row';
-        document.getElementById("editlp").style.display = 'table-row';
-        document.getElementById("editadd").style.display = 'table-row';
+    if (document.getElementsByClassName('infobox'))
+    {
+    	var elements = document.getElementsByClassName('infobox');
+    	for(var i = 0, length = elements.length; i < length; i++)
+	   	{
+			elements[i].style.display = 'none';
+		}
+    }
+	var elements = document.getElementsByClassName('edit');
+    for(var i = 0, length = elements.length; i < length; i++)
+    	{
+		    elements[i].style.display = 'table-row';
+		}
     }
     //-->
     </script>
@@ -50,7 +41,7 @@ This is the template for the main player page, called from ratings.views.player.
         </div>
         <div class="iboxtable">
             {% if adm %}
-                <div class="row" id="edittag" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">Player tag</div>
                     <div class="rower"><input type="text" name="tag" value="{{ player.tag }}" /></div>
                 </div>
@@ -63,7 +54,7 @@ This is the template for the main player page, called from ratings.views.player.
                 </div>
             </div>
             {% if player.country != "" %}
-            <div class="row" id="country">
+            <div class="row infobox">
                 <div class="rowel">Country</div>
                 <div class="rower">
                     {% if player.country != "" %}
@@ -74,7 +65,7 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if adm %}
-                <div class="row" id="editcountry" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">Country</div>
                     <div class="rower">
                         <select name="country">
@@ -89,25 +80,25 @@ This is the template for the main player page, called from ratings.views.player.
                 </div>
             {% endif %}
             {% if player.name %}
-            <div class="row" id="fullname">
+            <div class="row infobox">
                 <div class="rowel">Full name</div>
                 <div class="rower">{{ player.name }}</div>
             </div>
             {% endif %}
             {% if adm %}
-                <div class="row" id="editfullname" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">Full name</div>
                     <div class="rower"><input type="text" name="fullname" {% if player.name %}value="{{ player.name }}"{% endif %} /></div>
                 </div>
             {% endif %}
             {% if aliases %}
-            <div class="row" id="AKA">
+            <div class="row infobox">
                 <div class="rowel">AKA</div>
                 <div class="rower">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
             </div>
             {% endif %}
             {% if adm %}
-                <div class="row" id="editAKA" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">AKA</div>
                     <div class="rower"><input type="text" name="AKA"
                             {% if aliases%} value=
@@ -116,13 +107,13 @@ This is the template for the main player page, called from ratings.views.player.
                 </div>
             {% endif %}
             {% if player.birthday %}
-            <div class="row" id="birthday">
+            <div class="row infobox">
                 <div class="rowel">Birthday</div>
                 <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
             </div>
             {% endif %}
             {% if adm %}
-                <div class="row" id="editbirthday" style="display: none;">
+                <div class="row edit" style="display: none;">
                 <div class="rowel">Birthday</div>
                 <div class="rower"><input type="text" name="birthday" class="date" id="date"
                                     value="{% if player.birthday %}{{ player.birthday|date:"Y-m-d" }}{% endif %}" />
@@ -167,7 +158,7 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if player.tlpd_kr_id or player.tlpd_in_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
-                <div class="row" id="external">
+                <div class="row infobox">
                     <div class="rowel">External</div>
                     <div class="rower">
                         {% if player.sc2c_id %}
@@ -189,27 +180,27 @@ This is the template for the main player page, called from ratings.views.player.
                 </div>
             {% endif %}
             {% if adm %}
-                <div class="row" id="editsc2c" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">sc2charts.net</div>
                     <div class="rower"><input type="number" name="SC2C" {% if player.sc2c_id %}value="{{ player.sc2c_id }}"{% endif %} /></div>
                 </div>
-                <div class="row" id="edittlpdkr" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Korea</div>
                     <div class="rower"><input type="number" name="TLPDKR" {% if player.tlpd_kr_id %}value="{{ player.tlpd_kr_id }}"{% endif %} /></div>
                 </div>
-                <div class="row" id="edittlpdin" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Int.</div>
                     <div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
                 </div>
-                <div class="row" id="editsc2e" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">sc2earnings.com</div>
                     <div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>
                 </div>
-                <div class="row" id="editlp" style="display: none;">
+                <div class="row edit" style="display: none;">
                     <div class="rowel">Liquipedia</div>
                     <div class="rower"><input type="text" name="LP" {% if player.lp_name %}value="{{ player.lp_name }}"{% endif %} /></div>
                 </div>
-                <div class="row" id="editadd" style="display: none;"">
+                <div class="row edit" style="display: none;"">
                     <div class="rowel"></div>
                     <div class="rower"><input type="submit" name="op" value="Submit" /></div>
                 </div>

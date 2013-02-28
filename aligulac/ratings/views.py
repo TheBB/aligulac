@@ -131,7 +131,7 @@ def player(request, player_id):
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
     base.update(csrf(request)) 
     
-    # Make modifications for external links
+    # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
         tag = request.POST['tag']
         country = request.POST['country']

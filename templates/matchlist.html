@@ -69,7 +69,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
     {% if not forloop.first %}</tbody>{% endif %}
     <tr class="header">
         <td colspan="5">
-            {% if m.match.eventobj %}
+            {% if m.match.eventobj %} ▸
                 {% for event in m.match.eventobj.get_event_path %}
                     <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
                 {% endfor %}

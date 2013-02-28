@@ -263,7 +263,6 @@ class Team(models.Model):
         self.lp_name = lp_name
         self.save()    
 
-
 class TeamMembership(models.Model):
     player = models.ForeignKey(Player)
     team = models.ForeignKey(Team)

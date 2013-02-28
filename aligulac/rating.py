@@ -10,11 +10,6 @@ from ratings.tools import pdf, cdf
 
 LOG_CAP = 1e-10
 
-def ceilit(arr):
-    """Prevents RDs from going above INIT_DEV."""
-    for i in range(0,len(arr)):
-        arr[i] = min(arr[i], RATINGS_INIT_DEV)
-
 def check_max(func, x, i, name, disp):
     """Auxiliary function to perform numerical optimization. Will check the return flags and return the
     argmin, or None if an error occured."""
@@ -110,6 +105,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         print L
 
     played_cats = sorted(unique(oppc))          # The categories against which the player played
+    played_cats_p1 = [p+1 for p in played_cats]
     tot = sum(myr[array(played_cats)+1])        # The sum relative rating against those categories
                                                 # (will be kept constant)
     M = len(W)                                  # Number of opponents
@@ -127,6 +123,12 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     # (that the sum of relative ratings against the played categories is constant)
     def extend(x):
         return hstack((x, tot-sum(x[1:])))
+
+    # Ensure that arrays are 1-dimensional
+    def dim(x):
+        if x.ndim == 0:
+            x = array([x])
+        return x
 
     # Prepare some vectors and other numbers that are needed to form objective functions, derivatives and
     # Hessians
@@ -147,6 +149,10 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     gen_phi = lambda j, x: pdf(x, loc=mbar[j], scale=sbar[j])
     gen_Phi = lambda j, x: max(min(cdf(x, loc=mbar[j], scale=sbar[j]), 1-LOG_CAP), LOG_CAP)
 
+    alpha = pi/2/sqrt(3)
+    myrc = myr[[0]+played_cats_p1]
+    mysc = mys[[0]+played_cats_p1]
+
     # Objective function
     def logL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
@@ -154,6 +160,12 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         if pr:
             print ':::', x, Mv, Phi
         return sum(W*log(Phi) + L*log(1-Phi))
+
+    def logE(x):
+        return sum(log(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2))
+
+    #logF = lambda x: logL(x) + logE(x)
+    logF = lambda x: logL(x)
 
     # Derivative
     def DlogL(x):
@@ -163,6 +175,14 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         vec = (W/Phi - L/(1-Phi)) * phi
         return array(vec * matrix(DM))[0]
 
+    def DlogE(x):
+        ret = -2*alpha*tanh(alpha*(extend(x)-myrc)/mysc)/mysc
+        print ret
+        return ret
+
+    #DlogF = lambda x: DlogL(x) + DlogE(x)
+    DlogF = lambda x: DlogL(x)
+
     # Hessian
     def D2logL(x, DM, C):
         Mv = x[0] + extend(x)[loc(oppc)+1]
@@ -171,16 +191,22 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         alpha = phi/Phi
         beta = phi/(1-Phi)
         Mvbar = pi/sqrt(3)/sbar * tanh(pi/2/sqrt(3)*(Mv-mbar)/sbar)
-        #Mvbar = (Mv-mbar)/sbar**2
         coeff = - W*alpha*(alpha+Mvbar) - L*beta*(beta-Mvbar)
         ret = zeros((C,C))
         for j in range(0,M):
             ret += coeff[j] * outer(DM[j,:], DM[j,:])
         return ret
 
+    def D2logE(x):
+        return diag(-2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2)
+
+    #D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
+    D2logF = lambda x: D2logL(x,DM,C)
+
     # Prepare initial guess in unrestricted format and maximize
-    x = hstack((myr[0], myr[played_cats]))[0:-1]
-    x = maximize(logL, DlogL, lambda x: D2logL(x,DM,C), x, method=None, disp=pr)
+    x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
+    x = maximize(logF, DlogF, D2logF, x, method=None, disp=pr)
+    x = dim(x)
 
     # If maximization failed, return the current rating and print an error message
     if x == None:
@@ -188,7 +214,9 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 
     # Extend to restricted format
-    devs = maximum(-1/diag(D2logL(x, DMex, C+1)), RATINGS_MIN_DEV)
+    #devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
+    devs = -1/diag(D2logL(x, DMex, C+1))
+    devs = maximum(devs, RATINGS_MIN_DEV)
     rats = extend(x)
 
     # Compute new RD and rating for the indices that can change
@@ -196,6 +224,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr = zeros(len(myr))
 
     ind = [0] + [f+1 for f in played_cats]
+    #news[ind] = devs
+    #newr[ind] = rats
     news[ind] = 1./sqrt(1./devs**2 + 1./mys[ind]**2)
     newr[ind] = (rats/devs**2 + myr[ind]/mys[ind]**2) * news[ind]**2
 
@@ -211,8 +241,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr[ind] = myr[ind]
 
     # Keep new RDs between MIN_DEV and INIT_DEV
-    news = (abs(news-RATINGS_MIN_DEV)+news-RATINGS_MIN_DEV)/2 + RATINGS_MIN_DEV
-    ceilit(news)
+    news = minimum(news, RATINGS_INIT_DEV)
+    news = maximum(news, RATINGS_MIN_DEV)
 
     # Ensure that mean relative rating is zero
     m = mean(newr[1:])
@@ -220,8 +250,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr[0] += m
 
     # Extend the performance ratings to global indices
-    devsex = [None] * (Ncats + 1)
-    ratsex = [None] * (Ncats + 1)
+    devsex = [0] * (Ncats + 1)
+    ratsex = [0] * (Ncats + 1)
     devsex[0] = devs[0]
     ratsex[0] = rats[0]
     for c in played_cats:

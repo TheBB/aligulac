@@ -198,6 +198,7 @@ if __name__ == '__main__':
         (newr, newd, compr, compd) = update(cp.get_rating_array(), cp.get_dev_array(),\
                 array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L),\
                 cp.player.tag, False)
+        #break
         cp.new_rating = array_to_dict(newr)
         cp.new_dev = array_to_dict(newd)
         cp.comp_rating = array_to_dict(compr)
@@ -208,6 +209,7 @@ if __name__ == '__main__':
             num_retplayers += 1
         elif len(cp.W) > 0:
             num_newplayers += 1
+    #sys.exit(0)
 
     # Get a table of existing rating objects
     existing = set()

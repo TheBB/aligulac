@@ -62,6 +62,14 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
+    def get_event_fullname(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'])\
+                            .order_by('-lft')[0].fullname
+
+    def get_event_path(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False,
+                                    type__in=['category','event']).order_by('lft')
+    
     def change_type(self, type):
         self.type = type
         if type == 'event' or type == 'round':
@@ -171,6 +179,40 @@ class Player(models.Model):
         self.sc2e_id = sc2e_id
         self.lp_name = lp_name
         self.save()
+        
+    def set_tag(self, tag):
+        self.tag = tag
+        self.save()
+    
+    def set_country(self, country):
+        self.country = country
+        self.save()
+    
+    def set_name(self, name):
+        self.name = name
+        self.save()
+    
+    def set_birthday(self, birthday):
+        self.birthday = birthday
+        self.save()
+    
+    #set alias. Takes an array of arguments, which are compared to existing
+    #aliases. New aliases from "aliases" are added, aliases from "oldaliases"
+    #that are not in "aliases" are removed.
+    def set_aliases(self, aliases):
+        if aliases:
+            oldaliases = []
+            for alias in Alias.objects.filter(player=self):
+                oldaliases.append(alias.name)
+            newaliases = [x for x in aliases if x not in oldaliases]
+            removealiases = [x for x in oldaliases if x not in aliases]
+            for alias in newaliases:
+                Alias.add_player_alias(self, alias)
+            for alias in removealiases:
+                Alias.objects.filter(player=self, name=alias).delete()
+        #aliases is None, so delete all aliases
+        else:
+            Alias.objects.filter(player=self).delete()
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -206,6 +248,11 @@ class Alias(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @staticmethod
+    def add_player_alias(player, name):
+        new = Alias(player=player, name=name)
+        new.save()
 
 class Match(models.Model):
     period = models.ForeignKey(Period)
@@ -231,7 +278,7 @@ class Match(models.Model):
     WOL = 'WoL'
     HOTS = 'HotS'
     GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm')]
-    game = models.CharField(max_length=10, default='wol', blank=False, null=False, choices=GAMES)
+    game = models.CharField(max_length=10, default='WoL', blank=False, null=False, choices=GAMES)
     offline = models.BooleanField(default=False, null=False)
 
     class Meta:
@@ -316,6 +363,12 @@ class Match(models.Model):
     def get_loser_score(self):
         return min(self.sca, self.scb)
 
+    def event_check_fullpath(self):
+        return self.event if self.eventobj is None else self.eventobj.fullname
+
+    def event_check_partpath(self):
+        return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
+
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']
     try:
@@ -370,6 +423,12 @@ class PreMatch(models.Model):
         ret += ' ' + str(self.sca) + '-' + str(self.scb) + ' '
         ret += self.plb.tag if self.plb else self.plb_string
         return ret
+
+    def event_check_fullpath(self):
+        return self.group.event
+
+    def event_check_partpath(self):
+        return self.group.event
 
 class Rating(models.Model):
     period = models.ForeignKey(Period)

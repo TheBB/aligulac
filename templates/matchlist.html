@@ -1,0 +1,166 @@
+{% comment %}
+This is a very useful subroutine that is called from many different template files. It prints a list of
+matches. It expects a number of "arguments", all prefixed with lm_, to avoid naming collision.
+
+- lm_list: The list of matches to print. Must be prepared with display_matches (in ratings.tools).
+- lm_header: "full" => show headers by event (full path)
+             "partial" => show headers by event (partial path)
+             "info" => show column headers only
+- lm_adm: Set to true to show admin links on the far right.
+- lm_check: If both lm_check and lm_adm are true, a checkbox will also be shown.
+
+NB! The calling code is responsible for starting and ending the HTML table:
+
+<table class="results">
+    {% include "matchlist.html" with .... %}
+</table>
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% if lm_header == "info" %}
+    <tr class="header">
+        <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
+        <td class="lm_rta">Rating</td>
+        <td class="lm_pla">Player A</td>
+        <td class="lm_score">Score</td>
+        <td class="lm_plb">Player B</td>
+        <td class="lm_rtb">Rating</td>
+        <td class="lm_right"></td>
+    </tr>
+{% endif %}
+
+{% for m in lm_list %}
+
+{% comment %}Check for headers.{% endcomment %}
+{% if lm_header == "full" %}
+    {% ifchanged m.match.event_check_fullpath %}
+    {% if not forloop.first %}</tbody>{% endif %}
+    <tr class="header">
+        <td colspan="5">
+            {% if m.match.eventobj %} ▸
+                {% for event in m.match.eventobj.get_path %}
+                    <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
+                {% endfor %}
+            {% elif m.match.event %}
+                {{ m.match.event }}
+            {% elif m.match.group.event %}
+                {{ m.match.group.event }}
+            {% else %}
+                Unknown event(s)
+            {% endif %}
+        </td>
+        <td colspan="2" style="text-align: right;"> 
+            <a id="lma-{{ m.match_id }}" href="#" 
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
+                {% if lm_autohide %}show{% else %}hide{% endif %}
+            </a>
+    
+            {% if lm_adm and lm_check %}
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_fullpath}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_fullpath}}-'); return false;">unchk</a>
+            {% endif %}
+        </td>
+    </tr>
+    <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+    {% endifchanged %}
+{% elif lm_header == "partial" %}
+    {% ifchanged m.match.event_check_partpath %}
+    {% if not forloop.first %}</tbody>{% endif %}
+    <tr class="header">
+        <td colspan="5">
+            {% if m.match.eventobj %}
+                {% for event in m.match.eventobj.get_event_path %}
+                    <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
+                {% endfor %}
+            {% elif m.match.event %}
+                {{ m.match.event }}
+            {% elif m.match.group.event %}
+                {{ m.match.group.event }}
+            {% else %}
+                Unknown event(s)
+            {% endif %}
+        </td>
+        <td colspan="2" style="text-align: right;"> 
+            <a id="lma-{{ m.match_id }}" href="#" 
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
+                {% if lm_autohide %}show{% else %}hide{% endif %}
+            </a>
+    
+            {% if lm_adm and lm_check %}
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_partpath}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_partpath}}-'); return false;">unchk</a>
+            {% endif %}
+        </td>
+    </tr>
+    <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+    {% endifchanged %}
+{% endif %}
+<tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
+    <td class="lm_date">
+        {% if m.date %}{{ m.date|date:"Y-m-d" }}{% endif %}
+    </td>
+    <td class="lm_rta">
+        {% if m.pla_rating %}{{ m.pla_rating|ratscale }}{% endif %}
+    </td>
+    <td class="lm_pla">
+        {% if m.pla_score > m.plb_score %}<strong>{% endif %}
+        {% if m.pla_id %}<a href="/players/{{ m.pla_id }}-{{ m.pla_tag|urlfilter }}/">{% endif %}
+        {% if not m.pla_id and lm_adm %}
+            <input type="text" class="player" name="match-{{ m.match_id }}-pla" 
+                   style="text-align: right;" value="{{ m.pla_tag }}" />
+        {% else %}{{ m.pla_tag }}{% endif %}
+        {% if m.pla_id %}</a>{% endif %}
+        {% if m.pla_country != "" %}
+            <img src="{{ m.pla_country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla_country }}" />
+        {% endif %}
+        {% if m.pla_race %}
+            <img src="{{ m.pla_race|imgfolder|static }}" alt="{{ m.pla_race }}" class="btm" />
+        {% endif %}
+        {% if m.pla_score > m.plb_score %}</strong>{% endif %}
+    </td>
+    <td class="lm_score">
+        {{ m.pla_score }}–{{ m.plb_score }}
+    </td>
+    <td class="lm_plb">
+        {% if m.plb_score > m.pla_score %}<strong>{% endif %}
+        {% if m.plb_race %}
+            <img src="{{ m.plb_race|imgfolder|static }}" alt="{{ m.plb_race }}" class="btm" />
+        {% endif %}
+        {% if m.plb_country != "" %}
+            <img src="{{ m.plb_country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb_country }}" />
+        {% endif %}
+        {% if m.plb_id %} <a href="/players/{{ m.plb_id }}-{{ m.plb_tag|urlfilter }}/">{% endif %}
+        {% if not m.plb_id and lm_adm %}
+            <input type="text" class="player" name="match-{{ m.match_id }}-plb" value="{{ m.plb_tag }}" />
+        {% else %}{{ m.plb_tag }}{% endif %}
+        {% if m.plb_id %}</a>{% endif %}
+        {% if m.plb_score > m.pla_score %}</strong>{% endif %}
+    </td>
+    <td class="lm_rtb">
+        {% if m.plb_rating %}{{ m.plb_rating|ratscale }}{% endif %}
+    </td>
+    <td class="lm_right">
+        {% if lm_adm %}
+            {% if lm_check %}
+                {% if lm_header == "info" %}
+                <input type="checkbox" name="match-{{ m.match_id }}" value="y" />
+                {% elif lm_header == "partial" %}
+                <input type="checkbox" name="match-{{ m.match.event_check_partpath }}-{{ m.match_id }}" value="y" />
+                {% else %}
+                <input type="checkbox" name="match-{{ m.match.event_check_fullpath }}-{{ m.match_id }}" value="y" />
+                {% endif %}
+            {% endif %}
+            <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
+        {% else %}
+            {% if not m.treated %}
+                <img src="{{ "no.png"|static }}" alt="yes" class="btm" />
+            {% endif %}
+            <img src="{{ m.game|imgfolder|static }}" alt="{{ m.game }}" class="btm" />
+            <img src="{{ m.offline|yesno:"offline,online"|imgfolder|static }}" alt="{{ m.offline|yesno:"offline,online" }}" class="btm" />
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+{% if lm_header == "full" %} </tbody> {% endif %}

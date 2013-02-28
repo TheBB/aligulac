@@ -1,4 +1,5 @@
 from math import sqrt
+from collections import namedtuple
 
 from ratings.models import Player, Match, PreMatch
 from countries import data
@@ -39,69 +40,47 @@ def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5*tanh(pi/2/sqrt(3)*(x-loc)/scale)
 
 def filter_active_ratings(queryset):
-    return queryset.filter(decay__lt=5, dev__lt=0.2)
+    return queryset.filter(decay__lt=4, dev__lt=0.2)
 
-def sort_matches(matches, player, add_ratings=False):
-    sc_my, sc_op, msc_my, msc_op = 0, 0, 0, 0
+def filter_inactive_ratings(queryset):
+    return queryset.exclude(decay__lt=4, dev__lt=0.2)
+
+def add_ratings(matches):
+    for match in matches:
+        try:
+            match.rta = match.pla.rating_set.get(period__id=match.period.id-1).get_totalrating(match.rcb)
+        except:
+            match.rta = ''
+        try:
+            match.rtb = match.plb.rating_set.get(period__id=match.period.id-1).get_totalrating(match.rca)
+        except:
+            match.rtb = ''
     
-    for m in matches:
-        if m.pla == player:
-            m.sc_my, m.sc_op = m.sca, m.scb
-            m.rc_my, m.rc_op = m.rca, m.rcb
-            m.me, m.opp = m.pla, m.plb
-        else:
-            m.sc_my, m.sc_op = m.scb, m.sca
-            m.rc_my, m.rc_op = m.rcb, m.rca
-            m.me, m.opp = m.plb, m.pla
+    return matches
 
-        sc_my += m.sc_my
-        sc_op += m.sc_op
-        if m.sc_my > m.sc_op:
-            msc_my += 1
-        elif m.sc_op > m.sc_my:
-            msc_op += 1
+def order_player(matches, player):
+    for match in matches:
+        if player == match.plb:
+            temppl = match.pla
+            tempsc = match.sca
+            temprc = match.rca
 
-        if add_ratings:
+            match.pla = match.plb
+            match.sca = match.scb
+            match.rca = match.rcb
+
+            match.plb = temppl
+            match.scb = tempsc
+            match.rcb = temprc
+            
             try:
-                temp = m.opp.rating_set.get(period__id=m.period.id-1)
-                m.rt_op = temp.get_totalrating(player.race)
-                m.dev_op = temp.get_totaldev(player.race)
+                temprt = match.rta
+                match.rta = match.rtb
+                match.rtb = temprt
             except:
-                m.rt_op = 0
-                m.dev_op = sqrt(2)*RATINGS_INIT_DEV
-
-            try:
-                temp = m.me.rating_set.get(period__id=m.period.id-1)
-                m.rt_my = temp.get_totalrating(m.rc_op)
-                m.dev_my = temp.get_totaldev(m.rc_op)
-            except:
-                m.rt_my = 0
-                m.dev_my = sqrt(2)*RATINGS_INIT_DEV
-
-    return sc_my, sc_op, msc_my, msc_op
-
-def group_by_events(matches):
-    ret = []
-
-    events = []
-    for e in [m.eventobj for m in matches if m.eventobj != None]:
-        if e not in events:
-            events.append(e)
-
-    for e in events:
-        ret.append([m for m in matches if m.eventobj == e])
-
-    events = []
-    for e in [m.event for m in matches if m.eventobj == None]:
-        if e not in events:
-            events.append(e)
-
-    for e in events:
-        ret.append([m for m in matches if m.eventobj == None and m.event == e])
-
-    ret = sorted(ret, key=lambda l: l[0].date, reverse=True)
-
-    return ret
+                pass
+            
+    return matches
 
 def find_duplicates(pla, plb, sca, scb, date, incl_prematches=True):
     n = Match.objects.filter(pla=pla, plb=plb, sca=sca, scb=scb).extra(
@@ -191,3 +170,76 @@ def find_player(lst, make=False, soft=False):
         return Player.objects.filter(id=p.id)
 
     return qset.distinct()
+
+def display_matches(matches, date=True, fix_left=None, ratings=False):
+    class M:
+        pass
+    ret = []
+
+    prev_check = -1
+    group_id = 0
+
+    for idx, m in enumerate(matches):
+        r = M()
+        r.match = m
+        r.match_id = m.id
+
+        if type(m) == Match:
+            r.game = m.game
+            r.offline = m.offline
+        else:
+            r.game = m.group.game
+            r.offline = m.group.offline
+
+        r.treated = m.treated if type(m) == Match else False
+
+        if date and type(m) == Match:
+            r.date = m.date
+
+        r.pla_id = m.pla_id
+        r.plb_id = m.plb_id
+        r.pla_tag = m.pla.tag if m.pla else m.pla_string
+        r.plb_tag = m.plb.tag if m.plb else m.plb_string
+        r.pla_race = m.rca
+        r.plb_race = m.rcb
+        r.pla_country = m.pla.country if m.pla else ''
+        r.plb_country = m.plb.country if m.plb else ''
+        r.pla_score = m.sca
+        r.plb_score = m.scb
+
+        if ratings:
+            try:
+                rta = m.pla.rating_set.get(period__id=m.period_id-1)
+                r.pla_rating = rta.get_totalrating(m.rcb)
+                r.pla_dev = rta.get_totaldev(m.rcb)
+            except:
+                r.pla_rating = 0
+                r.pla_dev = sqrt(2)*RATINGS_INIT_DEV
+
+            try:
+                rtb = m.plb.rating_set.get(period__id=m.period_id-1)
+                r.plb_rating = rtb.get_totalrating(m.rca)
+                r.plb_dev = rtb.get_totaldev(m.rca)
+            except:
+                r.plb_rating = 0
+                r.plb_dev = sqrt(2)*RATINGS_INIT_DEV
+
+        if fix_left is not None and fix_left.id == r.plb_id:
+            r.pla_id,       r.plb_id      = r.plb_id,       r.pla_id
+            r.pla_tag,      r.plb_tag     = r.plb_tag,      r.pla_tag
+            r.pla_race,     r.plb_race    = r.plb_race,     r.pla_race
+            r.pla_country,  r.plb_country = r.plb_country,  r.pla_country
+            r.pla_score,    r.plb_score   = r.plb_score,    r.pla_score
+            if ratings:
+                r.pla_rating,  r.plb_rating = r.plb_rating,  r.pla_rating
+                r.pla_dev,     r.plb_dev    = r.plb_dev,     r.pla_dev
+
+        if type(m) == Match:
+            if m.eventobj:
+                r.eventtext = m.eventobj.fullname
+            elif m.event:
+                r.eventtext = m.event
+
+        ret.append(r)
+
+    return ret

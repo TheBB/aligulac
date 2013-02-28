@@ -285,6 +285,28 @@ ratings.views.events.
                     <input type="Submit" name="add" value="Add" />
                 </td>
             </tr>
+        	<form method="post" action="/results/events/{{ event.id }}/">
+	        {% csrf_token %}
+			<tr>
+				<td class="form_left">
+					<label for="moveevent">Move this event</label>
+				</td>
+				<td class="form_right">
+                    <select name="moveevent" id="moveevent">
+                    	{% for events in surroundingevents %} 
+                        <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
+                        {% endfor %}
+                    </select>
+				</td>
+			</tr>                                
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    <input type="Submit" name="move" value="Move" />
+                </td>
+            </tr>
+        </table>
+        </form>
         </table>
         </form>
     {% endif %}

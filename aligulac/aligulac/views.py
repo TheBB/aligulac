@@ -172,7 +172,7 @@ def search(request, q=''):
         teams = teams.filter(query)
     teams = teams.distinct()
 
-    events = Event.objects.all()
+    events = Event.objects.filter(type__in=['category','event'])
     for qpart in q.split(' '):
         if qpart.strip() == '':
             continue

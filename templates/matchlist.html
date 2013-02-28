@@ -3,7 +3,9 @@ This is a very useful subroutine that is called from many different template fil
 matches. It expects a number of "arguments", all prefixed with lm_, to avoid naming collision.
 
 - lm_list: The list of matches to print. Must be prepared with display_matches (in ratings.tools).
-- lm_header_info: If true if the, print a title row with column headings.
+- lm_header: "full" => show headers by event (full path)
+             "partial" => show headers by event (partial path)
+             "info" => show column headers only
 - lm_adm: Set to true to show admin links on the far right.
 - lm_check: If both lm_check and lm_adm are true, a checkbox will also be shown.
 

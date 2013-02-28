@@ -14,59 +14,59 @@ This shows a team page. Called from ratings.teamviews.team.
     {
     if (document.getElementsByClassName('infobox'))
     {
-    	var elements = document.getElementsByClassName('infobox');
-    	for(var i = 0, length = elements.length; i < length; i++)
-	   	{
-			elements[i].style.display = 'none';
-		}
+        var elements = document.getElementsByClassName('infobox');
+        for(var i = 0, length = elements.length; i < length; i++)
+        {
+            elements[i].style.display = 'none';
+        }
     }
-	var elements = document.getElementsByClassName('edit');
+    var elements = document.getElementsByClassName('edit');
     for(var i = 0, length = elements.length; i < length; i++)
-    	{
-		    elements[i].style.display = 'table-row';
-		}
+        {
+            elements[i].style.display = 'table-row';
+        }
     }
     </script>
 
     <h2>{{ team.name }}</h2>
-	<form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
-	{% csrf_token %}
+    <form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
+    {% csrf_token %}
     <div class="ibox" style="width: 25em;">
         <div class="iboxh">{{ team.name }}{% if adm %} (<a href="#" onclick="toggle_visibility(); return false;">Edit</a>){% endif %}</div>
         <div class="iboxtable">
-		{% if adm %}
-           	<div class="row edit" style="display: none;">
-	            <div class="rowel">Team name</div>
-               	<div class="rower"><input type="text" name="name" value="{{ team.name }}" /></div>
-			</div>
-		{% endif %}
+        {% if adm %}
+            <div class="row edit" style="display: none;">
+                <div class="rowel">Team name</div>
+                <div class="rower"><input type="text" name="name" value="{{ team.name }}" /></div>
+            </div>
+        {% endif %}
         {% if aliases %}
             <div class="row infobox">
                 <div class="rowel" style="width: 10em;">AKA</div>
                 <div class="rower" style="width: 20em;">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
             </div>
         {% endif %}
-		{% if adm %}
-           	<div class="row edit" style="display: none;">
-	            <div class="rowel">AKA</div>
-               	<div class="rower"><input type="text" name="AKA"
-					{% if aliases%} value=
-	      				"{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %},{% endif %}{% endfor %}"
-           			{% endif %} /></div>
-			</div>
-		{% endif %}
+        {% if adm %}
+            <div class="row edit" style="display: none;">
+                <div class="rowel">AKA</div>
+                <div class="rower"><input type="text" name="AKA"
+                    {% if aliases%} value=
+                        "{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %},{% endif %}{% endfor %}"
+                    {% endif %} /></div>
+            </div>
+        {% endif %}
         {% if team.shortname and adm %}
             <div class="row infobox">
                 <div class="rowel" style="width: 10em;">Short name</div>
                 <div class="rower" style="width: 20em;">{{ team.shortname }}</div>
             </div>
         {% endif %}
-		{% if adm %}
-           	<div class="row edit" style="display: none;">
-	            <div class="rowel">Short name</div>
-               	<div class="rower"><input type="text" name="shortname" {% if team.shortname %}value="{{ team.shortname }}"{% endif %} /></div>
-			</div>
-		{% endif %}
+        {% if adm %}
+            <div class="row edit" style="display: none;">
+                <div class="rowel">Short name</div>
+                <div class="rower"><input type="text" name="shortname" {% if team.shortname %}value="{{ team.shortname }}"{% endif %} /></div>
+            </div>
+        {% endif %}
         {% if team.founded %}
             <div class="row">
                 <div class="rowel" style="width: 10em;">Founded</div>
@@ -103,40 +103,42 @@ This shows a team page. Called from ratings.teamviews.team.
         {% endif %}
         {% if team.homepage or team.lp_name %}
             <div class="row infobox" id="external">
-	        	<div class="rowel">External</div>
+                <div class="rowel">External</div>
                 <div class="rower">
-                    	{% if team.homepage %}
-                    	<a href="{{ team.homepage }}" target="_blank">Homepage</a>
-                    	{% endif %} 
-                    	{% if team.lp_name %}
-                    	<a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">LP</a>
-                    	{% endif %}
-            	</div>
-			</div>
-		{% endif %}
-		{% if adm %}
-           	<div class="row edit" style="display: none;">
-	            <div class="rowel">Homepage</div>
-               	<div class="rower"><input type="text" name="homepage" {% if team.homepage %}value="{{ team.homepage}}"{% endif %} /></div>
-			</div>
-           	<div class="row edit" style="display: none;">
-	            <div class="rowel">Liquipedia</div>
-               	<div class="rower"><input type="text" name="lp_name" {% if team.lp_name %}value="{{ team.lp_name }}"{% endif %} /></div>
-			</div>
+                        {% if team.homepage %}
+                        <a href="{{ team.homepage }}" target="_blank">Homepage</a>
+                        {% endif %} 
+                        {% if team.lp_name %}
+                        <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">LP</a>
+                        {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {% if adm %}
+            <div class="row edit" style="display: none;">
+                <div class="rowel">Homepage</div>
+                <div class="rower"><input type="text" name="homepage" {% if team.homepage %}value="{{ team.homepage}}"{% endif %} /></div>
+            </div>
+            <div class="row edit" style="display: none;">
+                <div class="rowel">Liquipedia</div>
+                <div class="rower"><input type="text" name="lp_name" {% if team.lp_name %}value="{{ team.lp_name }}"{% endif %} /></div>
+            </div>
             <div class="row edit" style="display: none;"">
-		        <div class="rowel"></div>
-        		<div class="rower"><input type="submit" name="op" value="Submit" /></div>
-			</div>
-		{% endif %}
-		</div>
+                <div class="rowel"></div>
+                <div class="rower"><input type="submit" name="op" value="Submit" /></div>
+            </div>
+        {% endif %}
+        </div>
     </div>
     </form>
     
+    {% comment %}
     <p style="text-align: center;">
     {% if team.id|haslogo %}
     <img style="margin-bottom: 15px; float: right;" src="{{ team.id|imgfolder:"teams"|static }}" alt="{{ team.name }}" title="{{ team.name }}" />
     {% endif %}
     </p>
+    {% endcomment %}
 
     {% if team.founded and team.disbanded %}
     <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>

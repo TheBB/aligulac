@@ -15,15 +15,15 @@ This is the template for the main player page, called from ratings.views.player.
     function toggle_visibility()
     {
         if (document.getElementById("country"))
-        	{document.getElementById("country").style.display = 'none'};
+            {document.getElementById("country").style.display = 'none'};
         if (document.getElementById("fullname"))
-        	{document.getElementById("fullname").style.display = 'none'};
+            {document.getElementById("fullname").style.display = 'none'};
         if (document.getElementById("AKA"))
-        	{document.getElementById("AKA").style.display = 'none'};
+            {document.getElementById("AKA").style.display = 'none'};
         if (document.getElementById("birthday"))
-        	{document.getElementById("birthday").style.display = 'none'};
+            {document.getElementById("birthday").style.display = 'none'};
         if (document.getElementById("external"))
-        	{document.getElementById("external").style.display = 'none'};
+            {document.getElementById("external").style.display = 'none'};
         
         document.getElementById("edittag").style.display = 'table-row';
         document.getElementById("editcountry").style.display = 'table-row';
@@ -41,15 +41,18 @@ This is the template for the main player page, called from ratings.views.player.
     </script>
     
     <h2>{{ player.tag }}</h2>
-	<form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
-	{% csrf_token %}
+    <form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
+    {% csrf_token %}
     <div class="ibox" style="width: 25em;">
-        <div class="iboxh">{{ player.tag }}{% if adm %} (<a href="#" onclick="toggle_visibility(); return false;">Edit</a>){% endif %}</div>
+        <div class="iboxh">
+            {{ player.tag }}
+            {% if adm %} (<a href="#" onclick="toggle_visibility(); return false;">Edit</a>){% endif %}
+        </div>
         <div class="iboxtable">
             {% if adm %}
-            	<div class="row" id="edittag" style="display: none;">
-	                <div class="rowel">Player tag</div>
-                	<div class="rower"><input type="text" name="tag" value="{{ player.tag }}" /></div>
+                <div class="row" id="edittag" style="display: none;">
+                    <div class="rowel">Player tag</div>
+                    <div class="rower"><input type="text" name="tag" value="{{ player.tag }}" /></div>
                 </div>
             {% endif %}
             <div class="row">
@@ -71,15 +74,18 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if adm %}
-            	<div class="row" id="editcountry" style="display: none;">
-	                <div class="rowel">Country</div>
-                	<div class="rower">
-                		<select name="country">
-                			{% for country in countries %}
-                    			<option value="{{ country.2 }}"{% if player.country != "" %}{% ifequal country.2 player.country %}selected{% endifequal %}{% endif %}>{{ country.1 }}</option>
-                    		{% endfor %}
-                		</select>
-					</div>
+                <div class="row" id="editcountry" style="display: none;">
+                    <div class="rowel">Country</div>
+                    <div class="rower">
+                        <select name="country">
+                            {% for country in countries %}
+                            <option value="{{ country.2 }}" 
+                                {% ifequal country.2 player.country %}selected{% endifequal %}>
+                                {{ country.1 }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             {% endif %}
             {% if player.name %}
@@ -89,9 +95,9 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if adm %}
-            	<div class="row" id="editfullname" style="display: none;">
-	                <div class="rowel">Full name</div>
-                	<div class="rower"><input type="text" name="fullname" {% if player.name %}value="{{ player.name }}"{% endif %} /></div>
+                <div class="row" id="editfullname" style="display: none;">
+                    <div class="rowel">Full name</div>
+                    <div class="rower"><input type="text" name="fullname" {% if player.name %}value="{{ player.name }}"{% endif %} /></div>
                 </div>
             {% endif %}
             {% if aliases %}
@@ -101,12 +107,12 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if adm %}
-            	<div class="row" id="editAKA" style="display: none;">
-	                <div class="rowel">AKA</div>
-                	<div class="rower"><input type="text" name="AKA"
-                			{% if aliases%} value=
-                				"{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %},{% endif %}{% endfor %}"
-                			{% endif %} /></div>
+                <div class="row" id="editAKA" style="display: none;">
+                    <div class="rowel">AKA</div>
+                    <div class="rower"><input type="text" name="AKA"
+                            {% if aliases%} value=
+                                "{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %},{% endif %}{% endfor %}"
+                            {% endif %} /></div>
                 </div>
             {% endif %}
             {% if player.birthday %}
@@ -115,23 +121,23 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
             </div>
             {% endif %}
-			{% if adm %}
-            	<div class="row" id="editbirthday" style="display: none;">
-            	<div class="rowel">Birthday</div>
-            	<div class="rower"><input type="text" name="birthday" class="date"
-                        			value="{% if player.birthday %}{{ player.birthday|date:"Y-m-d" }}{% endif %}" />
-                	<script type="text/javascript" src="/js/datepicker.js" /></script>
-                	<script type="text/javascript">
-                    	// <![CDATA[  
-                    	var opts = {                            
+            {% if adm %}
+                <div class="row" id="editbirthday" style="display: none;">
+                <div class="rowel">Birthday</div>
+                <div class="rower"><input type="text" name="birthday" class="date" id="date"
+                                    value="{% if player.birthday %}{{ player.birthday|date:"Y-m-d" }}{% endif %}" />
+                    <script type="text/javascript" src="/js/datepicker.js" /></script>
+                    <script type="text/javascript">
+                        // <![CDATA[  
+                        var opts = {                            
                         formElements:{"date":"Y-ds-m-ds-d"},
-	                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    	};           
-                    	datePickerController.createDatePicker(opts);
-                    	// ]]>
-	                </script></div>
-				</div>
-			{% endif %}
+                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                        };           
+                        datePickerController.createDatePicker(opts);
+                        // ]]>
+                    </script></div>
+                </div>
+            {% endif %}
             {% if team %}
             <div class="row">
                 <div class="rowel">Team</div>
@@ -161,56 +167,56 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
             {% endif %}
             {% if player.tlpd_kr_id or player.tlpd_in_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
-            	<div class="row" id="external">
-	                <div class="rowel">External</div>
-                	<div class="rower">
-	                    {% if player.sc2c_id %}
-                    	<a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
-                    	{% endif %}
-                    	{% if player.tlpd_kr_id %}
-                    	<a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
-                    	{% endif %}
-                    	{% if player.tlpd_in_id %}
-                    	<a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
-                    	{% endif %}
-                    	{% if player.sc2e_id %}
-                    	<a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
-                    	{% endif %}
-                    	{% if player.lp_name %}
-                    	<a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
-                    	{% endif %}
-                	</div>
-            	</div>
+                <div class="row" id="external">
+                    <div class="rowel">External</div>
+                    <div class="rower">
+                        {% if player.sc2c_id %}
+                        <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
+                        {% endif %}
+                        {% if player.tlpd_kr_id %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
+                        {% endif %}
+                        {% if player.tlpd_in_id %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
+                        {% endif %}
+                        {% if player.sc2e_id %}
+                        <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
+                        {% endif %}
+                        {% if player.lp_name %}
+                        <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
             {% if adm %}
-            	<div class="row" id="editsc2c" style="display: none;">
-	                <div class="rowel">sc2charts.net</div>
-                	<div class="rower"><input type="number" name="SC2C" {% if player.sc2c_id %}value="{{ player.sc2c_id }}"{% endif %} /></div>
+                <div class="row" id="editsc2c" style="display: none;">
+                    <div class="rowel">sc2charts.net</div>
+                    <div class="rower"><input type="number" name="SC2C" {% if player.sc2c_id %}value="{{ player.sc2c_id }}"{% endif %} /></div>
                 </div>
-            	<div class="row" id="edittlpdkr" style="display: none;">
-	                <div class="rowel">TLPD Korea</div>
-                	<div class="rower"><input type="number" name="TLPDKR" {% if player.tlpd_kr_id %}value="{{ player.tlpd_kr_id }}"{% endif %} /></div>
+                <div class="row" id="edittlpdkr" style="display: none;">
+                    <div class="rowel">TLPD Korea</div>
+                    <div class="rower"><input type="number" name="TLPDKR" {% if player.tlpd_kr_id %}value="{{ player.tlpd_kr_id }}"{% endif %} /></div>
                 </div>
-            	<div class="row" id="edittlpdin" style="display: none;">
-	                <div class="rowel">TLPD Int.</div>
-                	<div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
+                <div class="row" id="edittlpdin" style="display: none;">
+                    <div class="rowel">TLPD Int.</div>
+                    <div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
                 </div>
-            	<div class="row" id="editsc2e" style="display: none;">
-	                <div class="rowel">sc2earnings.com</div>
-                	<div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>
+                <div class="row" id="editsc2e" style="display: none;">
+                    <div class="rowel">sc2earnings.com</div>
+                    <div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>
                 </div>
-            	<div class="row" id="editlp" style="display: none;">
-	                <div class="rowel">Liquipedia</div>
-                	<div class="rower"><input type="text" name="LP" {% if player.lp_name %}value="{{ player.lp_name }}"{% endif %} /></div>
-               	</div>
-            	<div class="row" id="editadd" style="display: none;"">
-	                <div class="rowel"></div>
-                	<div class="rower"><input type="submit" name="op" value="Submit" /></div>
-               	</div>
+                <div class="row" id="editlp" style="display: none;">
+                    <div class="rowel">Liquipedia</div>
+                    <div class="rower"><input type="text" name="LP" {% if player.lp_name %}value="{{ player.lp_name }}"{% endif %} /></div>
+                </div>
+                <div class="row" id="editadd" style="display: none;"">
+                    <div class="rowel"></div>
+                    <div class="rower"><input type="submit" name="op" value="Submit" /></div>
+                </div>
             {% endif %}
         </div>
     </div>
-	</form>
+    </form>
 
 {% if rating %}
 <p>Standings:</p>

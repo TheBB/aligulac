@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -62,8 +62,8 @@ def period(request, period_id, page='1'):
     specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
             .extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
 
-    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
-            .select_related('team', 'teammembership')
+    entries = Rating.objects.filter(period=period).select_related('team','teammembership')
+    entries = filter_active_ratings(entries)
 
     try:
         race = request.GET['race']

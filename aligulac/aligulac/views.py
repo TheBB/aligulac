@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
 from ratings.models import Rating, Period, Player, Team, Match
-from ratings.tools import find_player
+from ratings.tools import find_player, filter_active_ratings
 from ratings.templatetags.ratings_extras import urlfilter
 
 from blog.models import Post
@@ -141,8 +141,9 @@ def home(request):
     base = base_ctx(request=request)
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
-    entries = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')\
+    entries = Rating.objects.filter(period=period).order_by('-rating')\
             .select_related('team', 'teammembership')[0:10]
+    entries = filter_active_ratings(entries)
     for entry in entries:
         teams = entry.player.teammembership_set.filter(current=True)
         if teams.exists():

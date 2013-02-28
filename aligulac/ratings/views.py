@@ -343,7 +343,7 @@ def results(request):
 
     matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
 
-    base['matches'] = display_matches(matches, date=False)
+    base['matches'] = display_matches(matches, date=False, ratings=True)
     base['td'] = td
 
     return render_to_response('results.html', base)

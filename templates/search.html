@@ -33,5 +33,13 @@ aligulac.views.search.
                 {% endfor %}
             </ul>
         {% endif %}
+        {% if events %}
+            <h3>Events</h3>
+            <ul>
+                {% for event in events %}
+                <li><a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.fullname }}</a>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endif %}
 {% endblock %}

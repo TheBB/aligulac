@@ -10,7 +10,7 @@ from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
-from ratings.models import Rating, Period, Player, Team, Match
+from ratings.models import Rating, Period, Player, Team, Match, Event
 from ratings.tools import find_player, filter_active_ratings
 from ratings.templatetags.ratings_extras import urlfilter
 
@@ -163,14 +163,30 @@ def search(request, q=''):
         q = request.GET['q']
 
     players = find_player(q.split(' '), make=False, soft=True)
-    teams = Team.objects.filter(Q(name__icontains=q) | Q(alias__name__icontains=q)).distinct()
 
-    if players.count() == 1 and teams.count() == 0:
+    teams = Team.objects.all()
+    for qpart in q.split(' '):
+        if qpart.strip() == '':
+            continue
+        query = Q(name__icontains=qpart) | Q(alias__name__icontains=q)
+        teams = teams.filter(query)
+    teams = teams.distinct()
+
+    events = Event.objects.all()
+    for qpart in q.split(' '):
+        if qpart.strip() == '':
+            continue
+        events = events.filter(Q(fullname__icontains=qpart))
+    events = events.order_by('lft')
+
+    if players.count() == 1 and teams.count() == 0 and events.count() == 0:
         return redirect('/players/%i-%s/' % (players[0].id, urlfilter(players[0].tag)))
-    elif players.count() == 0 and teams.count() == 1:
+    elif players.count() == 0 and teams.count() == 1 and events.count() == 0:
         return redirect('/teams/%i-%s/' % (teams[0].id, urlfilter(teams[0].name)))
+    elif players.count() == 0 and teams.count() == 0 and events.count() == 1:
+        return redirect('/results/events/%i-%s/' % (events[0].id, urlfilter(events[0].fullname)))
 
-    base.update({'players': players, 'query': q, 'teams': teams})
+    base.update({'players': players, 'query': q, 'teams': teams, 'events': events})
 
     return render_to_response('search.html', base)
 

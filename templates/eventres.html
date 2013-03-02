@@ -252,7 +252,7 @@ ratings.views.events.
                     <label for="subevent">Event name</label>
                 </td>
                 <td class="form_right">
-                    {{ event }} <input type="text" name="subevent" id="subevent" />
+                    <label for="subevent">{{ event }} </label><input type="text" name="subevent" id="subevent" />
                 </td>
             </tr>
             <tr>
@@ -270,13 +270,12 @@ ratings.views.events.
             </tr>
             <tr>
                 <td class="form_left">
-                    <label for="noprint"></label>
                 </td>
                 <td class="form_right">
                     <input type="checkbox" id="noprint" name="noprint" value="noprint"/>
                     <label for="noprint">No Print</label>
                     <input type="checkbox" id="closed" name="closed" value="closed" checked/>
-                    <label for="noprint">Closed</label>
+                    <label for="closed">Closed</label>
                 </td>
             </tr>                                
             <tr>

@@ -366,12 +366,16 @@ def results_search(request):
                 match = Match.objects.get(id=int(key.split('-')[-1]))
                 if request.POST['event'] != 'nochange':
                     match.eventobj = event
+                    base['markevent'] = event
                 if request.POST['date'].strip() != '':
                     match.date = request.POST['date']
+                    base['markdate'] = request.POST['date']
                 if request.POST['type'] != 'nochange':
                     match.offline = (request.POST['type'] == 'offline')
+                    base['markoffline'] = request.POST['type']
                 if request.POST['game'] != 'nochange':
                     match.game = request.POST['game']
+                    base['markgame'] = request.POST['game']
                 match.save()
                 num += 1
 

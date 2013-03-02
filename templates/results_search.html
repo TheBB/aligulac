@@ -138,9 +138,9 @@ This is the results search function. Called from ratings.views.results_search.
                 </td>
                 <td class="form_right">
                     <select name="event" id="event">
-                        <option value="nochange" selected>No change</option>
+                        <option value="nochange" {% if not markevent %}selected{% endif %}>No change</option>
                         {% for event in events %}
-                        <option value="{{ event.id }}">{{ event }}</option>
+                        <option value="{{ event.id }}" {% ifequal event.id markevent.id %}selected{% endifequal %}>{{ event }}</option>
                         {% endfor %}
                     </select>
                 </td>
@@ -150,7 +150,7 @@ This is the results search function. Called from ratings.views.results_search.
                     <label for="date">Date</label>
                 </td>
                 <td class="form_right">
-                    <input type="text" class="date" name="date" id="date" value="" />
+                    <input type="text" class="date" name="date" id="date" {% if markdate %}value="{{ markdate }}"{% endif %} />
                     <script type="text/javascript">
                         // <![CDATA[  
                         var opts = {                            
@@ -168,9 +168,9 @@ This is the results search function. Called from ratings.views.results_search.
                 </td>
                 <td class="form_right">
                     <select name="type" id="type">
-                        <option value="nochange" selected>No change</option>
-                        <option value="online">Online</option>
-                        <option value="offline">Offline</option>
+                        <option value="nochange" {% if not markoffline %}selected{% endif %}>No change</option>
+                        <option value="online" {% if markoffline == "online" %}selected{% endif %}>Online</option>
+                        <option value="offline" {% if markoffline == "offline" %}selected{% endif %}>Offline</option>
                     </select>
                 </td>
             </tr>
@@ -180,9 +180,9 @@ This is the results search function. Called from ratings.views.results_search.
                 </td>
                 <td class="form_right">
                     <select name="game" id="game">
-                        <option value="nochange" selected>No change</option>
-                        <option value="WoL">Wings of Liberty</option>
-                        <option value="HotS">Heart of the Swarm</option>
+                        <option value="nochange" {% if not markgame %}selected{% endif %}>No change</option>
+                        <option value="WoL" {% if markgame == "WoL" %}selected{% endif %}>Wings of Liberty</option>
+                        <option value="HotS" {% if markgame == "HotS" %}selected{% endif %}>Heart of the Swarm</option>
                     </select>
                 </td>
             </tr>

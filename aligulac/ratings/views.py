@@ -520,7 +520,7 @@ def events(request, event_id=None):
                     for sibling in siblings:
                         sibling.change_type(request.POST['type'])
                         
-            if request.POST['date'].strip() != '':
+            if request.POST['date'].strip() != 'No change':
                 matches.update(date=request.POST['date'])
                 base['message'] = 'Modified all matches.'
             if request.POST['offline'] != 'nochange':

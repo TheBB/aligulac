@@ -519,12 +519,12 @@ def events(request, event_id=None):
             if request.POST['date'].strip() != '':
                 matches.update(date=request.POST['date'])
                 base['message'] = 'Modified all matches.'
-                if request.POST['offline'] != 'nochange':
-                    matches.update(offline=(request.POST['offline'] == 'offline'))
-                    base['message'] = 'Modified all matches.'
-                    if request.POST['game'] != 'nochange':
-                        matches.update(game=request.POST['game'])
-                        base['message'] = 'Modified all matches.'
+            if request.POST['offline'] != 'nochange':
+                matches.update(offline=(request.POST['offline'] == 'offline'))
+                base['message'] = 'Modified all matches.'
+            if request.POST['game'] != 'nochange':
+                matches.update(game=request.POST['game'])
+                base['message'] = 'Modified all matches.'
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
             if 'noprint' in request.POST.keys():

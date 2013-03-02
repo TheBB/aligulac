@@ -15,7 +15,9 @@ ratings.views.events.
 	<form method="post" action="/results/events/{{ event.id }}/">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
-        <div class="iboxh">Details{% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">Edit</a>){% endif %}</div>
+        <div class="iboxh">Details
+	        {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
+        </div>
         <div class="iboxtable">
             <div class="row edit" style="display: none;">
                 <div class="rowel" style="width: 7em;"><big><strong>Note</strong></big></div>
@@ -186,9 +188,6 @@ ratings.views.events.
         {% if forloop.last %}{{ e.name }}{% else %}
         <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a> →{% endif %}
     {% endfor %}
-    {% if adm %}
-        [<a href="/admin/ratings/event/{{ event.id }}/">admin</a>]
-    {% endif %}
 
     {% if children or siblings %}
     <div class="table" style="width: 35em;">

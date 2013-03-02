@@ -34,6 +34,8 @@ class Event(models.Model):
     big = models.BooleanField(default=False)
     noprint = models.BooleanField(default=False)
     fullname = models.CharField(max_length=500, default='')
+    homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
+    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -85,6 +87,24 @@ class Event(models.Model):
     def get_children(self):
         return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
     
+    def get_homepage(self):
+        if self.homepage:
+            return self.homepage
+        else:
+            if self.parent:
+                return self.parent.get_homepage()
+            else:
+                return None
+
+    def get_lp_name(self):
+        if self.lp_name:
+            return self.lp_name
+        else:
+            if self.parent:
+                return self.parent.get_lp_name()
+            else:
+                return None
+    
     def change_type(self, type):
         self.type = type
         if type == 'event' or type == 'round':
@@ -95,6 +115,14 @@ class Event(models.Model):
     
     def set_parent(self, parent):
         self.parent = parent
+        self.save()
+    
+    def set_homepage(self, homepage):
+        self.homepage = homepage
+        self.save()
+    
+    def set_lp_name(self, lp_name):
+        self.lp_name = lp_name
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):

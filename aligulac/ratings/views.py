@@ -529,6 +529,10 @@ def events(request, event_id=None):
             if request.POST['game'] != 'nochange':
                 matches.update(game=request.POST['game'])
                 base['message'] = 'Modified all matches.'
+            if request.POST['homepage'] != '':
+                event.set_homepage(request.POST['homepage'])
+            if request.POST['lp_name'] != '':
+                event.set_lp_name(request.POST['lp_name'])
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
             if 'noprint' in request.POST.keys():
@@ -570,6 +574,11 @@ def events(request, event_id=None):
     
     if event.type:
         base['eventtype'] = event.type
+        
+    if event.get_homepage():
+        base['homepage'] = event.get_homepage()
+    if event.get_lp_name():
+        base['lp_name'] = event.get_lp_name()
 
     base['offline'] = None
     if matches.values("offline").distinct().count() == 1:

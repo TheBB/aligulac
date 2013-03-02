@@ -159,7 +159,28 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
+            {% if homepage or lp_name %}
+            <div class="row infobox">
+                <div class="rowel">External</div>
+                <div class="rower">
+					{% if homepage %}
+                    <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
+                    {% endif %}
+					{% if lp_name %}
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
             {% if adm %}
+				<div class="row edit" style="display: none;">
+	            	<div class="rowel">Homepage</div>
+                	<div class="rower"><input type="text" name="homepage" {% if event.homepage %}value="{{ event.homepage }}"{% endif %} /></div>
+				</div>
+				<div class="row edit" style="display: none;">
+	            	<div class="rowel">Liquipedia</div>
+                	<div class="rower"><input type="text" name="lp_name" {% if event.lp_name %}value="{{ event.lp_name }}"{% endif %} /></div>
+				</div>
 				<div class="row edit" style="display: none;">
 	            	<div class="rowel"></div>
                 	<div class="rower"><input type="submit" name="op" value="Modify" /></div>

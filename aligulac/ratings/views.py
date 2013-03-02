@@ -520,6 +520,9 @@ def events(request, event_id=None):
                     for sibling in siblings:
                         sibling.change_type(request.POST['type'])
                         
+            if request.POST['name'] != '' and request.POST['name'] != event.name:
+                event.name = request.POST['name']
+                event.save()
             if request.POST['date'].strip() != 'No change':
                 matches.update(date=request.POST['date'])
                 base['message'] = 'Modified all matches.'
@@ -529,9 +532,9 @@ def events(request, event_id=None):
             if request.POST['game'] != 'nochange':
                 matches.update(game=request.POST['game'])
                 base['message'] = 'Modified all matches.'
-            if request.POST['homepage'] != '':
+            if request.POST['homepage'] != event.get_homepage():
                 event.set_homepage(request.POST['homepage'])
-            if request.POST['lp_name'] != '':
+            if request.POST['lp_name'] != event.get_lp_name():
                 event.set_lp_name(request.POST['lp_name'])
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':

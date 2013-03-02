@@ -10,33 +10,12 @@ ratings.views.events.
 {% block title %}{{ event }}{% endblock %}
 
 {% block content %}
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility()
-    {
-    if (document.getElementsByClassName('infobox'))
-    {
-    	var elements = document.getElementsByClassName('infobox');
-    	for(var i = 0, length = elements.length; i < length; i++)
-	   	{
-			elements[i].style.display = 'none';
-		}
-    }
-	var elements = document.getElementsByClassName('edit');
-    for(var i = 0, length = elements.length; i < length; i++)
-    	{
-		    elements[i].style.display = 'table-row';
-		}
-    }
-    //-->
-    </script>
-    
     <h2>{{ event }}</h2>
 
 	<form method="post" action="/results/events/{{ event.id }}/">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
-        <div class="iboxh">Details{% if adm %} (<a href="#" onclick="toggle_visibility(); return false;">Edit</a>){% endif %}</div>
+        <div class="iboxh">Details{% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">Edit</a>){% endif %}</div>
         <div class="iboxtable">
             <div class="row edit" style="display: none;">
                 <div class="rowel" style="width: 7em;"><big><strong>Note</strong></big></div>
@@ -56,6 +35,18 @@ ratings.views.events.
                 </div>
             </div>
             {% if adm %}
+                <div class="row edit" style="display: none;">
+                	<div class="rowel">Name</div>
+                	<div class="rower">
+                		<input type="text" name="name" id="name"
+							{% for e in path %}
+                	    		{% if forloop.last %}
+	        						value="{{ e.name }}"
+        						{% endif %}
+					    	{% endfor %}
+                		/>
+                	</div>
+                </div>
                 <div class="row edit" style="display: none;">
                 <div class="rowel">Date</div>
                 <div class="rower"><input type="text" name="date" class="date" id="date"
@@ -175,11 +166,11 @@ ratings.views.events.
             {% if adm %}
 				<div class="row edit" style="display: none;">
 	            	<div class="rowel">Homepage</div>
-                	<div class="rower"><input type="text" name="homepage" {% if event.homepage %}value="{{ event.homepage }}"{% endif %} /></div>
+                	<div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
 				</div>
 				<div class="row edit" style="display: none;">
 	            	<div class="rowel">Liquipedia</div>
-                	<div class="rower"><input type="text" name="lp_name" {% if event.lp_name %}value="{{ event.lp_name }}"{% endif %} /></div>
+                	<div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
 				</div>
 				<div class="row edit" style="display: none;">
 	            	<div class="rowel"></div>

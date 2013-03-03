@@ -454,6 +454,22 @@ class Match(models.Model):
     def event_check_partpath(self):
         return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
 
+#"Earnings" or "Earning"?
+class Earnings(models.Model):
+    event = models.ForeignKey(Event)
+    player = models.ForeignKey(Player)
+    placement = models.IntegerField()
+    earnings = models.IntegerField()
+    
+    @staticmethod
+    def set_earnings(event, player, placement, earnings):
+        #probably should be more subtle and not deleted everything on change
+        if Earnings.objects.filter(event=event).exists():
+            Earnings.objects.filter(event=event).delete()
+        new = Earnings(event=event, player=player, placement=placement, earnings=earnings)
+        new.save()
+        return new
+    
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']
     try:

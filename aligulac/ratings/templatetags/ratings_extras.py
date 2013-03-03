@@ -205,3 +205,7 @@ def urlfilter(value):
     value = value.replace('/', '')
     return value
 register.filter('urlfilter', urlfilter)
+
+def milliseconds(value):
+    return (int(value.strftime('%s'))+3600)*1000
+register.filter('milliseconds', milliseconds)

@@ -183,28 +183,13 @@ def player(request, player_id):
 
     try:
         base['first'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('date')[0]
-    except:
-        pass
-
-    try:
         base['last'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('-date')[0]
     except:
         pass
 
-    try:
-        base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
-    except:
-        pass
-
-    try:
-        base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
-    except:
-        pass
-
-    try: 
-        base['aliases'] = Alias.objects.filter(player=player)
-    except:
-        pass
+    base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
+    base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
+    base['aliases'] = Alias.objects.filter(player=player)
 
     # Winrates
     matches_a = Match.objects.filter(pla=player)
@@ -213,33 +198,21 @@ def player(request, player_id):
     def ntz(n):
         return n if n is not None else 0
 
-    try:
-        a = matches_a.aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.aggregate(Sum('sca'), Sum('scb'))
-        base['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.aggregate(Sum('sca'), Sum('scb'))
+    base['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
-        base['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
+    base['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
-        base['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
+    base['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
-        base['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
     # Career highs
     try:
@@ -255,9 +228,10 @@ def player(request, player_id):
     except:
         countryfull = ''
 
-    rating = Rating.objects.filter(player=player).order_by('-period')
-    if rating.count() < 2:
-        base['noimage'] = True
+    rating = Rating.objects.filter(player=player).order_by('period').select_related('period')
+    base['charts'] = rating.count >= 2
+    if base['charts']:
+        base['ratings'] = rating
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
@@ -270,7 +244,7 @@ def player(request, player_id):
     if not rating.exists():
         base.update({'player': player, 'countryfull': countryfull})
         return render_to_response('player.html', base)
-    rating = rating[0]
+    rating = rating.order_by('-period')[0]
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\

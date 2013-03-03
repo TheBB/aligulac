@@ -12,11 +12,11 @@ ratings.views.events.
 {% block content %}
     <h2>{{ event }}</h2>
 
-	<form method="post" action="/results/events/{{ event.id }}/">
+    <form method="post" action="/results/events/{{ event.id }}/">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
-	        {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
             <div class="row edit" style="display: none;">
@@ -28,26 +28,26 @@ ratings.views.events.
                 <div class="rowel" style="width: 7em;">Date{% ifnotequal earliest latest %}s{% endifnotequal %}</div>
                 <div class="rower" style="width: 18em;">
                     {% if earliest and latest %}
-	                	{% ifequal earliest latest %}
-                		{{ earliest }}
-                		{% else %}
-	                    {{ earliest }} to {{ latest }}
-                		{% endifequal %}
+                        {% ifequal earliest latest %}
+                        {{ earliest }}
+                        {% else %}
+                        {{ earliest }} to {{ latest }}
+                        {% endifequal %}
                     {% endif %}
                 </div>
             </div>
             {% if adm %}
                 <div class="row edit" style="display: none;">
-                	<div class="rowel">Name</div>
-                	<div class="rower">
-                		<input type="text" name="name" id="name"
-							{% for e in path %}
-                	    		{% if forloop.last %}
-	        						value="{{ e.name }}"
-        						{% endif %}
-					    	{% endfor %}
-                		/>
-                	</div>
+                    <div class="rowel">Name</div>
+                    <div class="rower">
+                        <input type="text" name="name" id="name"
+                            {% for e in path %}
+                                {% if forloop.last %}
+                                    value="{{ e.name }}"
+                                {% endif %}
+                            {% endfor %}
+                        />
+                    </div>
                 </div>
                 <div class="row edit" style="display: none;">
                 <div class="rowel">Date</div>
@@ -73,14 +73,14 @@ ratings.views.events.
             {% endif %}
             {% if adm %}
                 <div class="row edit" style="display: none;">
-                	<div class="rowel">Game</div>
-                	<div class="rower">
-                	<select name="game" id="game">
+                    <div class="rowel">Game</div>
+                    <div class="rower">
+                    <select name="game" id="game">
                         <option value="nochange" {% if not game %}selected{% endif %}>No change</option>
                         <option value="WoL" {% if game == "Wings of Liberty" %}selected{% endif %}>Wings of Liberty</option>
                         <option value="HotS" {% if game == "Heart of the Swarm" %}selected{% endif %}>Heart of the Swarm</option>
                     </select>
-                	</div>
+                    </div>
                 </div>
             {% endif %}
             <div class="row infobox">
@@ -89,14 +89,14 @@ ratings.views.events.
             </div>
             {% if adm %}
                 <div class="row edit" style="display: none;">
-                	<div class="rowel">On-/Offline</div>
-                	<div class="rower">
+                    <div class="rowel">On-/Offline</div>
+                    <div class="rower">
                     <select name="offline" id="offline">
                         <option value="nochange" {% if offline == None %}selected{% endif %}>No change</option>
                         <option value="online" {% if offline != None %}selected{% endif %}>Online</option>
                         <option value="offline" {% if offline %}selected{% endif %}>Offline</option>
                     </select>
-                	</div>
+                    </div>
                 </div>
             {% endif %}
             {% if adm %}
@@ -107,23 +107,23 @@ ratings.views.events.
                 </div>
                 {% endif %}
                 <div class="row edit" style="display: none;">
-                	<div class="rowel">Type</div>
-                	<div class="rower">
+                    <div class="rowel">Type</div>
+                    <div class="rower">
                     <select name="type" id="type">
                         <option value="nochange" {% if not eventtype %}selected{% endif %}>No change</option>
                         <option value="category" {% if eventtype == "category" %}selected{% endif %}/>Category</option>
                         <option value="event" {% if eventtype == "event" %}selected{% endif %}/>Event</option>
                         <option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
                     </select>
-                	</div>
+                    </div>
                 </div>
                 <div class="row edit" style="display: none;">
-                	<div class="rowel">
-                	<input type="checkbox" id="siblings" name="siblings" value="siblings" />
-                	</div>
-                	<div class="rower">
+                    <div class="rowel">
+                    <input type="checkbox" id="siblings" name="siblings" value="siblings" />
+                    </div>
+                    <div class="rower">
                     <label for="siblings">Apply to events on the same level</label>
-                	</div>
+                    </div>
                 </div>
             {% endif %}
             <div class="row">
@@ -156,29 +156,29 @@ ratings.views.events.
             <div class="row infobox">
                 <div class="rowel">External</div>
                 <div class="rower">
-					{% if homepage %}
+                    {% if homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
-					{% if lp_name %}
+                    {% if lp_name %}
                     <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
                     {% endif %}
                 </div>
             </div>
             {% endif %}
             {% if adm %}
-				<div class="row edit" style="display: none;">
-	            	<div class="rowel">Homepage</div>
-                	<div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
-				</div>
-				<div class="row edit" style="display: none;">
-	            	<div class="rowel">Liquipedia</div>
-                	<div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
-				</div>
-				<div class="row edit" style="display: none;">
-	            	<div class="rowel"></div>
-                	<div class="rower"><input type="submit" name="op" value="Modify" /></div>
-				</div>
-			{% endif %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Homepage</div>
+                    <div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Liquipedia</div>
+                    <div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel"></div>
+                    <div class="rower"><input type="submit" name="op" value="Modify" /></div>
+                </div>
+            {% endif %}
         </div>
     </div>
     </form>
@@ -306,20 +306,20 @@ ratings.views.events.
                     <input type="Submit" name="add" value="Add" />
                 </td>
             </tr>
-        	<form method="post" action="/results/events/{{ event.id }}/">
-	        {% csrf_token %}
-			<tr>
-				<td class="form_left">
-					<label for="moveevent">Move this event</label>
-				</td>
-				<td class="form_right">
+            <form method="post" action="/results/events/{{ event.id }}/">
+            {% csrf_token %}
+            <tr>
+                <td class="form_left">
+                    <label for="moveevent">Move this event</label>
+                </td>
+                <td class="form_right">
                     <select name="moveevent" id="moveevent">
-                    	{% for events in surroundingevents %} 
+                        {% for events in surroundingevents %} 
                         <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
                         {% endfor %}
                     </select>
-				</td>
-			</tr>                                
+                </td>
+            </tr>                                
             <tr>
                 <td class="form_left"></td>
                 <td class="form_right">

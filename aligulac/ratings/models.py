@@ -73,16 +73,10 @@ class Event(models.Model):
                                     type__in=['category','event']).order_by('lft')
     
     def get_parent(self, levels=1):
-        if levels == 1:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[0]
-            except:
-                return self
-        else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[0].get_parent(levels-1)
-            except:
-                return self
+        try:
+            return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[levels-1]
+        except:
+            return self
     
     def get_children(self):
         return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
@@ -91,18 +85,20 @@ class Event(models.Model):
         if self.homepage:
             return self.homepage
         else:
-            if self.parent:
-                return self.parent.get_homepage()
-            else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, homepage__isnull=False)\
+                            .order_by('-lft').values('homepage')[0]['homepage']
+            except:
                 return None
 
     def get_lp_name(self):
         if self.lp_name:
             return self.lp_name
         else:
-            if self.parent:
-                return self.parent.get_lp_name()
-            else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, lp_name__isnull=False)\
+                            .order_by('-lft').values('lp_name')[0]['lp_name']
+            except:
                 return None
     
     def change_type(self, type):

@@ -522,45 +522,71 @@ def events(request, event_id=None):
                         
             if request.POST['name'] != '' and request.POST['name'] != event.name:
                 event.name = request.POST['name']
+                event.update_name()
                 event.save()
+                for e in event.get_children():
+                    e.update_name()
+
             if request.POST['date'].strip() != 'No change':
                 matches.update(date=request.POST['date'])
                 base['message'] = 'Modified all matches.'
+
             if request.POST['offline'] != 'nochange':
                 matches.update(offline=(request.POST['offline'] == 'offline'))
                 base['message'] = 'Modified all matches.'
+
             if request.POST['game'] != 'nochange':
                 matches.update(game=request.POST['game'])
                 base['message'] = 'Modified all matches.'
+
             if request.POST['homepage'] != event.get_homepage():
                 event.set_homepage(request.POST['homepage'])
+
             if request.POST['lp_name'] != event.get_lp_name():
                 event.set_lp_name(request.POST['lp_name'])
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
-            if 'noprint' in request.POST.keys():
-                noprint = True
-            else:
-                noprint = False
-
-            if 'closed' in request.POST.keys():
-                closed = True
-            else:
-                closed = False
-                
             parent = event
             for q in request.POST['subevent'].strip().split(','):
                 type = request.POST['type']
-                parent.add_child(q.strip(), type, noprint, closed)
+                parent.add_child(q.strip(), type, 'noprint' in request.POST, 'closed' in request.POST)
                 
         elif 'move' in request.POST and request.POST['move'] == 'Move':
             eventid = request.POST['moveevent']
-            event.set_parent(Event.objects.get(id=eventid))
-            
-            roots = list(Event.objects.filter(parent=event).order_by('lft'))
-            nextleft = 0
-            for r in roots:
-                nextleft = r.reorganize(nextleft) + 1
+            newparent = Event.objects.get(id=eventid)
+            event.set_parent(newparent)
+
+            width = event.rgt - event.lft + 1
+            edge = Event.objects.all().order_by('-rgt').values('rgt')[0]['rgt'] + 1000
+            if event.rgt < newparent.lft:
+                shift = 'left'
+                lft_shift = event.rgt + 1
+                rgt_shift = newparent.rgt - 1
+            elif event.lft > newparent.rgt:
+                shift = 'right'
+                lft_shift = newparent.rgt
+                rgt_shift = event.lft - 1
+            else:
+                # Invalid move command
+                shift = 'invalid'
+
+            if shift != 'invalid':
+                # Move event out of the tree to make space
+                dist_edge = edge - event.lft
+                Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)\
+                        .update(lft=F('lft')+dist_edge, rgt=F('rgt')+dist_edge)
+                # Shift events over
+                if shift == 'left':
+                    Event.objects.filter(lft__gte=lft_shift, rgt__lte=rgt_shift)\
+                            .update(lft=F('lft')-width, rgt=F('rgt')-width)
+                else:
+                    Event.objects.filter(lft__gte=lft_shift, rgt__lte=rgt_shift)\
+                            .update(lft=F('lft')+width, rgt=F('rgt')+width)
+
+                # Move event back into the tree to the new space
+                dist = event.rgt - newparent.rgt + 1
+                Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)\
+                        .update(lft=F('lft')-dist, rgt=F('rgt')-dist)
 
     #used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children()

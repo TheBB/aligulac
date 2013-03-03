@@ -214,9 +214,9 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 
     # Extend to restricted format
-    #devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
-    devs = -1/diag(D2logL(x, DMex, C+1))
-    devs = maximum(devs, RATINGS_MIN_DEV)
+    devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
+    #devs = -1/diag(D2logL(x, DMex, C+1))
+    #devs = maximum(devs, RATINGS_MIN_DEV)
     rats = extend(x)
 
     # Compute new RD and rating for the indices that can change

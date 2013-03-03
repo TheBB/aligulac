@@ -315,6 +315,9 @@ This is the template for the main player page, called from ratings.views.player.
                 type: 'spline',
                 zoomType: 'x'
             },
+            credits: {
+                enabled: false
+            },
             title: {
                 text: 'Rating history'
             },
@@ -326,7 +329,7 @@ This is the template for the main player page, called from ratings.views.player.
             },
             yAxis: {
                 title: {
-                    text: 'Ratings'
+                    text: null
                 }
             },
             tooltip: {
@@ -347,7 +350,7 @@ This is the template for the main player page, called from ratings.views.player.
                 dashStyle: 'Dash',
                 data: [{% spaceless %}
                       {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.rating|addf:r.rating_vp|ratscale }}],{% endfor %}{% endspaceless %}]
+                          {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}],{% endfor %}{% endspaceless %}]
             }, {
                 name: 'vs. Terran',
                 color: '#0000dd',
@@ -355,7 +358,7 @@ This is the template for the main player page, called from ratings.views.player.
                 dashStyle: 'Dash',
                 data: [{% spaceless %}
                       {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.rating|addf:r.rating_vt|ratscale }}],{% endfor %}{% endspaceless %}]
+                          {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}],{% endfor %}{% endspaceless %}]
             }, {
                 name: 'vs. Zerg',
                 color: '#dd0000',
@@ -363,14 +366,14 @@ This is the template for the main player page, called from ratings.views.player.
                 dashStyle: 'Dash',
                 data: [{% spaceless %}
                       {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.rating|addf:r.rating_vz|ratscale }}],{% endfor %}{% endspaceless %}]
+                          {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}],{% endfor %}{% endspaceless %}]
             }, {
                 name: 'General',
                 color: '#000000',
                 lineWidth: 3,
                 data: [{% spaceless %}
                       {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                      {{ r.rating|ratscale }}],{% endfor %}{% endspaceless %}]
+                      {{ r.bf_rating|ratscale }}],{% endfor %}{% endspaceless %}]
             }]
         });
     });

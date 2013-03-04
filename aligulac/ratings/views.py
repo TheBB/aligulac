@@ -471,6 +471,13 @@ def events(request, event_id=None):
                      'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
         return render_to_response('events.html', base)
 
+    # Number of matches (set event to big if too large)
+    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
+    if matches.count() > 200 and not event.big:
+        event.big = True
+        event.save()
+
+
     # Make modifications if neccessary
     if base['adm'] == True:
         if 'op' in request.POST and request.POST['op'] == 'Modify':
@@ -556,12 +563,6 @@ def events(request, event_id=None):
         siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
         base['siblings'] = siblings
 
-    # Number of matches (set event to big if too large)
-    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
-    if matches.count() > 200 and not event.big:
-        event.big = True
-        event.save()
-    
     # Used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children()
 

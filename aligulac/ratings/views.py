@@ -476,6 +476,14 @@ def events(request, event_id=None):
     if matches.count() > 200 and not event.big:
         event.big = True
         event.save()
+        
+    # Get parent, ancestors and siblings
+    base['event'] = event
+    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
+    base['children'] = Event.objects.filter(parent=event).order_by('lft')
+    if event.parent != None:
+        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        base['siblings'] = siblings
 
     # Make modifications if neccessary
     if base['adm'] == True:
@@ -556,14 +564,6 @@ def events(request, event_id=None):
                 base['message'] = 'Updated tournament prizepool.'
             else:
                 base['message'] = 'There was an error updating the tournament prizepool.'
-
-    # Get parent, ancestors and siblings
-    base['event'] = event
-    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
-    base['children'] = Event.objects.filter(parent=event).order_by('lft')
-    if event.parent != None:
-        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
-        base['siblings'] = siblings
 
     # Used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children()

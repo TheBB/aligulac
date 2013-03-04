@@ -478,19 +478,17 @@ def events(request, event_id=None):
         event.save()
         
     # Get parent, ancestors and siblings
-    base['event'] = event
-    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
-    base['children'] = Event.objects.filter(parent=event).order_by('lft')
     if event.parent != None:
         siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
-        base['siblings'] = siblings
+    else:
+        siblings = None
 
     # Make modifications if neccessary
     if base['adm'] == True:
         if 'op' in request.POST and request.POST['op'] == 'Modify':
             if request.POST['type'] != 'nochange':
                 event.change_type(request.POST['type'])
-                if 'siblings' in request.POST.keys() and siblings:
+                if 'siblings' in request.POST.keys() and siblings is not None:
                     for sibling in siblings:
                         sibling.change_type(request.POST['type'])
                         
@@ -564,6 +562,12 @@ def events(request, event_id=None):
                 base['message'] = 'Updated tournament prizepool.'
             else:
                 base['message'] = 'There was an error updating the tournament prizepool.'
+
+    base['event'] = event
+    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
+    base['children'] = Event.objects.filter(parent=event).order_by('lft')
+    if event.parent != None:
+        base['siblings'] = event.parent.event_set.exclude(id=event.id).order_by('lft')
 
     # Used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children()

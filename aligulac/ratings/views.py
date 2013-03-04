@@ -477,7 +477,6 @@ def events(request, event_id=None):
         event.big = True
         event.save()
 
-
     # Make modifications if neccessary
     if base['adm'] == True:
         if 'op' in request.POST and request.POST['op'] == 'Modify':
@@ -522,7 +521,10 @@ def events(request, event_id=None):
             eventid = request.POST['moveevent']
             newparent = Event.objects.get(id=eventid)
 
-            diff = newparent.rgt - event.lft
+            if event.lft > newparent.rgt:
+                diff = newparent.rgt - event.lft
+            else:
+                diff = newparent.rgt - event.rgt - 1
             event_shift(event, diff)
 
             event.set_parent(newparent)

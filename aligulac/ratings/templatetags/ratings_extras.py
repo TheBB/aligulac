@@ -210,5 +210,5 @@ def urlfilter(value):
 register.filter('urlfilter', urlfilter)
 
 def milliseconds(value):
-    return (value - date(1970,1,1)).total_seconds() * 1000
+    return (value - date(1970,1,1)).days * 24 * 60 * 60 * 1000
 register.filter('milliseconds', milliseconds)

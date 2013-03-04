@@ -281,7 +281,7 @@ ratings.views.events.
     	{% endif %}
     	if (clicked_id == 'changeplayers')
     	{
-    		var amount = document.getElementById('amount').value
+    		var amount = document.getElementById('numberplayers').value
     	}
     
     	if (table.rows.length > 1)
@@ -294,16 +294,16 @@ ratings.views.events.
     
 		for(var i = 0; i < amount; i++)
     	{
-    		var placement = i+1
-			var earning = ''
-			var earningsplayer = ''
+    		var placement = i+1;
+			var earning = '';
+			var earningsplayer = '';
     		
 			{% if earnings %}
 				{% for earning in earnings %}
 					if (placement == {{ earning.placement }})
 					{
-						earning = "{{ earning.earnings }}"
-						earningsplayer = "{{ earning.player.id }}"
+						earning = "{{ earning.earnings }}";
+						earningsplayer = "{{ earning.player.id }}";
 					}
 				{% endfor %}
 			{% endif %}
@@ -332,7 +332,6 @@ ratings.views.events.
         	var cell2 = row.insertCell(1);
         	var cell3 = row.insertCell(2);
         	cell1.innerHTML = placement
-        	
         	cell2.appendChild(select);
         	cell3.innerHTML = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" value="' + earning + '" size="3" /> $'
     	}
@@ -347,24 +346,86 @@ ratings.views.events.
 		prizepoolbutton.style.display = 'none';
 	    table.style.display = 'table';
 	}
+	
+	function validate()
+	{
+		function eliminateDuplicates(arr)
+		{
+  			var i,
+      		len=arr.length,
+      		out=[],
+      		obj={};
+
+  			for (i=0;i<len;i++)
+  			{
+	    		obj[arr[i]]=0;
+  			}
+  			for (i in obj) {
+	    		out.push(i);
+  			}
+  			return out;
+		}
+		
+		var form = document.forms.prizepool;
+		var length = form.numberplayers.selectedIndex;
+		var players = new Array();
+		
+		for(var i = 0; i < length+1; i++)
+		{
+			var amount = form['amount-' + i].value;
+			players.push(form['player-' + i].value);
+			var placement = i+1;
+			var regex = /[^0-9\.,]+/g;
+			
+			if (amount == '' | amount.length == 0)
+			{
+				alert('Please add a value for Player ' + placement);
+				return false;
+			}
+			if (regex.test(amount))
+			{
+				alert('Cannot parse value for Player ' + placement);
+				return false;
+			}
+
+		}
+		
+		var nodupes = eliminateDuplicates(players);
+		if (nodupes.length != players.length)
+		{
+			log('whee');
+			alert('Duplicated player detected.');
+			return false
+		}
+		
+		return true;
+	}
 	</script>
 	
-	<form method="post" action="/results/events/{{ event.id }}/">
+	<form method="post" name="prizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate()">
 	{% csrf_token %}
 
-	<!-- <input type="button" id="prizepoolbutton" onclick="addprizepool();  {% if earnings %}
-																			createtable(this.id);
-																		{% endif %} return false;"
-																		{% if earnings %}
-																			value="Change prize pool"
-																		{% else %}
-																			value="Add prize pool"
-																		{% endif %}																		
-																		 /> -->
+	{% if event.type == 'event' %}
+		{% if earnings %}
+			<input type="button" id="prizepoolbutton" onclick="addprizepool(); createtable(this.id); return false;" value="Change prize pool"/>
+		{% else %}
+			<input type="button" id="prizepoolbutton" onclick="addprizepool(); return false;" value="Add prize pool"/>
+		{% endif %}
+	{% endif %}
+
 	<span id="createtable" style="display: none;">
 		How many players?
-		<input type="text" id="amount" name="amount" {% if earnings %}value="{{ earnings.count }}"{% endif %} size="1"/>
-		<input type="button" id ="changeplayers" onclick="createtable(this.id); return false;" value="Add"/>
+		<select name="numberplayers" id="numberplayers">
+        	{% for player in players %}
+            	<option value="{{ forloop.counter }}"
+            		{% if earnings %} 
+            			{% ifequal earnings.count forloop.counter %}selected{% endifequal %}
+                	{% endif %}
+               		>{{ forloop.counter }}
+				</option>
+			{% endfor %}
+		</select>
+		<input type="button" id ="changeplayers" onclick="createtable(this.id); return false;" value="Set"/>
 	</span>
 	
 	<table id="table" class="results" style="display: none;">

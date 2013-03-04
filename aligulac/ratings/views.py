@@ -530,16 +530,23 @@ def events(request, event_id=None):
             players = []
             amounts = []
             placements = []
+            
             for i in range(0, amount):
                 player = request.POST['player-' + str(i)]
                 player = Player.objects.get(id=player)
+                
                 amount = request.POST['amount-' + str(i)]
+                amount = amount.replace(',', '').replace('.', '').strip()
                 
                 players.append(player)
                 amounts.append(amount)
                 placements.append(i)
-                
-            Earnings.set_earnings(event, players, amounts, placements)
+            
+            success = Earnings.set_earnings(event, players, amounts, placements)
+            if success:
+                base['message'] = 'Updated tournament prizepool.'
+            else:
+                base['message'] = 'There was an error updating the tournament prizepool.'
 
     # Get parent, ancestors and siblings
     base['event'] = event

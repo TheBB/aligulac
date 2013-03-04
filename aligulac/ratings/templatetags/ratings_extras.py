@@ -1,5 +1,5 @@
 from django import template
-from datetime import timedelta
+from datetime import timedelta, date
 from dateutil.relativedelta import relativedelta
 from aligulac import settings
 
@@ -207,5 +207,5 @@ def urlfilter(value):
 register.filter('urlfilter', urlfilter)
 
 def milliseconds(value):
-    return (int(value.strftime('%s'))+3600)*1000
+    return (value - date(1970,1,1)).total_seconds() * 1000
 register.filter('milliseconds', milliseconds)

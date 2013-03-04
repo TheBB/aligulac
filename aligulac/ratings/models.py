@@ -34,6 +34,8 @@ class Event(models.Model):
     big = models.BooleanField(default=False)
     noprint = models.BooleanField(default=False)
     fullname = models.CharField(max_length=500, default='')
+    homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
+    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -70,12 +72,53 @@ class Event(models.Model):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False,
                                     type__in=['category','event']).order_by('lft')
     
+    def get_parent(self, levels=1):
+        try:
+            return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[levels-1]
+        except:
+            return self
+    
+    def get_children(self):
+        return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
+    
+    def get_homepage(self):
+        if self.homepage:
+            return self.homepage
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, homepage__isnull=False)\
+                            .order_by('-lft').values('homepage')[0]['homepage']
+            except:
+                return None
+
+    def get_lp_name(self):
+        if self.lp_name:
+            return self.lp_name
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, lp_name__isnull=False)\
+                            .order_by('-lft').values('lp_name')[0]['lp_name']
+            except:
+                return None
+    
     def change_type(self, type):
         self.type = type
         if type == 'event' or type == 'round':
             Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
         if type == 'event' or type == 'category':
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+        self.save()
+    
+    def set_parent(self, parent):
+        self.parent = parent
+        self.save()
+    
+    def set_homepage(self, homepage):
+        self.homepage = homepage
+        self.save()
+    
+    def set_lp_name(self, lp_name):
+        self.lp_name = lp_name
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):
@@ -98,7 +141,12 @@ class Event(models.Model):
     @staticmethod
     def add_root(name, type, big = False, noprint = False):
         new = Event(name=name)
-        new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
+
+        try:
+            new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
+        except:
+            new.lft = 0
+
         new.rgt = new.lft + 1
         new.big = big
         new.noprint = noprint
@@ -411,6 +459,26 @@ class Match(models.Model):
     def event_check_partpath(self):
         return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
 
+#"Earnings" or "Earning"?
+class Earnings(models.Model):
+    event = models.ForeignKey(Event)
+    player = models.ForeignKey(Player)
+    earnings = models.IntegerField()
+    placement = models.IntegerField()
+    
+    @staticmethod
+    def set_earnings(event, players, earnings, placements):
+        #probably should be more subtle and not deleted everything on change
+        if Earnings.objects.filter(event=event).exists():
+            Earnings.objects.filter(event=event).delete()
+        if not len(players) == len(earnings):
+            return None
+        else:
+            for i in range(0,len(players)):
+                new = Earnings(event=event, player=players[i], placement=placements[i]+1, earnings=earnings[i])
+                new.save()
+        return new
+    
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']
     try:

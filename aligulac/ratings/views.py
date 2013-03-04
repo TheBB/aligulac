@@ -3,11 +3,11 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias
+from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -183,28 +183,13 @@ def player(request, player_id):
 
     try:
         base['first'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('date')[0]
-    except:
-        pass
-
-    try:
         base['last'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).order_by('-date')[0]
     except:
         pass
 
-    try:
-        base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
-    except:
-        pass
-
-    try:
-        base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
-    except:
-        pass
-
-    try: 
-        base['aliases'] = Alias.objects.filter(player=player)
-    except:
-        pass
+    base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
+    base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
+    base['aliases'] = Alias.objects.filter(player=player)
 
     # Winrates
     matches_a = Match.objects.filter(pla=player)
@@ -213,33 +198,21 @@ def player(request, player_id):
     def ntz(n):
         return n if n is not None else 0
 
-    try:
-        a = matches_a.aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.aggregate(Sum('sca'), Sum('scb'))
-        base['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.aggregate(Sum('sca'), Sum('scb'))
+    base['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
-        base['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
+    base['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
-        base['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
+    base['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
-    try:
-        a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
-        b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
-        base['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
-    except:
-        pass
+    a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
 
     # Career highs
     try:
@@ -255,9 +228,10 @@ def player(request, player_id):
     except:
         countryfull = ''
 
-    rating = Rating.objects.filter(player=player).order_by('-period')
-    if rating.count() < 2:
-        base['noimage'] = True
+    rating = Rating.objects.filter(player=player).order_by('period').select_related('period')
+    base['charts'] = rating.count >= 2
+    if base['charts']:
+        base['ratings'] = rating
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
@@ -270,7 +244,7 @@ def player(request, player_id):
     if not rating.exists():
         base.update({'player': player, 'countryfull': countryfull})
         return render_to_response('player.html', base)
-    rating = rating[0]
+    rating = rating.order_by('-period')[0]
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\
@@ -366,12 +340,16 @@ def results_search(request):
                 match = Match.objects.get(id=int(key.split('-')[-1]))
                 if request.POST['event'] != 'nochange':
                     match.eventobj = event
+                    base['markevent'] = event
                 if request.POST['date'].strip() != '':
                     match.date = request.POST['date']
+                    base['markdate'] = request.POST['date']
                 if request.POST['type'] != 'nochange':
                     match.offline = (request.POST['type'] == 'offline')
+                    base['markoffline'] = request.POST['type']
                 if request.POST['game'] != 'nochange':
                     match.game = request.POST['game']
+                    base['markgame'] = request.POST['game']
                 match.save()
                 num += 1
 
@@ -493,6 +471,83 @@ def events(request, event_id=None):
                      'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
         return render_to_response('events.html', base)
 
+    # Make modifications if neccessary
+    if base['adm'] == True:
+        if 'op' in request.POST and request.POST['op'] == 'Modify':
+            if request.POST['type'] != 'nochange':
+                event.change_type(request.POST['type'])
+                if 'siblings' in request.POST.keys() and siblings:
+                    for sibling in siblings:
+                        sibling.change_type(request.POST['type'])
+                        
+            if request.POST['name'] != '' and request.POST['name'] != event.name:
+                event.name = request.POST['name']
+                event.update_name()
+                event.save()
+                for e in event.get_children():
+                    e.update_name()
+
+            if request.POST['date'].strip() != 'No change':
+                matches.update(date=request.POST['date'])
+                base['message'] = 'Modified all matches.'
+
+            if request.POST['offline'] != 'nochange':
+                matches.update(offline=(request.POST['offline'] == 'offline'))
+                base['message'] = 'Modified all matches.'
+
+            if request.POST['game'] != 'nochange':
+                matches.update(game=request.POST['game'])
+                base['message'] = 'Modified all matches.'
+
+            if request.POST['homepage'] != event.get_homepage():
+                event.set_homepage(request.POST['homepage'])
+
+            if request.POST['lp_name'] != event.get_lp_name():
+                event.set_lp_name(request.POST['lp_name'])
+                        
+        elif 'add' in request.POST and request.POST['add'] == 'Add':
+            parent = event
+            for q in request.POST['subevent'].strip().split(','):
+                type = request.POST['type']
+                parent.add_child(q.strip(), type, 'noprint' in request.POST, 'closed' in request.POST)
+                
+        elif 'move' in request.POST and request.POST['move'] == 'Move':
+            eventid = request.POST['moveevent']
+            newparent = Event.objects.get(id=eventid)
+
+            diff = newparent.rgt - event.lft
+            event_shift(event, diff)
+
+            event.set_parent(newparent)
+            event.update_name()
+
+            for e in event.get_children():
+                e.update_name()
+
+        elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
+            amount = int(request.POST['amount'])
+            
+            players = []
+            amounts = []
+            placements = []
+            
+            for i in range(0, amount):
+                player = request.POST['player-' + str(i)]
+                player = Player.objects.get(id=player)
+                
+                amount = request.POST['amount-' + str(i)]
+                amount = amount.replace(',', '').replace('.', '').strip()
+                
+                players.append(player)
+                amounts.append(amount)
+                placements.append(i)
+            
+            success = Earnings.set_earnings(event, players, amounts, placements)
+            if success:
+                base['message'] = 'Updated tournament prizepool.'
+            else:
+                base['message'] = 'There was an error updating the tournament prizepool.'
+
     # Get parent, ancestors and siblings
     base['event'] = event
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
@@ -507,42 +562,9 @@ def events(request, event_id=None):
         event.big = True
         event.save()
     
-    # Make modifications if neccessary
-    if base['adm'] == True:
-        if 'op' in request.POST and request.POST['op'] == 'Modify':
-            if request.POST['type'] != 'nochange':
-                event.change_type(request.POST['type'])
-                if 'siblings' in request.POST.keys() and siblings:
-                    for sibling in siblings:
-                        sibling.change_type(request.POST['type'])
-                        
-            if request.POST['date'].strip() != '':
-                matches.update(date=request.POST['date'])
-                base['message'] = 'Modified all matches.'
-                if request.POST['offline'] != 'nochange':
-                    matches.update(offline=(request.POST['offline'] == 'offline'))
-                    base['message'] = 'Modified all matches.'
-                    if request.POST['game'] != 'nochange':
-                        matches.update(game=request.POST['game'])
-                        base['message'] = 'Modified all matches.'
-                        
-        elif 'add' in request.POST and request.POST['add'] == 'Add':
-            if 'noprint' in request.POST.keys():
-                noprint = True
-            else:
-                noprint = False
+    # Used for moving events
+    base['surroundingevents'] = event.get_parent(1).get_children()
 
-            if 'closed' in request.POST.keys():
-                closed = True
-            else:
-                closed = False
-                
-            parent = event
-            for q in request.POST['subevent'].strip().split(','):
-                type = request.POST['type']
-                parent.add_child(q.strip(), type, noprint, closed)
-
-                        
     # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:
         base['game'] = matches[0].game
@@ -553,8 +575,17 @@ def events(request, event_id=None):
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
     
+    base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
+
+    base['earnings'] = Earnings.objects.filter(event=event).order_by('placement')
+    
     if event.type:
         base['eventtype'] = event.type
+        
+    if event.get_homepage():
+        base['homepage'] = event.get_homepage()
+    if event.get_lp_name():
+        base['lp_name'] = event.get_lp_name()
 
     base['offline'] = None
     if matches.values("offline").distinct().count() == 1:

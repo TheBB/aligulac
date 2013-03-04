@@ -12,34 +12,119 @@ ratings.views.events.
 {% block content %}
     <h2>{{ event }}</h2>
 
+    <form method="post" action="/results/events/{{ event.id }}/">
+    {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
-        <div class="iboxh">Details</div>
+        <div class="iboxh">Details
+            {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
+        </div>
         <div class="iboxtable">
-            <div class="row">
-                <div class="rowel" style="width: 7em;">Dates</div>
+            <div class="row edit" style="display: none;">
+                <div class="rowel" style="width: 7em;"><big><strong>Note</strong></big></div>
+                <div class="rower" style="width: 18em;"><big>Date, Game and On-/Offline will apply to <strong>ALL</strong> subevents!</big>
+                </div>
+            </div>
+            <div class="row infobox">
+                <div class="rowel" style="width: 7em;">Date{% ifnotequal earliest latest %}s{% endifnotequal %}</div>
                 <div class="rower" style="width: 18em;">
                     {% if earliest and latest %}
-                    {{ earliest }} to {{ latest }}
+                        {% ifequal earliest latest %}
+                        {{ earliest }}
+                        {% else %}
+                        {{ earliest }} to {{ latest }}
+                        {% endifequal %}
                     {% endif %}
                 </div>
             </div>
+            {% if adm %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Name</div>
+                    <div class="rower">
+                        <input type="text" name="name" id="name"
+                            {% for e in path %}
+                                {% if forloop.last %}
+                                    value="{{ e.name }}"
+                                {% endif %}
+                            {% endfor %}
+                        />
+                    </div>
+                </div>
+                <div class="row edit" style="display: none;">
+                <div class="rowel">Date</div>
+                <div class="rower"><input type="text" name="date" class="date" id="date"
+                                    value="No change" />
+                    <script type="text/javascript" src="/js/datepicker.js" /></script>
+                    <script type="text/javascript">
+                        // <![CDATA[  
+                        var opts = {                            
+                        formElements:{"date":"Y-ds-m-ds-d"},
+                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                        };           
+                        datePickerController.createDatePicker(opts);
+                        // ]]>
+                    </script></div>
+                </div>
+            {% endif %}
             {% if game %}
-            <div class="row">
+            <div class="row infobox">
                 <div class="rowel">Game</div>
                 <div class="rower">{{ game }}</div>
             </div>
             {% endif %}
-            <div class="row">
+            {% if adm %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Game</div>
+                    <div class="rower">
+                    <select name="game" id="game">
+                        <option value="nochange" {% if not game %}selected{% endif %}>No change</option>
+                        <option value="WoL" {% if game == "Wings of Liberty" %}selected{% endif %}>Wings of Liberty</option>
+                        <option value="HotS" {% if game == "Heart of the Swarm" %}selected{% endif %}>Heart of the Swarm</option>
+                    </select>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row infobox">
                 <div class="rowel">On-/Offline</div>
                 <div class="rower">{{ offline|yesno:"Offline,Online,Both" }}</div>
             </div>
             {% if adm %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">On-/Offline</div>
+                    <div class="rower">
+                    <select name="offline" id="offline">
+                        <option value="nochange" {% if offline == None %}selected{% endif %}>No change</option>
+                        <option value="online" {% if offline != None %}selected{% endif %}>Online</option>
+                        <option value="offline" {% if offline %}selected{% endif %}>Offline</option>
+                    </select>
+                    </div>
+                </div>
+            {% endif %}
+            {% if adm %}
                 {% if eventtype %}
-                <div class="row">
+                <div class="row infobox">
                     <div class="rowel">Type</div>
                     <div class="rower">{{ eventtype|capfirst }}</div>
                 </div>
                 {% endif %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Type</div>
+                    <div class="rower">
+                    <select name="type" id="type">
+                        <option value="nochange" {% if not eventtype %}selected{% endif %}>No change</option>
+                        <option value="category" {% if eventtype == "category" %}selected{% endif %}/>Category</option>
+                        <option value="event" {% if eventtype == "event" %}selected{% endif %}/>Event</option>
+                        <option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">
+                    <input type="checkbox" id="siblings" name="siblings" value="siblings" />
+                    </div>
+                    <div class="rower">
+                    <label for="siblings">Apply to events on the same level</label>
+                    </div>
+                </div>
             {% endif %}
             <div class="row">
                 <div class="rowel">Games</div>
@@ -67,17 +152,42 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
+            {% if homepage or lp_name %}
+            <div class="row infobox">
+                <div class="rowel">External</div>
+                <div class="rower">
+                    {% if homepage %}
+                    <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
+                    {% endif %}
+                    {% if lp_name %}
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            {% if adm %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Homepage</div>
+                    <div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Liquipedia</div>
+                    <div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel"></div>
+                    <div class="rower"><input type="submit" name="op" value="Modify" /></div>
+                </div>
+            {% endif %}
         </div>
     </div>
+    </form>
 
     <p><a href="/results/events/">Root</a> →
     {% for e in path %}
         {% if forloop.last %}{{ e.name }}{% else %}
         <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a> →{% endif %}
     {% endfor %}
-    {% if adm %}
-        [<a href="/admin/ratings/event/{{ event.id }}/">admin</a>]
-    {% endif %}
 
     {% if children or siblings %}
     <div class="table" style="width: 35em;">
@@ -144,6 +254,190 @@ ratings.views.events.
         {{ message }}
     {% endif %}
 
+	{% if adm %}
+	<script>
+		
+	function log(msg) {
+	    setTimeout(function() {
+        	throw new Error(msg);
+    	}, 0);
+	}
+	function addprizepool()
+	{
+		var prizepoolbutton = document.getElementById('prizepoolbutton');
+		var createtable = document.getElementById('createtable');
+		
+		prizepoolbutton.style.display = 'none';
+		createtable.style.display = 'inline';
+	}
+	
+	function createtable(clicked_id)
+	{
+		var prizepoolbutton = document.getElementById('prizepoolbutton');
+    	var table = document.getElementById('table');
+    	
+    	{% if earnings %}
+	    	var amount = {{ earnings.count }}
+    	{% endif %}
+    	if (clicked_id == 'changeplayers')
+    	{
+    		var amount = document.getElementById('numberplayers').value
+    	}
+    
+    	if (table.rows.length > 1)
+    	{
+	        for(var i = table.rows.length-1; i > 0; i--)
+        	{
+            	table.deleteRow(i);
+        	}
+    	}
+    
+		for(var i = 0; i < amount; i++)
+    	{
+    		var placement = i+1;
+			var earning = '';
+			var earningsplayer = '';
+    		
+			{% if earnings %}
+				{% for earning in earnings %}
+					if (placement == {{ earning.placement }})
+					{
+						earning = "{{ earning.earnings }}";
+						earningsplayer = "{{ earning.player.id }}";
+					}
+				{% endfor %}
+			{% endif %}
+			
+			var select = document.createElement("select");
+			select.setAttribute("name", "player-" + i);
+			select.setAttribute("id", "player-" + i);
+			
+			{% for player in players %}
+				var eventplayer = "{{ player.id }}"
+				
+				var option = document.createElement("option");
+				option.setAttribute("value", "{{ player.id }}");
+				option.innerHTML = "{{ player.tag }}";
+				select.appendChild(option);
+				
+				if (earningsplayer == eventplayer)
+				{
+					select.selectedIndex = {{ forloop.counter0 }};
+				}
+			{% endfor %}			    		
+    		
+	        var row = table.insertRow(-1);
+	        row.className = "nonheader row1"
+        	var cell1 = row.insertCell(0);
+        	var cell2 = row.insertCell(1);
+        	var cell3 = row.insertCell(2);
+        	cell1.innerHTML = placement
+        	cell2.appendChild(select);
+        	cell3.innerHTML = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" value="' + earning + '" size="3" /> $'
+    	}
+    	
+    	var row = table.insertRow(-1);
+    	row.className = 'nonheader row2'
+    	row.colSpan = '3'; /* why doesn't this work? */
+    	row.align = 'right';
+    	var cell1 = row.insertCell(0);
+    	cell1.innerHTML = '<input type="hidden" name="amount" value="' + amount + '" /><input type="submit" name="earnings" value="Add" />'
+
+		prizepoolbutton.style.display = 'none';
+	    table.style.display = 'table';
+	}
+	
+	function validate()
+	{
+		function eliminateDuplicates(arr)
+		{
+  			var i,
+      		len=arr.length,
+      		out=[],
+      		obj={};
+
+  			for (i=0;i<len;i++)
+  			{
+	    		obj[arr[i]]=0;
+  			}
+  			for (i in obj) {
+	    		out.push(i);
+  			}
+  			return out;
+		}
+		
+		var form = document.forms.prizepool;
+		var length = form.numberplayers.selectedIndex;
+		var players = new Array();
+		
+		for(var i = 0; i < length+1; i++)
+		{
+			var amount = form['amount-' + i].value;
+			players.push(form['player-' + i].value);
+			var placement = i+1;
+			var regex = /[^0-9\.,]+/g;
+			
+			if (amount == '' | amount.length == 0)
+			{
+				alert('Please add a value for Player ' + placement);
+				return false;
+			}
+			if (regex.test(amount))
+			{
+				alert('Cannot parse value for Player ' + placement);
+				return false;
+			}
+
+		}
+		
+		var nodupes = eliminateDuplicates(players);
+		if (nodupes.length != players.length)
+		{
+			log('whee');
+			alert('Duplicated player detected.');
+			return false
+		}
+		
+		return true;
+	}
+	</script>
+	
+	<form method="post" name="prizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate()">
+	{% csrf_token %}
+
+	{% if event.type == 'event' %}
+		{% if earnings %}
+			<input type="button" id="prizepoolbutton" onclick="addprizepool(); createtable(this.id); return false;" value="Change prize pool"/>
+		{% else %}
+			<input type="button" id="prizepoolbutton" onclick="addprizepool(); return false;" value="Add prize pool"/>
+		{% endif %}
+	{% endif %}
+
+	<span id="createtable" style="display: none;">
+		How many players?
+		<select name="numberplayers" id="numberplayers">
+        	{% for player in players %}
+            	<option value="{{ forloop.counter }}"
+            		{% if earnings %} 
+            			{% ifequal earnings.count forloop.counter %}selected{% endifequal %}
+                	{% endif %}
+               		>{{ forloop.counter }}
+				</option>
+			{% endfor %}
+		</select>
+		<input type="button" id ="changeplayers" onclick="createtable(this.id); return false;" value="Set"/>
+	</span>
+	
+	<table id="table" class="results" style="display: none;">
+    	<tr class="header">
+        	<td>Placement</td>
+        	<td>Player</td>
+	        <td>Money earned</td>
+    	</tr>
+	</table>
+	</form>
+	{% endif %}
+	
     {% if matches %}
         <table class="results">
         {% include "matchlist.html" with lm_list=matches lm_adm=0 lm_header="full" %}
@@ -153,90 +447,6 @@ ratings.views.events.
     {% endif %}
 
     {% if adm %}
-        <p>The following modifications will be made to <strong>all</strong> matches in this event:</p>
-        <form method="post" action="/results/events/{{ event.id }}/">
-        {% csrf_token %}
-        
-        <table class="bigform">
-            <!-- <tr>
-                <td class="form_left">
-                    <label for="event">Event object</label>
-                </td>
-                <td class="form_right">
-                    <select name="event" id="event">
-                        <option value="nochange" selected>No change</option>
-                        {% for event in events %}
-                        <option value="{{ event.id }}">{{ event }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr> -->
-            <tr>
-                <td class="form_left">
-                    <label for="type">Event type</label>
-                </td>
-                <td class="form_right">
-                    <select name="type" id="type">
-                        <option value="nochange" selected>No change</option>
-                        <option value="category" />Category</option>
-                        <option value="event" />Event</option>
-                        <option value="round" />Round</option>
-                    </select>
-                    <input type="checkbox" id="siblings" name="siblings" value="siblings" />
-                    <label for="siblings">Apply to all events on the same level</label>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="date">Date</label>
-                </td>
-                <td class="form_right">
-                    <input type="text" class="date" name="date" id="date" value="" />
-                    <script type="text/javascript">
-                        // <![CDATA[  
-                        var opts = {                            
-                            formElements:{"date":"Y-ds-m-ds-d"},
-                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                        };
-                        datePickerController.createDatePicker(opts);
-                        // ]]>
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="offline">On/Offline</label>
-                </td>
-                <td class="form_right">
-                    <select name="offline" id="offline">
-                        <option value="nochange" selected>No change</option>
-                        <option value="online">Online</option>
-                        <option value="offline">Offline</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="game">Game version</label>
-                </td>
-                <td class="form_right">
-                    <select name="game" id="game">
-                        <option value="nochange" selected>No change</option>
-                        <option value="WoL">Wings of Liberty</option>
-                        <option value="HotS">Heart of the Swarm</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    <input type="Submit" name="op" value="Modify" />
-                </td>
-            </tr>
-        </table>
-
-        </form>
-
         <p>Add subevent:</p>
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
@@ -248,7 +458,7 @@ ratings.views.events.
                     <label for="subevent">Event name</label>
                 </td>
                 <td class="form_right">
-                    {{ event }} <input type="text" name="subevent" id="subevent" />
+                    <label for="subevent">{{ event }} </label><input type="text" name="subevent" id="subevent" />
                 </td>
             </tr>
             <tr>
@@ -266,19 +476,40 @@ ratings.views.events.
             </tr>
             <tr>
                 <td class="form_left">
-                    <label for="noprint"></label>
                 </td>
                 <td class="form_right">
                     <input type="checkbox" id="noprint" name="noprint" value="noprint"/>
                     <label for="noprint">No Print</label>
                     <input type="checkbox" id="closed" name="closed" value="closed" checked/>
-                    <label for="noprint">Closed</label>
+                    <label for="closed">Closed</label>
                 </td>
             </tr>                                
             <tr>
                 <td class="form_left"></td>
                 <td class="form_right">
                     <input type="Submit" name="add" value="Add" />
+                </td>
+            </tr>
+            <form method="post" action="/results/events/{{ event.id }}/">
+            {% csrf_token %}
+            <tr>
+                <td class="form_left">
+                    <label for="moveevent">Move this event</label>
+                </td>
+                <td class="form_right">
+                    <select name="moveevent" id="moveevent">
+                        {% for events in surroundingevents %} 
+                        {% if events != event %}
+                        <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>                                
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    <input type="Submit" name="move" value="Move" />
                 </td>
             </tr>
         </table>

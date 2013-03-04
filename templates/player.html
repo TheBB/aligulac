@@ -9,35 +9,13 @@ This is the template for the main player page, called from ratings.views.player.
 {% block title %}{{ player.tag }}{% endblock %}
 
 {% block content %}
-      
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility()
-    {
-    if (document.getElementsByClassName('infobox'))
-    {
-    	var elements = document.getElementsByClassName('infobox');
-    	for(var i = 0, length = elements.length; i < length; i++)
-	   	{
-			elements[i].style.display = 'none';
-		}
-    }
-	var elements = document.getElementsByClassName('edit');
-    for(var i = 0, length = elements.length; i < length; i++)
-    	{
-		    elements[i].style.display = 'table-row';
-		}
-    }
-    //-->
-    </script>
-    
     <h2>{{ player.tag }}</h2>
     <form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
     {% csrf_token %}
     <div class="ibox" style="width: 25em;">
         <div class="iboxh">
             {{ player.tag }}
-            {% if adm %} (<a href="#" onclick="toggle_visibility(); return false;">Edit</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/player/{{ player.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
             {% if adm %}
@@ -135,14 +113,18 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower"><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></div>
             </div>
             {% endif %}
+            {% if first %}
             <div class="row">
                 <div class="rowel">First match</div>
                 <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
             </div>
+            {% endif %}
+            {% if last %}
             <div class="row">
                 <div class="rowel">Last match</div>
                 <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
             </div>
+            {% endif %}
             <div class="row">
                 <div class="rowel">Matches played</div>
                 <div class="rower">{{ totalmatches }}</div>
@@ -200,7 +182,7 @@ This is the template for the main player page, called from ratings.views.player.
                     <div class="rowel">Liquipedia</div>
                     <div class="rower"><input type="text" name="LP" {% if player.lp_name %}value="{{ player.lp_name }}"{% endif %} /></div>
                 </div>
-                <div class="row edit" style="display: none;"">
+                <div class="row edit" style="display: none;">
                     <div class="rowel"></div>
                     <div class="rower"><input type="submit" name="op" value="Submit" /></div>
                 </div>
@@ -224,7 +206,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rower" style="width: 10em">
             {% if total %}
             {{ total.0 }}/{{ total.1|add:total.0 }}
-            <span class="small">({{ total.0|pctg:total.1 }}%)
+            <span class="small">({{ total.0|pctg:total.1 }}%)</span>
             {% endif %}
         </div>
     </div>
@@ -239,7 +221,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rower">
             {% if vp %}
             {{ vp.0 }}/{{ vp.1|add:vp.0 }}
-            <span class="small">({{ vp.0|pctg:vp.1 }}%)
+            <span class="small">({{ vp.0|pctg:vp.1 }}%)</span>
             {% endif %}
         </div>
     </div>
@@ -254,7 +236,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rower">
             {% if vt %}
             {{ vt.0 }}/{{ vt.1|add:vt.0 }}
-            <span class="small">({{ vt.0|pctg:vt.1 }}%)
+            <span class="small">({{ vt.0|pctg:vt.1 }}%)</span>
             {% endif %}
         </div>
     </div>
@@ -269,7 +251,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rower">
             {% if vz %}
             {{ vz.0 }}/{{ vz.1|add:vz.0 }}
-            <span class="small">({{ vz.0|pctg:vz.1 }}%)
+            <span class="small">({{ vz.0|pctg:vz.1 }}%)</span>
             {% endif %}
         </div>
     </div>
@@ -328,58 +310,80 @@ This is the template for the main player page, called from ratings.views.player.
     </div>
 </div>
 
-{% if not noimage %}
-    <script type="text/javascript">
-        // <![CDATA[  
-        function changeRange()
-        {
-            var before = document.getElementById("before").value;
-            var after = document.getElementById("after").value;
-
-            var pic = document.getElementById("plot");
-            pic.src = "/players/{{ player.id }}/plot/?before=" + before + "&after=" + after;
-
-            var a = document.getElementById("plotlink");
-            a.href = "/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big&before=" + before + "&after=" + after;
-        }
-        function resetRange()
-        {
-            var pic = document.getElementById("plot");
-            pic.src = "/players/{{ player.id }}/plot/";
-
-            var a = document.getElementById("plotlink");
-            a.href = "/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big";
-        }
-        // ]]>
-    </script>
-<div style="text-align: center;">
-    <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/plot/?big" id="plotlink">
-        <img src="/players/{{ player.id }}/plot/" alt="history graph" class="longplot" id="plot" />
-    </a>
-</div>
-<p style="text-align: center;">Set plot range
-    between <input type="text" name="after" id="after" style="width: 6.5em;" value="{{ firstrating.period.end|date:"Y-m-d" }}" />
-    and <input type="text" name="before" id="before" style="width: 6.5em;" value="{{ rating.period.end|date:"Y-m-d" }}" />
-    <input type="button" value="Change" onclick="changeRange()" />
-    <input type="button" value="Reset" onclick="resetRange()" />
-</p>
-    <script type="text/javascript">
-        // <![CDATA[  
-        var opts = {                            
-            formElements:{"before":"Y-ds-m-ds-d"},
-            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-        };
-        datePickerController.createDatePicker(opts);
-        var opts2 = {                            
-            formElements:{"after":"Y-ds-m-ds-d"},
-            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-        };
-        datePickerController.createDatePicker(opts2);
-        // ]]>
-    </script>
+{% if charts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart',
+                type: 'spline',
+                zoomType: 'x'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: 'Rating history for {{ player.tag }}'
+            },
+            subtitle: {
+                text: 'Click and drag to zoom'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                xDateFormat: '%B %e, %Y'
+            },
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false,
+                        symbol: 'circle'
+                    }
+                },
+            },
+            series: [{
+                name: 'vs. Protoss',
+                color: '#00dd00',
+                lineWidth: 1,
+                dashStyle: 'Dash',
+                data: [{% spaceless %}
+                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
+                          {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}],{% endfor %}{% endspaceless %}]
+            }, {
+                name: 'vs. Terran',
+                color: '#0000dd',
+                lineWidth: 1,
+                dashStyle: 'Dash',
+                data: [{% spaceless %}
+                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
+                          {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}],{% endfor %}{% endspaceless %}]
+            }, {
+                name: 'vs. Zerg',
+                color: '#dd0000',
+                lineWidth: 1,
+                dashStyle: 'Dash',
+                data: [{% spaceless %}
+                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
+                          {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}],{% endfor %}{% endspaceless %}]
+            }, {
+                name: 'General',
+                color: '#000000',
+                lineWidth: 3,
+                data: [{% spaceless %}
+                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
+                      {{ r.bf_rating|ratscale }}],{% endfor %}{% endspaceless %}]
+            }]
+        });
+    });
+</script>
+<div id="chart" style="width: 67em; height: 30em;"> </div>
 {% endif %}
-{% else %}
-<p>{{ player.tag }} has no rating yet.</p>
 {% endif %}
 
 <h3>More information</h3>

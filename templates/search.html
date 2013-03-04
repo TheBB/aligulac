@@ -12,8 +12,8 @@ aligulac.views.search.
 {% block content %}
     <h2>Search results</h2>
 
-    {% if players.count == 0  and teams.count == 0 %}
-        No such player or team '{{ query }}' found.
+    {% if players.count == 0 and teams.count == 0 and events.count == 0 %}
+        No such player, team or event '{{ query }}' found.
     {% else %}
         {% if teams %}
             <h3>Teams</h3>

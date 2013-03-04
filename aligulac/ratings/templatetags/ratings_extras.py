@@ -1,5 +1,5 @@
 from django import template
-from datetime import timedelta
+from datetime import timedelta, date
 from dateutil.relativedelta import relativedelta
 from aligulac import settings
 
@@ -60,7 +60,10 @@ def pctg2(value):
 register.filter('pctg2', pctg2)
 
 def pctg3(value, arg):
-    return '%.2f' % (100*float(value)/float(arg))
+    if float(arg) > 0:
+        return '%.2f' % (100*float(value)/float(arg))
+    else:
+        return '%.2f' % 0.0
 register.filter('pctg3', pctg3)
 
 def oprace(value):
@@ -205,3 +208,7 @@ def urlfilter(value):
     value = value.replace('/', '')
     return value
 register.filter('urlfilter', urlfilter)
+
+def milliseconds(value):
+    return (value - date(1970,1,1)).total_seconds() * 1000
+register.filter('milliseconds', milliseconds)

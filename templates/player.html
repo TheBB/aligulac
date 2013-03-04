@@ -15,7 +15,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="ibox" style="width: 25em;">
         <div class="iboxh">
             {{ player.tag }}
-            {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/player/{{ player.id }}/">admin</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_infobox(); hide_charts(); return false;">edit</a>, <a href="/admin/ratings/player/{{ player.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
             {% if adm %}

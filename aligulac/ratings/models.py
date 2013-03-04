@@ -141,7 +141,12 @@ class Event(models.Model):
     @staticmethod
     def add_root(name, type, big = False, noprint = False):
         new = Event(name=name)
-        new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
+
+        try:
+            new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
+        except:
+            new.lft = 0
+
         new.rgt = new.lft + 1
         new.big = big
         new.noprint = noprint

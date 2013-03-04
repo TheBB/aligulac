@@ -564,14 +564,19 @@ def events(request, event_id=None):
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
             amount = int(request.POST['amount'])
             
+            players = []
+            amounts = []
+            placements = []
             for i in range(0, amount):
                 player = request.POST['player-' + str(i)]
                 player = Player.objects.get(id=player)
                 amount = request.POST['amount-' + str(i)]
-                print player
                 
-                if amount != '':
-                    Earnings.set_earnings(event, player, i+1, amount)
+                players.append(player)
+                amounts.append(amount)
+                placements.append(i)
+                
+            Earnings.set_earnings(event, players, amounts, placements)
 
 
     #used for moving events
@@ -587,11 +592,8 @@ def events(request, event_id=None):
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
     
-    #this is horribly, horribly slow, it outputs hundreds of player objects
-    #base['players'] = Player.objects.filter(Q(match_pla__in=matches) | Q(match_plb__in=matches)).distinct().order_by('tag')
-    #this doesn't
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
-    
+
     base['earnings'] = Earnings.objects.filter(event=event).order_by('placement')
     
     if event.type:

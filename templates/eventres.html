@@ -278,8 +278,6 @@ ratings.views.events.
     	
     	{% if earnings %}
 	    	var amount = {{ earnings.count }}
-    	{% else %}
-	    	var amount = document.getElementById('amount').value
     	{% endif %}
     	if (clicked_id == 'changeplayers')
     	{
@@ -298,30 +296,35 @@ ratings.views.events.
     	{
     		var placement = i+1
 			var earning = ''
+			var earningsplayer = ''
     		
 			{% if earnings %}
 				{% for earning in earnings %}
 					if (placement == {{ earning.placement }})
 					{
-						earning = {{ earning.earnings }}
+						earning = "{{ earning.earnings }}"
+						earningsplayer = "{{ earning.player.id }}"
 					}
 				{% endfor %}
-			{% endif %}			    		
-    		
-    		
-			/*{% if earnings %}
-    				{% for earning in earnings %}
-    					if (placement == {{ earning.placement }})
-    					{
-							{% ifequal player.id earning.player.id %}
-								log("{{player.tag}}")
-								log("{{earning.player.tag}}")
-   								+ 'selected'
-   							{% endifequal %}
-    					}
-					{% endfor %}
-           	{% endif %}*/
-    		
+			{% endif %}
+			
+			var select = document.createElement("select");
+			select.setAttribute("name", "player-" + i);
+			select.setAttribute("id", "player-" + i);
+			
+			{% for player in players %}
+				var eventplayer = "{{ player.id }}"
+				
+				var option = document.createElement("option");
+				option.setAttribute("value", "{{ player.id }}");
+				option.innerHTML = "{{ player.tag }}";
+				select.appendChild(option);
+				
+				if (earningsplayer == eventplayer)
+				{
+					select.selectedIndex = {{ forloop.counter0 }};
+				}
+			{% endfor %}			    		
     		
 	        var row = table.insertRow(-1);
 	        row.className = "nonheader row1"
@@ -330,13 +333,7 @@ ratings.views.events.
         	var cell3 = row.insertCell(2);
         	cell1.innerHTML = placement
         	
-        	/* Need to somehow add "selected" to correct players when "earnings" present.. */
-        	cell2.innerHTML = 	'<select name="player-' + i + '" id="player' + i + '">\
-									{% for player in players %}\
-	                        			<option value="{{ player.id }}"\
-	                        			>{{ player.tag }}</option>\
-                        			{% endfor %}\
-                    			</select>' 
+        	cell2.appendChild(select);
         	cell3.innerHTML = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" value="' + earning + '" size="3" /> $'
     	}
     	
@@ -355,7 +352,15 @@ ratings.views.events.
 	<form method="post" action="/results/events/{{ event.id }}/">
 	{% csrf_token %}
 
-	<!--<input type="button" id="prizepoolbutton" onclick="addprizepool(); {% if earnings %}createtable(this.id);{% endif %} return false;" value="Add/change prize pool"/>-->
+	<!-- <input type="button" id="prizepoolbutton" onclick="addprizepool();  {% if earnings %}
+																			createtable(this.id);
+																		{% endif %} return false;"
+																		{% if earnings %}
+																			value="Change prize pool"
+																		{% else %}
+																			value="Add prize pool"
+																		{% endif %}																		
+																		 /> -->
 	<span id="createtable" style="display: none;">
 		How many players?
 		<input type="text" id="amount" name="amount" {% if earnings %}value="{{ earnings.count }}"{% endif %} size="1"/>

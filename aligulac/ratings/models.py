@@ -458,16 +458,20 @@ class Match(models.Model):
 class Earnings(models.Model):
     event = models.ForeignKey(Event)
     player = models.ForeignKey(Player)
-    placement = models.IntegerField()
     earnings = models.IntegerField()
+    placement = models.IntegerField()
     
     @staticmethod
-    def set_earnings(event, player, placement, earnings):
+    def set_earnings(event, players, earnings, placements):
         #probably should be more subtle and not deleted everything on change
         if Earnings.objects.filter(event=event).exists():
             Earnings.objects.filter(event=event).delete()
-        new = Earnings(event=event, player=player, placement=placement, earnings=earnings)
-        new.save()
+        if not len(players) == len(earnings):
+            return None
+        else:
+            for i in range(0,len(players)):
+                new = Earnings(event=event, player=players[i], placement=placements[i]+1, earnings=earnings[i])
+                new.save()
         return new
     
 def mark_period(sender, **kwargs):

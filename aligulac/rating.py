@@ -205,7 +205,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
-    x = maximize(logF, DlogF, D2logF, x, method=None, disp=pr)
+    x = maximize(logF, DlogF, D2logF, x, method='powell', disp=pr)
     x = dim(x)
 
     # If maximization failed, return the current rating and print an error message
@@ -214,10 +214,14 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 
     # Extend to restricted format
-    #devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
-    devs = -1/diag(D2logL(x, DMex, C+1))
+    devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
+    #devs = -1/diag(D2logL(x, DMex, C+1))
     devs = maximum(devs, RATINGS_MIN_DEV)
     rats = extend(x)
+
+    if pr:
+        print devs
+        print rats
 
     # Compute new RD and rating for the indices that can change
     news = zeros(len(myr))
@@ -229,25 +233,42 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     news[ind] = 1./sqrt(1./devs**2 + 1./mys[ind]**2)
     newr[ind] = (rats/devs**2 + myr[ind]/mys[ind]**2) * news[ind]**2
 
+    if pr:
+        print news
+        print newr
+
     # Enforce the restriction of sum relative rating against played categories should be constant
     ind = ind[1:]
     m = (sum(newr[ind]) - tot)/len(ind)
     newr[ind] -= m
     newr[0] += m
 
+    if pr:
+        print newr
+
     # Ratings against non-played categories should be kept as before.
     ind = setdiff1d(range(0,len(myr)), [0] + ind)
     news[ind] = mys[ind]
     newr[ind] = myr[ind]
 
+    if pr:
+        print news
+        print newr
+
     # Keep new RDs between MIN_DEV and INIT_DEV
     news = minimum(news, RATINGS_INIT_DEV)
     news = maximum(news, RATINGS_MIN_DEV)
+
+    if pr:
+        print news
 
     # Ensure that mean relative rating is zero
     m = mean(newr[1:])
     newr[1:] -= m
     newr[0] += m
+
+    if pr:
+        print newr
 
     # Extend the performance ratings to global indices
     devsex = [None] * (Ncats + 1)

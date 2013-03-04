@@ -468,7 +468,7 @@ class Earnings(models.Model):
     
     @staticmethod
     def set_earnings(event, players, earnings, placements):
-        #probably should be more subtle and not deleted everything on change
+        #probably should be more subtle and not delete everything on change
         if Earnings.objects.filter(event=event).exists():
             Earnings.objects.filter(event=event).delete()
         if not len(players) == len(earnings):

@@ -60,7 +60,10 @@ def pctg2(value):
 register.filter('pctg2', pctg2)
 
 def pctg3(value, arg):
-    return '%.2f' % (100*float(value)/float(arg))
+    if float(arg) > 0:
+        return '%.2f' % (100*float(value)/float(arg))
+    else:
+        return '%.2f' % 0.0
 register.filter('pctg3', pctg3)
 
 def oprace(value):

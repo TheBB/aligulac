@@ -243,3 +243,19 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
         ret.append(r)
 
     return ret
+
+def event_shift(event, diff):
+    subtree = list(event.children()) + [event]
+    width = event.rgt - event.lft + 1
+
+    if diff > 0:
+        Event.objects.filter(lft__gt=event.rgt, lft__lte=event.rgt+diff).update(lft=F('lft')-width)
+        Event.objects.filter(rgt__gt=event.rgt, rgt__lte=event.rgt+diff).update(rgt=F('rgt')-width)
+    elif diff < 0:
+        Event.objects.filter(lft__gte=event.lft-diff, lft__lt=event.lft).update(lft=F('lft')+width)
+        Event.objects.filter(rgt__gte=event.lft-diff, rgt__lt=event.lft).update(rgt=F('rgt')+width)
+
+    for e in subtree:
+        e.lft += diff
+        e.rgt += diff
+        e.save()

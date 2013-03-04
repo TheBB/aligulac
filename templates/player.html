@@ -113,14 +113,18 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower"><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></div>
             </div>
             {% endif %}
+            {% if first %}
             <div class="row">
                 <div class="rowel">First match</div>
                 <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
             </div>
+            {% endif %}
+            {% if last %}
             <div class="row">
                 <div class="rowel">Last match</div>
                 <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
             </div>
+            {% endif %}
             <div class="row">
                 <div class="rowel">Matches played</div>
                 <div class="rower">{{ totalmatches }}</div>

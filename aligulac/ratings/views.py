@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.settings import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -471,20 +471,6 @@ def events(request, event_id=None):
                      'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
         return render_to_response('events.html', base)
 
-    # Get parent, ancestors and siblings
-    base['event'] = event
-    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
-    base['children'] = Event.objects.filter(parent=event).order_by('lft')
-    if event.parent != None:
-        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
-        base['siblings'] = siblings
-
-    # Number of matches (set event to big if too large)
-    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
-    if matches.count() > 200 and not event.big:
-        event.big = True
-        event.save()
-    
     # Make modifications if neccessary
     if base['adm'] == True:
         if 'op' in request.POST and request.POST['op'] == 'Modify':
@@ -528,39 +514,16 @@ def events(request, event_id=None):
         elif 'move' in request.POST and request.POST['move'] == 'Move':
             eventid = request.POST['moveevent']
             newparent = Event.objects.get(id=eventid)
+
+            diff = newparent.rgt - event.lft
+            event_shift(event, diff)
+
             event.set_parent(newparent)
+            event.update_name()
 
-            width = event.rgt - event.lft + 1
-            edge = Event.objects.all().order_by('-rgt').values('rgt')[0]['rgt'] + 1000
-            if event.rgt < newparent.lft:
-                shift = 'left'
-                lft_shift = event.rgt + 1
-                rgt_shift = newparent.rgt - 1
-            elif event.lft > newparent.rgt:
-                shift = 'right'
-                lft_shift = newparent.rgt
-                rgt_shift = event.lft - 1
-            else:
-                # Invalid move command
-                shift = 'invalid'
+            for e in event.get_children():
+                e.update_name()
 
-            if shift != 'invalid':
-                # Move event out of the tree to make space
-                dist_edge = edge - event.lft
-                Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)\
-                        .update(lft=F('lft')+dist_edge, rgt=F('rgt')+dist_edge)
-                # Shift events over
-                if shift == 'left':
-                    Event.objects.filter(lft__gte=lft_shift, rgt__lte=rgt_shift)\
-                            .update(lft=F('lft')-width, rgt=F('rgt')-width)
-                else:
-                    Event.objects.filter(lft__gte=lft_shift, rgt__lte=rgt_shift)\
-                            .update(lft=F('lft')+width, rgt=F('rgt')+width)
-
-                # Move event back into the tree to the new space
-                dist = event.rgt - newparent.rgt + 1
-                Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt)\
-                        .update(lft=F('lft')-dist, rgt=F('rgt')-dist)
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
             amount = int(request.POST['amount'])
             
@@ -578,8 +541,21 @@ def events(request, event_id=None):
                 
             Earnings.set_earnings(event, players, amounts, placements)
 
+    # Get parent, ancestors and siblings
+    base['event'] = event
+    base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
+    base['children'] = Event.objects.filter(parent=event).order_by('lft')
+    if event.parent != None:
+        siblings = event.parent.event_set.exclude(id=event.id).order_by('lft')
+        base['siblings'] = siblings
 
-    #used for moving events
+    # Number of matches (set event to big if too large)
+    matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
+    if matches.count() > 200 and not event.big:
+        event.big = True
+        event.save()
+    
+    # Used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children()
 
     # Determine WoL/HotS and Online/Offline and event type

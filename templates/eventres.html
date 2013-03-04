@@ -438,7 +438,9 @@ ratings.views.events.
                 <td class="form_right">
                     <select name="moveevent" id="moveevent">
                         {% for events in surroundingevents %} 
+                        {% if events != event %}
                         <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </td>

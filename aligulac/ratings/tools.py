@@ -1,7 +1,7 @@
 from math import sqrt
 from collections import namedtuple
 
-from ratings.models import Player, Match, PreMatch
+from ratings.models import Player, Match, PreMatch, Event
 from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
@@ -245,15 +245,15 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
     return ret
 
 def event_shift(event, diff):
-    subtree = list(event.children()) + [event]
+    subtree = list(event.get_children()) + [event]
     width = event.rgt - event.lft + 1
 
     if diff > 0:
         Event.objects.filter(lft__gt=event.rgt, lft__lte=event.rgt+diff).update(lft=F('lft')-width)
         Event.objects.filter(rgt__gt=event.rgt, rgt__lte=event.rgt+diff).update(rgt=F('rgt')-width)
     elif diff < 0:
-        Event.objects.filter(lft__gte=event.lft-diff, lft__lt=event.lft).update(lft=F('lft')+width)
-        Event.objects.filter(rgt__gte=event.lft-diff, rgt__lt=event.lft).update(rgt=F('rgt')+width)
+        Event.objects.filter(lft__gte=event.lft+diff, lft__lt=event.lft).update(lft=F('lft')+width)
+        Event.objects.filter(rgt__gte=event.lft+diff, rgt__lt=event.lft).update(rgt=F('rgt')+width)
 
     for e in subtree:
         e.lft += diff

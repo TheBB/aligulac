@@ -57,9 +57,6 @@ urlpatterns = patterns('',
     url(r'^404/$', 'aligulac.views.h404'),
     url(r'^500/$', 'aligulac.views.h500'),
 
-    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to',\
-            {'url': 'http://aligulac.com:81/al/favicon.ico'}),
-
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )

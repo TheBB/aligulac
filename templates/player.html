@@ -125,6 +125,12 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
             </div>
             {% endif %}
+            {% if earnings %}
+            <div class="row">
+                <div class="rowel">Total earnings</div>
+                <div class="rower">${{ earnings }}</div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="rowel">Matches played</div>
                 <div class="rower">{{ totalmatches }}</div>

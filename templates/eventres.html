@@ -99,6 +99,12 @@ ratings.views.events.
                     </div>
                 </div>
             {% endif %}
+            {% if prizepool %}
+            <div class="row">
+                <div class="rowel">Prize pool</div>
+                <div class="rower">${{ prizepool }}</div>
+            </div>
+            {% endif %}
             {% if adm %}
                 {% if eventtype %}
                 <div class="row infobox">
@@ -333,7 +339,7 @@ ratings.views.events.
         	var cell3 = row.insertCell(2);
         	cell1.innerHTML = placement
         	cell2.appendChild(select);
-        	cell3.innerHTML = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" value="' + earning + '" size="3" /> $'
+        	cell3.innerHTML = '$<input type="text" name="amount-' + i + '" id="amount-' + i + '" value="' + earning + '" size="3" />'
     	}
     	
     	var row = table.insertRow(-1);

@@ -190,6 +190,9 @@ def player(request, player_id):
     base['totalmatches'] = Match.objects.filter(Q(pla=player) | Q(plb=player)).count()
     base['offlinematches'] = Match.objects.filter(Q(pla=player) | Q(plb=player), offline=True).count()
     base['aliases'] = Alias.objects.filter(player=player)
+    
+    earnings = Earnings.objects.filter(player=player)
+    base['earnings'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
 
     # Winrates
     matches_a = Match.objects.filter(pla=player)
@@ -582,9 +585,14 @@ def events(request, event_id=None):
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
     
+    # Get list of players and earnings for prizepools
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
-
-    base['earnings'] = Earnings.objects.filter(event=event).order_by('placement')
+    
+    earnings = Earnings.objects.filter(event=event).order_by('placement')
+    base['earnings'] = earnings
+    
+    base['prizepool'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
+    
     
     if event.type:
         base['eventtype'] = event.type

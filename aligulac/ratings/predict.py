@@ -22,10 +22,10 @@ from collections import namedtuple
 
 TL_HEADER = '[center][code]'
 TL_FOOTER = '[/code][/center][small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-          + '[url=http://aligulac.com/predict/]Make another[/url].[/small]'
+        + '[url=http://twitter.com/Sc2Aligulac]Twitter[/url].[/small]'
 REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
-              + '[^Make ^another](http://aligulac.com/predict/)^.'
+        + '[^Twitter](http://twitter.com/Sc2Aligulac)^.'
 
 def predict(request):
     base = base_ctx()

@@ -129,18 +129,6 @@ def balance_plot(request):
     else:
         races = ['P','T']
 
-    fn = PATH_TO_STATIC + ''.join(races) + ('big' if 'big' in request.GET else '') + '.png'
-    try:
-        modified = datetime.datetime.fromtimestamp(os.stat(fn).st_mtime)
-        delta = datetime.datetime.now() - modified
-        if delta <= datetime.timedelta(days=7):
-            response = HttpResponse(content_type='image/png')
-            with open(fn, 'r') as f:
-                response.write(f.read())
-            return response
-    except:
-        pass
-
     scores = zeros((2,N))
     time = zeros(N)
 

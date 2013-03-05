@@ -14,6 +14,7 @@ from django.core.context_processors import csrf
 from countries import transformations, data
 
 from math import sqrt
+from numpy import zeros
 
 def collect(lst, n=2):
     ret, part = [], []
@@ -875,4 +876,52 @@ def records(request):
 def balance(request):
     base = base_ctx('Reports', 'Balance', request)
 
+    first = (2010,7)
+    last = (datetime.date.today().year, datetime.date.today().month-1)
+    if last[1] == 0:
+        last[0] -= 1
+        last[1] = 12
+
+    N = (last[0]-first[0])*12 + last[1]-first[1] + 1
+
+    def nti(x):
+        return 0 if x is None else x
+
+    def add_to_array(qset, rc1, rc2, ar, col):
+        temp = qset.filter(rca=rc1, rcb=rc2).aggregate(Sum('sca'), Sum('scb'))
+        ar[0, col] += nti(temp['sca__sum'])
+        ar[1, col] += nti(temp['scb__sum'])
+        temp = qset.filter(rca=rc2, rcb=rc1).aggregate(Sum('sca'), Sum('scb'))
+        ar[0, col] += nti(temp['scb__sum'])
+        ar[1, col] += nti(temp['sca__sum'])
+
+    pvt_scores = zeros((2,N))
+    pvz_scores = zeros((2,N))
+    tvz_scores = zeros((2,N))
+    time = []
+
+    ind = 0
+    delta = datetime.timedelta(days=15)
+    while first[0] < last[0] or (first[0] == last[0] and first[1] <= last[1]):
+        matches = Match.objects.filter(date__gte='%i-%i-01' % first)
+        if first[1] < 12:
+            matches = matches.filter(date__lt='%i-%i-01' % (first[0], first[1]+1))
+        else:
+            matches = matches.filter(date__lt='%i-%i-01' % (first[0]+1, 1))
+
+        add_to_array(matches, 'P', 'T', pvt_scores, ind)
+        add_to_array(matches, 'P', 'Z', pvz_scores, ind)
+        add_to_array(matches, 'T', 'Z', tvz_scores, ind)
+        time.append(datetime.date(month=first[1], year=first[0], day=15))
+
+        first = (first[0], first[1]+1)
+        if first[1] == 13:
+            first = (first[0]+1, 1)
+        ind += 1
+
+    base['pvt'] = zip(100*pvt_scores[0,:]/(pvt_scores[0,:] + pvt_scores[1,:]), time)
+    base['pvz'] = zip(100*pvz_scores[0,:]/(pvz_scores[0,:] + pvz_scores[1,:]), time)
+    base['tvz'] = zip(100*tvz_scores[0,:]/(tvz_scores[0,:] + tvz_scores[1,:]), time)
+
+    base['charts'] = True
     return render_to_response('reports_balance.html', base)

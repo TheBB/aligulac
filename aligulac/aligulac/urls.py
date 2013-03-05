@@ -12,7 +12,6 @@ urlpatterns = patterns('',
 
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/$', 'ratings.views.player'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/period/(?P<period_id>\d+)/$', 'ratings.views.rating_details'),
-    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/plot/$', 'ratings.plotviews.player_plot'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/results/$', 'ratings.views.player_results'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/historical/$', 'ratings.views.player_historical'),
 
@@ -52,7 +51,6 @@ urlpatterns = patterns('',
 
     url(r'reports/$', 'ratings.views.balance'),
     url(r'reports/balance/$', 'ratings.views.balance'),
-    url(r'reports/balance/plot/$', 'ratings.plotviews.balance_plot'),
 
     url(r'^404/$', 'aligulac.views.h404'),
     url(r'^500/$', 'aligulac.views.h500'),

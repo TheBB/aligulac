@@ -479,6 +479,10 @@ class Earnings(models.Model):
                 new.save()
         return new
     
+    def __unicode__(self):
+        return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)
+
+    
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']
     try:

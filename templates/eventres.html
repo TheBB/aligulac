@@ -102,7 +102,7 @@ ratings.views.events.
             {% if prizepool %}
             <div class="row">
                 <div class="rowel">Prize pool</div>
-                <div class="rower">${{ prizepool }}</div>
+                <div class="rower">${{ prizepool|add_separator }}</div>
             </div>
             {% endif %}
             {% if adm %}

@@ -7,7 +7,7 @@ from tools import filter_active_ratings, filter_inactive_ratings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q, Sum
-from models import Player, Team, Rating, TeamMembership, Match, Alias
+from models import Player, Team, Rating, TeamMembership, Match, Alias, Earnings
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -68,6 +68,9 @@ def team(request, team_id):
     base['zerg'] = players.filter(player__race__exact='Z') 
     base['protoss'] = players.filter(player__race__exact='P') 
     base['terran'] = players.filter(player__race__exact='T')
+
+    earnings = Earnings.objects.filter(player__in=players.values('player'))
+    base['earnings'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
 
     try: 
         base['aliases'] = Alias.objects.filter(team=team)

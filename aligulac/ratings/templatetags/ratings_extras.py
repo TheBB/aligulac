@@ -212,3 +212,16 @@ register.filter('urlfilter', urlfilter)
 def milliseconds(value):
     return (value - date(1970,1,1)).days * 24 * 60 * 60 * 1000
 register.filter('milliseconds', milliseconds)
+
+def add_separator(int):
+    string = str(int)
+    newstring = ''
+    
+    while True:
+        if len(string) <= 3:
+            newstring = string + newstring
+            return newstring
+        else:
+            newstring = '.' + string[-3:] + newstring
+            string = string[:-3]
+register.filter('add_separator', add_separator)

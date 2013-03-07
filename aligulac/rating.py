@@ -5,7 +5,7 @@ This is where the rating magic happens. Imported by period.py.
 from numpy import *
 import scipy.optimize as opt
 
-from aligulac.settings import RATINGS_MIN_DEV, RATINGS_INIT_DEV
+from aligulac.parameters import RATINGS_MIN_DEV, RATINGS_INIT_DEV
 from ratings.tools import pdf, cdf
 
 LOG_CAP = 1e-10

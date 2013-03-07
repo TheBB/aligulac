@@ -6,7 +6,7 @@ from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
-from aligulac.settings import RATINGS_INIT_DEV
+from aligulac.parameters import RATINGS_INIT_DEV
 from numpy import tanh, pi
 from math import sqrt, exp
 

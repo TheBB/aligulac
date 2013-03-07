@@ -1,7 +1,7 @@
 import os, datetime
 from pyparsing import nestedExpr
 
-from aligulac.settings import RATINGS_INIT_DEV
+from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift
 

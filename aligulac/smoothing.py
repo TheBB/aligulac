@@ -15,7 +15,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Player, Match, Rating, Event, Period
-from aligulac.settings import RATINGS_DEV_DECAY, RATINGS_INIT_DEV, RATINGS_MIN_DEV
+from aligulac.parameters import RATINGS_DEV_DECAY, RATINGS_INIT_DEV, RATINGS_MIN_DEV
 
 if __name__ == '__main__':
     last = Period.objects.filter(computed=True).order_by('-id')[0]

@@ -22,7 +22,7 @@ from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
 from ratings.tools import filter_active_ratings
-from aligulac.settings import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY
+from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY
 
 from rating import update
 from ratings.tools import cdf

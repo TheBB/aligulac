@@ -24,6 +24,7 @@ This is the prediction page for single elimination brackets. It's called from ra
             {% endfor %}
         </div>
         {% for p in players %}
+        {% if p.dbpl %}
         <div class="row {% cycle 'row2' 'row1' %}">
             <div class="rowe" style="text-align: right;">
                 {{ forloop.counter }}.
@@ -45,6 +46,7 @@ This is the prediction page for single elimination brackets. It's called from ra
             </div>
             {% endfor %}
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 
@@ -57,9 +59,8 @@ This is the prediction page for single elimination brackets. It's called from ra
         <div class="rowe" style="width: 30em;">{{ m }}</div>
         <div class="rowe"></div>
         <div class="rowe"></div>
-        <div class="rowe"></div>
     </div>
-    {% else %}
+    {% elif m.pla and m.plb %}
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe" style="width: 31em; text-align: right;">
             {% if m.sca > m.scb %}<strong>{% endif %}

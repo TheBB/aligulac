@@ -61,6 +61,10 @@ def predict(request):
     for line in request.GET['players'].splitlines():
         if line.strip() == '':
             continue
+        elif line.strip() == '-' or line.strip().upper() == 'BYE':
+            players.append(None)
+            continue
+
         dbplayer = find_player(line.strip().split(' '), make=False)
         if dbplayer.count() > 1:
             base['errs'].append('Player \'%s\' not unique, add more information.' % line)
@@ -100,7 +104,7 @@ def predict(request):
         return render_to_response('predict.html', base)
 
     bo = '%2C'.join([str(b) for b in bo])
-    ps = '%2C'.join([str(p.id) for p in players])
+    ps = '%2C'.join([(str(p.id) if p is not None else '0') for p in players])
     if fmt == 0:
         return redirect('/predict/match/?bo=%s&ps=%s' % (bo, ps))
     elif fmt == 1:
@@ -225,7 +229,13 @@ def pred_4pswiss(request):
 def pred_sebracket(request):
     base = base_ctx('Predict', request=request)
 
-    dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
+    dbpl = []
+    for i in request.GET['ps'].split(','):
+        id = int(i)
+        if id > 0:
+            dbpl.append(get_object_or_404(Player, id=id))
+        else:
+            dbpl.append(None)
     sipl = [make_player(pl) for pl in dbpl]
     nrounds = int(log(len(sipl),2))
     num = [(int(bo)+1)/2 for bo in request.GET['bo'].split(',')]
@@ -266,9 +276,10 @@ def pred_sebracket(request):
         matches.append('Round %i' % rnd)
         for j in range(1, 2**(nrounds-rnd)+1):
             match = obj.get_match('%i-%i' % (rnd, j))
-            matches.append(MatchObj(match, match.get_player(0).dbpl, match.get_player(1).dbpl,\
-                    match.is_modified(), match.can_modify(), match.is_fixed(),\
-                    match._result[0], match._result[1], '%i-%i' % (rnd, j)))
+            if match.get_player(0).dbpl is not None and match.get_player(1).dbpl is not None:
+                matches.append(MatchObj(match, match.get_player(0).dbpl, match.get_player(1).dbpl,
+                               match.is_modified(), match.can_modify(), match.is_fixed(),
+                               match._result[0], match._result[1], '%i-%i' % (rnd, j)))
     base['matches'] = matches
 
     MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
@@ -443,7 +454,7 @@ def fpswiss_postable(base, obj, players):
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
 
 def sebracket_postable(base, obj, players):
-    nl = max([len(p.dbpl.tag) for p in players])
+    nl = max([len(p.dbpl.tag) for p in players if p.dbpl is not None])
 
     s =   'Win    '
     for i in range(1, int(log(len(players),2))+1):
@@ -454,6 +465,8 @@ def sebracket_postable(base, obj, players):
     strings = [(s, '', ''), None]
 
     for p in players:
+        if p.dbpl is None:
+            continue
         s = '{name: >{nl}}  '.format(name=p.dbpl.tag, nl=nl)
         for t in p.tally:
             s += ' {p: >7.2f}%'.format(p=100*t)

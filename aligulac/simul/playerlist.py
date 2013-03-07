@@ -6,6 +6,11 @@ from ratings.tools import cdf
 debug = False
 
 def make_player(player):
+    if player is None:
+        pl = Player('BYE', 'T', -10000, 0, 0, 0)
+        pl.dbpl = None
+        return pl
+
     rats = Rating.objects.filter(player=player).order_by('-period__id')
     if rats.count == 0:
         pl = Player(player.tag, player.race, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 0.6)

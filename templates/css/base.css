@@ -350,6 +350,10 @@ table.results {
     border-collapse: collapse;
 }
 
+table.prizepool {
+    width: 40em;
+}
+
 /* ========== MATCHLIST TABLE ========= */
 
 td.lm_date {

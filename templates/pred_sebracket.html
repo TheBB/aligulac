@@ -50,11 +50,11 @@ This is the prediction page for single elimination brackets. It's called from ra
         {% endfor %}
     </div>
 
-    <h3>Median outcome</h3>
+<h3>Median outcome</h3>
 
 <div class="table numtable" style="width: 67em;">
     {% for m in meanres %}
-    {% if not m.pla %}
+    {% if not m.pla and not m.plb %}
     <div class="rowh">
         <div class="rowe" style="width: 30em;">{{ m }}</div>
         <div class="rowe"></div>
@@ -88,7 +88,7 @@ This is the prediction page for single elimination brackets. It's called from ra
     {% endfor %}
 </div>
 
-    <h3>Update bracket progress</h3>
+<h3>Update bracket progress</h3>
 
     <form method="get" action="/predict/sebracket/">
         <input type="hidden" name="bo" value="{{ bo }}" />

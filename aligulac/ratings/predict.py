@@ -267,7 +267,7 @@ def pred_sebracket(request):
     for i in range(len(players[0].tally)-1, -1, -1):
         players.sort(key=lambda p: p.tally[i], reverse=True)
 
-    base['players'] = players
+    base['players'] = [p for p in players if p.dbpl is not None]
     base['nrounds'] = nrounds
 
     MatchObj = namedtuple('MatchObj', 'obj pla plb modded canmod fixed sca scb id')

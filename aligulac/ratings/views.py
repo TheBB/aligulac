@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift, PATCHES
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -236,6 +236,7 @@ def player(request, player_id):
     base['charts'] = rating.count >= 2
     if base['charts']:
         base['ratings'] = rating
+        base['patches'] = PATCHES
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
@@ -926,4 +927,5 @@ def balance(request):
     base['tvz'] = zip(100*tvz_scores[0,:]/(tvz_scores[0,:] + tvz_scores[1,:]), time)
 
     base['charts'] = True
+    base['patches'] = PATCHES
     return render_to_response('reports_balance.html', base)

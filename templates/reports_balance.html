@@ -39,6 +39,23 @@ that means Protoss is doing well and Terran poorly.</p>
             },
             xAxis: {
                 type: 'datetime',
+                plotLines: [
+                {% for p in patches %}
+                {
+                    value: {{ p.0|milliseconds }},
+                    color: '#cccccc',
+                    width: 2,
+                    label: {
+                        text: '{{ p.1 }}',
+                        verticalAlign: 'bottom',
+                        textAlign: 'right',
+                        y: -2,
+                        style: {
+                            fontSize: '0.8em',
+                        }
+                    }
+                },
+                {% endfor %}]
             },
             yAxis: {
                 title: {

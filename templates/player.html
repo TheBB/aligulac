@@ -335,7 +335,24 @@ This is the template for the main player page, called from ratings.views.player.
                 text: 'Click and drag to zoom'
             },
             xAxis: {
-                type: 'datetime'
+                type: 'datetime',
+                plotLines: [
+                {% for p in patches %}
+                {
+                    value: {{ p.0|milliseconds }},
+                    color: '#cccccc',
+                    width: 2,
+                    label: {
+                        text: '{{ p.1 }}',
+                        verticalAlign: 'bottom',
+                        textAlign: 'right',
+                        y: -2,
+                        style: {
+                            fontSize: '0.8em',
+                        }
+                    }
+                },
+                {% endfor %}]
             },
             yAxis: {
                 title: {
@@ -385,6 +402,13 @@ This is the template for the main player page, called from ratings.views.player.
                       {% for r in ratings %}[{{ r.period.end|milliseconds }},
                       {{ r.bf_rating|ratscale }}],{% endfor %}{% endspaceless %}]
             }]
+        /*}, function(chart) {
+            chart.xAxis[0].addPlotLine({
+                value: 1325040400000,
+                color: '#aaaaaa',
+                width: 2,
+                id: 'khaydarin'
+            });*/
         });
     });
 </script>

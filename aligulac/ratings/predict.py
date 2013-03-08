@@ -22,10 +22,9 @@ from collections import namedtuple
 
 TL_HEADER = '[center][code]'
 TL_FOOTER = '[/code][/center][small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-        + '[url=http://twitter.com/Sc2Aligulac]Twitter[/url].[/small]'
+        + '[url=%s]Modify[/url].[/small]'
 REDDIT_HEADER = ''
-REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. '\
-        + '[^Twitter](http://twitter.com/Sc2Aligulac)^.'
+REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
 
 def predict(request):
     base = base_ctx()
@@ -164,7 +163,8 @@ def pred_match(request):
     base['s1'] = s1
     base['s2'] = s2
 
-    match_postable(base, obj, r1, r2)
+    match_postable(base, obj, r1, r2,
+                   url='http://aligulac.com/predict/match/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_match.html', base)
 
 def pred_4pswiss(request):
@@ -223,7 +223,8 @@ def pred_4pswiss(request):
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 
-    fpswiss_postable(base, obj, players)
+    fpswiss_postable(base, obj, players,
+                     url='http://aligulac.com/predict/4pswiss/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_4pswiss.html', base)
 
 def pred_sebracket(request):
@@ -297,7 +298,8 @@ def pred_sebracket(request):
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 
-    sebracket_postable(base, obj, players)
+    sebracket_postable(base, obj, players,
+                       url='http://aligulac.com/predict/sebracket/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_sebracket.html', base)
 
 def pred_rrgroup(request):
@@ -365,7 +367,8 @@ def pred_rrgroup(request):
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 
-    rrgroup_postable(base, obj, players)
+    rrgroup_postable(base, obj, players, 
+                     url='http://aligulac.com/predict/rrgroup/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_rrgroup.html', base)
 
 def left_center_right(strings, gap=2, justify=True, indent=0):
@@ -398,7 +401,7 @@ def left_center_right(strings, gap=2, justify=True, indent=0):
 
     return out[:-1]
 
-def match_postable(base, obj, r1, r2):
+def match_postable(base, obj, r1, r2, url):
     pa = obj.get_player(0)
     pb = obj.get_player(1)
 
@@ -430,14 +433,14 @@ def match_postable(base, obj, r1, r2):
     postable_tl = left_center_right(strings)
     postable_tl += '\n\nMedian outcome: {pla} {sca}-{scb} {plb}'\
             .format(pla=pa.name, sca=ls[1], plb=pb.name, scb=ls[2])
-    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
 
     postable_reddit = left_center_right(strings, justify=False, indent=4)
     postable_reddit += '\n\n    Median outcome: {pla} {sca}-{scb} {plb}'\
             .format(pla=pa.name, sca=ls[1], plb=pb.name, scb=ls[2])
-    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
-def fpswiss_postable(base, obj, players):
+def fpswiss_postable(base, obj, players, url):
     nl = max([len(p.dbpl.tag) for p in players])
 
     strings = [('Top 2      1st      2nd      3rd      4th', '', ''), None]
@@ -448,12 +451,12 @@ def fpswiss_postable(base, obj, players):
                         p3=100*p.tally[1], p4=100*p.tally[0], name=p.dbpl.tag, nl=nl), '', ''))
 
     postable_tl = left_center_right(strings, justify=False, gap=0)
-    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
-    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
-def sebracket_postable(base, obj, players):
+def sebracket_postable(base, obj, players, url):
     nl = max([len(p.dbpl.tag) for p in players if p.dbpl is not None])
 
     s =   'Win    '
@@ -473,12 +476,12 @@ def sebracket_postable(base, obj, players):
         strings.append((s, '', ''))
 
     postable_tl = left_center_right(strings, justify=False, gap=0)
-    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
-    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
-def rrgroup_postable(base, obj, players):
+def rrgroup_postable(base, obj, players, url):
     nl = max([len(p.dbpl.tag) for p in players])
 
     s =   ''
@@ -496,10 +499,10 @@ def rrgroup_postable(base, obj, players):
         strings.append((s, '', ''))
 
     postable_tl = left_center_right(strings, justify=False, gap=0)
-    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
-    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
 def ordinal(value):
     """

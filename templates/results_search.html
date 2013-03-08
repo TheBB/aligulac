@@ -77,6 +77,36 @@ This is the results search function. Called from ratings.views.results_search.
             </td>
         </tr>
         {% endif %}
+        <tr class="row">
+            <td class="form_left">Match format</td>
+            <td class="form_right">
+                <select name="bo">
+                    <option value="all" {% if bo == "all" %}selected{% endif %}>All</option>
+                    <option value="3"   {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
+                    <option value="5"   {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="row">
+            <td class="form_left">On/offline</td>
+            <td class="form_right">
+                <select name="offline">
+                    <option value="both"    {% if offline == "both" %}selected{% endif %}>Both</option>
+                    <option value="online"  {% if offline == "online" %}selected{% endif %}>Online</option>
+                    <option value="offline" {% if offline == "offline" %}selected{% endif %}>Offline</option>
+                </select>
+            </td>
+        </tr>
+        <tr class="row">
+            <td class="form_left">Game version</td>
+            <td class="form_right">
+                <select name="game">
+                    <option value="all"  {% if game == "all" %}selected{% endif %}>All</option>
+                    <option value="WoL"  {% if game == "WoL" %}selected{% endif %}>Wings of Liberty</option>
+                    <option value="HotS" {% if game == "HotS" %}selected{% endif %}>Heart of the Swarm</option>
+                </select>
+            </td>
+        </tr>
         <tr>
             <td class="form_left"></td>
             <td class="form_right">

@@ -392,6 +392,31 @@ def results_search(request):
                     Q(eventobj__isnull=False, eventobj__fullname__icontains=query)
                 matches = matches.filter(q)
 
+        if 'bo' in request.GET:
+            if request.GET['bo'] == '3':
+                matches = matches.filter(Q(sca__gte=2) | Q(scb__gte=2))
+            elif request.GET['bo'] == '5':
+                matches = matches.filter(Q(sca__gte=3) | Q(scb__gte=3))
+            base['bo'] = request.GET['bo']
+        else:
+            base['bo'] = 'all'
+        
+        if 'offline' in request.GET:
+            if request.GET['offline'] == 'online':
+                matches = matches.filter(offline=0)
+            elif request.GET['offline'] == 'offline':
+                matches = matches.filter(offline=1)
+            base['offline'] = request.GET['offline']
+        else:
+            base['offline'] = 'both'
+
+        if 'game' in request.GET:
+            if request.GET['game'] != 'all':
+                matches = matches.filter(game=request.GET['game'])
+            base['game'] = request.GET['game']
+        else:
+            base['game'] = 'all'
+
         players, failures = [], []
         base['errs'] = []
         base['pls'] = request.GET['players']
@@ -699,6 +724,13 @@ def player_results(request, player_id):
         base['offline'] = request.GET['offline']
     else:
         base['offline'] = 'both'
+
+    if 'game' in request.GET:
+        if request.GET['game'] != 'all':
+            matches = matches.filter(game=request.GET['game'])
+        base['game'] = request.GET['game']
+    else:
+        base['game'] = 'all'
     
     matches = matches.order_by('-date', '-eventobj__lft', 'event', '-id')
     matches = matches.select_related('pla__rating').select_related('plb__rating').select_related('period')

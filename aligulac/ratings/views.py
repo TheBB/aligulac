@@ -432,6 +432,8 @@ def results_search(request):
             base['matches'] = display_matches(matches, date=True, fix_left=pls[0])
             base['sc_my'] = sum([m.pla_score for m in base['matches']])
             base['sc_op'] = sum([m.plb_score for m in base['matches']])
+            base['msc_my'] = sum([(1 if m.pla_score > m.plb_score else 0) for m in base['matches']])
+            base['msc_op'] = sum([(1 if m.pla_score < m.plb_score else 0) for m in base['matches']])
             base['left'] = pls[0]
             if len(pls) == 2:
                 base['right'] = pls[1]

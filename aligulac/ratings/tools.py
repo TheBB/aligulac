@@ -2,7 +2,7 @@ from math import sqrt
 from collections import namedtuple
 from datetime import date
 
-from ratings.models import Player, Match, PreMatch, Event
+from ratings.models import Player, Match, PreMatch, Event, Earnings
 from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
@@ -265,3 +265,12 @@ def event_shift(event, diff):
         e.lft += diff
         e.rgt += diff
         e.save()
+
+def get_placements(event):
+    earningdict = {}
+    for earning in Earnings.objects.filter(event=event).order_by('placement'):
+        try:
+            earningdict[earning.earnings].append(earning.placement)
+        except:
+            earningdict[earning.earnings] = [earning.placement]
+    return earningdict

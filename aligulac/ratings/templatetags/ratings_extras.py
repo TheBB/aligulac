@@ -260,3 +260,16 @@ def add_separator(int):
             newstring = '.' + string[-3:] + newstring
             string = string[:-3]
 register.filter('add_separator', add_separator)
+
+# Returns "1st", "2nd", "3rd", etc.
+def add_num_suffix(int):
+    int = str(int)
+    if int == '1':
+        return int + 'st'
+    elif int == '2':
+        return int + 'nd'
+    elif int == '3':
+        return int + 'rd'
+    else: 
+        return int + 'th'
+register.filter('add_num_suffix', add_num_suffix)

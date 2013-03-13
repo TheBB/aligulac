@@ -101,6 +101,17 @@ class Event(models.Model):
             except:
                 return None
     
+    def get_earliest(self):
+        try:
+            return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('date')[0].date
+        except:
+            return None
+    def get_latest(self):
+        try:
+            return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('-date')[0].date
+        except:
+            return None
+    
     def change_type(self, type):
         self.type = type
         if type == 'event' or type == 'round':

@@ -3,7 +3,7 @@ from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift, PATCHES
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift, get_placements, PATCHES
 from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -773,6 +773,31 @@ def player_results(request, player_id):
     base['player'] = player
     
     return render_to_response('player_results.html', base)
+
+def player_earnings(request, player_id):
+    player = get_object_or_404(Player, id=int(player_id))
+
+    base = base_ctx('Ranking', 'Earnings', request, context=player)
+
+    earnings = Earnings.objects.filter(player=player)
+    totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
+        
+    for event in earnings:
+        dict = get_placements(event.event)
+        for earning, placement in dict.items():
+            if event.placement in placement:
+                event.min = min(placement)
+                event.max = max(placement)
+    
+    #sort by latest date        
+    def getLatest( object ):
+        return object.event.get_latest()
+    earnings= list(earnings)
+    earnings.sort( key=getLatest, reverse=True )
+
+    base.update({'player': player, 'earnings': earnings, 'totalearnings': totalearnings})
+    
+    return render_to_response('player_earnings.html', base)
 
 def rating_details(request, player_id, period_id):
     period_id = int(period_id)

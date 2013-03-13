@@ -10,7 +10,7 @@ from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
-from ratings.models import Rating, Period, Player, Team, Match, Event
+from ratings.models import Rating, Period, Player, Team, Match, Event, Earnings
 from ratings.tools import find_player, filter_active_ratings
 from ratings.templatetags.ratings_extras import urlfilter
 
@@ -74,6 +74,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
     if context != None:
         if type(context) == Player:
             rating = Rating.objects.filter(player=context, comp_rat__isnull=False).order_by('-period')
+            earnings = Earnings.objects.filter(player=context)
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
 
@@ -83,6 +84,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 base['submenu'].append(('Rating history', base_url + 'historical/'))
 
             base['submenu'].append(('Match history', base_url + 'results/'))
+            
+            if earnings.exists():
+                base['submenu'].append(('Earnings', base_url + 'earnings/'))
 
             if rating.exists():
                 base['submenu'].append(('Adjustments', base_url + 'period/%i' % rating[0].period.id))

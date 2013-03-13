@@ -176,6 +176,13 @@ def eventchildren(value):
     return value.event_set.order_by('lft')
 register.filter('eventchildren', eventchildren)
 
+def getN(lst):
+    N = 1
+    K = 60
+    while N < len(lst) and sum([2+len(x.name) for x in lst[-N-1::]]) < K:
+        N += 1
+    return N 
+
 def eventliststart(value, N=None):
     if N == None:
         N = getN(list(value))

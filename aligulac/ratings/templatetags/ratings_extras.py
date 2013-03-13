@@ -257,7 +257,7 @@ def add_separator(int):
             newstring = string + newstring
             return newstring
         else:
-            newstring = '.' + string[-3:] + newstring
+            newstring = ',' + string[-3:] + newstring
             string = string[:-3]
 register.filter('add_separator', add_separator)
 

@@ -78,7 +78,7 @@ class SEBracket(Composite):
 
         progress = simul.progressbar.ProgressBar(N, exp='Monte Carlo')
         for i in range(0,N):
-            self.compute_mc_round(0, 1/N)
+            self.compute_mc_round(0, 1.0/N)
 
             if i % 500 == 0:
                 progress.update_time(i)

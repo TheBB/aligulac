@@ -100,15 +100,16 @@ class Event(models.Model):
                             .order_by('-lft').values('lp_name')[0]['lp_name']
             except:
                 return None
-    
+            
+    #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def get_earliest(self):
         from django.db import connection
         cursor = connection.cursor()
         try:
             cursor.execute('select date, id from ratings_match where eventobj_id in\
                                         (select id from ratings_event where\
-                                        lft >= ' + str(event.event.lft) + ' and\
-                                        rgt <= ' + str(event.event.rgt) +
+                                        lft >= ' + str(self.lft) + ' and\
+                                        rgt <= ' + str(self.rgt) +
                                         ') order by date asc limit 1;')
             return cursor.fetchone()[0]
         except:
@@ -120,8 +121,8 @@ class Event(models.Model):
         try:
             cursor.execute('select date, id from ratings_match where eventobj_id in\
                                         (select id from ratings_event where\
-                                        lft >= ' + str(event.event.lft) + ' and\
-                                        rgt <= ' + str(event.event.rgt) +
+                                        lft >= ' + str(self.lft) + ' and\
+                                        rgt <= ' + str(self.rgt) +
                                         ') order by date desc limit 1;')
             return cursor.fetchone()[0]
         except:

@@ -1,0 +1,11 @@
+# Bytecode
+*.pyc
+
+# SQL dumps
+*.sql
+
+# Pickle files
+*.pickle
+
+# Swap files (vim)
+*.swp

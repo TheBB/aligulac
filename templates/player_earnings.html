@@ -5,6 +5,7 @@ This is the template for the earnings of a player. It's called from ratings.view
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load humanize %}
 
 {% block title %}{{ player.tag }} earnings{% endblock %}
 
@@ -24,9 +25,9 @@ This is the template for the earnings of a player. It's called from ratings.view
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
             <td style="text-align: right;">
             {% if earning.min != earning.max %}
-                {{ earning.min|add_num_suffix }}&ndash;{{ earning.max|add_num_suffix }}
+                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
             {% else %}
-                {{ earning.min|add_num_suffix }}
+                {{ earning.min|ordinal }}
             {% endif %}
             </td>
             <td></td>

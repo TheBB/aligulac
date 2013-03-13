@@ -9,7 +9,7 @@ from ratings.tools import find_player, find_duplicates, display_matches
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q, Sum, F
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event, PreMatchGroup, PreMatch
+from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Earnings, PreMatchGroup, PreMatch
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -491,6 +491,7 @@ def manage(request):
         if 'conf' in request.POST and request.POST['conf'] == 'yes':
             Match.objects.filter(pla=source).update(pla=target, treated=False)
             Match.objects.filter(plb=source).update(plb=target, treated=False)
+            Earnings.objects.filter(player=source).update(player=target)
             Rating.objects.filter(player=source).delete()
             TeamMembership.objects.filter(player=source).delete()
             source.delete()

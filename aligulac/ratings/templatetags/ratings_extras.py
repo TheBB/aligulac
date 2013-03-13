@@ -112,6 +112,20 @@ def prevmonth(value):
     return value - relativedelta(months=1)
 register.filter('prevmonth', prevmonth)
 
+def datemax(value, arg):
+    if value - arg > timedelta(0):
+        return value
+    else:
+        return arg
+register.filter('datemax', datemax)
+
+def datemin(value, arg):
+    if value - arg < timedelta(0):
+        return value
+    else:
+        return arg
+register.filter('datemin', datemin)
+
 def haslogo(value):
     try:
         with open('/usr/local/www/media/al/teams/%i.png' % int(value)) as f:

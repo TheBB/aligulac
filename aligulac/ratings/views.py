@@ -4,6 +4,7 @@ from pyparsing import nestedExpr
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift, PATCHES
+from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
@@ -320,10 +321,14 @@ def results(request):
     except:
         td = datetime.date.today()
 
-    matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
-
-    base['matches'] = display_matches(matches, date=False, ratings=True)
+    base['mindate'] = datetime.date(year=2010, month=2, day=25)
+    base['maxdate'] = datetime.date.today()
+    td = datemax(td, base['mindate'])
+    td = datemin(td, base['maxdate'])
     base['td'] = td
+
+    matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
+    base['matches'] = display_matches(matches, date=False, ratings=True)
 
     return render_to_response('results.html', base)
 

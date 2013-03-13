@@ -50,6 +50,7 @@ def period(request, period_id, page='1'):
         page = 1
     period = get_object_or_404(Period, id=period_id, computed=True)
 
+    # Best and most specialised players
     best = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0]
     bestvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
             .extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
@@ -64,6 +65,23 @@ def period(request, period_id, page='1'):
     specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
             .extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
 
+    # Matchup statistics
+    ntz = lambda k: k if k is not None else 0
+
+    def wl(rca, rcb):
+        ms = Match.objects.filter(period=period, rca=rca, rcb=rcb).aggregate(Sum('sca'), Sum('scb'))
+        w = ntz(ms['sca__sum'])
+        l = ntz(ms['scb__sum'])
+        ms = Match.objects.filter(period=period, rca=rcb, rcb=rca).aggregate(Sum('sca'), Sum('scb'))
+        w += ntz(ms['scb__sum'])
+        l += ntz(ms['sca__sum'])
+        return w, l
+    
+    pvt_wins, pvt_loss = wl('P', 'T')
+    pvz_wins, pvz_loss = wl('P', 'Z')
+    tvz_wins, tvz_loss = wl('T', 'Z')
+
+    # Filtering the ratings
     entries = Rating.objects.filter(period=period).select_related('team','teammembership')
     entries = filter_active_ratings(entries)
 
@@ -104,6 +122,7 @@ def period(request, period_id, page='1'):
     elif sort == 'vz':
         entries = entries.extra(select={'d':'rating+rating_vz'}).order_by('-d', 'player__tag')
 
+    # Pages
     nperiods = Period.objects.filter(computed=True).count()
     nitems = entries.count()
     npages = nitems/psize + (1 if nitems % psize > 0 else 0)
@@ -111,6 +130,7 @@ def period(request, period_id, page='1'):
 
     entries = entries[(page-1)*psize:page*psize]
 
+    # Collect team data
     for entry in entries:
         teams = entry.player.teammembership_set.filter(current=True)
         if teams.exists():
@@ -118,11 +138,14 @@ def period(request, period_id, page='1'):
             entry.teamfull = teams[0].team.name
             entry.teamid = teams[0].team.id
 
+    # Render
     base = base_ctx('Ranking', 'Current', request)
-    base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,\
-            'best': best, 'bestvp': bestvp, 'bestvt': bestvt, 'bestvz': bestvz, 'specvp': specvp,\
+    base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,
+            'best': best, 'bestvp': bestvp, 'bestvt': bestvt, 'bestvz': bestvz, 'specvp': specvp,
             'specvt': specvt, 'specvz': specvz, 'sortable': True, 'startcount': (page-1)*psize,
-            'localcount': True, 'sort': sort, 'race': race, 'nats': nats})
+            'localcount': True, 'sort': sort, 'race': race, 'nats': nats,
+            'pvt_wins': pvt_wins, 'pvt_loss': pvt_loss, 'pvz_wins': pvz_wins,
+            'pvz_loss': pvz_loss, 'tvz_wins': tvz_wins, 'tvz_loss': tvz_loss})
     if period.id != base['curp'].id:
         base['curpage'] = ''
 

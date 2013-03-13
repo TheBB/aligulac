@@ -23,10 +23,6 @@ This template shows a rating list for a given period.
                 <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
             </div>
             <div class="row">
-                <div class="rowel">Games</div>
-                <div class="rower">{{ period.num_games }}</div>
-            </div>
-            <div class="row">
                 <div class="rowel">Active players</div>
                 <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
             </div>
@@ -42,6 +38,28 @@ This template shows a rating list for a given period.
                 <div class="rower">
                     <img src="{{ period|uprace|imgfolder|static }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
                     {{ period|uprace|racefull}} ({{ period|uppctg }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">Games</div>
+                <div class="rower">{{ period.num_games }}</div>
+            </div>
+            <div class="row">
+                <div class="rowel">PvT</div>
+                <div class="rower">
+                    {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg:pvt_loss }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">PvZ</div>
+                <div class="rower">
+                    {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg:pvz_loss }}%)
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">TvZ</div>
+                <div class="rower">
+                    {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
         </div>

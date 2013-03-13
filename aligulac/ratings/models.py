@@ -106,6 +106,7 @@ class Event(models.Model):
             return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('date')[0].date
         except:
             return None
+
     def get_latest(self):
         try:
             return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('-date')[0].date
@@ -492,7 +493,6 @@ class Earnings(models.Model):
     
     def __unicode__(self):
         return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)
-
     
 def mark_period(sender, **kwargs):
     obj = kwargs['instance']

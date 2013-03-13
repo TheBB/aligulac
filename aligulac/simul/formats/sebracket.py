@@ -76,7 +76,7 @@ class SEBracket(Composite):
         for m in self._bracket[0]:
             m.compute_partial()
 
-        progress = progressbar.ProgressBar(N, exp='Monte Carlo')
+        progress = simul.progressbar.ProgressBar(N, exp='Monte Carlo')
         for i in range(0,N):
             self.compute_mc_round(0, 1/N)
 

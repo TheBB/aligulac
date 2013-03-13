@@ -11,38 +11,42 @@ This is the template for the earnings of a player. It's called from ratings.view
 {% block content %}
 <h2>{{ player.tag }} earnings</h2>
 <p>{{ player.tag }} has earned a total of ${{ totalearnings|add_separator }}.</p>
-<table class="results">
+<table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 6em;">Placement</td>
+        <td style="width: 6em; text-align: right;">Placement</td>
+        <td style="width: 0.1em;"></td>
         <td>Tournament</td>
-        <td style="width: 5em;">Earnings</td>
-        <td style="width: 19em;">Date</td>
+        <td style="width: 5em; text-align: right;">Earnings</td>
+        <td style="width: 2em;"></td>
+        <td style="width: 19em;">Dates</td>
     </tr>
     {% for earning in earnings %}
-		<tr class="nonheader {% cycle 'row2' 'row1' %}">
-	        <td>
-	        {% if earning.min != earning.max %}
-	        	{{ earning.min|add_num_suffix }}&ndash;{{ earning.max|add_num_suffix }}
-	        {% else %}
-	        	{{ earning.min|add_num_suffix }}
-	        {% endif %}
-	        </td>
-        	<td>
-        		{% for event in earning.event.get_event_path %}
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+            <td style="text-align: right;">
+            {% if earning.min != earning.max %}
+                {{ earning.min|add_num_suffix }}&ndash;{{ earning.max|add_num_suffix }}
+            {% else %}
+                {{ earning.min|add_num_suffix }}
+            {% endif %}
+            </td>
+            <td></td>
+            <td>
+                {% for event in earning.event.get_event_path %}
                     <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
                 {% endfor %}
-        	</td>
-        	<td>${{ earning.earnings|add_separator }}</td>
-        	<td>
-        	{% with earliest=earning.event.get_earliest latest=earning.event.get_latest %}
-        		{% if earliest != latest %}
-        			{{ earliest }} &ndash; {{ latest }}
-        		{% else %}
-        			{{ latest }}
-        		{% endif %}        		
-        	{% endwith %} 
-        	</td>
-		</tr>
-	{% endfor %}
+            </td>
+            <td style="text-align: right;">${{ earning.earnings|add_separator }}</td>
+            <td></td>
+            <td>
+            {% with earliest=earning.event.get_earliest latest=earning.event.get_latest %}
+                {% if earliest != latest %}
+                    {{ earliest }} &ndash; {{ latest }}
+                {% else %}
+                    {{ latest }}
+                {% endif %}             
+            {% endwith %} 
+            </td>
+        </tr>
+    {% endfor %}
 </table>
 {% endblock %}

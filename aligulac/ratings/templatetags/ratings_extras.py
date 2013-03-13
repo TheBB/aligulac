@@ -7,6 +7,10 @@ from math import sqrt
 
 register = template.Library()
 
+# ----------------
+# Tools for converting URLs
+# ----------------
+
 def css(value):
     if not settings.DEBUG:
         return 'http://css.aligulac.com/' + value + '.css'
@@ -32,6 +36,16 @@ def imgfolder(value, arg=''):
         return str(value) + '.png'
 register.filter('imgfolder', imgfolder)
 
+def urlfilter(value):
+    value = value.replace(' ', '-')
+    value = value.replace('/', '')
+    return value
+register.filter('urlfilter', urlfilter)
+
+# ----------------
+# Tools for scaling rating numbers
+# ----------------
+
 def ratscale(value):
     return int(round((float(value) + 1.0)*1000))
 register.filter('ratscale', ratscale)
@@ -48,6 +62,11 @@ def racefull(value):
     return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
 register.filter('racefull', racefull)
 
+# ----------------
+# Calculating percentages
+# ----------------
+
+# Percentage of VALUE to VALUE+ARG
 def pctg(value, arg):
     if float(value) + float(arg) > 0:
         return int(round(100*float(value)/(float(value)+float(arg))))
@@ -55,16 +74,22 @@ def pctg(value, arg):
         return 0
 register.filter('pctg', pctg)
 
+# Percentage of VALUE to 1
 def pctg2(value):
     return '%5.2f' % (100*float(value))
 register.filter('pctg2', pctg2)
 
+# Percentage of VALUE to ARG
 def pctg3(value, arg):
     if float(arg) > 0:
         return '%.2f' % (100*float(value)/float(arg))
     else:
         return '%.2f' % 0.0
 register.filter('pctg3', pctg3)
+
+# ----------------
+# Tools for OP and UP races
+# ----------------
 
 def oprace(value):
     if value.dom_p > value.dom_t and value.dom_p > value.dom_z:
@@ -92,9 +117,9 @@ def uppctg(value):
     return int(round(100*(1. - min([value.dom_p, value.dom_t, value.dom_z]))))
 register.filter('uppctg', uppctg)
 
-def prob(value):
-    return '%6.2f' % (100*value)
-register.filter('prob', prob)
+# ----------------
+# Date tools for the results
+# ----------------
 
 def tomorrow(value):
     return value + timedelta(1)
@@ -126,17 +151,9 @@ def datemin(value, arg):
         return arg
 register.filter('datemin', datemin)
 
-def haslogo(value):
-    try:
-        with open('/usr/local/www/media/al/teams/%i.png' % int(value)) as f:
-            return True
-    except:
-        return False
-register.filter('haslogo', haslogo)
-
-def sub(value, arg):
-    return int(value) - int(arg)
-register.filter('sub', sub)
+# ----------------
+# Used for the events
+# ----------------
 
 def unfold(value):
     value = -int(value)
@@ -159,13 +176,6 @@ def eventchildren(value):
     return value.event_set.order_by('lft')
 register.filter('eventchildren', eventchildren)
 
-def getN(lst):
-    N = 1
-    K = 60
-    while N < len(lst) and sum([2+len(x.name) for x in lst[-N-1::]]) < K:
-        N += 1
-    return N
-
 def eventliststart(value, N=None):
     if N == None:
         N = getN(list(value))
@@ -178,6 +188,31 @@ def eventlistend(value, N=None):
     return list(value)[-N:]
 register.filter('eventlistend', eventlistend)
 
+# ----------------
+# Miscellaneous
+# ----------------
+
+# Prins a floating point number between 0 and 1 as a percentage
+# TODO: Basically identical to pctg2. Fix this?
+def prob(value):
+    return '%6.2f' % (100*value)
+register.filter('prob', prob)
+
+# Checks whether a team has a logo file
+def haslogo(value):
+    try:
+        with open('/usr/local/www/media/al/teams/%i.png' % int(value)) as f:
+            return True
+    except:
+        return False
+register.filter('haslogo', haslogo)
+
+# Subtraction of integers
+def sub(value, arg):
+    return int(value) - int(arg)
+register.filter('sub', sub)
+
+# Used for getting confidence intervals
 def devrange(value, arg):
     r = value.dev**2
     if arg == 'P':
@@ -188,45 +223,24 @@ def devrange(value, arg):
         return sqrt(r + value.dev_vz**2)
 register.filter('devrange', devrange)
 
-def accessplayer(value, arg):
-    return value.get_player(int(arg)).dbpl.tag
-register.filter('accessplayer', accessplayer)
-
-def accessplayerid(value, arg):
-    return value.get_player(int(arg)).dbpl.id
-register.filter('accessplayerid', accessplayerid)
-
-def accessscore(value, arg):
-    return value._result[int(arg)]
-register.filter('accessscore', accessscore)
-
+# Create a link to match prediction from a more complex format
 def makematchlink(value):
     return "/predict/match/?bo=%i&amp;ps=%i%%2C%i&amp;s1=%i&amp;s2=%i" % \
             (2*value._num-1, value.get_player(0).dbpl.id, value.get_player(1).dbpl.id,\
              value._result[0], value._result[1])
 register.filter('makematchlink', makematchlink)
 
+# Exponentiation of integers
 def pow(value, arg):
     return int(value)**int(arg)
 register.filter('pow', pow)
 
-def mscore(value):
-    exp = 0
-    for i in range(0,len(value.mwins)):
-        exp += i * value.mwins[i]
-    return (value, value._nplayers-1-exp)
-register.filter('mscore', mscore)
-
-def urlfilter(value):
-    value = value.replace(' ', '-')
-    value = value.replace('/', '')
-    return value
-register.filter('urlfilter', urlfilter)
-
+# Used for printing javascript code for charts
 def milliseconds(value):
     return (value - date(1970,1,1)).days * 24 * 60 * 60 * 1000
 register.filter('milliseconds', milliseconds)
 
+# Used for prizemoney
 def add_separator(int):
     string = str(int)
     newstring = ''

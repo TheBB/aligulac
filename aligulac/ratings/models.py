@@ -102,14 +102,28 @@ class Event(models.Model):
                 return None
     
     def get_earliest(self):
+        from django.db import connection
+        cursor = connection.cursor()
         try:
-            return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('date')[0].date
+            cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(event.event.lft) + ' and\
+                                        rgt <= ' + str(event.event.rgt) +
+                                        ') order by date asc limit 1;')
+            return cursor.fetchone()[0]
         except:
             return None
 
     def get_latest(self):
+        from django.db import connection
+        cursor = connection.cursor()
         try:
-            return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt).order_by('-date')[0].date
+            cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(event.event.lft) + ' and\
+                                        rgt <= ' + str(event.event.rgt) +
+                                        ') order by date desc limit 1;')
+            return cursor.fetchone()[0]
         except:
             return None
     

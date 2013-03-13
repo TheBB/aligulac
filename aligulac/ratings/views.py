@@ -779,6 +779,9 @@ def player_earnings(request, player_id):
 
     base = base_ctx('Ranking', 'Earnings', request, context=player)
 
+    from django.db import connection
+    cursor = connection.cursor()
+
     earnings = Earnings.objects.filter(player=player)
     totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
         
@@ -788,10 +791,22 @@ def player_earnings(request, player_id):
             if event.placement in placement:
                 event.min = min(placement)
                 event.max = max(placement)
+        cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(event.event.lft) + ' and\
+                                        rgt <= ' + str(event.event.rgt) +
+                                        ') order by date asc limit 1;')
+        event.earliest = cursor.fetchone()[0]
+        cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(event.event.lft) + ' and\
+                                        rgt <= ' + str(event.event.rgt) +
+                                        ') order by date desc limit 1;')
+        event.latest = cursor.fetchone()[0]
     
     #sort by latest date        
     def getLatest( object ):
-        return object.event.get_latest()
+        return object.latest
     earnings= list(earnings)
     earnings.sort( key=getLatest, reverse=True )
 

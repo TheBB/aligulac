@@ -48,5 +48,17 @@ This is the template for the earnings of a player. It's called from ratings.view
             </td>
         </tr>
     {% endfor %}
+        	</td>
+        	<td>${{ earning.earnings|add_separator }}</td>
+        	<td>
+        		{% if earning.earliest != earning.latest %}
+        			{{ earning.earliest }} &ndash; {{ earning.latest }}
+        		{% else %}
+        			{{ earning.latest }}
+        		{% endif %}        		
+        	</td>
+		</tr>
+	{% endfor %}
+>>>>>>> Optimize query
 </table>
 {% endblock %}

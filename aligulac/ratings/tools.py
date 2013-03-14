@@ -14,7 +14,8 @@ from math import sqrt, exp
 PATCHES = [(date(year=2010, month=10, day=14), '1.1.2'),
            (date(year=2011, month=3,  day=22), '1.3.0'),
            (date(year=2011, month=9,  day=20), '1.4.0'),
-           (date(year=2012, month=2,  day=21), '1.4.3')]
+           (date(year=2012, month=2,  day=21), '1.4.3'),
+           (date(year=2012, month=3,  day=12), 'HotS')]
 
 def prob_of_winning(rating_a=None, rating_b=None):
     if rating_a and rating_b:

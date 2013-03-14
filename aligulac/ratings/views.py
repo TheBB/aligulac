@@ -818,6 +818,8 @@ def earnings(request):
     ranking = Earnings.objects.values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings')
     players = Player.objects.all()
     
+    totalprizepool = Earnings.objects.aggregate(Sum('earnings'))['earnings__sum']
+    
     for player in ranking:
         player["playerobj"] = players.get(id=player["player"])
         try:
@@ -834,7 +836,7 @@ def earnings(request):
 
     ranking = ranking[(page-1)*psize:page*psize]
 
-    base.update({'ranking': ranking, 'page': page, 'npages': npages, 'startcount': startcount})
+    base.update({'ranking': ranking, 'totalprizepool': totalprizepool, 'page': page, 'npages': npages, 'startcount': startcount})
     
     return render_to_response('earnings.html', base)
 

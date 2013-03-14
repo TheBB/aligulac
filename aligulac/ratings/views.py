@@ -259,6 +259,11 @@ def player(request, player_id):
     rating = Rating.objects.filter(player=player).order_by('period').select_related('period')
     base['charts'] = rating.count >= 2
     if base['charts']:
+        try:
+            last_adjust = Rating.objects.filter(player=player, decay=0).order_by('-period')[0]
+            rating = rating.filter(period_id__lte=last_adjust.period_id)
+        except:
+            pass
         base['ratings'] = rating
         base['patches'] = PATCHES
 

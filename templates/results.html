@@ -73,27 +73,35 @@ This page shows the results by date. Called from ratings.views.results.
         <div class="row">
             <div class="rowe" style="width: 22.5em;"></div>
             <div class="rowe" style="width: 1em; text-align: left;">
-                <a href="/results/?d={{ td|prevmonth|date:"Y-m-d" }}">
-                    <img src="{{ "first.png"|static }}" alt="previous month" class="btm" />
+                {% if td != mindate %}
+                <a href="/results/?d={{ td|prevmonth|datemax:mindate|date:"Y-m-d" }}">
+                    <img src="{{ "first.png"|static }}" title="previous month" alt="previous month" class="btm" />
                 </a>
+                {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: left;">
+                {% if td != mindate %}
                 <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                    <img src="{{ "prev.png"|static }}" alt="previous month" class="btm" />
+                    <img src="{{ "prev.png"|static }}" title="previous day" alt="previous day" class="btm" />
                 </a>
+                {% endif %}
             </div>
             <div class="rowe" style="width: 8em; text-align: center;">
                 <a href="/results/">today</a>
             </div>
             <div class="rowe" style="width: 1em; text-align: right;">
+                {% if td != maxdate %}
                 <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                    <img src="{{ "next.png"|static }}" alt="previous month" class="btm" />
+                    <img src="{{ "next.png"|static }}" title="next day" alt="next day" class="btm" />
                 </a>
+                {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: right;">
-                <a href="/results/?d={{ td|nextmonth|date:"Y-m-d" }}">
-                    <img src="{{ "last.png"|static }}" alt="previous month" class="btm" />
+                {% if td != maxdate %}
+                <a href="/results/?d={{ td|nextmonth|datemin:maxdate|date:"Y-m-d" }}">
+                    <img src="{{ "last.png"|static }}" title="next month" alt="next month" class="btm" />
                 </a>
+                {% endif %}
             </div>
             <div class="rowe" style="width: 22.5em;"></div>
         </div>

@@ -784,9 +784,6 @@ def player_earnings(request, player_id):
 
     base = base_ctx('Ranking', 'Earnings', request, context=player)
 
-    from django.db import connection
-    cursor = connection.cursor()
-
     earnings = Earnings.objects.filter(player=player)
     totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
         
@@ -809,6 +806,37 @@ def player_earnings(request, player_id):
     base.update({'player': player, 'earnings': earnings, 'totalearnings': totalearnings})
     
     return render_to_response('player_earnings.html', base)
+
+def earnings(request):
+    base = base_ctx('Ranking', 'Earnings', request)
+
+    try:
+        page = int(request.GET['page'])
+    except:
+        page = 1
+
+    ranking = Earnings.objects.values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings')
+    players = Player.objects.all()
+    
+    for player in ranking:
+        player["playerobj"] = players.get(id=player["player"])
+        try:
+            player["teamobj"] = player["playerobj"].teammembership_set.get(current=True)
+        except:
+            pass
+    
+    # Pages
+    psize = 40
+    nitems = ranking.count()
+    npages = nitems/psize + (1 if nitems % psize > 0 else 0)
+    page = min(max(page, 1), npages)
+    startcount = (page-1)*psize
+
+    ranking = ranking[(page-1)*psize:page*psize]
+
+    base.update({'ranking': ranking, 'page': page, 'npages': npages, 'startcount': startcount})
+    
+    return render_to_response('earnings.html', base)
 
 def rating_details(request, player_id, period_id):
     period_id = int(period_id)

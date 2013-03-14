@@ -57,7 +57,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                            ('Transfers', '/player_transfers/')]
     elif section == 'Ranking':
         base['submenu'] = [('Current', '/periods/%i' % curp.id),\
-                           ('History', '/periods/')]
+                           ('History', '/periods/'),\
+                           ('Earnings', '/earnings/')]
     elif section == 'About':
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),

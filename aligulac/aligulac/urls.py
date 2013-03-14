@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     url(r'^periods/$', 'ratings.views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.views.period'),
 
+    url(r'^earnings/$', 'ratings.views.earnings'),
+
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/$', 'ratings.views.player'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/period/(?P<period_id>\d+)/$', 'ratings.views.rating_details'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/results/$', 'ratings.views.player_results'),

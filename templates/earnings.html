@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the template for the earnings of a player. It's called from ratings.views.player_earnings.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load humanize %}
+
+{% block title %}Earnings ranking{% endblock %}
+
+{% block content %}
+<h2>Earnings ranking</h2>
+
+<div class="table" style="min-width: 67em;">
+    <div class="row">
+        <div class="rowe" style="width: 23.5em;">
+        </div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            {% if page > 1 %}
+            <a href="?page=1">
+                <img src="{{ "first.png"|static }}" alt="first" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 1em; text-align: left;">
+            {% if page > 1 %}
+            <a href="?page={{ page|add:"-1" }}">
+                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 8em; text-align: center;">Page {{ page }}/{{ npages }}</div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            {% if page < npages %}
+            <a href="?page={{ page|add:"1" }}">
+                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 1em; text-align: right;">
+            {% if page < npages %}
+            <a href="?page={{ npages }}">
+                <img src="{{ "last.png"|static }}" alt="last" class="btm" />
+            </a>
+            {% endif %}
+        </div>
+        <div class="rowe" style="width: 22.5em;">
+        </div>
+    </div>
+</div>
+
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td class="rl_number">#</td>
+        <td class="rl_icon"></td>
+        <td class="rl_icon"></td>
+        <td class="rl_name">Name</td>
+        <td style="width: 15em;">Team</td>
+        <td style="width: 15em; text-align: right;">Total earnings</td>
+    </tr>
+    {% for earning in ranking %}
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+        	<td class="rl_number">
+            {% if startcount %}
+                {{ forloop.counter|add:startcount }}.
+            {% else %}
+                {{ forloop.counter }}.
+            {% endif %}
+        	</td>
+        	<td class="rl_icon">
+            	{% if earning.playerobj.country != "" %}
+            		<img src="{{ earning.playerobj.country|lower|imgfolder:"flags"|static }}" alt="{{ earning.playerobj.country }}" />
+            	{% endif %}
+	        </td>
+        	<td class="rl_icon">
+            	<img src="{{ earning.playerobj.race|imgfolder|static }}" alt="{{ earning.playerobj.race }}" class="btm" />
+	        </td>
+        	<td class="rl_name">
+            	<a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/">{{ earning.playerobj.tag }}</a>
+	        </td>
+        	<td>
+            	{% if earning.teamobj %}
+	                <a href="/teams/{{ earning.teamobj.team.id }}-{{ earning.teamobj.team.name|urlfilter }}/">{{ earning.teamobj.team.name }}</a>
+            	{% endif %}
+	        </td>
+	        <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">${{ earning.totalearnings|add_separator }}</a>
+	        </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

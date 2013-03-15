@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 from datetime import timedelta, date
 from dateutil.relativedelta import relativedelta
@@ -260,3 +261,18 @@ def add_separator(int):
             newstring = ',' + string[-3:] + newstring
             string = string[:-3]
 register.filter('add_separator', add_separator)
+
+def add_sep_and_cur(int, cur):
+    str = add_separator(int)
+    if not cur:
+        return "$" + str
+    
+    if cur == "USD":
+        return "$" + str
+    elif cur == "EUR":
+        return "€" + str
+    elif cur == "KRW":
+        return "₩" + str
+    else:
+        return str + " " + cur
+register.filter('add_sep_and_cur', add_sep_and_cur)

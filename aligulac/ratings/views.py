@@ -657,8 +657,12 @@ def events(request, event_id=None):
     base['earnings'] = earnings
     
     base['prizepool'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
+    base['prizepoolorig'] = earnings.aggregate(Sum('origearnings'))['origearnings__sum']
     
-    base['prizepoolcur'] = earnings.values('currency')[0]['currency']
+    try:
+        base['prizepoolcur'] = earnings.values('currency')[0]['currency']
+    except:
+        base['prizepoolcur'] = "USD"
     
     # Get list of currencies
     currencies = []

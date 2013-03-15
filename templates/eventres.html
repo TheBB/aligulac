@@ -102,7 +102,8 @@ ratings.views.events.
             {% if prizepool %}
             <div class="row">
                 <div class="rowel">Prize pool</div>
-                <div class="rower">${{ prizepool|add_separator }}</div>
+                <div class="rower">{{ prizepoolorig|add_sep_and_cur:prizepoolcur }} 
+                {% if prizepoolcur != "USD" %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
             </div>
             {% endif %}
             {% if adm %}
@@ -262,7 +263,7 @@ ratings.views.events.
 
     {% if adm %}
     <script>
-        
+
     function log(msg) {
         setTimeout(function() {
             throw new Error(msg);
@@ -288,6 +289,12 @@ ratings.views.events.
         var row = cell.parentNode.parentNode;
         row.className = "nonheader row1";
     }
+
+	/*function selectcurrency() {
+		var currency = document.getElementById("currency");
+        var currencyvalue = currency.options[currency.selectedIndex].value;
+        log(currencyvalue);
+	}*/
 
     function createtable(clicked_id)
     {
@@ -354,7 +361,7 @@ ratings.views.events.
             cell1.innerHTML = placement
             cell2.appendChild(select);
             var selectbox = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="8" />'
-            cell3.innerHTML = selectbox + ' {{ prizepoolcur }}'
+            cell3.innerHTML = selectbox
         }
         
         var row = table.insertRow(-1);

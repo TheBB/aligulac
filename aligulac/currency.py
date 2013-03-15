@@ -15,6 +15,7 @@ class ExchangeRates(object):
     def _loadjson(self, date):
         date = self._date.strftime('%Y-%m-%d')
         url = 'http://openexchangerates.org/api/historical/' + date + '.json?app_id=' + settings.EXCHANGE_ID
+        print url
         try:
             jsonfile = urllib2.urlopen(url)
         except urllib2.HTTPerror, err:

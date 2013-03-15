@@ -119,7 +119,9 @@ ratings.views.events.
                         <option value="nochange" {% if not eventtype %}selected{% endif %}>No change</option>
                         <option value="category" {% if eventtype == "category" %}selected{% endif %}/>Category</option>
                         <option value="event" {% if eventtype == "event" %}selected{% endif %}/>Event</option>
-                        <option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
+                        {% if event.parent %}
+                        	<option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
+                        {% endif %}
                     </select>
                     </div>
                 </div>

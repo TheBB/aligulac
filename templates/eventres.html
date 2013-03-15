@@ -404,11 +404,12 @@ ratings.views.events.
         for(var i = 0; i < length+1; i++)
         {
             var amount = form['amount-' + i].value;
+            amount = amount.replace(/[\., ]/g, '');
+            
             players.push(form['player-' + i].value);
             var placement = i+1;
-            var regex = /[^0-9\.,]+/g;
-            
-            if (amount == '' | amount.length == 0)
+            var regex = /[^0-9]+/g;
+            if (amount == '')
             {
                 alert('Please add a value for Player ' + placement);
                 return false;

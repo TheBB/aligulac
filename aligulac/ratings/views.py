@@ -619,7 +619,7 @@ def events(request, event_id=None):
                 player = Player.objects.get(id=player)
                 
                 amount = request.POST['amount-' + str(i)]
-                amount = amount.replace(',', '').replace('.', '').strip()
+                amount = amount.replace(',', '').replace('.', '').replace(' ', '')
                 
                 players.append(player)
                 amounts.append(amount)

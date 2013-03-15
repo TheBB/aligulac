@@ -265,9 +265,8 @@ register.filter('add_separator', add_separator)
 def add_sep_and_cur(int, cur):
     str = add_separator(int)
     if not cur:
-        return "$" + str
-    
-    if cur == "USD":
+        return "$" + str    
+    elif cur == "USD":
         return "$" + str
     elif cur == "EUR":
         return "€" + str

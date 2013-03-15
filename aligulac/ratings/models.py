@@ -522,9 +522,10 @@ class Earnings(models.Model):
             date = self.event.get_latest()
             exchangerates = curex.ExchangeRates(date)
 
-            for earning in earningobj:        
-                earning.earnings = round(exchangerates.convert(earning.origearnings, currency))
-                earning.save()
+            if exchangerates:
+                for earning in earningobj:        
+                    earning.earnings = round(exchangerates.convert(earning.origearnings, currency))
+                    earning.save()
     
     def __unicode__(self):
         return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)

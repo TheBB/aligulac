@@ -15,7 +15,11 @@ class ExchangeRates(object):
     def _loadjson(self, date):
         date = self._date.strftime('%Y-%m-%d')
         url = 'http://openexchangerates.org/api/historical/' + date + '.json?app_id=' + settings.EXCHANGE_ID
-        jsonfile = urllib2.urlopen(url)
+        try:
+            jsonfile = urllib2.urlopen(url)
+        except urllib2.HTTPerror, err:
+            #API limit reached for the month or other error
+            return False
         return json.loads(jsonfile.read())
 
     def _tobase(self, amount, currency):

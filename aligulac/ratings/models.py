@@ -6,6 +6,7 @@ from countries import transformations, data
 
 from math import sqrt
 import datetime
+import currency as curex
 
 class Period(models.Model):
     start = models.DateField('Start date')
@@ -490,21 +491,40 @@ class Match(models.Model):
 class Earnings(models.Model):
     event = models.ForeignKey(Event)
     player = models.ForeignKey(Player)
-    earnings = models.IntegerField()
+    earnings = models.IntegerField(null=True, blank=True)
+    origearnings = models.IntegerField()
+    currency = models.CharField(max_length=30)
     placement = models.IntegerField()
     
     @staticmethod
-    def set_earnings(event, players, earnings, placements):
+    def set_earnings(event, players, origearnings, currency, placements):
         #probably should be more subtle and not delete everything on change
         if Earnings.objects.filter(event=event).exists():
             Earnings.objects.filter(event=event).delete()
-        if not len(players) == len(earnings):
+        if not len(players) == len(origearnings):
             return None
         else:
             for i in range(0,len(players)):
-                new = Earnings(event=event, player=players[i], placement=placements[i]+1, earnings=earnings[i])
+                new = Earnings(event=event, player=players[i], placement=placements[i]+1, origearnings=origearnings[i], currency=currency)
                 new.save()
+            new.convert_earnings()
         return new
+    
+    def convert_earnings(self):
+        currency = self.currency
+        earningobj = Earnings.objects.filter(event=self.event)
+        
+        if currency == 'USD':
+            for earning in earningobj:
+                earning.earnings = earning.origearnings
+                earning.save()
+        else:
+            date = self.event.get_latest()
+            exchangerates = curex.ExchangeRates(date)
+
+            for earning in earningobj:        
+                earning.earnings = round(exchangerates.convert(earning.origearnings, currency))
+                earning.save()
     
     def __unicode__(self):
         return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)

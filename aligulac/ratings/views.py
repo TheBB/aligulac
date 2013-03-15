@@ -1,4 +1,6 @@
 import os, datetime
+import ccy
+import operator
 from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
@@ -606,6 +608,7 @@ def events(request, event_id=None):
 
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
             amount = int(request.POST['amount'])
+            currency = request.POST['currency']
             
             players = []
             amounts = []
@@ -622,7 +625,7 @@ def events(request, event_id=None):
                 amounts.append(amount)
                 placements.append(i)
             
-            success = Earnings.set_earnings(event, players, amounts, placements)
+            success = Earnings.set_earnings(event, players, amounts, currency, placements)
             if success:
                 base['message'] = 'Updated tournament prizepool.'
             else:
@@ -655,6 +658,18 @@ def events(request, event_id=None):
     
     base['prizepool'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
     
+    base['prizepoolcur'] = earnings.values('currency')[0]['currency']
+    
+    # Get list of currencies
+    currencies = []
+    sortedcurrencies = sorted(ccy.currencydb(), key=operator.itemgetter(0))
+
+    for currency in sortedcurrencies:
+        dict = {}
+        dict["name"] = ccy.currency(currency).name
+        dict["code"] = ccy.currency(currency).code
+        currencies.append(dict)
+    base['currencies'] = currencies
     
     if event.type:
         base['eventtype'] = event.type

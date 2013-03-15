@@ -302,9 +302,9 @@ ratings.views.events.
             var amount = document.getElementById('numberplayers').value
         }
     
-        if (table.rows.length > 1)
+        if (table.rows.length > 2)
         {
-            for(var i = table.rows.length-1; i > 0; i--)
+            for(var i = table.rows.length-1; i > 1; i--)
             {
                 table.deleteRow(i);
             }
@@ -320,7 +320,7 @@ ratings.views.events.
                 {% for earning in earnings %}
                     if (placement == {{ earning.placement }})
                     {
-                        earning = "{{ earning.earnings }}";
+                        earning = "{{ earning.origearnings }}";
                         earningsplayer = "{{ earning.player.id }}";
                     }
                 {% endfor %}
@@ -353,7 +353,8 @@ ratings.views.events.
             var cell3 = row.insertCell(2);
             cell1.innerHTML = placement
             cell2.appendChild(select);
-            cell3.innerHTML = '$<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="3" />'
+            var selectbox = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="8" />'
+            cell3.innerHTML = selectbox + ' {{ prizepoolcur }}'
         }
         
         var row = table.insertRow(-1);
@@ -451,9 +452,26 @@ ratings.views.events.
     </span>
     <table id="table"  class="results prizepool" style="display: none;">
         <tr class="header">
-            <td>Placement</td>
-            <td>Player</td>
-            <td>Money earned</td>
+            <td style="width: 3em;">#</td>
+            <td style="width: 20em;">Player</td>
+            <td style="width: 17em;">Money earned</td>
+        </tr>
+        <tr class="nonheader row2">
+            <td></td>
+            <td style="text-align: right;">Currency:</td>
+            <td>
+				<select name="currency" id="currency">
+					{% for currency in currencies %} 
+						<option value="{{ currency.code }}"
+							{% if not prizepoolcur %}
+								{% if currency.code == "USD" %}selected{% endif %}
+							{% else %}
+								{% if currency.code == prizepoolcur %}selected{% endif %}
+							{% endif %}
+						>{{ currency.code }} - {{ currency.name }}</option>
+					{% endfor %}
+				</select>
+            </td>
         </tr>
     </table>
     </form>

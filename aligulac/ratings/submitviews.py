@@ -63,7 +63,11 @@ def add_matches(request):
 
     if 'matches' in request.POST:
         # Collect various information from the form
-        event = request.POST['event'].strip()
+        try:
+            event = request.POST['event'].strip()
+        except:
+            event = None
+
         date = request.POST['date']
         matches = request.POST['matches'].splitlines()
         offline = not (request.POST['type'] != 'offline')
@@ -235,7 +239,6 @@ def add_matches(request):
                 m.rca = pla_obj.race if rca == None else rca
                 m.rcb = plb_obj.race if rcb == None else rcb
                 m.date = date
-                m.event = event
                 m.submitter = request.user
                 m.set_period()
                 m.eventobj = eventobj
@@ -328,8 +331,7 @@ def review(request):
             eobj = Event.objects.get(id=int(request.POST['eobj']))
         else:
             eobj = None
-
-        etext = request.POST['event']
+        base['eobj'] = eobj.id
 
         delete = True if request.POST['act'] == 'reject' else False
 
@@ -376,7 +378,7 @@ def review(request):
                         m.date = pm.group.date
                     else:
                         m.date = request.POST['date']
-                    m.event = etext if etext.strip() != '' else pm.group.event
+                    m.event = pm.group.event
                     m.eventobj = eobj
                     m.submitter = request.user
                     m.set_period()

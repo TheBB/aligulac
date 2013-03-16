@@ -56,16 +56,12 @@ ratings.submitviews.add_matches.
             <li><strong>Event:</strong> Anything that can be used to identify the tournament the games were
             played in. Please provide as much information as possible. (Rounds, day number, week number,
             etc.)</li>
-            {% else %}
-            <li><strong>Event:</strong> Anything that can be used to identify the tournament the games were
-            played in.</li>
             {% endif %}
             {% if adm %}
             <li><strong>Event object:</strong> The event the games were played in. 
-                <span style="color: #ff0000;">Use an event object instead of event text whenever possible. You
-                    do not need both. If you can't find the correct event object, please consider 
-                    <a href="/add/events/">making it</a>. If these are the final games associated with an
-                    event object, please close it afterwards.</span></li>
+                <span style="color: #ff0000;">If you can't find the correct event object, you have to <a
+                    href="/add/events/">make it</a>. If these are the final games associated with an event
+                    object, please close it afterwards.</span></li>
             {% endif %}
             <li><strong>Date played:</strong> The date the games were played (as accurate as possible). This
             will be used to check for possible duplicates.</li>
@@ -197,6 +193,7 @@ ratings.submitviews.add_matches.
     <form method="post" action="/add/">
     {% csrf_token %}
     <table class="bigform">
+        {% if not adm %}
         <tr>
             <td class="form_left">
                 Event
@@ -205,6 +202,7 @@ ratings.submitviews.add_matches.
                 <input type="text" class="text" name="event" value="{{ event }}" />
             </td>
         </tr>
+        {% endif %}
         {% if adm %}
         <tr>
             <td class="form_left">

@@ -404,7 +404,7 @@ ratings.views.events.
         for(var i = 0; i < length+1; i++)
         {
             var amount = form['amount-' + i].value;
-            amount = amount.replace(/[\., ]/g, '');
+            amount = amount.replace(/[\., ]*/g, '');
             
             players.push(form['player-' + i].value);
             var placement = i+1;

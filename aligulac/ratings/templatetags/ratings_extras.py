@@ -272,6 +272,20 @@ def add_sep_and_cur(int, cur):
         return "€" + str
     elif cur == "KRW":
         return "₩" + str
+    elif cur == "SEK" or cur == "NOK":
+        return str + " kr"
+    elif cur == "DKK":
+        return str + " kr."
+    elif cur == "GBP":
+        return "£" + str
+    elif cur == "AUD":
+        return "A$" + str
+    elif cur == "CNY":
+        return "¥" + str
+    elif cur == "TWD":
+        return "NT$" + str
+    elif cur == "PLN":
+        return str + " zł"
     else:
         return str + " " + cur
 register.filter('add_sep_and_cur', add_sep_and_cur)

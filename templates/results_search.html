@@ -80,7 +80,7 @@ This is the results search function. Called from ratings.views.results_search.
         <tr class="row">
             <td class="form_left">Match format</td>
             <td class="form_right">
-                <select name="bo">
+                <select name="bo" style="width: 15em;">
                     <option value="all" {% if bo == "all" %}selected{% endif %}>All</option>
                     <option value="3"   {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
                     <option value="5"   {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
@@ -90,7 +90,7 @@ This is the results search function. Called from ratings.views.results_search.
         <tr class="row">
             <td class="form_left">On/offline</td>
             <td class="form_right">
-                <select name="offline">
+                <select name="offline" style="width: 15em;">
                     <option value="both"    {% if offline == "both" %}selected{% endif %}>Both</option>
                     <option value="online"  {% if offline == "online" %}selected{% endif %}>Online</option>
                     <option value="offline" {% if offline == "offline" %}selected{% endif %}>Offline</option>
@@ -100,7 +100,7 @@ This is the results search function. Called from ratings.views.results_search.
         <tr class="row">
             <td class="form_left">Game version</td>
             <td class="form_right">
-                <select name="game">
+                <select name="game" style="width: 15em;">
                     <option value="all"  {% if game == "all" %}selected{% endif %}>All</option>
                     <option value="WoL"  {% if game == "WoL" %}selected{% endif %}>Wings of Liberty</option>
                     <option value="HotS" {% if game == "HotS" %}selected{% endif %}>Heart of the Swarm</option>

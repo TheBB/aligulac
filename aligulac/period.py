@@ -33,7 +33,6 @@ EXRACES = 'M' + RACES       # 'M' is 'MEAN'
 
 # This is a meta class holding information about rating computation
 class CPlayer:
-
     def __init__(self):
         self.prev_rating = dict()       # A dict mapping EXRACES to ratings
         self.prev_dev = dict()          # A dict mapping EXRACES to RDs
@@ -195,14 +194,12 @@ if __name__ == '__main__':
     num_retplayers = 0
     num_newplayers = 0
     for cp in cplayers.values():
-        (newr, newd, compr, compd) = update(cp.get_rating_array(), cp.get_dev_array(),\
-                array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L),\
+        (newr, newd) = update(cp.get_rating_array(), cp.get_dev_array(),
+                array(cp.oppr), array(cp.oppd), array(cp.oppc), array(cp.W), array(cp.L),
                 cp.player.tag, False)
-        #break
+
         cp.new_rating = array_to_dict(newr)
         cp.new_dev = array_to_dict(newd)
-        cp.comp_rating = array_to_dict(compr)
-        cp.comp_dev = array_to_dict(compd)
 
         # Count player as returning or new
         if len(cp.W) > 0 and cp.prev_rating_obj:
@@ -222,9 +219,7 @@ if __name__ == '__main__':
     update_qvals, insert_qvals = [], []
     for cp in cplayers.values():
         tup = (cp.new_rating['M'],  cp.new_rating['P'],  cp.new_rating['T'],  cp.new_rating['Z'],
-               cp.new_dev['M'],     cp.new_dev['P'],     cp.new_dev['T'],     cp.new_dev['Z'],
-               cp.comp_rating['M'], cp.comp_rating['P'], cp.comp_rating['T'], cp.comp_rating['Z'],
-               cp.comp_dev['M'],    cp.comp_dev['P'],    cp.comp_dev['T'],    cp.comp_dev['Z'])
+               cp.new_dev['M'],     cp.new_dev['P'],     cp.new_dev['T'],     cp.new_dev['Z'])
 
         if cp.player.id not in existing:
             to = insert_qvals
@@ -244,22 +239,16 @@ if __name__ == '__main__':
     cursor.executemany('''UPDATE ratings_rating 
                           SET rating=%s,    rating_vp=%s,    rating_vt=%s,    rating_vz=%s,
                               dev=%s,       dev_vp=%s,       dev_vt=%s,       dev_vz=%s,
-                              comp_rat=%s,  comp_rat_vp=%s,  comp_rat_vt=%s,  comp_rat_vz=%s,
-                              comp_dev=%s,  comp_dev_vp=%s,  comp_dev_vt=%s,  comp_dev_vz=%s,
                               decay=%s
                           WHERE player_id=%s AND period_id=%s''', update_qvals)
     cursor.executemany('''INSERT INTO ratings_rating 
                           (rating,     rating_vp,     rating_vt,     rating_vz,
                            dev,        dev_vp,        dev_vt,        dev_vz,
-                           comp_rat,   comp_rat_vp,   comp_rat_vt,   comp_rat_vz,
-                           comp_dev,   comp_dev_vp,   comp_dev_vt,   comp_dev_vz,
                            bf_rating,  bf_rating_vp,  bf_rating_vt,  bf_rating_vz,
                            bf_dev,     bf_dev_vp,     bf_dev_vt,     bf_dev_vz,
                            decay,      player_id,     period_id)
                           VALUES
                           (%s, %s, %s, %s,
-                           %s, %s, %s, %s,
-                           %s, %s, %s, %s,
                            %s, %s, %s, %s,
                            %s, %s, %s, %s,
                            %s, %s, %s, %s,

@@ -41,6 +41,7 @@ def discrepancy():
                           m.rca<>'R' AND m.rcb<>'R' ''')
 
     disc = 0
+    num = 0
     for r in cur.fetchall():
         ra = r[0] + r['PTZ'.index(r[17])+1]
         sa = r[4]**2 + r['PTZ'.index(r[17])+5]**2
@@ -49,8 +50,9 @@ def discrepancy():
 
         p = cdf(ra-rb, scale=sqrt(1+sa+sb))
         disc -= r[18] * log(p) + r[19] * log(1-p)
+        num += 1
 
-    return disc
+    return disc/num
 
 def objfun(x):
     print datetime.datetime.now(), 'Parameters:', x

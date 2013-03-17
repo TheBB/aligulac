@@ -34,27 +34,28 @@ def maximize(L, DL, D2L, x, method=None, disp=False):
 
     # Newton Conjugate Gradient
     if method == None or method == 'ncg':
-        func = lambda x0: opt.fmin_ncg(mL, x0, fprime=mDL, fhess=mD2L, disp=disp, full_output=True, avextol=1e-10)
+        func = lambda x0: opt.fmin_ncg(mL, x0, fprime=mDL, fhess=mD2L, disp=disp, 
+                                       full_output=True, avextol=1e-5)
         xm = check_max(func, x, 5, 'NCG', disp)
         if xm != None:
             return xm
 
     # Broyden-Fletcher-Goldfarb-Shanno
     if method == None or method == 'bfgs':
-        func = lambda x0: opt.fmin_bfgs(mL, x0, fprime=mDL, disp=disp, full_output=True, gtol=1e-10)
+        func = lambda x0: opt.fmin_bfgs(mL, x0, fprime=mDL, disp=disp, full_output=True, gtol=1e-5)
         xm = check_max(func, x, 6, 'BFGS', disp)
         if xm != None:
             return xm
 
     # Powell
     if method == None or method == 'powell':
-        func = lambda x0: opt.fmin_powell(mL, x0, disp=disp, full_output=True, ftol=1e-10)
+        func = lambda x0: opt.fmin_powell(mL, x0, disp=disp, full_output=True, ftol=1e-5)
         xm = check_max(func, x, 5, 'POWELL', disp)
         if xm != None:
             return xm
 
     # Downhill simplex (last resort)
-    func = lambda x0: opt.fmin(mL, x0, disp=disp, full_output=True, ftol=1e-10)
+    func = lambda x0: opt.fmin(mL, x0, disp=disp, full_output=True, ftol=1e-5)
     xm = check_max(func, x, 4, 'DOWNHILL_SIMPLEX', disp)
     return xm
 
@@ -91,10 +92,10 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     # If no games were played, do nothing.
     if len(W) == 0:
-        return(myr, mys, [None] * (Ncats+1), [None] * (Ncats+1))
+        return(myr, mys)
 
     # Add fake games to prevent infinities
-    (oppr, opps, oppc, W, L) = fix_ww(myr, mys, oppr, opps, oppc, W, L)
+    #(oppr, opps, oppc, W, L) = fix_ww(myr, mys, oppr, opps, oppc, W, L)
 
     if pr:
         print text
@@ -164,8 +165,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     def logE(x):
         return sum(log(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2))
 
-    #logF = lambda x: logL(x) + logE(x)
-    logF = lambda x: logL(x)
+    logF = lambda x: logL(x) + logE(x)
 
     # Derivative
     def DlogL(x):
@@ -177,11 +177,10 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     def DlogE(x):
         ret = -2*alpha*tanh(alpha*(extend(x)-myrc)/mysc)/mysc
-        print ret
+        ret = ret[0:-1] - ret[-1]
         return ret
 
-    #DlogF = lambda x: DlogL(x) + DlogE(x)
-    DlogF = lambda x: DlogL(x)
+    DlogF = lambda x: DlogL(x) + DlogE(x)
 
     # Hessian
     def D2logL(x, DM, C):
@@ -198,14 +197,19 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return ret
 
     def D2logE(x):
-        return diag(-2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2)
+        diags = -2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2
+        diags, final = diags[0:-1], diags[-1]
+        return diag(diags) + final
 
-    #D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
-    D2logF = lambda x: D2logL(x,DM,C)
+    def D2logEx(x):
+        diags = -2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2
+        return diag(diags)
+
+    D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
-    x = maximize(logF, DlogF, D2logF, x, method='powell', disp=pr)
+    x = maximize(logF, DlogF, D2logF, x, method=None, disp=pr)
     x = dim(x)
 
     # If maximization failed, return the current rating and print an error message
@@ -214,9 +218,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 
     # Extend to restricted format
-    devs = sqrt(-1/diag(D2logL(x, DMex, C+1)))
-    #devs = -1/diag(D2logL(x, DMex, C+1))
-    devs = maximum(devs, RATINGS_MIN_DEV)
+    D2 = D2logL(x, DMex, C+1) + D2logEx(x)
+    devs = sqrt(-1/diag(D2))
     rats = extend(x)
 
     if pr:
@@ -228,10 +231,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     newr = zeros(len(myr))
 
     ind = [0] + [f+1 for f in played_cats]
-    #news[ind] = devs
-    #newr[ind] = rats
-    news[ind] = 1./sqrt(1./devs**2 + 1./mys[ind]**2)
-    newr[ind] = (rats/devs**2 + myr[ind]/mys[ind]**2) * news[ind]**2
+    news[ind] = devs
+    newr[ind] = rats
 
     if pr:
         print news
@@ -269,17 +270,6 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     if pr:
         print newr
-
-    # Extend the performance ratings to global indices
-    devsex = [None] * (Ncats + 1)
-    ratsex = [None] * (Ncats + 1)
-    devsex[0] = devs[0]
-    ratsex[0] = rats[0]
-    for c in played_cats:
-        devsex[c+1] = devs[played_cats.index(c)+1]
-        ratsex[c+1] = rats[played_cats.index(c)+1]
-
-    if pr:
         print '------------ Finished'
 
-    return (newr, news, ratsex, devsex)
+    return (newr, news)

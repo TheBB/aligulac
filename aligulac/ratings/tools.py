@@ -275,3 +275,251 @@ def get_placements(event):
         except:
             earningdict[earning.earnings] = [earning.placement]
     return earningdict
+
+def add_earnings_regularcup():
+    eventid = 9860    
+    event = Event.objects.get(id=eventid)
+    winners = {'#23':['DIMAGA'], '#22':['Kas'], '#21':['Brat_OK'], '#20':['Happy', 95], '#19':['fraer'], '#18':['Noname'], '#17':['fraer'], '#15':['HappyZerg'], '#14':['Noname'], '#13':['Kas'], '#12':['fraer'], '#11':['Bly'], '#10':['Happy', 95], '#9':['Happy', 95], '#8':['fraer'], '#7':['Happy', 95], '#6':['sLivko'], '#5':['Happy', 95], '#4':['fraer'], '#3':['Happy', 95], '#2':['Verdi'], '#1':['Bly']}
+    prize = 100
+    currency = "USD"
+    
+    for ievent in event.get_children(type="event"):
+        player = Player.objects.filter(tag=winners[ievent.name][0])
+        if len(player) != 1:
+            player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+
+def add_earnings_zotacNA():
+    eventid = 3083    
+    event = Event.objects.get(id=eventid)
+    winners = {'#83':['Sage'], '#82':['Arthur'], '#81':['MaSa'], '#80':['Vasilisk'], '#79':['MaSsan'], '#78':['Dreamertt'], '#77':['HyuN'], '#76':['HyuN'], '#75':['Crane'], '#74':['StarDust'], '#73':['Tree'], '#72':['Revival'], '#71':['dde'], '#70':['Tree'], '#69':['inori'], '#68':['inori'], '#67':['aLive'], '#66':['Crane'], '#65':['dde'], '#64':['Min'], '#63':['Symbol'], '#62':['HyuN'], '#61':['HyuN'], '#60':['Revival'], '#59':['HyuN'], '#58':['HyuN'], '#57':['ByuN'], '#56':['Polt'], '#55':['Daisy'], '#54':['HyuN'], '#53':['HyuN'], '#52':['HyuN'], '#51':['Revival'], '#50':['HyuN'], '#49':['dreamertt'], '#48':['Mentalist'], '#47':['ByuN'], '#46':['inori'], '#45':['Revival'], '#44':['ByuN'], '#43':['Crane'], '#42':['Sleep'], '#41':['Revival'], '#40':['Crane'], '#39':['Sleep'], '#38':['Shine', 62], '#37':['Crane'], '#36':['Golden'], '#35':['Lucky'], '#34':['horror', 277], '#33':['KiLLeR', 169], '#32':['Tree'], '#31':['Lucky'], '#30':['ReaL'], '#29':['Sleep'], '#28':['ByuN'], '#27':['Sleep'], '#26':['Sleep'], '#25':['Monster', 30], '#24':['AnNyeong'], '#23':['CrazymoviNG'], '#22':['Skit'], '#21':['Terius'], '#20':['Galaxy', 205], '#19':['Deezer'], '#18':['dde'], '#17':['Gatored'], '#16':['PeGaSuS'], '#15':['Revival'], '#14':['HwangSin'], '#13':['sC'], '#12':['sC'], '#11':['MajOr'], '#10':['Check'], '#9':['HwangSin'], '#8':['LastShadow'], '#7':['Fenix'], '#6':['Gatored'], '#5':['Gatored'], '#4':['GoOdy'], '#3':['GoOdy'], '#2':['LastShadow'], '#1':['Drewbie']}
+    prize = 100
+    currency = "USD"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            break
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print players
+        print earnings
+        print ievent
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+        
+def add_earnings_zotacEU():
+    eventid = 596    
+    event = Event.objects.get(id=eventid)
+    winners = {'#138':['LiveZerg'],'#137':['fraer'],'#136':['Welmu'],'#135':['LiveZerg'],'#134':['ReaL'],'#133':['roof'],'#132':['Bly'],'#131':['Nerchio'],'#130':['Acro'],'#129':['MilkEA'],'#128':['Happy', 95],'#127':['LoWeLy'],'#126':['LoWeLy'],'#125':['fraer'],'#124':['Welmu'],'#123':['sLivko'],'#122':['Revival'],'#121':['Nerchio'],'#120':['LiveZerg'],'#119':['ReaL'],'#118':['roof'],'#117':['VortiX'],'#116':['Nerchio'],'#115':['TitaN', 60],'#114':['Kas'],'#113':['elfi'],'#112':['Bly'],'#111':['Revival'],'#110':['Revival'],'#109':['elfi'],'#108':['Bly'],'#107':['Nerchio'],'#106':['fraer'],'#105':['Bly'],'#104':['Welmu'],'#103':['Sleep'],'#102':['VortiX'],'#101':['LiveZerg'],'#100':['LiveZerg'],'#99':['Nerchio'],'#98':['fraer'],'#97':['Bly'],'#96':['Bly'],'#95':['fraer'],'#94':['sLivko'],'#93':['Happy', 95],'#92':['Happy', 95],'#91':['monchi'],'#90':['Krr'],'#89':['NoXOuT'],'#88':['Bly'],'#87':['GoOdy'],'#86':['sLivko'],'#85':['Beastyqt'],'#84':['roof'],'#83':['GoOdy'],'#82':['TAiLS', 112],'#81':['CoolTea'],'#80':['Nerchio'],'#79':['GoOdy'],'#78':['SLiDeR'],'#77':['Deezer'],'#76':['Nerchio'],'#75':['GoOdy'],'#74':['DarKFoRcE'],'#73':['roof'],'#72':['Nerchio'],'#71':['GoOdy'],'#70':['Satiini'],'#69':['LucifroN'],'#68':['Satiini'],'#67':['Tarson'],'#66':['Satiini'],'#65':['roof'],'#64':['Beastyqt'],'#63':['Nerchio'],'#62':['Nerchio'],'#61':['Nerchio'],'#60':['GoOdy'],'#59':['Nerchio'],'#58':['Nerchio'],'#57':['Strelok'],'#56':['DIMAGA'],'#55':['elfi'],'#54':['elfi'],'#53':['LoWeLy'],'#52':['Satiini'],'#51':['GoOdy'],'#50':['Tarson'],'#49':['Jimpo'],'#48':['GoOdy'],'#47':['Strelok'],'#46':['VortiX'],'#45':['elfi'],'#44':['Strelok'],'#43':['GoOdy'],'#42':['Tefel'],'#41':['elfi'],'#40':['AureS'],'#39':['elfi'],'#38':['Nerchio'],'#37':['Strelok'],'#36':['NaNiwa'],'#35':['Strelok'],'#34':['Strelok'],'#33':['Satiini'],'#32':['NaNiwa'],'#31':['Control'],'#30':['GoOdy'],'#29':['Kas'],'#28':['Kas'],'#27':['DIMAGA'],'#26':['LucifroN'],'#25':['DIMAGA'],'#24':['PredY'],'#23':['LucifroN'],'#22':['Strelok'],'#21':['SeleCT'],'#20':['Kas'],'#19':['SjoW'],'#18':['MorroW'],'#17':['SjoW']}
+    prize = 100
+    currency = "EUR"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            continue
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print players
+        print earnings
+        print ievent
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+
+def add_earnings_tlopen():
+    eventid = 10912    
+    event = Event.objects.get(id=eventid)
+    prizes = [100, 50, 25, 25]
+    currency = "USD"
+    first, second, third, fourth = '', '', '', ''
+    
+    for ievent in event.get_children(type="event"):
+        if ievent.name != "#1":
+            for childievent in ievent.get_children():
+                if childievent.name == "Final":
+                    matches = Match.objects.filter(eventobj=childievent)
+                    final = matches[0]
+                    if final.sca > final.scb:
+                        first = final.pla
+                        second = final.plb
+                    else:
+                        first = final.plb
+                        second = final.pla
+                if childievent.name == "Ro4":
+                    matches = Match.objects.filter(eventobj=childievent)
+                    sfinal1 = matches[0]
+                    sfinal2 = matches[1]
+                    if sfinal1.sca > sfinal1.scb:
+                        third = sfinal1.plb
+                    else:
+                        third = sfinal1.pla
+                    if sfinal2.sca > sfinal2.scb:
+                        fourth = sfinal2.plb
+                    else:
+                        fourth = sfinal2.pla
+        
+            players = [first, second, third, fourth]
+            placements = [0, 1, 2, 3]
+            print ievent
+            print players
+            print prizes
+        
+            Earnings.set_earnings(ievent, players, prizes, currency, placements)
+            print "yay!"
+
+def add_earnings_craftcupUS():
+    eventid = 7149    
+    event = Event.objects.get(id=eventid)
+    winners = {'#1':['qxc'],'#2':['Fenix'],'#3':['MurDeR'],'#4':['Ryze'],'#5':['Socke'],'#6':['DdoRo'],'#7':['Greatman'],'#8':['mihai'],'#9':['Levin'],'#10':['Fan'],'#11':['Killer', 169],'#12':['Skillet'],'#13':['DdoRo'],'#14':['OpTiKzErO'],'#15':['Spades'],'#16':['Rigid'],'#17':['mkengyn'],'#18':['BigBadBeaver'],'#19':['OpTiKzErO'],'#20':['ThisIsJimmy'],'#21':['PhiliBiRD'],'#22':['OpTiKzErO'],'#23':['Attero'],'#24':['GoOdy'],'#25':['NGry'],'#26':['GoOdy'],'#27':['Grubby'],'#28':['owmygroin'],'#29':['Bio'],'#30':['DarkDreaMs'],'#31':['SungpA'],'#32':['MarinekngXPn'],'#33':['MeYera'],'#34':['Blast'],'#35':['KWest'],'#36':['sYz'],'#37':['RaNgeD'],'#38':['OnlyToss'],'#39':['nukestrike'],'#40':['Forbs'],'#41':['gun'],'#42':['gun'],'#43':['gun'],'#44':['Glon'],'#45':['Gun'],'#46':['Seiplo'],'#47':['Seiplo'],'#48':['dde'],'#49':['dde'],'#50':['TriMaster'],'#51':['dde']}
+    prize = 20
+    currency = "USD"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            break
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print ievent
+        print players
+        print earnings
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+
+
+def add_earnings_competocup():
+    eventid = 10188    
+    event = Event.objects.get(id=eventid)
+    winners = {'#47':['Orly'],'#46':['sYz'],'#45':['Beastyqt'],'#44':['elfi'],'#43':['elfi'],'#42':['Rikytan'],'#41':['Naama'],'#40':['GoOdy'],'#39':['Beastyqt'],'#38':['Beastyqt'],'#37':['Happy', 40],'#36':['DeathAngel'],'#35':['Happy', 40],'#34':['Tarson'],'#33':['Bly'],'#32':['Seiplo'],'#31':['Beastyqt'],'#30':['Elfi'],'#29':['Elfi'],'#28':['SKy', 584],'#27':['MorroW'],'#26':['Kas'],'#25':['GoOdy'],'#24':['iNSoLeNCE'],'#23':['Elfi'],'#22':['Kas'],'#21':['DieStar'],'#20':['GoOdy'],'#19':['Kas'],'#18':['iNSoLeNCE'],'#17':['Jimpo'],'#16':['eNvious'],'#15':['eNvious'],'#14':['Damnosaurus'],'#13':['Naama'],'#12':['Kas'],'#11':['Tefel'],'#10':['Bly'],'#9':['NightEnD'],'#7':['SeleCT'],'#6':['MorroW'],'#5':['Kas'],'#4':['ClouD', 227],'#3':['Sein'],'#2':['SjoW'],'#1':['GoOdy']}
+    prize = 50
+    currency = "EUR"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            continue
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print ievent
+        print players
+        print earnings
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+
+def add_earnings_go4sc2_1():
+    eventid = 11351
+    event = Event.objects.get(id=eventid)
+    winners = {'#3':['Mardow'],'#5':['White-Ra'],'#7':['TLO'],'#9':['DeMusliM'],'#11':['TLO'],'#13':['Brat_OK'],'#15':['HuK'],'#19':['MorroW'],'#21':['Tarson'],'#23':['Strelok']}
+    prize = 100
+    currency = "EUR"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            continue
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print ievent
+        print players
+        print earnings
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"
+
+def add_earnings_go4sc2_2():
+    eventid = 11351
+    event = Event.objects.get(id=eventid)
+    winners = {'#25':['NaNiwa'],'#27':['White-Ra'],'#29':['DIMAGA'],'#31':['Naama'],'#33':['NaNiwa'],'#35':['MaNa'],'#37':['MaNa'],'#39':['Tarson'],'#41':['Socke'],'#43':['Naama'],'#45':['Brat_OK'],'#47':['GoOdy'],'#49':['DarKFoRcE'],'#51':['SjoW'],'#53':['cloud',227],'#55':['Tarson'],'#57':['SjoW'],'#59':['Brat_OK'],'#60':['Kas'],'#62':['Krolu'],'#64':['Control'],'#66':['Adelscott'],'#68':['NaNiwa'],'#69':['Satiini'],'#71':['Strelok'],'#73':['GoOdy'],'#75':['DIMAGA'],'#77':['SjoW'],'#79':['MorroW'],'#81':['cloud',227],'#83':['DIMAGA'],'#85':['Kas'],'#88':['GoOdy'],'#90':['Kas'],'#92':['Stephano'],'#94':['DarKFoRcE'],'#96':['Stephano'],'#98':['Stephano'],'#100':['Happy',95],'#103':['LaLuSh'],'#105':['Strelok'],'#107':['LoWeLy'],'#109':['DeathAngel'],'#112':['Adelscott'],'#114':['sLivko'],'#116':['Happy',95],'#121':['Stephano'],'#123':['GoOdy'],'#125':['LaLuSh'],'#129':['DarKFoRcE'],'#132':['MaNa'],'#134':['MaNa'],'#136':['Eeel'],'#138':['VortiX'],'#140':['Beastyqt'],'#142':['ReaL'],'#144':['Kas'],'#146':['Beastyqt'],'#148':['Nerchio'],'#150':['DarkHydra'],'#152':['Beastyqt'],'#154':['Aristeo'],'#157':['Tefel'],'#159':['MaNa'],'#163':['Aristeo'],'#165':['SjoW'],'#167':['Beastyqt'],'#169':['DBS'],'#171':['LoWeLy'],'#173':['titan',60],'#176':['Nerchio'],'#178':['Nerchio'],'#180':['LiveZerg'],'#182':['titan',60],'#184':['LiveZerg'],'#186':['Nerchio'],'#189':['Tefel'],'#191':['BsK'],'#194':['HyuN'],'#196':['DIMAGA'],'#198':['titan',60],'#203':['sYz'],'#205':['HyuN'],'#207':['Nerchio'],'#211':['HyuN'],'#213':['MaNa'],'#215':['Bly'],'#217':['Revival'],'#219':['LiveZerg'],'#222':['HyuN'],'#224':['HyuN'],'#226':['Nerchio'],'#228':['HyuN'],'#230':['Nerchio'],'#232':['Nerchio'],'#234':['HyuN'],'#236':['Nerchio'],'#238':['ShoWTimE',2170],'#240':['Romson'],'#241':['Snute'],'#243':['Nerchio'],'#246':['Turuk'],'#248':['Nimitz'],'#250':['titan',60],'#252':['Snute'],'#254':['Delphi'],'#255':['Bly'],'#257':['Harstem'],'#259':['Giantt'],'#261':['Zazu']}
+    prize = 200
+    currency = "EUR"
+    
+    for ievent in event.get_children(type="event"):
+        try:
+            player = Player.objects.filter(tag=winners[ievent.name][0])
+        except:
+            continue
+        if len(player) != 1:
+            try:
+                player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
+            except:
+                print player
+                print winners[ievent.name][0]
+                print ievent
+        player = player[0]
+        
+        players = [player]
+        earnings = [prize]
+        placements = [0]
+        print ievent
+        print players
+        print earnings
+        
+        Earnings.set_earnings(ievent, players, earnings, currency, placements)
+        print "yay!"

@@ -581,6 +581,15 @@ def events(request, event_id=None):
             if request.POST['homepage'] != event.get_homepage():
                 event.set_homepage(request.POST['homepage'])
 
+            if request.POST['tlpd_in_id'] != event.get_tlpd_in_id():
+                event.set_tlpd_in_id(request.POST['tlpd_in_id'])
+
+            if request.POST['tlpd_kr_id'] != event.get_tlpd_kr_id():
+                event.set_tlpd_kr_id(request.POST['tlpd_kr_id'])
+
+            if request.POST['tl_thread'] != event.get_tl_thread():
+                event.set_tl_thread(request.POST['tl_thread'])
+
             if request.POST['lp_name'] != event.get_lp_name():
                 event.set_lp_name(request.POST['lp_name'])
                         
@@ -680,6 +689,12 @@ def events(request, event_id=None):
         
     if event.get_homepage():
         base['homepage'] = event.get_homepage()
+    if event.get_tlpd_in_id():
+        base['tlpd_in_id'] = event.get_tlpd_in_id()
+    if event.get_tlpd_kr_id():
+        base['tlpd_kr_id'] = event.get_tlpd_kr_id()
+    if event.get_tl_thread():
+        base['tl_thread'] = event.get_tl_thread()
     if event.get_lp_name():
         base['lp_name'] = event.get_lp_name()
 

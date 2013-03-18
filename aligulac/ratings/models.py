@@ -37,6 +37,9 @@ class Event(models.Model):
     fullname = models.CharField(max_length=500, default='')
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
+    tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
+    tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
+    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -104,6 +107,38 @@ class Event(models.Model):
                             .order_by('-lft').values('lp_name')[0]['lp_name']
             except:
                 return None
+
+    def get_tlpd_in_id(self):
+        if self.tlpd_in_id:
+            return self.tlpd_in_id
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tlpd_in_id__isnull=False)\
+                            .order_by('-lft').values('tlpd_in_id')[0]['tlpd_in_id']
+                print "whee"
+            except:
+                print "boo"
+                return None
+
+    def get_tlpd_kr_id(self):
+        if self.tlpd_kr_id:
+            return self.tlpd_kr_id
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tlpd_kr_id__isnull=False)\
+                            .order_by('-lft').values('tlpd_kr_id')[0]['tlpd_kr_id']
+            except:
+                return None
+
+    def get_tl_thread(self):
+        if self.tl_thread:
+            return self.tl_thread
+        else:
+            try:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tl_thread__isnull=False)\
+                            .order_by('-lft').values('tl_thread')[0]['tl_thread']
+            except:
+                return None
             
     #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def get_earliest(self):
@@ -150,6 +185,27 @@ class Event(models.Model):
     
     def set_lp_name(self, lp_name):
         self.lp_name = lp_name
+        self.save()
+
+    def set_tlpd_kr_id(self, tlpd_kr_id):
+        if tlpd_kr_id == '':
+            self.tlpd_kr_id = None
+        else:
+            self.tlpd_kr_id = tlpd_kr_id
+        self.save()
+
+    def set_tlpd_in_id(self, tlpd_in_id):
+        if tlpd_in_id == '':
+            self.tlpd_in_id = None
+        else:
+            self.tlpd_in_id = tlpd_in_id
+        self.save()
+
+    def set_tl_thread(self, tl_thread):
+        if tl_thread == '':
+            self.tl_thread = None
+        else:
+            self.tl_thread = tl_thread
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):

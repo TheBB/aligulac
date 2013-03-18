@@ -168,6 +168,15 @@ ratings.views.events.
                     {% if homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
+                    {% if tlpd_kr_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpd_kr_id }}" target="_blank">TLPD</a>
+                    {% endif %}
+                    {% if tlpd_in_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpd_in_id }}" target="_blank">TLPD</a>
+                    {% endif %}
+                    {% if tl_thread %}
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ tl_thread }}" target="_blank">TL</a>
+                    {% endif %}
                     {% if lp_name %}
                     <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
                     {% endif %}
@@ -180,7 +189,19 @@ ratings.views.events.
                     <div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">Liquipedia</div>
+                    <div class="rowel">TLPD Korea</div>
+                    <div class="rower"><input type="text" name="tlpd_kr_id" {% if tlpd_kr_id %}value="{{ tlpd_kr_id }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">TLPD Int.</div>
+                    <div class="rower"><input type="text" name="tlpd_in_id" {% if tlpd_in_id %}value="{{ tlpd_in_id }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Teamliquid.net thread ID</div>
+                    <div class="rower"><input type="text" name="tl_thread" {% if tl_thread %}value="{{ tl_thread }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Liquipedia title</div>
                     <div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">

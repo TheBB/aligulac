@@ -684,20 +684,6 @@ def events(request, event_id=None):
         currencies.append(dict)
     base['currencies'] = currencies
     
-    if event.type:
-        base['eventtype'] = event.type
-        
-    if event.get_homepage():
-        base['homepage'] = event.get_homepage()
-    if event.get_tlpd_in_id():
-        base['tlpd_in_id'] = event.get_tlpd_in_id()
-    if event.get_tlpd_kr_id():
-        base['tlpd_kr_id'] = event.get_tlpd_kr_id()
-    if event.get_tl_thread():
-        base['tl_thread'] = event.get_tl_thread()
-    if event.get_lp_name():
-        base['lp_name'] = event.get_lp_name()
-
     base['offline'] = None
     if matches.values("offline").distinct().count() == 1:
         base['offline'] = matches[0].offline
@@ -728,17 +714,8 @@ def events(request, event_id=None):
     base['tvz_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
 
     # Dates
-    try:
-        base['earliest'] = matches.order_by('date')[0].date
-        base['latest'] = matches.order_by('-date')[0].date
-    except:
-        pass
-
-    # This is too slow. What to do?
-    # base['nplayers'] = Player.objects.filter(
-    #         Q(match_pla__eventobj__lft__gte=event.lft, match_pla__eventobj__rgt__lte=event.rgt)\
-    #       | Q(match_plb__eventobj__lft__gte=event.lft, match_plb__eventobj__rgt__lte=event.rgt))\
-    #         .distinct().count()
+    base['earliest'] = event.get_earliest()
+    base['latest'] = event.get_latest()
 
     matches = matches.order_by('-date', '-eventobj__lft', '-id')[0:200]
     base['matches'] = display_matches(matches)

@@ -107,21 +107,19 @@ ratings.views.events.
             </div>
             {% endif %}
             {% if adm %}
-                {% if eventtype %}
                 <div class="row infobox">
                     <div class="rowel">Type</div>
-                    <div class="rower">{{ eventtype|capfirst }}</div>
+                    <div class="rower">{{ event.type|capfirst }}</div>
                 </div>
-                {% endif %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Type</div>
                     <div class="rower">
                     <select name="type" id="type">
-                        <option value="nochange" {% if not eventtype %}selected{% endif %}>No change</option>
-                        <option value="category" {% if eventtype == "category" %}selected{% endif %}/>Category</option>
-                        <option value="event" {% if eventtype == "event" %}selected{% endif %}/>Event</option>
+                        <option value="nochange" {% if not event.type %}selected{% endif %}>No change</option>
+                        <option value="category" {% if event.type == "category" %}selected{% endif %}/>Category</option>
+                        <option value="event" {% if event.type == "event" %}selected{% endif %}/>Event</option>
                         {% if event.parent %}
-                        	<option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
+                        	<option value="round" {% if event.type == "round" %}selected{% endif %}/>Round</option>
                         {% endif %}
                     </select>
                     </div>
@@ -135,6 +133,10 @@ ratings.views.events.
                     </div>
                 </div>
             {% endif %}
+            <div class="row">
+                <div class="rowel">Players</div>
+                <div class="rower">{{ players|length }}</div>
+            </div>
             <div class="row">
                 <div class="rowel">Games</div>
                 <div class="rower">{{ ngames }}</div>
@@ -161,24 +163,24 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
-            {% if homepage or lp_name %}
+            {% if event.get_homepage or event.get_tlpd_kr_id or event.get_tlpd_in_id or event.get_tl_thread or event.get_lp_name %}
             <div class="row infobox">
                 <div class="rowel">External</div>
                 <div class="rower">
-                    {% if homepage %}
+                    {% if event.get_homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
-                    {% if tlpd_kr_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpd_kr_id }}" target="_blank">TLPD</a>
+                    {% if event.get_tlpd_kr_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
                     {% endif %}
-                    {% if tlpd_in_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpd_in_id }}" target="_blank">TLPD</a>
+                    {% if event.get_tlpd_in_id %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
                     {% endif %}
                     {% if tl_thread %}
-                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ tl_thread }}" target="_blank">TL</a>
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                     {% endif %}
-                    {% if lp_name %}
-                    <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
+                    {% if event.get_lp_name %}
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
                     {% endif %}
                 </div>
             </div>
@@ -186,23 +188,23 @@ ratings.views.events.
             {% if adm %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Homepage</div>
-                    <div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="homepage" {% if event.get_homepage %}value="{{ event.get_homepage }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Korea</div>
-                    <div class="rower"><input type="text" name="tlpd_kr_id" {% if tlpd_kr_id %}value="{{ tlpd_kr_id }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="tlpd_kr_id" {% if event.get_tlpd_kr_id %}value="{{ event.get_tlpd_kr_id }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Int.</div>
-                    <div class="rower"><input type="text" name="tlpd_in_id" {% if tlpd_in_id %}value="{{ tlpd_in_id }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="tlpd_in_id" {% if event.get_tlpd_in_id %}value="{{ event.get_tlpd_in_id }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Teamliquid.net thread ID</div>
-                    <div class="rower"><input type="text" name="tl_thread" {% if tl_thread %}value="{{ tl_thread }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="tl_thread" {% if event.get_tl_thread %}value="{{ event.get_tl_thread }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Liquipedia title</div>
-                    <div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="lp_name" {% if event.get_lp_name %}value="{{ event.get_lp_name }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel"></div>

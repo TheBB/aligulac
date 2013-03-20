@@ -10,9 +10,203 @@ ratings.views.events.
 {% block title %}{{ event }}{% endblock %}
 
 {% block content %}
+{% if adm %}
+    <script>
+
+    function log(msg) {
+        setTimeout(function() {
+            throw new Error(msg);
+        }, 0);
+    }
+
+    function addprizepool()
+    {
+        var prizepoolbutton = document.getElementById('prizepoolbutton');
+        var createtable = document.getElementById('createtable');
+        
+        prizepoolbutton.style.display = 'none';
+        createtable.style.display = 'inline';
+    }
+    
+    function addfocus(cell)
+    {
+        var row = cell.parentNode.parentNode;
+        row.className = "nonheader row2";
+    }
+    function losefocus(cell)
+    {
+        var row = cell.parentNode.parentNode;
+        row.className = "nonheader row1";
+    }
+
+	/*function selectcurrency() {
+		var currency = document.getElementById("currency");
+        var currencyvalue = currency.options[currency.selectedIndex].value;
+        log(currencyvalue);
+	}*/
+
+    function createtable(clicked_id)
+    {
+        var prizepoolbutton = document.getElementById('prizepoolbutton');
+        var table = document.getElementById('table');
+        
+        {% if earnings %}
+            var amount = {{ earnings.count }}
+        {% endif %}
+        if (clicked_id == 'changeplayers')
+        {
+            var amount = document.getElementById('numberplayers').value
+        }
+    
+        if (table.rows.length > 2)
+        {
+            for(var i = table.rows.length-1; i > 1; i--)
+            {
+                table.deleteRow(i);
+            }
+        }
+    
+        for(var i = 0; i < amount; i++)
+        {
+            var placement = i+1;
+            var earning = '';
+            var earningsplayer = '';
+            
+            {% if earnings %}
+                {% for earning in earnings %}
+                    if (placement == {{ earning.placement }})
+                    {
+                        earning = "{{ earning.origearnings }}";
+                        earningsplayer = "{{ earning.player.id }}";
+                    }
+                {% endfor %}
+            {% endif %}
+            
+            var select = document.createElement("select");
+            select.setAttribute("name", "player-" + i);
+            select.setAttribute("id", "player-" + i);
+            select.setAttribute("onfocus", "addfocus(this)");
+            select.setAttribute("onblur", "losefocus(this)"); 
+            
+            {% for player in players %}
+                var eventplayer = "{{ player.id }}"
+                
+                var option = document.createElement("option");
+                option.setAttribute("value", "{{ player.id }}");
+                option.innerHTML = "{{ player.tag }}";
+                select.appendChild(option);
+                
+                if (earningsplayer == eventplayer)
+                {
+                    select.selectedIndex = {{ forloop.counter0 }};
+                }
+            {% endfor %}                        
+            
+            var row = table.insertRow(-1);
+            row.className = "nonheader row1"
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = placement
+            cell2.appendChild(select);
+            var selectbox = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="8" />'
+            cell3.innerHTML = selectbox
+        }
+        
+        var row = table.insertRow(-1);
+        row.className = 'nonheader row2';
+        // why doesn't this work?
+        // row.colSpan = '3';
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell3.align = 'right';
+        cell3.innerHTML = '<input type="hidden" name="amount" value="' + amount + '" /><input type="submit" name="earnings" value="Add" />'
+
+        prizepoolbutton.style.display = 'none';
+        table.style.display = 'table';
+    }
+    
+    function validate()
+    {
+        function eliminateDuplicates(arr)
+        {
+            var i,
+            len=arr.length,
+            out=[],
+            obj={};
+
+            for (i=0;i<len;i++)
+            {
+                obj[arr[i]]=0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+        
+        var form = document.forms.prizepool;
+        var length = form.numberplayers.selectedIndex;
+        var players = new Array();
+        
+        for(var i = 0; i < length+1; i++)
+        {
+            var amount = form['amount-' + i].value;
+            amount = amount.replace(/[\., ]*/g, '');
+            
+            players.push(form['player-' + i].value);
+            var placement = i+1;
+            var regex = /[^0-9]+/g;
+            if (amount == '')
+            {
+                alert('Please add a value for Player ' + placement);
+                return false;
+            }
+            if (regex.test(amount))
+            {
+                alert('Cannot parse value for Player ' + placement);
+                return false;
+            }
+
+        }
+        
+        var nodupes = eliminateDuplicates(players);
+        if (nodupes.length != players.length)
+        {
+            alert('Duplicated player detected.');
+            return false;
+        }
+        
+        return true;
+    }
+
+    function validate_infobox()
+    {
+    	var prizepoolselect = document.getElementById('prizepoolselect')
+    	var prizepool = prizepoolselect.options[prizepoolselect.selectedIndex].value;
+    	var hasprizepool = '{{ prizepoolorig }}'
+    	if (prizepool == 'no' && hasprizepool != 'None')
+    	{
+    		var answer = confirm("This event has a prize pool. Are you sure you want to delete it?");
+    		if (answer)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    </script>
+{% endif %}
+
     <h2>{{ event }}</h2>
 
-    <form method="post" action="/results/events/{{ event.id }}/">
+    <form method="post" action="/results/events/{{ event.id }}/" onsubmit="return validate_infobox();">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
@@ -100,13 +294,23 @@ ratings.views.events.
                 </div>
             {% endif %}
             {% if prizepoolorig %}
-            <div class="row">
+            <div class="row infobox">
                 <div class="rowel">Prize pool</div>
                 <div class="rower">{{ prizepoolorig|add_sep_and_cur:prizepoolcur }} 
                 {% if prizepoolcur != "USD" %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
             </div>
             {% endif %}
             {% if adm %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Prize pool?</div>
+                    <div class="rower">
+                    <select name="prizepoolselect" id="prizepoolselect">
+                        <option value="unknown" {% if not event.prizepool|is_false %}selected{% endif %}>Select</option>
+                        <option value="yes" {% if event.prizepool %}selected{% endif %}>Yes</option>
+                        <option value="no" {% if event.prizepool|is_false %}selected{% endif %}/>No</option>
+                    </select>
+                    </div>
+                </div>
                 <div class="row infobox">
                     <div class="rowel">Type</div>
                     <div class="rower">{{ event.type|capfirst }}</div>
@@ -284,182 +488,10 @@ ratings.views.events.
         {{ message }}
     {% endif %}
 
-    {% if adm %}
-    <script>
-
-    function log(msg) {
-        setTimeout(function() {
-            throw new Error(msg);
-        }, 0);
-    }
-
-    function addprizepool()
-    {
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
-        var createtable = document.getElementById('createtable');
-        
-        prizepoolbutton.style.display = 'none';
-        createtable.style.display = 'inline';
-    }
-    
-    function addfocus(cell)
-    {
-        var row = cell.parentNode.parentNode;
-        row.className = "nonheader row2";
-    }
-    function losefocus(cell)
-    {
-        var row = cell.parentNode.parentNode;
-        row.className = "nonheader row1";
-    }
-
-	/*function selectcurrency() {
-		var currency = document.getElementById("currency");
-        var currencyvalue = currency.options[currency.selectedIndex].value;
-        log(currencyvalue);
-	}*/
-
-    function createtable(clicked_id)
-    {
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
-        var table = document.getElementById('table');
-        
-        {% if earnings %}
-            var amount = {{ earnings.count }}
-        {% endif %}
-        if (clicked_id == 'changeplayers')
-        {
-            var amount = document.getElementById('numberplayers').value
-        }
-    
-        if (table.rows.length > 2)
-        {
-            for(var i = table.rows.length-1; i > 1; i--)
-            {
-                table.deleteRow(i);
-            }
-        }
-    
-        for(var i = 0; i < amount; i++)
-        {
-            var placement = i+1;
-            var earning = '';
-            var earningsplayer = '';
-            
-            {% if earnings %}
-                {% for earning in earnings %}
-                    if (placement == {{ earning.placement }})
-                    {
-                        earning = "{{ earning.origearnings }}";
-                        earningsplayer = "{{ earning.player.id }}";
-                    }
-                {% endfor %}
-            {% endif %}
-            
-            var select = document.createElement("select");
-            select.setAttribute("name", "player-" + i);
-            select.setAttribute("id", "player-" + i);
-            select.setAttribute("onfocus", "addfocus(this)");
-            select.setAttribute("onblur", "losefocus(this)"); 
-            
-            {% for player in players %}
-                var eventplayer = "{{ player.id }}"
-                
-                var option = document.createElement("option");
-                option.setAttribute("value", "{{ player.id }}");
-                option.innerHTML = "{{ player.tag }}";
-                select.appendChild(option);
-                
-                if (earningsplayer == eventplayer)
-                {
-                    select.selectedIndex = {{ forloop.counter0 }};
-                }
-            {% endfor %}                        
-            
-            var row = table.insertRow(-1);
-            row.className = "nonheader row1"
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            cell1.innerHTML = placement
-            cell2.appendChild(select);
-            var selectbox = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="8" />'
-            cell3.innerHTML = selectbox
-        }
-        
-        var row = table.insertRow(-1);
-        row.className = 'nonheader row2';
-        // why doesn't this work?
-        // row.colSpan = '3';
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        cell3.align = 'right';
-        cell3.innerHTML = '<input type="hidden" name="amount" value="' + amount + '" /><input type="submit" name="earnings" value="Add" />'
-
-        prizepoolbutton.style.display = 'none';
-        table.style.display = 'table';
-    }
-    
-    function validate()
-    {
-        function eliminateDuplicates(arr)
-        {
-            var i,
-            len=arr.length,
-            out=[],
-            obj={};
-
-            for (i=0;i<len;i++)
-            {
-                obj[arr[i]]=0;
-            }
-            for (i in obj) {
-                out.push(i);
-            }
-            return out;
-        }
-        
-        var form = document.forms.prizepool;
-        var length = form.numberplayers.selectedIndex;
-        var players = new Array();
-        
-        for(var i = 0; i < length+1; i++)
-        {
-            var amount = form['amount-' + i].value;
-            amount = amount.replace(/[\., ]*/g, '');
-            
-            players.push(form['player-' + i].value);
-            var placement = i+1;
-            var regex = /[^0-9]+/g;
-            if (amount == '')
-            {
-                alert('Please add a value for Player ' + placement);
-                return false;
-            }
-            if (regex.test(amount))
-            {
-                alert('Cannot parse value for Player ' + placement);
-                return false;
-            }
-
-        }
-        
-        var nodupes = eliminateDuplicates(players);
-        if (nodupes.length != players.length)
-        {
-            alert('Duplicated player detected.');
-            return false
-        }
-        
-        return true;
-    }
-    </script>
-    
+    {% if adm %}    
     <form method="post" name="prizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate()">
     {% csrf_token %}
-
-    {% if event.type == 'event' %}
+    {% if event.type == 'event' and not event.prizepool|is_false %}
         {% if earnings %}
             <input type="button" id="prizepoolbutton" onclick="addprizepool(); createtable(this.id); return false;" value="Change prize pool"/>
         {% else %}
@@ -479,7 +511,7 @@ ratings.views.events.
                 </option>
             {% endfor %}
         </select>
-        <input type="button" id ="changeplayers" onclick="createtable(this.id); return false;" value="Set"/>
+        <input type="button" id="changeplayers" onclick="createtable(this.id); return false;" value="Set"/>
     </span>
     <table id="table"  class="results prizepool" style="display: none;">
         <tr class="header">

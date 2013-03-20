@@ -40,6 +40,7 @@ class Event(models.Model):
     tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
     tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+    prizepool = models.NullBooleanField(blank=True, null=True)
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -115,9 +116,7 @@ class Event(models.Model):
             try:
                 return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tlpd_in_id__isnull=False)\
                             .order_by('-lft').values('tlpd_in_id')[0]['tlpd_in_id']
-                print "whee"
             except:
-                print "boo"
                 return None
 
     def get_tlpd_kr_id(self):
@@ -585,7 +584,7 @@ class Earnings(models.Model):
                 for earning in earningobj:        
                     earning.earnings = round(exchangerates.convert(earning.origearnings, currency))
                     earning.save()
-    
+   
     def __unicode__(self):
         return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)
     

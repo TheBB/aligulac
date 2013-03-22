@@ -595,9 +595,9 @@ def events(request, event_id=None):
             
             if request.POST['prizepoolselect'] != 'unknown':
                 if request.POST['prizepoolselect'] == 'yes':
-                    event.prizepool = True
+                    event.set_prizepool(True)
                 else:
-                    event.prizepool = False
+                    event.set_prizepool(False)
                     Earnings.objects.filter(event=event).delete()
                 
                         
@@ -643,8 +643,6 @@ def events(request, event_id=None):
                 placements.append(i)
             
             success = Earnings.set_earnings(event, players, amounts, currency, placements)
-            
-            event.prizepool = True
             
             if success:
                 base['message'] = 'Updated tournament prizepool.'
@@ -837,7 +835,7 @@ def earnings(request):
     except:
         page = 1
 
-    ranking = Earnings.objects.values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings')
+    ranking = Earnings.objects.values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings', 'player')
     players = Player.objects.all()
     
     totalprizepool = Earnings.objects.aggregate(Sum('earnings'))['earnings__sum']

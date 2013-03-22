@@ -380,7 +380,7 @@ ratings.views.events.
                     {% if event.get_tlpd_in_id %}
                     <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
                     {% endif %}
-                    {% if tl_thread %}
+                    {% if event.get_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                     {% endif %}
                     {% if event.get_lp_name %}

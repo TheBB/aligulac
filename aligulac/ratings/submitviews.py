@@ -470,6 +470,49 @@ def manage_events(request):
     base.update(csrf(request))
     return render_to_response('eventmgr.html', base)
 
+
+def open_events(request):
+    base = base_ctx('Submit', 'Open events', request)
+
+    if not base['adm']:
+        base.update(csrf(request))
+        return render_to_response('login.html', base)
+
+    base['user'] = request.user.username
+    base.update(csrf(request))
+
+    if base['adm'] == True:
+        if 'openevents' in request.POST:
+            for event in request.POST.getlist('openevent'):
+                Event.objects.get(id=event).close()
+        if 'prizepools' in request.POST:
+            for event in request.POST.getlist('prizepool'):
+                print "setting thingy false:"
+                print event
+                Event.objects.get(id=event).set_prizepool(False)
+
+    openevents = []
+    emptyopenevents = []
+    events = Event.objects.filter(type="event", closed=False)
+    noprizepoolevents = Event.objects.filter(type="event", prizepool__isnull=True)
+    
+    for event in events:
+        #If any of the subevents is not empty, add it to openevents. Else it has no matches and so is added to emptyopenevents
+        if len(Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False)) > 0:
+            openevents.append(event)
+        else:
+            emptyopenevents.append(event)
+    
+    #remove "unknown events"
+    emptyopenevents = emptyopenevents[1:] 
+                
+    base['openevents'] = openevents
+    base['emptyopenevents'] = emptyopenevents
+    base['noprizepoolevents'] = noprizepoolevents
+
+    
+    return render_to_response('events_open.html', base)
+
 def manage(request):
     base = base_ctx('Submit', 'Misc', request)
 

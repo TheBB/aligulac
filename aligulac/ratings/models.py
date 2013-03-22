@@ -68,6 +68,8 @@ class Event(models.Model):
 
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+    def get_path_print(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')
 
     def get_event_fullname(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'])\
@@ -172,6 +174,10 @@ class Event(models.Model):
             Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
         if type == 'event' or type == 'category':
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+        self.save()
+    
+    def set_prizepool(self, prizepool):
+        self.prizepool = prizepool is True
         self.save()
     
     def set_parent(self, parent):
@@ -566,6 +572,7 @@ class Earnings(models.Model):
                 new = Earnings(event=event, player=players[i], placement=placements[i]+1, origearnings=origearnings[i], currency=currency)
                 new.save()
             new.convert_earnings()
+        event.set_prizepool(True)
         return new
     
     def convert_earnings(self):

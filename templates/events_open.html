@@ -11,7 +11,8 @@ This is the template for the event manager admin page. It's called from ratings.
 {% block content %}
 
 <h2>Open events</h2>
-These events have games, which means that they are currently active and have not yet finished. If that is not the case, please close the event.
+These events have games, which means that they are currently active and have not yet finished.
+If the event has finished, please make sure that all matches have been added before closing the event.
 <form method="post" action="/add/events2/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
@@ -94,10 +95,12 @@ In the latter case, feel free to use the external links provided to add the matc
 	{% endfor %} 
 </table>
 <h2>Missing prize pool information</h2>
-These events have no information on their prize pools yet.
-If you know that no prize pool was given out for an event (qualifiers, etc.), you can set the event as having no prize pool.
-If you know that the event in question has a prize pool, go to the event's page and add the prize pool there.
-If you know that the event has a prize pool but do not know the exact numbers, please leave it open and don't change anything.
+These events are closed and have no information on their prize pools yet.
+<ul>
+<li>If you know the event's prize pool, visit the event page and add the prize pool information there.</li> 
+<li>If you know the event has no prize pool, you can mark the event as having no prize pool. Don't just assume that an event has no prize pool just because it is a qualifier, however. Some do!</li>  
+<li>If you are not sure whether the event has a prize pool or do not have the exact sums, do nothing.</li>
+</ul>
 <form method="post" action="/add/events2/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">

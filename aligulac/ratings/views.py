@@ -593,12 +593,9 @@ def events(request, event_id=None):
             if request.POST['lp_name'] != event.get_lp_name():
                 event.set_lp_name(request.POST['lp_name'])
             
-            if request.POST['prizepoolselect'] != 'unknown':
-                if request.POST['prizepoolselect'] == 'yes':
-                    event.set_prizepool(True)
-                else:
-                    event.set_prizepool(False)
-                    Earnings.objects.filter(event=event).delete()
+            if request.POST['prizepoolselect'] == 'no':
+                event.set_prizepool(False)
+                Earnings.objects.filter(event=event).delete()
                 
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':

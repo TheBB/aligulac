@@ -494,7 +494,7 @@ def open_events(request):
     openevents = []
     emptyopenevents = []
     events = Event.objects.filter(type="event", closed=False)
-    noprizepoolevents = Event.objects.filter(type="event", prizepool__isnull=True)
+    noprizepoolevents = Event.objects.filter(prizepool__isnull=True, type="event", closed=True)
     
     for event in events:
         #If any of the subevents is not empty, add it to openevents. Else it has no matches and so is added to emptyopenevents
@@ -504,7 +504,8 @@ def open_events(request):
             emptyopenevents.append(event)
     
     #remove "unknown events"
-    emptyopenevents = emptyopenevents[1:] 
+    emptyopenevents = emptyopenevents[1:]
+    noprizepoolevents = noprizepoolevents[1:]
                 
     base['openevents'] = openevents
     base['emptyopenevents'] = emptyopenevents

@@ -24,10 +24,12 @@ This is the template for the earnings of a player. It's called from ratings.view
     {% for earning in earnings %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
             <td style="text-align: right;">
-            {% if earning.min != earning.max %}
-                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
-            {% else %}
-                {{ earning.min|ordinal }}
+            {% if earning.min != 0 %}
+            	{% if earning.min != earning.max %}
+	                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
+            	{% else %}
+	                {{ earning.min|ordinal }}
+            	{% endif %}
             {% endif %}
             </td>
             <td></td>

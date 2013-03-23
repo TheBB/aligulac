@@ -30,22 +30,38 @@ ratings.views.events.
         row.className = "nonheader row1";
     }
 
-    function addprizepool()
+    function addprizepool(clicked_id)
     {
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
-        var tableposition = document.getElementById('createtable');
-        
-        tableposition.innerHTML = "How many players?";
+        var prizepoolbutton = document.getElementById(clicked_id);
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+        	var tableposition = document.getElementById('createrankedtable');
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+        	var tableposition = document.getElementById('createunrankedtable');
+        } 
         
         var numberplayers = document.createElement("select");
-        numberplayers.setAttribute("id", "numberplayers");
+        numberplayers.setAttribute("id", "numberplayers" + clicked_id);
         numberplayers.setAttribute("name", "numberplayers");
         {% for player in players %}
         	var option = document.createElement("option");
         	option.setAttribute("value", "{{ forloop.counter }}");
-        	{% if earnings %}
-        		{% ifequal earnings.count forloop.counter %}
-        			option.setAttribute("selected", "selected");
+        	{% if rearnings %}
+        		{% ifequal rearnings.count forloop.counter %}
+        			if (clicked_id == "rankedprizepoolbutton")
+			        {
+        				option.setAttribute("selected", "selected");
+        			}
+        		{% endifequal %}
+        	{% endif %}
+        	{% if urearnings %}
+        		{% ifequal urearnings.count forloop.counter %}
+        			if (clicked_id == "unrankedprizepoolbutton")
+			        {
+        				option.setAttribute("selected", "selected");
+        			}
         		{% endifequal %}
         	{% endif %}
         	option.innerHTML = "{{ forloop.counter }}"
@@ -54,29 +70,43 @@ ratings.views.events.
         
         var button = document.createElement("input");
         button.setAttribute("type", "button");
-        button.setAttribute("id", "changeplayers");
-        button.setAttribute("onclick", "createtable(this.id); return false;");
+        button.setAttribute("id", clicked_id);
+        button.setAttribute("onclick", "createtable(this.id, true); return false;");
         button.setAttribute("value", "Set");
         
         prizepoolbutton.style.display = 'none';
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+	        tableposition.appendChild(document.createTextNode("How many players (ranked)? "));
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+	        tableposition.appendChild(document.createTextNode("How many players (unranked)? "));
+        }
         tableposition.appendChild(numberplayers);
         tableposition.appendChild(button);
     }
 
-    function createtable(clicked_id)
+    function createtable(clicked_id, changeplayers)
     {
-    	var tableposition = document.getElementById("createtable");
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+        	var tableposition = document.getElementById('createrankedtable');
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+        	var tableposition = document.getElementById('createunrankedtable');
+        }
     	
     	try
     	{
-    		oldtable = document.getElementById("table");
+    		oldtable = document.getElementById("table" + clicked_id);
 		   	tableposition.removeChild(oldtable);
     	}
     	catch(e) { }
     	
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
         var table = document.createElement("table");
-        table.setAttribute("id", "table");
+        table.setAttribute("id", "table" + clicked_id);
         table.setAttribute("class", "results prizepool");
         
         var row = table.insertRow(-1);
@@ -88,7 +118,10 @@ ratings.views.events.
         cell1.setAttribute("style", "width: 3em;");
         cell2.setAttribute("style", "width: 20em;");
         cell3.setAttribute("style", "width: 17em;");
-        cell1.innerHTML = "#";
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+        	cell1.innerHTML = "#";
+        }
         cell2.innerHTML = "Player";
         cell3.innerHTML = "Money earned";
         
@@ -121,35 +154,47 @@ ratings.views.events.
         cell2.innerHTML = "Currency:"
         cell3.appendChild(currencies);
         
-        
-        {% if earnings %}
-            var amount = {{ earnings.count }}
-        {% endif %}
-        if (clicked_id == 'changeplayers')
-        {
-            var amount = document.getElementById('numberplayers').value
-        }
-    
-        if (table.rows.length > 2)
-        {
-            for(var i = table.rows.length-1; i > 1; i--)
-            {
-                table.deleteRow(i);
+        {% if rearnings %}
+        	if (clicked_id == "rankedprizepoolbutton")
+	        {
+            	var amount = {{ rearnings.count }};
             }
+        {% endif %}
+        {% if urearnings %}
+        	if (clicked_id == "unrankedprizepoolbutton")
+	        {
+            	var amount = {{ urearnings.count }};
+            }
+        {% endif %}
+        
+        if (changeplayers)
+        {
+            var amount = document.getElementById('numberplayers' + clicked_id).value
         }
     
         for(var i = 0; i < amount; i++)
         {
             var placement = i+1;
-            var earning = '';
-            var earningsplayer = '';
+            var rearning = '';
+            var rearningsplayer = '';
+            var urearning = '';
+            var urearningsplayer = '';
             
-            {% if earnings %}
-                {% for earning in earnings %}
+            {% if rearnings %}
+                {% for earning in rearnings %}
                     if (placement == {{ earning.placement }})
                     {
-                        earning = "{{ earning.origearnings }}";
-                        earningsplayer = "{{ earning.player.id }}";
+                        rearning = "{{ earning.origearnings }}";
+                        rearningsplayer = "{{ earning.player.id }}";
+                    }
+                {% endfor %}
+            {% endif %}
+            {% if urearnings %}
+                {% for earning in urearnings %}
+                    if (placement == {{ forloop.counter }})
+                    {
+                        urearning = "{{ earning.origearnings }}";
+                        urearningsplayer = "{{ earning.player.id }}";
                     }
                 {% endfor %}
             {% endif %}
@@ -168,10 +213,21 @@ ratings.views.events.
                 option.innerHTML = "{{ player.tag }}";
                 select.appendChild(option);
                 
-                if (earningsplayer == eventplayer)
-                {
-                    select.selectedIndex = {{ forloop.counter0 }};
+		        if (clicked_id == "rankedprizepoolbutton")
+		        {
+                	if (rearningsplayer == eventplayer)
+                	{
+	                    select.selectedIndex = {{ forloop.counter0 }};
+                	}
                 }
+		        else if (clicked_id == "unrankedprizepoolbutton")
+		        {
+                	if (urearningsplayer == eventplayer)
+                	{
+	                    select.selectedIndex = {{ forloop.counter0 }};
+                	}
+                }
+
             {% endfor %}                        
             
             var selectbox = document.createElement("input");
@@ -180,7 +236,14 @@ ratings.views.events.
             selectbox.setAttribute("id", "amount-" + i);
             selectbox.setAttribute("onfocus", "addfocus(this)");
             selectbox.setAttribute("onblur", "losefocus(this)");
-            selectbox.setAttribute("value", earning);
+	        if (clicked_id == "rankedprizepoolbutton")
+	        {
+            	selectbox.setAttribute("value", rearning);
+            }
+	        else if (clicked_id == "unrankedprizepoolbutton")
+	        {
+            	selectbox.setAttribute("value", urearning);
+            }
             selectbox.setAttribute("size", "8");
             
             var row = table.insertRow(-1);
@@ -188,7 +251,11 @@ ratings.views.events.
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
-            cell1.innerHTML = placement
+            
+        	if (clicked_id == "rankedprizepoolbutton")
+	        {
+            	cell1.innerHTML = placement
+            }
             cell2.appendChild(select);
             cell3.appendChild(selectbox);
         }
@@ -198,6 +265,18 @@ ratings.views.events.
         hiddeninput.setAttribute("name", "amount");
         hiddeninput.setAttribute("value", amount);
         
+        var hiddentype = document.createElement("input");
+        hiddentype.setAttribute("type", "hidden");
+        hiddentype.setAttribute("name", "un-ranked");
+       	if (clicked_id == "rankedprizepoolbutton")
+        {
+        	hiddentype.setAttribute("value", "ranked");
+        }
+       	else if (clicked_id == "unrankedprizepoolbutton")
+        {
+        	hiddentype.setAttribute("value", "unranked");
+        }
+
         var submitbutton = document.createElement("input");
         submitbutton.setAttribute("type", "submit");
         submitbutton.setAttribute("name", "earnings");
@@ -209,13 +288,13 @@ ratings.views.events.
 		cell.colSpan = '3';
         cell.align = 'right';
         cell.appendChild(hiddeninput);
+        cell.appendChild(hiddentype);
         cell.appendChild(submitbutton);
 
-        prizepoolbutton.style.display = 'none';
         tableposition.appendChild(table);
     }
     
-    function validate()
+    function validate(name)
     {
         function eliminateDuplicates(arr)
         {
@@ -234,8 +313,32 @@ ratings.views.events.
             return out;
         }
         
-        var form = document.forms.prizepool;
-        var length = form.numberplayers.selectedIndex;
+        if (name == "rankedprizepool")
+        {
+        	var form = document.forms.rankedprizepool;
+        	try
+        	{
+	        	var othercurrency = "{{ urearnings.0.currency }}";
+	        }
+	        catch(e) { }
+        }
+        else if (name == "unrankedprizepool")
+        {
+        	var form = document.forms.unrankedprizepool;
+        	try
+        	{
+	        	var othercurrency = "{{ rearnings.0.currency }}";
+	        }
+	        catch(e) { }
+        }
+	    var length = form.numberplayers.selectedIndex;
+	    var currency = form.currency.options[form.currency.selectedIndex].value;
+	    if (currency != othercurrency && othercurrency != "")
+	    {
+			alert('Use only one currency! Change the currency in the ranked/unranked prize pool if necessary.');
+			return false;	    
+	    }
+	    
         var players = new Array();
         
         for(var i = 0; i < length+1; i++)
@@ -265,6 +368,8 @@ ratings.views.events.
             alert('Duplicated player detected.');
             return false;
         }
+        
+        
         
         return true;
     }
@@ -576,17 +681,28 @@ ratings.views.events.
     {% endif %}
 
     {% if adm %}    
-    <form method="post" name="prizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate()">
+    <form method="post" name="rankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
     {% csrf_token %}
     {% if event.type == 'event' and not event.prizepool|is_false %}
-        {% if earnings %}
-            <input type="button" id="prizepoolbutton" onclick="addprizepool(); createtable(this.id); return false;" value="Change prize pool"/>
+        {% if rearnings %}
+            <input type="button" id="rankedprizepoolbutton" onclick="addprizepool(this.id); createtable(this.id); return false;" value="Change ranked prize pool"/>
         {% else %}
-            <input type="button" id="prizepoolbutton" onclick="addprizepool(); return false;" value="Add prize pool"/>
+            <input type="button" id="rankedprizepoolbutton" onclick="addprizepool(this.id); return false;" value="Add ranked prize pool"/>
         {% endif %}
     {% endif %}
+    <span id="createrankedtable"></span>
+    </form>
 
-    <span id="createtable"></span>
+    <form method="post" name="unrankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
+    {% csrf_token %}
+    {% if event.type == 'event' and not event.prizepool|is_false %}
+        {% if urearnings %}
+            <input type="button" id="unrankedprizepoolbutton" onclick="addprizepool(this.id); createtable(this.id); return false;" value="Change unranked prize pool"/>
+        {% else %}
+            <input type="button" id="unrankedprizepoolbutton" onclick="addprizepool(this.id); return false;" value="Add unranked prize pool"/>
+        {% endif %}
+    {% endif %}
+    <span id="createunrankedtable"></span>
     </form>
     <br>
     {% endif %}

@@ -639,7 +639,10 @@ def events(request, event_id=None):
                 
                 players.append(player)
                 amounts.append(amount)
-                placements.append(i)
+                if request.POST['un-ranked'] == "ranked":
+                    placements.append(i)
+                elif request.POST['un-ranked'] == "unranked":
+                    placements.append(-1)
             
             success = Earnings.set_earnings(event, players, amounts, currency, placements)
             
@@ -670,14 +673,19 @@ def events(request, event_id=None):
     # Get list of players and earnings for prizepools
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
     
-    earnings = Earnings.objects.filter(event=event).order_by('placement')
-    base['earnings'] = earnings
+    totalearnings = Earnings.objects.filter(event=event).order_by('placement')
     
-    base['prizepool'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
-    base['prizepoolorig'] = earnings.aggregate(Sum('origearnings'))['origearnings__sum']
+    base['prizepool'] = totalearnings.aggregate(Sum('earnings'))['earnings__sum']
+    base['prizepoolorig'] = totalearnings.aggregate(Sum('origearnings'))['origearnings__sum']
     
+    rearnings = totalearnings.exclude(placement__exact=0)
+    base['rearnings'] = rearnings
+    
+    urearnings = totalearnings.filter(placement__exact=0)
+    base['urearnings'] = urearnings
+
     try:
-        base['prizepoolcur'] = earnings.values('currency')[0]['currency']
+        base['prizepoolcur'] = totalearnings.values('currency')[0]['currency']
     except:
         base['prizepoolcur'] = "USD"
     
@@ -819,7 +827,7 @@ def player_earnings(request, player_id):
     #sort by latest date        
     def getLatest( object ):
         return object.latest
-    earnings= list(earnings)
+    earnings = list(earnings)
     earnings.sort( key=getLatest, reverse=True )
 
     base.update({'player': player, 'earnings': earnings, 'totalearnings': totalearnings})

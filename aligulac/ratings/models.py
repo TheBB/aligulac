@@ -564,7 +564,10 @@ class Earnings(models.Model):
     def set_earnings(event, players, origearnings, currency, placements):
         #probably should be more subtle and not delete everything on change
         if Earnings.objects.filter(event=event).exists():
-            Earnings.objects.filter(event=event).delete()
+            if placements[0] == -1:
+                Earnings.objects.filter(event=event, placement__exact=0).delete()
+            else:
+                Earnings.objects.filter(event=event).exclude(placement__exact=0).delete()
         if not len(players) == len(origearnings):
             return None
         else:

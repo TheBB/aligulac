@@ -177,7 +177,7 @@ class Event(models.Model):
         self.save()
     
     def set_prizepool(self, prizepool):
-        self.prizepool = prizepool is True
+        self.prizepool = prizepool
         self.save()
     
     def set_parent(self, parent):

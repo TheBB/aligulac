@@ -329,9 +329,7 @@ def review(request):
     if 'act' in request.POST and base['adm'] == True:
         if int(request.POST['eobj']) != 2:
             eobj = Event.objects.get(id=int(request.POST['eobj']))
-        else:
-            eobj = None
-        base['eobj'] = eobj.id
+            base['eobj'] = eobj.id
 
         delete = True if request.POST['act'] == 'reject' else False
 

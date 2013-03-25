@@ -85,11 +85,11 @@ class Event(models.Model):
         except:
             return self
     
-    def get_children(self, type=None):
-        if type:
-            return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt,type=type).order_by('lft')
+    def get_children(self, type=['category', 'event', 'round'], id=False):
+        if not id:
+            return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt,type__in=type).order_by('lft')
         else:
-            return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
+            return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt,type__in=type).order_by('lft')
     
     def get_homepage(self):
         if self.homepage:

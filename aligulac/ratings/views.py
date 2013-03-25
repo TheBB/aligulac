@@ -673,19 +673,41 @@ def events(request, event_id=None):
     # Get list of players and earnings for prizepools
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
     
-    totalearnings = Earnings.objects.filter(event=event).order_by('placement')
+    #earnings for this event
+    totalearningsevent = Earnings.objects.filter(event=event).order_by('placement')
+    #earnings for this event + all child events
+    totalearnings = Earnings.objects.filter(event__in=event.get_children(id=True)).order_by('placement')
     
-    base['prizepool'] = totalearnings.aggregate(Sum('earnings'))['earnings__sum']
-    base['prizepoolorig'] = totalearnings.aggregate(Sum('origearnings'))['origearnings__sum']
-    
-    rearnings = totalearnings.exclude(placement__exact=0)
+    #ranked earnings
+    rearnings = totalearningsevent.exclude(placement__exact=0)
     base['rearnings'] = rearnings
     
-    urearnings = totalearnings.filter(placement__exact=0)
+    #unranked earnings
+    urearnings = totalearningsevent.filter(placement__exact=0)
     base['urearnings'] = urearnings
 
+    #base['prizepoolorig'] = totalearnings.aggregate(Sum('origearnings'))['origearnings__sum']
+    
+    #total prizepool in dollars
+    base['prizepool'] = totalearnings.aggregate(Sum('earnings'))['earnings__sum']
+
+    #get number of currencies used
+    numcur = {}
+    for earning in totalearnings:
+        numcur[earning.currency] = True
+    #total prizepool in original currencies. Gives out an array of dictionaries in the form of [{pp: prize pool, cur: currecy}, ...]
+    #also sets nousdpp to True if there is a non-USD prize pool currency
+    prizepoolorig = []
+    if len(numcur) > 0:
+        for k,v in numcur.items():
+             prizepoolorig.append({"pp": totalearnings.filter(currency=k).aggregate(Sum('origearnings'))['origearnings__sum'], "cur": k})
+             if k != "USD":
+                 base['nousdpp'] = True
+        base['prizepoolorig'] = prizepoolorig
+    
+    #prize pool currency for current event
     try:
-        base['prizepoolcur'] = totalearnings.values('currency')[0]['currency']
+        base['prizepoolcur'] = totalearningsevent[0].currency
     except:
         base['prizepoolcur'] = "USD"
     

@@ -283,7 +283,7 @@ def add_earnings_regularcup():
     prize = 100
     currency = "USD"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         player = Player.objects.filter(tag=winners[ievent.name][0])
         if len(player) != 1:
             player = Player.objects.filter(tag=winners[ievent.name][0], id=winners[ievent.name][1])
@@ -303,7 +303,7 @@ def add_earnings_zotacNA():
     prize = 100
     currency = "USD"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:
@@ -334,7 +334,7 @@ def add_earnings_zotacEU():
     prize = 100
     currency = "EUR"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:
@@ -365,7 +365,7 @@ def add_earnings_tlopen():
     currency = "USD"
     first, second, third, fourth = '', '', '', ''
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         if ievent.name != "#1":
             for childievent in ievent.get_children():
                 if childievent.name == "Final":
@@ -406,7 +406,7 @@ def add_earnings_craftcupUS():
     prize = 20
     currency = "USD"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:
@@ -438,7 +438,7 @@ def add_earnings_competocup():
     prize = 50
     currency = "EUR"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:
@@ -469,7 +469,7 @@ def add_earnings_go4sc2_1():
     prize = 100
     currency = "EUR"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:
@@ -500,7 +500,7 @@ def add_earnings_go4sc2_2():
     prize = 200
     currency = "EUR"
     
-    for ievent in event.get_children(type="event"):
+    for ievent in event.get_children(type=["event"]):
         try:
             player = Player.objects.filter(tag=winners[ievent.name][0])
         except:

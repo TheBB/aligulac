@@ -488,8 +488,8 @@ ratings.views.events.
             {% if prizepoolorig %}
             <div class="row infobox">
                 <div class="rowel">Prize pool</div>
-                <div class="rower">{{ prizepoolorig|add_sep_and_cur:prizepoolcur }} 
-                {% if prizepoolcur != "USD" %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
+                <div class="rower">{% for pp in prizepoolorig %}{{ pp.pp|add_sep_and_cur:pp.cur }}{% if not forloop.last %} + {% endif %}{% endfor %} 
+                {% if nousdpp %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
             </div>
             {% endif %}
             {% if adm %}

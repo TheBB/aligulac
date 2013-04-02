@@ -7,6 +7,8 @@ This script analyzes the predictive power of the rating system.
 import sys, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
+from djangi.db.models import Q
+
 from ratings.models import Match
 from ratings.tools import cdf
 
@@ -23,7 +25,7 @@ table_l = [0]*num_slots
 games = 0
 
 num = 0
-for m in Match.objects.all().select_related('player__rating'):
+for m in Match.objects.all().select_related('player__rating').filter(pla__country='KR', plb__country='KR'):
     num += 1
     if num % 1000 == 0:
         print num

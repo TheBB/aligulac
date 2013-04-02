@@ -468,7 +468,6 @@ def manage_events(request):
     base.update(csrf(request))
     return render_to_response('eventmgr.html', base)
 
-
 def open_events(request):
     base = base_ctx('Submit', 'Open events', request)
 
@@ -495,8 +494,9 @@ def open_events(request):
     noprizepoolevents = Event.objects.filter(prizepool__isnull=True, type="event", closed=True)
     
     for event in events:
-        #If any of the subevents is not empty, add it to openevents. Else it has no matches and so is added to emptyopenevents
-        if len(Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False)) > 0:
+        # If any of the subevents is not empty, add it to openevents.
+        # Else it has no matches and so is added to emptyopenevents
+        if Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False).exists():
             openevents.append(event)
         else:
             emptyopenevents.append(event)

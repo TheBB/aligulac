@@ -11,8 +11,10 @@ This is the template for the event manager admin page. It's called from ratings.
 {% block content %}
 
 <h2>Open events</h2>
-These events have games, which means that they are currently active and have not yet finished.
-If the event has finished, please make sure that all matches have been added before closing the event.
+
+<p>These events have games, which means that they are currently active and have not yet finished.  If the
+event has finished, please make sure that all matches have been added before closing the event.</p>
+
 <form method="post" action="/add/events2/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
@@ -57,8 +59,11 @@ If the event has finished, please make sure that all matches have been added bef
 </table>
 </form>
 <br>
-These events have no games yet, which means that they are either future events or finished events that are not yet in the database.
-In the latter case, feel free to use the external links provided to add the matches to the database and close the event when you are done.  
+
+<p>These events have no games yet, which means that they are either future events or finished events that are
+not yet in the database.  In the latter case, feel free to use the external links provided to add the matches
+to the database and close the event when you are done.</p>
+
 <table class="results" style="width: 67em;">
 	<tr class="header">
 		<td style="width: 50m;">Open events without games</td>
@@ -94,13 +99,16 @@ In the latter case, feel free to use the external links provided to add the matc
 		</tr>
 	{% endfor %} 
 </table>
+
 <h2>Missing prize pool information</h2>
-These events are closed and have no information on their prize pools yet.
+<p>These events are closed and have no information on their prize pools yet.</p>
+
 <ul>
 <li>If you know the event's prize pool, visit the event page and add the prize pool information there.</li> 
 <li>If you know the event has no prize pool, you can mark the event as having no prize pool. Don't just assume that an event has no prize pool just because it is a qualifier, however. Some do!</li>  
 <li>If you are not sure whether the event has a prize pool or do not have the exact sums, do nothing.</li>
 </ul>
+
 <form method="post" action="/add/events2/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">

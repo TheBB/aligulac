@@ -496,20 +496,20 @@ def open_events(request):
     for event in events:
         # If any of the subevents is not empty, add it to openevents.
         # Else it has no matches and so is added to emptyopenevents
-        if Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False).exists():
+        if Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, 
+                                match__eventobj__isnull=False).exists():
             openevents.append(event)
         else:
             emptyopenevents.append(event)
-    
+
     #remove "unknown events"
     emptyopenevents = emptyopenevents[1:]
     noprizepoolevents = noprizepoolevents[1:]
-                
+
     base['openevents'] = openevents
     base['emptyopenevents'] = emptyopenevents
     base['noprizepoolevents'] = noprizepoolevents
 
-    
     return render_to_response('events_open.html', base)
 
 def manage(request):

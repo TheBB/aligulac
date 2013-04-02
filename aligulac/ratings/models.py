@@ -151,6 +151,12 @@ class Event(models.Model):
                                         lft >= ' + str(self.lft) + ' and\
                                         rgt <= ' + str(self.rgt) +
                                         ') order by date asc limit 1;')
+            #cursor.execute('''SELECT m.date, m.id
+                              #FROM ratings_match AS m, ratings_event AS e
+                              #WHERE m.eventobj_id=e.id 
+                                    #AND e.lft >= ''' + str(self.lft) + '''
+                                    #AND e.rgt <= ''' + str(self.rgt) + '''
+                              #ORDER BY m.date ASC LIMIT 1;''')
             return cursor.fetchone()[0]
         except:
             return None
@@ -164,6 +170,12 @@ class Event(models.Model):
                                         lft >= ' + str(self.lft) + ' and\
                                         rgt <= ' + str(self.rgt) +
                                         ') order by date desc limit 1;')
+            #cursor.execute('''SELECT m.date, m.id
+                              #FROM ratings_match AS m, ratings_event AS e
+                              #WHERE m.eventobj_id=e.id 
+                                    #AND e.lft >= ''' + str(self.lft) + '''
+                                    #AND e.rgt <= ''' + str(self.rgt) + '''
+                              #ORDER BY m.date DESC LIMIT 1;''')
             return cursor.fetchone()[0]
         except:
             return None
@@ -468,14 +480,14 @@ class Match(models.Model):
 
     def populate_orig(self):
         try:
-            self.orig_pla = self.pla
-            self.orig_plb = self.plb
+            self.orig_pla = self.pla_id
+            self.orig_plb = self.plb_id
             self.orig_rca = self.rca
             self.orig_rcb = self.rcb
             self.orig_sca = self.sca
             self.orig_scb = self.scb
             self.orig_date = self.date
-            self.orig_period = self.period
+            self.orig_period = self.period_id
         except:
             self.orig_pla = None
             self.orig_plb = None
@@ -487,7 +499,7 @@ class Match(models.Model):
             self.orig_period = None
 
     def changed_effect(self):
-        return self.orig_pla != self.pla or self.orig_plb != self.plb or\
+        return self.orig_pla != self.pla_id or self.orig_plb != self.plb_id or\
                self.orig_rca != self.rca or self.orig_rcb != self.rcb or\
                self.orig_sca != self.sca or self.orig_scb != self.scb
 
@@ -495,7 +507,7 @@ class Match(models.Model):
         return self.orig_date != self.date
 
     def changed_period(self):
-        return self.orig_period != self.period
+        return self.orig_period != self.period_id
 
     def __init__(self, *args, **kwargs):
         super(Match, self).__init__(*args, **kwargs)

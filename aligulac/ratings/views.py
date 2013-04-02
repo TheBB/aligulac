@@ -540,6 +540,7 @@ def events(request, event_id=None):
 
     # Number of matches (set event to big if too large)
     matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
+    matches = matches.select_related('pla', 'plb', 'eventobj')
     if matches.count() > 200 and not event.big:
         event.big = True
         event.save()
@@ -670,33 +671,33 @@ def events(request, event_id=None):
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
     
-    # Get list of players and earnings for prizepools
+    #  Get list of players and earnings for prizepools
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
     
-    #earnings for this event
+    # earnings for this event
     totalearningsevent = Earnings.objects.filter(event=event).order_by('placement')
-    #earnings for this event + all child events
+
+    # earnings for this event + all child events
     totalearnings = Earnings.objects.filter(event__in=event.get_children(id=True)).order_by('placement')
     
-    #ranked earnings
+    # ranked earnings
     rearnings = totalearningsevent.exclude(placement__exact=0)
     base['rearnings'] = rearnings
     
-    #unranked earnings
+    # unranked earnings
     urearnings = totalearningsevent.filter(placement__exact=0)
     base['urearnings'] = urearnings
 
-    #base['prizepoolorig'] = totalearnings.aggregate(Sum('origearnings'))['origearnings__sum']
-    
-    #total prizepool in dollars
+    # total prizepool in dollars
     base['prizepool'] = totalearnings.aggregate(Sum('earnings'))['earnings__sum']
 
-    #get number of currencies used
+    # get number of currencies used
     numcur = {}
     for earning in totalearnings:
         numcur[earning.currency] = True
-    #total prizepool in original currencies. Gives out an array of dictionaries in the form of [{pp: prize pool, cur: currecy}, ...]
-    #also sets nousdpp to True if there is a non-USD prize pool currency
+    # total prizepool in original currencies. 
+    # Gives out an array of dictionaries in the form of [{pp: prize pool, cur: currecy}, ...]
+    # also sets nousdpp to True if there is a non-USD prize pool currency
     prizepoolorig = []
     if len(numcur) > 0:
         for k,v in numcur.items():

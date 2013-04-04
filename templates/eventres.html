@@ -378,7 +378,7 @@ ratings.views.events.
     {
     	var prizepool = document.getElementById('prizepoolselect')
     	var hasprizepool = '{{ prizepoolorig }}'
-    	if (prizepool.checked && hasprizepool != 'None')
+    	if (prizepool.checked && hasprizepool != '')
     	{
     		var answer = confirm("This event has a prize pool. Are you sure you want to delete it?");
     		if (answer)

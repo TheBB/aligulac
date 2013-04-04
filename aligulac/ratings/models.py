@@ -91,6 +91,9 @@ class Event(models.Model):
         else:
             return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt,type__in=type).order_by('lft')
     
+    def get_root(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')[0]
+    
     def get_homepage(self):
         if self.homepage:
             return self.homepage

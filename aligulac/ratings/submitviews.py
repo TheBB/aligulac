@@ -490,8 +490,9 @@ def open_events(request):
 
     openevents = []
     emptyopenevents = []
+    noprizepoolevents = []
     events = Event.objects.filter(type="event", closed=False)
-    noprizepoolevents = Event.objects.filter(prizepool__isnull=True, type="event", closed=True)
+    ppevents = Event.objects.filter(prizepool__isnull=True, type="event", closed=True)
     
     for event in events:
         # If any of the subevents is not empty, add it to openevents.
@@ -501,6 +502,11 @@ def open_events(request):
             openevents.append(event)
         else:
             emptyopenevents.append(event)
+            
+    for event in ppevents:
+        if event.get_root().category != "team":
+            noprizepoolevents.append(event)
+
 
     #remove "unknown events"
     emptyopenevents = emptyopenevents[1:]

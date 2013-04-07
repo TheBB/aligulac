@@ -139,8 +139,9 @@ def pred_match(request):
     obj.modify(s1, s2)
     obj.compute()
 
-    base.update({'p1': dbpl[0], 'p2': dbpl[1], 'r1': sipl[0].elo + sipl[0].elo_race[sipl[1].race],\
-                 'r2': sipl[1].elo + sipl[1].elo_race[sipl[0].race]})
+    base.update({'p1': dbpl[0], 'p2': dbpl[1], 
+                 'r1': sipl[0].elo_vs_opponent(sipl[1]),
+                 'r2': sipl[1].elo_vs_opponent(sipl[0])})
     tally = obj.get_tally()
     base.update({'t1': tally[sipl[0]][1], 't2': tally[sipl[1]][1]})
     base['max'] = max(base['t1'], base['t2'])
@@ -407,9 +408,9 @@ def match_postable(base, obj, r1, r2, url):
 
     numlen = len(str(obj._num))
 
-    strings = [('({rat}) {name}'.format(rat=ratscale(pa.elo + pa.elo_race[pb.race]), name=pa.name),\
+    strings = [('({rat}) {name}'.format(rat=ratscale(pa.elo_vs_opponent(pb)), name=pa.name),\
                 '{sca: >{nl}}-{scb: <{nl}}'.format(sca=obj._result[0], scb=obj._result[1], nl=numlen),\
-                '{name} ({rat})'.format(rat=ratscale(pb.elo + pb.elo_race[pa.race]), name=pb.name))]
+                '{name} ({rat})'.format(rat=ratscale(pb.elo_vs_opponent(pa)), name=pb.name))]
     strings.append(None)
     
     for i in range(0, len(r1)):

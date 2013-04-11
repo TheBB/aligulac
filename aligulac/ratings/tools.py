@@ -534,5 +534,58 @@ def add_earnings_closecombat2011():
         Earnings.set_earnings(ievent, players, earnings, currency, placements)
         print "yay!"
 
-def add_earnings():
-    return 0;
+
+def add_earnings_go4sc2_NA():
+    eventid = 11635
+    event = Event.objects.get(id=eventid)
+    prize = 50
+    currency = "USD"
+    
+    for ievent in event.get_children(type=["event"]):
+        
+        weekday = ievent.get_earliest().weekday()
+        #Only Sunday cups have prize pool, so filter out those
+        #Also grab games on Monday due to time zone errors
+        if weekday == 6 or weekday == 0:
+            winnercount = {}
+            winners = []
+            losers = []
+            for match in Match.objects.filter(eventobj=ievent):
+                #Throw all winners and losers into a separate array
+                #Also count number of wins per player in a dictionary
+                if match.sca > match.scb:
+                    if match.pla not in winners:
+                        winners.append(match.pla)
+                    if match.plb not in losers:
+                        losers.append(match.plb)
+                    if match.pla not in winnercount:
+                        winnercount[match.pla] = 1
+                    else:
+                        winnercount[match.pla] += 1
+                else:
+                    if match.plb not in winners:
+                        winners.append(match.plb)
+                    if match.pla not in losers:
+                        losers.append(match.pla)
+                    if match.plb not in winnercount:
+                        winnercount[match.plb] = 1
+                    else:
+                        winnercount[match.plb] += 1
+            #Substract losers list from winners list, leaving only playeres that haven't lost 
+            winnerlist = [x for x in winners if x not in losers]
+            #Remove all players that have lost a game from the winnercount dictionary
+            for k,v in winnercount.items():
+                if k not in winnerlist:
+                    del winnercount[k]
+            #Determine the winner: The player who never lost a game and won the most games
+            winner = max(winnercount, key=winnercount.get)
+        
+            earnings = [prize]
+            players = [winner]
+            placements = [0]
+            print ievent
+            print players
+            print earnings
+        
+            Earnings.set_earnings(ievent, players, earnings, currency, placements)
+            print "yay!"

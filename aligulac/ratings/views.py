@@ -160,42 +160,69 @@ def player(request, player_id):
     
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
+        base['message'] = ""
+        
         tag = request.POST['tag']
+        if tag != '' and tag != player.tag:
+            player.set_tag(tag)
+            base['message'] += "Changed player's tag. "
+        
         country = request.POST['country']
+        if country != player.country:
+            player.set_country(country)
+            base['message'] += "Changed player's country. "
+        
         name = request.POST['fullname']
-        if name == '':
-            name = None
+        if name != player.name:
+            if player.name or name != '':
+                player.set_name(name)
+                base['message'] += "Changed player's name. "
+
         akas = request.POST['AKA']
         if akas != '':
-            aka = [s for s in akas.split(',')]
+            aka = [s.strip() for s in akas.split(',')]
+            print aka
         else:
             aka = None
-        birthday = request.POST['birthday']
-        if birthday == '':
-            birthday = None
-        sc2c = request.POST['SC2C']
-        if sc2c == '':
-            sc2c = None
-        tlpdkr = request.POST['TLPDKR']
-        if tlpdkr == '':
-            tlpdkr = None
-        tlpdin = request.POST['TLPDIN']
-        if tlpdin == '':
-            tlpdin = None
-        sc2e = request.POST['SC2E']
-        if sc2e == '':
-            sc2e = None
-        lp = request.POST['LP']
-        if lp == '':
-            lp = None
-
-        if tag != '':
-            player.set_tag(tag)        
-        player.set_country(country)
-        player.set_name(name)
-        player.set_birthday(birthday)
         player.set_aliases(aka)
-        player.update_external_links(sc2c, tlpdkr, tlpdin, sc2e, lp)
+        #base['message'] += "Changed player's aliases. "
+
+        birthday = request.POST['birthday']
+        if birthday != str(player.birthday):
+            if player.birthday or birthday != '':
+                player.set_birthday(birthday)
+                base['message'] += "Changed player's birthday. "
+
+        sc2c = request.POST['SC2C']
+        if sc2c != str(player.sc2c_id):
+            if player.sc2c_id or sc2c != '':
+                player.set_sc2c_id(sc2c)
+                base['message'] += "Changed SC2charts link. "
+
+
+        tlpdkr = request.POST['TLPDKR']
+        if tlpdkr != str(player.tlpd_kr_id):
+            if player.tlpd_kr_id or tlpdkr != '':
+                player.set_tlpd_kr_id(tlpdkr)
+                base['message'] += "Changed TLPD Korea link. "
+
+        tlpdin = request.POST['TLPDIN']
+        if tlpdin != str(player.tlpd_in_id):
+            if player.tlpd_in_id or tlpdin != '':
+                player.set_tlpd_in_id(tlpdin)
+                base['message'] += "Changed TLKD international link. "
+
+        sc2e = request.POST['SC2E']
+        if sc2e != str(player.sc2e_id):
+            if player.sc2e_id or sc2e != '':
+                player.set_sc2e_id(sc2e)
+                base['message'] += "Changed SC2earnings link. "
+
+        lp = request.POST['LP']
+        if lp != str(player.lp_name):
+            if player.lp_name or lp != '':
+                player.set_lp_name(lp)
+                base['message'] += "Changed Liquipedia link. "
 
     countries = []
     for k, v in data.ccn_to_cn.iteritems():

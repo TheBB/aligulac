@@ -124,6 +124,10 @@ This shows a team page. Called from ratings.teamviews.team.
     </p>
     {% endcomment %}
 
+	{% if message %}
+		<p>{{ message }}</p>
+	{% endif %}
+	
     {% if team.founded and team.disbanded %}
     <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
     {% elif team.founded %}

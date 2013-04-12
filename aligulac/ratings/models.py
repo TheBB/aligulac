@@ -337,14 +337,6 @@ class Player(models.Model):
         else:
             return self.tag + ' (' + self.race + ')'
     
-    def update_external_links(self, sc2c_id, tlpd_kr_id, tlpd_in_id, sc2e_id, lp_name):
-        self.sc2c_id = sc2c_id
-        self.tlpd_kr_id = tlpd_kr_id
-        self.tlpd_in_id = tlpd_in_id
-        self.sc2e_id = sc2e_id
-        self.lp_name = lp_name
-        self.save()
-        
     def set_tag(self, tag):
         self.tag = tag
         self.save()
@@ -354,11 +346,52 @@ class Player(models.Model):
         self.save()
     
     def set_name(self, name):
-        self.name = name
+        if name == '':
+            self.name = None
+        else:
+            self.name = name
         self.save()
     
     def set_birthday(self, birthday):
-        self.birthday = birthday
+        if birthday == '':
+            self.birthday = None
+        else:
+            self.birthday = birthday
+        self.save()
+
+    def set_sc2c_id(self, sc2c_id):
+        if sc2c_id == '':
+            self.sc2c_id = None
+        else:
+            self.sc2c_id = sc2c_id
+        self.save()
+
+    def set_tlpd_kr_id(self, tlpd_kr_id):
+        if tlpd_kr_id == '':
+            self.tlpd_kr_id = None
+        else:
+            self.tlpd_kr_id = tlpd_kr_id
+        self.save()
+
+    def set_tlpd_in_id(self, tlpd_in_id):
+        if tlpd_in_id == '':
+            self.tlpd_in_id = None
+        else:
+            self.tlpd_in_id = tlpd_in_id
+        self.save()
+
+    def set_sc2e_id(self, sc2e_id):
+        if sc2e_id == '':
+            self.sc2e_id = None
+        else:
+            self.sc2e_id = sc2e_id
+        self.save()
+
+    def set_lp_name(self, lp_name):
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()
     
     #set alias. Takes an array of arguments, which are compared to existing
@@ -399,7 +432,10 @@ class Team(models.Model):
         self.save()
     
     def set_shortname(self, shortname):
-        self.shortname = shortname
+        if shortname == '':
+            self.shortname = None
+        else:
+            self.shortname = shortname
         self.save()
     
     #set alias. Takes an array of arguments, which are compared to existing
@@ -421,11 +457,17 @@ class Team(models.Model):
             Alias.objects.filter(team=self).delete()
     
     def set_homepage(self, homepage):
-        self.homepage = homepage
+        if homepage == '':
+            self.homepage = None
+        else:
+            self.homepage = homepage
         self.save()
     
     def set_lp_name(self, lp_name):
-        self.lp_name = lp_name
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()    
 
 class TeamMembership(models.Model):

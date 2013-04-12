@@ -36,32 +36,40 @@ def team(request, team_id):
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
 
+        base['message'] = ""
+        
         name = request.POST['name']
+        if name!= '' and name != team.name:
+            team.set_name(name)
+            base['message'] += "Changed team name. "
 
         akas = request.POST['AKA']
         if akas != '':
-            aka = [s for s in akas.split(',')]
+            aka = [s.strip() for s in akas.split(',')]
         else:
             aka = None
+        team.set_aliases(aka)
+        #base['message'] += "Changed team aliases. "
 
         shortname = request.POST['shortname']
-        if shortname == '':
-            shortname = None
+        if shortname != team.shortname:
+            if team.shortname or shortname != '':
+                team.set_shortname(shortname)
+                base['message'] += "Changed team's short name. "
 
         homepage = request.POST['homepage']
-        if homepage == '':
-            homepage = None
+        if homepage != team.homepage:
+            if team.homepage or homepage != '':
+                team.set_homepage(homepage)
+                base['message'] += "Changed team's homepage. "
 
         lp_name = request.POST['lp_name']
-        if lp_name == '':
-            lp_name = None
+        if lp_name != team.lp_name:
+            if team.lp_name or lp_name != '':
+                team.set_lp_name(lp_name)
+                base['message'] += "Changed team's Liquipedia link. "
 
-        if name!= '':
-            team.set_name(name)
-        team.set_aliases(aka)
-        team.set_shortname(shortname)
-        team.set_homepage(homepage)
-        team.set_lp_name(lp_name)
+
 
     players = TeamMembership.objects.filter(team__name=team, current=True, playing=True)
     base['players'] = players 

@@ -553,12 +553,10 @@ def events(request, event_id=None):
 
     # Make modifications if neccessary
     if base['adm'] == True:
+        
+        base['message'] = ""
+        
         if 'op' in request.POST and request.POST['op'] == 'Modify':
-            if request.POST['type'] != 'nochange':
-                event.change_type(request.POST['type'])
-                if 'siblings' in request.POST.keys() and siblings is not None:
-                    for sibling in siblings:
-                        sibling.change_type(request.POST['type'])
                         
             if request.POST['name'] != '' and request.POST['name'] != event.name:
                 event.name = request.POST['name']
@@ -566,49 +564,93 @@ def events(request, event_id=None):
                 event.save()
                 for e in event.get_children():
                     e.update_name()
+                base['message'] += 'Set new event name. '
 
             if request.POST['date'].strip() != 'No change':
                 matches.update(date=request.POST['date'])
-                base['message'] = 'Modified all matches.'
-
-            if request.POST['offline'] != 'nochange':
-                matches.update(offline=(request.POST['offline'] == 'offline'))
-                base['message'] = 'Modified all matches.'
+                base['message'] += 'Set new date for all matches. '
 
             if request.POST['game'] != 'nochange':
-                matches.update(game=request.POST['game'])
-                base['message'] = 'Modified all matches.'
 
+                opgame = None
+                if matches.values("game").distinct().count() == 1:
+                    opgame = matches[0].game
+                
+                if request.POST['game'] != opgame or not opgame:
+                    matches.update(game=request.POST['game'])
+                    base['message'] += 'Set game to ' + request.POST['game'] + '. '
+
+            if request.POST['offline'] != 'nochange':
+                
+                opoffline = None
+                if matches.values("offline").distinct().count() == 1:
+                    if matches[0].offline:
+                        opoffline = 'offline'
+                    else:
+                        opoffline = 'online'
+                
+                if request.POST['offline'] != opoffline or not opoffline:
+                    matches.update(offline=(request.POST['offline'] == 'offline'))
+                    base['message'] += 'Set matches to ' + request.POST['offline'] + '. '
+
+            #Set new type if new type is != old type or sibling checkbox is set. 
+            if request.POST['type'] != 'nochange' and (request.POST['type'] != event.type or 'siblings' in request.POST.keys()):
+                event.change_type(request.POST['type'])
+                base['message'] += 'Set new event type. '
+                if 'siblings' in request.POST.keys() and siblings is not None:
+                    base['message'] += 'Set new event type for sibling events. '
+                    for sibling in siblings:
+                        sibling.change_type(request.POST['type'])
+                base['message'] += 'This likely affected child- and parent events. '
+
+            #Check if new ID is not the same as old ID
             if request.POST['homepage'] != event.get_homepage():
-                event.set_homepage(request.POST['homepage'])
+                #Special case: Make sure not to delete already empty old ID.
+                if event.get_homepage() or request.POST['homepage'] != '':
+                    event.set_homepage(request.POST['homepage'])
+                    base['message'] += 'Set new homepage. '
 
-            if request.POST['tlpd_in_id'] != event.get_tlpd_in_id():
-                event.set_tlpd_in_id(request.POST['tlpd_in_id'])
+            if request.POST['tlpd_kr_id'] != str(event.get_tlpd_kr_id()):
+                if event.get_tlpd_kr_id() or request.POST['tlpd_kr_id'] != '':
+                    event.set_tlpd_kr_id(request.POST['tlpd_kr_id'])
+                    base['message'] += 'Set new TLPD Korea ID. '
 
-            if request.POST['tlpd_kr_id'] != event.get_tlpd_kr_id():
-                event.set_tlpd_kr_id(request.POST['tlpd_kr_id'])
+            if request.POST['tlpd_in_id'] != str(event.get_tlpd_in_id()):
+                if event.get_tlpd_in_id() or request.POST['tlpd_in_id'] != '':
+                    event.set_tlpd_in_id(request.POST['tlpd_in_id'])
+                    base['message'] += 'Set new TLPD international ID. '
 
-            if request.POST['tlpd_hots_id'] != event.get_tlpd_hots_id():
-                event.set_tlpd_hots_id(request.POST['tlpd_hots_id'])
-
-            if request.POST['tl_thread'] != event.get_tl_thread():
-                event.set_tl_thread(request.POST['tl_thread'])
+            if request.POST['tlpd_hots_id'] != str(event.get_tlpd_hots_id()):
+                if event.get_tlpd_hots_id() or request.POST['tlpd_hots_id'] != '':
+                    event.set_tlpd_hots_id(request.POST['tlpd_hots_id'])
+                    base['message'] += 'Set new TLPD Heart of the Swarm ID. '
+                    
+            if request.POST['tl_thread'] != str(event.get_tl_thread()):
+                if event.get_tl_thread() or request.POST['tl_thread'] != '':
+                    event.set_tl_thread(request.POST['tl_thread'])
+                    base['message'] += 'Set new teamliquid.net thread ID. '
 
             if request.POST['lp_name'] != event.get_lp_name():
-                event.set_lp_name(request.POST['lp_name'])
+                if event.get_lp_name() or request.POST['lp_name'] != '':
+                    event.set_lp_name(request.POST['lp_name'])
+                    base['message'] += 'Set new Liquipedia link. '
             
-            if request.POST.get("prizepoolselect"):
+            #event.get_prizepool()
+            print request.POST.get("prizepoolselect")
+            if request.POST.get("prizepoolselect") and event.get_prizepool() is not False:
                 event.set_prizepool(False)
                 Earnings.objects.filter(event=event).delete()
-            else:
+                base['message'] += 'Set this event as having no prize pool. '
+            elif event.get_prizepool() is False:
                 event.set_prizepool(None) 
+                base['message'] += 'Set this event as having a prize pool. '
                 
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
             parent = event
             for q in request.POST['subevent'].strip().split(','):
-                type = request.POST['type']
-                parent.add_child(q.strip(), type, 'noprint' in request.POST, 'closed' in request.POST)
+                addtype = request.POST['type']
+                parent.add_child(q.strip(), addtype, 'noprint' in request.POST, 'closed' in request.POST)
                 
         elif 'move' in request.POST and request.POST['move'] == 'Move':
             eventid = request.POST['moveevent']

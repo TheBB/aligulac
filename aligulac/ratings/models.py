@@ -143,6 +143,9 @@ class Event(models.Model):
         else:
             return None
 
+    def get_prizepool(self):
+        return self.prizepool
+
     #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def get_earliest(self):
         from django.db import connection

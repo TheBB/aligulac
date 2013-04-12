@@ -559,7 +559,7 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
-            {% if event.get_homepage or event.get_tlpd_kr_id or event.get_tlpd_in_id or event.get_tl_thread or event.get_lp_name %}
+            {% if event.get_homepage or event.get_tlpd_kr_id or event.get_tlpd_in_id or event.get_tlpd_hots_id or event.get_tl_thread or event.get_lp_name %}
             <div class="row infobox">
                 <div class="rowel">External</div>
                 <div class="rower">
@@ -571,6 +571,9 @@ ratings.views.events.
                     {% endif %}
                     {% if event.get_tlpd_in_id %}
                     <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
+                    {% endif %}
+                    {% if event.get_tlpd_hots_id %}
+                    <a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ event.get_tlpd_hots_id }}" target="_blank">TLPD</a>
                     {% endif %}
                     {% if event.get_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
@@ -593,6 +596,10 @@ ratings.views.events.
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Int.</div>
                     <div class="rower"><input type="text" name="tlpd_in_id" {% if event.get_tlpd_in_id %}value="{{ event.get_tlpd_in_id }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">TLPD HotS</div>
+                    <div class="rower"><input type="text" name="tlpd_hots_id" {% if event.get_tlpd_hots_id %}value="{{ event.get_tlpd_hots_id }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Teamliquid.net thread ID</div>

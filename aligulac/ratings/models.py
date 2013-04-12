@@ -39,6 +39,7 @@ class Event(models.Model):
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
     tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
+    tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
     prizepool = models.NullBooleanField(blank=True, null=True)
 
@@ -95,55 +96,53 @@ class Event(models.Model):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')[0]
     
     def get_homepage(self):
-        if self.homepage:
-            return self.homepage
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, homepage__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].homepage
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, homepage__isnull=False)\
-                            .order_by('-lft').values('homepage')[0]['homepage']
-            except:
-                return None
+            return None
 
     def get_lp_name(self):
-        if self.lp_name:
-            return self.lp_name
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, lp_name__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].lp_name
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, lp_name__isnull=False)\
-                            .order_by('-lft').values('lp_name')[0]['lp_name']
-            except:
-                return None
+            return None
 
     def get_tlpd_in_id(self):
-        if self.tlpd_in_id:
-            return self.tlpd_in_id
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_in_id__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].tlpd_in_id
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tlpd_in_id__isnull=False)\
-                            .order_by('-lft').values('tlpd_in_id')[0]['tlpd_in_id']
-            except:
-                return None
+            return None
 
     def get_tlpd_kr_id(self):
-        if self.tlpd_kr_id:
-            return self.tlpd_kr_id
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_kr_id__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].tlpd_kr_id
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tlpd_kr_id__isnull=False)\
-                            .order_by('-lft').values('tlpd_kr_id')[0]['tlpd_kr_id']
-            except:
-                return None
+            return None
+
+    def get_tlpd_hots_id(self):
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_hots_id__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].tlpd_hots_id
+        else:
+            return None
 
     def get_tl_thread(self):
-        if self.tl_thread:
-            return self.tl_thread
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tl_thread__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].tl_thread
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, tl_thread__isnull=False)\
-                            .order_by('-lft').values('tl_thread')[0]['tl_thread']
-            except:
-                return None
-            
+            return None
+
     #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def get_earliest(self):
         from django.db import connection
@@ -219,6 +218,13 @@ class Event(models.Model):
             self.tlpd_in_id = None
         else:
             self.tlpd_in_id = tlpd_in_id
+        self.save()
+
+    def set_tlpd_hots_id(self, tlpd_hots_id):
+        if tlpd_hots_id == '':
+            self.tlpd_hots_id = None
+        else:
+            self.tlpd_hots_id = tlpd_hots_id
         self.save()
 
     def set_tl_thread(self, tl_thread):

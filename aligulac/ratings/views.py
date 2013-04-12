@@ -588,6 +588,9 @@ def events(request, event_id=None):
             if request.POST['tlpd_kr_id'] != event.get_tlpd_kr_id():
                 event.set_tlpd_kr_id(request.POST['tlpd_kr_id'])
 
+            if request.POST['tlpd_hots_id'] != event.get_tlpd_hots_id():
+                event.set_tlpd_hots_id(request.POST['tlpd_hots_id'])
+
             if request.POST['tl_thread'] != event.get_tl_thread():
                 event.set_tl_thread(request.POST['tl_thread'])
 

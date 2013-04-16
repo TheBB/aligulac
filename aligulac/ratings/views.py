@@ -342,8 +342,8 @@ def player(request, player_id):
                     return (left*r.bf_rating + right*ratings[ind-1].bf_rating) / (left+right)
                 except:
                     return r.bf_rating
-
         return ratings[-1].bf_rating
+
     stories = player.story_set.all()
     for s in stories:
         s.rating = interp_rating(s.date, base['ratings'])

@@ -376,38 +376,66 @@ This is the template for the main player page, called from ratings.views.player.
                     }
                 },
             },
+            tooltip: {
+                formatter: function () {
+                    return this.point.name;
+                }
+            },
             series: [{
                 name: 'vs. Protoss',
                 color: '#00dd00',
                 lineWidth: 1,
                 dashStyle: 'Dash',
-                data: [{% spaceless %}
-                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}],{% endfor %}{% endspaceless %}]
+                data: [{% for r in ratings %} {
+                          name: '{{ r.period.end }} vP: {{r.bf_rating|ratscale }}',
+                          x: {{ r.period.end|milliseconds }},
+                          y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
+                      },{% endfor %}]
             }, {
                 name: 'vs. Terran',
                 color: '#0000dd',
                 lineWidth: 1,
                 dashStyle: 'Dash',
-                data: [{% spaceless %}
-                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}],{% endfor %}{% endspaceless %}]
+                data: [{% for r in ratings %} {
+                          name: '{{ r.period.end }} vT: {{r.bf_rating|ratscale }}',
+                          x: {{ r.period.end|milliseconds }},
+                          y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
+                      },{% endfor %}]
             }, {
                 name: 'vs. Zerg',
                 color: '#dd0000',
                 lineWidth: 1,
                 dashStyle: 'Dash',
-                data: [{% spaceless %}
-                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                          {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}],{% endfor %}{% endspaceless %}]
+                data: [{% for r in ratings %} {
+                          name: '{{ r.period.end }} vZ: {{r.bf_rating|ratscale }}',
+                          x: {{ r.period.end|milliseconds }},
+                          y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
+                      },{% endfor %}]
             }, {
                 name: 'General',
                 color: '#000000',
                 lineWidth: 3,
-                data: [{% spaceless %}
-                      {% for r in ratings %}[{{ r.period.end|milliseconds }},
-                      {{ r.bf_rating|ratscale }}],{% endfor %}{% endspaceless %}]
-            }]
+                data: [{% for r in ratings %} {
+                          name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
+                          x: {{ r.period.end|milliseconds }},
+                          y: {{ r.bf_rating|ratscale }}
+                      },{% endfor %}]
+            }, {% if stories %}
+                {
+                name: 'Stories',
+                type: 'scatter',
+                color: '#aaaa00',
+                marker: {
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 5
+                },
+                data: [{% for s in stories %} {
+                          name: '{{ s.date }}: {{ s.text }}',
+                          x: {{ s.date|milliseconds }},
+                          y: {{ s.rating|ratscale }}
+                      },{% endfor %}]
+            } {% endif %}]
         /*}, function(chart) {
             chart.xAxis[0].addPlotLine({
                 value: 1325040400000,

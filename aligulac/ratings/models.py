@@ -412,6 +412,17 @@ class Player(models.Model):
         else:
             Alias.objects.filter(player=self).delete()
 
+class Story(models.Model):
+    player = models.ForeignKey(Player, null=False)
+    text = models.CharField(max_length=200, null=False)
+    date = models.DateField(null=False)
+
+    class Meta:
+        verbose_name_plural = 'stories'
+
+    def __unicode__(self):
+        return self.player.tag + ': ' + self.text + ' on ' + str(self.date)
+
 class Team(models.Model):
     name = models.CharField(max_length=100)
     shortname = models.CharField(max_length=25, null=True, blank=True)

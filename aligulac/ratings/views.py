@@ -333,7 +333,24 @@ def player(request, player_id):
     teammems = sorted(teammems, key=meandate, reverse=True)
     teammems = sorted(teammems, key=lambda t: t.current, reverse=True)
 
-    base.update({'player': player, 'countryfull': countryfull, 'rating': rating, 'teammems': teammems})
+    def interp_rating(date, ratings):
+        for ind, r in enumerate(ratings):
+            if (r.period.end - date).days >= 0:
+                try:
+                    right = (r.period.end - date).days
+                    left = (date - ratings[ind-1].period.end).days
+                    return (left*r.bf_rating + right*ratings[ind-1].bf_rating) / (left+right)
+                except:
+                    return r.bf_rating
+
+        return ratings[-1].bf_rating
+    stories = player.story_set.all()
+    for s in stories:
+        s.rating = interp_rating(s.date, base['ratings'])
+    base['stories'] = stories
+
+    base.update({'player': player, 'countryfull': countryfull, 'rating': rating,
+                 'teammems': teammems})
     return render_to_response('player.html', base)
 
 def player_historical(request, player_id):

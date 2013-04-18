@@ -321,6 +321,7 @@ class Player(models.Model):
 
     tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
     tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
+    tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
     sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
@@ -378,6 +379,13 @@ class Player(models.Model):
             self.tlpd_in_id = None
         else:
             self.tlpd_in_id = tlpd_in_id
+        self.save()
+
+    def set_tlpd_hots_id(self, tlpd_hots_id):
+        if tlpd_hots_id == '':
+            self.tlpd_hots_id = None
+        else:
+            self.tlpd_hots_id = tlpd_hots_id
         self.save()
 
     def set_sc2e_id(self, sc2e_id):

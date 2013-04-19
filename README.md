@@ -2,13 +2,13 @@
 
 Contributing to Aligulac can take several forms.
 
-* [Maintaining the database.](#database)
+* [Maintaining the database.](#-maintaining-the-database)
 * Developing the website.
 * Other types of work.
 
 These are described in the relevant sections below.
 
-## <a id="database"></a> Maintaining the database
+## Maintaining the database
 
 This is the source code for the website http://aligulac.com
 

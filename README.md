@@ -1,5 +1,7 @@
 # Contributor's guide to Aligulac.com
 
+## Overview
+
 Contributing to Aligulac can take several forms.
 
 * [Maintaining the database.](#maintaining-the-database)
@@ -7,6 +9,14 @@ Contributing to Aligulac can take several forms.
 * [Other types of work.](#other)
 
 These are described in the relevant sections below.
+
+## Meeting places
+
+The most active forum for Aligulac contributors to meet and coordinate is our
+Skype chat. To get in, just add TheBB on Skype. His username is *evfonn*.
+
+There is also an IRC channel on quakenet: #aligulac. It is not as active, but
+favored by some.
 
 ## Maintaining the database
 

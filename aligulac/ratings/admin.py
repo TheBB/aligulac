@@ -28,7 +28,7 @@ class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
             (None,          {'fields': ['tag','race']}),
             ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_kr_id','tlpd_in_id','lp_name','sc2c_id','sc2e_id']})
+            ('External',    {'fields': ['tlpd_kr_id','tlpd_in_id','tlpd_hots_id','lp_name','sc2c_id','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline]
     search_fields = ['tag']

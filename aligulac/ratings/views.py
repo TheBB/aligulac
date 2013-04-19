@@ -197,32 +197,37 @@ def player(request, player_id):
         if sc2c != str(player.sc2c_id):
             if player.sc2c_id or sc2c != '':
                 player.set_sc2c_id(sc2c)
-                base['message'] += "Changed SC2charts link. "
-
+                base['message'] += "Changed SC2charts ID. "
 
         tlpdkr = request.POST['TLPDKR']
         if tlpdkr != str(player.tlpd_kr_id):
             if player.tlpd_kr_id or tlpdkr != '':
                 player.set_tlpd_kr_id(tlpdkr)
-                base['message'] += "Changed TLPD Korea link. "
+                base['message'] += "Changed TLPD Korea ID. "
 
         tlpdin = request.POST['TLPDIN']
         if tlpdin != str(player.tlpd_in_id):
             if player.tlpd_in_id or tlpdin != '':
                 player.set_tlpd_in_id(tlpdin)
-                base['message'] += "Changed TLKD international link. "
+                base['message'] += "Changed TLPD international ID. "
+
+        tlpdhots = request.POST['TLPDHOTS']
+        if tlpdhots != str(player.tlpd_hots_id):
+            if player.tlpd_hots_id or tlpdhots != '':
+                player.set_tlpd_hots_id(tlpdhots)
+                base['message'] += "Changed TLPD HotS ID. "
 
         sc2e = request.POST['SC2E']
         if sc2e != str(player.sc2e_id):
             if player.sc2e_id or sc2e != '':
                 player.set_sc2e_id(sc2e)
-                base['message'] += "Changed SC2earnings link. "
+                base['message'] += "Changed SC2earnings ID. "
 
         lp = request.POST['LP']
         if lp != str(player.lp_name):
             if player.lp_name or lp != '':
                 player.set_lp_name(lp)
-                base['message'] += "Changed Liquipedia link. "
+                base['message'] += "Changed Liquipedia title. "
 
     countries = []
     for k, v in data.ccn_to_cn.iteritems():

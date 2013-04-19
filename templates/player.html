@@ -148,7 +148,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower">{{ player.goodynum }}</div>
             </div>
             {% endif %}
-            {% if player.tlpd_kr_id or player.tlpd_in_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+            {% if player.tlpd_kr_id or player.tlpd_in_id or player.tlpd_hots_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
                 <div class="row infobox">
                     <div class="rowel">External</div>
                     <div class="rower">
@@ -160,6 +160,9 @@ This is the template for the main player page, called from ratings.views.player.
                         {% endif %}
                         {% if player.tlpd_in_id %}
                         <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
+                        {% endif %}
+                        {% if player.tlpd_hots_id %}
+                        <a href="http://www.teamliquid.net/tlpd/hots/players/{{ player.tlpd_hots_id }}" target="_blank">TLPD:HotS</a>
                         {% endif %}
                         {% if player.sc2e_id %}
                         <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
@@ -182,6 +185,10 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Int.</div>
                     <div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">TLPD HotS</div>
+                    <div class="rower"><input type="number" name="TLPDHOTS" {% if player.tlpd_hots_id %}value="{{ player.tlpd_hots_id }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel">sc2earnings.com</div>

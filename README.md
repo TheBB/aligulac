@@ -2,7 +2,7 @@
 
 Contributing to Aligulac can take several forms.
 
-* [Maintaining the database.](#-maintaining-the-database)
+* [Maintaining the database.](#maintaining-the-database)
 * Developing the website.
 * Other types of work.
 

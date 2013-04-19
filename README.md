@@ -48,6 +48,21 @@ have no impact on anything.
 
 **NOTE:** When changing a player's race, past matches will remain unaffected.
 
+### Events
+
+The events system is one of the most complicated parts of Aligulac, and also one
+of the things that separate it from its "competitors".
+
+Every match should be assigned to one and only one event. This means that the
+term *event* has a somewhat broader usage here than elsewhere. Particularly,
+events may represent both rounds and organizers.
+
+Events are organized in a tree structure. For example:
+
+GSL → 2013 → Season 1 → Code S → Ro16 → Group A 
+Proleage → 2011-2012 Hybrid Season 2 → Round 2 → Week 4 → Samsung KHAN vs. CJ
+Entus
+
 ## Developing the website
 
 This is the source code for the website http://aligulac.com

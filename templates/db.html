@@ -28,13 +28,29 @@ dump. Called from aligulac.views.db.
         <div class="rower">{{ nmatches }}</div>
     </div>
     <div class="row">
-        <div class="rowel">Wings of Liberty</div>
+        <div class="rowel">Wings of Liberty Games</div>
+        <div class="rower">{{ nwolgames }} <span class="small">({{ nwolgames|pctg3:ngames }}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Heart of the Swarm Games</div>
+        <div class="rower">{{ nhotsgames }} <span class="small">({{ nhotsgames|pctg3:ngames }}%)</span></div>
+    </div>
+	 <div class="row">
+        <div class="rowel">Wings of Liberty Matches</div>
         <div class="rower">{{ nwol }} <span class="small">({{ nwol|pctg3:nmatches }}%)</span></div>
     </div>
-    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Heart of the Swarm</div>
+	 <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+        <div class="rowel">Heart of the Swarm Matches</div>
         <div class="rower">{{ nhots }} <span class="small">({{ nhots|pctg3:nmatches }}%)</span></div>
     </div>
+	<div class="row">
+        <div class="rowel">Games played online</div>
+        <div class="rower">{{ nonlinegames }} <span class="small">({{ nonlinegames|pctg3:ngames}}%)</span></div>
+    </div>
+    <div class="row">
+        <div class="rowel">Games played offline</div>
+        <div class="rower">{{ nofflinegames }} <span class="small">({{ nofflinegames|pctg3:ngames}}%)</span></div>
+	</div>
     <div class="row">
         <div class="rowel">Matches played online</div>
         <div class="rower">{{ nonline }} <span class="small">({{ nonline|pctg3:nmatches }}%)</span></div>

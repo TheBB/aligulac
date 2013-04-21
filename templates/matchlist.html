@@ -57,8 +57,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_fullpath}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_fullpath}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_fullpath|smallhash}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_fullpath|smallhash}}-'); return false;">unchk</a>
             {% endif %}
         </td>
     </tr>
@@ -88,8 +88,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_partpath}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_partpath}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_partpath|smallhash}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_partpath|smallhash}}-'); return false;">unchk</a>
             {% endif %}
         </td>
     </tr>
@@ -146,9 +146,9 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 {% if lm_header == "info" %}
                 <input type="checkbox" name="match-{{ m.match_id }}" value="y" />
                 {% elif lm_header == "partial" %}
-                <input type="checkbox" name="match-{{ m.match.event_check_partpath }}-{{ m.match_id }}" value="y" />
+                <input type="checkbox" name="match-{{ m.match.event_check_partpath|smallhash }}-{{ m.match_id }}" value="y" />
                 {% else %}
-                <input type="checkbox" name="match-{{ m.match.event_check_fullpath }}-{{ m.match_id }}" value="y" />
+                <input type="checkbox" name="match-{{ m.match.event_check_fullpath|smallhash }}-{{ m.match_id }}" value="y" />
                 {% endif %}
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>

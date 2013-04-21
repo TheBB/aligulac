@@ -45,8 +45,8 @@ ratings.submitviews.review.
             <a id="lma-{{ g.id }}" href="#" 
                 onclick="togvis_tbody('lm-{{g.id}}');togHTML('lma-{{g.id}}','hide','show');return false;">
                 show</a>
-            <a href="#" onclick="mark_all(true, 'match-{{g.event}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{g.event}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{g.event|smallhash}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{g.event|smallhash}}-'); return false;">unchk</a>
             </td>
         </tr>
     <tbody id="lm-{{g.id}}" style="display: none;">

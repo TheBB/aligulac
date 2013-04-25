@@ -181,7 +181,6 @@ def player(request, player_id):
         akas = request.POST['AKA']
         if akas != '':
             aka = [s.strip() for s in akas.split(',')]
-            print aka
         else:
             aka = None
         player.set_aliases(aka)
@@ -198,25 +197,26 @@ def player(request, player_id):
             if player.sc2c_id or sc2c != '':
                 player.set_sc2c_id(sc2c)
                 base['message'] += "Changed SC2charts ID. "
+        
+        tlpdid = request.POST['TLPD']
+        tlpddb = 0
+        if request.POST.get('TLPDKR'):
+            tlpddb += 0b1
+        if request.POST.get('TLPDIN'):
+            tlpddb += 0b10
+        if request.POST.get('TLPDHOTS'):
+            tlpddb += 0b100
+        if request.POST.get('TLPDHOTSBETA'):
+            tlpddb += 0b1000
 
-        tlpdkr = request.POST['TLPDKR']
-        if tlpdkr != str(player.tlpd_kr_id):
-            if player.tlpd_kr_id or tlpdkr != '':
-                player.set_tlpd_kr_id(tlpdkr)
-                base['message'] += "Changed TLPD Korea ID. "
-
-        tlpdin = request.POST['TLPDIN']
-        if tlpdin != str(player.tlpd_in_id):
-            if player.tlpd_in_id or tlpdin != '':
-                player.set_tlpd_in_id(tlpdin)
-                base['message'] += "Changed TLPD international ID. "
-
-        tlpdhots = request.POST['TLPDHOTS']
-        if tlpdhots != str(player.tlpd_hots_id):
-            if player.tlpd_hots_id or tlpdhots != '':
-                player.set_tlpd_hots_id(tlpdhots)
-                base['message'] += "Changed TLPD HotS ID. "
-
+        if tlpdid != str(player.tlpd_id) or tlpddb != player.tlpd_db:
+            if player.tlpd_id or tlpdid != '':
+                player.set_tlpd_id(tlpdid, tlpddb)
+                if tlpdid == '' or tlpddb == 0:
+                    base['message'] += "Removed TLPD ID. "
+                else:
+                    base['message'] += "Changed TLPD ID. "
+        
         sc2e = request.POST['SC2E']
         if sc2e != str(player.sc2e_id):
             if player.sc2e_id or sc2e != '':
@@ -659,20 +659,24 @@ def events(request, event_id=None):
                     event.set_homepage(request.POST['homepage'])
                     base['message'] += 'Set new homepage. '
 
-            if request.POST['tlpd_kr_id'] != str(event.get_tlpd_kr_id()):
-                if event.get_tlpd_kr_id() or request.POST['tlpd_kr_id'] != '':
-                    event.set_tlpd_kr_id(request.POST['tlpd_kr_id'])
-                    base['message'] += 'Set new TLPD Korea ID. '
-
-            if request.POST['tlpd_in_id'] != str(event.get_tlpd_in_id()):
-                if event.get_tlpd_in_id() or request.POST['tlpd_in_id'] != '':
-                    event.set_tlpd_in_id(request.POST['tlpd_in_id'])
-                    base['message'] += 'Set new TLPD international ID. '
-
-            if request.POST['tlpd_hots_id'] != str(event.get_tlpd_hots_id()):
-                if event.get_tlpd_hots_id() or request.POST['tlpd_hots_id'] != '':
-                    event.set_tlpd_hots_id(request.POST['tlpd_hots_id'])
-                    base['message'] += 'Set new TLPD Heart of the Swarm ID. '
+            tlpdid = request.POST['TLPD']
+            tlpddbstr = request.POST['TLPDDB']
+            if tlpddbstr  == 'TLPDKR':
+                tlpddb = 0b1
+            elif tlpddbstr == 'TLPDIN':
+                tlpddb = 0b10
+            elif tlpddbstr == 'TLPDHOTS':
+                tlpddb = 0b100
+            elif tlpddbstr == 'TLPDHOTSBETA':
+                tlpddb = 0b1000
+    
+            if tlpdid != str(event.tlpd_id) or tlpddb != event.tlpd_db:
+                if event.tlpd_id or tlpdid != '':
+                    event.set_tlpd_id(tlpdid, tlpddb)
+                    if tlpdid == '' or tlpddb == 0:
+                        base['message'] += "Removed TLPD ID. "
+                    else:
+                        base['message'] += "Changed TLPD ID. "
                     
             if request.POST['tl_thread'] != str(event.get_tl_thread()):
                 if event.get_tl_thread() or request.POST['tl_thread'] != '':
@@ -685,7 +689,6 @@ def events(request, event_id=None):
                     base['message'] += 'Set new Liquipedia link. '
             
             #event.get_prizepool()
-            print request.POST.get("prizepoolselect")
             if request.POST.get("prizepoolselect") and event.get_prizepool() is not False:
                 event.set_prizepool(False)
                 Earnings.objects.filter(event=event).delete()

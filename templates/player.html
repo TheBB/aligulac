@@ -148,22 +148,27 @@ This is the template for the main player page, called from ratings.views.player.
                 <div class="rower">{{ player.goodynum }}</div>
             </div>
             {% endif %}
-            {% if player.tlpd_kr_id or player.tlpd_in_id or player.tlpd_hots_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+            {% if player.tlpd_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
                 <div class="row infobox">
                     <div class="rowel">External</div>
                     <div class="rower">
                         {% if player.sc2c_id %}
                         <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
                         {% endif %}
-                        {% if player.tlpd_kr_id %}
-                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ player.tlpd_kr_id }}" target="_blank">TLPD:KR</a>
-                        {% endif %}
-                        {% if player.tlpd_in_id %}
-                        <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ player.tlpd_in_id }}" target="_blank">TLPD:IN</a>
-                        {% endif %}
-                        {% if player.tlpd_hots_id %}
-                        <a href="http://www.teamliquid.net/tlpd/hots/players/{{ player.tlpd_hots_id }}" target="_blank">TLPD:HotS</a>
-                        {% endif %}
+                        {% with tlpds=player.get_tlpd_id %}
+                        	{% if tlpds.KR %}
+	                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ tlpds.KR }}" target="_blank">TLPD:KR</a>
+                        	{% endif %}
+                        	{% if tlpds.IN %}
+	                        <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ tlpds.IN }}" target="_blank">TLPD:IN</a>
+                        	{% endif %}
+                        	{% if tlpds.HotS %}
+	                        <a href="http://www.teamliquid.net/tlpd/hots/players/{{ tlpds.HotS }}" target="_blank">TLPD:HotS</a>
+                        	{% endif %}
+                        	{% if tlpds.HotSbeta %}
+	                        <a href="http://www.teamliquid.net/tlpd/hots-beta/players/{{ tlpds.HotSbeta }}" target="_blank">TLPD:HotS beta</a>
+                        	{% endif %}
+                        {% endwith %}
                         {% if player.sc2e_id %}
                         <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
                         {% endif %}
@@ -179,17 +184,24 @@ This is the template for the main player page, called from ratings.views.player.
                     <div class="rower"><input type="number" name="SC2C" {% if player.sc2c_id %}value="{{ player.sc2c_id }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD Korea</div>
-                    <div class="rower"><input type="number" name="TLPDKR" {% if player.tlpd_kr_id %}value="{{ player.tlpd_kr_id }}"{% endif %} /></div>
+                    <div class="rowel">TLPD ID</div>
+                    <div class="rower"><input type="number" name="TLPD" {% if player.tlpd_id %}value="{{ player.tlpd_id }}"{% endif %} /></div>
                 </div>
+				{% with tlpds=player.get_tlpd_id %}
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD Int.</div>
-                    <div class="rower"><input type="number" name="TLPDIN" {% if player.tlpd_in_id %}value="{{ player.tlpd_in_id }}"{% endif %} /></div>
+                    <div class="rowel">TLPD Databases</div>
+                    <div class="rower">
+                    	<label for="TLPDKR">Korea</label>
+                    	<input type="checkbox" id="TLPDKR" name="TLPDKR" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
+                    	<label for="TLPDIN">International</label>
+                    	<input type="checkbox" id="TLPDIN" name="TLPDIN" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
+                    	<label for="TLPDHOTS">HotS</label>
+                    	<input type="checkbox" id="TLPDHOTS" name="TLPDHOTS" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
+                    	<label for="TLPDHOTSBETA">HotS beta</label>
+                    	<input type="checkbox" id="TLPDHOTSBETA" name="TLPDHOTSBETA" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                    </div>
                 </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD HotS</div>
-                    <div class="rower"><input type="number" name="TLPDHOTS" {% if player.tlpd_hots_id %}value="{{ player.tlpd_hots_id }}"{% endif %} /></div>
-                </div>
+				{% endwith %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">sc2earnings.com</div>
                     <div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>

@@ -1,4 +1,4 @@
-from ratings.models import Player, Team, Period, Match, Rating, Event, Alias,\
+from ratings.models import Player, Team, Period, Match, Rating, Event, Alias, Earnings,\
                            PreMatchGroup, PreMatch, Story
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
@@ -13,6 +13,13 @@ def player_country(p):
         return ''
 player_country.short_description = 'Country'
 
+def player_team(p):
+    try:
+        return Team.objects.get(active=True, teammembership__player=p, teammembership__current=True)
+    except:
+        return ''
+player_team.short_description = 'Team'
+    
 class MembersInline(admin.TabularInline):
     model = Team.members.through
 
@@ -24,15 +31,18 @@ class StoriesInline(admin.TabularInline):
     model = Story
     fields = ['text', 'date']
 
+class EarningsInline(admin.TabularInline):
+    model = Earnings
+
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
             (None,          {'fields': ['tag','race']}),
             ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_kr_id','tlpd_in_id','tlpd_hots_id','lp_name','sc2c_id','sc2e_id']})
+            ('External',    {'fields': ['tlpd_id','tlpd_db','lp_name','sc2c_id','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline]
     search_fields = ['tag']
-    list_display = ('tag', 'race', player_country, 'name')
+    list_display = ('tag', 'race', player_team, player_country, 'name')
 
 class TeamAdmin(admin.ModelAdmin):
     fields = ['name', 'shortname', 'founded', 'disbanded', 'lp_name', 'homepage', 'active']

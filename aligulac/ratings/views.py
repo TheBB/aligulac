@@ -659,24 +659,25 @@ def events(request, event_id=None):
                     event.set_homepage(request.POST['homepage'])
                     base['message'] += 'Set new homepage. '
 
-            tlpdid = request.POST['TLPD']
-            tlpddbstr = request.POST['TLPDDB']
-            if tlpddbstr  == 'TLPDKR':
-                tlpddb = 0b1
-            elif tlpddbstr == 'TLPDIN':
-                tlpddb = 0b10
-            elif tlpddbstr == 'TLPDHOTS':
-                tlpddb = 0b100
-            elif tlpddbstr == 'TLPDHOTSBETA':
-                tlpddb = 0b1000
+            if 'TLPDDB' in request.POST:
+                tlpdid = request.POST['TLPD']
+                tlpddbstr = request.POST['TLPDDB']
+                if tlpddbstr  == 'TLPDKR':
+                    tlpddb = 0b1
+                elif tlpddbstr == 'TLPDIN':
+                    tlpddb = 0b10
+                elif tlpddbstr == 'TLPDHOTS':
+                    tlpddb = 0b100
+                elif tlpddbstr == 'TLPDHOTSBETA':
+                    tlpddb = 0b1000
     
-            if tlpdid != str(event.tlpd_id) or tlpddb != event.tlpd_db:
-                if event.tlpd_id or tlpdid != '':
-                    event.set_tlpd_id(tlpdid, tlpddb)
-                    if tlpdid == '' or tlpddb == 0:
-                        base['message'] += "Removed TLPD ID. "
-                    else:
-                        base['message'] += "Changed TLPD ID. "
+                if tlpdid != str(event.tlpd_id) or tlpddb != event.tlpd_db:
+                    if event.tlpd_id or tlpdid != '':
+                        event.set_tlpd_id(tlpdid, tlpddb)
+                        if tlpdid == '' or tlpddb == 0:
+                            base['message'] += "Removed TLPD ID. "
+                        else:
+                            base['message'] += "Changed TLPD ID. "
                     
             if request.POST['tl_thread'] != str(event.get_tl_thread()):
                 if event.get_tl_thread() or request.POST['tl_thread'] != '':

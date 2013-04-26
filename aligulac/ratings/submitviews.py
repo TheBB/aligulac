@@ -503,10 +503,10 @@ def open_events(request):
         else:
             emptyopenevents.append(event)
             
+    #exclude team events and empty events from no prize pool list 
     for event in ppevents:
-        if event.get_root().category != "team":
+        if event.get_root().category != "team" and Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False).exists():
             noprizepoolevents.append(event)
-
 
     #remove "unknown events"
     emptyopenevents = emptyopenevents[1:]

@@ -403,7 +403,7 @@ def add_earnings_craftcupcombined():
 def add_earnings_cyborgcup():
     eventid = 11774
     event = Event.objects.get(id=eventid)
-    winners = {'#1':['Socke'],'#2':['GoOdy'],'#3':['DIMAGA'],'#4':['SjoW'],'#5':['DIMAGA'],'#6':['NightEnD'],'#7':['DIMAGA'],'#8':['DIMAGA'],'#9':['Satiini'],'#10':['INSoLeNCE'],'#11':['TLO'],'#12':['MaNa'],'#13':['Happy', 95],'#14':['Happy', 95],'#15':['MaNa'],'#16':['Kas'],'#17':['DIMAGA'],'#18':['Welmu'],'#19':['Bly'],'#20':['Happy', 95],'#21':['DIMAGA'],'#22':['HyuN']}
+    winners = {'#1':['Socke'],'#2':['GoOdy'],'#3':['DIMAGA'],'#4':['SjoW'],'#5':['DIMAGA'],'#6':['NightEnD'],'#7':['DIMAGA'],'#8':['DIMAGA'],'#9':['Satiini'],'#10':['INSoLeNCE'],'#11':['TLO'],'#13':['Happy', 95],'#14':['Happy', 95],'#15':['MaNa'],'#16':['Kas'],'#17':['DIMAGA'],'#18':['Welmu'],'#19':['Bly'],'#20':['Happy', 95],'#21':['DIMAGA'],'#22':['HyuN']}
     prize = 200
     currency = "EUR"
     

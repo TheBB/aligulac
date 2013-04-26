@@ -12,7 +12,7 @@ def make_player(player):
         return pl
 
     rats = Rating.objects.filter(player=player).order_by('-period__id')
-    if rats.count == 0:
+    if rats.count() == 0:
         pl = Player(player.tag, player.race, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 0.6)
         pl.dbpl = player
     else:

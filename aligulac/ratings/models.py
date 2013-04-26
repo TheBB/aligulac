@@ -45,11 +45,6 @@ class Event(models.Model):
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
 
-    #soon obsolete
-    tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
-    tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
-    tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
-
     prizepool = models.NullBooleanField(blank=True, null=True)
 
     INDIVIDUAL = 'individual'
@@ -310,11 +305,6 @@ class Player(models.Model):
     S = 'S'
     RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random'), (S, 'Switcher')]
     race = models.CharField(max_length=1, choices=RACES)
-
-    #soon obsolete
-    tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
-    tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
-    tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
 
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     #tlpd_db contains information in binary form on which TLPD databases to use:

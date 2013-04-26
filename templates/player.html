@@ -406,7 +406,7 @@ This is the template for the main player page, called from ratings.views.player.
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vP: {{r.bf_rating|ratscale }}',
+                          name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
                           y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
                       },{% endfor %}]
@@ -416,7 +416,7 @@ This is the template for the main player page, called from ratings.views.player.
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vT: {{r.bf_rating|ratscale }}',
+                          name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
                           y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
                       },{% endfor %}]
@@ -426,7 +426,7 @@ This is the template for the main player page, called from ratings.views.player.
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vZ: {{r.bf_rating|ratscale }}',
+                          name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
                           y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
                       },{% endfor %}]

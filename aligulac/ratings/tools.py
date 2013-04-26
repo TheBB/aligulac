@@ -589,3 +589,28 @@ def add_earnings_go4sc2_NA():
         
             Earnings.set_earnings(ievent, players, earnings, currency, placements)
             print "yay!"
+
+def convert_tlpds():
+    for event in Event.objects.filter(tlpd_kr_id__isnull=False):
+        tlpddb = 0b1
+        event.set_tlpd_id(event.tlpd_kr_id, tlpddb)
+    for event in Event.objects.filter(tlpd_in_id__isnull=False):
+        tlpddb = 0b10
+        event.set_tlpd_id(event.tlpd_in_id, tlpddb)
+    for event in Event.objects.filter(tlpd_hots_id__isnull=False):
+        tlpddb = 0b100
+        event.set_tlpd_id(event.tlpd_hots_id, tlpddb)
+        
+    for player in Player.objects.filter(Q(tlpd_kr_id__isnull=False) | Q(tlpd_in_id__isnull=False) | Q(tlpd_hots_id__isnull=False)):
+        tlpddb = 0
+        if player.tlpd_kr_id:
+            tlpdid = player.tlpd_kr_id 
+            tlpddb += 0b1
+        if player.tlpd_in_id:
+            tlpdid = player.tlpd_in_id 
+            tlpddb += 0b10
+        if player.tlpd_hots_id:
+            tlpdid = player.tlpd_hots_id 
+            tlpddb += 0b100
+
+        player.set_tlpd_id(tlpdid, tlpddb)

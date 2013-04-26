@@ -559,22 +559,27 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
-            {% if event.get_homepage or event.get_tlpd_kr_id or event.get_tlpd_in_id or event.get_tlpd_hots_id or event.get_tl_thread or event.get_lp_name %}
+            {% if event.get_homepage or event.tlpd_id or event.get_tl_thread or event.get_lp_name %}
             <div class="row infobox">
                 <div class="rowel">External</div>
                 <div class="rower">
                     {% if event.get_homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
-                    {% if event.get_tlpd_kr_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
-                    {% endif %}
-                    {% if event.get_tlpd_in_id %}
-                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
-                    {% endif %}
-                    {% if event.get_tlpd_hots_id %}
-                    <a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ event.get_tlpd_hots_id }}" target="_blank">TLPD</a>
-                    {% endif %}
+	                {% with tlpds=event.get_tlpd_id %}
+	                	{% if tlpds.KR %}
+	                  	<a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpds.KR }}" target="_blank">TLPD</a>
+	                 	{% endif %}
+	                 	{% if tlpds.IN %}
+	                  	<a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpds.IN }}" target="_blank">TLPD</a>
+	                 	{% endif %}
+	                 	{% if tlpds.HotS %}
+	                  	<a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ tlpds.HotS }}" target="_blank">TLPD</a>
+	                 	{% endif %}
+	                 	{% if tlpds.HotSbeta %}
+	                  	<a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">TLPD</a>
+	                 	{% endif %}
+	                {% endwith %}
                     {% if event.get_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                     {% endif %}
@@ -590,17 +595,24 @@ ratings.views.events.
                     <div class="rower"><input type="text" name="homepage" {% if event.get_homepage %}value="{{ event.get_homepage }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD Korea</div>
-                    <div class="rower"><input type="text" name="tlpd_kr_id" {% if event.get_tlpd_kr_id %}value="{{ event.get_tlpd_kr_id }}"{% endif %} /></div>
+                    <div class="rowel">TLPD ID</div>
+                    <div class="rower"><input type="number" name="TLPD" {% if event.tlpd_id %}value="{{ event.tlpd_id }}"{% endif %} /></div>
                 </div>
+				{% with tlpds=event.get_tlpd_id %}
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD Int.</div>
-                    <div class="rower"><input type="text" name="tlpd_in_id" {% if event.get_tlpd_in_id %}value="{{ event.get_tlpd_in_id }}"{% endif %} /></div>
+                    <div class="rowel">TLPD Database</div>
+                    <div class="rower">
+                    	<label for="TLPDKR">Korea</label>
+                    	<input type="radio" id="TLPDKR" name="TLPDDB" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
+                    	<label for="TLPDIN">International</label>
+                    	<input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
+                    	<label for="TLPDHOTS">HotS</label>
+                    	<input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
+                    	<label for="TLPDHOTSBETA">HotS beta</label>
+                    	<input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                    </div>
                 </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD HotS</div>
-                    <div class="rower"><input type="text" name="tlpd_hots_id" {% if event.get_tlpd_hots_id %}value="{{ event.get_tlpd_hots_id }}"{% endif %} /></div>
-                </div>
+				{% endwith %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Teamliquid.net thread ID</div>
                     <div class="rower"><input type="text" name="tl_thread" {% if event.get_tl_thread %}value="{{ event.get_tl_thread }}"{% endif %} /></div>

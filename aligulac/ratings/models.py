@@ -37,10 +37,19 @@ class Event(models.Model):
     fullname = models.CharField(max_length=500, default='')
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
+    
+    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
+    #tlpd_db contains information in binary form on which TLPD databases to use:
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
+    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
+    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+
+    #soon obsolete
     tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
     tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
     tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
-    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+
     prizepool = models.NullBooleanField(blank=True, null=True)
 
     INDIVIDUAL = 'individual'
@@ -111,27 +120,21 @@ class Event(models.Model):
         else:
             return None
 
-    def get_tlpd_in_id(self):
-        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_in_id__isnull=False).order_by('-lft')
-        
+    #returns a dictionary of TLPD IDs, or None if player has no TLPD link.
+    #Dictionary keys: IN, KR, HotS, HotSbeta. Values are either None or the TLPD ID.   
+    def get_tlpd_id(self):
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_id__isnull=False).order_by('-lft')
         if id:
-            return id[0].tlpd_in_id
-        else:
-            return None
-
-    def get_tlpd_kr_id(self):
-        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_kr_id__isnull=False).order_by('-lft')
-        
-        if id:
-            return id[0].tlpd_kr_id
-        else:
-            return None
-
-    def get_tlpd_hots_id(self):
-        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_hots_id__isnull=False).order_by('-lft')
-        
-        if id:
-            return id[0].tlpd_hots_id
+            tlpd_ids = {}
+            if (self.tlpd_db % 2) == 1:
+                tlpd_ids["KR"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b10 % 2) == 1:
+                tlpd_ids["IN"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b100 % 2) == 1:
+                tlpd_ids["HotS"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b1000 % 2) == 1:
+                tlpd_ids["HotSbeta"] = id[0].tlpd_id
+            return tlpd_ids
         else:
             return None
 
@@ -209,27 +212,16 @@ class Event(models.Model):
         self.lp_name = lp_name
         self.save()
 
-    def set_tlpd_kr_id(self, tlpd_kr_id):
-        if tlpd_kr_id == '':
-            self.tlpd_kr_id = None
-        else:
-            self.tlpd_kr_id = tlpd_kr_id
-        self.save()
 
-    def set_tlpd_in_id(self, tlpd_in_id):
-        if tlpd_in_id == '':
-            self.tlpd_in_id = None
+    def set_tlpd_id(self, tlpd_id, tlpd_db):
+        if tlpd_id == '' or tlpd_db == 0:
+            self.tlpd_id = None
+            self.tlpd_db = None
         else:
-            self.tlpd_in_id = tlpd_in_id
+            self.tlpd_id = tlpd_id
+            self.tlpd_db = tlpd_db
         self.save()
-
-    def set_tlpd_hots_id(self, tlpd_hots_id):
-        if tlpd_hots_id == '':
-            self.tlpd_hots_id = None
-        else:
-            self.tlpd_hots_id = tlpd_hots_id
-        self.save()
-
+        
     def set_tl_thread(self, tl_thread):
         if tl_thread == '':
             self.tl_thread = None
@@ -319,9 +311,16 @@ class Player(models.Model):
     RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random'), (S, 'Switcher')]
     race = models.CharField(max_length=1, choices=RACES)
 
+    #soon obsolete
     tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
     tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
     tlpd_hots_id = models.IntegerField('TLPD HotS ID', blank=True, null=True)
+
+    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
+    #tlpd_db contains information in binary form on which TLPD databases to use:
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
+    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
     sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
@@ -367,25 +366,13 @@ class Player(models.Model):
             self.sc2c_id = sc2c_id
         self.save()
 
-    def set_tlpd_kr_id(self, tlpd_kr_id):
-        if tlpd_kr_id == '':
-            self.tlpd_kr_id = None
+    def set_tlpd_id(self, tlpd_id, tlpd_db):
+        if tlpd_id == '' or tlpd_db == 0:
+            self.tlpd_id = None
+            self.tlpd_db = None
         else:
-            self.tlpd_kr_id = tlpd_kr_id
-        self.save()
-
-    def set_tlpd_in_id(self, tlpd_in_id):
-        if tlpd_in_id == '':
-            self.tlpd_in_id = None
-        else:
-            self.tlpd_in_id = tlpd_in_id
-        self.save()
-
-    def set_tlpd_hots_id(self, tlpd_hots_id):
-        if tlpd_hots_id == '':
-            self.tlpd_hots_id = None
-        else:
-            self.tlpd_hots_id = tlpd_hots_id
+            self.tlpd_id = tlpd_id
+            self.tlpd_db = tlpd_db
         self.save()
 
     def set_sc2e_id(self, sc2e_id):
@@ -419,6 +406,23 @@ class Player(models.Model):
         #aliases is None, so delete all aliases
         else:
             Alias.objects.filter(player=self).delete()
+
+    #returns a dictionary of TLPD IDs, or None if player has no TLPD link.
+    #Dictionary keys: IN, KR, HotS, HotSbeta. Values are either None or the TLPD ID.   
+    def get_tlpd_id(self):
+        if self.tlpd_id is None:
+            return None
+        else:
+            tlpd_ids = {}
+            if (self.tlpd_db % 2) == 1:
+                tlpd_ids["KR"] = self.tlpd_id
+            if (self.tlpd_db / 0b10 % 2) == 1:
+                tlpd_ids["IN"] = self.tlpd_id
+            if (self.tlpd_db / 0b100 % 2) == 1:
+                tlpd_ids["HotS"] = self.tlpd_id
+            if (self.tlpd_db / 0b1000 % 2) == 1:
+                tlpd_ids["HotSbeta"] = self.tlpd_id
+            return tlpd_ids
 
 class Story(models.Model):
     player = models.ForeignKey(Player, null=False)

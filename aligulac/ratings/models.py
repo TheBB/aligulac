@@ -657,6 +657,13 @@ class Earnings(models.Model):
         event.set_prizepool(True)
         return new
     
+    @staticmethod
+    def delete_earnings(event, ranked=True):
+        if ranked:
+            Earnings.objects.filter(event=event).exclude(placement__exact=0).delete()
+        else:
+            Earnings.objects.filter(event=event, placement__exact=0).delete()
+            
     def convert_earnings(self):
         currency = self.currency
         earningobj = Earnings.objects.filter(event=self.event)

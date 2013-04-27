@@ -749,6 +749,15 @@ def events(request, event_id=None):
                 base['message'] = 'Updated tournament prizepool.'
             else:
                 base['message'] = 'There was an error updating the tournament prizepool.'
+                
+        elif 'deleteearnings' in request.POST and request.POST['deleteearnings'] == 'Delete':
+            if request.POST['un-ranked'] == "ranked":
+                Earnings.delete_earnings(event)
+                base['message'] = 'Deleted ranked prize pool.'
+            elif request.POST['un-ranked'] == "unranked":
+                Earnings.delete_earnings(event, ranked=False)
+                base['message'] = 'Deleted unranked prize pool.'
+            
 
     base['event'] = event
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
@@ -945,7 +954,7 @@ def player_earnings(request, player_id):
         event.earliest = event.event.get_earliest()
         event.latest = event.event.get_latest()
     
-    #sort by latest date        
+    #sort by latest date
     def getLatest( object ):
         return object.latest
     earnings = list(earnings)

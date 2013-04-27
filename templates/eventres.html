@@ -284,12 +284,24 @@ ratings.views.events.
         
         var row = table.insertRow(-1);
         row.className = 'nonheader row2';
-        var cell = row.insertCell(0);
-		cell.colSpan = '3';
-        cell.align = 'right';
-        cell.appendChild(hiddeninput);
-        cell.appendChild(hiddentype);
-        cell.appendChild(submitbutton);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        if (!changeplayers) {
+        	var deletebutton = document.createElement("input");
+        	deletebutton.setAttribute("type", "submit");
+        	deletebutton.setAttribute("name", "deleteearnings");
+        	deletebutton.setAttribute("value", "Delete");
+        	deletebutton.setAttribute("onclick", "return validate_deleteearnings()");
+        	cell1.align = 'left';
+        	cell1.appendChild(deletebutton);
+		}
+
+		cell2.colSpan = '2';
+        cell2.align = 'right';
+        cell2.appendChild(hiddeninput);
+        cell2.appendChild(hiddentype);
+        cell2.appendChild(submitbutton);
 
         tableposition.appendChild(table);
     }
@@ -392,6 +404,13 @@ ratings.views.events.
     	}
     	
     	return true;
+    }
+    
+    function validate_deleteearnings()
+    {
+    	var answer = confirm("Are you sure you want to delete the prize pool?");
+    		if (answer) { return true; }
+    		else { return false; }
     }
     </script>
 {% endif %}

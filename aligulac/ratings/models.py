@@ -663,6 +663,10 @@ class Earnings(models.Model):
             Earnings.objects.filter(event=event).exclude(placement__exact=0).delete()
         else:
             Earnings.objects.filter(event=event, placement__exact=0).delete()
+
+    @staticmethod
+    def move_earnings(oldevent, newevent):
+        Earnings.objects.filter(event=oldevent).update(event=newevent)
             
     def convert_earnings(self):
         currency = self.currency

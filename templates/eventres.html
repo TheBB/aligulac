@@ -797,6 +797,8 @@ ratings.views.events.
                     <input type="Submit" name="add" value="Add" />
                 </td>
             </tr>
+	        </form>
+	        {% if surroundingevents %}
             <form method="post" action="/results/events/{{ event.id }}/">
             {% csrf_token %}
             <tr>
@@ -807,7 +809,7 @@ ratings.views.events.
                     <select name="moveevent" id="moveevent">
                         {% for events in surroundingevents %} 
                         {% if events != event %}
-                        <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
+                        <option value="{{ events.id }}" >{{ events }}</option>
                         {% endif %}
                         {% endfor %}
                     </select>
@@ -819,8 +821,33 @@ ratings.views.events.
                     <input type="Submit" name="move" value="Move" />
                 </td>
             </tr>
+	        </form>
+    	    {% endif %}
+	        {% if childevents %}{% if rearnings or urearnings %}
+            <form method="post" action="/results/events/{{ event.id }}/">
+            {% csrf_token %}
+            <tr>
+                <td class="form_left">
+                    <label for="moveevent">Move prize pools</label>
+                </td>
+                <td class="form_right">
+                    <select name="moveprizepool" id="moveprizepool">
+                        {% for events in childevents %} 
+                        <option value="{{ events.id }}" >{{ events }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    Warning: This will change the type of the event the prize pool is moved to to "event".<br>
+                    This event will be subsequently turned into a category.<br>
+                    <input type="Submit" name="movepp" value="Move" />
+                </td>
+            </tr>
+        	</form>
+	        {% endif %}{% endif %}
         </table>
-        </form>
     {% endif %}
 
 <p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>

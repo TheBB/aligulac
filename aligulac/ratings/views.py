@@ -721,6 +721,13 @@ def events(request, event_id=None):
             for e in event.get_children():
                 e.update_name()
 
+        elif 'movepp' in request.POST and request.POST['movepp'] == 'Move':
+            neweventid = request.POST['moveprizepool']
+            newevent = Event.objects.get(id=neweventid)
+            Earnings.move_earnings(event, neweventid)
+            newevent.change_type('event')
+            base['message'] = "Moved prize pool(s) to " + newevent.fullname
+
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
             amount = int(request.POST['amount'])
             currency = request.POST['currency']
@@ -767,6 +774,9 @@ def events(request, event_id=None):
 
     # Used for moving events
     base['surroundingevents'] = event.get_parent(1).get_children().exclude(lft__gte=event.lft, rgt__lte=event.rgt)
+    
+    # Used for moving prize pools
+    base['childevents'] = event.get_children()
 
     # Determine WoL/HotS and Online/Offline and event type
     if matches.values("game").distinct().count() == 1:

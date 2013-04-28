@@ -628,6 +628,17 @@ class Match(models.Model):
 
         super(Match, self).save(force_insert, force_update, *args, **kwargs)
         self.populate_orig()
+    
+    def delete(self,  *args, **kwargs):
+        eventobj = self.eventobj
+            
+        super(Match, self).delete(*args, **kwargs)
+        
+        if eventobj:
+            for event in self.eventobj.get_children(id=True):
+                # This is very slow if used for many matches, but that should rarely happen. 
+                event.set_earliest(event.get_earliest())
+                event.set_latest(event.get_latest())
 
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)

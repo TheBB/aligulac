@@ -631,7 +631,6 @@ class Match(models.Model):
     
     def delete(self,  *args, **kwargs):
         eventobj = self.eventobj
-            
         super(Match, self).delete(*args, **kwargs)
         
         if eventobj:

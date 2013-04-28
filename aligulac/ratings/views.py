@@ -951,9 +951,11 @@ def player_earnings(request, player_id):
 
     base = base_ctx('Ranking', 'Earnings', request, context=player)
 
+    # Get earnings and total earnings.
     earnings = Earnings.objects.filter(player=player)
     totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
     
+    # Get placements for events. 
     for event in earnings:
         dict = get_placements(event.event)
         for earning, placement in dict.items():
@@ -961,13 +963,25 @@ def player_earnings(request, player_id):
                 event.min = min(placement)
                 event.max = max(placement)
     
-    #sort by latest date
+    # Get dictionary of earnings in the form of Currency:TotalEarnings.
+    earningsByCurrency = {}
+    for earning in earnings:
+        try:
+            earningsByCurrency[earning.currency] += earning.origearnings
+        except:
+            earningsByCurrency[earning.currency] = earning.origearnings
+    
+    # Set earningsByCurrency to None when there is only one currency: USD.
+    if len(earningsByCurrency) == 1 and 'USD' in earningsByCurrency:
+        earningsByCurrency = None
+    
+    # Sort earnings by latest date.
     def getLatest( e ):
         return e.event.latest
     earnings = list(earnings)
     earnings.sort( key=getLatest, reverse=True )
 
-    base.update({'player': player, 'earnings': earnings, 'totalearnings': totalearnings})
+    base.update({'player': player, 'earnings': earnings, 'totalearnings': totalearnings, 'earningsByCurrency': earningsByCurrency})
     
     return render_to_response('player_earnings.html', base)
 
@@ -978,29 +992,64 @@ def earnings(request):
         page = int(request.GET['page'])
     except:
         page = 1
+    
+    # Filters
+    filters = {}
+    # Filter by year
+    if 'year' in request.GET and request.GET['year'] != 'all':
+        year = int(request.GET['year'])
+        fromdate = datetime.date(year, 1, 1)
+        todate = datetime.date(year+1, 1, 1)
+        filters["year"] = year
+    else:
+        fromdate = datetime.date(1900, 1, 1)
+        todate = datetime.date(2100, 1, 1)
+        filters["year"] = 'all'
+    # Filter by currency
+    if 'currency' in request.GET and request.GET['currency'] != 'all':
+        filters['currency'] = request.GET['currency']
+    else: 
+        filters['currency'] = 'all'
 
-    ranking = Earnings.objects.values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings', 'player')
-    players = Player.objects.all()
-    
-    totalprizepool = Earnings.objects.aggregate(Sum('earnings'))['earnings__sum']
-    
+    # Create ranking and total prize pool amount based on filters.
+    if filters['currency'] == 'all':
+        ranking = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate).values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings', 'player')
+        totalprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate).aggregate(Sum('earnings'))['earnings__sum']
+    else:
+        ranking = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__exact=filters['currency']).values('player').annotate(totalearnings=Sum('origearnings')).order_by('-totalearnings', 'player')
+        totalprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__exact=filters['currency']).aggregate(Sum('origearnings'))['origearnings__sum']
+
+    # Get currencies used.
+    currencies = []
+    currenciesQuery = Earnings.objects.values('currency').distinct().order_by('currency')
+    for currency in currenciesQuery:
+        dict = {}
+        dict["name"] = ccy.currency(currency['currency']).name
+        dict["code"] = ccy.currency(currency['currency']).code
+        currencies.append(dict)
+        
+    # Add player and team objects to ranking.
     for player in ranking:
-        player["playerobj"] = players.get(id=player["player"])
+        player["playerobj"] = Player.objects.get(id=player["player"])
         try:
             player["teamobj"] = player["playerobj"].teammembership_set.get(current=True)
         except:
             pass
     
-    # Pages
+    # Split ranking into 40 player sized pages
     psize = 40
     nitems = ranking.count()
     npages = nitems/psize + (1 if nitems % psize > 0 else 0)
     page = min(max(page, 1), npages)
     startcount = (page-1)*psize
 
-    ranking = ranking[(page-1)*psize:page*psize]
+    # If totalprizepool does not exist, the filters filtered out all players.
+    if totalprizepool:
+        ranking = ranking[(page-1)*psize:page*psize]
+    else:
+        base['empty'] = True
 
-    base.update({'ranking': ranking, 'totalprizepool': totalprizepool, 'page': page, 'npages': npages, 'startcount': startcount})
+    base.update({'ranking': ranking, 'totalprizepool': totalprizepool, 'filters':filters, 'currencies':currencies, 'page': page, 'npages': npages, 'startcount': startcount})
     
     return render_to_response('earnings.html', base)
 

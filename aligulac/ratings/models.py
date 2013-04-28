@@ -605,11 +605,12 @@ class Match(models.Model):
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         if self.changed_date():
             self.set_period()
-            for event in self.eventobj.get_children(id=True):
-                # This is very slow if used for many matches, but that should rarely happen. 
-                event.set_earliest(event.get_earliest())
-                event.set_latest(event.get_latest())
-                
+            if self.eventobj:
+                for event in self.eventobj.get_children(id=True):
+                    # This is very slow if used for many matches, but that should rarely happen. 
+                    event.set_earliest(event.get_earliest())
+                    event.set_latest(event.get_latest())
+
         if self.changed_period() or self.changed_effect():
             try:
                 self.orig_period.needs_recompute = True

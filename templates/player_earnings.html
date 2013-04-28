@@ -46,10 +46,10 @@ This is the template for the earnings of a player. It's called from ratings.view
             </td>
             <td></td>
             <td>
-            {% if earning.earliest != earning.latest %}
-            	{{ earning.earliest }} &ndash; {{ earning.latest }}
+            {% if earning.event.earliest != earning.event.latest %}
+            	{{ earning.event.earliest }} &ndash; {{ earning.event.latest }}
 			{% else %}
-            	{{ earning.latest }}
+            	{{ earning.event.latest }}
 			{% endif %}             
             </td>
         </tr>

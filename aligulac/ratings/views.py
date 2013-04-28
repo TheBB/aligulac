@@ -616,7 +616,8 @@ def events(request, event_id=None):
                 base['message'] += 'Set new event name. '
 
             if request.POST['date'].strip() != 'No change':
-                matches.update(date=request.POST['date'])
+                for match in matches:
+                    match.set_date(request.POST['date'])
                 base['message'] += 'Set new date for all matches. '
 
             if request.POST['game'] != 'nochange':
@@ -724,8 +725,7 @@ def events(request, event_id=None):
         elif 'movepp' in request.POST and request.POST['movepp'] == 'Move':
             neweventid = request.POST['moveprizepool']
             newevent = Event.objects.get(id=neweventid)
-            Earnings.move_earnings(event, neweventid)
-            newevent.change_type('event')
+            event.move_earnings(newevent)
             base['message'] = "Moved prize pool(s) to " + newevent.fullname
 
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
@@ -759,10 +759,10 @@ def events(request, event_id=None):
                 
         elif 'deleteearnings' in request.POST and request.POST['deleteearnings'] == 'Delete':
             if request.POST['un-ranked'] == "ranked":
-                Earnings.delete_earnings(event)
+                event.delete_earnings()
                 base['message'] = 'Deleted ranked prize pool.'
             elif request.POST['un-ranked'] == "unranked":
-                Earnings.delete_earnings(event, ranked=False)
+                event.delete_earnings(ranked=False)
                 base['message'] = 'Deleted unranked prize pool.'
             
 
@@ -953,20 +953,17 @@ def player_earnings(request, player_id):
 
     earnings = Earnings.objects.filter(player=player)
     totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
-        
+    
     for event in earnings:
         dict = get_placements(event.event)
         for earning, placement in dict.items():
             if event.placement in placement:
                 event.min = min(placement)
                 event.max = max(placement)
-        
-        event.earliest = event.event.get_earliest()
-        event.latest = event.event.get_latest()
     
     #sort by latest date
-    def getLatest( object ):
-        return object.latest
+    def getLatest( e ):
+        return e.event.latest
     earnings = list(earnings)
     earnings.sort( key=getLatest, reverse=True )
 

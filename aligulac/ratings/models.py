@@ -47,6 +47,9 @@ class Event(models.Model):
 
     prizepool = models.NullBooleanField(blank=True, null=True)
 
+    earliest = models.DateField(blank=True, null=True)
+    latest = models.DateField(blank=True, null=True)
+
     INDIVIDUAL = 'individual'
     TEAM = 'team'
     FREQUENT = 'frequent'
@@ -185,8 +188,10 @@ class Event(models.Model):
     
     def change_type(self, type):
         self.type = type
+        # Set childevents as "round" if type is "event" or "round". 
         if type == 'event' or type == 'round':
             Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
+        # Set parent events as "category" if type is "event" or "category". 
         if type == 'event' or type == 'category':
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
         self.save()
@@ -207,7 +212,6 @@ class Event(models.Model):
         self.lp_name = lp_name
         self.save()
 
-
     def set_tlpd_id(self, tlpd_id, tlpd_db):
         if tlpd_id == '' or tlpd_db == 0:
             self.tlpd_id = None
@@ -222,6 +226,14 @@ class Event(models.Model):
             self.tl_thread = None
         else:
             self.tl_thread = tl_thread
+        self.save()
+    
+    def set_earliest(self, date):
+        self.earliest = date
+        self.save()
+
+    def set_latest(self, date):
+        self.latest = date
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):
@@ -282,6 +294,16 @@ class Event(models.Model):
         self.save()
 
         return self.rgt
+    
+    def delete_earnings(self, ranked=True):
+        if ranked:
+            Earnings.objects.filter(event=self).exclude(placement__exact=0).delete()
+        else:
+            Earnings.objects.filter(event=self, placement__exact=0).delete()
+
+    def move_earnings(self, newevent):
+        Earnings.objects.filter(event=self).update(event=newevent)
+        newevent.change_type('event')
 
 class Player(models.Model):
     class Meta:
@@ -583,7 +605,11 @@ class Match(models.Model):
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         if self.changed_date():
             self.set_period()
-
+            for event in self.eventobj.get_children(id=True):
+                # This is very slow if used for many matches, but that should rarely happen. 
+                event.set_earliest(event.get_earliest())
+                event.set_latest(event.get_latest())
+                
         if self.changed_period() or self.changed_effect():
             try:
                 self.orig_period.needs_recompute = True
@@ -605,6 +631,10 @@ class Match(models.Model):
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)
         self.period = pers[0]
+    
+    def set_date(self, date):
+        self.date = date
+        self.save()
 
     def __unicode__(self):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
@@ -656,17 +686,6 @@ class Earnings(models.Model):
             new.convert_earnings()
         event.set_prizepool(True)
         return new
-    
-    @staticmethod
-    def delete_earnings(event, ranked=True):
-        if ranked:
-            Earnings.objects.filter(event=event).exclude(placement__exact=0).delete()
-        else:
-            Earnings.objects.filter(event=event, placement__exact=0).delete()
-
-    @staticmethod
-    def move_earnings(oldevent, newevent):
-        Earnings.objects.filter(event=oldevent).update(event=newevent)
             
     def convert_earnings(self):
         currency = self.currency

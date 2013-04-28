@@ -238,7 +238,7 @@ def add_matches(request):
                 m.scb = scb
                 m.rca = pla_obj.race if rca == None else rca
                 m.rcb = plb_obj.race if rcb == None else rcb
-                m.date = date
+                m.set_date(date)
                 m.submitter = request.user
                 m.set_period()
                 m.eventobj = eventobj

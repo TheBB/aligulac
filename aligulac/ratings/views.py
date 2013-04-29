@@ -992,7 +992,34 @@ def earnings(request):
         page = int(request.GET['page'])
     except:
         page = 1
-    
+
+    # Get list of countries of players that earned money.
+    # Creates two arrays: countries, an array of dictionaries in the form of cc:countryCode, name:countryName,
+    # used for the dropdown selection in the html, and countriesDict, an array of country codes, used
+    # in the main query when the filter is set to "all".
+    countriesDict = []
+    countries = []
+    for player in Player.objects.filter(earnings__player__isnull=False).distinct().values('country'):
+        if player['country'] not in countriesDict and player['country'] is not None and player['country'] != '':
+            countriesDict.append(player['country'])
+    for country in countriesDict:
+            dict = {}
+            dict['cc'] = country
+            dict['name'] = data.ccn_to_cn[data.cca2_to_ccn[country]]
+            countries.append(dict)
+    countries.sort(key=lambda a: a['name'])
+
+    # Get currencies used.
+    # Usage see above.
+    currenciesDict = []
+    currencies = []
+    for currency in Earnings.objects.values('currency').distinct().order_by('currency'):
+        dict = {}
+        dict["name"] = ccy.currency(currency['currency']).name
+        dict["code"] = ccy.currency(currency['currency']).code
+        currencies.append(dict)
+        currenciesDict.append(currency['currency'])
+
     # Filters
     filters = {}
     # Filter by year
@@ -1005,29 +1032,33 @@ def earnings(request):
         fromdate = datetime.date(1900, 1, 1)
         todate = datetime.date(2100, 1, 1)
         filters["year"] = 'all'
+    # Filter by country
+    if 'country' in request.GET and request.GET['country'] != 'all'  and request.GET['country'] != 'foreigners':
+        filters['country'] = request.GET['country']
+        countriesQuery = [request.GET['country']]
+    elif request.GET['country'] == 'foreigners':
+        filters['country'] = request.GET['country']
+        countriesQuery = countriesDict
+        countriesQuery.remove('KR')
+    else:
+        filters['country'] = 'all'
+        countriesQuery = countriesDict
     # Filter by currency
     if 'currency' in request.GET and request.GET['currency'] != 'all':
         filters['currency'] = request.GET['currency']
+        currenciesQuery = [request.GET['currency']]
     else: 
         filters['currency'] = 'all'
+        currenciesQuery = currenciesDict
 
     # Create ranking and total prize pool amount based on filters.
-    if filters['currency'] == 'all':
-        ranking = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate).values('player').annotate(totalearnings=Sum('earnings')).order_by('-totalearnings', 'player')
-        totalprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate).aggregate(Sum('earnings'))['earnings__sum']
-    else:
-        ranking = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__exact=filters['currency']).values('player').annotate(totalearnings=Sum('origearnings')).order_by('-totalearnings', 'player')
-        totalprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__exact=filters['currency']).aggregate(Sum('origearnings'))['origearnings__sum']
+    ranking = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__in=currenciesQuery, player__country__in=countriesQuery).\
+    values('player').annotate(totalorigearnings=Sum('origearnings')).annotate(totalearnings=Sum('earnings')).order_by('-totalearnings', 'player')
+    totalorigprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__in=currenciesQuery, player__country__in=countriesQuery)\
+    .aggregate(Sum('origearnings'))['origearnings__sum']
+    totalprizepool = Earnings.objects.filter(event__latest__gte=fromdate, event__latest__lt=todate, currency__in=currenciesQuery, player__country__in=countriesQuery)\
+    .aggregate(Sum('earnings'))['earnings__sum']
 
-    # Get currencies used.
-    currencies = []
-    currenciesQuery = Earnings.objects.values('currency').distinct().order_by('currency')
-    for currency in currenciesQuery:
-        dict = {}
-        dict["name"] = ccy.currency(currency['currency']).name
-        dict["code"] = ccy.currency(currency['currency']).code
-        currencies.append(dict)
-        
     # Add player and team objects to ranking.
     for player in ranking:
         player["playerobj"] = Player.objects.get(id=player["player"])
@@ -1049,7 +1080,8 @@ def earnings(request):
     else:
         base['empty'] = True
 
-    base.update({'ranking': ranking, 'totalprizepool': totalprizepool, 'filters':filters, 'currencies':currencies, 'page': page, 'npages': npages, 'startcount': startcount})
+    base.update({'ranking': ranking, 'totalprizepool': totalprizepool, 'totalorigprizepool': totalorigprizepool, 'filters':filters,
+                  'currencies':currencies, 'countries':countries, 'page': page, 'npages': npages, 'startcount': startcount})
     
     return render_to_response('earnings.html', base)
 

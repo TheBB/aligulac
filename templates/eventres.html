@@ -35,37 +35,37 @@ ratings.views.events.
         var prizepoolbutton = document.getElementById(clicked_id);
         if (clicked_id == "rankedprizepoolbutton")
         {
-        	var tableposition = document.getElementById('createrankedtable');
+            var tableposition = document.getElementById('createrankedtable');
         }
         else if (clicked_id == "unrankedprizepoolbutton")
         {
-        	var tableposition = document.getElementById('createunrankedtable');
+            var tableposition = document.getElementById('createunrankedtable');
         } 
         
         var numberplayers = document.createElement("select");
         numberplayers.setAttribute("id", "numberplayers" + clicked_id);
         numberplayers.setAttribute("name", "numberplayers");
         {% for player in players %}
-        	var option = document.createElement("option");
-        	option.setAttribute("value", "{{ forloop.counter }}");
-        	{% if rearnings %}
-        		{% ifequal rearnings.count forloop.counter %}
-        			if (clicked_id == "rankedprizepoolbutton")
-			        {
-        				option.setAttribute("selected", "selected");
-        			}
-        		{% endifequal %}
-        	{% endif %}
-        	{% if urearnings %}
-        		{% ifequal urearnings.count forloop.counter %}
-        			if (clicked_id == "unrankedprizepoolbutton")
-			        {
-        				option.setAttribute("selected", "selected");
-        			}
-        		{% endifequal %}
-        	{% endif %}
-        	option.innerHTML = "{{ forloop.counter }}"
-        	numberplayers.appendChild(option);
+            var option = document.createElement("option");
+            option.setAttribute("value", "{{ forloop.counter }}");
+            {% if rearnings %}
+                {% ifequal rearnings.count forloop.counter %}
+                    if (clicked_id == "rankedprizepoolbutton")
+                    {
+                        option.setAttribute("selected", "selected");
+                    }
+                {% endifequal %}
+            {% endif %}
+            {% if urearnings %}
+                {% ifequal urearnings.count forloop.counter %}
+                    if (clicked_id == "unrankedprizepoolbutton")
+                    {
+                        option.setAttribute("selected", "selected");
+                    }
+                {% endifequal %}
+            {% endif %}
+            option.innerHTML = "{{ forloop.counter }}"
+            numberplayers.appendChild(option);
         {% endfor %}
         
         var button = document.createElement("input");
@@ -77,11 +77,11 @@ ratings.views.events.
         prizepoolbutton.style.display = 'none';
         if (clicked_id == "rankedprizepoolbutton")
         {
-	        tableposition.appendChild(document.createTextNode("How many players (ranked)? "));
+            tableposition.appendChild(document.createTextNode("How many players (ranked)? "));
         }
         else if (clicked_id == "unrankedprizepoolbutton")
         {
-	        tableposition.appendChild(document.createTextNode("How many players (unranked)? "));
+            tableposition.appendChild(document.createTextNode("How many players (unranked)? "));
         }
         tableposition.appendChild(numberplayers);
         tableposition.appendChild(button);
@@ -91,20 +91,20 @@ ratings.views.events.
     {
         if (clicked_id == "rankedprizepoolbutton")
         {
-        	var tableposition = document.getElementById('createrankedtable');
+            var tableposition = document.getElementById('createrankedtable');
         }
         else if (clicked_id == "unrankedprizepoolbutton")
         {
-        	var tableposition = document.getElementById('createunrankedtable');
+            var tableposition = document.getElementById('createunrankedtable');
         }
-    	
-    	try
-    	{
-    		oldtable = document.getElementById("table" + clicked_id);
-		   	tableposition.removeChild(oldtable);
-    	}
-    	catch(e) { }
-    	
+        
+        try
+        {
+            oldtable = document.getElementById("table" + clicked_id);
+            tableposition.removeChild(oldtable);
+        }
+        catch(e) { }
+        
         var table = document.createElement("table");
         table.setAttribute("id", "table" + clicked_id);
         table.setAttribute("class", "results prizepool");
@@ -120,7 +120,7 @@ ratings.views.events.
         cell3.setAttribute("style", "width: 17em;");
         if (clicked_id == "rankedprizepoolbutton")
         {
-        	cell1.innerHTML = "#";
+            cell1.innerHTML = "#";
         }
         cell2.innerHTML = "Player";
         cell3.innerHTML = "Money earned";
@@ -129,19 +129,19 @@ ratings.views.events.
         currencies.setAttribute("name", "currency");
         currencies.setAttribute("id", "currency");
         {% for currency in currencies %}
-        	var currency = document.createElement("option");
-        	currency.setAttribute("value", "{{ currency.code }}");
-        	{% if not prizepoolcur %}
-        		{% if currency.code == "USD" %}
-        			currency.setAttribute("selected", "selected");
-        		{% endif %}
-        	{% else %}
-        		{% if currency.code == prizepoolcur %}
-        			currency.setAttribute("selected", "selected");
-        		{% endif %}
-        	{% endif %}
-        	currency.innerHTML ="{{ currency.code }} - {{ currency.name }}";
-        	currencies.appendChild(currency);
+            var currency = document.createElement("option");
+            currency.setAttribute("value", "{{ currency.code }}");
+            {% if not prizepoolcur %}
+                {% if currency.code == "USD" %}
+                    currency.setAttribute("selected", "selected");
+                {% endif %}
+            {% else %}
+                {% if currency.code == prizepoolcur %}
+                    currency.setAttribute("selected", "selected");
+                {% endif %}
+            {% endif %}
+            currency.innerHTML ="{{ currency.code }} - {{ currency.name }}";
+            currencies.appendChild(currency);
         {% endfor %}
         
         var row = table.insertRow(-1);
@@ -155,15 +155,15 @@ ratings.views.events.
         cell3.appendChild(currencies);
         
         {% if rearnings %}
-        	if (clicked_id == "rankedprizepoolbutton")
-	        {
-            	var amount = {{ rearnings.count }};
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                var amount = {{ rearnings.count }};
             }
         {% endif %}
         {% if urearnings %}
-        	if (clicked_id == "unrankedprizepoolbutton")
-	        {
-            	var amount = {{ urearnings.count }};
+            if (clicked_id == "unrankedprizepoolbutton")
+            {
+                var amount = {{ urearnings.count }};
             }
         {% endif %}
         
@@ -213,19 +213,19 @@ ratings.views.events.
                 option.innerHTML = "{{ player.tag }}";
                 select.appendChild(option);
                 
-		        if (clicked_id == "rankedprizepoolbutton")
-		        {
-                	if (rearningsplayer == eventplayer)
-                	{
-	                    select.selectedIndex = {{ forloop.counter0 }};
-                	}
+                if (clicked_id == "rankedprizepoolbutton")
+                {
+                    if (rearningsplayer == eventplayer)
+                    {
+                        select.selectedIndex = {{ forloop.counter0 }};
+                    }
                 }
-		        else if (clicked_id == "unrankedprizepoolbutton")
-		        {
-                	if (urearningsplayer == eventplayer)
-                	{
-	                    select.selectedIndex = {{ forloop.counter0 }};
-                	}
+                else if (clicked_id == "unrankedprizepoolbutton")
+                {
+                    if (urearningsplayer == eventplayer)
+                    {
+                        select.selectedIndex = {{ forloop.counter0 }};
+                    }
                 }
 
             {% endfor %}                        
@@ -236,13 +236,13 @@ ratings.views.events.
             selectbox.setAttribute("id", "amount-" + i);
             selectbox.setAttribute("onfocus", "addfocus(this)");
             selectbox.setAttribute("onblur", "losefocus(this)");
-	        if (clicked_id == "rankedprizepoolbutton")
-	        {
-            	selectbox.setAttribute("value", rearning);
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                selectbox.setAttribute("value", rearning);
             }
-	        else if (clicked_id == "unrankedprizepoolbutton")
-	        {
-            	selectbox.setAttribute("value", urearning);
+            else if (clicked_id == "unrankedprizepoolbutton")
+            {
+                selectbox.setAttribute("value", urearning);
             }
             selectbox.setAttribute("size", "8");
             
@@ -252,9 +252,9 @@ ratings.views.events.
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
             
-        	if (clicked_id == "rankedprizepoolbutton")
-	        {
-            	cell1.innerHTML = placement
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                cell1.innerHTML = placement
             }
             cell2.appendChild(select);
             cell3.appendChild(selectbox);
@@ -268,13 +268,13 @@ ratings.views.events.
         var hiddentype = document.createElement("input");
         hiddentype.setAttribute("type", "hidden");
         hiddentype.setAttribute("name", "un-ranked");
-       	if (clicked_id == "rankedprizepoolbutton")
+        if (clicked_id == "rankedprizepoolbutton")
         {
-        	hiddentype.setAttribute("value", "ranked");
+            hiddentype.setAttribute("value", "ranked");
         }
-       	else if (clicked_id == "unrankedprizepoolbutton")
+        else if (clicked_id == "unrankedprizepoolbutton")
         {
-        	hiddentype.setAttribute("value", "unranked");
+            hiddentype.setAttribute("value", "unranked");
         }
 
         var submitbutton = document.createElement("input");
@@ -288,16 +288,16 @@ ratings.views.events.
         var cell2 = row.insertCell(1);
 
         if (!changeplayers) {
-        	var deletebutton = document.createElement("input");
-        	deletebutton.setAttribute("type", "submit");
-        	deletebutton.setAttribute("name", "deleteearnings");
-        	deletebutton.setAttribute("value", "Delete");
-        	deletebutton.setAttribute("onclick", "return validate_deleteearnings()");
-        	cell1.align = 'left';
-        	cell1.appendChild(deletebutton);
-		}
+            var deletebutton = document.createElement("input");
+            deletebutton.setAttribute("type", "submit");
+            deletebutton.setAttribute("name", "deleteearnings");
+            deletebutton.setAttribute("value", "Delete");
+            deletebutton.setAttribute("onclick", "return validate_deleteearnings()");
+            cell1.align = 'left';
+            cell1.appendChild(deletebutton);
+        }
 
-		cell2.colSpan = '2';
+        cell2.colSpan = '2';
         cell2.align = 'right';
         cell2.appendChild(hiddeninput);
         cell2.appendChild(hiddentype);
@@ -327,30 +327,30 @@ ratings.views.events.
         
         if (name == "rankedprizepool")
         {
-        	var form = document.forms.rankedprizepool;
-        	try
-        	{
-	        	var othercurrency = "{{ urearnings.0.currency }}";
-	        }
-	        catch(e) { }
+            var form = document.forms.rankedprizepool;
+            try
+            {
+                var othercurrency = "{{ urearnings.0.currency }}";
+            }
+            catch(e) { }
         }
         else if (name == "unrankedprizepool")
         {
-        	var form = document.forms.unrankedprizepool;
-        	try
-        	{
-	        	var othercurrency = "{{ rearnings.0.currency }}";
-	        }
-	        catch(e) { }
+            var form = document.forms.unrankedprizepool;
+            try
+            {
+                var othercurrency = "{{ rearnings.0.currency }}";
+            }
+            catch(e) { }
         }
-	    var length = form.numberplayers.selectedIndex;
-	    var currency = form.currency.options[form.currency.selectedIndex].value;
-	    if (currency != othercurrency && othercurrency != "")
-	    {
-			alert('Use only one currency! Change the currency in the ranked/unranked prize pool if necessary.');
-			return false;	    
-	    }
-	    
+        var length = form.numberplayers.selectedIndex;
+        var currency = form.currency.options[form.currency.selectedIndex].value;
+        if (currency != othercurrency && othercurrency != "")
+        {
+            alert('Use only one currency! Change the currency in the ranked/unranked prize pool if necessary.');
+            return false;       
+        }
+        
         var players = new Array();
         
         for(var i = 0; i < length+1; i++)
@@ -388,29 +388,29 @@ ratings.views.events.
 
     function validate_infobox()
     {
-    	var prizepool = document.getElementById('prizepoolselect')
-    	var hasprizepool = '{{ prizepoolorig }}'
-    	if (prizepool.checked && hasprizepool != '')
-    	{
-    		var answer = confirm("This event has a prize pool. Are you sure you want to delete it?");
-    		if (answer)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	
-    	return true;
+        var prizepool = document.getElementById('prizepoolselect')
+        var hasprizepool = '{{ prizepoolorig }}'
+        if (prizepool.checked && hasprizepool != '')
+        {
+            var answer = confirm("This event has a prize pool. Are you sure you want to delete it?");
+            if (answer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     function validate_deleteearnings()
     {
-    	var answer = confirm("Are you sure you want to delete the prize pool?");
-    		if (answer) { return true; }
-    		else { return false; }
+        var answer = confirm("Are you sure you want to delete the prize pool?");
+            if (answer) { return true; }
+            else { return false; }
     }
     </script>
 {% endif %}
@@ -512,15 +512,15 @@ ratings.views.events.
             </div>
             {% endif %}
             {% if adm %}
-            	{% if event.type == "event" %}
-                	<div class="row edit" style="display: none;">
-                    	<div class="rowel">No prize pool?</div>
-                    	<div class="rower">
-	                    	<input type="checkbox" id="prizepoolselect" name="prizepoolselect" value="prizepoolselect"
-	                    		{% if event.prizepool|is_false %}checked{% endif %}
-	                    	>
-	                    </div>
-                	</div>
+                {% if event.type == "event" %}
+                    <div class="row edit" style="display: none;">
+                        <div class="rowel">No prize pool?</div>
+                        <div class="rower">
+                            <input type="checkbox" id="prizepoolselect" name="prizepoolselect" value="prizepoolselect"
+                                {% if event.prizepool|is_false %}checked{% endif %}
+                            >
+                        </div>
+                    </div>
                 {% endif %}
                 <div class="row infobox">
                     <div class="rowel">Type</div>
@@ -534,7 +534,7 @@ ratings.views.events.
                         <option value="category" {% if event.type == "category" %}selected{% endif %}/>Category</option>
                         <option value="event" {% if event.type == "event" %}selected{% endif %}/>Event</option>
                         {% if event.parent %}
-                        	<option value="round" {% if event.type == "round" %}selected{% endif %}/>Round</option>
+                            <option value="round" {% if event.type == "round" %}selected{% endif %}/>Round</option>
                         {% endif %}
                     </select>
                     </div>
@@ -585,20 +585,20 @@ ratings.views.events.
                     {% if event.get_homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
-	                {% with tlpds=event.get_tlpd_id %}
-	                	{% if tlpds.KR %}
-	                  	<a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpds.KR }}" target="_blank">TLPD</a>
-	                 	{% endif %}
-	                 	{% if tlpds.IN %}
-	                  	<a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpds.IN }}" target="_blank">TLPD</a>
-	                 	{% endif %}
-	                 	{% if tlpds.HotS %}
-	                  	<a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ tlpds.HotS }}" target="_blank">TLPD</a>
-	                 	{% endif %}
-	                 	{% if tlpds.HotSbeta %}
-	                  	<a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">TLPD</a>
-	                 	{% endif %}
-	                {% endwith %}
+                    {% with tlpds=event.get_tlpd_id %}
+                        {% if tlpds.KR %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpds.KR }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.IN %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpds.IN }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.HotS %}
+                        <a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ tlpds.HotS }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.HotSbeta %}
+                        <a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">TLPD</a>
+                        {% endif %}
+                    {% endwith %}
                     {% if event.get_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                     {% endif %}
@@ -617,21 +617,21 @@ ratings.views.events.
                     <div class="rowel">TLPD ID</div>
                     <div class="rower"><input type="number" name="TLPD" {% if event.tlpd_id %}value="{{ event.tlpd_id }}"{% endif %} /></div>
                 </div>
-				{% with tlpds=event.get_tlpd_id %}
+                {% with tlpds=event.get_tlpd_id %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Database</div>
                     <div class="rower">
-                    	<label for="TLPDKR">Korea</label>
-                    	<input type="radio" id="TLPDKR" name="TLPDDB" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
-                    	<label for="TLPDIN">International</label>
-                    	<input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
-                    	<label for="TLPDHOTS">HotS</label>
-                    	<input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
-                    	<label for="TLPDHOTSBETA">HotS beta</label>
-                    	<input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                        <label for="TLPDKR">Korea</label>
+                        <input type="radio" id="TLPDKR" name="TLPDDB" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
+                        <label for="TLPDIN">International</label>
+                        <input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
+                        <label for="TLPDHOTS">HotS</label>
+                        <input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
+                        <label for="TLPDHOTSBETA">HotS beta</label>
+                        <input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
                     </div>
                 </div>
-				{% endwith %}
+                {% endwith %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Teamliquid.net thread ID</div>
                     <div class="rower"><input type="text" name="tl_thread" {% if event.get_tl_thread %}value="{{ event.get_tl_thread }}"{% endif %} /></div>
@@ -758,6 +758,7 @@ ratings.views.events.
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
         
+        <input type="hidden" name="action" value="subevents" />
         <input type="hidden" name="parent" value="{{ event }}" />
         <table class="bigform">
             <tr>
@@ -797,8 +798,8 @@ ratings.views.events.
                     <input type="Submit" name="add" value="Add" />
                 </td>
             </tr>
-	        </form>
-	        {% if surroundingevents %}
+            </form>
+            {% if surroundingevents %}
             <form method="post" action="/results/events/{{ event.id }}/">
             {% csrf_token %}
             <tr>
@@ -821,9 +822,9 @@ ratings.views.events.
                     <input type="Submit" name="move" value="Move" />
                 </td>
             </tr>
-	        </form>
-    	    {% endif %}
-	        {% if childevents %}{% if rearnings or urearnings %}
+            </form>
+            {% endif %}
+            {% if childevents %}{% if rearnings or urearnings %}
             <form method="post" action="/results/events/{{ event.id }}/">
             {% csrf_token %}
             <tr>
@@ -845,9 +846,55 @@ ratings.views.events.
                     <input type="Submit" name="movepp" value="Move" />
                 </td>
             </tr>
-        	</form>
-	        {% endif %}{% endif %}
+            </form>
+            {% endif %}{% endif %}
         </table>
+
+        {% if event.type == "round" or event.type == "event" %}
+        <p>Add story:</p>
+        <form method="post" action="/results/events/{{ event.id }}/">
+        {% csrf_token %}
+
+        <table class="bigform">
+            <tr>
+                <td class="form_left">Player</td>
+                <td class="form_right">
+                    <select name="player">
+                        {% for p in players %}
+                        <option value="{{ p.id }}">{{ p.tag }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">Date</td>
+                <td class="form_right">
+                    <input type="text" id="d" name="date" value="{{ event.latest|date:"Y-m-d" }}" maxlength="10" style="width: 6.5em;" />
+                    <script type="text/javascript">
+                    // <![CDATA[  
+                    var opts = {                            
+                        formElements:{"d":"Y-ds-m-ds-d"},
+                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                    };
+                    datePickerController.createDatePicker(opts);
+                    // ]]>
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">Text</td>
+                <td class="form_right">
+                    <input type="text" name="text" style="width: 30em;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    <input type="submit" name="addstory" value="Add story" />
+                </td>
+            </tr>
+        </table>
+        {% endif %}
     {% endif %}
 
 <p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>

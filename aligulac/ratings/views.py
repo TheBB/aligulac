@@ -11,7 +11,8 @@ from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings, BalanceEntry
+from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings,\
+                   BalanceEntry, Story
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
@@ -603,11 +604,10 @@ def events(request, event_id=None):
 
     # Make modifications if neccessary
     if base['adm'] == True:
-        
+
         base['message'] = ""
         
         if 'op' in request.POST and request.POST['op'] == 'Modify':
-                        
             if request.POST['name'] != '' and request.POST['name'] != event.name:
                 event.name = request.POST['name']
                 event.update_name()
@@ -699,7 +699,6 @@ def events(request, event_id=None):
             elif event.get_prizepool() is False:
                 event.set_prizepool(None) 
                 base['message'] += 'Set this event as having a prize pool. '
-                
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
             parent = event
@@ -765,7 +764,16 @@ def events(request, event_id=None):
             elif request.POST['un-ranked'] == "unranked":
                 event.delete_earnings(ranked=False)
                 base['message'] = 'Deleted unranked prize pool.'
-            
+
+        elif 'addstory' in request.POST and request.POST['addstory'] == 'Add story':
+            player = Player.objects.get(id=int(request.POST['player']))
+            if not Story.objects.filter(player=player, event=event).exists():
+                new = Story(player=player, event=event, date=request.POST['date'],
+                            text=request.POST['text'])
+                new.save()
+                base['message'] = 'Added a story for ' + player.tag + '.'
+            else:
+                base['message'] = 'Story NOT added, duplicate exists.'
 
     base['event'] = event
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')
@@ -789,7 +797,7 @@ def events(request, event_id=None):
         #elif base['game'] = 'LotV':
             #base['game'] = 'Legacy of the Void'
     
-    #  Get list of players and earnings for prizepools
+    # Get list of players and earnings for prizepools
     base['players'] = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
     
     # earnings for this event

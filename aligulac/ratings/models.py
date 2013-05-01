@@ -425,6 +425,7 @@ class Story(models.Model):
     player = models.ForeignKey(Player, null=False)
     text = models.CharField(max_length=200, null=False)
     date = models.DateField(null=False)
+    event = models.ForeignKey(Event, null=True)
 
     class Meta:
         verbose_name_plural = 'stories'

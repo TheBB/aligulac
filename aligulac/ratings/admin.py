@@ -27,10 +27,6 @@ class AliasesInline(admin.TabularInline):
     model = Alias
     fields = ['name']
 
-class StoriesInline(admin.TabularInline):
-    model = Story
-    fields = ['text', 'date']
-
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
@@ -40,7 +36,7 @@ class PlayerAdmin(admin.ModelAdmin):
             ('Optional',    {'fields': ['name','birthday','country']}),
             ('External',    {'fields': ['tlpd_id','tlpd_db','lp_name','sc2c_id','sc2e_id']})
     ]
-    inlines = [MembersInline, AliasesInline, StoriesInline]
+    inlines = [MembersInline, AliasesInline]
     search_fields = ['tag']
     list_display = ('tag', 'race', player_team, player_country, 'name')
 

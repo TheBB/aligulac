@@ -85,6 +85,17 @@ def period(request, period_id, page='1'):
     pvz_wins, pvz_loss = wl('P', 'Z')
     tvz_wins, tvz_loss = wl('T', 'Z')
 
+    # Build country list
+    countriesDict = []
+    countries = []
+    for p in Player.objects.filter(rating__period_id=period.id, rating__decay__lt=4).distinct().values('country'):
+        if p['country'] not in countriesDict and p['country'] is not None and p['country'] != '':
+            countriesDict.append(p['country'])
+    for country in countriesDict:
+        d = {'cc': country, 'name': data.ccn_to_cn[data.cca2_to_ccn[country]]}
+        countries.append(d)
+    countries.sort(key=lambda a: a['name'])
+
     # Filtering the ratings
     entries = Rating.objects.filter(period=period).select_related('team','teammembership')
     entries = filter_active_ratings(entries)
@@ -106,10 +117,10 @@ def period(request, period_id, page='1'):
         nats = request.GET['nats']
     except:
         nats = 'all'
-    if nats == 'kr':
-        entries = entries.filter(player__country='KR')
-    elif nats == 'foreigners':
+    if nats == 'foreigners':
         entries = entries.exclude(player__country='KR')
+    elif nats != 'all':
+        entries = entries.filter(player__country=nats)
 
     try:
         sort = request.GET['sort']
@@ -132,7 +143,10 @@ def period(request, period_id, page='1'):
     npages = nitems/psize + (1 if nitems % psize > 0 else 0)
     page = min(max(page, 1), npages)
 
-    entries = entries[(page-1)*psize:page*psize]
+    try:
+        entries = entries[(page-1)*psize:page*psize]
+    except:
+        pass
 
     # Collect team data
     for entry in entries:
@@ -149,7 +163,8 @@ def period(request, period_id, page='1'):
             'specvt': specvt, 'specvz': specvz, 'sortable': True, 'startcount': (page-1)*psize,
             'localcount': True, 'sort': sort, 'race': race, 'nats': nats,
             'pvt_wins': pvt_wins, 'pvt_loss': pvt_loss, 'pvz_wins': pvz_wins,
-            'pvz_loss': pvz_loss, 'tvz_wins': tvz_wins, 'tvz_loss': tvz_loss})
+            'pvz_loss': pvz_loss, 'tvz_wins': tvz_wins, 'tvz_loss': tvz_loss,
+            'countries': countries})
     if period.id != base['curp'].id:
         base['curpage'] = ''
 

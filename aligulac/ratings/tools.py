@@ -279,5 +279,4 @@ def get_placements(event):
 def add_earliest_latest():
     for event in Event.objects.all():
         print event
-        event.set_earliest(event.get_earliest())
-        event.set_latest(event.get_latest())
+        event.update_dates()

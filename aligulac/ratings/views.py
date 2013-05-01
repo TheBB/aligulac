@@ -870,8 +870,8 @@ def events(request, event_id=None):
     base['tvz_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
 
     # Dates
-    base['earliest'] = event.get_earliest()
-    base['latest'] = event.get_latest()
+    base['earliest'] = event.earliest
+    base['latest'] = event.latest
 
     matches = matches.order_by('-date', '-eventobj__lft', '-id')[0:200]
     base['matches'] = display_matches(matches)

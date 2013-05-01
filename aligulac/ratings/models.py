@@ -76,6 +76,7 @@ class Event(models.Model):
 
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
+
     def get_path_print(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')
 
@@ -148,26 +149,7 @@ class Event(models.Model):
         return self.prizepool
 
     #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
-    def get_earliest(self):
-        from django.db import connection
-        cursor = connection.cursor()
-        try:
-            cursor.execute('select date, id from ratings_match where eventobj_id in\
-                                        (select id from ratings_event where\
-                                        lft >= ' + str(self.lft) + ' and\
-                                        rgt <= ' + str(self.rgt) +
-                                        ') order by date asc limit 1;')
-            #cursor.execute('''SELECT m.date, m.id
-                              #FROM ratings_match AS m, ratings_event AS e
-                              #WHERE m.eventobj_id=e.id 
-                                    #AND e.lft >= ''' + str(self.lft) + '''
-                                    #AND e.rgt <= ''' + str(self.rgt) + '''
-                              #ORDER BY m.date ASC LIMIT 1;''')
-            return cursor.fetchone()[0]
-        except:
-            return None
-
-    def get_latest(self):
+    def update_dates(self):
         from django.db import connection
         cursor = connection.cursor()
         try:
@@ -176,15 +158,18 @@ class Event(models.Model):
                                         lft >= ' + str(self.lft) + ' and\
                                         rgt <= ' + str(self.rgt) +
                                         ') order by date desc limit 1;')
-            #cursor.execute('''SELECT m.date, m.id
-                              #FROM ratings_match AS m, ratings_event AS e
-                              #WHERE m.eventobj_id=e.id 
-                                    #AND e.lft >= ''' + str(self.lft) + '''
-                                    #AND e.rgt <= ''' + str(self.rgt) + '''
-                              #ORDER BY m.date DESC LIMIT 1;''')
-            return cursor.fetchone()[0]
+            self.latest = cursor.fetchone()[0]
+            cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(self.lft) + ' and\
+                                        rgt <= ' + str(self.rgt) +
+                                        ') order by date asc limit 1;')
+            self.earliest = cursor.fetchone()[0]
+            self.save()
         except:
-            return None
+            self.latest = None
+            self.earliest = None
+            self.save()
     
     def change_type(self, type):
         self.type = type
@@ -608,8 +593,7 @@ class Match(models.Model):
             if self.eventobj:
                 for event in self.eventobj.get_children(id=True):
                     # This is very slow if used for many matches, but that should rarely happen. 
-                    event.set_earliest(event.get_earliest())
-                    event.set_latest(event.get_latest())
+                    event.update_dates()
 
         if self.changed_period() or self.changed_effect():
             try:
@@ -636,8 +620,7 @@ class Match(models.Model):
         if eventobj:
             for event in self.eventobj.get_children(id=True):
                 # This is very slow if used for many matches, but that should rarely happen. 
-                event.set_earliest(event.get_earliest())
-                event.set_latest(event.get_latest())
+                event.update_dates()
 
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)

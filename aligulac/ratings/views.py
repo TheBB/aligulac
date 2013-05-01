@@ -5,19 +5,20 @@ from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift, get_placements, PATCHES
+from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
+                          get_placements, PATCHES
 from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings
+from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings, BalanceEntry
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 
 from countries import transformations, data
 
 from math import sqrt
-from numpy import zeros
+from numpy import zeros, array
 
 def collect(lst, n=2):
     ret, part = [], []
@@ -1256,42 +1257,57 @@ def balance(request):
         last[0] -= 1
         last[1] = 12
 
-    N = (last[0]-first[0])*12 + last[1]-first[1] + 1
-
-    def nti(x):
-        return 0 if x is None else x
-
-    def add_to_array(qset, rc1, rc2, ar, col):
+    nti = lambda x: 0 if x is None else x
+    def get_data(qset, rc1, rc2):
         temp = qset.filter(rca=rc1, rcb=rc2).aggregate(Sum('sca'), Sum('scb'))
-        ar[0, col] += nti(temp['sca__sum'])
-        ar[1, col] += nti(temp['scb__sum'])
+        ret1, ret2 = nti(temp['sca__sum']), nti(temp['scb__sum'])
         temp = qset.filter(rca=rc2, rcb=rc1).aggregate(Sum('sca'), Sum('scb'))
-        ar[0, col] += nti(temp['scb__sum'])
-        ar[1, col] += nti(temp['sca__sum'])
+        ret1 += nti(temp['scb__sum'])
+        ret2 += nti(temp['sca__sum'])
+        return ret1, ret2
+
+    # Update all months every month
+    if not BalanceEntry.objects.filter(date=datetime.date(year=last[0], month=last[1], day=15)).exists():
+        while first[0] < last[0] or (first[0] == last[0] and first[1] <= last[1]):
+            matches = Match.objects.filter(date__gte='%i-%i-01' % first)
+            if first[1] < 12:
+                matches = matches.filter(date__lt='%i-%i-01' % (first[0], first[1]+1))
+            else:
+                matches = matches.filter(date__lt='%i-%i-01' % (first[0]+1, 1))
+
+            pvtw, pvtl = get_data(matches, 'P', 'T')
+            pvzw, pvzl = get_data(matches, 'P', 'Z')
+            tvzw, tvzl = get_data(matches, 'T', 'Z')
+            try:
+                BalanceEntry.get(date=datetime.date(year=first[0], month=first[1], day=15)).\
+                        update(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,
+                               tvz_wins=tvzw, tvz_losses=tvzl)
+            except:
+                new = BalanceEntry(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,
+                                   tvz_wins=tvzw, tvz_losses=tvzl,
+                                   date=datetime.date(year=first[0], month=first[1], day=15))
+                new.save()
+
+            first = (first[0], first[1]+1)
+            if first[1] == 13:
+                first = (first[0]+1, 1)
+
+    N = BalanceEntry.objects.count()
 
     pvt_scores = zeros((2,N))
     pvz_scores = zeros((2,N))
     tvz_scores = zeros((2,N))
-    time = []
 
-    ind = 0
-    delta = datetime.timedelta(days=15)
-    while first[0] < last[0] or (first[0] == last[0] and first[1] <= last[1]):
-        matches = Match.objects.filter(date__gte='%i-%i-01' % first)
-        if first[1] < 12:
-            matches = matches.filter(date__lt='%i-%i-01' % (first[0], first[1]+1))
-        else:
-            matches = matches.filter(date__lt='%i-%i-01' % (first[0]+1, 1))
+    entries = BalanceEntry.objects.all().order_by('date')
 
-        add_to_array(matches, 'P', 'T', pvt_scores, ind)
-        add_to_array(matches, 'P', 'Z', pvz_scores, ind)
-        add_to_array(matches, 'T', 'Z', tvz_scores, ind)
-        time.append(datetime.date(month=first[1], year=first[0], day=15))
+    pvt_scores[0,:] = array([e.pvt_wins for e in entries])
+    pvt_scores[1,:] = array([e.pvt_losses for e in entries])
+    pvz_scores[0,:] = array([e.pvz_wins for e in entries])
+    pvz_scores[1,:] = array([e.pvz_losses for e in entries])
+    tvz_scores[0,:] = array([e.tvz_wins for e in entries])
+    tvz_scores[1,:] = array([e.tvz_losses for e in entries])
 
-        first = (first[0], first[1]+1)
-        if first[1] == 13:
-            first = (first[0]+1, 1)
-        ind += 1
+    time = [e.date for e in entries]
 
     base['pvt'] = zip(100*pvt_scores[0,:]/(pvt_scores[0,:] + pvt_scores[1,:]), time)
     base['pvz'] = zip(100*pvz_scores[0,:]/(pvz_scores[0,:] + pvz_scores[1,:]), time)

@@ -909,3 +909,12 @@ class Rating(models.Model):
         self.comp_dev_vp = d['P']
         self.comp_dev_vt = d['T']
         self.comp_dev_vz = d['Z']
+
+class BalanceEntry(models.Model):
+    date = models.DateField()
+    pvt_wins = models.IntegerField()
+    pvt_losses = models.IntegerField()
+    pvz_wins = models.IntegerField()
+    pvz_losses = models.IntegerField()
+    tvz_wins = models.IntegerField()
+    tvz_losses = models.IntegerField()

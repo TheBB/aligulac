@@ -5,7 +5,7 @@ os.environ['HOME'] = '/root'
 from aligulac.views import base_ctx
 from ratings.tools import find_player
 from simul.playerlist import make_player
-from simul.formats import match, mslgroup, sebracket, rrgroup
+from simul.formats import match, mslgroup, sebracket, rrgroup, teampl
 from ratings.templatetags.ratings_extras import ratscale
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -31,7 +31,7 @@ def predict(request):
     base['curpage'] = 'Predict'
 
     formats = ['Best-of-N match', 'Four-player Swiss group', 'Single elimination bracket',\
-               'Round robin group']
+               'Round robin group', 'Proleague team match']
     base['formats'] = formats
 
     if 'format' not in request.GET:
@@ -98,6 +98,11 @@ def predict(request):
             base['errs'].append('Expected at least three players')
         if len(bo) != 1:
             base['errs'].append('Expected exactly one \'best of \'')
+    elif fmt == 4:
+        if len(players) % 2 != 0:
+            base['errs'].append('Expected an even number of players')
+        if len(bo) != 1:
+            base['errs'].append('Expected exactly one \'best of\'')
 
     if len(base['errs']) != 0:
         return render_to_response('predict.html', base)
@@ -112,6 +117,8 @@ def predict(request):
         return redirect('/predict/sebracket/?bo=%s&ps=%s' % (bo, ps))
     elif fmt == 3:
         return redirect('/predict/rrgroup/?bo=%s&ps=%s' % (bo, ps))
+    elif fmt == 4:
+        return redirect('/predict/proleague/?bo=%s&ps=%s' % (bo, ps))
 
     return render_to_response('predict.html', base)
 
@@ -364,13 +371,71 @@ def pred_rrgroup(request):
                     match._result[0], match._result[1]))
     base['matches'] = matches
 
-
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 
     rrgroup_postable(base, obj, players, 
                      url='http://aligulac.com/predict/rrgroup/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_rrgroup.html', base)
+
+def pred_proleague(request):
+    base = base_ctx('Predict', request=request)
+
+    dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
+    sipl = [make_player(pl) for pl in dbpl]
+    num = (int(request.GET['bo'])+1)/2
+    nplayers = len(sipl)
+    obj = teampl.TeamPL(num)
+    obj.set_players(sipl)
+
+    def update(request, obj, match, r1, r2):
+        if r1 in request.GET and r2 in request.GET:
+            try:
+                if obj.get_match(match).can_modify():
+                    obj.get_match(match).modify(int(request.GET[r1]), int(request.GET[r2]))
+            except:
+                pass
+        else:
+            obj.get_match(match).modify(0, 0)
+
+    for i in range(0, obj._nplayers):
+        update(request, obj, i, 'm%i-1' % i, 'm%i-2' % i)
+
+    obj.compute()
+
+    ResObj = namedtuple('ResObj', 'scl scw proba probb')
+    base['results'] = []
+    base['prob_draw'] = 0.0
+    for score in range(0,obj._nplayers+1):
+        if 2*score < obj._nplayers:
+            base['results'].append(ResObj(score, obj._nplayers-score,
+                        obj.get_tally()[1][score], obj.get_tally()[0][score]))
+        elif 2*score == obj._nplayers:
+            base['prob_draw'] = obj.get_tally()[0][score]
+        if 2*score >= obj._nplayers:
+            break
+    base['t1'] = sum([r.proba for r in base['results']])
+    base['t2'] = sum([r.probb for r in base['results']])
+
+    MatchObj = namedtuple('MatchObj', 'obj pla plb modded canmod fixed sca scb')
+    matches = []
+    base['s1'], base['s2'] = 0, 0
+    for i in range(0, obj._nplayers):
+        match = obj.get_match(i)
+        matches.append(MatchObj(match, match.get_player(0).dbpl, match.get_player(1).dbpl,\
+                    match.is_modified(), match.can_modify(), match.is_fixed(),\
+                    match._result[0], match._result[1]))
+        if match.is_fixed():
+            base['s1'] += 1 if match._result[0] > match._result[1] else 0
+            base['s2'] += 1 if match._result[1] > match._result[0] else 0
+    base['matches'] = matches
+
+    base['ps'] = request.GET['ps']
+    base['bo'] = request.GET['bo']
+
+    proleague_postable(base, obj, base['results'], base['prob_draw'], 
+                     url='http://aligulac.com/predict/proleague/?bo=%s&ps=%s' % (base['bo'], base['ps']))
+    return render_to_response('pred_proleague.html', base)
 
 def left_center_right(strings, gap=2, justify=True, indent=0):
     left_width = max([len(s[0]) for s in strings if s != None]) + 4
@@ -503,6 +568,42 @@ def rrgroup_postable(base, obj, players, url):
     base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
+    base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
+
+def proleague_postable(base, obj, res, pdraw, url):
+    numlen = len(str(obj._nplayers))
+    strings = [('{p} et al.'.format(p=obj._pla[0].dbpl.tag),
+                '{sca: >{nl}}-{scb: <{nl}}'.format(sca=base['s1'], scb=base['s2'], nl=numlen),
+                '{p} et al.'.format(p=obj._plb[0].dbpl.tag))]
+    strings.append(None)
+
+    for r in res:
+        if r.proba == 0.0 and r.probb == 0.0:
+            continue
+
+        if r.proba > 0.0:
+            L = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r.proba, sca=r.scw, scb=r.scl, nl=numlen)
+        else:
+            L = ''
+
+        if r.probb > 0.0:
+            R = '{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(pctg=100*r.probb, sca=r.scl, scb=r.scw, nl=numlen)
+        else:
+            R = ''
+
+        strings.append((L, '', R))
+
+    strings += [None, ('{pctg: >6.2f}%'.format(pctg=100*base['t1']), '',
+                       '{pctg: >6.2f}%'.format(pctg=100*base['t2']))]
+
+    postable_tl = left_center_right(strings)
+    if pdraw > 0.0:
+        postable_tl += '\n\nProbability of draw/ace match: {pctg: >6.2f}%'.format(pctg=100*pdraw)
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
+
+    postable_reddit = left_center_right(strings, justify=False, indent=4)
+    if pdraw > 0.0:
+        postable_reddit += '\n\n    Probability of draw/ace match: {pctg: >6.2f}%'.format(pctg=100*pdraw)
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
 def ordinal(value):

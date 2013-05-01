@@ -26,19 +26,28 @@ class TeamPL:
         self._num = num
 
     def set_players(self, players):
-        self._pla = players[0]
-        self._plb = players[1]
+        self._pla = players[:len(players)/2]
+        self._plb = players[len(players)/2:]
+        self._nplayers = len(self._pla)
+
+        self._matches = []
+        for i in range(0,self._nplayers):
+            m = Match(self._num)
+            m.set_players([self._pla[i], self._plb[i]])
+            self._matches.append(m)
+
+    def get_match(self, i):
+        return self._matches[i]
+
+    def get_tally(self):
+        return self._tally
 
     def compute(self):
         N = 1000
-        self._tally = [Tally(2), Tally(2)]
+        self._tally = [Tally(self._nplayers+1), Tally(self._nplayers+1)]
 
-        self._matches = []
-        for i in range(0,7):
-            m = Match(self._num)
-            m.set_players([self._pla[i], self._plb[i]])
+        for m in self._matches:
             m.compute()
-            self._matches.append(m)
 
         for i in range(0,N):
             self.compute_inst(1.0/N)
@@ -51,9 +60,5 @@ class TeamPL:
                 sca += 1
             else:
                 scb += 1
-        if sca > scb:
-            self._tally[0][1] += base
-            self._tally[1][0] += base
-        else:
-            self._tally[1][1] += base
-            self._tally[0][0] += base
+        self._tally[0][sca] += base
+        self._tally[1][scb] += base

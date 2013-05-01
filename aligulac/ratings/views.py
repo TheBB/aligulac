@@ -1037,7 +1037,7 @@ def earnings(request):
     if 'country' in request.GET and request.GET['country'] != 'all'  and request.GET['country'] != 'foreigners':
         filters['country'] = request.GET['country']
         countriesQuery = [request.GET['country']]
-    elif request.GET['country'] == 'foreigners':
+    elif 'country' in request.GET and request.GET['country'] == 'foreigners':
         filters['country'] = request.GET['country']
         countriesQuery = countriesDict
         countriesQuery.remove('KR')

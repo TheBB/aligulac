@@ -431,7 +431,7 @@ class Story(models.Model):
         verbose_name_plural = 'stories'
 
     def __unicode__(self):
-        return self.player.tag + ': ' + self.text + ' on ' + str(self.date)
+        return self.player.tag + ' - ' + self.text + ' on ' + str(self.date)
 
 class Team(models.Model):
     name = models.CharField(max_length=100)

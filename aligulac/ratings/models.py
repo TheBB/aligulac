@@ -147,6 +147,11 @@ class Event(models.Model):
 
     def get_prizepool(self):
         return self.prizepool
+    
+    def get_earliest(self):
+        return self.earliest
+    def get_latest(self):
+        return self.latest
 
     #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def update_dates(self):
@@ -190,11 +195,17 @@ class Event(models.Model):
         self.save()
     
     def set_homepage(self, homepage):
-        self.homepage = homepage
+        if homepage == '':
+            self.homepage = None
+        else:
+            self.homepage = homepage
         self.save()
     
     def set_lp_name(self, lp_name):
-        self.lp_name = lp_name
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()
 
     def set_tlpd_id(self, tlpd_id, tlpd_db):

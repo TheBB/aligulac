@@ -195,11 +195,17 @@ class Event(models.Model):
         self.save()
     
     def set_homepage(self, homepage):
-        self.homepage = homepage
+        if homepage == '':
+            self.homepage = None
+        else:
+            self.homepage = homepage
         self.save()
     
     def set_lp_name(self, lp_name):
-        self.lp_name = lp_name
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()
 
     def set_tlpd_id(self, tlpd_id, tlpd_db):

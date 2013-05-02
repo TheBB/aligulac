@@ -458,7 +458,7 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for s in stories %} {
-                          name: '{{ s.date }}: {{ s.text }}{% if s.event %}<br/>{{s.event.fullname}}{% endif %}',
+                          name: '{{s.text}}<br/>{{s.date}}{% if s.event %}: {{s.event.fullname}}{% endif %}',
                           url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter}}/',
                           x: {{ s.date|milliseconds }},
                           y: {{ s.rating|ratscale }}

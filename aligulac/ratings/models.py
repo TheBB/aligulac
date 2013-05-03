@@ -93,6 +93,15 @@ class Event(models.Model):
             return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[levels-1]
         except:
             return self
+
+    def get_parents(self, id=False):
+        try:
+            if not id:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')
+            else:
+                return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('-lft')
+        except:
+            return self
     
     def get_children(self, type=['category', 'event', 'round'], id=False):
         if not id:
@@ -627,7 +636,7 @@ class Match(models.Model):
         
         if update_dates:
             # This is very slow if used for many matches, but that should rarely happen.
-            for event in self.eventobj.get_children(id=True):
+            for event in self.eventobj.get_parents(id=True):
                 event.update_dates()
     
     def delete(self,  *args, **kwargs):

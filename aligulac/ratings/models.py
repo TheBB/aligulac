@@ -603,9 +603,9 @@ class Match(models.Model):
         update_dates = False
         if self.changed_date():
             self.set_period()
+            
             if self.eventobj:
-                for event in self.eventobj.get_children(id=True):
-                    update_dates = True
+                update_dates = True
 
         if self.changed_period() or self.changed_effect():
             try:
@@ -627,7 +627,8 @@ class Match(models.Model):
         
         if update_dates:
             # This is very slow if used for many matches, but that should rarely happen.
-            event.update_dates()
+            for event in self.eventobj.get_children(id=True):
+                event.update_dates()
     
     def delete(self,  *args, **kwargs):
         eventobj = self.eventobj

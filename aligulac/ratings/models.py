@@ -600,12 +600,12 @@ class Match(models.Model):
         self.populate_orig()
 
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        update_dates = False
         if self.changed_date():
             self.set_period()
             if self.eventobj:
                 for event in self.eventobj.get_children(id=True):
-                    # This is very slow if used for many matches, but that should rarely happen. 
-                    event.update_dates()
+                    update_dates = True
 
         if self.changed_period() or self.changed_effect():
             try:
@@ -624,6 +624,10 @@ class Match(models.Model):
 
         super(Match, self).save(force_insert, force_update, *args, **kwargs)
         self.populate_orig()
+        
+        if update_dates:
+            # This is very slow if used for many matches, but that should rarely happen.
+            event.update_dates()
     
     def delete(self,  *args, **kwargs):
         eventobj = self.eventobj
@@ -638,10 +642,6 @@ class Match(models.Model):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)
         self.period = pers[0]
     
-    def set_date(self, date):
-        self.date = date
-        self.save()
-
     def __unicode__(self):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
                 '-' + str(self.scb) + ' ' + self.plb.tag

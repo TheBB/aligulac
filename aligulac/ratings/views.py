@@ -346,44 +346,47 @@ def player(request, player_id):
 
         # Add points to graph when player left or joined a team.
         # Creates an array if dictionaries in the form of date:date, rating:rating, data:[{date:date, team:team, jol:jol}, {...}]  
-        teampoints = []
-        latest = last_adjust
-        earliest = Rating.objects.filter(player=player, decay=0).order_by('period')[0]
-        for teammem in teammems:
-            dict = {}
-            if teammem.start:
-                if earliest.period.start < teammem.start and latest.period.start > teammem.start:
-                    dict['date'] = teammem.start
-                    dict['rating'] = interp_rating(teammem.start, base['ratings'])
-                    dict['data'] = []
-                    dict['data'].append({'date':teammem.start, 'team':teammem.team, 'jol':'joined'})
-                    teampoints.append(dict)
-            dict = {}
-            if teammem.end:
-                if earliest.period.start < teammem.end and latest.period.start > teammem.end:
-                    dict['date'] = teammem.end
-                    dict['rating'] = interp_rating(teammem.end, base['ratings'])
-                    dict['data'] = []
-                    dict['data'].append({'date':teammem.end, 'team':teammem.team, 'jol':'left'})
-                    teampoints.append(dict)
-        teampoints.sort(key=lambda a: a['date'])
-        # Condense items if team switches happened within 14 days.
-        if len(teampoints) > 1:
-            search = True
-            cur = 0
-            while search:
-                timediff = teampoints[cur+1]['date'] - teampoints[cur]['date']
-                if timediff.days <= 14:
-                    teampoints[cur]['data'].append({'date':teampoints[cur+1]['data'][0]['date'], 'team':teampoints[cur+1]['data'][0]['team'], 'jol':teampoints[cur+1]['data'][0]['jol']})
-                    teampoints.remove(teampoints[cur+1])
-                else:
-                    cur += 1
-                if not cur < len(teampoints)-1:
-                    search = False
-        # Sort data in array, first by date, then by joined/left
-        for point in teampoints:
-            point['data'].sort(key=lambda a: a['jol'], reverse=True)
-            point['data'].sort(key=lambda a: a['date'])
+        latest = Rating.objects.filter(player=player, decay=0).order_by('-period')
+        if latest:
+            latest = latest[0]
+            earliest = Rating.objects.filter(player=player, decay=0).order_by('period')[0]
+            teampoints = []
+            for teammem in teammems:
+                dict = {}
+                if teammem.start:
+                    if earliest.period.start < teammem.start and latest.period.start > teammem.start:
+                        dict['date'] = teammem.start
+                        dict['rating'] = interp_rating(teammem.start, base['ratings'])
+                        dict['data'] = []
+                        dict['data'].append({'date':teammem.start, 'team':teammem.team, 'jol':'joins'})
+                        teampoints.append(dict)
+                dict = {}
+                if teammem.end:
+                    if earliest.period.start < teammem.end and latest.period.start > teammem.end:
+                        dict['date'] = teammem.end
+                        dict['rating'] = interp_rating(teammem.end, base['ratings'])
+                        dict['data'] = []
+                        dict['data'].append({'date':teammem.end, 'team':teammem.team, 'jol':'leaves'})
+                        teampoints.append(dict)
+            teampoints.sort(key=lambda a: a['date'])
+            # Condense items if team switches happened within 14 days.
+            if len(teampoints) > 1:
+                search = True
+                cur = 0
+                while search:
+                    timediff = teampoints[cur+1]['date'] - teampoints[cur]['date']
+                    if timediff.days <= 14:
+                        teampoints[cur]['data'].append({'date':teampoints[cur+1]['data'][0]['date'], 'team':teampoints[cur+1]['data'][0]['team'], 'jol':teampoints[cur+1]['data'][0]['jol']})
+                        teampoints.remove(teampoints[cur+1])
+                    else:
+                        cur += 1
+                    if not cur < len(teampoints)-1:
+                        search = False
+            # Sort data in array, first by date, then by joined/left
+            for point in teampoints:
+                point['data'].sort(key=lambda a: a['jol'], reverse=True)
+                point['data'].sort(key=lambda a: a['date'])
+            base['teampoints'] = teampoints
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
@@ -413,7 +416,7 @@ def player(request, player_id):
     base['stories'] = stories
 
     base.update({'player': player, 'countryfull': countryfull, 'rating': rating,
-                 'teammems': teammems, 'teampoints': teampoints})
+                 'teammems': teammems})
     return render_to_response('player.html', base)
 
 def player_historical(request, player_id):

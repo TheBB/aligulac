@@ -463,8 +463,7 @@ This is the template for the main player page, called from ratings.views.player.
                           x: {{ s.date|milliseconds }},
                           y: {{ s.rating|ratscale }}
                       },{% endfor %}]
-            } {% endif %}
-            {% if teampoints %}
+            }, {% endif %}{% if teampoints %}
                 {
                 name: 'Team switches',
                 type: 'scatter',

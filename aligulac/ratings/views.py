@@ -832,9 +832,10 @@ def events(request, event_id=None):
 
         elif 'addstory' in request.POST and request.POST['addstory'] == 'Add story':
             player = Player.objects.get(id=int(request.POST['player']))
-            if not Story.objects.filter(player=player, event=event).exists():
-                new = Story(player=player, event=event, date=request.POST['date'],
-                            text=request.POST['text'])
+            date = request.POST['date']
+            text = request.POST['text']
+            if not Story.objects.filter(player=player, event=event, date=date).exists():
+                new = Story(player=player, event=event, date=date, text=text)
                 new.save()
                 base['message'] = 'Added a story for ' + player.tag + '.'
             else:

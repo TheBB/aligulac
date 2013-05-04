@@ -345,7 +345,7 @@ def player(request, player_id):
         base['patches'] = PATCHES
 
         # Add points to graph when player left or joined a team.
-        # Creates an array if dictionaries in the form of date:date, rating:rating, data:[{date:date, team:team, jol:jol}, {...}]  
+        # Creates an array if dictionaries in the form of date:date, rating:rating, data:[{date:date, team:team, jol:jol}, {...}]
         latest = Rating.objects.filter(player=player, decay=0).order_by('-period')
         if latest:
             latest = latest[0]
@@ -354,7 +354,7 @@ def player(request, player_id):
             for teammem in teammems:
                 dict = {}
                 if teammem.start:
-                    if earliest.period.start < teammem.start and latest.period.start > teammem.start:
+                    if earliest.period.start < teammem.start < latest.period.start:
                         dict['date'] = teammem.start
                         dict['rating'] = interp_rating(teammem.start, base['ratings'])
                         dict['data'] = []
@@ -362,7 +362,7 @@ def player(request, player_id):
                         teampoints.append(dict)
                 dict = {}
                 if teammem.end:
-                    if earliest.period.start < teammem.end and latest.period.start > teammem.end:
+                    if earliest.period.start < teammem.end < latest.period.start:
                         dict['date'] = teammem.end
                         dict['rating'] = interp_rating(teammem.end, base['ratings'])
                         dict['data'] = []
@@ -370,13 +370,14 @@ def player(request, player_id):
                         teampoints.append(dict)
             teampoints.sort(key=lambda a: a['date'])
             # Condense items if team switches happened within 14 days.
+            days = 14
             if len(teampoints) > 1:
                 search = True
                 cur = 0
                 while search:
                     timediff = teampoints[cur+1]['date'] - teampoints[cur]['date']
-                    if timediff.days <= 14:
-                        teampoints[cur]['data'].append({'date':teampoints[cur+1]['data'][0]['date'], 'team':teampoints[cur+1]['data'][0]['team'], 'jol':teampoints[cur+1]['data'][0]['jol']})
+                    if timediff.days <= days:
+                        teampoints[cur]['data'].append(teampoints[cur+1]['data'][0])
                         teampoints.remove(teampoints[cur+1])
                     else:
                         cur += 1
@@ -387,6 +388,16 @@ def player(request, player_id):
                 point['data'].sort(key=lambda a: a['jol'], reverse=True)
                 point['data'].sort(key=lambda a: a['date'])
             base['teampoints'] = teampoints
+
+            # Add stories
+            stories = player.story_set.all()
+            for s in stories:
+                if earliest.period.start < s.date < latest.period.start:
+                    s.rating = interp_rating(s.date, base['ratings'])
+                else:
+                    s.skip = True
+            base['stories'] = stories
+
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
@@ -409,11 +420,6 @@ def player(request, player_id):
 
     if matches.exists():
         base['matches'] = display_matches(matches, fix_left=player, ratings=True)
-
-    stories = player.story_set.all()
-    for s in stories:
-        s.rating = interp_rating(s.date, base['ratings'])
-    base['stories'] = stories
 
     base.update({'player': player, 'countryfull': countryfull, 'rating': rating,
                  'teammems': teammems})

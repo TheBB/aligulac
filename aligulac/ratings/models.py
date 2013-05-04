@@ -652,6 +652,10 @@ class Match(models.Model):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)
         self.period = pers[0]
     
+    def set_date(self, date):
+        self.date = date
+        self.save()
+        
     def __unicode__(self):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
                 '-' + str(self.scb) + ' ' + self.plb.tag

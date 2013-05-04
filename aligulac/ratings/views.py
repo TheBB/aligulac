@@ -498,7 +498,7 @@ def results_search(request):
                     match.eventobj = event
                     base['markevent'] = event
                 if request.POST['date'].strip() != '':
-                    match.date = request.POST['date']
+                    match.set_date(request.POST['date'])
                     base['markdate'] = request.POST['date']
                 if request.POST['type'] != 'nochange':
                     match.offline = (request.POST['type'] == 'offline')

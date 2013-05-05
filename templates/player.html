@@ -413,6 +413,7 @@ This is the template for the main player page, called from ratings.views.player.
                 color: '#00dd00',
                 lineWidth: 1,
                 dashStyle: 'Dash',
+                enableMouseTracking: false,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -423,6 +424,7 @@ This is the template for the main player page, called from ratings.views.player.
                 color: '#0000dd',
                 lineWidth: 1,
                 dashStyle: 'Dash',
+                enableMouseTracking: false,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -433,6 +435,7 @@ This is the template for the main player page, called from ratings.views.player.
                 color: '#dd0000',
                 lineWidth: 1,
                 dashStyle: 'Dash',
+                enableMouseTracking: false,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -442,6 +445,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: 'General',
                 color: '#000000',
                 lineWidth: 3,
+                enableMouseTracking: false,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
                           x: {{ r.period.end|milliseconds }},

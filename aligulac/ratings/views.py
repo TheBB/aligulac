@@ -495,7 +495,7 @@ def results_search(request):
             if key[0:6] == 'match-':
                 match = Match.objects.get(id=int(key.split('-')[-1]))
                 if request.POST['event'] != 'nochange':
-                    match.eventobj = event
+                    match.set_event(event)
                     base['markevent'] = event
                 if request.POST['date'].strip() != '':
                     match.set_date(request.POST['date'])

@@ -655,6 +655,20 @@ class Match(models.Model):
     def set_date(self, date):
         self.date = date
         self.save()
+    
+    # Update dates for both old and new event, then set new event object.
+    def set_event(self, event):
+        oldevent = None
+        if self.eventobj:
+            oldevent = self.eventobj
+        self.eventobj = event
+        self.save()
+        # This is very slow if used for many matches, but that should rarely happen.
+        for event in event.get_parents(id=True):
+            event.update_dates()
+        if oldevent:
+            for event in oldevent.get_parents(id=True):
+                event.update_dates()
         
     def __unicode__(self):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\

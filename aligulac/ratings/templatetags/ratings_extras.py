@@ -2,6 +2,7 @@
 from django import template
 from datetime import timedelta, date
 from dateutil.relativedelta import relativedelta
+import md5
 from aligulac import settings
 
 from math import sqrt
@@ -289,3 +290,16 @@ def add_sep_and_cur(int, cur):
     else:
         return str + " " + cur
 register.filter('add_sep_and_cur', add_sep_and_cur)
+
+#{% if bool|is_false %} returns True if bool is False; False if bool is None.
+#{% if not bool %} returns True in both cases. 
+def is_false(bool):
+    return bool is False
+register.filter('is_false', is_false)
+
+# Produces a small string hash
+def smallhash(value):
+    m = md5.new()
+    m.update(value)
+    return m.hexdigest()[:6]
+register.filter('smallhash', smallhash)

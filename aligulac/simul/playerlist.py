@@ -12,7 +12,7 @@ def make_player(player):
         return pl
 
     rats = Rating.objects.filter(player=player).order_by('-period__id')
-    if rats.count == 0:
+    if rats.count() == 0:
         pl = Player(player.tag, player.race, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 0.6)
         pl.dbpl = player
     else:
@@ -44,12 +44,23 @@ class Player:
             self.dev_race = copy.dev_race
             self.flag = copy.flag
 
+    def elo_vs_opponent(self, opponent):
+        if opponent.race in 'PTZ':
+            return self.elo + self.elo_race[opponent.race]
+        else:
+            return self.elo
+
+    def dev_vs_opponent(self, opponent):
+        if opponent.race in 'PTZ':
+            return self.dev**2 + self.dev_race[opponent.race]**2
+        else:
+            return self.dev**2 + sum([d**2 for d in self.dev_race.values()])/9
+
     def prob_of_winning(self, opponent):
-        mix = 0.3
-        my_elo = self.elo + self.elo_race[opponent.race]
-        op_elo = opponent.elo + opponent.elo_race[self.race]
-        my_dev = self.dev**2 + self.dev_race[opponent.race]**2
-        op_dev = opponent.dev**2 + opponent.dev_race[self.race]**2
+        my_elo = self.elo_vs_opponent(opponent)
+        op_elo = opponent.elo_vs_opponent(self)
+        my_dev = self.dev_vs_opponent(opponent)
+        op_dev = opponent.dev_vs_opponent(self)
         return cdf(my_elo - op_elo, scale=sqrt(1+my_dev+op_dev))
 
     def copy(self):

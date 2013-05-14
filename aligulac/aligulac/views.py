@@ -50,6 +50,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('Matches', '/add/'),\
                            ('Review', '/add/review/'),\
                            ('Events', '/add/events/'),\
+                           ('Open events', '/add/open_events/'),\
                            ('Integrity', '/add/integrity/'),\
                            ('Misc', '/add/misc/')]
     elif section == 'Teams':
@@ -103,9 +104,15 @@ def db(request):
 
     nwol = Match.objects.filter(game='WoL').count()
     nhots = Match.objects.filter(game='HotS').count()
-    
+
+    nwolgames = Match.objects.filter(game='WoL').aggregate(Sum('sca'))['sca__sum'] + Match.objects.filter(game='WoL').aggregate(Sum('scb'))['scb__sum']
+    nhotsgames = Match.objects.filter(game='HotS').aggregate(Sum('sca'))['sca__sum'] + Match.objects.filter(game='HotS').aggregate(Sum('scb'))['scb__sum']
+	
     nonline = Match.objects.filter(offline = False).count()
     noffline = Match.objects.filter(offline = True).count()
+	
+    nonlinegames = Match.objects.filter(offline = False).aggregate(Sum('sca'))['sca__sum'] + Match.objects.filter(offline= False).aggregate(Sum('scb'))['scb__sum']
+    nofflinegames = Match.objects.filter(offline = True).aggregate(Sum('sca'))['sca__sum'] + Match.objects.filter(offline= True).aggregate(Sum('scb'))['scb__sum']
 
     npartial = Match.objects.exclude(eventobj__isnull=True, event='').count()
     nfull = Match.objects.filter(eventobj__isnull=False).count()
@@ -121,7 +128,8 @@ def db(request):
                  'nwol': nwol, 'nhots': nhots, 'nonline': nonline, 'noffline': noffline,\
                  'npartial': npartial, 'nfull': nfull, 'nuncatalogued': nuncatalogued,\
                  'nplayers': nplayers, 'nkoreans': nkoreans,\
-                 'nteams': nteams, 'nactive': nactive, 'ninactive': ninactive})
+                 'nteams': nteams, 'nactive': nactive, 'ninactive': ninactive,\
+		 'nwolgames': nwolgames, 'nhotsgames': nhotsgames, 'nonlinegames': nonlinegames, 'nofflinegames':nofflinegames})
 
     submitters = []
     for u in User.objects.all():

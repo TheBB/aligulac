@@ -11,23 +11,32 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% block content %}
 <h2>{{ player.tag }} earnings</h2>
-<p>{{ player.tag }} has earned a total of ${{ totalearnings|add_separator }}.</p>
+<p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.
+{% if earningsByCurrency %}<br>Broken down by currency, that's 
+{% for currency, earnings in earningsByCurrency.items %}
+	{{ earnings|add_sep_and_cur:currency }}{% if forloop.revcounter == 2 %} and  
+	{% elif forloop.last %}.
+	{% else %}, {% endif %} 
+{% endfor %}
+{% endif %}</p>
 <table class="results" style="width: 67em;">
     <tr class="header">
         <td style="width: 6em; text-align: right;">Placement</td>
         <td style="width: 0.1em;"></td>
         <td>Tournament</td>
-        <td style="width: 12em; text-align: right;">Earnings</td>
+        <td style="width: 13em; text-align: right;">Earnings</td>
         <td style="width: 2em;"></td>
         <td style="width: 19em;">Dates</td>
     </tr>
     {% for earning in earnings %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
             <td style="text-align: right;">
-            {% if earning.min != earning.max %}
-                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
-            {% else %}
-                {{ earning.min|ordinal }}
+            {% if earning.min != 0 %}
+            	{% if earning.min != earning.max %}
+	                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
+            	{% else %}
+	                {{ earning.min|ordinal }}
+            	{% endif %}
             {% endif %}
             </td>
             <td></td>
@@ -44,10 +53,10 @@ This is the template for the earnings of a player. It's called from ratings.view
             </td>
             <td></td>
             <td>
-            {% if earning.earliest != earning.latest %}
-            	{{ earning.earliest }} &ndash; {{ earning.latest }}
+            {% if earning.event.earliest != earning.event.latest %}
+            	{{ earning.event.earliest }} &ndash; {{ earning.event.latest }}
 			{% else %}
-            	{{ earning.latest }}
+            	{{ earning.event.latest }}
 			{% endif %}             
             </td>
         </tr>

@@ -48,6 +48,7 @@ arguments:
         <td class="rl_icon"></td>
         <td class="rl_arrow"></td>
     </tr>
+    {% if entries %}
     {% for entry in entries %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td class="rl_number">
@@ -131,6 +132,11 @@ arguments:
         </td>
     </tr>
     {% endfor %}
+    {% else %}
+    <tr class="nonheader row2">
+        <td colspan="15">No entries found.</td>
+    </tr>
+    {% endif %}
 </table>
 
 {% include "periodpagenav.html" %}

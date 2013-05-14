@@ -51,8 +51,8 @@ with open(backup_list, 'r') as f:
 files = [f.strip() for f in files if f.strip() != '']
 files.append('{filename}'.format(filename=dt.isoformat()))
 
-# If there are more than 40 stored backups, delete the earliest one
-if len(files) > 40:
+# If there are more than 100 stored backups, delete the earliest one
+if len(files) > 100:
     os.system('rm ' + backup_location.format(filename=files[0]))
     files = files[1:]
 

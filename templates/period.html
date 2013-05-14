@@ -139,7 +139,9 @@ This template shows a rating list for a given period.
     <select name="nats">
         <option value="all" {% if nats == "all" %}selected{% endif %}>All</option>
         <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
-        <option value="kr" {% if nats == "kr" %}selected{% endif %}>Koreans</option>
+        {% for c in countries %}
+        <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
     </select>
     <input type="submit" value="Filter" />
     </p>

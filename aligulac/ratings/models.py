@@ -37,6 +37,18 @@ class Event(models.Model):
     fullname = models.CharField(max_length=500, default='')
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
+    
+    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
+    #tlpd_db contains information in binary form on which TLPD databases to use:
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
+    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
+    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+
+    prizepool = models.NullBooleanField(blank=True, null=True)
+
+    earliest = models.DateField(blank=True, null=True)
+    latest = models.DateField(blank=True, null=True)
 
     INDIVIDUAL = 'individual'
     TEAM = 'team'
@@ -65,6 +77,9 @@ class Event(models.Model):
     def get_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False).order_by('lft')
 
+    def get_path_print(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')
+
     def get_event_fullname(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'])\
                             .order_by('-lft')[0].fullname
@@ -78,45 +93,77 @@ class Event(models.Model):
             return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')[levels-1]
         except:
             return self
+
+    def get_parents(self, id=False):
+        try:
+            if not id:
+                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('-lft')
+            else:
+                return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('-lft')
+        except:
+            return self
     
-    def get_children(self):
-        return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt).order_by('lft')
+    def get_children(self, type=['category', 'event', 'round'], id=False):
+        if not id:
+            return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt,type__in=type).order_by('lft')
+        else:
+            return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt,type__in=type).order_by('lft')
+    
+    def get_root(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')[0]
     
     def get_homepage(self):
-        if self.homepage:
-            return self.homepage
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, homepage__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].homepage
         else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, homepage__isnull=False)\
-                            .order_by('-lft').values('homepage')[0]['homepage']
-            except:
-                return None
-
-    def get_lp_name(self):
-        if self.lp_name:
-            return self.lp_name
-        else:
-            try:
-                return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt, lp_name__isnull=False)\
-                            .order_by('-lft').values('lp_name')[0]['lp_name']
-            except:
-                return None
-            
-    #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
-    def get_earliest(self):
-        from django.db import connection
-        cursor = connection.cursor()
-        try:
-            cursor.execute('select date, id from ratings_match where eventobj_id in\
-                                        (select id from ratings_event where\
-                                        lft >= ' + str(self.lft) + ' and\
-                                        rgt <= ' + str(self.rgt) +
-                                        ') order by date asc limit 1;')
-            return cursor.fetchone()[0]
-        except:
             return None
 
+    def get_lp_name(self):
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, lp_name__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].lp_name
+        else:
+            return None
+
+    #returns a dictionary of TLPD IDs, or None if player has no TLPD link.
+    #Dictionary keys: IN, KR, HotS, HotSbeta. Values are either None or the TLPD ID.   
+    def get_tlpd_id(self):
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tlpd_id__isnull=False).order_by('-lft')
+        if id:
+            tlpd_ids = {}
+            if (self.tlpd_db % 2) == 1:
+                tlpd_ids["KR"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b10 % 2) == 1:
+                tlpd_ids["IN"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b100 % 2) == 1:
+                tlpd_ids["HotS"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b1000 % 2) == 1:
+                tlpd_ids["HotSbeta"] = id[0].tlpd_id
+            return tlpd_ids
+        else:
+            return None
+
+    def get_tl_thread(self):
+        id = Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, tl_thread__isnull=False).order_by('-lft')
+        
+        if id:
+            return id[0].tl_thread
+        else:
+            return None
+
+    def get_prizepool(self):
+        return self.prizepool
+    
+    def get_earliest(self):
+        return self.earliest
     def get_latest(self):
+        return self.latest
+
+    #raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
+    def update_dates(self):
         from django.db import connection
         cursor = connection.cursor()
         try:
@@ -125,16 +172,31 @@ class Event(models.Model):
                                         lft >= ' + str(self.lft) + ' and\
                                         rgt <= ' + str(self.rgt) +
                                         ') order by date desc limit 1;')
-            return cursor.fetchone()[0]
+            self.latest = cursor.fetchone()[0]
+            cursor.execute('select date, id from ratings_match where eventobj_id in\
+                                        (select id from ratings_event where\
+                                        lft >= ' + str(self.lft) + ' and\
+                                        rgt <= ' + str(self.rgt) +
+                                        ') order by date asc limit 1;')
+            self.earliest = cursor.fetchone()[0]
+            self.save()
         except:
-            return None
+            self.latest = None
+            self.earliest = None
+            self.save()
     
     def change_type(self, type):
         self.type = type
+        # Set childevents as "round" if type is "event" or "round". 
         if type == 'event' or type == 'round':
             Event.objects.filter(lft__gte=self.lft, lft__lt=self.rgt).update(type='round')
+        # Set parent events as "category" if type is "event" or "category". 
         if type == 'event' or type == 'category':
             Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).update(type='category')
+        self.save()
+    
+    def set_prizepool(self, prizepool):
+        self.prizepool = prizepool
         self.save()
     
     def set_parent(self, parent):
@@ -142,11 +204,41 @@ class Event(models.Model):
         self.save()
     
     def set_homepage(self, homepage):
-        self.homepage = homepage
+        if homepage == '':
+            self.homepage = None
+        else:
+            self.homepage = homepage
         self.save()
     
     def set_lp_name(self, lp_name):
-        self.lp_name = lp_name
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
+        self.save()
+
+    def set_tlpd_id(self, tlpd_id, tlpd_db):
+        if tlpd_id == '' or tlpd_db == 0:
+            self.tlpd_id = None
+            self.tlpd_db = None
+        else:
+            self.tlpd_id = tlpd_id
+            self.tlpd_db = tlpd_db
+        self.save()
+        
+    def set_tl_thread(self, tl_thread):
+        if tl_thread == '':
+            self.tl_thread = None
+        else:
+            self.tl_thread = tl_thread
+        self.save()
+    
+    def set_earliest(self, date):
+        self.earliest = date
+        self.save()
+
+    def set_latest(self, date):
+        self.latest = date
         self.save()
 
     def add_child(self, name, type, noprint = False, closed = False):
@@ -207,6 +299,16 @@ class Event(models.Model):
         self.save()
 
         return self.rgt
+    
+    def delete_earnings(self, ranked=True):
+        if ranked:
+            Earnings.objects.filter(event=self).exclude(placement__exact=0).delete()
+        else:
+            Earnings.objects.filter(event=self, placement__exact=0).delete()
+
+    def move_earnings(self, newevent):
+        Earnings.objects.filter(event=self).update(event=newevent)
+        newevent.change_type('event')
 
 class Player(models.Model):
     class Meta:
@@ -231,8 +333,11 @@ class Player(models.Model):
     RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random'), (S, 'Switcher')]
     race = models.CharField(max_length=1, choices=RACES)
 
-    tlpd_kr_id = models.IntegerField('TLPD Korean ID', blank=True, null=True)
-    tlpd_in_id = models.IntegerField('TLPD International ID', blank=True, null=True)
+    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
+    #tlpd_db contains information in binary form on which TLPD databases to use:
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
+    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
     sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
@@ -249,14 +354,6 @@ class Player(models.Model):
         else:
             return self.tag + ' (' + self.race + ')'
     
-    def update_external_links(self, sc2c_id, tlpd_kr_id, tlpd_in_id, sc2e_id, lp_name):
-        self.sc2c_id = sc2c_id
-        self.tlpd_kr_id = tlpd_kr_id
-        self.tlpd_in_id = tlpd_in_id
-        self.sc2e_id = sc2e_id
-        self.lp_name = lp_name
-        self.save()
-        
     def set_tag(self, tag):
         self.tag = tag
         self.save()
@@ -266,11 +363,47 @@ class Player(models.Model):
         self.save()
     
     def set_name(self, name):
-        self.name = name
+        if name == '':
+            self.name = None
+        else:
+            self.name = name
         self.save()
     
     def set_birthday(self, birthday):
-        self.birthday = birthday
+        if birthday == '':
+            self.birthday = None
+        else:
+            self.birthday = birthday
+        self.save()
+
+    def set_sc2c_id(self, sc2c_id):
+        if sc2c_id == '':
+            self.sc2c_id = None
+        else:
+            self.sc2c_id = sc2c_id
+        self.save()
+
+    def set_tlpd_id(self, tlpd_id, tlpd_db):
+        if tlpd_id == '' or tlpd_db == 0:
+            self.tlpd_id = None
+            self.tlpd_db = None
+        else:
+            self.tlpd_id = tlpd_id
+            self.tlpd_db = tlpd_db
+        self.save()
+
+    def set_sc2e_id(self, sc2e_id):
+        if sc2e_id == '':
+            self.sc2e_id = None
+        else:
+            self.sc2e_id = sc2e_id
+        self.save()
+
+    def set_lp_name(self, lp_name):
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()
     
     #set alias. Takes an array of arguments, which are compared to existing
@@ -290,6 +423,35 @@ class Player(models.Model):
         #aliases is None, so delete all aliases
         else:
             Alias.objects.filter(player=self).delete()
+
+    #returns a dictionary of TLPD IDs, or None if player has no TLPD link.
+    #Dictionary keys: IN, KR, HotS, HotSbeta. Values are either None or the TLPD ID.   
+    def get_tlpd_id(self):
+        if self.tlpd_id is None:
+            return None
+        else:
+            tlpd_ids = {}
+            if (self.tlpd_db % 2) == 1:
+                tlpd_ids["KR"] = self.tlpd_id
+            if (self.tlpd_db / 0b10 % 2) == 1:
+                tlpd_ids["IN"] = self.tlpd_id
+            if (self.tlpd_db / 0b100 % 2) == 1:
+                tlpd_ids["HotS"] = self.tlpd_id
+            if (self.tlpd_db / 0b1000 % 2) == 1:
+                tlpd_ids["HotSbeta"] = self.tlpd_id
+            return tlpd_ids
+
+class Story(models.Model):
+    player = models.ForeignKey(Player, null=False)
+    text = models.CharField(max_length=200, null=False)
+    date = models.DateField(null=False)
+    event = models.ForeignKey(Event, null=True)
+
+    class Meta:
+        verbose_name_plural = 'stories'
+
+    def __unicode__(self):
+        return self.player.tag + ' - ' + self.text + ' on ' + str(self.date)
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
@@ -311,7 +473,10 @@ class Team(models.Model):
         self.save()
     
     def set_shortname(self, shortname):
-        self.shortname = shortname
+        if shortname == '':
+            self.shortname = None
+        else:
+            self.shortname = shortname
         self.save()
     
     #set alias. Takes an array of arguments, which are compared to existing
@@ -333,11 +498,17 @@ class Team(models.Model):
             Alias.objects.filter(team=self).delete()
     
     def set_homepage(self, homepage):
-        self.homepage = homepage
+        if homepage == '':
+            self.homepage = None
+        else:
+            self.homepage = homepage
         self.save()
     
     def set_lp_name(self, lp_name):
-        self.lp_name = lp_name
+        if lp_name == '':
+            self.lp_name = None
+        else:
+            self.lp_name = lp_name
         self.save()    
 
 class TeamMembership(models.Model):
@@ -404,14 +575,14 @@ class Match(models.Model):
 
     def populate_orig(self):
         try:
-            self.orig_pla = self.pla
-            self.orig_plb = self.plb
+            self.orig_pla = self.pla_id
+            self.orig_plb = self.plb_id
             self.orig_rca = self.rca
             self.orig_rcb = self.rcb
             self.orig_sca = self.sca
             self.orig_scb = self.scb
             self.orig_date = self.date
-            self.orig_period = self.period
+            self.orig_period = self.period_id
         except:
             self.orig_pla = None
             self.orig_plb = None
@@ -423,7 +594,7 @@ class Match(models.Model):
             self.orig_period = None
 
     def changed_effect(self):
-        return self.orig_pla != self.pla or self.orig_plb != self.plb or\
+        return self.orig_pla != self.pla_id or self.orig_plb != self.plb_id or\
                self.orig_rca != self.rca or self.orig_rcb != self.rcb or\
                self.orig_sca != self.sca or self.orig_scb != self.scb
 
@@ -431,15 +602,19 @@ class Match(models.Model):
         return self.orig_date != self.date
 
     def changed_period(self):
-        return self.orig_period != self.period
+        return self.orig_period != self.period_id
 
     def __init__(self, *args, **kwargs):
         super(Match, self).__init__(*args, **kwargs)
         self.populate_orig()
 
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        update_dates = False
         if self.changed_date():
             self.set_period()
+            
+            if self.eventobj:
+                update_dates = True
 
         if self.changed_period() or self.changed_effect():
             try:
@@ -458,11 +633,43 @@ class Match(models.Model):
 
         super(Match, self).save(force_insert, force_update, *args, **kwargs)
         self.populate_orig()
+        
+        if update_dates:
+            # This is very slow if used for many matches, but that should rarely happen.
+            for event in self.eventobj.get_parents(id=True):
+                event.update_dates()
+    
+    def delete(self,  *args, **kwargs):
+        eventobj = self.eventobj
+        super(Match, self).delete(*args, **kwargs)
+        
+        if eventobj:
+            for event in self.eventobj.get_children(id=True):
+                # This is very slow if used for many matches, but that should rarely happen. 
+                event.update_dates()
 
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)
         self.period = pers[0]
-
+    
+    def set_date(self, date):
+        self.date = date
+        self.save()
+    
+    # Update dates for both old and new event, then set new event object.
+    def set_event(self, event):
+        oldevent = None
+        if self.eventobj:
+            oldevent = self.eventobj
+        self.eventobj = event
+        self.save()
+        # This is very slow if used for many matches, but that should rarely happen.
+        for event in event.get_parents(id=True):
+            event.update_dates()
+        if oldevent:
+            for event in oldevent.get_parents(id=True):
+                event.update_dates()
+        
     def __unicode__(self):
         return str(self.date) + ' ' + self.pla.tag + ' ' + str(self.sca) +\
                 '-' + str(self.scb) + ' ' + self.plb.tag
@@ -500,7 +707,10 @@ class Earnings(models.Model):
     def set_earnings(event, players, origearnings, currency, placements):
         #probably should be more subtle and not delete everything on change
         if Earnings.objects.filter(event=event).exists():
-            Earnings.objects.filter(event=event).delete()
+            if placements[0] == -1:
+                Earnings.objects.filter(event=event, placement__exact=0).delete()
+            else:
+                Earnings.objects.filter(event=event).exclude(placement__exact=0).delete()
         if not len(players) == len(origearnings):
             return None
         else:
@@ -508,8 +718,9 @@ class Earnings(models.Model):
                 new = Earnings(event=event, player=players[i], placement=placements[i]+1, origearnings=origearnings[i], currency=currency)
                 new.save()
             new.convert_earnings()
+        event.set_prizepool(True)
         return new
-    
+            
     def convert_earnings(self):
         currency = self.currency
         earningobj = Earnings.objects.filter(event=self.event)
@@ -526,7 +737,7 @@ class Earnings(models.Model):
                 for earning in earningobj:        
                     earning.earnings = round(exchangerates.convert(earning.origearnings, currency))
                     earning.save()
-    
+   
     def __unicode__(self):
         return '#' + str(self.placement) + ' at ' + self.event.fullname + ': ' + self.player.tag + ' Earnings: $' + str(self.earnings)
     
@@ -738,3 +949,12 @@ class Rating(models.Model):
         self.comp_dev_vp = d['P']
         self.comp_dev_vt = d['T']
         self.comp_dev_vz = d['Z']
+
+class BalanceEntry(models.Model):
+    date = models.DateField()
+    pvt_wins = models.IntegerField()
+    pvt_losses = models.IntegerField()
+    pvz_wins = models.IntegerField()
+    pvz_losses = models.IntegerField()
+    tvz_wins = models.IntegerField()
+    tvz_losses = models.IntegerField()

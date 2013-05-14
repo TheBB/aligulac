@@ -11,21 +11,59 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% block content %}
 <h2>Earnings ranking</h2>
-<p>In total, ${{ totalprizepool|add_separator }} has been awarded in prize money.</p>
+<p>{% if not empty %}
+In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %}, 
+{% if filters.currency != 'all' %}{{ totalorigprizepool|add_sep_and_cur:filters.currency }}
+{% if filters.currency != 'USD' %} ({{ totalprizepool|add_sep_and_cur:'USD' }})
+{% endif %}
+{% else %}{{ totalprizepool|add_sep_and_cur:'USD' }}
+{% endif %}
+ has been awarded in prize money.
+{% else %}The filters came up empty. :(
+{% endif %}<br>
+<form method="get" action="/earnings/">
+    <input type="hidden" name="page" value="{{ page }}" />
+    Filter by year:
+    <select name="year">
+        <option value="all" {% if filters.year == 'all' %}selected{% endif %}>All</option>
+        <option value="2013" {% if filters.year == 2013 %}selected{% endif %}>2013</option>
+        <option value="2012" {% if filters.year == 2012 %}selected{% endif %}>2012</option>
+        <option value="2011" {% if filters.year == 2011 %}selected{% endif %}>2011</option>
+        <option value="2010" {% if filters.year == 2010 %}selected{% endif %}>2010</option>
+    </select>
+    Filter by country:
+    <select name="country">
+        <option value="all" {% if filters.country == 'all' %}selected{% endif %}>All</option>
+        <option value="foreigners" {% if filters.country == 'foreigners' %}selected{% endif %}>Non-Koreans</option>
+        {% for country in countries %}
+        <option value="{{ country.cc }}" {% if filters.country == country.cc %}selected{% endif %}>{{ country.name }}</option>
+        {% endfor %}
+    </select>
+    Filter by currency:
+    <select name="currency">
+        <option value="all" {% if filters.currency == 'all' %}selected{% endif %}>All</option>
+        {% for currency in currencies %}
+        <option value="{{ currency.code }}" {% if filters.currency == currency.code %}selected{% endif %}>{{ currency.code }} - {{ currency.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Filter" />
+</form>
+</p>
+{% if not empty %}
 <div class="table" style="min-width: 67em;">
     <div class="row">
         <div class="rowe" style="width: 23.5em;">
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
-            <a href="?page=1">
+            <a href="?page=1}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
                 <img src="{{ "first.png"|static }}" alt="first" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
-            <a href="?page={{ page|add:"-1" }}">
+            <a href="?page={{ page|add:"-1" }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
                 <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
             </a>
             {% endif %}
@@ -33,14 +71,14 @@ This is the template for the earnings of a player. It's called from ratings.view
         <div class="rowe" style="width: 8em; text-align: center;">Page {{ page }}/{{ npages }}</div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
-            <a href="?page={{ page|add:"1" }}">
+            <a href="?page={{ page|add:"1" }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
                 <img src="{{ "next.png"|static }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
-            <a href="?page={{ npages }}">
+            <a href="?page={{ npages }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
                 <img src="{{ "last.png"|static }}" alt="last" class="btm" />
             </a>
             {% endif %}
@@ -84,9 +122,14 @@ This is the template for the earnings of a player. It's called from ratings.view
 	                <a href="/teams/{{ earning.teamobj.team.id }}-{{ earning.teamobj.team.name|urlfilter }}/">{{ earning.teamobj.team.name }}</a>
             	{% endif %}
 	        </td>
-	        <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">${{ earning.totalearnings|add_separator }}</a>
+	        <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">
+	        {% if filters.currency != 'all' %}{{ earning.totalorigearnings|add_sep_and_cur:filters.currency }}
+	        {% if filters.currency != 'USD' %} ({{ earning.totalearnings|add_sep_and_cur:'USD' }}){% endif %}
+	        {% else %}{{ earning.totalearnings|add_sep_and_cur:'USD' }}
+	        {% endif %}</a>
 	        </td>
         </tr>
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}

@@ -329,9 +329,7 @@ def review(request):
     if 'act' in request.POST and base['adm'] == True:
         if int(request.POST['eobj']) != 2:
             eobj = Event.objects.get(id=int(request.POST['eobj']))
-        else:
-            eobj = None
-        base['eobj'] = eobj.id
+            base['eobj'] = eobj.id
 
         delete = True if request.POST['act'] == 'reject' else False
 
@@ -469,6 +467,56 @@ def manage_events(request):
 
     base.update(csrf(request))
     return render_to_response('eventmgr.html', base)
+
+def open_events(request):
+    base = base_ctx('Submit', 'Open events', request)
+
+    if not base['adm']:
+        base.update(csrf(request))
+        return render_to_response('login.html', base)
+
+    base['user'] = request.user.username
+    base.update(csrf(request))
+
+    if base['adm'] == True:
+        if 'openevents' in request.POST:
+            for event in request.POST.getlist('openevent'):
+                Event.objects.get(id=event).close()
+        if 'prizepools' in request.POST:
+            for event in request.POST.getlist('prizepool'):
+                print "setting thingy false:"
+                print event
+                Event.objects.get(id=event).set_prizepool(False)
+
+    openevents = []
+    emptyopenevents = []
+    noprizepoolevents = []
+    events = Event.objects.filter(type="event", closed=False)
+    ppevents = Event.objects.filter(prizepool__isnull=True, type="event", closed=True)
+    
+    for event in events:
+        # If any of the subevents is not empty, add it to openevents.
+        # Else it has no matches and so is added to emptyopenevents
+        if Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, 
+                                match__eventobj__isnull=False).exists():
+            openevents.append(event)
+        else:
+            emptyopenevents.append(event)
+            
+    #exclude team events and empty events from no prize pool list 
+    for event in ppevents:
+        if event.get_root().category != "team" and Event.objects.filter(lft__gte=event.lft, rgt__lte=event.rgt, match__eventobj__isnull=False).exists():
+            noprizepoolevents.append(event)
+
+    #remove "unknown events"
+    emptyopenevents = emptyopenevents[1:]
+    noprizepoolevents = noprizepoolevents[1:]
+
+    base['openevents'] = openevents
+    base['emptyopenevents'] = emptyopenevents
+    base['noprizepoolevents'] = noprizepoolevents
+
+    return render_to_response('events_open.html', base)
 
 def manage(request):
     base = base_ctx('Submit', 'Misc', request)

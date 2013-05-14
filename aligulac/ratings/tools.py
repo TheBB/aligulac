@@ -244,7 +244,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
                 r.pla_dev,     r.plb_dev    = r.plb_dev,     r.pla_dev
 
         if type(m) == Match:
-            if m.eventobj:
+            if m.eventobj_id is not None:
                 r.eventtext = m.eventobj.fullname
             elif m.event:
                 r.eventtext = m.event
@@ -277,3 +277,8 @@ def get_placements(event):
         except:
             earningdict[earning.earnings] = [earning.placement]
     return earningdict
+
+def add_earliest_latest():
+    for event in Event.objects.all():
+        print event
+        event.update_dates()

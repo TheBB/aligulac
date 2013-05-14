@@ -10,9 +10,414 @@ ratings.views.events.
 {% block title %}{{ event }}{% endblock %}
 
 {% block content %}
+{% if adm %}
+    <script>
+
+    function log(msg) {
+        setTimeout(function() {
+            throw new Error(msg);
+        }, 0);
+    }
+
+    function addfocus(cell)
+    {
+        var row = cell.parentNode.parentNode;
+        row.className = "nonheader row2";
+    }
+    function losefocus(cell)
+    {
+        var row = cell.parentNode.parentNode;
+        row.className = "nonheader row1";
+    }
+
+    function addprizepool(clicked_id)
+    {
+        var prizepoolbutton = document.getElementById(clicked_id);
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+            var tableposition = document.getElementById('createrankedtable');
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+            var tableposition = document.getElementById('createunrankedtable');
+        } 
+        
+        var numberplayers = document.createElement("select");
+        numberplayers.setAttribute("id", "numberplayers" + clicked_id);
+        numberplayers.setAttribute("name", "numberplayers");
+        {% for player in players %}
+            var option = document.createElement("option");
+            option.setAttribute("value", "{{ forloop.counter }}");
+            {% if rearnings %}
+                {% ifequal rearnings.count forloop.counter %}
+                    if (clicked_id == "rankedprizepoolbutton")
+                    {
+                        option.setAttribute("selected", "selected");
+                    }
+                {% endifequal %}
+            {% endif %}
+            {% if urearnings %}
+                {% ifequal urearnings.count forloop.counter %}
+                    if (clicked_id == "unrankedprizepoolbutton")
+                    {
+                        option.setAttribute("selected", "selected");
+                    }
+                {% endifequal %}
+            {% endif %}
+            option.innerHTML = "{{ forloop.counter }}"
+            numberplayers.appendChild(option);
+        {% endfor %}
+        
+        var button = document.createElement("input");
+        button.setAttribute("type", "button");
+        button.setAttribute("id", clicked_id);
+        button.setAttribute("onclick", "createtable(this.id, true); return false;");
+        button.setAttribute("value", "Set");
+        
+        prizepoolbutton.style.display = 'none';
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+            tableposition.appendChild(document.createTextNode("How many players (ranked)? "));
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+            tableposition.appendChild(document.createTextNode("How many players (unranked)? "));
+        }
+        tableposition.appendChild(numberplayers);
+        tableposition.appendChild(button);
+    }
+
+    function createtable(clicked_id, changeplayers)
+    {
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+            var tableposition = document.getElementById('createrankedtable');
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+            var tableposition = document.getElementById('createunrankedtable');
+        }
+        
+        try
+        {
+            oldtable = document.getElementById("table" + clicked_id);
+            tableposition.removeChild(oldtable);
+        }
+        catch(e) { }
+        
+        var table = document.createElement("table");
+        table.setAttribute("id", "table" + clicked_id);
+        table.setAttribute("class", "results prizepool");
+        
+        var row = table.insertRow(-1);
+        row.setAttribute("class", "header");
+        
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.setAttribute("style", "width: 3em;");
+        cell2.setAttribute("style", "width: 20em;");
+        cell3.setAttribute("style", "width: 17em;");
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+            cell1.innerHTML = "#";
+        }
+        cell2.innerHTML = "Player";
+        cell3.innerHTML = "Money earned";
+        
+        var currencies = document.createElement("select");
+        currencies.setAttribute("name", "currency");
+        currencies.setAttribute("id", "currency");
+        {% for currency in currencies %}
+            var currency = document.createElement("option");
+            currency.setAttribute("value", "{{ currency.code }}");
+            {% if not prizepoolcur %}
+                {% if currency.code == "USD" %}
+                    currency.setAttribute("selected", "selected");
+                {% endif %}
+            {% else %}
+                {% if currency.code == prizepoolcur %}
+                    currency.setAttribute("selected", "selected");
+                {% endif %}
+            {% endif %}
+            currency.innerHTML ="{{ currency.code }} - {{ currency.name }}";
+            currencies.appendChild(currency);
+        {% endfor %}
+        
+        var row = table.insertRow(-1);
+        row.setAttribute("class", "nonheader row2");
+        
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell2.setAttribute("style", "text-align: right;");
+        cell2.innerHTML = "Currency:"
+        cell3.appendChild(currencies);
+        
+        {% if rearnings %}
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                var amount = {{ rearnings.count }};
+            }
+        {% endif %}
+        {% if urearnings %}
+            if (clicked_id == "unrankedprizepoolbutton")
+            {
+                var amount = {{ urearnings.count }};
+            }
+        {% endif %}
+        
+        if (changeplayers)
+        {
+            var amount = document.getElementById('numberplayers' + clicked_id).value
+        }
+    
+        for(var i = 0; i < amount; i++)
+        {
+            var placement = i+1;
+            var rearning = '';
+            var rearningsplayer = '';
+            var urearning = '';
+            var urearningsplayer = '';
+            
+            {% if rearnings %}
+                {% for earning in rearnings %}
+                    if (placement == {{ earning.placement }})
+                    {
+                        rearning = "{{ earning.origearnings }}";
+                        rearningsplayer = "{{ earning.player.id }}";
+                    }
+                {% endfor %}
+            {% endif %}
+            {% if urearnings %}
+                {% for earning in urearnings %}
+                    if (placement == {{ forloop.counter }})
+                    {
+                        urearning = "{{ earning.origearnings }}";
+                        urearningsplayer = "{{ earning.player.id }}";
+                    }
+                {% endfor %}
+            {% endif %}
+            
+            var select = document.createElement("select");
+            select.setAttribute("name", "player-" + i);
+            select.setAttribute("id", "player-" + i);
+            select.setAttribute("onfocus", "addfocus(this)");
+            select.setAttribute("onblur", "losefocus(this)"); 
+            
+            {% for player in players %}
+                var eventplayer = "{{ player.id }}"
+                
+                var option = document.createElement("option");
+                option.setAttribute("value", "{{ player.id }}");
+                option.innerHTML = "{{ player.tag }}";
+                select.appendChild(option);
+                
+                if (clicked_id == "rankedprizepoolbutton")
+                {
+                    if (rearningsplayer == eventplayer)
+                    {
+                        select.selectedIndex = {{ forloop.counter0 }};
+                    }
+                }
+                else if (clicked_id == "unrankedprizepoolbutton")
+                {
+                    if (urearningsplayer == eventplayer)
+                    {
+                        select.selectedIndex = {{ forloop.counter0 }};
+                    }
+                }
+
+            {% endfor %}                        
+            
+            var selectbox = document.createElement("input");
+            selectbox.setAttribute("type", "text");
+            selectbox.setAttribute("name", "amount-" + i);
+            selectbox.setAttribute("id", "amount-" + i);
+            selectbox.setAttribute("onfocus", "addfocus(this)");
+            selectbox.setAttribute("onblur", "losefocus(this)");
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                selectbox.setAttribute("value", rearning);
+            }
+            else if (clicked_id == "unrankedprizepoolbutton")
+            {
+                selectbox.setAttribute("value", urearning);
+            }
+            selectbox.setAttribute("size", "8");
+            
+            var row = table.insertRow(-1);
+            row.className = "nonheader row1"
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            
+            if (clicked_id == "rankedprizepoolbutton")
+            {
+                cell1.innerHTML = placement
+            }
+            cell2.appendChild(select);
+            cell3.appendChild(selectbox);
+        }
+        
+        var hiddeninput = document.createElement("input");
+        hiddeninput.setAttribute("type", "hidden");
+        hiddeninput.setAttribute("name", "amount");
+        hiddeninput.setAttribute("value", amount);
+        
+        var hiddentype = document.createElement("input");
+        hiddentype.setAttribute("type", "hidden");
+        hiddentype.setAttribute("name", "un-ranked");
+        if (clicked_id == "rankedprizepoolbutton")
+        {
+            hiddentype.setAttribute("value", "ranked");
+        }
+        else if (clicked_id == "unrankedprizepoolbutton")
+        {
+            hiddentype.setAttribute("value", "unranked");
+        }
+
+        var submitbutton = document.createElement("input");
+        submitbutton.setAttribute("type", "submit");
+        submitbutton.setAttribute("name", "earnings");
+        submitbutton.setAttribute("value", "Add");
+        
+        var row = table.insertRow(-1);
+        row.className = 'nonheader row2';
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        if (!changeplayers) {
+            var deletebutton = document.createElement("input");
+            deletebutton.setAttribute("type", "submit");
+            deletebutton.setAttribute("name", "deleteearnings");
+            deletebutton.setAttribute("value", "Delete");
+            deletebutton.setAttribute("onclick", "return validate_deleteearnings()");
+            cell1.align = 'left';
+            cell1.appendChild(deletebutton);
+        }
+
+        cell2.colSpan = '2';
+        cell2.align = 'right';
+        cell2.appendChild(hiddeninput);
+        cell2.appendChild(hiddentype);
+        cell2.appendChild(submitbutton);
+
+        tableposition.appendChild(table);
+    }
+    
+    function validate(name)
+    {
+        function eliminateDuplicates(arr)
+        {
+            var i,
+            len=arr.length,
+            out=[],
+            obj={};
+
+            for (i=0;i<len;i++)
+            {
+                obj[arr[i]]=0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+        
+        if (name == "rankedprizepool")
+        {
+            var form = document.forms.rankedprizepool;
+            try
+            {
+                var othercurrency = "{{ urearnings.0.currency }}";
+            }
+            catch(e) { }
+        }
+        else if (name == "unrankedprizepool")
+        {
+            var form = document.forms.unrankedprizepool;
+            try
+            {
+                var othercurrency = "{{ rearnings.0.currency }}";
+            }
+            catch(e) { }
+        }
+        var length = form.numberplayers.selectedIndex;
+        var currency = form.currency.options[form.currency.selectedIndex].value;
+        if (currency != othercurrency && othercurrency != "")
+        {
+            alert('Use only one currency! Change the currency in the ranked/unranked prize pool if necessary.');
+            return false;       
+        }
+        
+        var players = new Array();
+        
+        for(var i = 0; i < length+1; i++)
+        {
+            var amount = form['amount-' + i].value;
+            amount = amount.replace(/[\., ]*/g, '');
+            
+            players.push(form['player-' + i].value);
+            var placement = i+1;
+            var regex = /[^0-9]+/g;
+            if (amount == '')
+            {
+                alert('Please add a value for Player ' + placement);
+                return false;
+            }
+            if (regex.test(amount))
+            {
+                alert('Cannot parse value for Player ' + placement);
+                return false;
+            }
+
+        }
+        
+        var nodupes = eliminateDuplicates(players);
+        if (nodupes.length != players.length)
+        {
+            alert('Duplicated player detected.');
+            return false;
+        }
+        
+        
+        
+        return true;
+    }
+
+    function validate_infobox()
+    {
+        var prizepool = document.getElementById('prizepoolselect')
+        var hasprizepool = '{{ prizepoolorig }}'
+        if (prizepool.checked && hasprizepool != '')
+        {
+            var answer = confirm("This event has a prize pool. Are you sure you want to delete it?");
+            if (answer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    function validate_deleteearnings()
+    {
+        var answer = confirm("Are you sure you want to delete the prize pool?");
+            if (answer) { return true; }
+            else { return false; }
+    }
+    </script>
+{% endif %}
+
     <h2>{{ event }}</h2>
 
-    <form method="post" action="/results/events/{{ event.id }}/">
+    <form method="post" action="/results/events/{{ event.id }}/" onsubmit="return validate_infobox();">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
@@ -100,28 +505,36 @@ ratings.views.events.
                 </div>
             {% endif %}
             {% if prizepoolorig %}
-            <div class="row">
+            <div class="row infobox">
                 <div class="rowel">Prize pool</div>
-                <div class="rower">{{ prizepoolorig|add_sep_and_cur:prizepoolcur }} 
-                {% if prizepoolcur != "USD" %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
+                <div class="rower">{% for pp in prizepoolorig %}{{ pp.pp|add_sep_and_cur:pp.cur }}{% if not forloop.last %} + {% endif %}{% endfor %} 
+                {% if nousdpp %}({{ prizepool|add_sep_and_cur:"USD" }}){% endif %}</div>
             </div>
             {% endif %}
             {% if adm %}
-                {% if eventtype %}
+                {% if event.type == "event" %}
+                    <div class="row edit" style="display: none;">
+                        <div class="rowel">No prize pool?</div>
+                        <div class="rower">
+                            <input type="checkbox" id="prizepoolselect" name="prizepoolselect" value="prizepoolselect"
+                                {% if event.prizepool|is_false %}checked{% endif %}
+                            >
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="row infobox">
                     <div class="rowel">Type</div>
-                    <div class="rower">{{ eventtype|capfirst }}</div>
+                    <div class="rower">{{ event.type|capfirst }}</div>
                 </div>
-                {% endif %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Type</div>
                     <div class="rower">
                     <select name="type" id="type">
-                        <option value="nochange" {% if not eventtype %}selected{% endif %}>No change</option>
-                        <option value="category" {% if eventtype == "category" %}selected{% endif %}/>Category</option>
-                        <option value="event" {% if eventtype == "event" %}selected{% endif %}/>Event</option>
+                        <option value="nochange" {% if not event.type %}selected{% endif %}>No change</option>
+                        <option value="category" {% if event.type == "category" %}selected{% endif %}/>Category</option>
+                        <option value="event" {% if event.type == "event" %}selected{% endif %}/>Event</option>
                         {% if event.parent %}
-                        	<option value="round" {% if eventtype == "round" %}selected{% endif %}/>Round</option>
+                            <option value="round" {% if event.type == "round" %}selected{% endif %}/>Round</option>
                         {% endif %}
                     </select>
                     </div>
@@ -135,6 +548,10 @@ ratings.views.events.
                     </div>
                 </div>
             {% endif %}
+            <div class="row">
+                <div class="rowel">Players</div>
+                <div class="rower">{{ players|length }}</div>
+            </div>
             <div class="row">
                 <div class="rowel">Games</div>
                 <div class="rower">{{ ngames }}</div>
@@ -161,15 +578,32 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
-            {% if homepage or lp_name %}
+            {% if event.get_homepage or event.tlpd_id or event.get_tl_thread or event.get_lp_name %}
             <div class="row infobox">
                 <div class="rowel">External</div>
                 <div class="rower">
-                    {% if homepage %}
+                    {% if event.get_homepage %}
                     <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                     {% endif %}
-                    {% if lp_name %}
-                    <a href="http://wiki.teamliquid.net/starcraft2/{{ lp_name }}" target="_blank">LP</a>
+                    {% with tlpds=event.get_tlpd_id %}
+                        {% if tlpds.KR %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpds.KR }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.IN %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpds.IN }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.HotS %}
+                        <a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ tlpds.HotS }}" target="_blank">TLPD</a>
+                        {% endif %}
+                        {% if tlpds.HotSbeta %}
+                        <a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">TLPD</a>
+                        {% endif %}
+                    {% endwith %}
+                    {% if event.get_tl_thread %}
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
+                    {% endif %}
+                    {% if event.get_lp_name %}
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
                     {% endif %}
                 </div>
             </div>
@@ -177,11 +611,34 @@ ratings.views.events.
             {% if adm %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">Homepage</div>
-                    <div class="rower"><input type="text" name="homepage" {% if homepage %}value="{{ homepage }}"{% endif %} /></div>
+                    <div class="rower"><input type="text" name="homepage" {% if event.get_homepage %}value="{{ event.get_homepage }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
-                    <div class="rowel">Liquipedia</div>
-                    <div class="rower"><input type="text" name="lp_name" {% if lp_name %}value="{{ lp_name }}"{% endif %} /></div>
+                    <div class="rowel">TLPD ID</div>
+                    <div class="rower"><input type="number" name="TLPD" {% if event.tlpd_id %}value="{{ event.tlpd_id }}"{% endif %} /></div>
+                </div>
+                {% with tlpds=event.get_tlpd_id %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">TLPD Database</div>
+                    <div class="rower">
+                        <label for="TLPDKR">Korea</label>
+                        <input type="radio" id="TLPDKR" name="TLPDDB" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
+                        <label for="TLPDIN">International</label>
+                        <input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
+                        <label for="TLPDHOTS">HotS</label>
+                        <input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
+                        <label for="TLPDHOTSBETA">HotS beta</label>
+                        <input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                    </div>
+                </div>
+                {% endwith %}
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Teamliquid.net thread ID</div>
+                    <div class="rower"><input type="text" name="tl_thread" {% if event.get_tl_thread %}value="{{ event.get_tl_thread }}"{% endif %} /></div>
+                </div>
+                <div class="row edit" style="display: none;">
+                    <div class="rowel">Liquipedia title</div>
+                    <div class="rower"><input type="text" name="lp_name" {% if event.get_lp_name %}value="{{ event.get_lp_name }}"{% endif %} /></div>
                 </div>
                 <div class="row edit" style="display: none;">
                     <div class="rowel"></div>
@@ -258,230 +715,32 @@ ratings.views.events.
     {% endif %}
     
     {% if message %}
-        {{ message }}
+        <p>{{ message }}</p>
     {% endif %}
 
-    {% if adm %}
-    <script>
-
-    function log(msg) {
-        setTimeout(function() {
-            throw new Error(msg);
-        }, 0);
-    }
-
-    function addprizepool()
-    {
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
-        var createtable = document.getElementById('createtable');
-        
-        prizepoolbutton.style.display = 'none';
-        createtable.style.display = 'inline';
-    }
-    
-    function addfocus(cell)
-    {
-        var row = cell.parentNode.parentNode;
-        row.className = "nonheader row2";
-    }
-    function losefocus(cell)
-    {
-        var row = cell.parentNode.parentNode;
-        row.className = "nonheader row1";
-    }
-
-	/*function selectcurrency() {
-		var currency = document.getElementById("currency");
-        var currencyvalue = currency.options[currency.selectedIndex].value;
-        log(currencyvalue);
-	}*/
-
-    function createtable(clicked_id)
-    {
-        var prizepoolbutton = document.getElementById('prizepoolbutton');
-        var table = document.getElementById('table');
-        
-        {% if earnings %}
-            var amount = {{ earnings.count }}
-        {% endif %}
-        if (clicked_id == 'changeplayers')
-        {
-            var amount = document.getElementById('numberplayers').value
-        }
-    
-        if (table.rows.length > 2)
-        {
-            for(var i = table.rows.length-1; i > 1; i--)
-            {
-                table.deleteRow(i);
-            }
-        }
-    
-        for(var i = 0; i < amount; i++)
-        {
-            var placement = i+1;
-            var earning = '';
-            var earningsplayer = '';
-            
-            {% if earnings %}
-                {% for earning in earnings %}
-                    if (placement == {{ earning.placement }})
-                    {
-                        earning = "{{ earning.origearnings }}";
-                        earningsplayer = "{{ earning.player.id }}";
-                    }
-                {% endfor %}
-            {% endif %}
-            
-            var select = document.createElement("select");
-            select.setAttribute("name", "player-" + i);
-            select.setAttribute("id", "player-" + i);
-            select.setAttribute("onfocus", "addfocus(this)");
-            select.setAttribute("onblur", "losefocus(this)"); 
-            
-            {% for player in players %}
-                var eventplayer = "{{ player.id }}"
-                
-                var option = document.createElement("option");
-                option.setAttribute("value", "{{ player.id }}");
-                option.innerHTML = "{{ player.tag }}";
-                select.appendChild(option);
-                
-                if (earningsplayer == eventplayer)
-                {
-                    select.selectedIndex = {{ forloop.counter0 }};
-                }
-            {% endfor %}                        
-            
-            var row = table.insertRow(-1);
-            row.className = "nonheader row1"
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            cell1.innerHTML = placement
-            cell2.appendChild(select);
-            var selectbox = '<input type="text" name="amount-' + i + '" id="amount-' + i + '" onfocus="addfocus(this);" onblur="losefocus(this);" value="' + earning + '" size="8" />'
-            cell3.innerHTML = selectbox
-        }
-        
-        var row = table.insertRow(-1);
-        row.className = 'nonheader row2';
-        // why doesn't this work?
-        // row.colSpan = '3';
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        cell3.align = 'right';
-        cell3.innerHTML = '<input type="hidden" name="amount" value="' + amount + '" /><input type="submit" name="earnings" value="Add" />'
-
-        prizepoolbutton.style.display = 'none';
-        table.style.display = 'table';
-    }
-    
-    function validate()
-    {
-        function eliminateDuplicates(arr)
-        {
-            var i,
-            len=arr.length,
-            out=[],
-            obj={};
-
-            for (i=0;i<len;i++)
-            {
-                obj[arr[i]]=0;
-            }
-            for (i in obj) {
-                out.push(i);
-            }
-            return out;
-        }
-        
-        var form = document.forms.prizepool;
-        var length = form.numberplayers.selectedIndex;
-        var players = new Array();
-        
-        for(var i = 0; i < length+1; i++)
-        {
-            var amount = form['amount-' + i].value;
-            amount = amount.replace(/[\., ]*/g, '');
-            
-            players.push(form['player-' + i].value);
-            var placement = i+1;
-            var regex = /[^0-9]+/g;
-            if (amount == '')
-            {
-                alert('Please add a value for Player ' + placement);
-                return false;
-            }
-            if (regex.test(amount))
-            {
-                alert('Cannot parse value for Player ' + placement);
-                return false;
-            }
-
-        }
-        
-        var nodupes = eliminateDuplicates(players);
-        if (nodupes.length != players.length)
-        {
-            alert('Duplicated player detected.');
-            return false
-        }
-        
-        return true;
-    }
-    </script>
-    
-    <form method="post" name="prizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate()">
+    {% if adm %}    
+    <form method="post" name="rankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
     {% csrf_token %}
-
-    {% if event.type == 'event' %}
-        {% if earnings %}
-            <input type="button" id="prizepoolbutton" onclick="addprizepool(); createtable(this.id); return false;" value="Change prize pool"/>
+    {% if event.type == 'event' and not event.prizepool|is_false %}
+        {% if rearnings %}
+            <input type="button" id="rankedprizepoolbutton" onclick="addprizepool(this.id); createtable(this.id); return false;" value="Change ranked prize pool"/>
         {% else %}
-            <input type="button" id="prizepoolbutton" onclick="addprizepool(); return false;" value="Add prize pool"/>
+            <input type="button" id="rankedprizepoolbutton" onclick="addprizepool(this.id); return false;" value="Add ranked prize pool"/>
         {% endif %}
     {% endif %}
+    <span id="createrankedtable"></span>
+    </form>
 
-    <span id="createtable" style="display: none;">
-        How many players?
-        <select name="numberplayers" id="numberplayers">
-            {% for player in players %}
-                <option value="{{ forloop.counter }}"
-                    {% if earnings %} 
-                        {% ifequal earnings.count forloop.counter %}selected{% endifequal %}
-                    {% endif %}
-                    >{{ forloop.counter }}
-                </option>
-            {% endfor %}
-        </select>
-        <input type="button" id ="changeplayers" onclick="createtable(this.id); return false;" value="Set"/>
-    </span>
-    <table id="table"  class="results prizepool" style="display: none;">
-        <tr class="header">
-            <td style="width: 3em;">#</td>
-            <td style="width: 20em;">Player</td>
-            <td style="width: 17em;">Money earned</td>
-        </tr>
-        <tr class="nonheader row2">
-            <td></td>
-            <td style="text-align: right;">Currency:</td>
-            <td>
-				<select name="currency" id="currency">
-					{% for currency in currencies %} 
-						<option value="{{ currency.code }}"
-							{% if not prizepoolcur %}
-								{% if currency.code == "USD" %}selected{% endif %}
-							{% else %}
-								{% if currency.code == prizepoolcur %}selected{% endif %}
-							{% endif %}
-						>{{ currency.code }} - {{ currency.name }}</option>
-					{% endfor %}
-				</select>
-            </td>
-        </tr>
-    </table>
+    <form method="post" name="unrankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
+    {% csrf_token %}
+    {% if event.type == 'event' and not event.prizepool|is_false %}
+        {% if urearnings %}
+            <input type="button" id="unrankedprizepoolbutton" onclick="addprizepool(this.id); createtable(this.id); return false;" value="Change unranked prize pool"/>
+        {% else %}
+            <input type="button" id="unrankedprizepoolbutton" onclick="addprizepool(this.id); return false;" value="Add unranked prize pool"/>
+        {% endif %}
+    {% endif %}
+    <span id="createunrankedtable"></span>
     </form>
     <br>
     {% endif %}
@@ -499,6 +758,7 @@ ratings.views.events.
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
         
+        <input type="hidden" name="action" value="subevents" />
         <input type="hidden" name="parent" value="{{ event }}" />
         <table class="bigform">
             <tr>
@@ -538,6 +798,8 @@ ratings.views.events.
                     <input type="Submit" name="add" value="Add" />
                 </td>
             </tr>
+            </form>
+            {% if surroundingevents %}
             <form method="post" action="/results/events/{{ event.id }}/">
             {% csrf_token %}
             <tr>
@@ -548,7 +810,7 @@ ratings.views.events.
                     <select name="moveevent" id="moveevent">
                         {% for events in surroundingevents %} 
                         {% if events != event %}
-                        <option value="{{ events.id }}" {% ifequal events event %}selected{% endifequal %}>{{ events }}</option>
+                        <option value="{{ events.id }}" >{{ events }}</option>
                         {% endif %}
                         {% endfor %}
                     </select>
@@ -560,8 +822,79 @@ ratings.views.events.
                     <input type="Submit" name="move" value="Move" />
                 </td>
             </tr>
+            </form>
+            {% endif %}
+            {% if childevents %}{% if rearnings or urearnings %}
+            <form method="post" action="/results/events/{{ event.id }}/">
+            {% csrf_token %}
+            <tr>
+                <td class="form_left">
+                    <label for="moveevent">Move prize pools</label>
+                </td>
+                <td class="form_right">
+                    <select name="moveprizepool" id="moveprizepool">
+                        {% for events in childevents %} 
+                        <option value="{{ events.id }}" >{{ events }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    Warning: This will change the type of the event the prize pool is moved to to "event".<br>
+                    This event will be subsequently turned into a category.<br>
+                    <input type="Submit" name="movepp" value="Move" />
+                </td>
+            </tr>
+            </form>
+            {% endif %}{% endif %}
         </table>
-        </form>
+
+        {% if event.type == "round" or event.type == "event" %}
+        <p>Add story:</p>
+        <form method="post" action="/results/events/{{ event.id }}/">
+        {% csrf_token %}
+
+        <table class="bigform">
+            <tr>
+                <td class="form_left">Player</td>
+                <td class="form_right">
+                    <select name="player">
+                        {% for p in players %}
+                        <option value="{{ p.id }}">{{ p.tag }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">Date</td>
+                <td class="form_right">
+                    <input type="text" id="d" name="date" value="{{ event.latest|date:"Y-m-d" }}" maxlength="10" style="width: 6.5em;" />
+                    <script type="text/javascript">
+                    // <![CDATA[  
+                    var opts = {                            
+                        formElements:{"d":"Y-ds-m-ds-d"},
+                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+                    };
+                    datePickerController.createDatePicker(opts);
+                    // ]]>
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left">Text</td>
+                <td class="form_right">
+                    <input type="text" name="text" style="width: 30em;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="form_left"></td>
+                <td class="form_right">
+                    <input type="submit" name="addstory" value="Add story" />
+                </td>
+            </tr>
+        </table>
+        {% endif %}
     {% endif %}
 
 <p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>

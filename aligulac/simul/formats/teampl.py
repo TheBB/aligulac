@@ -4,6 +4,7 @@ class Tally:
 
     def __init__(self, rounds):
         self.finishes = [0] * rounds
+        self.win, self.loss = 0.0, 0.0
 
     def __getitem__(self, key):
         return self.finishes[key]
@@ -26,8 +27,8 @@ class TeamPL:
         self._num = num
 
     def set_players(self, players):
-        self._pla = players[:len(players)/2]
-        self._plb = players[len(players)/2:]
+        self._pla = players[0]
+        self._plb = players[1]
         self._nplayers = len(self._pla)
 
         self._matches = []
@@ -62,3 +63,9 @@ class TeamPL:
                 scb += 1
         self._tally[0][sca] += base
         self._tally[1][scb] += base
+        if sca > scb:
+            self._tally[0].win += base
+            self._tally[1].loss += base
+        else:
+            self._tally[1].loss += base
+            self._tally[0].win += base

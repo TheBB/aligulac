@@ -76,8 +76,8 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
     obj.compute()
 
     # Add the scores
-    scores[team_a] += obj._tally[0][1]/(nteams-1)
-    scores[team_b] += obj._tally[1][1]/(nteams-1)
+    scores[team_a] += obj._tally[0].win/(nteams-1)
+    scores[team_b] += obj._tally[1].win/(nteams-1)
 
 # Write the scores to database
 if proleague:

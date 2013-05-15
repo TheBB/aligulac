@@ -7,7 +7,7 @@ This script analyzes the predictive power of the rating system.
 import sys, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 
-from djangi.db.models import Q
+from django.db.models import Q
 
 from ratings.models import Match
 from ratings.tools import cdf
@@ -25,10 +25,22 @@ table_l = [0]*num_slots
 games = 0
 
 num = 0
-for m in Match.objects.all().select_related('player__rating').filter(pla__country='KR', plb__country='KR'):
+
+matches = Match.objects.all().select_related('player__rating')
+if 'kr' in sys.argv:
+    matches = matches.filter(pla__country='KR', plb__country='KR')
+elif 'in' in sys.argv:
+    matches = matches.exclude(pla__country='KR', plb__country='KR')
+elif 'x' in sys.argv:
+    matches = matches.filter(Q(pla__country='KR') | Q(plb__country='KR'))\
+                     .exclude(pla__country='KR', plb__country='KR')
+
+nmatches = matches.count()
+
+for m in matches:
     num += 1
     if num % 1000 == 0:
-        print num
+        print('{num}/{nmatches}'.format(num=num, nmatches=nmatches))
 
     if m.sca + m.scb == 0:
         continue
@@ -96,6 +108,15 @@ pylab.grid()
 pylab.xlabel('Predicted winrate')
 pylab.ylabel('Actual winrate')
 
-pylab.title('Actual vs. predicted winrate (' + str(sum(games)) + ' games)')
+title = 'Actual vs. predicted winrate'
+if 'kr' in sys.argv:
+    title += ' (KR)'
+elif 'kr' in sys.argv:
+    title += ' (IN)'
+elif 'kr' in sys.argv:
+    title += ' (X-scene)'
+title += ' ({ng})'.format(ng=sum(games))
+
+pylab.title(title)
 pylab.legend([p2,p3], ['ideal','fitted'], loc=9)
 pylab.show()

@@ -60,6 +60,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('Current', '/periods/%i' % curp.id),\
                            ('History', '/periods/'),\
                            ('Earnings', '/earnings/')]
+    elif section == 'Predict':
+        base['submenu'] = [('Predict', '/predict/'),
+                           ('Compare', '/compare/')]
     elif section == 'About':
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),

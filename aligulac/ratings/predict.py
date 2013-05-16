@@ -3,7 +3,7 @@ import os
 os.environ['HOME'] = '/root'
 
 from aligulac.views import base_ctx
-from ratings.tools import find_player
+from ratings.tools import find_player, cdf
 from simul.playerlist import make_player
 from simul.formats import match, mslgroup, sebracket, rrgroup, teampl
 from ratings.templatetags.ratings_extras import ratscale
@@ -27,8 +27,7 @@ REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
 
 def predict(request):
-    base = base_ctx()
-    base['curpage'] = 'Predict'
+    base = base_ctx('Predict', 'Predict', request)
 
     formats = ['Best-of-N match', 'Four-player Swiss group', 'Single elimination bracket',\
                'Round robin group', 'Proleague team match']
@@ -123,7 +122,7 @@ def predict(request):
     return render_to_response('predict.html', base)
 
 def pred_match(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -176,7 +175,7 @@ def pred_match(request):
     return render_to_response('pred_match.html', base)
 
 def pred_4pswiss(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -236,7 +235,7 @@ def pred_4pswiss(request):
     return render_to_response('pred_4pswiss.html', base)
 
 def pred_sebracket(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = []
     for i in request.GET['ps'].split(','):
@@ -311,7 +310,7 @@ def pred_sebracket(request):
     return render_to_response('pred_sebracket.html', base)
 
 def pred_rrgroup(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -379,7 +378,7 @@ def pred_rrgroup(request):
     return render_to_response('pred_rrgroup.html', base)
 
 def pred_proleague(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -619,3 +618,47 @@ def ordinal(value):
     if value % 100 in (11, 12, 13): # special case
         return u"%d%s" % (value, suffixes[0])
     return u"%d%s" % (value, suffixes[value % 10])
+
+def compare(request):
+    base = base_ctx('Predict', 'Compare', request=request)
+
+    if 'pla' not in request.GET and 'plb' not in request.GET:
+        return render_to_response('compare.html', base)
+    
+    pla = find_player(request.GET['pla'].strip().split(' '), make=False)
+    plb = find_player(request.GET['plb'].strip().split(' '), make=False)
+    base['plas'] = request.GET['pla']
+    base['plbs'] = request.GET['plb']
+
+    base['errs'] = []
+    for p, ps in [(pla, request.GET['pla']), (plb, request.GET['plb'])]:
+        if p.count() > 1:
+            base['errs'].append('Player \'%s\' not unique, add more information.' % ps)
+        elif not p.exists():
+            base['errs'].append('No such player \'%s\' found.' % ps)
+
+    if len(base['errs']) > 0:
+        return render_to_response('compare.html', base)
+
+    pla, plb = pla[0], plb[0]
+    base['pla'] = pla
+    base['plb'] = plb
+
+    rata = pla.rating_set.order_by('-period__id')[0]
+    ratb = plb.rating_set.order_by('-period__id')[0]
+
+    def analyze(pla, rata, plb, ratb, race):
+        diff = rata.get_totalrating(race) - ratb.get_totalrating(race)
+        dev = sqrt(rata.get_totaldev(race)**2 + ratb.get_totaldev(race)**2)
+        if diff > 0:
+            return pla, plb, cdf(-diff, scale=dev)
+        else:
+            return plb, pla, cdf(diff, scale=dev)
+
+    base['winner'],    base['loser'],    base['sig'] =    analyze(pla, rata, plb, ratb, None)
+    base['winner_vp'], base['loser_vp'], base['sig_vp'] = analyze(pla, rata, plb, ratb, 'P')
+    base['winner_vt'], base['loser_vt'], base['sig_vt'] = analyze(pla, rata, plb, ratb, 'T')
+    base['winner_vz'], base['loser_vz'], base['sig_vz'] = analyze(pla, rata, plb, ratb, 'Z')
+
+
+    return render_to_response('compare.html', base)

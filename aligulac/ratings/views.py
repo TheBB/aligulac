@@ -407,10 +407,11 @@ def player(request, player_id):
     if firstrating.exists():
         base['firstrating'] = firstrating[0]
 
-    if not rating.exists():
+    r = Rating.objects.filter(player=player)
+    if not r.exists():
         base.update({'player': player, 'countryfull': countryfull})
         return render_to_response('player.html', base)
-    rating = rating.order_by('-period')[0]
+    rating = r.order_by('-period')[0]
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\

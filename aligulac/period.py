@@ -22,7 +22,7 @@ from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
 from ratings.tools import filter_active_ratings
-from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY, OFFLINE_WEIGHT
+from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY, OFFLINE_WEIGHT, KR_WEIGHT
 
 from rating import update
 from ratings.tools import cdf
@@ -135,6 +135,10 @@ def get_matches(cplayers, period):
 
         if m.offline:
             weight *= OFFLINE_WEIGHT
+        if m.pla.country == 'KR':
+            weight *= KR_WEIGHT
+        if m.plb.country == 'KR':
+            weight *= KR_WEIGHT
 
         # For each race combination, add information to the cplayer objects
         for ra in rcas:

@@ -15,26 +15,22 @@ from ratings.tools import cdf
 from math import floor, sqrt
 from random import choice
 import numpy
+from numpy.polynomial.polynomial import polyfit
 from numpy import array
 import pylab
 
-num_slots = 30
+NS = 30
 
-table_w = [0]*num_slots
-table_l = [0]*num_slots
-games = 0
+tables = { 'kr-w': [0]*NS, 'kr-l': [0]*NS, 'kr-g': [0]*NS, 'kr-z': [], 'kr-f': [], 'kr-gg': [],
+           'in-w': [0]*NS, 'in-l': [0]*NS, 'in-g': [0]*NS, 'in-z': [], 'in-f': [], 'in-gg': [],
+           'xx-w': [0]*NS, 'xx-l': [0]*NS, 'xx-g': [0]*NS, 'xx-z': [], 'xx-f': [], 'xx-gg': [],
+           'al-w': [0]*NS, 'al-l': [0]*NS, 'al-g': [0]*NS, 'al-z': [], 'al-f': [], 'al-gg': [] }
 
+names = { 'al': 'All', 'kr': 'Korean', 'in': 'International', 'xx': 'Cross-scene' }
+           
 num = 0
 
-matches = Match.objects.all().select_related('player__rating')
-if 'kr' in sys.argv:
-    matches = matches.filter(pla__country='KR', plb__country='KR')
-elif 'in' in sys.argv:
-    matches = matches.exclude(pla__country='KR', plb__country='KR')
-elif 'x' in sys.argv:
-    matches = matches.filter(Q(pla__country='KR') | Q(plb__country='KR'))\
-                     .exclude(pla__country='KR', plb__country='KR')
-
+matches = Match.objects.all().select_related('player__rating', 'player')
 nmatches = matches.count()
 
 for m in matches:
@@ -71,52 +67,60 @@ for m in matches:
     else:
         na, nb = choice([(m.sca, m.scb), (m.scb, m.sca)])
 
-    S = int(floor(2*(prob-0.5)*num_slots))
+    S = int(floor(2*(prob-0.5)*NS))
 
-    table_w[S] += na
-    table_l[S] += nb
-    games += na + nb
+    tlist = ['al']
+    if m.pla.country == 'KR' and m.plb.country == 'KR':
+        tlist.append('kr')
+    elif m.pla.country != 'KR' and m.plb.country != 'KR':
+        tlist.append('in')
+    else:
+        tlist.append('xx')
 
-zones = []
-fracs = []
-games = []
-slw = float(50)/num_slots
-for i in range(0,num_slots):
-    if table_w[i] + table_l[i] == 0:
-        continue
+    for t in tlist:
+        tables[t+'-w'][S] += na
+        tables[t+'-l'][S] += nb
+        tables[t+'-g'][S] += na + nb
 
-    zones.append(50.0+slw*(i+0.5))
-    fracs.append(float(table_w[i]) / float(table_w[i] + table_l[i]))
-    games.append(table_w[i] + table_l[i])
+slw = float(50)/NS
+for t in ['al','kr','in','xx']:
+    for i in range(0,NS):
+        if tables[t+'-g'][i] == 0:
+            continue
+        tables[t+'-z'].append(50.0+slw*(i+0.5))
+        tables[t+'-f'].append(float(tables[t+'-w'][i]) / float(tables[t+'-g'][i]))
+        tables[t+'-gg'].append(tables[t+'-g'][i])
+    tables[t+'-fit'] = polyfit(tables[t+'-z'], [100*f for f in tables[t+'-f']], 1, w=tables[t+'-gg'])
 
-a = numpy.polynomial.polynomial.polyfit(zones,[100*f for f in fracs], 1, w=games)
+sub = 1
+for t in ['al','kr','in','xx']:
+    Z = tables[t+'-z']
+    F = tables[t+'-f']
+    A = tables[t+'-fit']
 
-p1, = pylab.plot(zones, [100*f for f in fracs], '#000000', marker='o', linewidth=2)
-p2, = pylab.plot(zones + [100], [z for z in zones] + [100], '#ff0000', linestyle='--')
-p3, = pylab.plot([zones[0],100], [a[0]+a[1]*zones[0],a[0]+a[1]*100],\
-                 '#0000ff', linestyle='--')
+    pylab.subplot(2,2,sub)
 
-z = 1.96
-fr = array(fracs)
-gm = array(games)
-ci_mean = (fr + z**2/2/gm) / (1 + z**2/gm)
-ci_width = z * numpy.sqrt(fr*(1-fr)/gm + z**2/4/gm**2) / (1 + z**2/gm)
-pylab.fill_between(zones, 100*(ci_mean-ci_width), 100*(ci_mean+ci_width), facecolor='#dddddd', edgecolor='#bbbbbb')
+    p1, = pylab.plot(Z, [100*f for f in F], '#000000', marker='o', linewidth=2)
+    p2, = pylab.plot(tables[t+'-z'] + [100], [z for z in tables[t+'-z']] + [100], '#ff0000', linestyle='--')
+    p3, = pylab.plot([Z[0],100], [A[0]+A[1]*Z[0],A[0]+A[1]*100], '#0000ff', linestyle='--')
 
-pylab.axis([50,100,50,100])
-pylab.grid()
-pylab.xlabel('Predicted winrate')
-pylab.ylabel('Actual winrate')
+    z = 1.96
+    F = array(F)
+    G = array(tables[t+'-gg'])
+    ci_mean = (F + z**2/2/G) / (1 + z**2/G)
+    ci_width = z * numpy.sqrt(F*(1-F)/G + z**2/4/G**2) / (1 + z**2/G)
+    pylab.fill_between(Z, 100*(ci_mean-ci_width), 100*(ci_mean+ci_width), 
+                       facecolor='#dddddd', edgecolor='#bbbbbb')
 
-title = 'Actual vs. predicted winrate'
-if 'kr' in sys.argv:
-    title += ' (KR)'
-elif 'kr' in sys.argv:
-    title += ' (IN)'
-elif 'kr' in sys.argv:
-    title += ' (X-scene)'
-title += ' ({ng})'.format(ng=sum(games))
+    pylab.axis([50,100,50,100])
+    pylab.grid()
+    #pylab.xlabel('Predicted winrate')
+    #pylab.ylabel('Actual winrate')
 
-pylab.title(title)
-pylab.legend([p2,p3], ['ideal','fitted'], loc=9)
+    pylab.title(names[t] + ' (%i)' % sum(tables[t+'-g']), fontsize=10)
+
+    sub += 1
+
+fig = pylab.gcf()
+fig.suptitle('Predicted vs. actual winrate for different scenes', fontsize=14)
 pylab.show()

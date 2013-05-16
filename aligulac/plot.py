@@ -22,6 +22,9 @@ table_w = [0]*num_slots
 table_l = [0]*num_slots
 games = 0
 
+gamescore = [0, 0]
+matchscore = [0, 0]
+
 num = 0
 for m in Match.objects.all().select_related('player__rating').filter(game='HotS'):
     num += 1
@@ -62,6 +65,16 @@ for m in Match.objects.all().select_related('player__rating').filter(game='HotS'
     table_w[S] += na
     table_l[S] += nb
     games += na + nb
+
+    gamescore[0] += na
+    gamescore[1] += nb
+    if na > nb:
+        matchscore[0] += 1 
+    else:
+        matchscore[1] += 1
+
+print gamescore
+print matchscore
 
 zones = []
 fracs = []

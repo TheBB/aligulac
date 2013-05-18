@@ -1,0 +1,17 @@
+{% load ratings_extras %}
+
+{% if messages %}
+<table class="messages">
+{% for m in messages %}
+<tr class="m{{m.type}}">
+    <td class="micon m{{m.type}}icon">
+        <img class="btm" src="{{ m.type|imgfolder|static }}" />
+    </td>
+    <td class="mtext m{{m.type}}text">
+        {% if m.title %}<strong>{{ m.title }}</strong></br>{% endif %}
+        {{ m.text|safe }}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}

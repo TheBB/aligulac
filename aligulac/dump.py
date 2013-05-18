@@ -10,21 +10,22 @@ import datetime
 from aligulac.settings import DATABASES
 
 # These tables should not be included in the public dump
-ignore_tables = ['auth_group',\
-                 'auth_group_permissions',\
-                 'auth_permission',\
-                 'auth_user',\
-                 'auth_user_groups',\
-                 'auth_user_user_permissions',\
-                 'django_admin_log',\
-                 'django_content_type',\
-                 'django_session',\
-                 'django_site',\
-                 'faq_post',\
-                 'blog_post',\
-                 'ratings_prematch',\
-                 'ratings_prematchgroup',\
-                 'ratings_rating',\
+ignore_tables = ['auth_group',
+                 'auth_group_permissions',
+                 'auth_permission',
+                 'auth_user',
+                 'auth_user_groups',
+                 'auth_user_user_permissions',
+                 'django_admin_log',
+                 'django_content_type',
+                 'django_session',
+                 'django_site',
+                 'faq_post',
+                 'blog_post',
+                 'ratings_balanceentry',
+                 'ratings_prematch',
+                 'ratings_prematchgroup',
+                 'ratings_rating',
                  'ratings_period']
 
 # Locations for public dump, backup dump and backup list

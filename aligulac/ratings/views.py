@@ -992,6 +992,22 @@ def player_results(request, player_id):
 
     base = base_ctx('Ranking', 'Match history', request, context=player)
 
+    try:
+        ints = [int(x) for x in request.GET['after'].split('-')]
+        td = datetime.date(ints[0], ints[1], ints[2])
+        matches = matches.filter(date__gte=td)
+        base['after'] = request.GET['after']
+    except:
+        pass
+
+    try:
+        ints = [int(x) for x in request.GET['before'].split('-')]
+        td = datetime.date(ints[0], ints[1], ints[2])
+        matches = matches.filter(date__lte=td)
+        base['before'] = request.GET['before']
+    except:
+        pass
+
     if 'race' in request.GET:
         q = None
         for r in request.GET['race']:

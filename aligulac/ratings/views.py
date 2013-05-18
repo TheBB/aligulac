@@ -4,7 +4,7 @@ import operator
 from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
-from aligulac.views import base_ctx
+from aligulac.views import base_ctx, Message
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
                           get_placements, PATCHES
 from ratings.templatetags.ratings_extras import datemax, datemin
@@ -46,13 +46,20 @@ def periods(request):
     return render_to_response('periods.html', base)
 
 def period(request, period_id, page='1'):
+    base = base_ctx('Ranking', 'Current', request)
     psize = 40
 
     try:
         page = int(request.GET['page'])
     except:
         page = 1
+
     period = get_object_or_404(Period, id=period_id, computed=True)
+    if period.is_preview():
+        base['messages'].append(Message(
+            'This is a <em>preview</em> of the next rating list. It will not be finalized until '\
+                    + period.end.strftime('%B %d') + '.',
+            type=Message.INFO))
 
     # Best and most specialised players
     best = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0]
@@ -157,7 +164,6 @@ def period(request, period_id, page='1'):
             entry.teamid = teams[0].team.id
 
     # Render
-    base = base_ctx('Ranking', 'Current', request)
     base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,
             'best': best, 'bestvp': bestvp, 'bestvt': bestvt, 'bestvz': bestvz, 'specvp': specvp,
             'specvt': specvt, 'specvz': specvz, 'sortable': True, 'startcount': (page-1)*psize,
@@ -177,23 +183,21 @@ def player(request, player_id):
     
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
-        base['message'] = ""
-        
         tag = request.POST['tag']
         if tag != '' and tag != player.tag:
             player.set_tag(tag)
-            base['message'] += "Changed player's tag. "
+            base['messages'].append(Message('Changed tag.', Message.SUCCESS))
         
         country = request.POST['country']
         if country != player.country:
             player.set_country(country)
-            base['message'] += "Changed player's country. "
+            base['messages'].append(Message('Changed country.', Message.SUCCESS))
         
         name = request.POST['fullname']
         if name != player.name:
             if player.name or name != '':
                 player.set_name(name)
-                base['message'] += "Changed player's name. "
+                base['messages'].append(Message('Changed name.', Message.SUCCESS))
 
         akas = request.POST['AKA']
         if akas != '':
@@ -207,13 +211,13 @@ def player(request, player_id):
         if birthday != str(player.birthday):
             if player.birthday or birthday != '':
                 player.set_birthday(birthday)
-                base['message'] += "Changed player's birthday. "
+                base['messages'].append(Message('Changed birthday.', Message.SUCCESS))
 
         sc2c = request.POST['SC2C']
         if sc2c != str(player.sc2c_id):
             if player.sc2c_id or sc2c != '':
                 player.set_sc2c_id(sc2c)
-                base['message'] += "Changed SC2charts ID. "
+                base['messages'].append(Message('Changed SC2Charts.net ID.', Message.SUCCESS))
         
         tlpdid = request.POST['TLPD']
         tlpddb = 0
@@ -230,21 +234,21 @@ def player(request, player_id):
             if player.tlpd_id or tlpdid != '':
                 player.set_tlpd_id(tlpdid, tlpddb)
                 if tlpdid == '' or tlpddb == 0:
-                    base['message'] += "Removed TLPD ID. "
+                    base['messages'].append(Message('Removed TLPD information.', Message.SUCCESS))
                 else:
-                    base['message'] += "Changed TLPD ID. "
+                    base['messages'].append(Message('Changed TLPD information.', Message.SUCCESS))
         
         sc2e = request.POST['SC2E']
         if sc2e != str(player.sc2e_id):
             if player.sc2e_id or sc2e != '':
                 player.set_sc2e_id(sc2e)
-                base['message'] += "Changed SC2earnings ID. "
+                base['messages'].append(Message('Changed SC2Earnings.com ID.', Message.SUCCESS))
 
         lp = request.POST['LP']
         if lp != str(player.lp_name):
             if player.lp_name or lp != '':
                 player.set_lp_name(lp)
-                base['message'] += "Changed Liquipedia title. "
+                base['messages'].append(Message('Changed Liquipedia title.', Message.SUCCESS))
 
     def meandate(tm):
         if tm.start != None and tm.end != None:
@@ -316,10 +320,10 @@ def player(request, player_id):
 
     # Career highs
     try:
-        base['highs'] = (Rating.objects.filter(player=player).order_by('-rating')[0],\
-                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0],\
-                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0],\
-                 Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0])
+        base['highs'] = (Rating.objects.filter(player=player).order_by('-rating')[0],
+             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vp'}).order_by('-d')[0],
+             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vt'}).order_by('-d')[0],
+             Rating.objects.filter(player=player).extra(select={'d':'rating+rating_vz'}).order_by('-d')[0])
     except:
         pass
 
@@ -334,13 +338,17 @@ def player(request, player_id):
     teammems = sorted(teammems, key=lambda t: t.current, reverse=True)
 
     rating = Rating.objects.filter(player=player).order_by('period').select_related('period')
-    base['charts'] = rating.count >= 2
+    try:
+        last_adjust = Rating.objects.filter(player=player, decay=0).order_by('-period')[0]
+        base['charts'] = last_adjust.period_id > rating[0].period_id
+    except:
+        # No rating
+        base['messages'].append(Message('%s has no rating yet.' % player.tag, type=Message.INFO))
+        base['charts'] = False
+
     if base['charts']:
-        try:
-            last_adjust = Rating.objects.filter(player=player, decay=0).order_by('-period')[0]
-            rating = rating.filter(period_id__lte=last_adjust.period_id)
-        except:
-            pass
+        last_adjust = Rating.objects.filter(player=player, decay=0).order_by('-period')[0]
+        rating = rating.filter(period_id__lte=last_adjust.period_id)
         base['ratings'] = rating
         base['patches'] = PATCHES
 
@@ -397,6 +405,11 @@ def player(request, player_id):
                 else:
                     s.skip = True
             base['stories'] = stories
+    else:
+        # No charts
+        base['messages'].append(Message(
+            '%s has no rating chart on account of having played matches in fewer than two periods.'\
+                    % player.tag, type=Message.INFO))
 
 
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
@@ -510,7 +523,7 @@ def results_search(request):
                 match.save()
                 num += 1
 
-        base['message'] = 'Modified %i matches.' % num
+        base['messages'].append(Message('Successfully modified %i matches.' % num, type=Message.SUCCESS))
 
     if 'op' in request.GET and request.GET['op'] == 'search':
         matches = Match.objects.all()
@@ -570,18 +583,20 @@ def results_search(request):
             base['game'] = 'all'
 
         players, failures = [], []
-        base['errs'] = []
+        ok = True
         base['pls'] = request.GET['players']
         for line in request.GET['players'].splitlines():
             if line.strip() == '':
                 continue
             pls = find_player(line.strip().split(' '), make=False)
             if not pls.exists():
-                base['errs'].append('No players matching the query \'%s\'.' % line.strip())
+                base['messages'].append(Message('No players matching this query.', line.strip(),
+                                                type=Message.ERROR))
+                ok = False
             else:
                 players.append(pls)
 
-        if len(base['errs']) > 0:
+        if not ok:
             return render_to_response('results_search.html', base)
 
         pls = []
@@ -601,7 +616,8 @@ def results_search(request):
         base['count'] = matches.count()
 
         if base['count'] > 1000:
-            base['errs'].append('Too many results (%i). Please add restrictions.' % base['count'])
+            base['messages'].append(Message(
+                'Too many results (%i). Please add restrictions.' % base['count'], type=Message.ERROR))
             return render_to_response('results_search.html', base)
 
         matches = matches.order_by('-date', 'eventobj__lft', 'event', 'id')
@@ -669,10 +685,9 @@ def events(request, event_id=None):
         siblings = None
 
     # Make modifications if neccessary
+    # TODO: This block is way too long and should be moved somewhere else.
     if base['adm'] == True:
 
-        base['message'] = ""
-        
         if 'op' in request.POST and request.POST['op'] == 'Modify':
             if request.POST['name'] != '' and request.POST['name'] != event.name:
                 event.name = request.POST['name']
@@ -680,12 +695,13 @@ def events(request, event_id=None):
                 event.save()
                 for e in event.get_children():
                     e.update_name()
-                base['message'] += 'Set new event name. '
+                base['messages'].append(Message('Changed event name.', type=Message.SUCCESS))
 
             if request.POST['date'].strip() != 'No change':
                 for match in matches:
                     match.set_date(request.POST['date'])
-                base['message'] += 'Set new date for all matches. '
+                base['messages'].append(Message('Changed date for %i matches.' % match.count(), 
+                                        type=Message.SUCCESS))
 
             if request.POST['game'] != 'nochange':
 
@@ -695,7 +711,8 @@ def events(request, event_id=None):
                 
                 if request.POST['game'] != opgame or not opgame:
                     matches.update(game=request.POST['game'])
-                    base['message'] += 'Set game to ' + request.POST['game'] + '. '
+                    base['messages'].append(Message('Set game version to %s for %i matches.'
+                        % (request.POST['game'], matches.count()), type=Message.SUCCESS))
 
             if request.POST['offline'] != 'nochange':
                 
@@ -708,24 +725,28 @@ def events(request, event_id=None):
                 
                 if request.POST['offline'] != opoffline or not opoffline:
                     matches.update(offline=(request.POST['offline'] == 'offline'))
-                    base['message'] += 'Set matches to ' + request.POST['offline'] + '. '
+                    base['messages'].append(Message('Set match type to %s for %i matches.'
+                        % (request.POST['offline'], matches.count()), type=Message.SUCCESS))
 
             #Set new type if new type is != old type or sibling checkbox is set. 
-            if request.POST['type'] != 'nochange' and (request.POST['type'] != event.type or 'siblings' in request.POST.keys()):
+            if request.POST['type'] != 'nochange' and\
+                            (request.POST['type'] != event.type or 'siblings' in request.POST.keys()):
                 event.change_type(request.POST['type'])
-                base['message'] += 'Set new event type. '
+                mtext = 'Set new event type'
+                base['message'] += 'Set new event type'
                 if 'siblings' in request.POST.keys() and siblings is not None:
-                    base['message'] += 'Set new event type for sibling events. '
+                    mtext += ' for this and sibling events'
                     for sibling in siblings:
                         sibling.change_type(request.POST['type'])
-                base['message'] += 'This likely affected child- and parent events. '
+                mtext += '. This may have affected child- and parent events.'
+                base['messages'].append(Message(mtext, type=Message.SUCCESS))
 
             #Check if new ID is not the same as old ID
             if request.POST['homepage'] != event.get_homepage():
                 #Special case: Make sure not to delete already empty old ID.
                 if event.get_homepage() or request.POST['homepage'] != '':
                     event.set_homepage(request.POST['homepage'])
-                    base['message'] += 'Set new homepage. '
+                    base['messages'].append(Message('Changed homepage.', type=Message.SUCCESS))
 
             if 'TLPDDB' in request.POST:
                 tlpdid = request.POST['TLPD']
@@ -743,34 +764,39 @@ def events(request, event_id=None):
                     if event.tlpd_id or tlpdid != '':
                         event.set_tlpd_id(tlpdid, tlpddb)
                         if tlpdid == '' or tlpddb == 0:
-                            base['message'] += "Removed TLPD ID. "
+                            base['messages'].append(Message('Removed TLPD info.', type=Message.SUCCESS))
                         else:
-                            base['message'] += "Changed TLPD ID. "
+                            base['messages'].append(Message('Changed TLPD info.', type=Message.SUCCESS))
                     
             if request.POST['tl_thread'] != str(event.get_tl_thread()):
                 if event.get_tl_thread() or request.POST['tl_thread'] != '':
                     event.set_tl_thread(request.POST['tl_thread'])
-                    base['message'] += 'Set new teamliquid.net thread ID. '
+                    base['messages'].append(Message('Changed TL.net thread ID.', type=Message.SUCCESS))
 
             if request.POST['lp_name'] != event.get_lp_name():
                 if event.get_lp_name() or request.POST['lp_name'] != '':
                     event.set_lp_name(request.POST['lp_name'])
-                    base['message'] += 'Set new Liquipedia link. '
+                    base['messages'].append(Message('Changed Liquipedia page title.', type=Message.SUCCESS))
             
             #event.get_prizepool()
             if request.POST.get("prizepoolselect") and event.get_prizepool() is not False:
                 event.set_prizepool(False)
                 Earnings.objects.filter(event=event).delete()
-                base['message'] += 'Set this event as having no prize pool. '
+                base['messages'].append(Message('Marked this event as having no prize pool.',
+                                                type=Message.SUCCESS))
             elif event.get_prizepool() is False:
                 event.set_prizepool(None) 
-                base['message'] += 'Set this event as having a prize pool. '
+                base['messages'].append(Message('Marked this event as having  prize pool.',
+                                                type=Message.SUCCESS))
                         
         elif 'add' in request.POST and request.POST['add'] == 'Add':
             parent = event
+            nadd = 0
             for q in request.POST['subevent'].strip().split(','):
                 addtype = request.POST['type']
                 parent.add_child(q.strip(), addtype, 'noprint' in request.POST, 'closed' in request.POST)
+                nadd += 1
+            base['messages'].append(Message('Added %i children events.' % nadd, type=Message.SUCCESS))
                 
         elif 'move' in request.POST and request.POST['move'] == 'Move':
             eventid = request.POST['moveevent']
@@ -788,11 +814,15 @@ def events(request, event_id=None):
             for e in event.get_children():
                 e.update_name()
 
+            base['messages'].append(Message('Moved this event under \'%s\'' % newparent.fullname,
+                                            type=Message.SUCCESS))
+
         elif 'movepp' in request.POST and request.POST['movepp'] == 'Move':
             neweventid = request.POST['moveprizepool']
             newevent = Event.objects.get(id=neweventid)
             event.move_earnings(newevent)
-            base['message'] = "Moved prize pool(s) to " + newevent.fullname
+            base['messages'].append(Message('Moved prize pool to \'%s\'' % newevent.fullname,
+                                            type=Message.SUCCESS))
 
         elif 'earnings' in request.POST and request.POST['earnings'] == 'Add':
             amount = int(request.POST['amount'])
@@ -819,17 +849,19 @@ def events(request, event_id=None):
             success = Earnings.set_earnings(event, players, amounts, currency, placements)
             
             if success:
-                base['message'] = 'Updated tournament prizepool.'
+                base['messages'].append(Message('Successfully updated prize pool.', type=Message.SUCCESS))
             else:
-                base['message'] = 'There was an error updating the tournament prizepool.'
+                base['messages'].append(Message('Unable to update prize pool.', type=Message.ERROR))
                 
         elif 'deleteearnings' in request.POST and request.POST['deleteearnings'] == 'Delete':
             if request.POST['un-ranked'] == "ranked":
                 event.delete_earnings()
-                base['message'] = 'Deleted ranked prize pool.'
+                base['messages'].append(Message('Successfully deleted ranked prize pool', 
+                                                type=Message.SUCCESS))
             elif request.POST['un-ranked'] == "unranked":
                 event.delete_earnings(ranked=False)
-                base['message'] = 'Deleted unranked prize pool.'
+                base['messages'].append(Message('Successfully deleted unranked prize pool', 
+                                                type=Message.SUCCESS))
 
         elif 'addstory' in request.POST and request.POST['addstory'] == 'Add story':
             player = Player.objects.get(id=int(request.POST['player']))
@@ -838,9 +870,9 @@ def events(request, event_id=None):
             if not Story.objects.filter(player=player, event=event, date=date).exists():
                 new = Story(player=player, event=event, date=date, text=text)
                 new.save()
-                base['message'] = 'Added a story for ' + player.tag + '.'
+                base['messages'].append(Message('Added a story for %s.' % player.tag, type=Message.SUCCESS))
             else:
-                base['message'] = 'Story NOT added, duplicate exists.'
+                base['messages'].append(Message('Story not added, a duplicate exists.', type=Message.ERROR))
 
     base['event'] = event
     base['path'] = Event.objects.filter(lft__lte=event.lft, rgt__gte=event.rgt).order_by('lft')

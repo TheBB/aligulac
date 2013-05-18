@@ -11,6 +11,8 @@ This template shows a rating list for a given period.
 {% block content %}
     <h2>List {{ period.id }}: {{ period.end|date:"F jS, Y" }}</h2>
 
+    {% include "messages.html" %}
+
     <div class="ibox" style="width: 25em; margin-left: 2em;">
         <div class="iboxh"> List {{ period.id }} </div>
         <div class="iboxtable">
@@ -65,10 +67,12 @@ This template shows a rating list for a given period.
         </div>
     </div>
 
+    {% comment %}
     {% if period.is_preview %}
     <p>This is a <strong>preview</strong> of the next rating list. It will not be finalized until 
     {{ period.end|date:"F jS" }}.</p>
     {% endif %}
+    {% endcomment %}
 
 <div class="table" style="width: 30em;">
     <div class="row">

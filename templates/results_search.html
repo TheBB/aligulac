@@ -11,18 +11,7 @@ This is the results search function. Called from ratings.views.results_search.
 {% block content %}
     <h2>Search results</h2>
 
-    {% if errs %}
-    <p>Please fix the following problems:</p>
-    <ul>
-        {% for e in errs %}
-        <li>{{ e }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    {% if message %}
-    <p><strong>{{ message }}</strong></p>
-    {% endif %}
+    {% include "messages.html" %}
 
     <form method="get" action="/results/search/">
     <input type="hidden" name="op" value="search" />

@@ -1,7 +1,7 @@
 import os
 from pyparsing import nestedExpr
 
-from aligulac.views import base_ctx
+from aligulac.views import base_ctx, Message
 from tools import filter_active_ratings, filter_inactive_ratings
 
 from django.shortcuts import render_to_response, get_object_or_404
@@ -36,12 +36,10 @@ def team(request, team_id):
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
 
-        base['message'] = ""
-        
         name = request.POST['name']
         if name!= '' and name != team.name:
             team.set_name(name)
-            base['message'] += "Changed team name. "
+            base['messages'].append(Message('Changed team name.', type=Message.SUCCESS))
 
         akas = request.POST['AKA']
         if akas != '':
@@ -55,20 +53,19 @@ def team(request, team_id):
         if shortname != team.shortname:
             if team.shortname or shortname != '':
                 team.set_shortname(shortname)
-                base['message'] += "Changed team's short name. "
+                base['messages'].append(Message('Changed short name.', type=Message.SUCCESS))
 
         homepage = request.POST['homepage']
         if homepage != team.homepage:
             if team.homepage or homepage != '':
                 team.set_homepage(homepage)
-                base['message'] += "Changed team's homepage. "
+                base['messages'].append(Message('Changed short homepage.', type=Message.SUCCESS))
 
         lp_name = request.POST['lp_name']
         if lp_name != team.lp_name:
             if team.lp_name or lp_name != '':
                 team.set_lp_name(lp_name)
-                base['message'] += "Changed team's Liquipedia link. "
-
+                base['messages'].append(Message('Changed Liquipedia title.', type=Message.SUCCESS))
 
 
     players = TeamMembership.objects.filter(team__name=team, current=True, playing=True)

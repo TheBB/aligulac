@@ -2,7 +2,7 @@ import os
 
 os.environ['HOME'] = '/root'
 
-from aligulac.views import base_ctx
+from aligulac.views import base_ctx, Message
 from ratings.tools import find_player, cdf
 from simul.playerlist import make_player
 from simul.formats import match, mslgroup, sebracket, rrgroup, teampl
@@ -36,13 +36,12 @@ def predict(request):
     if 'format' not in request.GET:
         return render_to_response('predict.html', base)
 
-    base['errs'] = []
-
     try:
         fmt = int(request.GET['format'])
         formats[fmt]
     except:
-        base['errs'].append('Unrecognized format ID: %s' % request.GET['format'])
+        base['messages'].append(Message('Unrecognized format ID: %s.' % request.GET['format'],
+                                type=Message.ERROR))
     base['fmt'] = fmt
 
     try:
@@ -52,7 +51,9 @@ def predict(request):
             assert(i % 2 == 1)
             assert(i > 0)
     except:
-        base['errs'].append('\'Best of\' must be a comma-separated list of positive odd integers (1,3,5,...)')
+        base['messages'].append(Message(
+            '\'Best of\' must be a comma-separated list of positive odd integers (1,3,5,...).',
+            type=Message.ERROR))
     base['bo'] = request.GET['bo']
 
     failures, players = [], []
@@ -65,45 +66,47 @@ def predict(request):
 
         dbplayer = find_player(line.strip().split(' '), make=False)
         if dbplayer.count() > 1:
-            base['errs'].append('Player \'%s\' not unique, add more information.' % line)
+            base['messages'].append(Message('Player not unique, add more information.', line, Message.ERROR))
         elif not dbplayer.exists():
-            base['errs'].append('No such player \'%s\' found.' % line)
+            base['messages'].append(Message('No such player found.', line, Message.ERROR))
         else:
             players.append(dbplayer[0])
     base['pls'] = request.GET['players']
 
-    if len(base['errs']) != 0:
+    if len(base['messages']) != 0:
         return render_to_response('predict.html', base)
 
     if fmt == 0: 
         if len(players) != 2:
-            base['errs'].append('Expected exactly two players')
+            base['messages'].append(Message('Expected exactly two players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 1:
         if len(players) != 4:
-            base['errs'].append('Expected exactly four player')
+            base['messages'].append(Message('Expected exactly four players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 2:
         if len(players) not in [2,4,8,16,32,64,128,256,512,1024]:
-            base['errs'].append('Expected number of players to be a power of two (2,4,8,...), got %i' % len(players))
+            base['messages'].append(Message('Expected number of players to be a power of two'\
+                                          + ' (2,4,8,...), got %i' % len(players), type=Message.ERROR))
         else:
             nrounds = int(log(len(players),2))
             if len(bo) != nrounds and len(bo) != 1:
-                base['errs'].append('Expected exactly 1 or %i \'best of\'' % nrounds)
+                base['messages'].append(Message('Expected exactly one or %i \'best of\'.' % nrounds,
+                                                type=Message.ERROR))
     elif fmt == 3:
         if len(players) < 3:
-            base['errs'].append('Expected at least three players')
+            base['messages'].append(Message('Expected at least three players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of \'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 4:
         if len(players) % 2 != 0:
-            base['errs'].append('Expected an even number of players')
+            base['messages'].append(Message('Expected an even number of players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
 
-    if len(base['errs']) != 0:
+    if len(base['messages']) != 0:
         return render_to_response('predict.html', base)
 
     bo = '%2C'.join([str(b) for b in bo])

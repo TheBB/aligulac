@@ -20,6 +20,22 @@ import simplejson
 
 from countries import transformations
 
+
+# This class encodes error/success/warning messages sent to the templates.
+# A list of these should be in base['messages']
+class Message:
+
+    WARNING = 'warning'
+    ERROR = 'error'
+    INFO = 'info'
+    SUCCESS = 'success'
+
+    def __init__(self, text, title='', type='info'):
+        self.title = title
+        self.text = text
+        self.type = type
+
+
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = Period.objects.filter(computed=True).order_by('-start')[0]
     menu = [('Ranking', '/periods/%i' % curp.id),\
@@ -35,6 +51,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     if request != None:
         base['adm'] = request.user.is_authenticated()
+        base['user'] = request.user.username
 
     if section == 'Records':
         base['submenu'] = [('HoF', '/records/?race=hof'),\
@@ -95,6 +112,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
             if rating.exists():
                 base['submenu'].append(('Adjustments', base_url + 'period/%i' % rating[0].period.id))
+
+    base['messages'] = []
 
     return base
 
@@ -264,19 +283,23 @@ def changepwd(request):
         return render_to_response('changepwd.html', base)
 
     if not request.user.check_password(request.POST['old']):
-        base.update({'wrong_old': True})
+        base['messages'].append(Message('The old password didn\'t match. Your password was not changed.',
+                                        type=Message.ERROR))
         base.update(csrf(request))
         return render_to_response('changepwd.html', base)
     
     if request.POST['new'] != request.POST['newre']:
-        base.update({'no_match': True})
+        base['messages'].append(Message('The new passwords didn\'t match. Your password was not changed.',
+                                        type=Message.ERROR))
         base.update(csrf(request))
         return render_to_response('changepwd.html', base)
 
     request.user.set_password(request.POST['new'])
+    base['messages'].append(Message(
+        'The password for ' + request.user.username + ' was successfully changed.', type=Message.SUCCESS))
     request.user.save()
 
-    return redirect('/add/')
+    return render_to_response('changepwd.html', base)
 
 def h404(request):
     base = base_ctx(request=request)

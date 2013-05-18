@@ -1,25 +1,14 @@
 {% extends "index.html" %}
 
-{% comment %}
-This page shows the results by date. Called from ratings.views.results.
-{% endcomment %}
-
 {% load ratings_extras %}
 
 {% block title %}Integrity warnings{% endblock %}
-
 
 {% block content %}
 
 <h2>Integrity warnings</h2>
 
-{% if adm %}
-<p>You are logged in as: {{ user }}.
-(<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
-{% else %}
-<p>You are not logged in. The submitted results will be pending review before being accepted.
-(<a href="/login/">login</a>)</p>
-{% endif %}
+{% include "messages.html" %}
 
 {% if matches %}
 <p>There are {{ num }} possibly duplicated matches in the database. Showing the first {{ matches|length }}.</p>
@@ -43,8 +32,7 @@ This page shows the results by date. Called from ratings.views.results.
 </form>
 {% endfor %}
 </table>
-{% else %}
-    <p>There are currently no warnings pending resolution.</p>
 {% endif %}
 
 {% endblock %}
+

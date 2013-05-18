@@ -417,6 +417,8 @@ ratings.views.events.
 
     <h2>{{ event }}</h2>
 
+    {% include "messages.html" %}
+
     <form method="post" action="/results/events/{{ event.id }}/" onsubmit="return validate_infobox();">
     {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
@@ -714,10 +716,6 @@ ratings.views.events.
         level to see a complete list.</p>
     {% endif %}
     
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-
     {% if adm %}    
     <form method="post" name="rankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
     {% csrf_token %}

@@ -419,6 +419,77 @@ td.rl_rating {
     text-align: right;
 }
 
+/* ========= MESSAGES ========== */
+
+table.messages {
+    width: 67em;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+tr.minfo {
+    background-color: #bbbbff;
+}
+
+td.micon {
+    border-style: solid none solid solid;
+    border-width: 0.1em;
+    width: 5em;
+    text-align: center;
+    padding: 0.3em;
+}
+
+td.mtext {
+    border-style: solid solid solid none;
+    border-width: 0.1em;
+    width: auto;
+}
+
+td.minfoicon {
+    border-color: #0000aa;
+}
+
+td.minfotext {
+    border-color: #0000aa;
+}
+
+tr.mwarning {
+    background-color: #ffffaa;
+}
+
+td.mwarningicon {
+    border-color: #666600;
+}
+
+td.mwarningtext {
+    border-color: #666600;
+}
+
+tr.merror {
+    background-color: #ffbbbb;
+}
+
+td.merroricon {
+    border-color: #aa0000;
+}
+
+td.merrortext {
+    border-color: #aa0000;
+}
+
+tr.msuccess {
+    background-color: #bbffbb;
+}
+
+td.msuccessicon {
+    border-color: #00aa00;
+}
+
+td.msuccesstext {
+    border-color: #00aa00;
+}
+
+
 /* ========= FORMS ========= */
 
 table.bigform {

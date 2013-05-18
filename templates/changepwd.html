@@ -11,15 +11,9 @@ Template for the change password function. Called from aligulac.views.changepwd.
 {% block content %}
     <h2>Change password</h2>
 
-    <p>To change the password for &quot;{{ user }}&quot;, fill in the form.</p>
+    {% include "messages.html" %}
 
-    {% if wrong_old %}
-    <p><strong>The old password didn't match. Your password was not changed.</strong></p>
-    {% endif %}
-
-    {% if no_match %}
-    <p><strong>The new passwords didn't match. Your password was not changed.</strong></p>
-    {% endif %}
+    <p>To change the password for {{ user }}, fill in the form.</p>
 
     <form method="post" action="/changepwd/">
     {% csrf_token %}

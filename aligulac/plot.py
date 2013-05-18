@@ -30,8 +30,11 @@ names = { 'al': 'All', 'kr': 'Korean', 'in': 'International', 'xx': 'Cross-scene
            
 num = 0
 
-matches = Match.objects.all().select_related('player__rating', 'player')
+matches = Match.objects.filter(offline=True).select_related('player__rating', 'player')
 nmatches = matches.count()
+
+gamescore = [0, 0]
+matchscore = [0, 0]
 
 for m in matches:
     num += 1
@@ -81,6 +84,18 @@ for m in matches:
         tables[t+'-w'][S] += na
         tables[t+'-l'][S] += nb
         tables[t+'-g'][S] += na + nb
+
+    gamescore[0] += na
+    gamescore[1] += nb
+    if na > nb:
+        matchscore[0] += 1
+    else:
+        matchscore[1] += 1
+
+print gamescore
+print matchscore
+
+sys.exit(0)
 
 slw = float(50)/NS
 for t in ['al','kr','in','xx']:

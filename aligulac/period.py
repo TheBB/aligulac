@@ -133,12 +133,12 @@ def get_matches(cplayers, period):
         rcbs = [m.rcb] if m.rcb in RACES else RACES
         weight = float(1)/len(rcas)/len(rcbs)
 
-        if m.offline:
-            weight *= OFFLINE_WEIGHT
-        if m.pla.country == 'KR':
-            weight *= KR_WEIGHT
-        if m.plb.country == 'KR':
-            weight *= KR_WEIGHT
+        #if m.offline:
+            #weight *= OFFLINE_WEIGHT
+        #if m.pla.country == 'KR':
+            #weight *= KR_WEIGHT
+        #if m.plb.country == 'KR':
+            #weight *= KR_WEIGHT
 
         # For each race combination, add information to the cplayer objects
         for ra in rcas:

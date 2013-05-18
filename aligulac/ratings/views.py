@@ -398,7 +398,6 @@ def player(request, player_id):
                     s.skip = True
             base['stories'] = stories
 
-
     recentchange = Rating.objects.filter(player=player, decay=0).order_by('-period')
     if recentchange.exists():
         base['recentchange'] = recentchange[0]

@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the template for the database status page. It displays a bunch of numbers and a link to the latest SQL
+dump. Called from aligulac.views.db.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+<h2>Staff</h2>
+
+<p>These are some of the people who make Aligulac possible. Often there is some delay in putting new
+contributors up here, so it might not be 100% complete.</p>
+
+<table style="width: 67em; border-style: none;">
+<tr><td>
+<h2>Eivind "TheBB" Fonn</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Site owner and boss bla bla bla.</p>
+</td></tr><tr><td>
+<h2>Conti</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Tom "kiekaboe" van Vliet</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Is a bot.</p>
+</td></tr><tr><td>
+<h2>Morten "Grovbolle" Jensen</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>PR dude.</p>
+</td></tr><tr><td>
+<h2>Inflicted</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>MasterOfPuppets</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Michael "Shellshock" Byers</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Tyler "PhoenixVoid" Choi</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Amaury "Otolia" Constant</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Valentin "FrozENDruiD" Chivu</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Nicolai Czempin</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>Andrew Fang</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr><tr><td>
+<h2>TheAmazombie</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Does stuff.</p>
+</td></tr>
+</table>
+
+{% endblock %}

@@ -172,6 +172,11 @@ def db(request):
 
     return render_to_response('db.html', base)
 
+def staff(request):
+    base = base_ctx('About', 'Staff', request)
+
+    return render_to_response('staff.html', base)
+
 def home(request):
     base = base_ctx(request=request)
 

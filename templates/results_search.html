@@ -142,7 +142,7 @@ This is the results search function. Called from ratings.views.results_search.
         </p>
     {% endif %}
     <table class="results">
-    {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_check=1 lm_header="partial" %}
+    {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_check=1 lm_header="full" %}
     </table>
     {% if adm %}
         <p>

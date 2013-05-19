@@ -79,10 +79,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                            ('Earnings', '/earnings/')]
     elif section == 'Predict':
         base['submenu'] = [('Predict', '/predict/'),
+                           #('Factoids', '/factoids/'),
                            ('Compare', '/compare/')]
     elif section == 'About':
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),
+                           #('Staff', '/staff/'),
                            ('Database', '/db/')]
     elif section == 'Reports':
         pass

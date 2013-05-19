@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^predict/proleague/$', 'ratings.predict.pred_proleague'),
     
     url(r'^compare/$', 'ratings.predict.compare'),
+    url(r'^factoids/$', 'ratings.factoids.factoids'),
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),

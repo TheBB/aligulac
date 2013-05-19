@@ -735,7 +735,7 @@ def events(request, event_id=None):
                             (request.POST['type'] != event.type or 'siblings' in request.POST.keys()):
                 event.change_type(request.POST['type'])
                 mtext = 'Set new event type'
-                base['message'] += 'Set new event type'
+                base['messages'].append(Message('Set new event type.', type=Message.SUCCESS))
                 if 'siblings' in request.POST.keys() and siblings is not None:
                     mtext += ' for this and sibling events'
                     for sibling in siblings:

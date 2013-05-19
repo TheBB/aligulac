@@ -2,7 +2,7 @@ import os, pickle
 import urllib, urllib2
 from pyparsing import nestedExpr
 
-from aligulac.views import base_ctx, Message
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
 from aligulac.settings import M_WARNINGS, M_APPROVED
 from ratings.tools import find_player, find_duplicates, display_matches
 
@@ -189,9 +189,7 @@ def add_matches(request):
                     if pls.count() > 1 and adm:
                         # Too many players found, and used logged in. Add failure message and return None.
                         failure.append(s)
-                        base['messages'].append(Message(
-                            'Player \'%s\' not unique, provide more information.' % ' '.join(lst),
-                            s, Message.ERROR))
+                        base['messages'].append(NotUniquePlayerMessage(' '.join(lst), pls))
                         return None
                     if not pls.exists() or pls.count() > 1:
                         # Too many or too few players found, and user not logged in. Just return None.
@@ -310,8 +308,7 @@ def review_treat_players(pm, base):
         lst, rca = get_race_info(lst)
         pla = find_player(lst, make=make_switch_a)
         if pla.count() > 1:
-            base['messages'].append(Message('Player not unique. Add more information.',
-                                            ' '.join(lst), type=Message.ERROR))
+            base['messages'].append(NotUniquePlayerMessage(' '.join(lst), pla))
         elif pla.count() == 0:
             base['messages'].append(Message('Player does not exist. Add !MAKE switch to create.',
                                             ' '.join(lst), type=Message.ERROR))
@@ -332,8 +329,7 @@ def review_treat_players(pm, base):
         lst, rcb = get_race_info(lst)
         plb = find_player(lst, make=make_switch_b)
         if plb.count() > 1:
-            base['messages'].append(Message('Player not unique. Add more information.',
-                                            ' '.join(lst), type=Message.ERROR))
+            base['messages'].append(NotUniquePlayerMessage(' '.join(lst), plb))
         elif plb.count() == 0:
             base['messages'].append(Message('Player does not exist. Add !MAKE switch to create.',
                                             ' '.join(lst), type=Message.ERROR))

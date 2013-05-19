@@ -1,4 +1,6 @@
 import os
+import string
+import random
 from datetime import datetime
 
 from django.contrib.auth import logout
@@ -34,6 +36,34 @@ class Message:
         self.title = title
         self.text = text
         self.type = type
+
+
+class NotUniquePlayerMessage(Message):
+
+    def __init__(self, search, players, type='error'):
+        lst = []
+        for p in players:
+            s = ''
+            if p.country is not None and p.country != '':
+                s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
+            s += '<img src="http://static.aligulac.com/%s.png" /> ' % p.race
+            s += '<a href="/players/%i-%s/">%s</a> (%i)' % (p.id, p.tag, p.tag, p.id)
+            lst.append(s)
+
+        num = 5
+        if len(lst) < num:
+            s = 'Possible matches: ' + ', '.join(lst[:-1]) + ' and ' + lst[-1] + '.'
+        else:
+            rand = ''.join(random.choice(string.ascii_lowercase) for _ in xrange(10))
+            s = 'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1])\
+              + ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand\
+              + 'togvis(\'%s-b\',\'inline\'); return false;">' % rand\
+              + '%i more</a></span>' % (len(lst) - num + 1)\
+              + '<span id="%s-b" style="display: none;">%s</span>'\
+                % (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1])\
+              + '.'
+
+        Message.__init__(self, s, '\'%s\' not unique' % search, type)
 
 
 def base_ctx(section=None, subpage=None, request=None, context=None):

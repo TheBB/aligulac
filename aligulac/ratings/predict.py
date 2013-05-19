@@ -2,7 +2,7 @@ import os
 
 os.environ['HOME'] = '/root'
 
-from aligulac.views import base_ctx, Message
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
 from ratings.tools import find_player, cdf
 from simul.playerlist import make_player
 from simul.formats import match, mslgroup, sebracket, rrgroup, teampl
@@ -66,7 +66,7 @@ def predict(request):
 
         dbplayer = find_player(line.strip().split(' '), make=False)
         if dbplayer.count() > 1:
-            base['messages'].append(Message('Player not unique, add more information.', line, Message.ERROR))
+            base['messages'].append(NotUniquePlayerMessage(line, dbplayer))
         elif not dbplayer.exists():
             base['messages'].append(Message('No such player found.', line, Message.ERROR))
         else:
@@ -633,14 +633,13 @@ def compare(request):
     base['plas'] = request.GET['pla']
     base['plbs'] = request.GET['plb']
 
-    base['errs'] = []
     for p, ps in [(pla, request.GET['pla']), (plb, request.GET['plb'])]:
         if p.count() > 1:
-            base['errs'].append('Player \'%s\' not unique, add more information.' % ps)
+            base['messages'].append(NotUniquePlayerMessage(ps, p))
         elif not p.exists():
-            base['errs'].append('No such player \'%s\' found.' % ps)
+            base['messages'].append(Message('No such player found.', ps, Message.ERROR))
 
-    if len(base['errs']) > 0:
+    if len(base['messages']) > 0:
         return render_to_response('compare.html', base)
 
     pla, plb = pla[0], plb[0]

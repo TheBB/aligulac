@@ -443,6 +443,7 @@ td.mtext {
     border-style: solid solid solid none;
     border-width: 0.1em;
     width: auto;
+    padding: 0.5em 0.5em 0.5em 0em;
 }
 
 td.minfoicon {

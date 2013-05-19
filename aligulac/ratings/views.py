@@ -4,7 +4,7 @@ import operator
 from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
-from aligulac.views import base_ctx, Message
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
                           get_placements, PATCHES
 from ratings.templatetags.ratings_extras import datemax, datemin
@@ -594,6 +594,8 @@ def results_search(request):
                                                 type=Message.ERROR))
                 ok = False
             else:
+                if pls.count() > 1:
+                    base['messages'].append(NotUniquePlayerMessage(line.strip(), pls, Message.WARNING))
                 players.append(pls)
 
         if not ok:

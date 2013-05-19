@@ -27,9 +27,11 @@ aligulac.views.search.
             <h3>Players</h3>
             <ul>
                 {% for player in players %}
-                <li><a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">{{ player.tag }}</a> 
+                <li>
                 <img src="{{ player.country|lower|imgfolder:"flags"|static }}" alt="{{ player.country }}" />
-                <img src="{{ player.race|imgfolder|static }}" alt="{{ player.race|racefull }}" /></li>
+                <img src="{{ player.race|imgfolder|static }}" alt="{{ player.race|racefull }}" />
+                <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">{{ player.tag }}</a> 
+                </li>
                 {% endfor %}
             </ul>
         {% endif %}

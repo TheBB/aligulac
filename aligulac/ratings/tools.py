@@ -242,7 +242,6 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
                 r.pla_dev,     r.plb_dev    = r.plb_dev,     r.pla_dev
 
         if type(m) == Match:
-            print 'yo'
             if m.eventobj_id is not None:
                 r.eventtext = m.eventobj.fullname
             elif m.event:

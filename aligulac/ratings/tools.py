@@ -2,6 +2,7 @@ from math import sqrt
 from collections import namedtuple
 from datetime import date
 
+import aligulac.views
 from ratings.models import Player, Match, PreMatch, Event, Earnings
 from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
@@ -178,7 +179,7 @@ def find_player(lst, make=False, soft=False):
 
     return qset.distinct()
 
-def display_matches(matches, date=True, fix_left=None, ratings=False):
+def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True):
     class M:
         pass
     ret = []
@@ -213,6 +214,11 @@ def display_matches(matches, date=True, fix_left=None, ratings=False):
         r.plb_country = m.plb.country if m.plb else ''
         r.pla_score = m.sca
         r.plb_score = m.scb
+
+        if messages:
+            r.messages = []
+            for msg in m.message_set.all():
+                r.messages.append(aligulac.views.Message(msg.text, msg.title, msg.type + '-small'))
 
         if ratings:
             try:

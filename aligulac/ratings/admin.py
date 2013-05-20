@@ -1,5 +1,5 @@
 from ratings.models import Player, Team, Period, Match, Rating, Event, Alias, Earnings,\
-                           PreMatchGroup, PreMatch, Story
+                           PreMatchGroup, PreMatch, Story, Message
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
 from django.db.models import Q, F
@@ -27,6 +27,11 @@ class AliasesInline(admin.TabularInline):
     model = Alias
     fields = ['name']
 
+class MessagesInline(admin.StackedInline):
+    model = Message
+    fields = ['type', 'title', 'text']
+    extra = 1
+
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
@@ -40,13 +45,13 @@ class PlayerAdmin(admin.ModelAdmin):
             ('Optional',    {'fields': ['name','birthday','country']}),
             ('External',    {'fields': ['tlpd_id','tlpd_db','lp_name','sc2c_id','sc2e_id']})
     ]
-    inlines = [MembersInline, AliasesInline, StoriesInline]
+    inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']
     list_display = ('tag', 'race', player_team, player_country, 'name')
 
 class TeamAdmin(admin.ModelAdmin):
     fields = ['name', 'shortname', 'founded', 'disbanded', 'lp_name', 'homepage', 'active']
-    inlines = [MembersInline, AliasesInline]
+    inlines = [MembersInline, AliasesInline, MessagesInline]
     search_fields = ['name']
 
 def match_period(m):
@@ -63,6 +68,7 @@ class MatchForm(forms.ModelForm):
 
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
+    inlines = [MessagesInline]
     #list_filter = [('date', DateFieldListFilter)]
     form = MatchForm
 
@@ -72,6 +78,7 @@ class MatchAdmin(admin.ModelAdmin):
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'type', 'lft', 'rgt')
+    inlines = [MessagesInline]
     exclude = ('lft', 'rgt')
     search_fields = ['fullname']
 

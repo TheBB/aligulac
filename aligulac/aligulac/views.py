@@ -66,6 +66,12 @@ class NotUniquePlayerMessage(Message):
         Message.__init__(self, s, '\'%s\' not unique' % search, type)
 
 
+def generate_messages(obj):
+    ret = []
+    for m in obj.message_set.all():
+        ret.append(Message(m.text, m.title, m.type))
+    return ret
+
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = Period.objects.filter(computed=True).order_by('-start')[0]
     menu = [('Ranking', '/periods/%i' % curp.id),\

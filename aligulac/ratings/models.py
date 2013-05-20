@@ -694,7 +694,22 @@ class Match(models.Model):
     def event_check_partpath(self):
         return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
 
-#"Earnings" or "Earning"?
+class Message(models.Model):
+    INFO = 'info'
+    WARNING = 'warning'
+    ERROR = 'error'
+    SUCCESS = 'success'
+    TYPES = [(INFO, 'info'), (WARNING, 'warning'), (ERROR, 'error'), (SUCCESS, 'success')]
+    type = models.CharField(max_length=10, choices=TYPES)
+
+    title = models.CharField(max_length=100, null=True)
+    text = models.TextField()
+
+    player = models.ForeignKey(Player, null=True)
+    event = models.ForeignKey(Event, null=True)
+    team = models.ForeignKey(Team, null=True)
+    match = models.ForeignKey(Match, null=True)
+
 class Earnings(models.Model):
     event = models.ForeignKey(Event)
     player = models.ForeignKey(Player)

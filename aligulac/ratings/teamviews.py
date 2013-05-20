@@ -1,7 +1,7 @@
 import os
 from pyparsing import nestedExpr
 
-from aligulac.views import base_ctx, Message
+from aligulac.views import base_ctx, Message, generate_messages
 from tools import filter_active_ratings, filter_inactive_ratings
 
 from django.shortcuts import render_to_response, get_object_or_404
@@ -32,6 +32,8 @@ def team(request, team_id):
 
     team = get_object_or_404(Team, id=team_id)
     base['team'] = team
+
+    base['messages'] += generate_messages(team)
 
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:

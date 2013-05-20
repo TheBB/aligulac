@@ -275,7 +275,7 @@ def add_matches(request):
                 base['messages'].append(Message('Could not parse: ' + e.message, s, Message.ERROR))
                 continue
 
-        success = display_matches(success)
+        success = display_matches(success, messages=False)
         if len(success) > 0:
             base['messages'].append(Message('Added %i match(es).' % len(success), type=Message.SUCCESS))
 
@@ -420,7 +420,7 @@ def review(request):
                     if not group.prematch_set.all().exists():
                         group.delete()
 
-        base['success'] = display_matches(success)
+        base['success'] = display_matches(success, messages=False)
         if len(success) > 0:
             base['messages'].append(Message('Approved %i match(es).' % len(success), type=Message.SUCCESS))
         
@@ -430,7 +430,7 @@ def review(request):
     groups = PreMatchGroup.objects.filter(prematch__isnull=False)\
             .select_related('prematch').order_by('id', 'event').distinct()
     for g in groups:
-        g.prematches = display_matches(g.prematch_set.all())
+        g.prematches = display_matches(g.prematch_set.all(), messages=False)
     base['groups'] = groups
 
     base.update(csrf(request))
@@ -671,7 +671,7 @@ def integrity(request):
                 block.append(Match.objects.get(id=id))
             except:
                 pass
-        matches.append((','.join(str(k) for k in list(w)), display_matches(block)))
+        matches.append((','.join(str(k) for k in list(w)), display_matches(block, messages=False)))
 
         if len(matches) == 50:
             break

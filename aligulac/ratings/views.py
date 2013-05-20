@@ -4,7 +4,7 @@ import operator
 from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
-from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage, generate_messages
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
                           get_placements, PATCHES
 from ratings.templatetags.ratings_extras import datemax, datemin
@@ -180,6 +180,8 @@ def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
     base.update(csrf(request)) 
+
+    base['messages'] += generate_messages(player)
     
     # Make modifications
     if 'op' in request.POST and request.POST['op'] == 'Submit' and base['adm'] == True:
@@ -429,6 +431,7 @@ def player(request, player_id):
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\
             .select_related('period')\
+            .prefetch_related('message_set')\
             .extra(where=['abs(datediff(date,\'%s\')) < 90' % datetime.datetime.now()])\
             .order_by('-date', '-id')[0:10]
 
@@ -488,6 +491,7 @@ def results(request):
     base['td'] = td
 
     matches = Match.objects.filter(date=td).order_by('eventobj__lft', 'event', 'id')
+    matches = matches.prefetch_related('message_set')
     base['matches'] = display_matches(matches, date=False, ratings=True)
 
     return render_to_response('results.html', base)
@@ -526,7 +530,7 @@ def results_search(request):
         base['messages'].append(Message('Successfully modified %i matches.' % num, type=Message.SUCCESS))
 
     if 'op' in request.GET and request.GET['op'] == 'search':
-        matches = Match.objects.all()
+        matches = Match.objects.all().prefetch_related('message_set')
 
         try:
             ints = [int(x) for x in request.GET['after'].split('-')]
@@ -672,6 +676,8 @@ def events(request, event_id=None):
                      'team_bigs': team_bigs, 'team_smalls': team_smalls,\
                      'freq_bigs': freq_bigs, 'freq_smalls': freq_smalls})
         return render_to_response('events.html', base)
+
+    base['messages'] += generate_messages(event)
 
     # Number of matches (set event to big if too large)
     matches = Match.objects.filter(eventobj__lft__gte=event.lft, eventobj__rgt__lte=event.rgt)
@@ -983,14 +989,14 @@ def events(request, event_id=None):
     base['earliest'] = event.earliest
     base['latest'] = event.latest
 
-    matches = matches.order_by('-date', '-eventobj__lft', '-id')[0:200]
+    matches = matches.prefetch_related('message_set').order_by('-date', '-eventobj__lft', '-id')[0:200]
     base['matches'] = display_matches(matches)
 
     return render_to_response('eventres.html', base)
 
 def player_results(request, player_id):
     player = get_object_or_404(Player, id=int(player_id))
-    matches = Match.objects.filter(Q(pla=player) | Q(plb=player))
+    matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).prefetch_related('message_set')
 
     base = base_ctx('Ranking', 'Match history', request, context=player)
 
@@ -1247,7 +1253,8 @@ def rating_details(request, player_id, period_id):
         prevdev = [RATINGS_INIT_DEV, {'P': RATINGS_INIT_DEV, 'T': RATINGS_INIT_DEV, 'Z': RATINGS_INIT_DEV}]
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period=period)\
-            .select_related('pla__rating').select_related('plb__rating').order_by('-date', '-id')
+            .select_related('pla__rating').select_related('plb__rating').order_by('-date', '-id')\
+            .prefetch_related('message_set')
     if not matches.exists():
         base.update({'period': period, 'player': player, 'prevlink': prevlink, 'nextlink': nextlink})
         return render_to_response('ratingdetails.html', base)

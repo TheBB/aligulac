@@ -889,7 +889,8 @@ def events(request, event_id=None):
         base['siblings'] = event.parent.event_set.exclude(id=event.id).order_by('lft')
 
     # Used for moving events
-    base['surroundingevents'] = event.get_parent(1).get_children().exclude(lft__gte=event.lft, rgt__lte=event.rgt)
+    base['surroundingevents'] = event.get_parent(1).get_children().exclude(lft__gte=event.lft,
+                                                                           rgt__lte=event.rgt)
     
     # Used for moving prize pools
     base['childevents'] = event.get_children()

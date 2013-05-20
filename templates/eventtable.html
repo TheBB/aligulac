@@ -34,9 +34,14 @@ This prints a table of root events. Called from events.html.
 </div>
 
 {% if smalls %}
+<form method="get" action="/results/events/">
 <p><strong>Smaller events:</strong>
+<select name="goto">
 {% for e in smalls %}
-<a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %},{% endif %}
+<option value="{{ e.id }}">{{ e.name }}</option>
 {% endfor %}
+</select>
+<input type="submit" value="Go" />
 </p>
+</form>
 {% endif %}

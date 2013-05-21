@@ -68,7 +68,11 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
             players.append(ratings[::-1])
 
     # Convert to player objects for the simul library
-    sim_players = [[make_player(r.player) for r in ratings] for ratings in players]
+    if proleague:
+        sim_players = [make_player(r.player) for r in players[0]] +\
+                      [make_player(r.player) for r in players[1]]
+    else:
+        sim_players = [[make_player(r.player) for r in ratings] for ratings in players]
 
     # Simulate the match
     obj = Simulator(2)

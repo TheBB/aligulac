@@ -752,7 +752,14 @@ ratings.views.events.
     {% endif %}
 
     {% if adm %}
-        <p>Add subevent:</p>
+        {% if not event.has_children %}
+        <h3>Add matches</h3>
+        <p>Go <a href="/add/?eventid={{ event.id }}">here</a> to 
+        {% if event.closed %}reopen the event and {% endif %}
+        add matches.</p>
+        {% endif %}
+
+        <h3>Add subevent</h3>
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
         
@@ -849,7 +856,7 @@ ratings.views.events.
         </table>
 
         {% if event.type == "round" or event.type == "event" %}
-        <p>Add story:</p>
+        <h3>Add story</h3>
         <form method="post" action="/results/events/{{ event.id }}/">
         {% csrf_token %}
 

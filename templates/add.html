@@ -278,7 +278,10 @@ ratings.submitviews.add_matches.
         <tr>
             <td class="form_left"></td>
             <td class="form_right">
-                <input type="submit" value="Submit" />
+                <input type="submit" name="action" value="Add" />
+                {% if adm %}
+                <input type="submit" name="action" value="Add and close event" />
+                {% endif %}
             </td>
         </tr>
     </table>

@@ -108,6 +108,9 @@ class Event(models.Model):
             return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt,type__in=type).order_by('lft')
         else:
             return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt,type__in=type).order_by('lft')
+
+    def has_children(self):
+        return self.rgt > self.lft + 1
     
     def get_root(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')[0]

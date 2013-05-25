@@ -99,7 +99,7 @@ def add_matches(request):
         except:
             eventobj = None
 
-        if eventobj != None:
+        if eventobj is not None:
             base['eobj'] = eventobj.id
 
         # Get extra data needed if not admin.
@@ -280,6 +280,24 @@ def add_matches(request):
             base['messages'].append(Message('Added %i match(es).' % len(success), type=Message.SUCCESS))
 
         base.update({'matches': '\n'.join(failure), 'success': success})
+
+    elif 'eventid' in request.GET:
+        try:
+            event = Event.objects.get(id=int(request.GET['eventid']))
+            event.closed = False
+            event.save()
+            base['eobj'] = event.id
+            base['messages'].append(Message('Reopened \'%s\'.' % event.fullname, type=Message.SUCCESS))
+        except:
+            base['messages'].append(Message('Couldn\'t find event ID %s.' % request.GET['eventid'], 
+                type=Message.ERROR))
+
+    try:
+        if base['adm'] and request.POST['action'] == 'Add and close event' and eventobj is not None:
+            eventobj.close()
+            base['messages'].append(Message('Event \'%s\' closed.' % eventobj.fullname, type=Message.SUCCESS))
+    except:
+        pass
 
     base.update(csrf(request))
     return render_to_response('add.html', base)

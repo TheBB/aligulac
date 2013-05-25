@@ -284,10 +284,11 @@ def add_matches(request):
     elif 'eventid' in request.GET:
         try:
             event = Event.objects.get(id=int(request.GET['eventid']))
-            event.closed = False
-            event.save()
+            if event.closed:
+                event.closed = False
+                event.save()
+                base['messages'].append(Message('Reopened \'%s\'.' % event.fullname, type=Message.SUCCESS))
             base['eobj'] = event.id
-            base['messages'].append(Message('Reopened \'%s\'.' % event.fullname, type=Message.SUCCESS))
         except:
             base['messages'].append(Message('Couldn\'t find event ID %s.' % request.GET['eventid'], 
                 type=Message.ERROR))

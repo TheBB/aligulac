@@ -22,7 +22,8 @@ from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
 from ratings.tools import filter_active_ratings
-from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY, OFFLINE_WEIGHT, KR_WEIGHT
+from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY,\
+                                OFFLINE_WEIGHT, KR_START
 
 from rating import update
 from ratings.tools import cdf
@@ -74,6 +75,9 @@ def get_new_players(cplayers, period, prev):
         for r in EXRACES:
             cp.prev_rating[r] = 0.0
             cp.prev_dev[r] = RATINGS_INIT_DEV
+
+        if player.country == 'KR':
+            cp.prev_rating['M'] = KR_START
 
         # Add to the dict
         cplayers[player.id] = cp
@@ -133,12 +137,8 @@ def get_matches(cplayers, period):
         rcbs = [m.rcb] if m.rcb in RACES else RACES
         weight = float(1)/len(rcas)/len(rcbs)
 
-        #if m.offline:
-            #weight *= OFFLINE_WEIGHT
-        #if m.pla.country == 'KR':
-            #weight *= KR_WEIGHT
-        #if m.plb.country == 'KR':
-            #weight *= KR_WEIGHT
+        if m.offline:
+            weight *= OFFLINE_WEIGHT
 
         # For each race combination, add information to the cplayer objects
         for ra in rcas:

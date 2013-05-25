@@ -12,7 +12,7 @@ from django.db.models import Q
 from ratings.models import Match
 from ratings.tools import cdf
 
-from math import floor, sqrt
+from math import floor, sqrt, log
 from random import choice
 import numpy
 from numpy.polynomial.polynomial import polyfit
@@ -30,11 +30,13 @@ names = { 'al': 'All', 'kr': 'Korean', 'in': 'International', 'xx': 'Cross-scene
            
 num = 0
 
-matches = Match.objects.filter(offline=True).select_related('player__rating', 'player')
+matches = Match.objects.select_related('player__rating', 'player')
 nmatches = matches.count()
 
 gamescore = [0, 0]
 matchscore = [0, 0]
+
+disc = 0.0
 
 for m in matches:
     num += 1
@@ -70,6 +72,8 @@ for m in matches:
     else:
         na, nb = choice([(m.sca, m.scb), (m.scb, m.sca)])
 
+    disc += -na*log(prob) - nb*log(1-prob)
+
     S = int(floor(2*(prob-0.5)*NS))
 
     tlist = ['al']
@@ -92,10 +96,9 @@ for m in matches:
     else:
         matchscore[1] += 1
 
-print gamescore
-print matchscore
-
-sys.exit(0)
+print 'Discrepancy:', disc/sum(gamescore)
+print 'Correct game prediction:', gamescore
+print 'Correct match prediction:', matchscore
 
 slw = float(50)/NS
 for t in ['al','kr','in','xx']:

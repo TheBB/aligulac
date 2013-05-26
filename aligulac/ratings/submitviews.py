@@ -295,8 +295,13 @@ def add_matches(request):
 
     try:
         if base['adm'] and request.POST['action'] == 'Add and close event' and eventobj is not None:
-            eventobj.close()
-            base['messages'].append(Message('Event \'%s\' closed.' % eventobj.fullname, type=Message.SUCCESS))
+            if len(failure) == 0:
+                eventobj.close()
+                base['messages'].append(Message('Event \'%s\' closed.' % eventobj.fullname, 
+                                                type=Message.SUCCESS))
+            else:
+                base['messages'].append(Message('Event \'%s\' was NOT closed.' % eventobj.fullname,
+                                                type=Message.WARNING))
     except:
         pass
 

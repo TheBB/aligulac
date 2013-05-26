@@ -600,6 +600,9 @@ ratings.views.events.
                         {% if tlpds.HotSbeta %}
                         <a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">TLPD</a>
                         {% endif %}
+                        {% if tlpds.WoLbeta %}
+                        <a href="http://www.teamliquid.net/tlpd/sc2-beta/leagues/{{ tlpds.WoLbeta }}" target="_blank">TLPD</a>
+                        {% endif %}
                     {% endwith %}
                     {% if event.get_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
@@ -628,9 +631,11 @@ ratings.views.events.
                         <label for="TLPDIN">International</label>
                         <input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
                         <label for="TLPDHOTS">HotS</label>
-                        <input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}>
+                        <input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}><br>
                         <label for="TLPDHOTSBETA">HotS beta</label>
                         <input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                        <label for="TLPDWOLBETA">WoL beta</label>
+                        <input type="radio" id="TLPDWOLBETA" name="TLPDDB" value="TLPDWOLBETA" {% if tlpds.WoLbeta %}checked{% endif %}>
                     </div>
                 </div>
                 {% endwith %}

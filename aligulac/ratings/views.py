@@ -231,6 +231,8 @@ def player(request, player_id):
             tlpddb += 0b100
         if request.POST.get('TLPDHOTSBETA'):
             tlpddb += 0b1000
+        if request.POST.get('TLPDWOLBETA'):
+            tlpddb += 0b10000
 
         if tlpdid != str(player.tlpd_id) or tlpddb != player.tlpd_db:
             if player.tlpd_id or tlpdid != '':
@@ -706,9 +708,11 @@ def events(request, event_id=None):
                 base['messages'].append(Message('Changed event name.', type=Message.SUCCESS))
 
             if request.POST['date'].strip() != 'No change':
+                mcounter = 0
                 for match in matches:
                     match.set_date(request.POST['date'])
-                base['messages'].append(Message('Changed date for %i matches.' % match.count(), 
+                    mcounter += 1
+                base['messages'].append(Message('Changed date for %i matches.' % mcounter, 
                                         type=Message.SUCCESS))
 
             if request.POST['game'] != 'nochange':
@@ -767,6 +771,8 @@ def events(request, event_id=None):
                     tlpddb = 0b100
                 elif tlpddbstr == 'TLPDHOTSBETA':
                     tlpddb = 0b1000
+                elif tlpddbstr == 'TLPDWOLBETA':
+                    tlpddb = 0b10000
     
                 if tlpdid != str(event.tlpd_id) or tlpddb != event.tlpd_db:
                     if event.tlpd_id or tlpdid != '':
@@ -821,6 +827,10 @@ def events(request, event_id=None):
 
             for e in event.get_children():
                 e.update_name()
+            # This is very slow if used for many matches, but that should rarely happen.
+            for e in event.get_parents(id=True):
+                e.update_dates()
+
 
             base['messages'].append(Message('Moved this event under \'%s\'' % newparent.fullname,
                                             type=Message.SUCCESS))

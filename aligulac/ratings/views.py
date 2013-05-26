@@ -706,9 +706,11 @@ def events(request, event_id=None):
                 base['messages'].append(Message('Changed event name.', type=Message.SUCCESS))
 
             if request.POST['date'].strip() != 'No change':
+                mcounter = 0
                 for match in matches:
                     match.set_date(request.POST['date'])
-                base['messages'].append(Message('Changed date for %i matches.' % match.count(), 
+                    mcounter += 1
+                base['messages'].append(Message('Changed date for %i matches.' % mcounter, 
                                         type=Message.SUCCESS))
 
             if request.POST['game'] != 'nochange':

@@ -823,6 +823,10 @@ def events(request, event_id=None):
 
             for e in event.get_children():
                 e.update_name()
+            # This is very slow if used for many matches, but that should rarely happen.
+            for e in event.get_parents(id=True):
+                e.update_dates()
+
 
             base['messages'].append(Message('Moved this event under \'%s\'' % newparent.fullname,
                                             type=Message.SUCCESS))

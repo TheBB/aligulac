@@ -647,7 +647,7 @@ class Match(models.Model):
         super(Match, self).delete(*args, **kwargs)
         
         if eventobj:
-            for event in self.eventobj.get_children(id=True):
+            for event in self.eventobj.get_parents(id=True):
                 # This is very slow if used for many matches, but that should rarely happen. 
                 event.update_dates()
 

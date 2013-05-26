@@ -231,6 +231,8 @@ def player(request, player_id):
             tlpddb += 0b100
         if request.POST.get('TLPDHOTSBETA'):
             tlpddb += 0b1000
+        if request.POST.get('TLPDWOLBETA'):
+            tlpddb += 0b10000
 
         if tlpdid != str(player.tlpd_id) or tlpddb != player.tlpd_db:
             if player.tlpd_id or tlpdid != '':
@@ -769,6 +771,8 @@ def events(request, event_id=None):
                     tlpddb = 0b100
                 elif tlpddbstr == 'TLPDHOTSBETA':
                     tlpddb = 0b1000
+                elif tlpddbstr == 'TLPDWOLBETA':
+                    tlpddb = 0b10000
     
                 if tlpdid != str(event.tlpd_id) or tlpddb != event.tlpd_db:
                     if event.tlpd_id or tlpdid != '':

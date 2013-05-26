@@ -40,8 +40,7 @@ class Event(models.Model):
     
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     #tlpd_db contains information in binary form on which TLPD databases to use:
-    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
-    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
 
@@ -145,6 +144,8 @@ class Event(models.Model):
                 tlpd_ids["HotS"] = id[0].tlpd_id
             if (self.tlpd_db / 0b1000 % 2) == 1:
                 tlpd_ids["HotSbeta"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b10000 % 2) == 1:
+                tlpd_ids["WoLbeta"] = id[0].tlpd_id
             return tlpd_ids
         else:
             return None
@@ -338,8 +339,8 @@ class Player(models.Model):
 
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     #tlpd_db contains information in binary form on which TLPD databases to use:
-    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
-    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
+    #So a value of 5 (00101 in binary) would correspond to a link to the korean and HotS TLPD.  
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
@@ -442,6 +443,8 @@ class Player(models.Model):
                 tlpd_ids["HotS"] = self.tlpd_id
             if (self.tlpd_db / 0b1000 % 2) == 1:
                 tlpd_ids["HotSbeta"] = self.tlpd_id
+            if (self.tlpd_db / 0b10000 % 2) == 1:
+                tlpd_ids["WoLbeta"] = self.tlpd_id
             return tlpd_ids
 
 class Story(models.Model):

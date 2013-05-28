@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% comment %}
+The form to shorten an URL called from miniURL.views.new.
+{% endcomment %}
+
+{% block title %}URL shortener{% endblock %}
+
+{% block content %}
+   <form method="post" action="{% url 'url_new' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit"/>
+</form>
+{% endblock %}

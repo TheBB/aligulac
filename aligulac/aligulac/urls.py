@@ -44,7 +44,8 @@ urlpatterns = patterns('',
     url(r'^staff/$', 'aligulac.views.staff'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
-
+    url(r'^m/', include('mini_url.urls')),
+    
     url(r'^add/$', 'ratings.submitviews.add_matches'),
     url(r'^add/review/$', 'ratings.submitviews.review'),
     url(r'^add/events/$', 'ratings.submitviews.manage_events'),

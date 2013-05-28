@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+
+{% comment %}
+The list of all registered shortened URLs called from miniURL.views.list.
+{% endcomment %}
+
+{% block title %}Short URLs list{% endblock %}
+
+{% block content %}
+    <p><a href="{% url 'url_new' %}">Shorten a new URL</a></p>
+
+    <p>List of all already shortened URLs:</p>
+        <ul>
+        {% for mini in minis %}
+            <li> {{ mini.longURL }} via <a href="http://{{ request.get_host }}{% url 'url_redirect' mini.code %}">{{ request.get_host }}{% url 'url_redirect' mini.code %}</a>
+            {% if mini.submitter %}created by {{ mini.submitter }}{% endif %} accessed ({{ mini.nb_access }} times)</li>
+            {% empty %}
+            <li>There is currently none.</li>
+        {% endfor %}
+        </ul>
+{% endblock %}

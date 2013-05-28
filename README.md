@@ -198,7 +198,15 @@ Needs:
 - Python 2.6 or 2.7
 - Django 1.4.x
 - A MySQL server
-- Python modules: numpy, scipy, markdown and pyparsing
+- Python modules:
+    * ccy
+    * dateutil
+    * markdown
+    * mysqldb
+    * numpy
+    * pyparsing
+    * scipy
+    * simplejson
 
 The repository does **not** contain the Django settings file or the database dumps.
 

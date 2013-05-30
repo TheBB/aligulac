@@ -312,6 +312,8 @@ class Event(models.Model):
 
     def move_earnings(self, newevent):
         Earnings.objects.filter(event=self).update(event=newevent)
+        event.set_prizepool(None)
+        newevent.set_prizepool(True)
         newevent.change_type('event')
 
 class Player(models.Model):

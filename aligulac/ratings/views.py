@@ -1419,9 +1419,14 @@ def balance(request):
             pvzw, pvzl = get_data(matches, 'P', 'Z')
             tvzw, tvzl = get_data(matches, 'T', 'Z')
             try:
-                BalanceEntry.get(date=datetime.date(year=first[0], month=first[1], day=15)).\
-                        update(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,
-                               tvz_wins=tvzw, tvz_losses=tvzl)
+                be = BalanceEntry.objects.get(date=datetime.date(year=first[0], month=first[1], day=15))
+                be.pvt_wins = pvtw
+                be.pvt_losses = pvtl
+                be.pvz_wins = pvzw
+                be.pvz_losses = pvzl
+                be.tvz_wins = tvzw
+                be.tvz_losses = tvzl
+                be.save()
             except:
                 new = BalanceEntry(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,
                                    tvz_wins=tvzw, tvz_losses=tvzl,

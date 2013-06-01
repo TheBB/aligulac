@@ -6,6 +6,7 @@ import md5
 from aligulac import settings
 
 from math import sqrt
+from aligulac.parameters import NA, INF, MININF
 
 register = template.Library()
 
@@ -55,6 +56,17 @@ register.filter('ratscale', ratscale)
 def ratscaled(value):
     return int(round(float(value)*1000))
 register.filter('ratscaled', ratscaled)
+
+def dispperf(value):
+    if value <= MININF:
+        return u'–\u221E'
+    elif value <= INF:
+        return u'+\u221E'
+    elif value <= NA:
+        return 'N/A'
+    else:
+        return ratscale(value)
+register.filter('dispperf', dispperf)
 
 def addf(value, arg):
     return float(value) + float(arg)

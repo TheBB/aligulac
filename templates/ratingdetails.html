@@ -70,7 +70,7 @@ numbers given below are projected adjustments and can change before then.</p>
             {% if ngames.1.P > 0 %}{{ nwins.1.P|floatformat:1 }}–{{ nlosses.1.P|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vp|ratscale }}{% endif %}
+            {% if ngames.1.P > 0 %}{{ rating.comp_rat_vp|dispperf }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vp|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
@@ -93,7 +93,7 @@ numbers given below are projected adjustments and can change before then.</p>
             {% if ngames.1.T > 0 %}{{ nwins.1.T|floatformat:1 }}–{{ nlosses.1.T|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vt|ratscale }}{% endif %}
+            {% if ngames.1.T > 0 %}{{ rating.comp_rat_vt|dispperf }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vt|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
@@ -116,7 +116,7 @@ numbers given below are projected adjustments and can change before then.</p>
             {% if ngames.1.Z > 0 %}{{ nwins.1.Z|floatformat:1 }}–{{ nlosses.1.Z|floatformat:1 }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ rating.comp_rat|addf:rating.comp_rat_vz|ratscale }}{% endif %}
+            {% if ngames.1.Z > 0 %}{{ rating.comp_rat_vz|dispperf }}{% endif %}
         </div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vz|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
@@ -132,7 +132,7 @@ numbers given below are projected adjustments and can change before then.</p>
         <div class="rowe" style="text-align: right;">{{ tot_rating.0|ratscale }}</div>
         <div class="rowe" style="text-align: right;">{{ expwins.0|floatformat:1 }}–{{ explosses.0|floatformat:1 }}</div>
         <div class="rowe" style="text-align: right;">{{ nwins.0|floatformat:1 }}–{{ nlosses.0|floatformat:1 }}</div>
-        <div class="rowe" style="text-align: right;">{{ rating.comp_rat|ratscale }}</div>
+        <div class="rowe" style="text-align: right;">{{ rating.comp_rat|dispperf }}</div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
             {% if diff.0 < 0 %}<span style="color: #aa0000;">
@@ -140,10 +140,6 @@ numbers given below are projected adjustments and can change before then.</p>
         </div>
     </div>
 </div>
-{% if modded %}
-    <p>To avoid infinite performances, some &quot;fake&quot; games have been inserted in the computation. This is explained
-    in the <a href="/faq/">FAQ</a>.</p> 
-{% endif %}
 {% endif %}
     
 <p>Exact game details:</p>

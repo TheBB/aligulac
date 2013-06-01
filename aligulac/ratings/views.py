@@ -63,18 +63,18 @@ def period(request, period_id, page='1'):
             type=Message.INFO))
 
     # Best and most specialised players
-    best = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2).order_by('-rating')[0]
-    bestvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    best = filter_active_ratings(Rating.objects.filter(period=period)).order_by('-rating')[0]
+    bestvp = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
-    bestvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    bestvt = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
-    bestvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    bestvz = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
-    specvp = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    specvp = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating_vp/dev_vp*rating'}).order_by('-d')[0]
-    specvt = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    specvt = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating_vt/dev_vt*rating'}).order_by('-d')[0]
-    specvz = Rating.objects.filter(period=period, decay__lt=4, dev__lte=0.2)\
+    specvz = filter_active_ratings(Rating.objects.filter(period=period))\
             .extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
 
     # Matchup statistics
@@ -1318,20 +1318,17 @@ def rating_details(request, player_id, period_id):
         exppctg = [expwins[0]/ngames[0]*100, {}]
         pctg = [float(nwins[0])/ngames[0]*100, {}]
         diff = [rating.rating-prevrat[0], {}]
-        modded = False
         for r in ['P','T','Z']:
             explosses[1][r] = ngames[1][r] - expwins[1][r]
             if ngames[1][r] > 0:
                 exppctg[1][r] = expwins[1][r]/ngames[1][r]*100
                 pctg[1][r] = float(nwins[1][r])/ngames[1][r]*100
             diff[1][r] = rating.get_totalrating(r) - prevrat[1][r]
-            if (nwins[1][r] != 0) != (nlosses[1][r] != 0):
-                modded = True
 
         base.update({'tot_rating': tot_rating, 'ngames': ngames, 'nwins': nwins, 'nlosses': nlosses,\
                      'prevrat': prevrat, 'pctg': pctg,\
                      'exppctg': exppctg, 'diff': diff, 'expwins': expwins, 'explosses': explosses,\
-                     'prevdev': prevdev, 'modded': modded})
+                     'prevdev': prevdev})
         return render_to_response('ratingdetails.html', base)
 
 def records(request):
@@ -1345,16 +1342,16 @@ def records(request):
     base = base_ctx('Records', sub, request)
 
     if race in ['all', 'T', 'P', 'Z']:
-        high = Rating.objects.extra(select={'rat': 'rating'})\
-                .filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
-        highp = Rating.objects.extra(select={'rat': 'rating+rating_vp'})\
-                .filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
-        hight = Rating.objects.extra(select={'rat': 'rating+rating_vt'}).\
-                filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
-        highz = Rating.objects.extra(select={'rat': 'rating+rating_vz'}).\
-                filter(period__id__gt=24, decay__lt=4, dev__lte=0.2)
-        dom = Rating.objects.extra(select={'rat': 'domination'}).\
-                filter(domination__gt=0.0, period__id__gt=24, decay__lt=4, dev__lte=0.2)
+        high = filter_active_ratings(Rating.objects.extra(select={'rat': 'rating'}))\
+                .filter(period__id__gt=24)
+        highp = filter_active_ratings(Rating.objects.extra(select={'rat': 'rating+rating_vp'}))\
+                .filter(period__id__gt=24)
+        hight = filter_active_ratings(Rating.objects.extra(select={'rat': 'rating+rating_vt'}))\
+                .filter(period__id__gt=24)
+        highz = filter_active_ratings(Rating.objects.extra(select={'rat': 'rating+rating_vz'}))\
+                .filter(period__id__gt=24)
+        dom = filter_active_ratings(Rating.objects.extra(select={'rat': 'domination'}))\
+                .filter(domination__gt=0.0, period__id__gt=24)
 
         if race in ['P','T','Z']:
             high = high.filter(player__race=request.GET['race'])

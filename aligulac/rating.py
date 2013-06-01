@@ -5,10 +5,17 @@ This is where the rating magic happens. Imported by period.py.
 from numpy import *
 import scipy.optimize as opt
 
-from aligulac.parameters import RATINGS_MIN_DEV, RATINGS_INIT_DEV
+from aligulac.parameters import RATINGS_MIN_DEV, RATINGS_INIT_DEV, NA, INF, MININF
 from ratings.tools import pdf, cdf
 
 LOG_CAP = 1e-10
+
+def check_grad(f, df, pts):
+    eps = 1e-8
+    ret = 0.0
+    for p in pts:
+        ret += abs((f(p+eps)-f(p))/eps - df(p))**2
+    return sqrt(ret)
 
 def check_max(func, x, i, name, disp):
     """Auxiliary function to perform numerical optimization. Will check the return flags and return the
@@ -85,6 +92,67 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
 
     # Return the new arrays
     return (oppr, opps, oppc, W, L)
+
+def performance(oppr, opps, oppc, W, L):
+    opp = zip(oppr, opps, oppc, W, L)
+
+    ret = [0.0, 0.0, 0.0, 0.0]
+    meanok = True
+
+    for cat in xrange(0,3):
+        spopp = [o for o in opp if o[2] == cat]
+        sW = sum([o[3] for o in spopp])
+        sL = sum([o[4] for o in spopp])
+
+        if sW == 0 and sL == 0:
+            ret[cat+1] = NA
+            meanok = False
+        elif sW == 0:
+            ret[cat+1] = MININF
+            meanok = False
+        elif sL == 0:
+            ret[cat+1] = INF
+            meanok = False
+        else:
+            gen_phi = lambda p, x: pdf(x, loc=p[0], scale=sqrt(1+p[1]**2))
+            gen_Phi = lambda p, x: max(min(cdf(x, loc=p[0], scale=sqrt(1+p[1]**2)), 1-LOG_CAP), LOG_CAP)
+
+            def logL(x):
+                ret = 0.0
+                for p in spopp:
+                    gP = gen_Phi(p,x)
+                    ret += p[3] * log(gP) + p[4] * log(1-gP)
+                return ret
+
+            def DlogL(x):
+                ret = 0.0
+                for p in spopp:
+                    gp = gen_phi(p,x)
+                    gP = gen_Phi(p,x)
+                    ret += (float(p[3])/gP - float(p[4])/(1-gP)) * gp
+                return ret
+
+            def D2logL(x):
+                ret = 0.0
+                for p in spopp:
+                    gp = gen_phi(p,x)
+                    gP = gen_Phi(p,x)
+                    alpha = gp/gP
+                    beta = gp/(1-gP)
+                    sb = sqrt(1+p[1]**2)
+                    Mv = pi/sqrt(3)/sb * tanh(pi/2/sqrt(3)*(x-p[0])/sb)
+                    ret -= p[3]*alpha*(alpha+Mv) + p[4]*beta*(beta-Mv)
+                return ret
+
+            perf = maximize(logL, DlogL, D2logL, 0.0, method=None)[0]
+            ret[cat+1] = perf
+
+    if meanok:
+        ret[0] = sum(ret[1:]) / 3
+    else:
+        ret[0] = NA
+
+    return ret
 
 def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     """This function updates the rating of a player according to the ratings of the opponents and the games

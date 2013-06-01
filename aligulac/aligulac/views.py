@@ -1,6 +1,7 @@
 import os
 import string
 import random
+import shlex
 from datetime import datetime
 
 from django.contrib.auth import logout
@@ -240,10 +241,10 @@ def search(request, q=''):
     if q == '':
         q = request.GET['q']
 
-    players = ratings.tools.find_player(q.split(' '), make=False, soft=True)
+    players = ratings.tools.find_player(shlex.split(q), make=False, soft=True)
 
     teams = Team.objects.all()
-    for qpart in q.split(' '):
+    for qpart in shlex.split(q):
         if qpart.strip() == '':
             continue
         query = Q(name__icontains=qpart) | Q(alias__name__icontains=q)
@@ -251,7 +252,7 @@ def search(request, q=''):
     teams = teams.distinct()
 
     events = Event.objects.filter(type__in=['category','event'])
-    for qpart in q.split(' '):
+    for qpart in shlex.split(q):
         if qpart.strip() == '':
             continue
         events = events.filter(Q(fullname__icontains=qpart))

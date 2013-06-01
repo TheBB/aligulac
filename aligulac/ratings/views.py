@@ -1,6 +1,7 @@
 import os, datetime
 import ccy
 import operator
+import shlex
 from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
@@ -557,7 +558,7 @@ def results_search(request):
 
         if 'eventtext' in request.GET and request.GET['eventtext'].strip() != '':
             base['eventtext'] = request.GET['eventtext'].strip()
-            queries = [f.strip() for f in request.GET['eventtext'].strip().split(' ') if f.strip() != '']
+            queries = [f.strip() for f in shlex.split(request.GET['eventtext'].strip()) if f.strip() != '']
             for query in queries:
                 q = Q(eventobj__isnull=True, event__icontains=query) |\
                     Q(eventobj__isnull=False, eventobj__fullname__icontains=query)

@@ -80,8 +80,12 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
     obj.compute()
 
     # Add the scores
-    scores[team_a] += obj._tally[0].win/(nteams-1)
-    scores[team_b] += obj._tally[1].win/(nteams-1)
+    if proleague:
+        scores[team_a] += obj._tally[0].win/(nteams-1)
+        scores[team_b] += obj._tally[1].win/(nteams-1)
+    else:
+        scores[team_a] += obj._tally[0][1]/(nteams-1)
+        scores[team_b] += obj._tally[1][1]/(nteams-1)
 
 # Write the scores to database
 if proleague:
@@ -96,4 +100,5 @@ for team in allowed_teams:
     else:
         team.scoreak = scores[team]
     team.save()
-    print '%5.2f%s: %s' % (100*scores[team], '%', team.name)
+
+    print '%5.2f%%: %s' % (100*scores[team], team.name)

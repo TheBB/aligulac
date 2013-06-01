@@ -27,8 +27,8 @@ class TeamPL:
         self._num = num
 
     def set_players(self, players):
-        self._pla = players[0]
-        self._plb = players[1]
+        self._pla = players[:len(players)/2]
+        self._plb = players[len(players)/2:]
         self._nplayers = len(self._pla)
 
         self._matches = []

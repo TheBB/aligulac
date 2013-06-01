@@ -242,10 +242,12 @@ def search(request, q=''):
     if q == '':
         q = request.GET['q']
 
-    players = ratings.tools.find_player(shlex.split(q), make=False, soft=True)
+    terms = shlex.split(q.encode())
+
+    players = ratings.tools.find_player(terms, make=False, soft=True)
 
     teams = Team.objects.all()
-    for qpart in shlex.split(q):
+    for qpart in terms:
         if qpart.strip() == '':
             continue
         query = Q(name__icontains=qpart) | Q(alias__name__icontains=q)
@@ -253,7 +255,7 @@ def search(request, q=''):
     teams = teams.distinct()
 
     events = Event.objects.filter(type__in=['category','event'])
-    for qpart in shlex.split(q):
+    for qpart in terms:
         if qpart.strip() == '':
             continue
         events = events.filter(Q(fullname__icontains=qpart))
@@ -266,7 +268,7 @@ def search(request, q=''):
     elif players.count() == 0 and teams.count() == 0 and events.count() == 1:
         return redirect('/results/events/%i-%s/' % (events[0].id, urlfilter(events[0].fullname)))
 
-    base.update({'players': players, 'query': q, 'teams': teams, 'events': events})
+    base.update({'players': players, 'query': repr(terms), 'teams': teams, 'events': events})
 
     return render_to_response('search.html', base)
 

@@ -321,6 +321,7 @@ def pred_rrgroup(request):
     nplayers = len(sipl)
     obj = rrgroup.RRGroup(len(sipl), num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
     obj.set_players(sipl)
+    obj.compute()
 
     MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
     meanres = []

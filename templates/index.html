@@ -133,7 +133,38 @@ Changes here will mostly be visible on the entire site.
                     Icons by Mark James. 
                     Race icons by <a href="http://wiki.teamliquid.net/starcraft2/Main_Page">Liquipedia</a>.
                     Date widget by <a href="http://www.frequency-decoder.com/">Frequency Decoder</a>.
-                    Charts by <a href="http://highcharts.com/">Highcharts</a>.
+                    Charts by <a href="http://highcharts.com/">Highcharts</a>.<br/><br/>
+
+                    <span id="genshort">
+                    <input type="submit" value="Generate short URL for this page" 
+                           onclick="gen_short();" />
+                    </span>
+                    <span id="dispshort" style="display: none;">
+                    </span>
+                    <script type="text/javascript">
+                        function gen_short()
+                        {
+                            var http = new XMLHttpRequest();
+                            var url = "/m/new/";
+                            var params = "url={{ cur_path }}&csrfmiddlewaretoken={{ csrf_token }}";
+                            http.open("POST", url, true);
+                            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                            http.setRequestHeader("Content-length", params.length);
+                            http.setRequestHeader("Connection", "close");
+                            http.onreadystatechange = function() {//Call a function when the state changes.
+                                if (http.readyState == 4 & http.status == 200)
+                                {
+                                    togvis('genshort', 'none');
+                                    document.getElementById('dispshort').innerHTML = 
+                                        "<a href=\"/m/" + http.responseText + "/\">/m/" + 
+                                        http.responseText + "</a>";
+                                    togvis('dispshort', 'inline');
+                                }
+                            }
+                            http.send(params);
+                        }
+                    </script>
+                </td>
             </tr>
         </table>
     </body>

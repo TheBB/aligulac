@@ -287,6 +287,8 @@ def add_sep_and_cur(int, cur):
         return "NT$" + str
     elif cur == "PLN":
         return str + " zł"
+    elif cur == "ZAR":
+        return "R " + str
     else:
         return str + " " + cur
 register.filter('add_sep_and_cur', add_sep_and_cur)

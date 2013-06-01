@@ -4,6 +4,8 @@
 from django.shortcuts import redirect, get_object_or_404, render
 from models import MiniURL
 from forms import MiniURLForm
+import urllib
+import HTMLParser
 
 from aligulac.views import base_ctx
 from django.http import HttpResponse
@@ -20,12 +22,15 @@ def list(request):
 
 def new(request):
     """Add a redirect"""
+    h = HTMLParser.HTMLParser()
+    longurl = h.unescape(request.POST['url'])
+
     if request.method == "POST":
         try:
-            miniURL = MiniURL(longURL=request.POST['url'])
+            miniURL = MiniURL(longURL=longurl)
             miniURL.save()
         except:
-            miniURL = MiniURL.objects.get(longURL=request.POST['url'])
+            miniURL = MiniURL.objects.get(longURL=longurl)
 
     return HttpResponse(miniURL.code)
 

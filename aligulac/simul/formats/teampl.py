@@ -67,5 +67,5 @@ class TeamPL:
             self._tally[0].win += base
             self._tally[1].loss += base
         else:
-            self._tally[1].loss += base
-            self._tally[0].win += base
+            self._tally[1].win += base
+            self._tally[0].loss += base

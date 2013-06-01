@@ -58,7 +58,7 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
                 player__teammembership__current=True, player__teammembership__playing=True)\
                 .exclude(player__race='S').exclude(player__race='R')
         ratings = list(filter_active_ratings(ratings).order_by('-rating')[:nplayers_max])
-        if proleague:
+        if not proleague:
             # First six in random order, then strongest player for ace match
             ace = ratings[0]
             shuffle(ratings)

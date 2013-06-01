@@ -146,7 +146,8 @@ Changes here will mostly be visible on the entire site.
                         {
                             var http = new XMLHttpRequest();
                             var url = "/m/new/";
-                            var params = "url={{ cur_path }}&csrfmiddlewaretoken={{ csrf_token }}";
+                            var params = "url=" + encodeURIComponent("{{ cur_path }}") + 
+                                "&csrfmiddlewaretoken={{ csrf_token }}";
                             http.open("POST", url, true);
                             http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                             http.setRequestHeader("Content-length", params.length);

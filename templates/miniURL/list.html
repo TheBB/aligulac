@@ -7,13 +7,12 @@ The list of all registered shortened URLs called from miniURL.views.list.
 {% block title %}Short URLs list{% endblock %}
 
 {% block content %}
-    <p><a href="{% url 'url_new' %}">Shorten a new URL</a></p>
-
-    <p>List of all already shortened URLs:</p>
+    <h2>List of short URLs</h2>
         <ul>
         {% for mini in minis %}
-            <li> {{ mini.longURL }} via <a href="http://{{ request.get_host }}{% url 'url_redirect' mini.code %}">{{ request.get_host }}{% url 'url_redirect' mini.code %}</a>
-            {% if mini.submitter %}created by {{ mini.submitter }}{% endif %} accessed ({{ mini.nb_access }} times)</li>
+            <li> {{ mini.longURL }} via <a href="/m/{{ mini.code }}/">/m/{{ mini.code }}</a>
+            {% if mini.submitter %}created by {{ mini.submitter }}{% endif %} (accessed {{ mini.nb_access }}
+            time{{ mini.nb_access|pluralize }})</li>
             {% empty %}
             <li>There is currently none.</li>
         {% endfor %}

@@ -84,7 +84,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             ('About', '/faq/'),\
             ('Submit', '/add/')]
 
-    base = {'curp': curp, 'menu': menu, 'debug': DEBUG}
+    base = {'curp': curp, 'menu': menu, 'debug': DEBUG, 'cur_path': request.get_full_path()}
+    base.update(csrf(request))
 
     if request != None:
         base['adm'] = request.user.is_authenticated()

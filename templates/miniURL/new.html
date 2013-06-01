@@ -7,7 +7,7 @@ The form to shorten an URL called from miniURL.views.new.
 {% block title %}URL shortener{% endblock %}
 
 {% block content %}
-   <form method="post" action="{% url 'url_new' %}">
+   <form method="post" action="/m/new/">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit"/>

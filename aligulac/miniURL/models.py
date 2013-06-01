@@ -12,22 +12,20 @@ class MiniURL(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     submitter = models.ForeignKey(User, null=True, blank=True)
     nb_access = models.PositiveIntegerField(default=0)
-    
+
     def __unicode__(self):
-        return u"[{0}] {1}".format(self.code, self.url)
-    
+        return u"[{0}] {1}".format(self.code, self.longURL)
+
     def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.generate(16)
+        if len(self.code) == 0:
+            self.generate()
         super(MiniURL, self).save(*args, **kwargs)
-        
-    def generate(self, N):
-        caracters = string.letters + string.digits
-        random = [random.choice(caracters) for _ in xrange(N)]
- 
-        self.code = ''.join(random)
-        
+
+    def generate(self, N=16):
+        characters = string.letters + string.digits
+        self.code = ''.join([random.choice(characters) for _ in xrange(N)])
+
     class Meta:
         verbose_name = "Mini URL"
         verbose_name_plural = "Mini URLs"
-    
+

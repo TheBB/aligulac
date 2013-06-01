@@ -11,14 +11,7 @@ This is the main prediction page, showing all available options. It's called fro
 {% block content %}
     <h2>Predict</h2>
 
-    {% if errs %}
-    <p>Please fix the following problems:</p>
-    <ul>
-        {% for e in errs %}
-        <li>{{ e }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    {% include "messages.html" %}
 
     <form method="get" action="/predict/">
     <div class="table" style="width: 50em;">
@@ -36,7 +29,7 @@ This is the main prediction page, showing all available options. It's called fro
         <div class="row">
             <div class="rowel">Best of</div>
             <div class="rower">
-                <input name="bo" style="width: 20em;" value="{{ bo }}" />
+                <input name="bo" style="width: 20em;" value="{{ bo|default:"1" }}" />
             </div>
         </div>
         <div class="row">

@@ -11,7 +11,7 @@ This is the template for the event manager admin page. It's called from ratings.
 {% block content %}
     <h2>Manage events</h2>
 
-    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% include "messages.html" %}
 
     <p>The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage
     (qualifiers/groups/playoffs)→round and so on. There are no hard rules.</p>

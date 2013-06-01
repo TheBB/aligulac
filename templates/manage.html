@@ -11,7 +11,7 @@ This is the page for miscellaneous administrative functions. Called from ratings
 {% block content %}
     <h2>Miscellaneous administration</h2>
 
-    <p>You are logged in as: {{ user }} (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
+    {% include "messages.html" %}
 
     <h3>Merge players</h3>
     {% if merge_conf %}
@@ -37,12 +37,6 @@ This is the page for miscellaneous administrative functions. Called from ratings
             <input type="submit" value="Merge" />
         </form>
     {% else %}
-        {% if merge_err %}
-            <p style="color: #ff0000; font-weight: bold;">{{ merge_err }}</p>
-        {% endif %}
-        {% if merge_succ %}
-            <p style="color: #009900; font-weight: bold;">{{ merge_succ }}</p>
-        {% endif %}
         <form method="post" action="/add/misc/">
             {% csrf_token %}
             <input type="hidden" name="op" value="merge" />
@@ -71,9 +65,6 @@ This is the page for miscellaneous administrative functions. Called from ratings
     {% endif %}
 
     <h3>Event tree NSM restoration</h3>
-    {% if treerestore_succ %}
-        <p style="color: #009900; font-weight: bold;">{{ treerestore_succ }}</p>
-    {% endif %}
     <p>This restores the NSM (Nested Set Model) of the event tree. Use it if you have deleted an event, changed a parent, or
     otherwise modified the tree structure via the admin interface (this does not include simple edits to a single event
     object such as changing names). Also use this if there are concurrency bugs caused by several people working on the tree
@@ -86,9 +77,6 @@ This is the page for miscellaneous administrative functions. Called from ratings
     </form>
 
     <h3>Event names update</h3>
-    {% if namerestore_succ %}
-        <p style="color: #009900; font-weight: bold;">{{ namerestore_succ }}</p>
-    {% endif %}
     <p>This updates the cache of the full event names (which includes all the parent names). You should do
     this after renaming events or changing parents.</p>
     <p><strong>This could take some time. Please wait for the page to load after pressing the button.</strong></p>

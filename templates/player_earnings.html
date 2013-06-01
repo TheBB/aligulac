@@ -14,9 +14,9 @@ This is the template for the earnings of a player. It's called from ratings.view
 <p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.
 {% if earningsByCurrency %}<br>Broken down by currency, that's 
 {% for currency, earnings in earningsByCurrency.items %}
-	{{ earnings|add_sep_and_cur:currency }}{% if forloop.revcounter == 2 %} and  
-	{% elif forloop.last %}.
-	{% else %}, {% endif %} 
+    {{ earnings|add_sep_and_cur:currency }}{% if forloop.revcounter == 2 %} and  
+    {% elif forloop.last %}.
+    {% else %}, {% endif %} 
 {% endfor %}
 {% endif %}</p>
 <table class="results" style="width: 67em;">
@@ -32,11 +32,11 @@ This is the template for the earnings of a player. It's called from ratings.view
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
             <td style="text-align: right;">
             {% if earning.min != 0 %}
-            	{% if earning.min != earning.max %}
-	                {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
-            	{% else %}
-	                {{ earning.min|ordinal }}
-            	{% endif %}
+                {% if earning.min != earning.max %}
+                    {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
+                {% else %}
+                    {{ earning.min|ordinal }}
+                {% endif %}
             {% endif %}
             </td>
             <td></td>
@@ -46,18 +46,18 @@ This is the template for the earnings of a player. It's called from ratings.view
                 {% endfor %}
             </td>
             <td style="text-align: right;">
-            	{{ earning.origearnings|add_sep_and_cur:earning.currency }} 
-            	{% if earning.origearnings != earning.earnings %}
-					({{ earning.earnings|add_sep_and_cur:"USD" }})
-            	{% endif %}
+                {{ earning.origearnings|add_sep_and_cur:earning.currency }} 
+                {% if earning.origearnings != earning.earnings %}
+                    ({{ earning.earnings|add_sep_and_cur:"USD" }})
+                {% endif %}
             </td>
             <td></td>
             <td>
             {% if earning.event.earliest != earning.event.latest %}
-            	{{ earning.event.earliest }} &ndash; {{ earning.event.latest }}
-			{% else %}
-            	{{ earning.event.latest }}
-			{% endif %}             
+                {{ earning.event.earliest }} &ndash; {{ earning.event.latest }}
+            {% else %}
+                {{ earning.event.latest }}
+            {% endif %}             
             </td>
         </tr>
     {% endfor %}

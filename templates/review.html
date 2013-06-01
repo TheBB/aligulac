@@ -13,10 +13,7 @@ ratings.submitviews.review.
 {% block content %}
     <h2>Review results</h2>
 
-    {% if adm %}
-    <p>You are logged in as: {{ user }}.
-    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
-    {% endif  %}
+    {% include "messages.html" %}
 
     {% if success %}
     <p>The following matches were successfully approved:</p>
@@ -24,13 +21,6 @@ ratings.submitviews.review.
     {% include "matchlist.html" with lm_list=success lm_adm=adm lm_check=0 lm_header="full" %}
     </table>
     <p></p>
-    {% endif %}
-
-    {% if messages %}
-    <p style="color: #ff0000;"><strong>The following problems occured:</strong></p>
-        <ul>
-            {% for m in messages %}<li>{{ m }}</li>{% endfor %}
-        </ul>
     {% endif %}
 
     {% if groups %}

@@ -40,8 +40,7 @@ class Event(models.Model):
     
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     #tlpd_db contains information in binary form on which TLPD databases to use:
-    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
-    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
 
@@ -108,6 +107,9 @@ class Event(models.Model):
             return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt,type__in=type).order_by('lft')
         else:
             return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt,type__in=type).order_by('lft')
+
+    def has_children(self):
+        return self.rgt > self.lft + 1
     
     def get_root(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')[0]
@@ -142,6 +144,8 @@ class Event(models.Model):
                 tlpd_ids["HotS"] = id[0].tlpd_id
             if (self.tlpd_db / 0b1000 % 2) == 1:
                 tlpd_ids["HotSbeta"] = id[0].tlpd_id
+            if (self.tlpd_db / 0b10000 % 2) == 1:
+                tlpd_ids["WoLbeta"] = id[0].tlpd_id
             return tlpd_ids
         else:
             return None
@@ -308,6 +312,8 @@ class Event(models.Model):
 
     def move_earnings(self, newevent):
         Earnings.objects.filter(event=self).update(event=newevent)
+        event.set_prizepool(None)
+        newevent.set_prizepool(True)
         newevent.change_type('event')
 
 class Player(models.Model):
@@ -335,8 +341,8 @@ class Player(models.Model):
 
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     #tlpd_db contains information in binary form on which TLPD databases to use:
-    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta
-    #So a value of 5 (0101 in binary) would correspond to a link to the korean and HotS TLPD.  
+    #1 for korean, 10 for international, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
+    #So a value of 5 (00101 in binary) would correspond to a link to the korean and HotS TLPD.  
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
@@ -439,6 +445,8 @@ class Player(models.Model):
                 tlpd_ids["HotS"] = self.tlpd_id
             if (self.tlpd_db / 0b1000 % 2) == 1:
                 tlpd_ids["HotSbeta"] = self.tlpd_id
+            if (self.tlpd_db / 0b10000 % 2) == 1:
+                tlpd_ids["WoLbeta"] = self.tlpd_id
             return tlpd_ids
 
 class Story(models.Model):
@@ -644,7 +652,7 @@ class Match(models.Model):
         super(Match, self).delete(*args, **kwargs)
         
         if eventobj:
-            for event in self.eventobj.get_children(id=True):
+            for event in self.eventobj.get_parents(id=True):
                 # This is very slow if used for many matches, but that should rarely happen. 
                 event.update_dates()
 
@@ -694,7 +702,22 @@ class Match(models.Model):
     def event_check_partpath(self):
         return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
 
-#"Earnings" or "Earning"?
+class Message(models.Model):
+    INFO = 'info'
+    WARNING = 'warning'
+    ERROR = 'error'
+    SUCCESS = 'success'
+    TYPES = [(INFO, 'info'), (WARNING, 'warning'), (ERROR, 'error'), (SUCCESS, 'success')]
+    type = models.CharField(max_length=10, choices=TYPES)
+
+    title = models.CharField(max_length=100, null=True)
+    text = models.TextField()
+
+    player = models.ForeignKey(Player, null=True)
+    event = models.ForeignKey(Event, null=True)
+    team = models.ForeignKey(Team, null=True)
+    match = models.ForeignKey(Match, null=True)
+
 class Earnings(models.Model):
     event = models.ForeignKey(Event)
     player = models.ForeignKey(Player)

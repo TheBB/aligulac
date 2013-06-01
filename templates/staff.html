@@ -1,0 +1,67 @@
+{% extends "index.html" %}
+
+{% comment %}
+This is the template for the database status page. It displays a bunch of numbers and a link to the latest SQL
+dump. Called from aligulac.views.db.
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+<h2>Staff</h2>
+
+<p>These are some of the people who make Aligulac possible. There is some delay in putting new contributors up
+here, so it might not be 100% complete.</p>
+
+<table style="width: 67em; border-style: none;">
+<tr><td>
+<h2>Eivind "TheBB" Fonn</h2>
+<img src="http://static.aligulac.com/staff/thebb.jpeg" style="float: left; margin-right: 2em;" />
+<p>TheBB is the head honcho of Aligulac. He conceived of the site, built the first version, and implemented
+most of the features currently available. Nowadays, time is shorter, but he remains responsible for the rating
+system and the inferences (predictions). He is also the server owner and the one paying for the upkeep.</p>
+<p>TheBB is Norwegian, but has spent his last four years in the flowery fields of Switzerland.</p>
+</td></tr>
+
+<tr><td>
+<h2>C. "Conti" Kolbe</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Together with Grovbolle, Conti was the first to join the team. He has made innumerable contributions to the
+database, with the second most matches added, and together with Grovbolle and kiekaboe basically created the
+event catalogue from scratch. However, Conti is also the man to thank for several features on the site,
+primarily earnings, team transfers, and several other minor enhancements.</p>
+</td></tr>
+
+<tr><td>
+<h2>Morten "Grovbolle" Jørgensen</h2>
+<img src="http://static.aligulac.com/staff/grovbolle.jpeg" style="float: left; margin-right: 2em;" />
+<p>Grovbolle is one of the earliest contributors. After working a lot with the database maintenance in the
+beginning, he has now moved to more of a public relations role. Today he spends most of his time tweeting
+obscenities and the occasional useful factoid from <a href="http://twitter.com/Sc2Aligulac">@Sc2Aligulac</a>.
+He also recruits new volunteers and tries to keep them from blowing the site up.</p>
+<p>Grovbolle is Danish, and has just completed his Bachelor thesis in Business Administration and Information
+Technology.</p>
+</td></tr>
+
+<tr><td>
+<h2>Tom "kiekaboe" van Vliet</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Nobody has added more matches than kiekaboe. Man or machine? Does it really matter? Whatever he is,
+we can thank him for thousands of matches added, probably tens of thousands catalogued, and innumerable
+conflicts and inconsistencies resolved. The database would not have been the same without him.</p>
+<p>One of the first to join the operation, kiekaboe remains active to this day.</p>
+</td></tr>
+
+<tr><td>
+<h2>William "Inflicted"</h2>
+<img src="http://static.aligulac.com/male.png" style="float: left; margin-right: 2em;" />
+<p>Inflicted is a long time database maintainer, and an even longer time Liquipedia contributor who joined the
+team in January 2013. As our only Aussie member, he is often the one adding SEA results.</p>
+<p>His encyclopedic knowledge of Liquipedia and TLPD come in handy when conflicts or inconsistencies are
+discovered.</p>
+</td></tr>
+</table>
+
+{% endblock %}

@@ -12,31 +12,14 @@ ratings.submitviews.add_matches.
 {% block content %}
     <h2>Submit results</h2>
 
-    {% if messages %}
-        {% if success %}
-        <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
-        before being visible.{% endif %}</p>
-            <table class="results">
-            {% include "matchlist.html" with lm_list=success lm_adm=adm lm_header="full" %}
-            </table>
-            <p></p>
-        {% endif %}
-        {% if failure %}
-        <p style="color: #ff0000;"><strong>There were problems with the following entries:</strong></p>
-            <ul>
-                {% for f in failure %}
-                <li>{% if f.0 %}'{{ f.0 }}': {% endif %}{{ f.1 }}.</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endif %}
+    {% include "messages.html" %}
 
-    {% if adm %}
-    <p>You are logged in as: {{ user }}.
-    (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)</p>
-    {% else %}
-    <p>You are not logged in. The submitted results will be pending review before being accepted.
-    (<a href="/login/">login</a>)</p>
+    {% if success %}
+    <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
+    before being visible.{% endif %}</p>
+        <table class="results">
+        {% include "matchlist.html" with lm_list=success lm_adm=adm lm_header="full" %}
+        </table>
     {% endif %}
 
     <script type="text/javascript">
@@ -295,7 +278,10 @@ ratings.submitviews.add_matches.
         <tr>
             <td class="form_left"></td>
             <td class="form_right">
-                <input type="submit" value="Submit" />
+                <input type="submit" name="action" value="Add" />
+                {% if adm %}
+                <input type="submit" name="action" value="Add and close event" />
+                {% endif %}
             </td>
         </tr>
     </table>

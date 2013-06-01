@@ -2,8 +2,8 @@ import os
 
 os.environ['HOME'] = '/root'
 
-from aligulac.views import base_ctx
-from ratings.tools import find_player
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
+from ratings.tools import find_player, cdf
 from simul.playerlist import make_player
 from simul.formats import match, mslgroup, sebracket, rrgroup, teampl
 from ratings.templatetags.ratings_extras import ratscale
@@ -27,8 +27,7 @@ REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
 
 def predict(request):
-    base = base_ctx()
-    base['curpage'] = 'Predict'
+    base = base_ctx('Predict', 'Predict', request)
 
     formats = ['Best-of-N match', 'Four-player Swiss group', 'Single elimination bracket',\
                'Round robin group', 'Proleague team match']
@@ -37,13 +36,12 @@ def predict(request):
     if 'format' not in request.GET:
         return render_to_response('predict.html', base)
 
-    base['errs'] = []
-
     try:
         fmt = int(request.GET['format'])
         formats[fmt]
     except:
-        base['errs'].append('Unrecognized format ID: %s' % request.GET['format'])
+        base['messages'].append(Message('Unrecognized format ID: %s.' % request.GET['format'],
+                                type=Message.ERROR))
     base['fmt'] = fmt
 
     try:
@@ -53,7 +51,9 @@ def predict(request):
             assert(i % 2 == 1)
             assert(i > 0)
     except:
-        base['errs'].append('\'Best of\' must be a comma-separated list of positive odd integers (1,3,5,...)')
+        base['messages'].append(Message(
+            '\'Best of\' must be a comma-separated list of positive odd integers (1,3,5,...).',
+            type=Message.ERROR))
     base['bo'] = request.GET['bo']
 
     failures, players = [], []
@@ -66,45 +66,47 @@ def predict(request):
 
         dbplayer = find_player(line.strip().split(' '), make=False)
         if dbplayer.count() > 1:
-            base['errs'].append('Player \'%s\' not unique, add more information.' % line)
+            base['messages'].append(NotUniquePlayerMessage(line, dbplayer))
         elif not dbplayer.exists():
-            base['errs'].append('No such player \'%s\' found.' % line)
+            base['messages'].append(Message('No such player found.', line, Message.ERROR))
         else:
             players.append(dbplayer[0])
     base['pls'] = request.GET['players']
 
-    if len(base['errs']) != 0:
+    if len(base['messages']) != 0:
         return render_to_response('predict.html', base)
 
     if fmt == 0: 
         if len(players) != 2:
-            base['errs'].append('Expected exactly two players')
+            base['messages'].append(Message('Expected exactly two players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 1:
         if len(players) != 4:
-            base['errs'].append('Expected exactly four player')
+            base['messages'].append(Message('Expected exactly four players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 2:
         if len(players) not in [2,4,8,16,32,64,128,256,512,1024]:
-            base['errs'].append('Expected number of players to be a power of two (2,4,8,...), got %i' % len(players))
+            base['messages'].append(Message('Expected number of players to be a power of two'\
+                                          + ' (2,4,8,...), got %i' % len(players), type=Message.ERROR))
         else:
             nrounds = int(log(len(players),2))
             if len(bo) != nrounds and len(bo) != 1:
-                base['errs'].append('Expected exactly 1 or %i \'best of\'' % nrounds)
+                base['messages'].append(Message('Expected exactly one or %i \'best of\'.' % nrounds,
+                                                type=Message.ERROR))
     elif fmt == 3:
         if len(players) < 3:
-            base['errs'].append('Expected at least three players')
+            base['messages'].append(Message('Expected at least three players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of \'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
     elif fmt == 4:
         if len(players) % 2 != 0:
-            base['errs'].append('Expected an even number of players')
+            base['messages'].append(Message('Expected an even number of players.', type=Message.ERROR))
         if len(bo) != 1:
-            base['errs'].append('Expected exactly one \'best of\'')
+            base['messages'].append(Message('Expected exactly one \'best of\'.', type=Message.ERROR))
 
-    if len(base['errs']) != 0:
+    if len(base['messages']) != 0:
         return render_to_response('predict.html', base)
 
     bo = '%2C'.join([str(b) for b in bo])
@@ -123,7 +125,8 @@ def predict(request):
     return render_to_response('predict.html', base)
 
 def pred_match(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
+    base['short_url_button'] = True
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -176,7 +179,7 @@ def pred_match(request):
     return render_to_response('pred_match.html', base)
 
 def pred_4pswiss(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -236,7 +239,7 @@ def pred_4pswiss(request):
     return render_to_response('pred_4pswiss.html', base)
 
 def pred_sebracket(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = []
     for i in request.GET['ps'].split(','):
@@ -311,7 +314,7 @@ def pred_sebracket(request):
     return render_to_response('pred_sebracket.html', base)
 
 def pred_rrgroup(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -319,6 +322,7 @@ def pred_rrgroup(request):
     nplayers = len(sipl)
     obj = rrgroup.RRGroup(len(sipl), num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
     obj.set_players(sipl)
+    obj.compute()
 
     MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
     meanres = []
@@ -379,7 +383,7 @@ def pred_rrgroup(request):
     return render_to_response('pred_rrgroup.html', base)
 
 def pred_proleague(request):
-    base = base_ctx('Predict', request=request)
+    base = base_ctx('Predict', 'Predict', request=request)
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]
@@ -619,3 +623,46 @@ def ordinal(value):
     if value % 100 in (11, 12, 13): # special case
         return u"%d%s" % (value, suffixes[0])
     return u"%d%s" % (value, suffixes[value % 10])
+
+def compare(request):
+    base = base_ctx('Predict', 'Compare', request=request)
+
+    if 'pla' not in request.GET and 'plb' not in request.GET:
+        return render_to_response('compare.html', base)
+    
+    pla = find_player(request.GET['pla'].strip().split(' '), make=False)
+    plb = find_player(request.GET['plb'].strip().split(' '), make=False)
+    base['plas'] = request.GET['pla']
+    base['plbs'] = request.GET['plb']
+
+    for p, ps in [(pla, request.GET['pla']), (plb, request.GET['plb'])]:
+        if p.count() > 1:
+            base['messages'].append(NotUniquePlayerMessage(ps, p))
+        elif not p.exists():
+            base['messages'].append(Message('No such player found.', ps, Message.ERROR))
+
+    if len(base['messages']) > 0:
+        return render_to_response('compare.html', base)
+
+    pla, plb = pla[0], plb[0]
+    base['pla'] = pla
+    base['plb'] = plb
+
+    rata = pla.rating_set.order_by('-period__id')[0]
+    ratb = plb.rating_set.order_by('-period__id')[0]
+
+    def analyze(pla, rata, plb, ratb, race):
+        diff = rata.get_totalrating(race) - ratb.get_totalrating(race)
+        dev = sqrt(rata.get_totaldev(race)**2 + ratb.get_totaldev(race)**2)
+        if diff > 0:
+            return pla, plb, cdf(-diff, scale=dev)
+        else:
+            return plb, pla, cdf(diff, scale=dev)
+
+    base['winner'],    base['loser'],    base['sig'] =    analyze(pla, rata, plb, ratb, None)
+    base['winner_vp'], base['loser_vp'], base['sig_vp'] = analyze(pla, rata, plb, ratb, 'P')
+    base['winner_vt'], base['loser_vt'], base['sig_vt'] = analyze(pla, rata, plb, ratb, 'T')
+    base['winner_vz'], base['loser_vz'], base['sig_vz'] = analyze(pla, rata, plb, ratb, 'Z')
+
+
+    return render_to_response('compare.html', base)

@@ -1,4 +1,7 @@
 import os
+import string
+import random
+import shlex
 from datetime import datetime
 
 from django.contrib.auth import logout
@@ -11,7 +14,7 @@ from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
 from ratings.models import Rating, Period, Player, Team, Match, Event, Earnings
-from ratings.tools import find_player, filter_active_ratings
+import ratings.tools
 from ratings.templatetags.ratings_extras import urlfilter
 
 from blog.models import Post
@@ -19,6 +22,56 @@ from blog.models import Post
 import simplejson
 
 from countries import transformations
+
+
+# This class encodes error/success/warning messages sent to the templates.
+# A list of these should be in base['messages']
+class Message:
+
+    WARNING = 'warning'
+    ERROR = 'error'
+    INFO = 'info'
+    SUCCESS = 'success'
+
+    def __init__(self, text, title='', type='info'):
+        self.title = title
+        self.text = text
+        self.type = type
+
+
+class NotUniquePlayerMessage(Message):
+
+    def __init__(self, search, players, type='error'):
+        lst = []
+        for p in players:
+            s = ''
+            if p.country is not None and p.country != '':
+                s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
+            s += '<img src="http://static.aligulac.com/%s.png" /> ' % p.race
+            s += '<a href="/players/%i-%s/">%s</a> (%i)' % (p.id, p.tag, p.tag, p.id)
+            lst.append(s)
+
+        num = 5
+        if len(lst) < num:
+            s = 'Possible matches: ' + ', '.join(lst[:-1]) + ' and ' + lst[-1] + '.'
+        else:
+            rand = ''.join(random.choice(string.ascii_lowercase) for _ in xrange(10))
+            s = 'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1])\
+              + ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand\
+              + 'togvis(\'%s-b\',\'inline\'); return false;">' % rand\
+              + '%i more</a></span>' % (len(lst) - num + 1)\
+              + '<span id="%s-b" style="display: none;">%s</span>'\
+                % (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1])\
+              + '.'
+
+        Message.__init__(self, s, '\'%s\' not unique' % search, type)
+
+
+def generate_messages(obj):
+    ret = []
+    for m in obj.message_set.all():
+        ret.append(Message(m.text, m.title, m.type))
+    return ret
 
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = Period.objects.filter(computed=True).order_by('-start')[0]
@@ -31,10 +84,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             ('About', '/faq/'),\
             ('Submit', '/add/')]
 
-    base = {'curp': curp, 'menu': menu, 'debug': DEBUG}
+    base = {'curp': curp, 'menu': menu, 'debug': DEBUG, 'cur_path': request.get_full_path()}
+    base.update(csrf(request))
 
     if request != None:
         base['adm'] = request.user.is_authenticated()
+        base['user'] = request.user.username
 
     if section == 'Records':
         base['submenu'] = [('HoF', '/records/?race=hof'),\
@@ -60,9 +115,14 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('Current', '/periods/%i' % curp.id),\
                            ('History', '/periods/'),\
                            ('Earnings', '/earnings/')]
+    elif section == 'Predict':
+        base['submenu'] = [('Predict', '/predict/'),
+                           #('Factoids', '/factoids/'),
+                           ('Compare', '/compare/')]
     elif section == 'About':
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),
+                           #('Staff', '/staff/'),
                            ('Database', '/db/')]
     elif section == 'Reports':
         pass
@@ -92,6 +152,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
             if rating.exists():
                 base['submenu'].append(('Adjustments', base_url + 'period/%i' % rating[0].period.id))
+
+    base['messages'] = []
 
     return base
 
@@ -150,11 +212,16 @@ def db(request):
 
     return render_to_response('db.html', base)
 
+def staff(request):
+    base = base_ctx('About', 'Staff', request)
+
+    return render_to_response('staff.html', base)
+
 def home(request):
     base = base_ctx(request=request)
 
     period = Period.objects.filter(computed=True).order_by('-start')[0]
-    entries = filter_active_ratings(Rating.objects.filter(period=period).order_by('-rating'))
+    entries = ratings.tools.filter_active_ratings(Rating.objects.filter(period=period).order_by('-rating'))
     entries = entries.select_related('team', 'teammembership')[0:10]
     for entry in entries:
         teams = entry.player.teammembership_set.filter(current=True)
@@ -175,10 +242,12 @@ def search(request, q=''):
     if q == '':
         q = request.GET['q']
 
-    players = find_player(q.split(' '), make=False, soft=True)
+    terms = shlex.split(q.encode())
+
+    players = ratings.tools.find_player(terms, make=False, soft=True)
 
     teams = Team.objects.all()
-    for qpart in q.split(' '):
+    for qpart in terms:
         if qpart.strip() == '':
             continue
         query = Q(name__icontains=qpart) | Q(alias__name__icontains=q)
@@ -186,7 +255,7 @@ def search(request, q=''):
     teams = teams.distinct()
 
     events = Event.objects.filter(type__in=['category','event'])
-    for qpart in q.split(' '):
+    for qpart in terms:
         if qpart.strip() == '':
             continue
         events = events.filter(Q(fullname__icontains=qpart))
@@ -199,7 +268,7 @@ def search(request, q=''):
     elif players.count() == 0 and teams.count() == 0 and events.count() == 1:
         return redirect('/results/events/%i-%s/' % (events[0].id, urlfilter(events[0].fullname)))
 
-    base.update({'players': players, 'query': q, 'teams': teams, 'events': events})
+    base.update({'players': players, 'query': repr(terms), 'teams': teams, 'events': events})
 
     return render_to_response('search.html', base)
 
@@ -261,19 +330,23 @@ def changepwd(request):
         return render_to_response('changepwd.html', base)
 
     if not request.user.check_password(request.POST['old']):
-        base.update({'wrong_old': True})
+        base['messages'].append(Message('The old password didn\'t match. Your password was not changed.',
+                                        type=Message.ERROR))
         base.update(csrf(request))
         return render_to_response('changepwd.html', base)
     
     if request.POST['new'] != request.POST['newre']:
-        base.update({'no_match': True})
+        base['messages'].append(Message('The new passwords didn\'t match. Your password was not changed.',
+                                        type=Message.ERROR))
         base.update(csrf(request))
         return render_to_response('changepwd.html', base)
 
     request.user.set_password(request.POST['new'])
+    base['messages'].append(Message(
+        'The password for ' + request.user.username + ' was successfully changed.', type=Message.SUCCESS))
     request.user.save()
 
-    return redirect('/add/')
+    return render_to_response('changepwd.html', base)
 
 def h404(request):
     base = base_ctx(request=request)

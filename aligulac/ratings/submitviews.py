@@ -2,7 +2,7 @@ import os, pickle
 import urllib, urllib2
 from pyparsing import nestedExpr
 
-from aligulac.views import base_ctx
+from aligulac.views import base_ctx, Message, NotUniquePlayerMessage
 from aligulac.settings import M_WARNINGS, M_APPROVED
 from ratings.tools import find_player, find_duplicates, display_matches
 
@@ -17,6 +17,16 @@ from countries import transformations, data
 
 class Integrity:
     pass
+
+def add_login_message(base, extra=''):
+    if not base['adm']:
+        text = 'You are not logged in.' + (' ' if extra != '' else '') + extra\
+             + ' (<a href="/login/">login</a>)'
+        base['messages'].append(Message(text, type=Message.INFO))
+    else:
+        text = 'You are logged in as ' + base['user']\
+             + ' (<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)'
+        base['messages'].append(Message(text, type=Message.INFO))
 
 def parse_match(s):
     res = nestedExpr('(',')').parseString('('+s.encode()+')').asList()[0]
@@ -42,7 +52,7 @@ def parse_match(s):
 
         else:
             elements += r
-
+ 
     collect.append(elements)
     collect = [[f for f in col if f != ''] for col in collect]
     return collect
@@ -55,10 +65,10 @@ def add_matches(request):
             login(request, user)
 
     base = base_ctx('Submit', 'Matches', request)
+    add_login_message(base, extra='Submitted results will be pending review before inclusion.')
 
     # If the user is logged in, the template needs a username and a list of event objects
     if base['adm']:
-        base['user'] = request.user.username
         base['events'] = Event.objects.filter(closed=False, rgt=F('lft')+1).order_by('lft')
 
     if 'matches' in request.POST:
@@ -89,7 +99,7 @@ def add_matches(request):
         except:
             eventobj = None
 
-        if eventobj != None:
+        if eventobj is not None:
             base['eobj'] = eventobj.id
 
         # Get extra data needed if not admin.
@@ -105,13 +115,12 @@ def add_matches(request):
 
         # Check various requirements for non-admins
         if not base['adm'] and len(matches) > 100:
-            base.update({'messages': True, 'success': [],\
-                    'failure': [(None, 'Please do not submit more than 100 results at a time')]})
+            base['messages'].append(Message('Please do not submit more than 100 results at a time.',
+                                         'Too many entries', Message.ERROR))
             base.update(csrf(request))
             return render_to_response('add.html', base)
         if not base['adm'] and source.strip() == '':
-            base.update({'messages': True, 'success': [],\
-                    'failure': [(None, 'Please include a source')]})
+            base['messages'].append(Message('Please include a source.', 'Source missing', Message.ERROR))
             base.update(csrf(request))
             return render_to_response('add.html', base)
 
@@ -162,21 +171,25 @@ def add_matches(request):
                 rcb, plb = get_race(plb)
 
                 # Find players
-                def get_player(lst, failure, make, adm):
+                def get_player(lst, failure, base, make, adm):
                     try:
                         pls = find_player(lst, make=make)
                     except Exception as e:
-                        failure.append((s, 'Could not parse: ' + e.message))
+                        failure.append(s)
+                        base['messages'].append(Message('Could not parse: ' + e.message,
+                                                        s, Message.ERROR))
                         return None
                     if not pls.exists() and adm:
                         # Player not found, and user logged in. Add failure message and return None.
-                        failure.append((s, 'Could not find player \'%s\', add !MAKE switch to create'\
-                                % ' '.join(lst)))
+                        failure.append(s)
+                        base['messages'].append(Message(
+                            'Could not find player \'%s\', add !MAKE switch to create.' % ' '.join(lst),
+                            s, Message.ERROR))
                         return None
                     if pls.count() > 1 and adm:
                         # Too many players found, and used logged in. Add failure message and return None.
-                        failure.append((s, 'Player \'%s\' not unique, provide more information'\
-                                % ' '.join(lst)))
+                        failure.append(s)
+                        base['messages'].append(NotUniquePlayerMessage(' '.join(lst), pls))
                         return None
                     if not pls.exists() or pls.count() > 1:
                         # Too many or too few players found, and user not logged in. Just return None.
@@ -184,11 +197,11 @@ def add_matches(request):
                     return pls[0]
 
                 # If the user is logged in and some players were not found, abort.
-                pla_obj = get_player(pla, failure, make_switch, base['adm'])
+                pla_obj = get_player(pla, failure, base, make_switch, base['adm'])
                 if pla_obj == None and base['adm']:
                     continue
 
-                plb_obj = get_player(plb, failure, make_switch, base['adm'])
+                plb_obj = get_player(plb, failure, base, make_switch, base['adm'])
                 if plb_obj == None and base['adm']:
                     continue
 
@@ -196,7 +209,10 @@ def add_matches(request):
                 if pla_obj and plb_obj:
                     n = find_duplicates(pla_obj, plb_obj, sca, scb, date)
                     if n > 0 and not dup_switch:
-                        failure.append((s, '%i possible duplicates found, add !DUP switch to force' % n))
+                        failure.append(s)
+                        base['messages'].append(Message(
+                            '%i possible duplicate(s) found, add !DUP switch to force.' % n,
+                            s, Message.ERROR))
                         continue
 
                 # If the user is not logged in, we now have enough information to create a prematch.
@@ -223,11 +239,17 @@ def add_matches(request):
 
                 # Abort if race information is incorrect
                 if pla_obj.race == 'S' and rca == None:
-                    failure.append((s, '%s is Random or Switcher, need race information' % pla_obj.tag))
+                    failure.append(s)
+                    base['messages'].append(Message(
+                        '%s is Random or Switcher, need race information.' % pla_obj.tag),
+                        s, Message.ERROR)
                     continue
 
                 if plb_obj.race == 'S' and rcb == None:
-                    failure.append((s, '%s is Random or Switcher, need race information' % plb_obj.tag))
+                    failure.append(s)
+                    base['messages'].append(Message(
+                        '%s is Random or Switcher, need race information.' % plb_obj.tag),
+                        s, Message.ERROR)
                     continue
 
                 # Add match
@@ -248,19 +270,45 @@ def add_matches(request):
 
                 success.append(m)
 
-            except ValueError as e:
-                failure.append((s, 'Could not parse: ' + e.message))
+            except Exception as e:
+                failure.append(s)
+                base['messages'].append(Message('Could not parse: ' + e.message, s, Message.ERROR))
                 continue
 
-        success = display_matches(success)
+        success = display_matches(success, messages=False)
+        if len(success) > 0:
+            base['messages'].append(Message('Added %i match(es).' % len(success), type=Message.SUCCESS))
 
-        base.update({'messages': True, 'matches': '\n'.join([f[0] for f in failure]),\
-                'success': success, 'failure': failure})
+        base.update({'matches': '\n'.join(failure), 'success': success})
+
+    elif 'eventid' in request.GET:
+        try:
+            event = Event.objects.get(id=int(request.GET['eventid']))
+            if event.closed:
+                event.closed = False
+                event.save()
+                base['messages'].append(Message('Reopened \'%s\'.' % event.fullname, type=Message.SUCCESS))
+            base['eobj'] = event.id
+        except:
+            base['messages'].append(Message('Couldn\'t find event ID %s.' % request.GET['eventid'], 
+                type=Message.ERROR))
+
+    try:
+        if base['adm'] and request.POST['action'] == 'Add and close event' and eventobj is not None:
+            if len(failure) == 0:
+                eventobj.close()
+                base['messages'].append(Message('Event \'%s\' closed.' % eventobj.fullname, 
+                                                type=Message.SUCCESS))
+            else:
+                base['messages'].append(Message('Event \'%s\' was NOT closed.' % eventobj.fullname,
+                                                type=Message.WARNING))
+    except:
+        pass
 
     base.update(csrf(request))
     return render_to_response('add.html', base)
 
-def review_treat_players(pm, messages):
+def review_treat_players(pm, base):
     def get_make_switch(lst):
         make_switch = False
         while lst[-1][0] == '!':
@@ -284,9 +332,10 @@ def review_treat_players(pm, messages):
         lst, rca = get_race_info(lst)
         pla = find_player(lst, make=make_switch_a)
         if pla.count() > 1:
-            messages.append('Player not unique: \'%s\'. Add more information.' % ' '.join(lst))
+            base['messages'].append(NotUniquePlayerMessage(' '.join(lst), pla))
         elif pla.count() == 0:
-            messages.append('Player does not exist: \'%s\'. Add !MAKE switch to create.' % ' '.join(lst))
+            base['messages'].append(Message('Player does not exist. Add !MAKE switch to create.',
+                                            ' '.join(lst), type=Message.ERROR))
         else:
             pm.pla = pla[0]
 
@@ -295,7 +344,8 @@ def review_treat_players(pm, messages):
     elif not pm.rca and pm.pla and pm.pla.race != 'S':
         pm.rca = pm.pla.race
     elif pm.pla and not pm.rca:
-        messages.append('No race information for %s.' % str(pm.pla))
+        base['messages'].append(Message('No race information for %s.' % str(pm.pla),
+                                        'Race information missing', type=Message.ERROR))
 
     if not pm.plb:
         lst = list(pm.plb_string.split(' '))
@@ -303,9 +353,10 @@ def review_treat_players(pm, messages):
         lst, rcb = get_race_info(lst)
         plb = find_player(lst, make=make_switch_b)
         if plb.count() > 1:
-            messages.append('Player not unique: \'%s\'. Add more information.' % ' '.join(lst))
+            base['messages'].append(NotUniquePlayerMessage(' '.join(lst), plb))
         elif plb.count() == 0:
-            messages.append('Player does not exist: \'%s\'. Add !MAKE switch to create.' % ' '.join(lst))
+            base['messages'].append(Message('Player does not exist. Add !MAKE switch to create.',
+                                            ' '.join(lst), type=Message.ERROR))
         else:
             pm.plb = plb[0]
 
@@ -314,7 +365,8 @@ def review_treat_players(pm, messages):
     elif not pm.rcb and pm.plb and pm.plb.race != 'S':
         pm.rcb = pm.plb.race
     elif pm.plb and not pm.rcb:
-        messages.append('No race information for %s.' % str(pm.plb))
+        base['messages'].append(Message('No race information for %s.' % str(pm.plb),
+                                        'Race information missing', type=Message.ERROR))
 
 def review(request):
     base = base_ctx('Submit', 'Review', request)
@@ -323,7 +375,7 @@ def review(request):
         base.update(csrf(request))
         return render_to_response('login.html', base)
 
-    base['user'] = request.user.username
+    add_login_message(base)
     base['events'] = Event.objects.filter(closed=False, rgt=F('lft')+1).order_by('lft')
 
     if 'act' in request.POST and base['adm'] == True:
@@ -333,8 +385,8 @@ def review(request):
 
         delete = True if request.POST['act'] == 'reject' else False
 
-        messages = []
         success = []
+        ndel = 0
 
         for key in sorted(request.POST.keys()):
             if request.POST[key] != 'y':
@@ -347,6 +399,7 @@ def review(request):
                     pm.delete()
                     if not group.prematch_set.all().exists():
                         group.delete()
+                    ndel += 1
                     continue
                 
                 if pm.pla == None:
@@ -355,7 +408,7 @@ def review(request):
                     pm.plb_string = request.POST['match-%i-plb' % pm.id]
 
                 if pm.pla == None or pm.plb == None:
-                    review_treat_players(pm, messages)
+                    review_treat_players(pm, base)
 
                 if pm.pla and not pm.rca:
                     pm.pla = None
@@ -391,14 +444,17 @@ def review(request):
                     if not group.prematch_set.all().exists():
                         group.delete()
 
-        base['messages'] = messages
-
-        base['success'] = display_matches(success)
+        base['success'] = display_matches(success, messages=False)
+        if len(success) > 0:
+            base['messages'].append(Message('Approved %i match(es).' % len(success), type=Message.SUCCESS))
+        
+        if ndel > 0:
+            base['messages'].append(Message('Rejected %i match(es).' % ndel, type=Message.SUCCESS))
 
     groups = PreMatchGroup.objects.filter(prematch__isnull=False)\
             .select_related('prematch').order_by('id', 'event').distinct()
     for g in groups:
-        g.prematches = display_matches(g.prematch_set.all())
+        g.prematches = display_matches(g.prematch_set.all(), messages=False)
     base['groups'] = groups
 
     base.update(csrf(request))
@@ -411,7 +467,7 @@ def manage_events(request):
         base.update(csrf(request))
         return render_to_response('login.html', base)
 
-    base['user'] = request.user.username
+    add_login_message(base)
 
     if 'parent' in request.POST:
         if request.POST['op'] == 'Add':
@@ -424,22 +480,32 @@ def manage_events(request):
             else:
                 noprint = False
                 
+            nadd = 0
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))
                 for q in request.POST['name'].strip().split(','):
                     type = request.POST['type']
                     parent.add_child(q.strip(), type, noprint)
+                    nadd += 1
+                base['messages'].append(Message('Created %i children of \'%s\'.' % (nadd, parent.fullname),
+                                                type=Message.SUCCESS))
             except:
+                # No parent => create roots
                 for q in request.POST['name'].strip().split(','):
                     if q.strip() == '':
                         continue
                     type = request.POST['type']
                     Event.add_root(q.strip(), type, big, noprint)
+                    nadd += 1
+                base['messages'].append(Message('Created %i new roots.' % nadd, type=Message.SUCCESS))
 
         elif request.POST['op'] == 'Close':
             try:
                 parent = Event.objects.get(id=int(request.POST['parent']))
                 parent.close()
+                base['messages'].append(Message(
+                    'Successfully closed \'%s\' and all its children.' % parent.fullname,
+                    type=Message.SUCCESS))
             except:
                 pass
 
@@ -475,18 +541,24 @@ def open_events(request):
         base.update(csrf(request))
         return render_to_response('login.html', base)
 
-    base['user'] = request.user.username
+    add_login_message(base)
     base.update(csrf(request))
 
     if base['adm'] == True:
         if 'openevents' in request.POST:
+            nclose = 0
             for event in request.POST.getlist('openevent'):
                 Event.objects.get(id=event).close()
+                nclose += 1
+            base['messages'].append(Message('Closed %i events and their children.' % nclose,
+                                            type=Message.SUCCESS))
         if 'prizepools' in request.POST:
+            nmarked = 0
             for event in request.POST.getlist('prizepool'):
-                print "setting thingy false:"
-                print event
                 Event.objects.get(id=event).set_prizepool(False)
+                nmarked += 1
+            base['messages'].append(Message('Marked %i events as having no prize pool.' % nmarked,
+                                            type=Message.SUCCESS))
 
     openevents = []
     emptyopenevents = []
@@ -525,7 +597,7 @@ def manage(request):
         base.update(csrf(request))
         return render_to_response('login.html', base)
 
-    base['user'] = request.user.username
+    add_login_message(base)
     base.update(csrf(request))
 
     if 'op' in request.POST and request.POST['op'] == 'merge':
@@ -535,7 +607,8 @@ def manage(request):
             source = Player.objects.get(id=int(request.POST['player_source']))
             target = Player.objects.get(id=int(request.POST['player_target']))
         except:
-            base['merge_err'] = 'Failed to find players. One or more incorrect IDs.'
+            base['messages'].append(Message('Failed to find players. One or more incorrect IDs.',
+                                            title='Merge error', type=Message.ERROR))
             return render_to_response('manage.html', base)
 
         if 'conf' in request.POST and request.POST['conf'] == 'yes':
@@ -544,9 +617,11 @@ def manage(request):
             Earnings.objects.filter(player=source).update(player=target)
             Rating.objects.filter(player=source).delete()
             TeamMembership.objects.filter(player=source).delete()
+            sourcename = source.tag
             source.delete()
 
-            base['merge_succ'] = 'Merging complete.'
+            base['messages'].append(Message('%s was successfully merged into %s.' % (sourcename, target.tag),
+                                            title='Merging complete', type=Message.SUCCESS))
             base['player_source'] = ''
             base['player_target'] = ''
         else:
@@ -560,13 +635,15 @@ def manage(request):
         nextleft = 0
         for r in roots:
             nextleft = r.reorganize(nextleft) + 1 
-        base['treerestore_succ'] = 'The NSM has been restored.'
+        base['messages'].append(Message('The NSM has been successfully restored.', 
+                                        title='NSM restoration', type=Message.SUCCESS))
         return render_to_response('manage.html', base)
 
     if 'op' in request.POST and request.POST['op'] == 'namerestore':
         for event in Event.objects.all():
             event.update_name()
-        base['namerestore_succ'] = 'The names have been updated.'
+        base['messages'].append(Message('The event names have been successfully updated.', 
+                                        title='Event name update', type=Message.SUCCESS))
         return render_to_response('manage.html', base)
 
     return render_to_response('manage.html', base)
@@ -578,7 +655,7 @@ def integrity(request):
         base.update(csrf(request))
         return render_to_response('login.html', base)
 
-    base['user'] = request.user.username
+    add_login_message(base)
     base.update(csrf(request))
 
     with open(M_WARNINGS, 'r') as f:
@@ -587,14 +664,17 @@ def integrity(request):
         approved = pickle.load(f)
 
     if 'del' in request.POST or 'del_ok' in request.POST:
+        ndel = 0
         for key in request.POST:
             if request.POST[key] != 'y':
                 continue
             if key[0:6] == 'match-':
                 try:
                     Match.objects.get(id=int(key.split('-')[-1])).delete()
+                    ndel += 1
                 except:
                     pass
+        base['messages'].append(Message('Deleted %i match(es).' % ndel, type=Message.SUCCESS))
 
     if 'del_ok' in request.POST or 'false' in request.POST:
         warning = tuple([int(f) for f in request.POST['warning'].split(',')])
@@ -605,6 +685,7 @@ def integrity(request):
             pickle.dump(warnings, f)
         with open(M_APPROVED, 'w') as f:
             pickle.dump(approved, f)
+        base['messages'].append(Message('Resolved one integrity warning.', type=Message.SUCCESS))
 
     matches = []
     for w in warnings:
@@ -614,11 +695,15 @@ def integrity(request):
                 block.append(Match.objects.get(id=id))
             except:
                 pass
-        matches.append((','.join(str(k) for k in list(w)), display_matches(block)))
+        matches.append((','.join(str(k) for k in list(w)), display_matches(block, messages=False)))
 
         if len(matches) == 50:
             break
+
     base['matches'] = matches
+    if len(matches) == 0:
+        base['messages'].append(Message('There are currently no warnings pending resolution.', 
+                                        type=Message.INFO))
     base['num'] = len(warnings)
 
     return render_to_response('integrity.html', base)

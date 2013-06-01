@@ -35,12 +35,17 @@ urlpatterns = patterns('',
     url(r'^predict/sebracket/$', 'ratings.predict.pred_sebracket'),
     url(r'^predict/rrgroup/$', 'ratings.predict.pred_rrgroup'),
     url(r'^predict/proleague/$', 'ratings.predict.pred_proleague'),
+    
+    url(r'^compare/$', 'ratings.predict.compare'),
+    url(r'^factoids/$', 'ratings.factoids.factoids'),
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),
+    url(r'^staff/$', 'aligulac.views.staff'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
-
+    url(r'^m/', include('miniURL.urls')),
+    
     url(r'^add/$', 'ratings.submitviews.add_matches'),
     url(r'^add/review/$', 'ratings.submitviews.review'),
     url(r'^add/events/$', 'ratings.submitviews.manage_events'),

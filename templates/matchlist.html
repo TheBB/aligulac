@@ -153,6 +153,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
         {% else %}
+            {% if m.messages %}
+            {% for msg in m.messages %}
+                <img src="{{ msg.type|imgfolder|static }}" class="btm" title="{{ msg.text }}" />
+            {% endfor %}
+            {% endif %}
+
             {% if not m.treated %}
                 <img src="{{ "no.png"|static }}" alt="unrated" title="unrated" class="btm" />
             {% endif %}

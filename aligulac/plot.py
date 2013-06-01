@@ -28,13 +28,13 @@ tables = { 'kr-w': [0]*NS, 'kr-l': [0]*NS, 'kr-g': [0]*NS, 'kr-z': [], 'kr-f': [
 
 names = { 'al': 'All', 'kr': 'Korean', 'in': 'International', 'xx': 'Cross-scene' }
            
+gamescore = [0, 0]
+matchscore = [0, 0]
+
 num = 0
 
 matches = Match.objects.select_related('player__rating', 'player')
 nmatches = matches.count()
-
-gamescore = [0, 0]
-matchscore = [0, 0]
 
 disc = 0.0
 

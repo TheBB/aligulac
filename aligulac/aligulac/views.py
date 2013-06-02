@@ -37,18 +37,28 @@ class Message:
         self.title = title
         self.text = text
         self.type = type
+        self.id = ''.join([random.choice(string.letters+string.digits) for _ in xrange(10)])
 
 
 class NotUniquePlayerMessage(Message):
 
-    def __init__(self, search, players, type='error'):
+    def __init__(self, search, players, update=None, updateline=None, type='error'):
+        id = ''.join([random.choice(string.letters+string.digits) for _ in xrange(10)])
+
         lst = []
         for p in players:
             s = ''
             if p.country is not None and p.country != '':
                 s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
             s += '<img src="http://static.aligulac.com/%s.png" /> ' % p.race
-            s += '<a href="/players/%i-%s/">%s</a> (%i)' % (p.id, p.tag, p.tag, p.id)
+
+            if update is None:
+                s += '<a href="/players/%i-%s/">%s</a>' % (p.id, p.tag, p.tag)
+            elif updateline is None:
+                s += ('<a href="#" onclick="set_textbox(\'%s\',\'%s %i\');' +\
+                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
+                     % (update, p.tag, p.id, id, p.tag)
+
             lst.append(s)
 
         num = 5
@@ -65,6 +75,7 @@ class NotUniquePlayerMessage(Message):
               + '.'
 
         Message.__init__(self, s, '\'%s\' not unique' % search, type)
+        self.id = id
 
 
 def generate_messages(obj):

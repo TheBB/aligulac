@@ -3,7 +3,7 @@
 {% if messages %}
 <table class="messages">
 {% for m in messages %}
-<tr class="m{{m.type}}">
+<tr id="{{m.id}}" class="m{{m.type}}">
     <td class="micon m{{m.type}}icon">
         <img class="btm" src="{{ m.type|imgfolder|static }}" />
     </td>

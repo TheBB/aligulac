@@ -635,9 +635,9 @@ def compare(request):
     base['plas'] = request.GET['pla']
     base['plbs'] = request.GET['plb']
 
-    for p, ps in [(pla, request.GET['pla']), (plb, request.GET['plb'])]:
+    for p, ps, id in [(pla, request.GET['pla'], 'pla'), (plb, request.GET['plb'], 'plb')]:
         if p.count() > 1:
-            base['messages'].append(NotUniquePlayerMessage(ps, p))
+            base['messages'].append(NotUniquePlayerMessage(ps, p, update=id))
         elif not p.exists():
             base['messages'].append(Message('No such player found.', ps, Message.ERROR))
 

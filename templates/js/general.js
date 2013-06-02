@@ -10,6 +10,13 @@ function trim(s)
     return s.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 }
 
+/* Sets the content of a textbox
+ */
+function set_textbox(id, s)
+{
+    document.getElementById(id).value = s;
+}
+
 /* ======================================================================
  * VISIBILITY TOGGLING
  * ======================================================================

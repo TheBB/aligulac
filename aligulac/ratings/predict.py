@@ -56,8 +56,9 @@ def predict(request):
             type=Message.ERROR))
     base['bo'] = request.GET['bo']
 
-    failures, players = [], []
+    failures, players, lineno = [], [], -1
     for line in request.GET['players'].splitlines():
+        lineno += 1
         if line.strip() == '':
             continue
         elif line.strip() == '-' or line.strip().upper() == 'BYE':
@@ -66,7 +67,8 @@ def predict(request):
 
         dbplayer = find_player(line.strip().split(' '), make=False)
         if dbplayer.count() > 1:
-            base['messages'].append(NotUniquePlayerMessage(line, dbplayer))
+            base['messages'].append(NotUniquePlayerMessage(line, dbplayer, update='players',
+                                                           updateline=lineno))
         elif not dbplayer.exists():
             base['messages'].append(Message('No such player found.', line, Message.ERROR))
         else:

@@ -591,7 +591,9 @@ def results_search(request):
         players, failures = [], []
         ok = True
         base['pls'] = request.GET['players']
+        lineno = -1
         for line in request.GET['players'].splitlines():
+            lineno += 1
             if line.strip() == '':
                 continue
             pls = find_player(line.strip().split(' '), make=False)
@@ -601,7 +603,8 @@ def results_search(request):
                 ok = False
             else:
                 if pls.count() > 1:
-                    base['messages'].append(NotUniquePlayerMessage(line.strip(), pls, Message.WARNING))
+                    base['messages'].append(NotUniquePlayerMessage(line.strip(), pls, update='players',
+                                                                   updateline=lineno, type=Message.WARNING))
                 players.append(pls)
 
         if not ok:

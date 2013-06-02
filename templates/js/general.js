@@ -17,6 +17,17 @@ function set_textbox(id, s)
     document.getElementById(id).value = s;
 }
 
+/* Sets a line of a textarea
+ */
+function set_textarea_line(id, s, line)
+{
+    var cur = document.getElementById(id).value;
+    cur = cur.replace(/\r\n/, '\n');
+    var a = cur.split('\n');
+    a[line] = s;
+    document.getElementById(id).value = a.join('\n');
+}
+
 /* ======================================================================
  * VISIBILITY TOGGLING
  * ======================================================================

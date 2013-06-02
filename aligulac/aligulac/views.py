@@ -58,6 +58,10 @@ class NotUniquePlayerMessage(Message):
                 s += ('<a href="#" onclick="set_textbox(\'%s\',\'%s %i\');' +\
                                          ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
                      % (update, p.tag, p.id, id, p.tag)
+            else:
+                s += ('<a href="#" onclick="set_textarea_line(\'%s\',\'%s %i\',%i);' +\
+                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
+                     % (update, p.tag, p.id, updateline, id, p.tag)
 
             lst.append(s)
 

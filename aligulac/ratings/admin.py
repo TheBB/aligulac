@@ -1,4 +1,4 @@
-from ratings.models import Player, Team, Period, Match, Rating, Event, Alias, Earnings,\
+from ratings.models import Player, Group, Period, Match, Rating, Event, Alias, Earnings,\
                            PreMatchGroup, PreMatch, Story, Message
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
@@ -21,7 +21,7 @@ def player_team(p):
 player_team.short_description = 'Team'
     
 class MembersInline(admin.TabularInline):
-    model = Team.members.through
+    model = Group.members.through
 
 class AliasesInline(admin.TabularInline):
     model = Alias
@@ -49,8 +49,8 @@ class PlayerAdmin(admin.ModelAdmin):
     search_fields = ['tag']
     list_display = ('tag', 'race', player_team, player_country, 'name')
 
-class TeamAdmin(admin.ModelAdmin):
-    fields = ['name', 'shortname', 'founded', 'disbanded', 'lp_name', 'homepage', 'active']
+class GroupAdmin(admin.ModelAdmin):
+    fields = ['name', 'shortname', 'founded', 'disbanded', 'lp_name', 'homepage', 'active', 'team']
     inlines = [MembersInline, AliasesInline, MessagesInline]
     search_fields = ['name']
 
@@ -83,7 +83,7 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['fullname']
 
 admin.site.register(Player, PlayerAdmin)
-admin.site.register(Team, TeamAdmin)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(PreMatchGroup)

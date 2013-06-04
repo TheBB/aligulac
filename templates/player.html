@@ -526,7 +526,7 @@ This is the template for the main player page, called from ratings.views.player.
     {% for tm in teammems %}
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe">
-            <a href="/teams/{{ tm.team.id }}-{{ tm.team.name|urlfilter }}/">{{ tm.team.name }}</a>
+            <a href="/teams/{{ tm.group.id }}-{{ tm.group.name|urlfilter }}/">{{ tm.group.name }}</a>
         </div>
         <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
         <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>

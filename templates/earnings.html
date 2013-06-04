@@ -119,7 +119,7 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
 	        </td>
         	<td>
             	{% if earning.teamobj %}
-	                <a href="/teams/{{ earning.teamobj.team.id }}-{{ earning.teamobj.team.name|urlfilter }}/">{{ earning.teamobj.team.name }}</a>
+	                <a href="/teams/{{ earning.teamobj.group.id }}-{{ earning.teamobj.group.name|urlfilter }}/">{{ earning.teamobj.group.name }}</a>
             	{% endif %}
 	        </td>
 	        <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">

@@ -12,7 +12,7 @@ from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.db.models import Q, F, Sum, Max
-from models import Period, Rating, Player, Match, Team, TeamMembership, Event, Alias, Earnings,\
+from models import Period, Rating, Player, Match, Group, GroupMembership, Event, Alias, Earnings,\
                    BalanceEntry, Story
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
@@ -105,7 +105,7 @@ def period(request, period_id, page='1'):
     countries.sort(key=lambda a: a['name'])
 
     # Filtering the ratings
-    entries = Rating.objects.filter(period=period).select_related('team','teammembership')
+    entries = Rating.objects.filter(period=period).select_related('group','groupmembership')
     entries = filter_active_ratings(entries)
 
     try:
@@ -158,11 +158,11 @@ def period(request, period_id, page='1'):
 
     # Collect team data
     for entry in entries:
-        teams = entry.player.teammembership_set.filter(current=True)
+        teams = entry.player.groupmembership_set.filter(current=True)
         if teams.exists():
-            entry.team = teams[0].team.shortname
-            entry.teamfull = teams[0].team.name
-            entry.teamid = teams[0].team.id
+            entry.team = teams[0].group.shortname
+            entry.teamfull = teams[0].group.name
+            entry.teamid = teams[0].group.id
 
     # Render
     base.update({'period': period, 'entries': entries, 'page': page, 'npages': npages, 'nperiods': nperiods,
@@ -283,7 +283,9 @@ def player(request, player_id):
     base['countries'] = countries
 
     try:
-        base['team'] = Team.objects.filter(active=True, teammembership__player=player, teammembership__current=True)[0]
+        base['team'] = Group.objects.filter(active=True, team=True,
+                                            groupmembership__player=player, 
+                                            groupmembership__current=True)[0]
     except:
         pass
 
@@ -337,7 +339,8 @@ def player(request, player_id):
     except:
         countryfull = ''
 
-    teammems = list(TeamMembership.objects.filter(player=player).extra(select={'mid': '(start+end)/2'}))
+    teammems = list(GroupMembership.objects.filter(player=player, group__team=True).\
+                    extra(select={'mid': '(start+end)/2'}))
     teammems = sorted(teammems, key=lambda t: t.id, reverse=True)
     teammems = sorted(teammems, key=meandate, reverse=True)
     teammems = sorted(teammems, key=lambda t: t.current, reverse=True)
@@ -371,7 +374,7 @@ def player(request, player_id):
                         dict['date'] = teammem.start
                         dict['rating'] = interp_rating(teammem.start, base['ratings'])
                         dict['data'] = []
-                        dict['data'].append({'date':teammem.start, 'team':teammem.team, 'jol':'joins'})
+                        dict['data'].append({'date':teammem.start, 'team':teammem.group, 'jol':'joins'})
                         teampoints.append(dict)
                 dict = {}
                 if teammem.end:
@@ -379,7 +382,7 @@ def player(request, player_id):
                         dict['date'] = teammem.end
                         dict['rating'] = interp_rating(teammem.end, base['ratings'])
                         dict['data'] = []
-                        dict['data'].append({'date':teammem.end, 'team':teammem.team, 'jol':'leaves'})
+                        dict['data'].append({'date':teammem.end, 'team':teammem.group, 'jol':'leaves'})
                         teampoints.append(dict)
             teampoints.sort(key=lambda a: a['date'])
             # Condense items if team switches happened within 14 days.
@@ -1209,7 +1212,7 @@ def earnings(request):
     for player in ranking:
         player["playerobj"] = Player.objects.get(id=player["player"])
         try:
-            player["teamobj"] = player["playerobj"].teammembership_set.get(current=True)
+            player["teamobj"] = player["playerobj"].groupmembership_set.get(current=True,group__team=True)
         except:
             pass
     

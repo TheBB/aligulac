@@ -15,7 +15,7 @@ player_country.short_description = 'Country'
 
 def player_team(p):
     try:
-        return Team.objects.get(active=True, teammembership__player=p, teammembership__current=True)
+        return Group.objects.get(active=True, groupmembership__player=p, groupmembership__current=True, team=True)
     except:
         return ''
 player_team.short_description = 'Team'

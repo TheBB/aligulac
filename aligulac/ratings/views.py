@@ -559,8 +559,6 @@ def results_search(request):
             base['eventtext'] = request.GET['eventtext'].strip()
             queries = shlex.split(request.GET['eventtext'].strip().encode())
             queries = [f.strip() for f in queries if f.strip() != '']
-            if base['adm']:
-                base['messages'].append(Message(str(queries), type=Message.INFO))
             for query in queries:
                 q = Q(eventobj__isnull=True, event__icontains=query) |\
                     Q(eventobj__isnull=False, eventobj__fullname__icontains=query)

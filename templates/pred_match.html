@@ -51,7 +51,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w1.vp %}
                     <font style="
-                    {% if w1.vp.0|pctg:w1.vp.1 == w1.max and w1.max >= 0 %}color:green;
+                    {% if w1.vp.0|pctg:w1.vp.1 == w1.max and w1.max > 0 %}color:green;
                     {% elif w1.vp.0|pctg:w1.vp.1 == w1.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p2.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">
@@ -63,7 +63,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w2.vp %}
                     <font style="
-                    {% if w2.vp.0|pctg:w2.vp.1 == w2.max and w2.max >= 0 %}color:green;
+                    {% if w2.vp.0|pctg:w2.vp.1 == w2.max and w2.max > 0 %}color:green;
                     {% elif w2.vp.0|pctg:w2.vp.1 == w2.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p1.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">
@@ -78,7 +78,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w1.vt %}
                     <font style="
-                    {% if w1.vt.0|pctg:w1.vt.1 == w1.max and w1.max >= 0 %}color:green;
+                    {% if w1.vt.0|pctg:w1.vt.1 == w1.max and w1.max > 0 %}color:green;
                     {% elif w1.vt.0|pctg:w1.vt.1 == w1.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p2.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">
@@ -90,7 +90,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w2.vt %}
                     <font style="
-                    {% if w2.vt.0|pctg:w2.vt.1 == w2.max and w2.max >= 0 %}color:green;
+                    {% if w2.vt.0|pctg:w2.vt.1 == w2.max and w2.max > 0 %}color:green;
                     {% elif w2.vt.0|pctg:w2.vt.1 == w2.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p1.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">
@@ -105,7 +105,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w1.vz %}
                     <font style="
-                    {% if w1.vz.0|pctg:w1.vz.1 == w1.max and w1.max >= 0 %}color:green;
+                    {% if w1.vz.0|pctg:w1.vz.1 == w1.max and w1.max > 0 %}color:green;
                     {% elif w1.vz.0|pctg:w1.vz.1 == w1.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p2.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">
@@ -117,7 +117,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             <div class="rower">
                 {% if w2.vz %}
                     <font style="
-                    {% if w2.vz.0|pctg:w2.vz.1 == w2.max and w2.max >= 0 %}color:green;
+                    {% if w2.vz.0|pctg:w2.vz.1 == w2.max and w2.max > 0 %}color:green;
                     {% elif w2.vz.0|pctg:w2.vz.1 == w2.min %}color:firebrick;{% endif %}
                     {% comment %}{% if p1.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
                     ">

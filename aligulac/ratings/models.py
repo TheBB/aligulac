@@ -461,10 +461,10 @@ class Story(models.Model):
     def __unicode__(self):
         return self.player.tag + ' - ' + self.text + ' on ' + str(self.date)
 
-class Group(models.Model):
+class Team(models.Model):
     name = models.CharField(max_length=100)
     shortname = models.CharField(max_length=25, null=True, blank=True)
-    members = models.ManyToManyField(Player, through='GroupMembership')
+    members = models.ManyToManyField(Player, through='TeamMembership')
     scoreak = models.FloatField(default=0.0)
     scorepl = models.FloatField(default=0.0)
     founded = models.DateField(null=True, blank=True)
@@ -472,7 +472,6 @@ class Group(models.Model):
     active = models.BooleanField(default=True)
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200) 
-    team = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name
@@ -520,22 +519,21 @@ class Group(models.Model):
             self.lp_name = lp_name
         self.save()    
 
-class GroupMembership(models.Model):
+class TeamMembership(models.Model):
     player = models.ForeignKey(Player)
-    group = models.ForeignKey(Group)
+    team = models.ForeignKey(Team)
     start = models.DateField('Date joined', blank=True, null=True)
     end = models.DateField('Date left', blank=True, null=True)
     current = models.BooleanField(default=True, null=False)
     playing = models.BooleanField(default=True, null=False)
-    override = models.BooleanField(default=False, null=False)
 	
     def __unicode__(self):
-        return 'Player: ' + self.player.tag + ' Team: ' + self.group.name + ' (' + str(self.start) + ' - ' + str(self.end) + ')'
+        return 'Player: ' + self.player.tag + ' Team: ' + self.team.name + ' (' + str(self.start) + ' - ' + str(self.end) + ')'
 
 class Alias(models.Model):
     name = models.CharField(max_length=100)
     player = models.ForeignKey(Player, null=True)
-    group = models.ForeignKey(Group, null=True)
+    team = models.ForeignKey(Team, null=True)
 
     class Meta:
         verbose_name_plural = 'aliases'
@@ -717,7 +715,7 @@ class Message(models.Model):
 
     player = models.ForeignKey(Player, null=True)
     event = models.ForeignKey(Event, null=True)
-    Group = models.ForeignKey(Group, null=True)
+    team = models.ForeignKey(Team, null=True)
     match = models.ForeignKey(Match, null=True)
 
 class Earnings(models.Model):

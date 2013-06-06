@@ -13,7 +13,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 from itertools import combinations
 from random import shuffle
 
-from ratings.models import Period, Rating, Group
+from ratings.models import Period, Rating, Team
 from ratings.tools import filter_active_ratings
 from simul.playerlist import make_player
 from simul.formats.teamak import TeamAK
@@ -32,11 +32,11 @@ Simulator = TeamPL if proleague else TeamAK
 
 # Get a list of all teams that can compete
 current_period = Period.objects.filter(computed=True).order_by('-id')[0]
-teams = Group.objects.filter(active=True, team=True)
+teams = Team.objects.filter(active=True)
 allowed_teams = []
 for team in teams:
-    ratings = Rating.objects.filter(period=current_period, player__groupmembership__team=team,\
-            player__groupmembership__current=True, player__groupmembership__playing=True)\
+    ratings = Rating.objects.filter(period=current_period, player__teammembership__team=team,\
+            player__teammembership__current=True, player__teammembership__playing=True)\
             .exclude(player__race='S').exclude(player__race='R')
     if filter_active_ratings(ratings).count() >= nplayers_needed:
         allowed_teams.append(team)
@@ -54,8 +54,8 @@ for (team_a, team_b) in combinations(allowed_teams, 2):
     # Get player lists for both teams
     players = []
     for team in [team_a, team_b]:
-        ratings = Rating.objects.filter(period=current_period, player__groupmembership__team=team,\
-                player__groupmembership__current=True, player__groupmembership__playing=True)\
+        ratings = Rating.objects.filter(period=current_period, player__teammembership__team=team,\
+                player__teammembership__current=True, player__teammembership__playing=True)\
                 .exclude(player__race='S').exclude(player__race='R')
         ratings = list(filter_active_ratings(ratings).order_by('-rating')[:nplayers_max])
         if not proleague:

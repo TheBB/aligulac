@@ -165,3 +165,5 @@ pip-log.txt
 settings.py
 *.pickle
 *.sql
+aligulac/aligulac/settings.py
+requirements.txt

@@ -1,0 +1,10 @@
+Django==1.4.5
+Markdown==2.3.1
+MySQL-python==1.2.4
+ccy==0.5.1
+simplejson==3.3.0
+pyparsing==1.5.7
+python-dateutil==2.1
+numpy==1.7.1
+scipy==0.12.0
+

@@ -170,6 +170,85 @@ def pred_match(request):
     while len(r2) < len(r1):
         r2 = [None] + r2
     base['res'] = zip(r1, r2)
+
+    # Winrates
+    base['w1'] = {}
+    base['w2'] = {}
+
+
+    def ntz(n):
+        return n if n is not None else 0
+
+    matches_a = Match.objects.filter(pla=dbpl[0])
+    matches_b = Match.objects.filter(plb=dbpl[0])
+
+    a = matches_a.aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.aggregate(Sum('sca'), Sum('scb'))
+    base['w1']['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
+    base['w1']['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
+    base['w1']['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['w1']['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    base['w1']['max'] = int(round(100 * max(
+        (float(base['w1']['vp'][0]) / float(sum(base['w1']['vp'])) if (sum(base['w1']['vp']) > 0) else 0),
+        (float(base['w1']['vt'][0]) / float(sum(base['w1']['vt'])) if (sum(base['w1']['vt']) > 0) else 0),
+        (float(base['w1']['vz'][0]) / float(sum(base['w1']['vz'])) if (sum(base['w1']['vz']) > 0) else 0)
+    )))
+
+    base['w1']['min'] = int(round(100 * min(
+        (float(base['w1']['vp'][0]) / float(sum(base['w1']['vp'])) if (sum(base['w1']['vp']) > 0) else 0),
+        (float(base['w1']['vt'][0]) / float(sum(base['w1']['vt'])) if (sum(base['w1']['vt']) > 0) else 0),
+        (float(base['w1']['vz'][0]) / float(sum(base['w1']['vz'])) if (sum(base['w1']['vz']) > 0) else 0)
+    )))
+
+    a = matches_a.filter(plb=dbpl[1]).aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(pla=dbpl[1]).aggregate(Sum('sca'), Sum('scb'))
+    base['w1']['vo'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    matches_a = Match.objects.filter(pla=dbpl[1])
+    matches_b = Match.objects.filter(plb=dbpl[1])
+
+    a = matches_a.aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.aggregate(Sum('sca'), Sum('scb'))
+    base['w2']['total'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='P').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='P').aggregate(Sum('sca'), Sum('scb'))
+    base['w2']['vp'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='T').aggregate(Sum('sca'), Sum('scb'))
+    base['w2']['vt'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(rca='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['w2']['vz'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    a = matches_a.filter(plb=dbpl[0]).aggregate(Sum('sca'), Sum('scb'))
+    b = matches_b.filter(pla=dbpl[0]).aggregate(Sum('sca'), Sum('scb'))
+    base['w2']['vo'] = (ntz(a['sca__sum']) + ntz(b['scb__sum']), ntz(a['scb__sum']) + ntz(b['sca__sum']))
+
+    base['w2']['max'] = int(round(100 * max(
+        (float(base['w2']['vp'][0]) / float(sum(base['w2']['vp'])) if (sum(base['w2']['vp']) > 0) else 0),
+        (float(base['w2']['vt'][0]) / float(sum(base['w2']['vt'])) if (sum(base['w2']['vt']) > 0) else 0),
+        (float(base['w2']['vz'][0]) / float(sum(base['w2']['vz'])) if (sum(base['w2']['vz']) > 0) else 0)
+    )))
+
+    base['w2']['min'] = int(round(100 * min(
+        (float(base['w2']['vp'][0]) / float(sum(base['w2']['vp'])) if (sum(base['w2']['vp']) > 0) else 0),
+        (float(base['w2']['vt'][0]) / float(sum(base['w2']['vt'])) if (sum(base['w2']['vt']) > 0) else 0),
+        (float(base['w2']['vz'][0]) / float(sum(base['w2']['vz'])) if (sum(base['w2']['vz']) > 0) else 0)
+    )))
+
     
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']

@@ -18,6 +18,132 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
     {% elif max <= 0.90 %}Large advantage for {{ fav.tag }}.
     {% else %}Overwhelming advantage for {{ fav.tag }}.{% endif %}</p>
 
+    <br/>
+
+    <div class="table" style="width: 30em;">
+        <div class="row">
+            <div class="rowel">&nbsp;</div>
+            <div class="rower">
+                <u>{{ p1.tag }}</u>
+            </div>
+            <div class="rower">
+                <u>{{ p2.tag }}</u>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Overall</div>
+            <div class="rower" style="width: 10em">
+                {% if w1.total %}
+                    {{ w1.total.0 }}/{{ w1.total.1|add:w1.total.0 }}
+                    <span class="small">({{ w1.total.0|pctg:w1.total.1 }}%)</span>
+                {% endif %}
+            </div>
+            <div class="rower" style="width: 10em">
+                {% if w2.total %}
+                    {{ w2.total.0 }}/{{ w2.total.1|add:w2.total.0 }}
+                    <span class="small">({{ w2.total.0|pctg:w2.total.1 }}%)</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">vP</div>
+            <div class="rower">
+                {% if w1.vp %}
+                    <font style="
+                    {% if w1.vp.0|pctg:w1.vp.1 == w1.max and w1.max > 0 %}color:green;
+                    {% elif w1.vp.0|pctg:w1.vp.1 == w1.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p2.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w1.vp.0 }}/{{ w1.vp.1|add:w1.vp.0 }}
+                    <span class="small">({{ w1.vp.0|pctg:w1.vp.1 }}%)</span>
+                    </font>
+                {% endif %}
+            </div>
+            <div class="rower">
+                {% if w2.vp %}
+                    <font style="
+                    {% if w2.vp.0|pctg:w2.vp.1 == w2.max and w2.max > 0 %}color:green;
+                    {% elif w2.vp.0|pctg:w2.vp.1 == w2.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p1.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w2.vp.0 }}/{{ w2.vp.1|add:w2.vp.0 }}
+                    <span class="small">({{ w2.vp.0|pctg:w2.vp.1 }}%)</span>
+                </font>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">vT</div>
+            <div class="rower">
+                {% if w1.vt %}
+                    <font style="
+                    {% if w1.vt.0|pctg:w1.vt.1 == w1.max and w1.max > 0 %}color:green;
+                    {% elif w1.vt.0|pctg:w1.vt.1 == w1.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p2.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w1.vt.0 }}/{{ w1.vt.1|add:w1.vt.0 }}
+                    <span class="small">({{ w1.vt.0|pctg:w1.vt.1 }}%)</span>
+                    </font>
+                {% endif %}
+            </div>
+            <div class="rower">
+                {% if w2.vt %}
+                    <font style="
+                    {% if w2.vt.0|pctg:w2.vt.1 == w2.max and w2.max > 0 %}color:green;
+                    {% elif w2.vt.0|pctg:w2.vt.1 == w2.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p1.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w2.vt.0 }}/{{ w2.vt.1|add:w2.vt.0 }}
+                    <span class="small">({{ w2.vt.0|pctg:w2.vt.1 }}%)</span>
+                </font>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">vZ</div>
+            <div class="rower">
+                {% if w1.vz %}
+                    <font style="
+                    {% if w1.vz.0|pctg:w1.vz.1 == w1.max and w1.max > 0 %}color:green;
+                    {% elif w1.vz.0|pctg:w1.vz.1 == w1.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p2.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w1.vz.0 }}/{{ w1.vz.1|add:w1.vz.0 }}
+                    <span class="small">({{ w1.vz.0|pctg:w1.vz.1 }}%)</span>
+                    </font>
+                {% endif %}
+            </div>
+            <div class="rower">
+                {% if w2.vz %}
+                    <font style="
+                    {% if w2.vz.0|pctg:w2.vz.1 == w2.max and w2.max > 0 %}color:green;
+                    {% elif w2.vz.0|pctg:w2.vz.1 == w2.min %}color:firebrick;{% endif %}
+                    {% comment %}{% if p1.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
+                    ">
+                    {{ w2.vz.0 }}/{{ w2.vz.1|add:w2.vz.0 }}
+                    <span class="small">({{ w2.vz.0|pctg:w2.vz.1 }}%)</span>
+                </font>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">Each Other</div>
+            <div class="rower">
+                {% if w1.vo %}
+                    {{ w1.vo.0 }}/{{ w1.vo.1|add:w1.vo.0 }}
+                    <span class="small">({{ w1.vo.0|pctg:w1.vo.1 }}%)</span>
+                {% endif %}
+            </div>
+            <div class="rower">
+                {% if w2.vo %}
+                    {{ w2.vo.0 }}/{{ w2.vo.1|add:w2.vo.0 }}
+                    <span class="small">({{ w2.vo.0|pctg:w2.vo.1 }}%)</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <br/><br/>
     <div class="table numtable" style="width: 67em;">
         <div class="rowh2">
             <div class="rowe" style="width: 26em; text-align: right;">

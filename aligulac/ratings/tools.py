@@ -120,8 +120,8 @@ def find_player(lst, make=False, soft=False):
                     Q(teammembership__current=True, teammembership__team__alias__name__icontains=s)
         else:
             q = Q(tag__iexact=s) | Q(alias__name__iexact=s) |\
-                    Q(teammembership__current=True, teammembership__team__name__iexact=s) |\
-                    Q(teammembership__current=True, teammembership__team__alias__name__iexact=s)
+                Q(teammembership__current=True, teammembership__team__name__iexact=s) |\
+                Q(teammembership__current=True, teammembership__team__alias__name__iexact=s)
 
         # Race query
         if len(s) == 1 and s.upper() in 'PTZSR':

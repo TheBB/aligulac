@@ -193,6 +193,8 @@ and all you need to do is create the event tree and assign them.
 
 This is the source code for the website http://aligulac.com
 
+The requirements are described in the requirements.txt file. It can be used directly with pip.
+
 Needs:
 
 - Python 2.6 or 2.7

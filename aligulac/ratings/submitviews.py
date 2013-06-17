@@ -172,13 +172,13 @@ def add_matches(request):
 
                 # Find players
                 def get_player(lst, failure, base, make, adm):
-                    try:
-                        pls = find_player(lst, make=make)
-                    except Exception as e:
-                        failure.append(s)
-                        base['messages'].append(Message('Could not parse: ' + e.message,
-                                                        s, Message.ERROR))
-                        return None
+                    #try:
+                    pls = find_player(lst, make=make)
+                    #except Exception as e:
+                        #failure.append(s)
+                        #base['messages'].append(Message('Could not parse: ' + e.message,
+                                                        #s, Message.ERROR))
+                        #return None
                     if not pls.exists() and adm:
                         # Player not found, and user logged in. Add failure message and return None.
                         failure.append(s)
@@ -241,15 +241,15 @@ def add_matches(request):
                 if pla_obj.race == 'S' and rca == None:
                     failure.append(s)
                     base['messages'].append(Message(
-                        '%s is Random or Switcher, need race information.' % pla_obj.tag),
-                        s, Message.ERROR)
+                        '%s is Random or Switcher, need race information.' % pla_obj.tag,
+                        s, Message.ERROR))
                     continue
 
                 if plb_obj.race == 'S' and rcb == None:
                     failure.append(s)
                     base['messages'].append(Message(
-                        '%s is Random or Switcher, need race information.' % plb_obj.tag),
-                        s, Message.ERROR)
+                        '%s is Random or Switcher, need race information.' % plb_obj.tag,
+                        s, Message.ERROR))
                     continue
 
                 # Add match

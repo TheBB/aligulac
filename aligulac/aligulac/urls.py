@@ -27,7 +27,9 @@ urlpatterns = patterns('',
     url(r'^results/events/(?P<event_id>\d+)(-[^ /]*)?/$', 'ratings.views.events'),
     url(r'^results/search/$', 'ratings.views.results_search'),
 
-    url(r'^records/$', 'ratings.views.records'),
+    url(r'^records/race/$', 'ratings.views.records_race'),
+    url(r'^records/history/$', 'ratings.views.records_history'),
+    url(r'^records/hof/$', 'ratings.views.records_hof'),
 
     url(r'^predict/$', 'ratings.predict.predict'),
     url(r'^predict/match/$', 'ratings.predict.pred_match'),

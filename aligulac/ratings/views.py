@@ -1413,7 +1413,7 @@ def records_history(request):
     return render_to_response('history.html', base)
 
 def records_hof(request):
-    base = base_ctx('Records', 'hof', request)
+    base = base_ctx('Records', 'HoF', request)
     base['high'] = Player.objects.filter(dom_val__isnull=False, dom_start__isnull=False,\
                 dom_end__isnull=False, dom_val__gt=0).order_by('-dom_val')
     return render_to_response('hof.html', base)

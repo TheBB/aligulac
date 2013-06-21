@@ -1410,7 +1410,6 @@ def records_history(request):
 
     base['charts'] = True
     base['patches'] = PATCHES
-    print {'records_history'}
     return render_to_response('history.html', base)
 
 def records_hof(request):
@@ -1427,7 +1426,6 @@ def records_race(request):
     except:
         race = 'All'
         sub = 'all'
-
     
     base = base_ctx('Records', sub, request)
 

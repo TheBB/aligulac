@@ -1378,10 +1378,10 @@ def records_history(request):
                  return ret
         return ret
 
-    #high = sift(high.order_by('-rat'), numPlayers)
-
-    high = high.values('player_id', 'player__race', 'player__tag').order_by('-rating')[:2000]
+    high = high.values('player_id', 'player__race', 'player__tag').order_by('-rating')[:3000]
     high = sift(high, num=numPlayers)
+
+    print len(high)
 
     players = []
     ratings = []

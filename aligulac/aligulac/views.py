@@ -92,7 +92,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = Period.objects.filter(computed=True).order_by('-start')[0]
     menu = [('Ranking', '/periods/%i' % curp.id),\
             ('Teams', '/teams/'),\
-            ('Records', '/records/'),\
+            ('Records', '/records/history'),\
             ('Results', '/results/'),\
             ('Reports', '/reports/'),\
             ('Predict', '/predict/'),\
@@ -107,11 +107,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['user'] = request.user.username
 
     if section == 'Records':
-        base['submenu'] = [('HoF', '/records/?race=hof'),\
-                           ('All', '/records/?race=all'),\
-                           ('Protoss', '/records/?race=P'),\
-                           ('Terran', '/records/?race=T'),\
-                           ('Zerg', '/records/?race=Z')]
+        base['submenu'] = [('History', '/records/history/'),
+                           ('HoF', '/records/hof/'),\
+                           ('All', '/records/race/?race=all'),\
+                           ('Protoss', '/records/race/?race=P'),\
+                           ('Terran', '/records/race/?race=T'),\
+                           ('Zerg', '/records/race/?race=Z')]
     elif section == 'Results':
         base['submenu'] = [('By Date', '/results/'),\
                            ('By Event', '/results/events/'),\

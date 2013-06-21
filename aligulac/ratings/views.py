@@ -1335,14 +1335,100 @@ def rating_details(request, player_id, period_id):
                      'prevdev': prevdev})
         return render_to_response('ratingdetails.html', base)
 
-def records(request):
+def records_history(request):
+    try:
+        numPlayers = request.GET['numPlayers']
+    except:
+        numPlayers = 5
+    numPlayers = int(numPlayers)
+
     try:
         race = request.GET['race']
-        sub = ['HoF','All','Protoss','Terran','Zerg'][['hof','all','P','T','Z'].index(race)]
     except:
-        race = 'hof'
-        sub = 'HoF'
+        race = 'ptzrs'
 
+    try:
+        nats = request.GET['nats']
+    except:
+        nats = 'all'
+    
+    base = base_ctx('Records', 'History', request)
+
+    high = filter_active_ratings(Rating.objects.filter(period__id__gt=24))
+    q = None
+    for r in race:
+        qt = Q(player__race=r.upper())
+        q = qt if q == None else q | qt
+
+    high = high.filter(q)
+
+    if nats == 'foreigners':
+        high = high.exclude(player__country='KR')
+    elif nats != 'all':
+        high = high.filter(player__country=nats)
+ 
+    def sift(lst, num=5):   
+        ret = []
+        pls = set()
+        for r in lst:
+            if not r['player_id'] in pls:
+                pls.add(r['player_id'])
+                ret.append(r)
+            if len(ret) == num:
+                 return ret
+        return ret
+
+    #high = sift(high.order_by('-rat'), numPlayers)
+
+    high = high.values('player_id', 'player__race', 'player__tag').order_by('-rating')[:2000]
+    high = sift(high, num=numPlayers)
+
+    players = []
+    ratings = []
+    for h in high:
+        r = list(Rating.objects.filter(player_id=h['player_id']).select_related('period').order_by('period'))
+        lp = len(r)
+        while lp > 0 and r[lp-1].decay > 0:
+            lp -= 1
+        if lp > 1:
+            players.append(h)
+            ratings.append(r[:lp])
+
+    base.update({'race': race, 'nats' : nats, 'numPlayers' : numPlayers, 'records': zip(players, ratings)})
+
+    # Build country list
+    countriesDict = []
+    countries = []
+    for r in Player.objects.all().values('country').distinct():
+        if r['country'] not in countriesDict and r['country'] is not None and r['country'] != '':
+            countriesDict.append(r['country'])
+    for country in countriesDict:
+        d = {'cc': country, 'name': data.ccn_to_cn[data.cca2_to_ccn[country]]}
+        countries.append(d)
+    countries.sort(key=lambda a: a['name'])
+    base['countries'] = countries
+
+    base['charts'] = True
+    base['patches'] = PATCHES
+    print {'records_history'}
+    return render_to_response('history.html', base)
+
+def records_hof(request):
+    base = base_ctx('Records', 'HoF', request)
+    base['high'] = Player.objects.filter(dom_val__isnull=False, dom_start__isnull=False,\
+                dom_end__isnull=False, dom_val__gt=0).order_by('-dom_val')
+    return render_to_response('hof.html', base)
+
+def records_race(request):
+    try:
+        race = request.GET['race']
+        sub = ['All','Protoss','Terran','Zerg'][['all','P','T','Z'].index(race)]
+
+    except:
+        race = 'All'
+        sub = 'all'
+
+    
     base = base_ctx('Records', sub, request)
 
     if race in ['all', 'T', 'P', 'Z']:
@@ -1386,11 +1472,6 @@ def records(request):
 
         base.update({'hightot': high, 'highp': highp, 'hight': hight, 'highz': highz, 'dom': dom})
         return render_to_response('records.html', base)
-
-    elif race in ['hof'] or True:
-        base['high'] = Player.objects.filter(dom_val__isnull=False, dom_start__isnull=False,\
-                dom_end__isnull=False, dom_val__gt=0).order_by('-dom_val')
-        return render_to_response('hof.html', base)
 
 def balance(request):
     base = base_ctx('Reports', 'Balance', request)

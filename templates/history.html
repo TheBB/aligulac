@@ -128,7 +128,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
                 {% elif player.player__race == "Z" %}
                     color: '#dd0000',
                 {% elif player.player__race == "P" %}
-                    color: '#00dd00',
+                    color: '#00aa00',
                 {% else %}
                     color: '#000000',
                 {% endif %}
@@ -138,8 +138,6 @@ This is the Hall of Fame template. It's called from ratings.views.records.
                           x: {{ r.period.end|milliseconds }},
                           y: {{ r.bf_rating|ratscale }}
                       },{% endfor %}]
-
-                
             },
             {% endfor %}] 
            

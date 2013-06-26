@@ -24,6 +24,7 @@ else:
     earliest = Period.objects.get(id=1)
 
 if not earliest:
+    os.system('touch ' + PATH_TO_DIR + 'update')
     sys.exit(0)
 
 latest = Period.objects.filter(start__lte=datetime.date.today()).order_by('-id')[0]

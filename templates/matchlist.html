@@ -21,11 +21,11 @@ NB! The calling code is responsible for starting and ending the HTML table:
 {% if lm_header == "info" %}
     <tr class="header">
         <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
-        <td class="lm_rta">Rating</td>
+        <td class="lm_rta">{% if lm_list.0.pla_rating %}Rating{% endif %}</td>
         <td class="lm_pla">Player A</td>
         <td class="lm_score">Score</td>
         <td class="lm_plb">Player B</td>
-        <td class="lm_rtb">Rating</td>
+        <td class="lm_rtb">{% if lm_list.0.pla_rating %}Rating{% endif %}</td>
         <td class="lm_right"></td>
     </tr>
 {% endif %}

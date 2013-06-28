@@ -19,8 +19,6 @@ from ratings.templatetags.ratings_extras import urlfilter
 
 from blog.models import Post
 
-import simplejson
-
 from countries import transformations
 
 
@@ -266,7 +264,7 @@ def search(request, q=''):
     for qpart in terms:
         if qpart.strip() == '':
             continue
-        query = Q(name__icontains=qpart) | Q(alias__name__icontains=q)
+        query = Q(name__icontains=qpart) | Q(alias__name__icontains=qpart)
         teams = teams.filter(query)
     teams = teams.distinct()
 

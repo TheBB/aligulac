@@ -58,7 +58,11 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'aligulac.views.logoutv'),
     url(r'^changepwd/$', 'aligulac.views.changepwd'),
 
-    url(r'^api/search/$', 'aligulac.views.api_search'),
+    url(r'^api/search_players/$', 'ratings.apiviews.search_players'),
+    url(r'^api/search_teams/$', 'ratings.apiviews.search_teams'),
+    url(r'^api/search_events/$', 'ratings.apiviews.search_events'),
+    url(r'^api/search/$', 'ratings.apiviews.search'),
+    url(r'^api/rating_list/$', 'ratings.apiviews.rating_list'),
 
     url(r'reports/$', 'ratings.views.balance'),
     url(r'reports/balance/$', 'ratings.views.balance'),

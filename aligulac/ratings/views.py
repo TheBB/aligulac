@@ -63,19 +63,14 @@ def period(request, period_id, page='1'):
             type=Message.INFO))
 
     # Best and most specialised players
-    best = filter_active_ratings(Rating.objects.filter(period=period)).order_by('-rating')[0]
-    bestvp = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
-    bestvt = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
-    bestvz = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
-    specvp = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating_vp/dev_vp*rating'}).order_by('-d')[0]
-    specvt = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating_vt/dev_vt*rating'}).order_by('-d')[0]
-    specvz = filter_active_ratings(Rating.objects.filter(period=period))\
-            .extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
+    qset = filter_active_ratings(Rating.objects.filter(period=period))
+    best = qset.objects.filter(period=period)).order_by('-rating')[0]
+    bestvp = qset.extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
+    bestvt = qset.extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
+    bestvz = qset.extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
+    specvp = qset.extra(select={'d':'rating_vp/dev_vp*rating'}).order_by('-d')[0]
+    specvt = qset.extra(select={'d':'rating_vt/dev_vt*rating'}).order_by('-d')[0]
+    specvz = qset.extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0]
 
     # Matchup statistics
     ntz = lambda k: k if k is not None else 0

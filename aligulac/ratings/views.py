@@ -1354,7 +1354,7 @@ def records_history(request):
     
     base = base_ctx('Records', 'History', request)
 
-    high = filter_active_ratings(Rating.objects.filter(period__id__gt=24))
+    high = filter_active_ratings(Rating.objects.filter(period__id__gt=17))
     q = None
     for r in race:
         qt = Q(player__race=r.upper())

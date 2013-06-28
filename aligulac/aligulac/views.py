@@ -284,44 +284,9 @@ def search(request, q=''):
     elif players.count() == 0 and teams.count() == 0 and events.count() == 1:
         return redirect('/results/events/%i-%s/' % (events[0].id, urlfilter(events[0].fullname)))
 
-    base.update({'players': players, 'query': repr(terms), 'teams': teams, 'events': events})
+    base.update({'players': players, 'query': q, 'teams': teams, 'events': events})
 
     return render_to_response('search.html', base)
-
-def api_search(request, q=''):
-    if q == '':
-        q = request.GET['q']
-
-    players = Player.objects.filter(tag__icontains=q)
-    d = []
-    for p in players:
-        dp = {'tag': p.tag, 'race': p.race}
-        if p.country != None and p.country != '':
-            dp['country'] = transformations.cc_to_cn(p.country)
-
-        try:
-            r = Rating.objects.filter(player=p).order_by('-period__id')[0]
-            dp['rating'] = r.rating
-            dp['rating_vp'] = r.rating_vp
-            dp['rating_vt'] = r.rating_vt
-            dp['rating_vz'] = r.rating_vz
-            dp['dev'] = r.dev
-            dp['dev_vp'] = r.dev_vp
-            dp['dev_vt'] = r.dev_vt
-            dp['dev_vz'] = r.dev_vz
-        except:
-            dp['rating'] = 0
-            dp['rating_vp'] = 0
-            dp['rating_vt'] = 0
-            dp['rating_vz'] = 0
-            dp['dev'] = 0.6
-            dp['dev_vp'] = 0.6
-            dp['dev_vt'] = 0.6
-            dp['dev_vz'] = 0.6
-
-        d.append(dp)
-
-    return HttpResponse(simplejson.dumps(d), mimetype='application/json')
 
 def logoutv(request):
     logout(request)

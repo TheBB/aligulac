@@ -65,30 +65,43 @@ that means Protoss is doing well and Terran poorly.</p>
                 max: 70
             },
             tooltip: {
-                xDateFormat: '%B %Y',
-                valueDecimals: 1,
-                valueSuffix: '%'
+                formatter: function () {
+                    return this.point.name;
+                }
             },
             plotOptions: {
                 series: {
                     marker: {
                         enabled: true,
-                        symbol: 'circle'
+                        symbol: 'circle',
+                        radius: 3
                     },
                 },
             },
             series: [{ 
                 name: 'PvT',
                 color: '#00aaaa',
-                data: [{% for r in pvt %}[ {{r.1|milliseconds}}, {{r.0}} ],{% endfor %}]
+                data: [{% for r in pvt %} { 
+                    'name': '{{r.2|date:"F Y"}}<br/>PvT: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
+                    'x': {{r.2|milliseconds}},
+                    'y': {{r.0}} 
+                },{% endfor %}]
             }, {
                 name: 'PvZ',
                 color: '#aaaa00',
-                data: [{% for r in pvz %}[ {{r.1|milliseconds}}, {{r.0}} ],{% endfor %}]
+                data: [{% for r in pvz %} { 
+                    'name': '{{r.2|date:"F Y"}}<br/>PvZ: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
+                    'x': {{r.2|milliseconds}},
+                    'y': {{r.0}} 
+                },{% endfor %}]
             }, {
                 name: 'TvZ',
                 color: '#aa00aa',
-                data: [{% for r in tvz %}[ {{r.1|milliseconds}}, {{r.0}} ],{% endfor %}]
+                data: [{% for r in tvz %} { 
+                    'name': '{{r.2|date:"F Y"}}<br/>TvZ: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
+                    'x': {{r.2|milliseconds}},
+                    'y': {{r.0}} 
+                },{% endfor %}]
             }] 
         });
     });

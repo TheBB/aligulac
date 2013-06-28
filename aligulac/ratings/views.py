@@ -64,7 +64,7 @@ def period(request, period_id, page='1'):
 
     # Best and most specialised players
     qset = filter_active_ratings(Rating.objects.filter(period=period))
-    best = qset.objects.filter(period=period)).order_by('-rating')[0]
+    best = qset.objects.filter(period=period).order_by('-rating')[0]
     bestvp = qset.extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
     bestvt = qset.extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
     bestvz = qset.extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]
@@ -1532,9 +1532,13 @@ def balance(request):
 
     time = [e.date for e in entries]
 
-    base['pvt'] = zip(100*pvt_scores[0,:]/(pvt_scores[0,:] + pvt_scores[1,:]), time)
-    base['pvz'] = zip(100*pvz_scores[0,:]/(pvz_scores[0,:] + pvz_scores[1,:]), time)
-    base['tvz'] = zip(100*tvz_scores[0,:]/(tvz_scores[0,:] + tvz_scores[1,:]), time)
+    base['pvt'] = zip(100*pvt_scores[0,:]/(pvt_scores[0,:] + pvt_scores[1,:]), 
+            pvt_scores[0,:] + pvt_scores[1,:], time)
+    base['pvz'] = zip(100*pvz_scores[0,:]/(pvz_scores[0,:] + pvz_scores[1,:]),
+            pvz_scores[0,:] + pvz_scores[1,:], time)
+    base['tvz'] = zip(100*tvz_scores[0,:]/(tvz_scores[0,:] + tvz_scores[1,:]),
+            tvz_scores[0,:] + tvz_scores[1,:], time)
+
 
     base['charts'] = True
     base['patches'] = PATCHES

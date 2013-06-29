@@ -64,7 +64,7 @@ def period(request, period_id, page='1'):
 
     # Best and most specialised players
     qset = filter_active_ratings(Rating.objects.filter(period=period))
-    best = qset.objects.filter(period=period).order_by('-rating')[0]
+    best = qset.filter(period=period).order_by('-rating')[0]
     bestvp = qset.extra(select={'d':'rating+rating_vp'}).order_by('-d')[0]
     bestvt = qset.extra(select={'d':'rating+rating_vt'}).order_by('-d')[0]
     bestvz = qset.extra(select={'d':'rating+rating_vz'}).order_by('-d')[0]

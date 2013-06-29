@@ -5,7 +5,7 @@ import shlex
 from datetime import datetime
 
 from django.contrib.auth import logout
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.context_processors import csrf

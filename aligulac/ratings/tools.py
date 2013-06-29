@@ -116,12 +116,20 @@ def find_player(lst, make=False, soft=False):
         # Always search by player tag, team and aliases
         if soft:
             q = Q(tag__icontains=s) | Q(alias__name__icontains=s) |\
-                    Q(teammembership__current=True, teammembership__team__name__icontains=s) |\
-                    Q(teammembership__current=True, teammembership__team__alias__name__icontains=s)
+                Q(groupmembership__current=True, 
+                  groupmembership__group__name__icontains=s,
+                  groupmembership__group__is_team=True) |\
+                Q(groupmembership__current=True, 
+                  groupmembership__group__alias__name__icontains=s,
+                  groupmembership__group__is_team=True)
         else:
             q = Q(tag__iexact=s) | Q(alias__name__iexact=s) |\
-                Q(teammembership__current=True, teammembership__team__name__iexact=s) |\
-                Q(teammembership__current=True, teammembership__team__alias__name__iexact=s)
+                Q(groupmembership__current=True, 
+                  groupmembership__group__name__iexact=s,
+                  groupmembership__group__is_team=True) |\
+                Q(groupmembership__current=True, 
+                  groupmembership__group__alias__name__iexact=s,
+                  groupmembership__group__is_team=True)
 
         # Race query
         if len(s) == 1 and s.upper() in 'PTZSR':

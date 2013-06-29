@@ -13,7 +13,7 @@ from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
-from ratings.models import Rating, Period, Player, Team, Match, Event, Earnings
+from ratings.models import Rating, Period, Player, Group, Match, Event, Earnings
 import ratings.tools
 from ratings.templatetags.ratings_extras import urlfilter
 
@@ -196,9 +196,10 @@ def db(request):
 
     nplayers = Player.objects.all().count()
     nkoreans = Player.objects.filter(country='KR').count()
-    nteams = Team.objects.all().count()
-    nactive = Team.objects.filter(active=True).count()
-    ninactive = Team.objects.filter(active=False).count()
+    nteams = Group.objects.filter(is_team=True).count()
+    nactive = Group.objects.filter(active=True, is_team=True).count()
+    ninactive = Group.objects.filter(active=False, is_team=True).count()
+
 
     base.update({'ngames': ngames, 'nmatches': nmatches, 'nuntreated': nuntreated,\
                  'nwol': nwol, 'nhots': nhots, 'nonline': nonline, 'noffline': noffline,\
@@ -238,11 +239,11 @@ def home(request):
     entries = ratings.tools.filter_active_ratings(Rating.objects.filter(period=period).order_by('-rating'))
     entries = entries.select_related('team', 'teammembership')[0:10]
     for entry in entries:
-        teams = entry.player.teammembership_set.filter(current=True)
+        teams = entry.player.groupmembership_set.filter(current=True, group__is_team=True)
         if teams.exists():
-            entry.team = teams[0].team.shortname
-            entry.teamfull = teams[0].team.name
-            entry.teamid = teams[0].team.id
+            entry.team = teams[0].group.shortname
+            entry.teamfull = teams[0].group.name
+            entry.teamid = teams[0].group.id
 
     blogs = Post.objects.order_by('-date')[0:3]
 
@@ -260,7 +261,7 @@ def search(request, q=''):
 
     players = ratings.tools.find_player(terms, make=False, soft=True)
 
-    teams = Team.objects.all()
+    teams = Group.objects.all()
     for qpart in terms:
         if qpart.strip() == '':
             continue

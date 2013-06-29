@@ -13,7 +13,7 @@ from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
-from ratings.models import Rating, Period, Player, Team, Match, Event, Earnings
+from ratings.models import Rating, Period, Player, Group, Match, Event, Earnings
 import ratings.tools
 from ratings.templatetags.ratings_extras import urlfilter
 
@@ -40,7 +40,7 @@ def player_object(p, sparse=False):
     dp['aliases'] = [a.name for a in p.alias_set.all()]
 
     try:
-        team = p.teammembership_set.filter(current=True)[0].team
+        team = p.groupmembership_set.filter(current=True, group__is_team=True)[0].group
         dp['team'] = team_object(team, sparse=True)
     except:
         pass
@@ -60,7 +60,7 @@ def team_object(t, sparse=False):
     dt['aliases'] = [a.name for a in t.alias_set.all()]
 
     dt['players'] = []
-    for tm in t.teammembership_set.filter(current=True):
+    for tm in t.groupmembership_set.filter(current=True, group__is_team=True):
         dt['players'].append(player_object(tm.player, sparse=True))
 
     return dt
@@ -68,7 +68,7 @@ def team_object(t, sparse=False):
 
 def event_object(e, sparse=False):
     de = {'id': e.id, 'fullname': e.fullname, 'type': e.type}
-    
+
     if sparse:
         return de
 
@@ -125,7 +125,7 @@ def search_teams(request, q='', soft=None, ret_object=False):
     terms = shlex.split(q.encode())
     ret = []
 
-    teams = Team.objects.all()
+    teams = Group.objects.filter(is_team=True)
     for qpart in terms:
         if qpart.strip() == '':
             continue

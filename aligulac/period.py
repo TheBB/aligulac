@@ -23,7 +23,7 @@ from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
 from ratings.tools import filter_active_ratings
 from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY,\
-                                OFFLINE_WEIGHT, KR_START
+                                OFFLINE_WEIGHT, KR_START, KR_END, KR_RATE
 
 from rating import update, performance
 from ratings.tools import cdf
@@ -31,6 +31,8 @@ from ratings.tools import cdf
 # Parameters for rating computation
 RACES = 'PTZ'
 EXRACES = 'M' + RACES       # 'M' is 'MEAN'
+
+KR_RATING = KR_END + (KR_START - KR_END) * exp(-KR_RATE * int(sys.argv[1]))
 
 # This is a meta class holding information about rating computation
 class CPlayer:
@@ -77,7 +79,7 @@ def get_new_players(cplayers, period, prev):
             cp.prev_dev[r] = RATINGS_INIT_DEV
 
         if player.country == 'KR':
-            cp.prev_rating['M'] = KR_START
+            cp.prev_rating['M'] = KR_RATING
 
         # Add to the dict
         cplayers[player.id] = cp

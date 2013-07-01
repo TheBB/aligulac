@@ -1573,6 +1573,9 @@ def balance(request):
                 be.pvz_losses = pvzl
                 be.tvz_wins = tvzw
                 be.tvz_losses = tvzl
+                be.p_gains = p_diff
+                be.t_gains = t_diff
+                be.z_gains = z_diff
                 be.save()
             except:
                 new = BalanceEntry(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,

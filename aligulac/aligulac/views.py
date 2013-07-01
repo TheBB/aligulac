@@ -149,7 +149,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     if context != None:
         if type(context) == Player:
-            rating = Rating.objects.filter(player=context, comp_rat__isnull=False).order_by('-period')
+            rating = Rating.objects.filter(player=context, decay=0).order_by('-period')
             earnings = Earnings.objects.filter(player=context)
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
@@ -165,7 +165,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 base['submenu'].append(('Earnings', base_url + 'earnings/'))
 
             if rating.exists():
-                base['submenu'].append(('Adjustments', base_url + 'period/%i' % rating[0].period.id))
+                base['submenu'].append(('Adjustments', base_url + 'period/%i/' % rating[0].period.id))
 
     base['messages'] = []
 

@@ -984,3 +984,6 @@ class BalanceEntry(models.Model):
     pvz_losses = models.IntegerField()
     tvz_wins = models.IntegerField()
     tvz_losses = models.IntegerField()
+    p_gains = models.FloatField()
+    t_gains = models.FloatField()
+    z_gains = models.FloatField()

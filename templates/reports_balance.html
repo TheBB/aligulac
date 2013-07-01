@@ -11,7 +11,8 @@ This is the template for the main player page, called from ratings.views.player.
 {% block content %}
 <h2>Balance report</h2>
 
-<p>These graphs show the historical month-by-month winrates for each non-mirror matchup in the database.</p>
+<p>The following chart show the historical month-by-month winrates for each non-mirror matchup in the
+database.</p>
 
 <p>Note that this yields information about <em>metagame</em> balance near the <em>top of the skill
     ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout
@@ -24,7 +25,7 @@ that means Protoss is doing well and Terran poorly.</p>
     $(document).ready(function() { 
         var chart1 = new Highcharts.Chart({
             chart: {
-                renderTo: 'chart-pvt',
+                renderTo: 'chart-rates',
                 type: 'spline',
                 zoomType: 'xy'
             },
@@ -106,6 +107,103 @@ that means Protoss is doing well and Terran poorly.</p>
         });
     });
 </script>
-<div style="width: 67em; height: 30em;" id="chart-pvt"></div>
+<div style="width: 67em; height: 30em;" id="chart-rates"></div>
+
+<p>The performance difference chart shows the <em>approximate</em> difference between <em>actual
+performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if,
+averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating
+was equal to 100 less than that of their opponents), but they performed as if they had a mean rating
+difference of 100 (about 54.5% winrate), then that amounts to a rating difference of
+<strong>+200</strong>.</p>
+
+<p>This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly
+hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the
+players, this chart will tend toward equilibrium, even if balance never changes.</p>
+
+<script type="text/javascript">
+    $(document).ready(function() { 
+        var chart1 = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart-diff',
+                type: 'spline',
+                zoomType: 'xy'
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: 'Performance difference'
+            },
+            subtitle: {
+                text: 'Click and drag to zoom'
+            },
+            xAxis: {
+                type: 'datetime',
+                plotLines: [
+                {% for p in patches %}
+                {
+                    value: {{ p.0|milliseconds }},
+                    color: '#cccccc',
+                    width: 2,
+                    label: {
+                        text: '{{ p.1 }}',
+                        verticalAlign: 'bottom',
+                        textAlign: 'right',
+                        y: -2,
+                        style: {
+                            fontSize: '0.8em',
+                        }
+                    }
+                },
+                {% endfor %}]
+            },
+            yAxis: {
+                title: {
+                    text: 'Performance difference [points]'
+                },
+            },
+            tooltip: {
+                formatter: function () {
+                    return this.point.name;
+                }
+            },
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: true,
+                        symbol: 'circle',
+                        radius: 3
+                    },
+                },
+            },
+            series: [{ 
+                name: 'Protoss',
+                color: '#00aa00',
+                data: [{% for r in p_diff %} { 
+                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
+                    'x': {{r.1|milliseconds}},
+                    'y': {{r.0|ratscaled}} 
+                },{% endfor %}]
+            }, {
+                name: 'Terran',
+                color: '#0000aa',
+                data: [{% for r in t_diff %} { 
+                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
+                    'x': {{r.1|milliseconds}},
+                    'y': {{r.0|ratscaled}} 
+                },{% endfor %}]
+            }, {
+                name: 'Zerg',
+                color: '#aa0000',
+                data: [{% for r in z_diff %} { 
+                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
+                    'x': {{r.1|milliseconds}},
+                    'y': {{r.0|ratscaled}} 
+                },{% endfor %}]
+            }] 
+        });
+    });
+</script>
+<div style="width: 67em; height: 30em;" id="chart-diff"></div>
 
 {% endblock %}

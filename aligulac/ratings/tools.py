@@ -9,7 +9,7 @@ from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
 from aligulac.parameters import RATINGS_INIT_DEV, KR_INIT
-from numpy import tanh, pi
+from numpy import tanh, arctanh, pi
 from math import sqrt, exp
 
 PATCHES = [(date(year=2010, month=10, day=14), '1.1.2'),
@@ -52,6 +52,9 @@ def pdf(x, loc=0.0, scale=1.0):
 
 def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5*tanh(pi/2/sqrt(3)*(x-loc)/scale)
+
+def icdf(c, loc=0.0, scale=1.0):
+    return loc + scale * 2*sqrt(3)/pi * arctanh(2*c - 1)
 
 def filter_active_ratings(queryset):
     #return queryset.filter(decay__lt=4, dev__lt=0.2)

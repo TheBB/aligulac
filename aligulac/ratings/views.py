@@ -6,11 +6,12 @@ from pyparsing import nestedExpr
 
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx, Message, NotUniquePlayerMessage, generate_messages
-from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
+from ratings.tools import find_player, display_matches, cdf, icdf, filter_active_ratings, event_shift,\
                           get_placements, PATCHES, start_rating
 from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.db import connection
 from django.db.models import Q, F, Sum, Max
 from models import Period, Rating, Player, Match, Group, GroupMembership, Event, Alias, Earnings,\
                    BalanceEntry, Story
@@ -1503,7 +1504,7 @@ def balance(request):
         last[1] = 12
 
     nti = lambda x: 0 if x is None else x
-    def get_data(qset, rc1, rc2):
+    def get_data_rates(qset, rc1, rc2):
         temp = qset.filter(rca=rc1, rcb=rc2).aggregate(Sum('sca'), Sum('scb'))
         ret1, ret2 = nti(temp['sca__sum']), nti(temp['scb__sum'])
         temp = qset.filter(rca=rc2, rcb=rc1).aggregate(Sum('sca'), Sum('scb'))
@@ -1511,18 +1512,59 @@ def balance(request):
         ret2 += nti(temp['sca__sum'])
         return ret1, ret2
 
+    def get_data_perf_single(date1, date2, rc1, rc2):
+        cur = connection.cursor()
+        cur.execute('''SELECT SUM(ra.rating + ra.rating_v%s),
+                              SUM(rb.rating + rb.rating_v%s),
+                              SUM(sca),
+                              SUM(scb),
+                              COUNT(*)
+                         FROM ratings_match AS m,
+                              ratings_rating AS ra,
+                              ratings_rating AS rb
+                        WHERE ra.player_id = m.pla_id AND
+                              rb.player_id = m.plb_id AND
+                              ra.period_id = m.period_id - 1 AND
+                              rb.period_id = m.period_id - 1 AND
+                              m.rca = '%s' AND
+                              m.rcb = '%s' AND
+                              m.date >= '%s' AND
+                              m.date < '%s' '''\
+                    % (rc2.lower(), rc1.lower(), rc1, rc2, date1, date2))
+        return cur.fetchone()
+
+    def get_data_perf(date1, date2, race):
+        wins1, wins2, diff = 0, 0, 0.0
+        for rc2 in 'PTZ':
+            if rc2 == race:
+                continue
+            row1 = get_data_perf_single(date1, date2, race, rc2)
+            row2 = get_data_perf_single(date1, date2, rc2, race)
+            wins1 += row1[2] + row2[3]
+            wins2 += row1[3] + row2[2]
+            diff += row1[0] - row1[1] + row2[1] - row1[0]
+
+        perfdiff = icdf(float(wins1)/float(wins1+wins2), loc=0.0, scale=1.0)
+
+        return perfdiff - diff/float(wins1+wins2)
+
     # Update all months every month
     if not BalanceEntry.objects.filter(date=datetime.date(year=last[0], month=last[1], day=15)).exists():
         while first[0] < last[0] or (first[0] == last[0] and first[1] <= last[1]):
-            matches = Match.objects.filter(date__gte='%i-%i-01' % first)
-            if first[1] < 12:
-                matches = matches.filter(date__lt='%i-%i-01' % (first[0], first[1]+1))
-            else:
-                matches = matches.filter(date__lt='%i-%i-01' % (first[0]+1, 1))
+            date1 = '%i-%i-01' % first
+            date2 = '%i-%i-01' % ((first[0], first[1]+1) if first[1] < 12 else (first[0]+1, 1))
 
-            pvtw, pvtl = get_data(matches, 'P', 'T')
-            pvzw, pvzl = get_data(matches, 'P', 'Z')
-            tvzw, tvzl = get_data(matches, 'T', 'Z')
+            matches = Match.objects.filter(date__gte=date1, date__lt=date2)
+            pvtw, pvtl = get_data_rates(matches, 'P', 'T')
+            pvzw, pvzl = get_data_rates(matches, 'P', 'Z')
+            tvzw, tvzl = get_data_rates(matches, 'T', 'Z')
+
+            p_diff = get_data_perf(date1, date2, 'P')
+            t_diff = get_data_perf(date1, date2, 'T')
+            z_diff = get_data_perf(date1, date2, 'Z')
+
+            print p_diff, t_diff, z_diff
+
             try:
                 be = BalanceEntry.objects.get(date=datetime.date(year=first[0], month=first[1], day=15))
                 be.pvt_wins = pvtw
@@ -1534,7 +1576,8 @@ def balance(request):
                 be.save()
             except:
                 new = BalanceEntry(pvt_wins=pvtw, pvt_losses=pvtl, pvz_wins=pvzw, pvz_losses=pvzl,
-                                   tvz_wins=tvzw, tvz_losses=tvzl,
+                                   tvz_wins=tvzw, tvz_losses=tvzl, p_gains=p_diff, t_gains=t_diff,
+                                   z_gains=z_diff,
                                    date=datetime.date(year=first[0], month=first[1], day=15))
                 new.save()
 
@@ -1556,6 +1599,9 @@ def balance(request):
     pvz_scores[1,:] = array([e.pvz_losses for e in entries])
     tvz_scores[0,:] = array([e.tvz_wins for e in entries])
     tvz_scores[1,:] = array([e.tvz_losses for e in entries])
+    p_diff = array([e.p_gains for e in entries])
+    t_diff = array([e.t_gains for e in entries])
+    z_diff = array([e.z_gains for e in entries])
 
     time = [e.date for e in entries]
 
@@ -1566,6 +1612,9 @@ def balance(request):
     base['tvz'] = zip(100*tvz_scores[0,:]/(tvz_scores[0,:] + tvz_scores[1,:]),
             tvz_scores[0,:] + tvz_scores[1,:], time)
 
+    base['p_diff'] = zip(p_diff, time)
+    base['t_diff'] = zip(t_diff, time)
+    base['z_diff'] = zip(z_diff, time)
 
     base['charts'] = True
     base['patches'] = PATCHES

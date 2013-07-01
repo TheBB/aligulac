@@ -7,7 +7,7 @@ from pyparsing import nestedExpr
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx, Message, NotUniquePlayerMessage, generate_messages
 from ratings.tools import find_player, display_matches, cdf, filter_active_ratings, event_shift,\
-                          get_placements, PATCHES
+                          get_placements, PATCHES, start_rating
 from ratings.templatetags.ratings_extras import datemax, datemin
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -1286,7 +1286,7 @@ def rating_details(request, player_id, period_id):
             prevrat[1][r] = prev.get_totalrating(r)
             prevdev[1][r] = prev.get_totaldev(r)
     else:
-        prevrat = [0., {'P': 0., 'T': 0., 'Z': 0.}]
+        prevrat = [start_rating(player.country, period.id), {'P': 0., 'T': 0., 'Z': 0.}]
         prevdev = [RATINGS_INIT_DEV, {'P': RATINGS_INIT_DEV, 'T': RATINGS_INIT_DEV, 'Z': RATINGS_INIT_DEV}]
 
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player)).filter(period=period)\

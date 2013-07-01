@@ -8,7 +8,7 @@ from countries import data
 from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 from django.db.models import Q, F, Sum, Max
-from aligulac.parameters import RATINGS_INIT_DEV
+from aligulac.parameters import RATINGS_INIT_DEV, KR_INIT
 from numpy import tanh, pi
 from math import sqrt, exp
 
@@ -17,6 +17,12 @@ PATCHES = [(date(year=2010, month=10, day=14), '1.1.2'),
            (date(year=2011, month=9,  day=20), '1.4.0'),
            (date(year=2012, month=2,  day=21), '1.4.3'),
            (date(year=2013, month=3,  day=12), 'HotS')]
+
+def start_rating(country, period):
+    if country == 'KR':
+        return KR_INIT
+    else:
+        return 0.0
 
 def prob_of_winning(rating_a=None, rating_b=None):
     if rating_a and rating_b:
@@ -236,7 +242,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
                 r.pla_rating = rta.get_totalrating(m.rcb)
                 r.pla_dev = rta.get_totaldev(m.rcb)
             except:
-                r.pla_rating = 0
+                r.pla_rating = start_rating(r.pla_country, m.period_id)
                 r.pla_dev = sqrt(2)*RATINGS_INIT_DEV
 
             try:
@@ -244,7 +250,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
                 r.plb_rating = rtb.get_totalrating(m.rca)
                 r.plb_dev = rtb.get_totaldev(m.rca)
             except:
-                r.plb_rating = 0
+                r.plb_rating = start_rating(r.plb_country, m.period_id)
                 r.plb_dev = sqrt(2)*RATINGS_INIT_DEV
 
         if fix_left is not None and fix_left.id == r.plb_id:

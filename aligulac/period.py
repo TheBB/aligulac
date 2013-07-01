@@ -21,7 +21,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "aligulac.settings")
 from django.db import connection, transaction
 from django.db.models import Q, F
 from ratings.models import Period, Player, Rating, Match
-from ratings.tools import filter_active_ratings
+from ratings.tools import filter_active_ratings, start_rating
 from aligulac.parameters import RATINGS_INIT_DEV, RATINGS_MIN_DEV, RATINGS_DEV_DECAY,\
                                 OFFLINE_WEIGHT, KR_START, KR_END, KR_RATE
 
@@ -32,7 +32,7 @@ from ratings.tools import cdf
 RACES = 'PTZ'
 EXRACES = 'M' + RACES       # 'M' is 'MEAN'
 
-KR_RATING = KR_END + (KR_START - KR_END) * exp(-KR_RATE * int(sys.argv[1]))
+KR_RATING = start_rating('KR', int(sys.argv[1]));
 
 # This is a meta class holding information about rating computation
 class CPlayer:

@@ -32,15 +32,15 @@ function parseBracket(text) {
     /* A list of matches for each round. */
     var properties = {};
     for (var i = 0; i < numRounds; i++) {
-	properties[i] = {};
-	var players = pow2[numRounds-i];
-	
-	for (var j = 0; j < players / 2; j++) {
+        properties[i] = {};
+        var players = pow2[numRounds-i];
+    
+        for (var j = 0; j < players / 2; j++) {
             /* Each match contains two players. */
             properties[i][j] = [{}, {}];
             properties[i][j][0].opponent = properties[i][j][1];
             properties[i][j][1].opponent = properties[i][j][0];
-	}
+        }
     }
     
     var propList = propText.split("|");
@@ -48,17 +48,17 @@ function parseBracket(text) {
     /* Read through all properties */
     for (var i in propList) {
 
-	var prop = propList[i];
-	match = prop.match(lp_prop_pattern);
-	
-	/* 
-	   This gives a list as follows:
-	   [ _, round, W|D, player, propName, propValue ] 
-	   e.g
-	   [ _, 1, "D", 1, "", "TargA"]
-	   [ _, 1, "D", 1, "race", "z"]
-	*/
-	if (match != undefined) {
+        var prop = propList[i];
+        match = prop.match(lp_prop_pattern);
+    
+        /* 
+           This gives a list as follows:
+           [ _, round, W|D, player, propName, propValue ] 
+           e.g
+           [ _, 1, "D", 1, "", "TargA"]
+           [ _, 1, "D", 1, "race", "z"]
+        */
+        if (match != undefined) {
             var round = +match[1];
             var player = +match[3];
             var propName = match[4];
@@ -71,24 +71,24 @@ function parseBracket(text) {
 
             /* Put it where it belongs! */
             properties[round][match][player][propName] = propValue;
-	}
+        }
     } 
 
     /* Iterate through players to determine byes */
     var result = [];
 
     for (var i = 0; i < numPlayers; i++ ) {
-	if (isOut(properties, 0, i))
+        if (isOut(properties, 0, i))
             result.push("-");
-	else {
+        else {
             var player = properties[0][Math.floor(i / 2)][i % 2]
             var p = player[""];
             if (player["flag"] != undefined)
-		p += " " + player["flag"];
+                p += " " + player["flag"];
             if (player["race"] != undefined)
-		p += " " + player["race"];
+                p += " " + player["race"];
             result.push(p);
-	}
+        }
     }
 
     return result.join("\n");
@@ -105,9 +105,9 @@ function isOut(properties, round, pid)
           the bracket and is not out.
     */
     if (player.opponent["win"] == 1)
-	return true;
+        return true;
     if (player["win"] == 1)
-	return isOut(properties, round + 1, match);
+        return isOut(properties, round + 1, match);
     
     return false;
 }

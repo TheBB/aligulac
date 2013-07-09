@@ -12,6 +12,21 @@ log2 = {
 };
 pow2 = [1, 2, 4, 8, 16, 32, 64, 128];
 
+function showLPButton() {
+    document.getElementById("lp_button").style.display = "";
+}
+
+function hideLPButton() {
+    document.getElementById("lp_button").style.display = "none";
+}
+
+function format_change(el) {
+    if (el.item(el.selectedIndex).text == "Single elimination bracket")
+        showLPButton();
+    else
+        hideLPButton();
+}
+
 function parseLP() {
     var text = document.getElementById("players").value;
     var result = parseBracket(text);

@@ -18,7 +18,8 @@ This is the main prediction page, showing all available options. It's called fro
         <div class="row">
             <div class="rowel" style="width: 10em;">Format</div>
             <div class="rower" style="width: 40em;">
-                <select name="format" style="width: 20em;">
+                <select name="format" style="width: 20em;"
+                    onchange="format_change(this);">
                     {% for format in formats %}
                     <option value="{{ forloop.counter0 }}"
                         {% if forloop.counter0 == fmt %}selected{% endif %}>{{ format }}</option>
@@ -42,7 +43,9 @@ This is the main prediction page, showing all available options. It's called fro
             <div class="rowel"></div>
             <div class="rower">
                 <input type="submit" value="Show me the future!" /> 
-                <input type="submit" value="Parse Liquipedia Bracket!" onclick="parseLP(); return false;" />
+                <input type="submit" value="Parse Liquipedia Bracket!"
+                onclick="parseLP(); return false;" id="lp_button"
+                style="display:none;" />
             </div>
         </div>
     </div>

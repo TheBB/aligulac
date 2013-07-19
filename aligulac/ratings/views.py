@@ -432,6 +432,9 @@ def player(request, player_id):
         return render_to_response('player.html', base)
     rating = r.order_by('-period')[0]
 
+    if rating.decay >= 4:
+        base['messages'].append(Message('Due to the player\'s lack of recent games, they have been marked as <em>inactive</em> and removed from the current rating list. Once they play a rated game they will be reinstated.', 'Inactive', type=Message.INFO))
+
     matches = Match.objects.filter(Q(pla=player) | Q(plb=player))\
             .select_related('pla__rating').select_related('plb__rating')\
             .select_related('period')\

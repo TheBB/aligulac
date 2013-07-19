@@ -65,7 +65,7 @@ arguments:
                      title="{{ entry.prev.position|sub:entry.position }}" />
                 {% elif entry.get_prev.position > entry.position %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" class="btm"
-                     title="{{ entry.prev.position|sub:entry.position }}" />
+                     title="+{{ entry.prev.position|sub:entry.position }}" />
                 {% endif %}
             {% elif rl_pos_arrow %}
             <img src="{{ "new.png"|static }}" alt="new" style="vertical-align: text-bottom;" />

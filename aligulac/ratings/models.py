@@ -901,6 +901,30 @@ class Rating(models.Model):
     def ratings(self):
         return [self.rating, self.rating_vp, self.rating_vt, self.rating_vz]
 
+    @property
+    def rating_diff(self):
+        if self.get_prev() is not None:
+            return self.rating - self.get_prev().rating
+
+    @property
+    def rating_diff_vp(self):
+        if self.get_prev() is not None:
+            return self.rating + self.rating_vp - \
+                (self.get_prev().rating + self.get_prev().rating_vp)
+
+    @property
+    def rating_diff_vt(self):
+        if self.get_prev() is not None:
+            return self.rating + self.rating_vt - \
+                (self.get_prev().rating + self.get_prev().rating_vt)
+
+    @property
+    def rating_diff_vz(self):
+        if self.get_prev() is not None:
+            return self.rating + self.rating_vz - \
+                (self.get_prev().rating + self.get_prev().rating_vz)
+
+
     def devs(self):
         return [self.dev, self.dev_vp, self.dev_vt, self.dev_vz]
 

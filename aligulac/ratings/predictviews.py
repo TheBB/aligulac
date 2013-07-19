@@ -14,6 +14,7 @@ from django.db.models import Q, Sum
 from models import Period, Rating, Player, Match
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
+from django.views.decorators.cache import cache_page
 
 from countries import transformations, data
 
@@ -126,6 +127,7 @@ def predict(request):
 
     return render_to_response('predict.html', base)
 
+@cache_page(60)
 def pred_match(request):
     base = base_ctx('Predict', 'Predict', request=request)
     base['short_url_button'] = True
@@ -259,6 +261,7 @@ def pred_match(request):
                    url='http://aligulac.com/predict/match/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_match.html', base)
 
+@cache_page(5 * 60)
 def pred_4pswiss(request):
     base = base_ctx('Predict', 'Predict', request=request)
 
@@ -319,6 +322,7 @@ def pred_4pswiss(request):
                      url='http://aligulac.com/predict/4pswiss/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_4pswiss.html', base)
 
+@cache_page(10 * 60)
 def pred_sebracket(request):
     base = base_ctx('Predict', 'Predict', request=request)
 
@@ -394,6 +398,7 @@ def pred_sebracket(request):
                        url='http://aligulac.com/predict/sebracket/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_sebracket.html', base)
 
+@cache_page(5 * 60)
 def pred_rrgroup(request):
     base = base_ctx('Predict', 'Predict', request=request)
 
@@ -463,6 +468,7 @@ def pred_rrgroup(request):
                      url='http://aligulac.com/predict/rrgroup/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_rrgroup.html', base)
 
+@cache_page(5 * 60)
 def pred_proleague(request):
     base = base_ctx('Predict', 'Predict', request=request)
 

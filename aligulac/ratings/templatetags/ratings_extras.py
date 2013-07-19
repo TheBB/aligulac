@@ -73,6 +73,10 @@ def addf(value, arg):
     return float(value) + float(arg)
 register.filter('addf', addf)
 
+def sub(value, arg):
+    return int(value) - int(arg)
+register.filter('sub', sub)
+
 def racefull(value):
     return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
 register.filter('racefull', racefull)

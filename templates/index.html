@@ -23,6 +23,9 @@ Changes here will mostly be visible on the entire site.
             <script src="http://code.highcharts.com/highcharts.js"></script>
             <script src="http://code.highcharts.com/modules/exporting.js"></script>
         {% endif %}
+        {% if curpage == "Predict" %}
+            <script type="text/javascript" src="{{ "lp-bracket-parser"|js }}" ></script>
+        {% endif %}
 
         <!-- Google Analytics -->
         <script type="text/javascript">

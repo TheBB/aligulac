@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 os.environ['HOME'] = '/root'
@@ -22,8 +23,10 @@ from math import sqrt, log
 from collections import namedtuple
 
 TL_HEADER = '[center][code]'
-TL_FOOTER = '[/code][/center][small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
-        + '[url=%s]Modify[/url].[/small]'
+TL_MIDDLE = '[/code][/center][spoiler][code]'
+TL_FOOTER = '[/code][/spoiler]\n'\
+            '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
+            '[url=%s]Modify[/url].[/small]'
 REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^Estimated ^by [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
 
@@ -381,20 +384,23 @@ def pred_sebracket(request):
 
     MeanRes = namedtuple('MeanRes', 'pla plb sca scb')
     meanres = []
+    bracket = []
     for rnd in range(1, nrounds+1):
         meanres.append('Round %i' % rnd)
+        bracket.append([])
         for j in range(1, 2**(nrounds-rnd)+1):
             match = obj.get_match('%i-%i' % (rnd, j))
             match.compute()
             lsup = match.find_lsup()
             meanres.append(MeanRes(match.get_player(0).dbpl, match.get_player(1).dbpl, lsup[1], lsup[2]))
+            bracket[-1].append(meanres[-1])
             match.broadcast_instance((0, [lsup[4], lsup[3]], match))
     base['meanres'] = meanres
 
     base['ps'] = request.GET['ps']
     base['bo'] = request.GET['bo']
 
-    sebracket_postable(base, obj, players,
+    sebracket_postable(base, obj, players, bracket,
                        url='http://aligulac.com/predict/sebracket/?bo=%s&ps=%s' % (base['bo'], base['ps']))
     return render_to_response('pred_sebracket.html', base)
 
@@ -613,7 +619,65 @@ def fpswiss_postable(base, obj, players, url):
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url
 
-def sebracket_postable(base, obj, players, url):
+def postable_bracket(bracket):
+    nrounds = len(bracket)
+
+    result = []
+
+    for r in range(nrounds):
+        result.append(u"")
+        result[r] += u"\n" * (2 ** r - 1)
+        
+        for i in range(len(bracket[r])):
+            (pla, plb, plascore, plbscore) = tuple(bracket[r][i])
+            if pla is not None:
+                pla = unicode(pla.tag)
+            else:
+                plascore = u""
+                pla = u""
+            if plb is not None:
+                plb = unicode(plb.tag)
+            else:
+                plbscore = u""
+                plb = u""
+
+            if r != 0:
+                pla = (u" " + pla).rjust(12, u"─")
+                plb = (u" " + plb).rjust(12, u"─")
+            else:
+                pla = (u" " + pla).rjust(12)
+                plb = (u" " + plb).rjust(12)
+            result[r] += u"{} {:>1} ┐ \n".format(pla, plascore)
+            result[r] += u"               │ \n" * (2 ** r - 1)
+            result[r] += u"               ├─\n"
+            result[r] += u"               │ \n" * (2 ** r - 1)
+            result[r] += u"{} {:>1} ┘ \n".format(plb, plbscore)
+
+            if i < len(bracket[r]):
+                result[r] += u"                 \n" * int(2 ** (r + 1) - 1)
+
+    result.append(u"\n" * (2 ** (r + 1) - 1))
+    result[-1] += u" {}".format(bracket[-1][0][0].tag
+                                if bracket[-1][0][2] > bracket[-1][0][3] 
+                                else bracket[-1][0][1].tag)
+
+    return add_blocks(result)
+
+def add_blocks(blocks):
+
+    line_blocks = [block.splitlines() for block in blocks]
+
+    result = ""
+    for line in range(len(line_blocks[0])):
+        result += ''.join(block[line] 
+                          for block in line_blocks 
+                          if line < len(block))
+        if line + 1 < len(line_blocks[0]):
+            result += u"\n"
+        
+    return result
+
+def sebracket_postable(base, obj, players, bracket, url):
     nl = max([len(p.dbpl.tag) for p in players if p.dbpl is not None])
 
     s =   'Win    '
@@ -632,8 +696,11 @@ def sebracket_postable(base, obj, players, url):
             s += ' {p: >7.2f}%'.format(p=100*t)
         strings.append((s, '', ''))
 
+    tl_bracket = postable_bracket(bracket)
+
     postable_tl = left_center_right(strings, justify=False, gap=0)
-    base['postable_tl'] = TL_HEADER + postable_tl + TL_FOOTER % url
+    base['postable_tl'] = TL_HEADER + postable_tl + TL_MIDDLE + tl_bracket\
+                          + (TL_FOOTER % url)
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url

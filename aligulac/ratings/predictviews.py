@@ -28,7 +28,8 @@ TL_FOOTER = '[/code][/center]\n'\
             '[url=%s]Modify[/url].[/small]'
 
 TL_SEBRACKET_HEADER = '[center][code]'
-TL_SEBRACKET_MIDDLE = '[/code][/center][spoiler][code]'
+TL_SEBRACKET_MIDDLE = '[/code][/center][b]Median Outcome Bracket[/b]\n'\
+                      '[spoiler][code]'
 TL_SEBRACKET_FOOTER = '[/code][/spoiler]\n'\
                       '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '\
                       '[url=%s]Modify[/url].[/small]'
@@ -704,7 +705,7 @@ def sebracket_postable(base, obj, players, bracket, url):
                           postable_tl + \
                           TL_SEBRACKET_MIDDLE + \
                           tl_bracket + \
-                          (TL_FOOTER % url)
+                          (TL_SEBRACKET_FOOTER % url)
 
     postable_reddit = left_center_right(strings, justify=False, gap=0, indent=4)
     base['postable_reddit'] = REDDIT_HEADER + postable_reddit + REDDIT_FOOTER % url

@@ -656,19 +656,19 @@ def create_postable_bracket(bracket):
             else:
                 pla = (u" " + pla).rjust(12)
                 plb = (u" " + plb).rjust(12)
-            result[r].append(u"{} {:>1} ┐ ".format(pla, plascore))
+            result[r].append(u"{0} {1:>1} ┐ ".format(pla, plascore))
             result[r].extend([u"               │ "] * (2 ** r - 1))
             result[r].append(u"               ├─")
             result[r].extend([u"               │ "] * (2 ** r - 1))
-            result[r].append(u"{} {:>1} ┘ ".format(plb, plbscore))
+            result[r].append(u"{0} {1:>1} ┘ ".format(plb, plbscore))
 
             if i < len(bracket[r]):
                 result[r].extend([u"                 "] * int(2 ** (r + 1) - 1))
 
     result.append([u""] * (2 ** (r + 1) - 1))
-    result[-1].append(u" {}".format(bracket[-1][0][0].tag
-                                    if bracket[-1][0][2] > bracket[-1][0][3] 
-                                    else bracket[-1][0][1].tag))
+    result[-1].append(u" " + (bracket[-1][0][0].tag
+                              if bracket[-1][0][2] > bracket[-1][0][3] 
+                              else bracket[-1][0][1].tag))
 
     postable_result = ""
     for line in range(len(result[0])):

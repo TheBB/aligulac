@@ -1,9 +1,12 @@
+from aligulac.cache import cache_page
+
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from faq.models import Post
 
 from aligulac.views import base_ctx
 
+@cache_page
 def faq(request):
     posts = Post.objects.order_by('index')
 

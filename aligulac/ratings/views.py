@@ -4,6 +4,7 @@ import operator
 import shlex
 from pyparsing import nestedExpr
 
+from aligulac.cache import cache_page
 from aligulac.parameters import RATINGS_INIT_DEV
 from aligulac.views import base_ctx, Message, NotUniquePlayerMessage, generate_messages
 from ratings.tools import find_player, display_matches, cdf, icdf, filter_active_ratings, event_shift,\
@@ -39,6 +40,7 @@ def collect(lst, n=2):
 
     return ret
 
+@cache_page
 def periods(request):
     periods = Period.objects.filter(computed=True).order_by('-start')
 
@@ -47,6 +49,8 @@ def periods(request):
 
     return render_to_response('periods.html', base)
 
+
+@cache_page
 def period(request, period_id, page='1'):
     base = base_ctx('Ranking', 'Current', request)
     psize = 40
@@ -174,6 +178,7 @@ def period(request, period_id, page='1'):
 
     return render_to_response('period.html', base)
 
+@cache_page
 def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
@@ -448,6 +453,7 @@ def player(request, player_id):
                  'teammems': teammems})
     return render_to_response('player.html', base)
 
+@cache_page
 def player_historical(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Rating history', request, context=player)
@@ -481,6 +487,7 @@ def player_historical(request, player_id):
     base.update({'player': player, 'historical': historical})
     return render_to_response('historical.html', base)
 
+@cache_page
 def results(request):
     base = base_ctx('Results', 'By Date', request)
 
@@ -502,6 +509,7 @@ def results(request):
 
     return render_to_response('results.html', base)
 
+@cache_page
 def results_search(request):
     base = base_ctx('Results', 'Search', request)
     base.update(csrf(request))
@@ -655,6 +663,7 @@ def results_search(request):
 
     return render_to_response('results_search.html', base)
 
+@cache_page
 def events(request, event_id=None):
     # Redirect to proper URL if there's a ?goto=... present
     if 'goto' in request.GET:
@@ -1097,6 +1106,7 @@ def player_results(request, player_id):
     
     return render_to_response('player_results.html', base)
 
+@cache_page
 def player_earnings(request, player_id):
     player = get_object_or_404(Player, id=int(player_id))
 
@@ -1255,6 +1265,7 @@ def earnings(request):
     
     return render_to_response('earnings.html', base)
 
+@cache_page
 def rating_details(request, player_id, period_id):
     period_id = int(period_id)
     player_id = int(player_id)
@@ -1494,6 +1505,7 @@ def records_race(request):
         base.update({'hightot': high, 'highp': highp, 'hight': hight, 'highz': highz, 'dom': dom})
         return render_to_response('records.html', base)
 
+@cache_page
 def balance(request):
     base = base_ctx('Reports', 'Balance', request)
 

@@ -13,6 +13,8 @@ from django.db.models import Sum, Q
 from django.contrib.auth.models import User
 
 from aligulac.settings import DEBUG, PATH_TO_DIR
+from aligulac.cache import cache_page
+from django.views.decorators.cache import cache_page as django_cache_page
 from ratings.models import Rating, Period, Player, Group, Match, Event, Earnings
 import ratings.tools
 from ratings.templatetags.ratings_extras import urlfilter
@@ -171,6 +173,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     return base
 
+@cache_page
 def db(request):
     base = base_ctx('About', 'Database', request)
 
@@ -227,11 +230,13 @@ def db(request):
 
     return render_to_response('db.html', base)
 
+@cache_page
 def staff(request):
     base = base_ctx('About', 'Staff', request)
 
     return render_to_response('staff.html', base)
 
+@cache_page
 def home(request):
     base = base_ctx(request=request)
 
@@ -251,6 +256,7 @@ def home(request):
     
     return render_to_response('index.html', base)
 
+@cache_page
 def search(request, q=''):
     base = base_ctx(request=request)
 

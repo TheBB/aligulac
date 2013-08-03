@@ -17,7 +17,7 @@ PATCHES = [(date(year=2010, month=10, day=14), '1.1.2'),
            (date(year=2011, month=9,  day=20), '1.4.0'),
            (date(year=2012, month=2,  day=21), '1.4.3'),
            (date(year=2013, month=3,  day=12), 'HotS'),
-           (date(year=2013, month=7,  day=11), '2.0.9')]
+           (date(year=2013, month=7,  day=11), '2.0.9 BU')]
 
 def start_rating(country, period):
     if country == 'KR':

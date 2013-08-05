@@ -70,9 +70,9 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <tr class="header">
         <td colspan="5">
             {% if m.match.eventobj %} ▸
-                {% for event in m.match.eventobj.get_event_path %}
-                    <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
-                {% endfor %}
+            	{% with event=m.match.eventobj.get_event_event %}
+            	<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter}}">{{ event.fullname }}</a>
+            	{% endwith %}
             {% elif m.match.event %}
                 {{ m.match.event }}
             {% elif m.match.group.event %}

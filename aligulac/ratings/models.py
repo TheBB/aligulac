@@ -83,6 +83,10 @@ class Event(models.Model):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'])\
                             .order_by('-lft')[0].fullname
 
+    def get_event_event(self):
+        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, type__in=['category','event'], noprint=False)\
+                            .order_by('-lft')[0]
+
     def get_event_path(self):
         return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt, noprint=False,
                                     type__in=['category','event']).order_by('lft')

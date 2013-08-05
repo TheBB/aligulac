@@ -550,8 +550,8 @@ class Alias(models.Model):
         new.save()
 
     @staticmethod
-    def add_team_alias(team, name):
-        new = Alias(team=team, name=name)
+    def add_team_alias(group, name):
+        new = Alias(group=group, name=name)
         new.save()
 
 class Match(models.Model):

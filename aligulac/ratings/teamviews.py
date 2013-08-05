@@ -79,7 +79,7 @@ def team(request, team_id):
     base['earnings'] = earnings.aggregate(Sum('earnings'))['earnings__sum']
 
     try: 
-        base['aliases'] = Alias.objects.filter(team=team)
+        base['aliases'] = Alias.objects.filter(group=team)
     except:
         pass
         

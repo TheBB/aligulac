@@ -580,6 +580,25 @@ ratings.views.events.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
+            <div class="row">
+                <div class="rowel">PvP</div>
+                <div class="rower">
+                    {{ pvp_games }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">TvT</div>
+                <div class="rower">
+                    {{ tvt_games }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">ZvZ</div>
+                <div class="rower">
+                    {{ zvz_games }}
+                </div>
+            </div>
+
             {% if event.get_homepage or event.tlpd_id or event.get_tl_thread or event.get_lp_name %}
             <div class="row infobox">
                 <div class="rowel">External</div>

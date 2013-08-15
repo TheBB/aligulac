@@ -89,9 +89,17 @@ def period(request, period_id, page='1'):
         l += ntz(ms['sca__sum'])
         return w, l
     
+    def games(race):
+        ms = Match.objects.filter(period=period, rca=race, rcb=race).aggregate(Sum('sca'), Sum('scb'))
+        s = ntz(ms['sca__sum']) + ntz(ms['scb__sum'])
+        return s
+
     pvt_wins, pvt_loss = wl('P', 'T')
     pvz_wins, pvz_loss = wl('P', 'Z')
     tvz_wins, tvz_loss = wl('T', 'Z')
+    pvp_games = games('P')
+    tvt_games = games('T')
+    zvz_games = games('Z')
 
     # Build country list
     countriesDict = []
@@ -171,6 +179,7 @@ def period(request, period_id, page='1'):
             'localcount': True, 'sort': sort, 'race': race, 'nats': nats,
             'pvt_wins': pvt_wins, 'pvt_loss': pvt_loss, 'pvz_wins': pvz_wins,
             'pvz_loss': pvz_loss, 'tvz_wins': tvz_wins, 'tvz_loss': tvz_loss,
+            'pvp_games': pvp_games, 'tvt_games': tvt_games, 'zvz_games': zvz_games,
             'countries': countries})
 
     if period.id != base['curp'].id:
@@ -1015,6 +1024,15 @@ def events(request, event_id=None):
     qsetb = matches.filter(rcb='T', rca='Z').aggregate(Sum('sca'), Sum('scb'))
     base['tvz_wins'] = nti(qseta['sca__sum']) + nti(qsetb['scb__sum'])
     base['tvz_loss'] = nti(qsetb['sca__sum']) + nti(qseta['scb__sum'])
+
+    qseta = matches.filter(rca='P', rcb='P').aggregate(Sum('sca'), Sum('scb'))
+    base['pvp_games'] = nti(qseta['sca__sum']) + nti(qseta['scb__sum'])
+
+    qseta = matches.filter(rca='T', rcb='T').aggregate(Sum('sca'), Sum('scb'))
+    base['tvt_games'] = nti(qseta['sca__sum']) + nti(qseta['scb__sum'])
+
+    qseta = matches.filter(rca='Z', rcb='Z').aggregate(Sum('sca'), Sum('scb'))
+    base['zvz_games'] = nti(qseta['sca__sum']) + nti(qseta['scb__sum'])
 
     # Dates
     base['earliest'] = event.earliest

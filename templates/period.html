@@ -64,6 +64,24 @@ This template shows a rating list for a given period.
                     {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
                 </div>
             </div>
+            <div class="row">
+                <div class="rowel">PvP</div>
+                <div class="rower">
+                    {{ pvp_games }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">TvT</div>
+                <div class="rower">
+                    {{ tvt_games }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="rowel">ZvZ</div>
+                <div class="rower">
+                    {{ zvz_games }}
+                </div>
+            </div>
         </div>
     </div>
 

@@ -3,7 +3,7 @@ This template prints a list of blog posts. It is included from the front page (i
 (blog.html).
 {% endcomment %}
 
-{% load markup %}
+{% load ratings_extras %}
 
 {% for post in blogposts %}
 <h2>{{ post.title }}</h2>

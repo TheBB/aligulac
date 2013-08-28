@@ -1,5 +1,6 @@
 # Rating system parameters
 
+
 RATINGS_INIT_DEV = 0.23
 RATINGS_MIN_DEV = 0.04
 RATINGS_DEV_DECAY = 0.065

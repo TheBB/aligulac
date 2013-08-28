@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models, transaction
 from django.db.models import Max, F
@@ -481,6 +483,14 @@ class Player(models.Model):
                  (Player.TLPD_DB_WOLBETA,         "WoLbeta")]
 
         return dict.fromkeys([n[1] for n in names if self.tlpd_db & n[0]], self.tlpd_id)
+    # }}}
+
+    # {{{ get_current_teammembership: Gets the current team membership object of this player, if any.
+    def get_current_teammembership(self):
+        try:
+            return self.groupmembership_set.filter(current=True, group__is_team=True)[0]
+        except:
+            return None
     # }}}
 # }}}
 
@@ -1049,21 +1059,18 @@ class Rating(models.Model):
     # }}}
 
     # {{{ rating_diff(_vx): Differences in rating between this and previous period
-    @property
     def rating_diff(self, race=None):
         if self.get_prev() is not None:
-            return self.get_rating(race) - self.get_prev().get_rating(race)
+            a = self.get_rating(race) - self.get_prev().get_rating(race)
+            return a
         return self.get_rating(race)
 
-    @property
     def rating_diff_vp(self):
         return self.rating_diff('P')
 
-    @property
     def rating_diff_vt(self):
         return self.rating_diff('T')
 
-    @property
     def rating_diff_vz(self):
         return self.rating_diff('Z')
     # }}}

@@ -24,12 +24,12 @@ class Period(models.Model):
     num_retplayers = models.IntegerField('# returning players', default=0)
     num_newplayers = models.IntegerField('# new players', default=0)
     num_games = models.IntegerField('# games', default=0)
-    dom_p = models.FloatField('Protoss OP value')
-    dom_t = models.FloatField('Terran OP value')
-    dom_z = models.FloatField('Zerg OP value')
+    dom_p = models.FloatField('Protoss OP value', null=True)
+    dom_t = models.FloatField('Terran OP value', null=True)
+    dom_z = models.FloatField('Zerg OP value', null=True)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return 'Period #' + str(self.id) + ': ' + str(self.start) + ' to ' + str(self.end)
     # }}}
 
@@ -75,10 +75,10 @@ class Event(models.Model):
     
     TYPE_CATEGORY, TYPE_EVENT, TYPE_ROUND = 'category', 'event', 'round'
     TYPES = [(TYPE_CATEGORY, 'Category'), (TYPE_EVENT, 'Event'), (TYPE_ROUND, 'Round')]
-    type = models.CharField(max_length=50, null=True, blank=True, choices=TYPES)
+    type = models.CharField(max_length=50, null=False, choices=TYPES)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return self.fullname
     # }}}
 
@@ -394,7 +394,7 @@ class Player(models.Model):
     dom_end   = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_end')
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         if self.country != None and self.country != '':
             return self.tag + ' (' + self.race + ', ' + self.country + ')'
         else:
@@ -496,7 +496,7 @@ class Story(models.Model):
     event = models.ForeignKey(Event, null=True)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return '%s - %s on %s' % (self.player.tag, self.text, str(self.date))
     # }}}
 # }}}
@@ -509,8 +509,8 @@ class Group(models.Model):
     name = models.CharField('Name', max_length=100, null=False, db_index=True)
     shortname = models.CharField('Short name', max_length=25, null=True, blank=True)
     members = models.ManyToManyField(Player, through='GroupMembership')
-    scoreak = models.FloatField('AK score', null=False, default=0.0)
-    scorepl = models.FloatField('PL score', null=False, default=0.0)
+    scoreak = models.FloatField('AK score', null=True, default=0.0)
+    scorepl = models.FloatField('PL score', null=True, default=0.0)
     founded = models.DateField('Date founded', null=True, blank=True)
     disbanded = models.DateField('Date disbanded', null=True, blank=True)
     active = models.BooleanField('Active', null=False, default=True)
@@ -521,7 +521,7 @@ class Group(models.Model):
     is_manual = models.BooleanField('Manual entry', null=False, default=True)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return self.name
     # }}}
 
@@ -580,7 +580,7 @@ class GroupMembership(models.Model):
     playing = models.BooleanField('Playing', default=True, null=False, db_index=True)
     
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return 'Player: %s Group: %s (%s - %s)' % (self.player.tag, self.group.name, 
                                                    str(self.start), str(self.end))
     # }}}
@@ -597,7 +597,7 @@ class Alias(models.Model):
     group = models.ForeignKey(Group, null=True)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return self.name
     # }}}
     
@@ -774,7 +774,7 @@ class Match(models.Model):
     # }}}
 
     # {{{ String representation 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s %s - %s %s' % (str(self.date), self.pla.tag, self.sca, self.scb, self.plb.tag)
     # }}}
 
@@ -881,7 +881,7 @@ class Earnings(models.Model):
     # }}}
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return '#%i at %s: %s $%s' % (self.placement, self.event.fullname, self.player.tag, self.earnings)
     # }}}
 # }}}
@@ -890,6 +890,8 @@ class Earnings(models.Model):
 class PreMatchGroup(models.Model):
     class Meta:
         db_table = 'prematchgroup'
+        verbose_name_plural = 'Prematch Groups'
+        verbose_name = 'Prematch Group'
 
     date = models.DateField('Date')
     event = models.CharField('Event', max_length=200, default='', null=False, blank=True)
@@ -903,7 +905,7 @@ class PreMatchGroup(models.Model):
     offline = models.BooleanField(default=False, null=False)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return str(self.date) + ' ' + self.event
     # }}}
 # }}}
@@ -927,11 +929,11 @@ class PreMatch(models.Model):
 
     P, T, Z, R = "PTZR"
     RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
-    rca = models.CharField(max_length=1, choices=RACES, null=False, blank=False, verbose_name='Race A')
-    rcb = models.CharField(max_length=1, choices=RACES, null=False, blank=False, verbose_name='Race B')
+    rca = models.CharField(max_length=1, choices=RACES, null=True, verbose_name='Race A')
+    rcb = models.CharField(max_length=1, choices=RACES, null=True, verbose_name='Race B')
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         ret = '(' + self.group.event + ') '
         ret += self.pla.tag if self.pla else self.pla_string
         ret += ' %i-%i ' % (self.sca, self.scb)
@@ -1002,7 +1004,7 @@ class Rating(models.Model):
     domination = models.FloatField(null=True, blank=True)
 
     # {{{ String representation
-    def __unicode__(self):
+    def __str__(self):
         return self.player.tag + ' P' + str(self.period.id)
     # }}}
 

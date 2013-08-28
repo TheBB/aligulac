@@ -4,11 +4,15 @@ from aligulac import settings
 from django.contrib import admin
 admin.autodiscover()
 
+handler404 = 'aligulac.views.h404'
+handler500 = 'aligulac.views.h500'
+
 urlpatterns = patterns('',
-    # Homepage
     url(r'^$', 'aligulac.views.home'),
 
-    # Admin interface
+    url(r'periods/$', 'ratings.period_views.periods'),
+    url(r'periods/(?P<period_id>\d+)/$', 'ratings.period_views.period'),
+
     url(r'^admin/', include(admin.site.urls)),
 )
 

@@ -92,10 +92,10 @@ arguments:
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating > entry.rating %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff|ratscaled }}" />
+                     title="{{ entry.rating_diff|ratscalediff }}" />
                 {% elif entry.get_prev.rating < entry.rating %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff|ratscaled }}" />
+                     title="+{{ entry.rating_diff|ratscalediff }}" />
                 {% endif %}
             {% endif %}
         </td>
@@ -104,10 +104,10 @@ arguments:
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vp > entry.rating|addf:entry.rating_vp %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vp|ratscaled }}" />
+                     title="{{ entry.rating_diff_vp|ratscalediff }}" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vp < entry.rating|addf:entry.rating_vp %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vp|ratscaled }}" />
+                     title="+{{ entry.rating_diff_vp|ratscalediff }}" />
                 {% endif %}
             {% endif %}
         </td>
@@ -116,10 +116,10 @@ arguments:
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vt > entry.rating|addf:entry.rating_vt %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vt|ratscaled }}" />
+                     title="{{ entry.rating_diff_vt|ratscalediff }}" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vt < entry.rating|addf:entry.rating_vt %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vt|ratscaled }}" />
+                     title="+{{ entry.rating_diff_vt|ratscalediff }}" />
                 {% endif %}
             {% endif %}
         </td>
@@ -128,10 +128,10 @@ arguments:
             {% if entry.get_prev %}
                 {% if entry.get_prev.rating|addf:entry.get_prev.rating_vz > entry.rating|addf:entry.rating_vz %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vz|ratscaled }}" />
+                     title="{{ entry.rating_diff_vz|ratscalediff }}" />
                 {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vz < entry.rating|addf:entry.rating_vz %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vz|ratscaled }}" />
+                     title="+{{ entry.rating_diff_vz|ratscalediff }}" />
                 {% endif %}
             {% endif %}
         </td>

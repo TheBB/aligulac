@@ -1,3 +1,5 @@
+from django.db.models import Sum
+
 from ratings.models import Period, Player, Rating
 from aligulac.settings import INACTIVE_THRESHOLD
 
@@ -33,4 +35,29 @@ def populate_teams(queryset):
             e.team = membership.group.shortname
             e.teamfull = membership.group.name
             e.teamid = membership.group.id
+    return queryset
+# }}}
+
+# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
+# AS IT FUCKING SHOULD BE.
+ntz = lambda k: k if k is not None else 0
+# }}}
+
+# {{{ count_winloss_games: Counts wins and losses over a queryset relative to player A.
+def count_winloss_games(queryset):
+    agg = queryset.aggregate(Sum('sca'), Sum('scb'))
+    return ntz(agg['sca__sum']), ntz(agg['scb__sum'])
+# }}}
+
+# {{{ count_matchup_games: Gets the matchup W-L data for a queryset.
+def count_matchup_games(queryset, rca, rcb):
+    wa, la = count_winloss_games(queryset.filter(rca=rca, rcb=rcb))
+    lb, wb = count_winloss_games(queryset.filter(rca=rcb, rcb=rca))
+    return wa+wb, la+lb
+# }}}
+
+# {{{ count_mirror_games: Gets the number of mirror games for a queryset.
+def count_mirror_games(queryset, race):
+    w, l = count_winloss_games(queryset.filter(rca=race, rcb=race))
+    return w + l
 # }}}

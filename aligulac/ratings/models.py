@@ -492,6 +492,19 @@ class Player(models.Model):
         except:
             return None
     # }}}
+
+    # {{{ get_latest_rating_update: Gets the latest rating of this player with decay zero, or None.
+    def get_latest_rating_update(self):
+        try:
+            return self.rating_set.filter(decay=0).order_by('-period')[0]
+        except:
+            return None
+    # }}}
+
+    # {{{ has_earnings: Checks whether the player has any earnings.
+    def has_earnings(self):
+        return self.earnings_set.exists()
+    # }}}
 # }}}
 
 # {{{ Stories

@@ -125,21 +125,21 @@ This template shows a rating list for a given period.
         <div class="rowel">Most specialised vP</div>
         <div class="rower">
             <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{ specvp.player.tag }}</a>
-            <span class="small">(+{{ specvp.rating_vp|ratscaled }})</span>
+            <span class="small">(+{{ specvp.rating_vp|ratscalediff }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Most specialised vT</div>
         <div class="rower">
             <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{ specvt.player.tag }}</a>
-            <span class="small">(+{{ specvt.rating_vt|ratscaled }})</span>
+            <span class="small">(+{{ specvt.rating_vt|ratscalediff }})</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Most specialised vZ</div>
         <div class="rower">
             <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{ specvz.player.tag }}</a>
-            <span class="small">(+{{ specvz.rating_vz|ratscaled }})</span>
+            <span class="small">(+{{ specvz.rating_vz|ratscalediff }})</span>
         </div>
     </div>
 </div>

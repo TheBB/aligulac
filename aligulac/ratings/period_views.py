@@ -12,7 +12,7 @@ from countries import data
 
 msg_preview = 'This is a <em>preview</em> of the next rating list. It will not be finalized until %s.'
 
-# {{{ periods
+# {{{ periods view
 @cache_page
 def periods(request):
     base = base_ctx('Ranking', 'History', request)
@@ -20,7 +20,7 @@ def periods(request):
     return render_to_response('periods.html', base)
 # }}}
 
-# {{{ period
+# {{{ period view
 @cache_page
 def period(request, period_id):
     base = base_ctx('Ranking', 'Current', request)

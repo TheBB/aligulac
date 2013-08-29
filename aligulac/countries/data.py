@@ -258,6 +258,8 @@ ccn_to_cca2 = {   '004': 'AF',
     '887': 'YE',
     '894': 'ZM'}
 
+countries = ccn_to_cca2.values()
+
 ccn_to_cca3 = {   '004': 'AFG',
     '008': 'ALB',
     '010': 'ATA',

@@ -97,7 +97,7 @@ def period(request, period_id):
 
     # {{{ Pages etc.
     pagesize = 40
-    page = get_param(request, 'page', 1)
+    page = int(get_param(request, 'page', 1))
     nitems = entries.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
@@ -168,7 +168,7 @@ def earnings(request):
 
     # {{{ Pages, etc.
     pagesize = 40
-    page = get_param(request, 'page', 1)
+    page = int(get_param(request, 'page', 1))
     nitems = ranking.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)

@@ -1,12 +1,15 @@
 from django.db.models import Sum
 
+import ccy
+from countries import data
+
 from ratings.models import Period, Player, Rating
 from aligulac.settings import INACTIVE_THRESHOLD
 
 # {{{ get_latest_period: Returns the latest computed period, or None.
 def get_latest_period():
     try:
-        return Period.objects.filter(computed=True).order_by('-start')[0]
+        return Period.objects.filter(computed=True).latest('start')
     except:
         return None
 # }}}
@@ -36,6 +39,24 @@ def populate_teams(queryset):
             e.teamfull = membership.group.name
             e.teamid = membership.group.id
     return queryset
+# }}}
+
+# {{{ country_list: Creates a list of countries in the given queryset (of Players).
+def country_list(queryset):
+    countries = queryset.values('country').distinct()
+    country_codes = {c['country'] for c in countries if c['country'] is not None}
+    print(country_codes)
+    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
+    country_dict.sort(key=lambda a: a['name'])
+    return country_dict
+# }}}
+
+# {{{ currency_list: Creates a list of currencies in the given queryset (of Earnings).
+def currency_list(queryset):
+    currencies = queryset.values('currency').distinct().order_by('currency')
+    currency_dict = [{'name': ccy.currency(c['currency']).name,
+                      'code': ccy.currency(c['currency']).code} for c in currencies]
+    return currency_dict
 # }}}
 
 # {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.

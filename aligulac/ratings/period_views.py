@@ -1,14 +1,13 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Sum
 
-from ratings.models import Period, Player, Rating
-from ratings.tools import filter_active, count_matchup_games, count_mirror_games, populate_teams
+from ratings.models import Earnings, Period, Player, Rating
+from ratings.tools import filter_active, count_matchup_games, count_mirror_games, populate_teams,\
+                          country_list, currency_list
 
 from aligulac.cache import cache_page
 from aligulac.tools import Message, base_ctx, get_param
 from aligulac.settings import INACTIVE_THRESHOLD
-
-from countries import data
 
 msg_preview = 'This is a <em>preview</em> of the next rating list. It will not be finalized until %s.'
 
@@ -61,13 +60,8 @@ def period(request, period_id):
     # }}}
 
     # {{{ Build country list
-    countries = Player.objects\
-                      .filter(rating__period_id=period.id, rating__decay__lt=INACTIVE_THRESHOLD)\
-                      .values('country')
-    country_codes = {c['country'] for c in countries if c is not None}
-    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
-    country_dict.sort(key=lambda a: a['name'])
-    base['countries'] = country_dict
+    all_players = filter_active(Player.objects.filter(rating__period_id=period.id))
+    base['countries'] = country_list(all_players)
     # }}}
 
     # {{{ Initial filtering of ratings
@@ -93,6 +87,12 @@ def period(request, period_id):
         entries = entries.order_by('-rating', 'player__tag')
     else:
         entries = entries.extra(select={'d':'rating+rating_'+sort}).order_by('-d', 'player__tag')
+
+    base.update({
+        'race': race,
+        'nats': nats,
+        'sort': sort,
+    })
     # }}}
 
     # {{{ Pages etc.
@@ -118,4 +118,82 @@ def period(request, period_id):
     })
         
     return render_to_response('period.html', base)
+# }}}
+
+# {{{ earnings view
+@cache_page
+def earnings(request):
+    base = base_ctx('Ranking', 'Earnings', request)
+
+    # {{{ Build country and currency list
+    all_players = Player.objects.filter(earnings__player__isnull=False).distinct()
+    base['countries'] = country_list(all_players)
+    base['currencies'] = currency_list(Earnings.objects)
+    # }}}
+
+    # {{{ Initial filtering of earnings
+    preranking = Earnings.objects
+
+    # Filtering by year
+    year = get_param(request, 'year', 'all')
+    if year != 'all':
+        preranking = preranking.filter(event__latest__year=int(year))
+
+    # Country filter
+    nats = get_param(request, 'country', 'all')
+    if nats == 'foreigners':
+        preranking = preranking.exclude(player__country='KR')
+    elif nats != 'all':
+        preranking = preranking.filter(player__country=nats)
+
+    # Currency filter
+    curs = get_param(request, 'currency', 'all')
+    if curs != 'all':
+        preranking = preranking.filter(currency=curs)
+
+    base['filters'] = {'year': year, 'country': nats, 'currency': curs}
+
+    ranking = preranking.values('player')\
+                        .annotate(totalorigearnings=Sum('origearnings'))\
+                        .annotate(totalearnings=Sum('earnings'))\
+                        .order_by('-totalearnings', 'player')
+    # }}}
+
+    # {{{ Calculate total earnings
+    base.update({
+        'totalorigprizepool': preranking.aggregate(Sum('origearnings'))['origearnings__sum'],
+        'totalprizepool':     preranking.aggregate(Sum('earnings'))['earnings__sum'],
+    })
+    # }}}
+
+    # {{{ Pages, etc.
+    pagesize = 40
+    page = get_param(request, 'page', 1)
+    nitems = ranking.count()
+    npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
+    page = min(max(page, 1), npages)
+
+    base.update({
+        'page':       page,
+        'npages':     npages,
+        'startcount': (page-1)*pagesize,
+    })
+
+    if nitems > 0:
+        ranking = ranking[(page-1)*pagesize : page*pagesize]
+    else:
+        base['empty'] = True
+    # }}}
+
+    # {{{ Populate with player and team objects
+    ids = [p['player'] for p in ranking]
+    players = Player.objects.in_bulk(ids)
+    for p in ranking:
+        p['playerobj'] = players[p['player']]
+        p['teamobj'] = p['playerobj'].get_current_team()
+
+    base['ranking'] = ranking
+    # }}}
+
+    return render_to_response('earnings.html', base)
 # }}}

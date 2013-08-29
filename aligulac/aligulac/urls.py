@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'periods/$', 'ratings.period_views.periods'),
     url(r'periods/(?P<period_id>\d+)/$', 'ratings.period_views.period'),
 
+    url(r'earnings/$', 'ratings.period_views.earnings'),
+
     url(r'^admin/', include(admin.site.urls)),
 )
 

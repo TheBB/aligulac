@@ -41,6 +41,7 @@ def get_param(request, param, default):
 # Returns: A dictionary to be extended by the view function, and then passed to template rendering.
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
+
     menu = [('Ranking', '/periods/%i' % curp.id),\
             ('Teams', '/teams/'),\
             ('Records', '/records/history'),\

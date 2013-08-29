@@ -8,3 +8,10 @@ python-dateutil==2.1
 numpy==1.7.1
 scipy==0.12.0
 
+south
+numpy
+scipy
+python-markdown2
+python-dateutil
+psycopg2
+Django

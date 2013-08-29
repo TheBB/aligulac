@@ -99,36 +99,35 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
     </tr>
     {% for earning in ranking %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
-        	<td class="rl_number">
+            <td class="rl_number">
             {% if startcount %}
                 {{ forloop.counter|add:startcount }}.
             {% else %}
                 {{ forloop.counter }}.
             {% endif %}
-        	</td>
-        	<td class="rl_icon">
-            	{% if earning.playerobj.country != "" %}
-            		<img src="{{ earning.playerobj.country|lower|imgfolder:"flags"|static }}" alt="{{ earning.playerobj.country }}" />
-            	{% endif %}
-	        </td>
-        	<td class="rl_icon">
-            	<img src="{{ earning.playerobj.race|imgfolder|static }}" alt="{{ earning.playerobj.race }}" class="btm" />
-	        </td>
-        	<td class="rl_name">
-            	<a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/">{{ earning.playerobj.tag }}</a>
-	        </td>
-        	<td>
-            	{% if earning.teamobj %}
-	                <a href="/teams/{{ earning.teamobj.group.id }}-{{ earning.teamobj.group.name|urlfilter
-                        }}/">{{ earning.teamobj.group.name }}</a>
-            	{% endif %}
-	        </td>
-	        <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">
-	        {% if filters.currency != 'all' %}{{ earning.totalorigearnings|add_sep_and_cur:filters.currency }}
-	        {% if filters.currency != 'USD' %} ({{ earning.totalearnings|add_sep_and_cur:'USD' }}){% endif %}
-	        {% else %}{{ earning.totalearnings|add_sep_and_cur:'USD' }}
-	        {% endif %}</a>
-	        </td>
+            </td>
+            <td class="rl_icon">
+                {% if earning.playerobj.country != "" %}
+                    <img src="{{ earning.playerobj.country|lower|imgfolder:"flags"|static }}" alt="{{ earning.playerobj.country }}" />
+                {% endif %}
+            </td>
+            <td class="rl_icon">
+                <img src="{{ earning.playerobj.race|imgfolder|static }}" alt="{{ earning.playerobj.race }}" class="btm" />
+            </td>
+            <td class="rl_name">
+                <a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/">{{ earning.playerobj.tag }}</a>
+            </td>
+            <td>
+                {% if earning.teamobj %}
+                    <a href="/teams/{{ earning.teamobj.id }}-{{ earning.teamobj.name|urlfilter }}/">{{ earning.teamobj.name }}</a>
+                {% endif %}
+            </td>
+            <td style="text-align: right;"><a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/earnings/">
+            {% if filters.currency != 'all' %}{{ earning.totalorigearnings|add_sep_and_cur:filters.currency }}
+            {% if filters.currency != 'USD' %} ({{ earning.totalearnings|add_sep_and_cur:'USD' }}){% endif %}
+            {% else %}{{ earning.totalearnings|add_sep_and_cur:'USD' }}
+            {% endif %}</a>
+            </td>
         </tr>
     {% endfor %}
 </table>

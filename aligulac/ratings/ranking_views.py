@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q, Sum
 
 from ratings.models import Earnings, Period, Player, Rating
-from ratings.tools import filter_active, count_matchup_games, count_mirror_games, populate_teams,\
-                          country_list, currency_list
+from ratings.tools import filter_active, total_ratings, count_matchup_games, count_mirror_games,\
+                          populate_teams, country_list, currency_list
 
 from aligulac.cache import cache_page
 from aligulac.tools import Message, base_ctx, get_param
@@ -35,15 +35,15 @@ def period(request, period_id):
     # }}}
 
     # {{{ Best and most specialised players
-    qset = filter_active(Rating.objects.filter(period=period))
+    qset = total_ratings(filter_active(Rating.objects.filter(period=period)))
     base.update({
-        'best':   qset.filter(period=period).order_by('-rating')[0],
-        'bestvp': qset.extra(select={'d':'rating+rating_vp'}).order_by('-d')[0],
-        'bestvt': qset.extra(select={'d':'rating+rating_vt'}).order_by('-d')[0],
-        'bestvz': qset.extra(select={'d':'rating+rating_vz'}).order_by('-d')[0],
-        'specvp': qset.extra(select={'d':'rating_vp/dev_vp*rating'}).order_by('-d')[0],
-        'specvt': qset.extra(select={'d':'rating_vt/dev_vt*rating'}).order_by('-d')[0],
-        'specvz': qset.extra(select={'d':'rating_vz/dev_vz*rating'}).order_by('-d')[0],
+        'best':   qset.latest('rating'),
+        'bestvp': qset.latest('-tot_vp'),
+        'bestvt': qset.latest('-tot_vt'),
+        'bestvz': qset.latest('-tot_vz'),
+        'specvp': qset.extra(select={'d':'rating_vp/dev_vp*rating'}).latest('d'),
+        'specvt': qset.extra(select={'d':'rating_vt/dev_vt*rating'}).latest('d'),
+        'specvz': qset.extra(select={'d':'rating_vz/dev_vz*rating'}).latest('d'),
     })
     # }}}
 
@@ -60,7 +60,7 @@ def period(request, period_id):
     # }}}
 
     # {{{ Build country list
-    all_players = filter_active(Player.objects.filter(rating__period_id=period.id))
+    all_players = Player.objects.filter(rating__period_id=period.id, rating__decay__lt=INACTIVE_THRESHOLD)
     base['countries'] = country_list(all_players)
     # }}}
 

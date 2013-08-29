@@ -234,7 +234,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel" style="width: 10em;">General</div>
         <div class="rower" style="width: 10em;">{{ rating.rating|ratscale }} 
-            ± {{ rating.dev|ratscaled }}
+            ± {{ rating.dev|ratscalediff }}
             {% if rating.position %}
                 <span class="small">(#{{ rating.position }})</span>
             {% endif %}
@@ -249,7 +249,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vP</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vp|ratscale }} 
-            ± {{ rating|devrange:"P"|ratscaled }}
+            ± {{ rating|ratingdev:"P"|ratscalediff }}
             {% if rating.position_vp %}
                 <span class="small">(#{{ rating.position_vp }})</span>
             {% endif %}
@@ -264,7 +264,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vT</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vt|ratscale }} 
-            ± {{ rating|devrange:"T"|ratscaled }}
+            ± {{ rating|ratingdev:"T"|ratscalediff }}
             {% if rating.position_vt %}
                 <span class="small">(#{{ rating.position_vt }})</span>
             {% endif %}
@@ -279,7 +279,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vZ</div>
         <div class="rower">{{ rating.rating|addf:rating.rating_vz|ratscale }} 
-            ± {{ rating|devrange:"Z"|ratscaled }}
+            ± {{ rating|ratingdev:"Z"|ratscalediff }}
             {% if rating.position_vz %}
                 <span class="small">(#{{ rating.position_vz }})</span>
             {% endif %}
@@ -299,7 +299,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel" style="width: 10em;">General</div>
         <div class="rower" style="width: 10em;">{{ highs.0.rating|ratscale }} 
-            ± {{ highs.0.dev|ratscaled }}
+            ± {{ highs.0.dev|ratscalediff }}
             {% if highs.0.position %}
                 <span class="small">(#{{ highs.0.position }})</span>
             {% endif %}
@@ -311,7 +311,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vP</div>
         <div class="rower">{{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
-            ± {{ highs.1|devrange:"P"|ratscaled }}
+            ± {{ highs.1|ratingdev:"P"|ratscalediff }}
             {% if highs.1.position_vp %}
                 <span class="small">(#{{ highs.1.position_vp }})</span>
             {% endif %}
@@ -323,7 +323,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vT</div>
         <div class="rower">{{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
-            ± {{ highs.2|devrange:"T"|ratscaled }}
+            ± {{ highs.2|ratingdev:"T"|ratscalediff }}
             {% if highs.2.position_vt %}
                 <span class="small">(#{{ highs.2.position_vt }})</span>
             {% endif %}
@@ -335,7 +335,7 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="row">
         <div class="rowel">vZ</div>
         <div class="rower">{{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
-            ± {{ highs.3|devrange:"Z"|ratscaled }}
+            ± {{ highs.3|ratingdev:"Z"|ratscalediff }}
             {% if highs.3.position_vz %}
                 <span class="small">(#{{ highs.3.position_vz }})</span>
             {% endif %}

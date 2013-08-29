@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models, transaction
-from django.db.models import Max, F
+from django.db.models import Max, F, Q
 
 from math import sqrt
 
@@ -449,14 +449,16 @@ class Player(models.Model):
     
     # {{{ set_aliases: Set aliases
     # Input: An array of string aliases, which are compared to existing aliases.
-    # New ones are added, existing superfluous ones are removed.
+    # New ones are added, existing superfluous ones are removed. Returns True if something changed.
     def set_aliases(self, aliases):
         if aliases:
             old = []
+            changed = False
 
             for alias in Alias.objects.filter(player=self):
                 if alias.name not in aliases:
                     alias.delete()
+                    changed = True
                 else:
                     old.append(alias.name)
 
@@ -464,9 +466,16 @@ class Player(models.Model):
 
             for alias in new:
                 Alias.add_player_alias(self, alias)
+                changed = True
+
+            return changed
 
         else:
-            Alias.objects.filter(player=self).delete()
+            old = Alias.objects.filter(player=self)
+            if old.exists():
+                old.delete()
+                return True
+            return False
     # }}}
 
     # {{{ get_tlpd_id: Gets TLPD databases
@@ -504,10 +513,20 @@ class Player(models.Model):
             return None
     # }}}
 
+    # {{{ get_current_rating: Gets the current rating, if any.
+    def get_current_rating(self):
+        try:
+            return self.rating_set\
+                       .filter(period__computed=True)\
+                       .latest('period')
+        except:
+            return None
+    # }}}
+
     # {{{ get_latest_rating_update: Gets the latest rating of this player with decay zero, or None.
     def get_latest_rating_update(self):
         try:
-            return self.rating_set.filter(decay=0).order_by('-period')[0]
+            return self.rating_set.filter(decay=0).latest('period')
         except:
             return None
     # }}}
@@ -515,6 +534,11 @@ class Player(models.Model):
     # {{{ has_earnings: Checks whether the player has any earnings.
     def has_earnings(self):
         return self.earnings_set.exists()
+    # }}}
+    
+    # {{{ get_matchset: Returns a queryset of all this player's matches.
+    def get_matchset(self):
+        return Match.objects.filter(Q(pla=self) | Q(plb=self))
     # }}}
 # }}}
 
@@ -829,6 +853,21 @@ class Match(models.Model):
     # {{{ get_loser_score: Returns the score of the loser.
     def get_loser_score(self):
         return min(self.sca, self.scb)
+    # }}}
+
+    # {{{ get_ratings: Gets the relevant ratings for both players, or None.
+    def get_ratings(self):
+        try:
+            rta = self.pla.rating_set.get(period_id=self.period_id-1)
+        except:
+            rta = None
+
+        try:
+            rtb = self.plb.rating_set.get(period_id=self.period_id-1)
+        except:
+            rtb = None
+
+        return rta, rtb
     # }}}
 
     # {{{ event_fullpath: Returns the full event name, taken from event object if available, or event text if

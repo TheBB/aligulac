@@ -1,5 +1,5 @@
-import string
 import random
+import string
 
 from django.core.context_processors import csrf
 
@@ -7,6 +7,7 @@ from aligulac.settings import DEBUG
 
 from ratings.models import Player, Rating, Earnings
 from ratings.tools import get_latest_period
+from ratings.templatetags.ratings_extras import urlfilter
 
 # {{{ Message
 # This class encodes error/success/warning messages sent to the templates.
@@ -24,10 +25,23 @@ class Message:
         self.id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
 # }}}
 
+# {{{ generate_messages: Generates a list of message objects for an object that supports them.
+def generate_messages(obj):
+    return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]
+# }}}
+
 # {{{ get_param(request, param, default): Returns request.GET[param] if available, default if not.
 def get_param(request, param, default):
     try:
         return request.GET[param]
+    except:
+        return default
+# }}}
+
+# {{{ post_param(request, param, default): Returns request.POST[param] if available, default if not.
+def post_param(request, param, default):
+    try:
+        return request.POST[param]
     except:
         return default
 # }}}

@@ -10,10 +10,12 @@ handler500 = 'aligulac.views.h500'
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
 
-    url(r'periods/$', 'ratings.period_views.periods'),
-    url(r'periods/(?P<period_id>\d+)/$', 'ratings.period_views.period'),
+    url(r'periods/$', 'ratings.ranking_views.periods'),
+    url(r'periods/(?P<period_id>\d+)/$', 'ratings.ranking_views.period'),
 
-    url(r'earnings/$', 'ratings.period_views.earnings'),
+    url(r'earnings/$', 'ratings.ranking_views.earnings'),
+
+    url(r'players/(?P<player_id>\d+)(-[^ /]*)?/$', 'ratings.player_views.player'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

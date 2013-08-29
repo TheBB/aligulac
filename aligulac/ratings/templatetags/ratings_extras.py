@@ -214,7 +214,7 @@ def ratscaleplus(value):
 
 # {{{ devrange: Computes RD against a certain race.
 @register.filter
-def ratindev(event, race):
+def ratingdev(event, race):
     return event.get_totaldev(race)
 # }}}
 

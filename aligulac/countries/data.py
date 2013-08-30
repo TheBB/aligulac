@@ -258,8 +258,6 @@ ccn_to_cca2 = {   '004': 'AF',
     '887': 'YE',
     '894': 'ZM'}
 
-countries = ccn_to_cca2.values()
-
 ccn_to_cca3 = {   '004': 'AFG',
     '008': 'ALB',
     '010': 'ATA',
@@ -747,6 +745,10 @@ ccn_to_cn = {   '004': 'Afghanistan',
     '882': 'Samoa',
     '887': 'Yemen',
     '894': 'Zambia'}
+
+items = list(ccn_to_cca2.items())
+countries = [(v, ccn_to_cn[k]) for k, v in items]
+countries.sort(key=lambda a: a[1])
 
 ccn_to_con = {   '004': 'Islamic Republic of Afghanistan',
     '008': 'Republic of Albania',

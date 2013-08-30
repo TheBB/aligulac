@@ -95,6 +95,19 @@ def currency_list(queryset):
 ntz = lambda k: k if k is not None else 0
 # }}}
 
+# {{{ filter_flags: Splits an integer representing bitwise or into a list of each flag.
+def filter_flags(flags):
+    power = 1
+    ret = []
+    while flags > 0:
+        if flags % 2 == 1:
+            ret.append(power)
+            flags -= 1
+        flags //= 2
+        power *= 2
+    return ret
+# }}}
+
 # {{{ split_matchset: Splits a match queryset into two, where player is A and B respectively
 def split_matchset(queryset, player):
     return queryset.filter(pla=player), queryset.filter(plb=player)

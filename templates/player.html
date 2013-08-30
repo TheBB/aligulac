@@ -5,6 +5,7 @@ This is the template for the main player page, called from ratings.views.player.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}{{ player.tag }}{% endblock %}
 
@@ -19,7 +20,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="iboxh">
             {{ player.tag }}
             {% if adm %} 
-            (<a href="#" onclick="toggle_infobox(); hide_charts(); return false;">edit</a>, 
+            (<a href="#" onclick="toggle_form(); hide_charts(); return false;">edit</a>, 
             <a href="/admin/ratings/player/{{ player.id }}/">admin</a>)
             {% endif %}
         </div>
@@ -159,21 +160,21 @@ This is the template for the main player page, called from ratings.views.player.
                         <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
                         {% endif %}
                         {% with tlpds=player.get_tlpd_id %}
-                        	{% if tlpds.KR %}
-	                        <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ tlpds.KR }}" target="_blank">TLPD:KR</a>
-                        	{% endif %}
-                        	{% if tlpds.IN %}
-	                        <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ tlpds.IN }}" target="_blank">TLPD:IN</a>
-                        	{% endif %}
-                        	{% if tlpds.HotS %}
-	                        <a href="http://www.teamliquid.net/tlpd/hots/players/{{ tlpds.HotS }}" target="_blank">TLPD:HotS</a>
-                        	{% endif %}
-                        	{% if tlpds.HotSbeta %}
-	                        <a href="http://www.teamliquid.net/tlpd/hots-beta/players/{{ tlpds.HotSbeta }}" target="_blank">TLPD:HotS beta</a>
-                        	{% endif %}
-                        	{% if tlpds.WoLbeta %}
-	                        <a href="http://www.teamliquid.net/tlpd/sc2-beta/players/{{ tlpds.WoLbeta }}" target="_blank">TLPD:WoL beta</a>
-                        	{% endif %}
+                            {% if tlpds.KR %}
+                            <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ tlpds.KR }}" target="_blank">TLPD:KR</a>
+                            {% endif %}
+                            {% if tlpds.IN %}
+                            <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ tlpds.IN }}" target="_blank">TLPD:IN</a>
+                            {% endif %}
+                            {% if tlpds.HotS %}
+                            <a href="http://www.teamliquid.net/tlpd/hots/players/{{ tlpds.HotS }}" target="_blank">TLPD:HotS</a>
+                            {% endif %}
+                            {% if tlpds.HotSbeta %}
+                            <a href="http://www.teamliquid.net/tlpd/hots-beta/players/{{ tlpds.HotSbeta }}" target="_blank">TLPD:HotS beta</a>
+                            {% endif %}
+                            {% if tlpds.WoLbeta %}
+                            <a href="http://www.teamliquid.net/tlpd/sc2-beta/players/{{ tlpds.WoLbeta }}" target="_blank">TLPD:WoL beta</a>
+                            {% endif %}
                         {% endwith %}
                         {% if player.sc2e_id %}
                         <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
@@ -193,23 +194,23 @@ This is the template for the main player page, called from ratings.views.player.
                     <div class="rowel">TLPD ID</div>
                     <div class="rower"><input type="number" name="TLPD" {% if player.tlpd_id %}value="{{ player.tlpd_id }}"{% endif %} /></div>
                 </div>
-				{% with tlpds=player.get_tlpd_id %}
+                {% with tlpds=player.get_tlpd_id %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">TLPD Databases</div>
                     <div class="rower">
-                    	<label for="TLPDKR">Korea</label>
-                    	<input type="checkbox" id="TLPDKR" name="TLPDKR" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
-                    	<label for="TLPDIN">International</label>
-                    	<input type="checkbox" id="TLPDIN" name="TLPDIN" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
-                    	<label for="TLPDHOTS">HotS</label>
-                    	<input type="checkbox" id="TLPDHOTS" name="TLPDHOTS" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}><br>
-                    	<label for="TLPDHOTSBETA">HotS beta</label>
-                    	<input type="checkbox" id="TLPDHOTSBETA" name="TLPDHOTSBETA" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
-                    	<label for="TLPDWOLBETA">WoL beta</label>
-                    	<input type="checkbox" id="TLPDWOLBETA" name="TLPDWOLBETA" value="TLPDWOLBETA" {% if tlpds.WoLbeta %}checked{% endif %}>
+                        <label for="TLPDKR">Korea</label>
+                        <input type="checkbox" id="TLPDKR" name="TLPDKR" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
+                        <label for="TLPDIN">International</label>
+                        <input type="checkbox" id="TLPDIN" name="TLPDIN" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
+                        <label for="TLPDHOTS">HotS</label>
+                        <input type="checkbox" id="TLPDHOTS" name="TLPDHOTS" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}><br>
+                        <label for="TLPDHOTSBETA">HotS beta</label>
+                        <input type="checkbox" id="TLPDHOTSBETA" name="TLPDHOTSBETA" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
+                        <label for="TLPDWOLBETA">WoL beta</label>
+                        <input type="checkbox" id="TLPDWOLBETA" name="TLPDWOLBETA" value="TLPDWOLBETA" {% if tlpds.WoLbeta %}checked{% endif %}>
                     </div>
                 </div>
-				{% endwith %}
+                {% endwith %}
                 <div class="row edit" style="display: none;">
                     <div class="rowel">sc2earnings.com</div>
                     <div class="rower"><input type="number" name="SC2E" {% if player.sc2e_id %}value="{{ player.sc2e_id }}"{% endif %} /></div>
@@ -345,6 +346,27 @@ This is the template for the main player page, called from ratings.views.player.
         </div>
     </div>
 </div>
+
+{% if adm %}
+<form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
+{% csrf_token %}
+<table class="hiddenform bigform" style="display: none;">
+{% form "player_form.html" %}
+    {% field "basic"        form.tag %}
+    {% field "select"       form.country %}
+    {% field "basic"        form.name %}
+    {% field "basic"        form.akas %}
+    {% field "date"         form.birthday %}
+    {% field "basic"        form.sc2c_id %}
+    {% field "basic"        form.sc2e_id %}
+    {% field "basic"        form.lp_name %}
+    {% field "basic"        form.tlpd_id %}
+    {% field "selectmulti"  form.tlpd_db %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+{% endif %}
 
 {% if charts %}
 <script type="text/javascript">
@@ -494,18 +516,6 @@ This is the template for the main player page, called from ratings.views.player.
 <div id="chart" style="width: 67em; height: 30em; margin-top: 2em;"> </div>
 {% endif %}
 {% endif %}
-
-<h3>More information</h3>
-<ul>
-{% if rating %}
-<li><a href="/players/{{ player.id }}-{{ player.tag }}/historical/">Rating history</a></li>
-<li><a href="/players/{{ player.id }}-{{ player.tag }}/period/{{ recentchange.period.id }}/">Recent rating adjustments</a></li>
-{% endif %}
-<li><a href="/players/{{ player.id }}-{{ player.tag }}/results/">Match history</a></li>
-{% if earnings %}
-<li><a href="/players/{{ player.id }}-{{ player.tag }}/earnings/">Earnings</a></li>
-{% endif %}
-</ul>
 
 {% if matches %}
 <h3>Most recent results</h3>

@@ -424,7 +424,7 @@ class Player(models.Model):
         self.sc2c_id = None if sc2c_id == '' else sc2c_id
         self.save()
 
-    def set_tlpd_id(self, tlpd_id, tlpd_db):
+    def set_tlpd_id(self, tlpd_id):
         self.tlpd_id = tlpd_id
         self.save()
 
@@ -444,6 +444,10 @@ class Player(models.Model):
 
     def remove_tlpd_db(self, tlpd_db):
         self.tlpd_db -= self.tlpd_db & tlpd_db
+        self.save()
+
+    def set_tlpd_db(self, tlpd_db):
+        self.tlpd_db = tlpd_db
         self.save()
     # }}}
     
@@ -476,6 +480,11 @@ class Player(models.Model):
                 old.delete()
                 return True
             return False
+    # }}}
+
+    # {{{ get_aliases: Returns all aliases as a list
+    def get_aliases(self):
+        return [a.name for a in self.alias_set.all()]
     # }}}
 
     # {{{ get_tlpd_id: Gets TLPD databases

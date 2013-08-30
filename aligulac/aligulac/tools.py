@@ -18,10 +18,15 @@ class Message:
     INFO = 'info'
     SUCCESS = 'success'
 
-    def __init__(self, text, title='', type='info'):
-        self.title = title
-        self.text = text
-        self.type = type
+    def __init__(self, text=None, title='', type='info', error=None, field=None):
+        if error is None:
+            self.title = title
+            self.text = text
+            self.type = type
+        else:
+            self.title = None
+            self.text = field + ': ' + error
+            self.type = self.ERROR
         self.id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
 # }}}
 

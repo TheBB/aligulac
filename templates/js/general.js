@@ -79,22 +79,11 @@ function switch_to(id, all)
     }
 }
 
-function toggle_infobox()
+function toggle_form()
 {
-    if (document.getElementsByClassName('infobox'))
-    {
-        var elements = document.getElementsByClassName('infobox');
-        for(var i = 0, length = elements.length; i < length; i++)
-        {
-            elements[i].style.display = 'none';
-        }
-    }
-    var elements = document.getElementsByClassName('edit');
-    for(var i = 0, length = elements.length; i < length; i++)
-    {
-        elements[i].style.display = 'table-row';
-    }
-
+    var elements = document.getElementsByClassName('hiddenform');
+    for (var i = 0, length = elements.length; i < length; i++)
+        elements[i].style.display = 'block';
 }
 
 function hide_charts()

@@ -493,6 +493,11 @@ td.msuccesstext {
 
 /* ========= FORMS ========= */
 
+table.hiddenform {
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
 table.bigform {
     width: 67em;
 }
@@ -512,6 +517,10 @@ td.form_right {
 
 td.va_top {
     vertical-align: top;
+}
+
+.wideinput {
+    width: 35em;
 }
 
 textarea {

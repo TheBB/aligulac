@@ -1,0 +1,74 @@
+{% block basic %}
+<tr>
+    <td class="form_left">{{ field.label_tag }}</td>
+    <td class="form_right">
+        <input class="wideinput"
+               type="{{ field_type|default:"text" }}"
+               name="{{ field.html_name }}" 
+               id="{{ field.auto_id }}"
+               value="{{ field.value|default:"" }}" />
+    </td>
+</tr>
+{% endblock %}
+
+{% block select %}
+<tr>
+    <td class="form_left">{{ field.label_tag }}</td>
+    <td class="form_right">
+        <select class="wideinput"
+                name="{{ field.html_name }}"
+                id="{{ field.auto_id }}">
+        {% for value, label in field.field.choices %}
+            <option value="{{ value }}"
+                {% if field.value == value|safe %}selected="selected"{% endif %}>{{ label }}</option>
+        {% endfor %}
+        </select>
+    </td>
+</tr>
+{% endblock %}
+
+{% block selectmulti %}
+<tr>
+    <td class="form_left">{{ field.label_tag }}</td>
+    <td class="form_right">
+        {% for value, label in field.field.choices %}
+        <label for="{{ field.auto_id }}_{{ forloop.counter0 }}">
+        <input id="{{ field.auto_id }}_{{ forloop.counter0 }}"
+             {% if value|stringformat:"i" in field.value or value in field.value%}checked="checked"{% endif %}
+             name="{{ field.html_name }}"
+             type="checkbox" value="{{ value }}">{{ label }}</label><br />
+        {% endfor %}
+    </td>
+</tr>
+{% endblock %}
+
+{% block date %}
+<tr>
+    <td class="form_left">{{ field.label_tag }}</td>
+    <td class="form_right">
+        <input class="date" 
+               type="text" 
+               name="{{ field.html_name }}" 
+               id="{{ field.auto_id }}"
+               value="{{ field.value|default:"" }}" />
+        <script type="text/javascript">
+        // <![CDATA[  
+            var opts = {                            
+                formElements: {"{{ field.auto_id }}" :"Y-ds-m-ds-d"},
+                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
+            };           
+            datePickerController.createDatePicker(opts);
+        // ]]>
+        </script>
+    </td>
+</tr>
+{% endblock %}
+
+{% block submit %}
+<tr>
+    <td class="form_left"></td>
+    <td class="form_right">
+        <input type="submit" name="op" value="Submit" />
+    </td>
+</tr>
+{% endblock %}

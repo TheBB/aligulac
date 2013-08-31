@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
-from aligulac.tools import Message, base_ctx, generate_messages, post_param
+from aligulac.tools import Message, base_ctx, generate_messages, StrippedCharField
 from aligulac.settings import INACTIVE_THRESHOLD
 
 from ratings.models import Match, Player
@@ -20,7 +20,7 @@ from countries import data, transformations
 
 msg_inactive = 'Due to %s\'s lack of recent games, they have been marked as <em>inactive</em> and '\
              + 'removed from the current rating list. Once they play a rated game they will be reinstated.'
-msg_nochart =  '%s has no rating chart on account of having played matches in fewer than two periods.'
+msg_nochart  = '%s has no rating chart on account of having played matches in fewer than two periods.'
 
 # {{{ meandate: Rudimentary function for sorting objects with a start and end date.
 def meandate(tm):
@@ -49,24 +49,16 @@ def interp_rating(date, ratings):
 
 # {{{ PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
-    tag = forms.CharField(max_length=30, required=True, label='Tag')
-    name = forms.CharField(max_length=100, required=False, label='Name')
+    tag = StrippedCharField(max_length=30, required=True, label='Tag')
+    race = forms.ChoiceField(choices=Player.RACES, required=True, label='Race')
+    name = StrippedCharField(max_length=100, required=False, label='Name')
     akas = forms.CharField(max_length=200, label='AKAs')
     birthday = forms.DateField(required=False, label='Birthday')
 
     tlpd_id = forms.IntegerField(required=False, label='TLPD ID')
     tlpd_db = forms.MultipleChoiceField(
-        required=False, 
-        choices=[
-            (Player.TLPD_DB_WOLBETA,        'WoL Beta'),
-            (Player.TLPD_DB_KOREAN,         'WoL Korean'),
-            (Player.TLPD_DB_INTERNATIONAL,  'WoL International'),
-            (Player.TLPD_DB_HOTSBETA,       'HotS Beta'),
-            (Player.TLPD_DB_HOTS,           'HotS'),
-        ],
-        label='TLPD DB',
-        widget=forms.CheckboxSelectMultiple)
-    lp_name = forms.CharField(max_length=200, required=False, label='Liquipedia title')
+        required=False, choices=Player.TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
+    lp_name = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
     sc2c_id = forms.IntegerField(required=False, label='SC2Charts.net ID')
     sc2e_id = forms.IntegerField(required=False, label='SC2Earnings.com ID')
 
@@ -79,6 +71,7 @@ class PlayerModForm(forms.Form):
         else:
             super(PlayerModForm, self).__init__(initial={
                 'tag': player.tag,
+                'race': player.race,
                 'country': player.country,
                 'name': player.name,
                 'akas': ', '.join(player.get_aliases()),
@@ -93,23 +86,6 @@ class PlayerModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ Cleaning
-    def clean_tag(self):
-        s = self.cleaned_data['tag'].strip()
-        if s == '':
-            raise ValidationError('This field is required.')
-        return s
-
-    def basic_clean(self, field):
-        if self.cleaned_data[field] is None:
-            return None
-        s = self.cleaned_data[field].strip()
-        return s if s != '' else None
-
-    clean_name = lambda self: self.basic_clean('name')
-    clean_lp_name = lambda self: self.basic_clean('lp_name')
-    # }}}
-
     # {{{ update_player: Pushes updates to player, responds with messages
     def update_player(self, player):
         ret = []
@@ -122,28 +98,27 @@ class PlayerModForm(forms.Form):
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
-        def basic_update(value, attr, setter, label):
+        def update(value, attr, setter, label):
             if value != getattr(player, attr):
                 getattr(player, setter)(value)
                 ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
 
-        basic_update(self.cleaned_data['tag'], 'tag', 'set_tag', 'tag')
-        basic_update(self.cleaned_data['country'], 'country', 'set_country', 'country')
-        basic_update(self.cleaned_data['name'], 'name', 'set_name', 'name')
-        basic_update(self.cleaned_data['birthday'], 'birthday', 'set_birthday', 'birthday')
-        basic_update(self.cleaned_data['tlpd_id'], 'tlpd_id', 'set_tlpd_id', 'TLPD ID')
-        basic_update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
-        basic_update(self.cleaned_data['lp_name'], 'lp_name', 'set_lp_name', 'Liquipedia title')
-        basic_update(self.cleaned_data['sc2c_id'], 'sc2c_id', 'set_sc2c_id', 'SC2Charts.net ID')
-        basic_update(self.cleaned_data['sc2e_id'], 'sc2e_id', 'set_sc2e_id', 'SC2Earnings.com ID')
+        update(self.cleaned_data['tag'], 'tag', 'set_tag', 'tag')
+        update(self.cleaned_data['race'], 'race', 'set_race', 'race')
+        update(self.cleaned_data['country'], 'country', 'set_country', 'country')
+        update(self.cleaned_data['name'], 'name', 'set_name', 'name')
+        update(self.cleaned_data['birthday'], 'birthday', 'set_birthday', 'birthday')
+        update(self.cleaned_data['tlpd_id'], 'tlpd_id', 'set_tlpd_id', 'TLPD ID')
+        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
+        update(self.cleaned_data['lp_name'], 'lp_name', 'set_lp_name', 'Liquipedia title')
+        update(self.cleaned_data['sc2c_id'], 'sc2c_id', 'set_sc2c_id', 'SC2Charts.net ID')
+        update(self.cleaned_data['sc2e_id'], 'sc2e_id', 'set_sc2e_id', 'SC2Earnings.com ID')
 
         if player.set_aliases(self.cleaned_data['akas'].split(',')):
             ret.append(Message('Changed aliases.', type=Message.SUCCESS))
 
         return ret
     # }}}
-
-    
 # }}} 
 
 # {{{ player view
@@ -196,18 +171,13 @@ def player(request, player_id):
     # }}}
 
     # {{{ Recent matches
-    matches = player.get_matchset()\
-                    .select_related('pla__rating', 'plb__rating', 'period')\
-                    .prefetch_related('message_set')\
-                    .filter(date__range=(date.today() - timedelta(days=90), date.today()))\
-                    .order_by('-date', '-id')[0:10]
-
+    matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj'])[0:10]
     if matches.exists():
         base['matches'] = display_matches(matches, fix_left=player, ratings=True)
     # }}}
 
     # {{{ Team memberships
-    team_memberships = list(player.groupmembership_set.filter(group__is_team=True))
+    team_memberships = list(player.groupmembership_set.filter(group__is_team=True).select_related('group'))
     team_memberships.sort(key=lambda t: t.id, reverse=True)
     team_memberships.sort(key=meandate, reverse=True)
     team_memberships.sort(key=lambda t: t.current, reverse=True)
@@ -215,7 +185,8 @@ def player(request, player_id):
     # }}}
 
     # {{{ If the player has at least one rating
-    ratings = total_ratings(player.rating_set.filter(period__computed=True))
+    ratings = total_ratings(player.rating_set.filter(period__computed=True))\
+              .select_related('period')
     if ratings.exists():
         rating = player.get_current_rating()
         base.update({
@@ -242,9 +213,8 @@ def player(request, player_id):
     # {{{ If the player has enough games to make a chart
     if base['charts']:
         ratings = total_ratings(player.rating_set.filter(period_id__lte=base['recentchange'].period_id))\
+                  .select_related('period__end')\
                   .order_by('period')
-        base['ratings'] = ratings
-        base['patches'] = PATCHES
 
         # {{{ Add stories and other extra information
         earliest = base['firstrating']
@@ -282,18 +252,20 @@ def player(request, player_id):
             point['data'].sort(key=lambda a: a['date'])
 
         # Look through stories
-        stories = player.story_set.all()
+        stories = player.story_set.all().select_related('event__fullname')
         for s in stories:
             if earliest.period.start < s.date < latest.period.start:
                 s.rating = interp_rating(s.date, ratings)
             else:
                 s.skip = True
+        # }}}
 
         base.update({
+            'ratings': ratings,
+            'patches': PATCHES,
             'stories': stories,
             'teampoints': teampoints,
         })
-        # }}}
     else:
         base['messages'].append(Message(msg_nochart % player.tag, type=Mesage.INFO))
     # }}}

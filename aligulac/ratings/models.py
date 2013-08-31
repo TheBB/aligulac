@@ -376,6 +376,13 @@ class Player(models.Model):
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
     TLPD_DB_KOREAN, TLPD_DB_INTERNATIONAL, TLPD_DB_HOTS, TLPD_DB_HOTSBETA, TLPD_DB_WOLBETA = 1,2,4,8,16
+    TLPD_DBS = [
+        (TLPD_DB_WOLBETA,       'WoL Beta'),
+        (TLPD_DB_KOREAN,        'WoL Korean'),
+        (TLPD_DB_INTERNATIONAL, 'WoL International'),
+        (TLPD_DB_HOTSBETA,      'HotS Beta'),
+        (TLPD_DB_HOTS,          'HotS'),
+    ]
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
 
@@ -402,10 +409,14 @@ class Player(models.Model):
         else:
             return self.tag + ' (' + self.race + ')'
     # }}}
-    
+
     # {{{ Standard setters
     def set_tag(self, tag):
         self.tag = tag
+        self.save()
+
+    def set_race(self, race):
+        self.race = race
         self.save()
     
     def set_country(self, country):
@@ -450,7 +461,7 @@ class Player(models.Model):
         self.tlpd_db = tlpd_db
         self.save()
     # }}}
-    
+
     # {{{ set_aliases: Set aliases
     # Input: An array of string aliases, which are compared to existing aliases.
     # New ones are added, existing superfluous ones are removed. Returns True if something changed.
@@ -544,11 +555,17 @@ class Player(models.Model):
     def has_earnings(self):
         return self.earnings_set.exists()
     # }}}
-    
+
     # {{{ get_matchset: Returns a queryset of all this player's matches.
-    def get_matchset(self):
-        return Match.objects.filter(Q(pla=self) | Q(plb=self))
-    # }}}
+    def get_matchset(self, related=[]):
+        qset = Match.objects.filter(Q(pla=self) | Q(plb=self))
+
+        if len(related) > 0:
+            qset = qset.select_related(*related)
+        qset = qset.prefetch_related('message_set')
+
+        return qset.order_by('-date', '-id')
+     # }}}
 # }}}
 
 # {{{ Stories
@@ -710,6 +727,10 @@ class Match(models.Model):
                             blank=False, null=False, choices=GAMES, db_index=True)
     offline = models.BooleanField('Offline', default=False, null=False, db_index=True)
 
+    # Helper fields for fast loading of frequently accessed information
+    rta = models.ForeignKey('Rating', related_name='rta', verbose_name='Rating A', null=True)
+    rtb = models.ForeignKey('Rating', related_name='rtb', verbose_name='Rating B', null=True)
+
     # {{{ populate_orig: Populates the original data fields, to check later if anything changed.
     def populate_orig(self):
         try:
@@ -862,21 +883,6 @@ class Match(models.Model):
     # {{{ get_loser_score: Returns the score of the loser.
     def get_loser_score(self):
         return min(self.sca, self.scb)
-    # }}}
-
-    # {{{ get_ratings: Gets the relevant ratings for both players, or None.
-    def get_ratings(self):
-        try:
-            rta = self.pla.rating_set.get(period_id=self.period_id-1)
-        except:
-            rta = None
-
-        try:
-            rtb = self.plb.rating_set.get(period_id=self.period_id-1)
-        except:
-            rtb = None
-
-        return rta, rtb
     # }}}
 
     # {{{ event_fullpath: Returns the full event name, taken from event object if available, or event text if
@@ -1039,6 +1045,9 @@ class Rating(models.Model):
 
     period = models.ForeignKey(Period, null=False, verbose_name='Period')
     player = models.ForeignKey(Player, null=False, verbose_name='Player')
+
+    # Helper fields for fast loading of frequently accessed information
+    prev = models.ForeignKey('Rating', related_name='prevrating', verbose_name='Previous rating', null=True)
 
     # Standard rating numbers
     rating = models.FloatField('Rating', null=False)

@@ -1,3 +1,5 @@
+{% load ratings_extras %}
+
 {% block basic %}
 <tr>
     <td class="form_left">{{ field.label_tag }}</td>
@@ -50,7 +52,7 @@
                type="text" 
                name="{{ field.html_name }}" 
                id="{{ field.auto_id }}"
-               value="{{ field.value|default:"" }}" />
+               value="{{ field.value|makedate|date:"Y-m-d"|default:"" }}" />
         <script type="text/javascript">
         // <![CDATA[  
             var opts = {                            

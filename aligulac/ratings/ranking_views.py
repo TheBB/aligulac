@@ -38,9 +38,9 @@ def period(request, period_id):
     qset = total_ratings(filter_active(Rating.objects.filter(period=period)))
     base.update({
         'best':   qset.latest('rating'),
-        'bestvp': qset.latest('-tot_vp'),
-        'bestvt': qset.latest('-tot_vt'),
-        'bestvz': qset.latest('-tot_vz'),
+        'bestvp': qset.latest('tot_vp'),
+        'bestvt': qset.latest('tot_vt'),
+        'bestvz': qset.latest('tot_vz'),
         'specvp': qset.extra(select={'d':'rating_vp/dev_vp*rating'}).latest('d'),
         'specvt': qset.extra(select={'d':'rating_vt/dev_vt*rating'}).latest('d'),
         'specvz': qset.extra(select={'d':'rating_vz/dev_vz*rating'}).latest('d'),

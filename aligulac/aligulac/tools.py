@@ -2,6 +2,7 @@ import random
 import string
 
 from django.core.context_processors import csrf
+from django import forms
 
 from aligulac.settings import DEBUG
 
@@ -35,6 +36,20 @@ def generate_messages(obj):
     return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]
 # }}}
 
+# {{{ StrippedCharField: Subclass of CharField that performs stripping.
+class StrippedCharField(forms.CharField):
+    def clean(self, value):
+        value = super(StrippedCharField, self).clean(value)
+        if value is not None:
+            value = value.strip()
+            if self.required and value == '':
+                raise ValidationError('This field is required.')
+            elif value == '':
+                return None
+            return value
+        return None
+# }}}
+
 # {{{ get_param(request, param, default): Returns request.GET[param] if available, default if not.
 def get_param(request, param, default):
     try:
@@ -44,6 +59,7 @@ def get_param(request, param, default):
 # }}}
 
 # {{{ post_param(request, param, default): Returns request.POST[param] if available, default if not.
+# If you're using this method, consider deploying a form instead.
 def post_param(request, param, default):
     try:
         return request.POST[param]

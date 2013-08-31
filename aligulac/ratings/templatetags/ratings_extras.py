@@ -2,7 +2,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from dateutil.relativedelta import relativedelta
 
 import markdown2
@@ -131,6 +131,13 @@ def smallhash(value):
     return m.hexdigest()[:6]
 # }}}
 
+# {{{
+@register.filter
+def makedate(value):
+    if isinstance(value, str):
+        value = datetime.strptime(value, '%Y-%m-%d').date()
+    return value
+# }}}
 # }}}
 
 # {{{ URL generation filters

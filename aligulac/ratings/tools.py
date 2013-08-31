@@ -174,16 +174,14 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
         # }}}
 
         # {{{ Check ratings if needed
-        if ratings:
-            rta, rtb = m.get_ratings()
-
+        if ratings and isinstance(m, Match):
             r.update({
-                'pla_rating': rta.get_totalrating(m.rcb) if rta
+                'pla_rating': m.rta.get_totalrating(m.rcb) if m.rta
                               else start_rating(r['pla_country'], m.period_id),
-                'plb_rating': rtb.get_totalrating(m.rca) if rtb
+                'plb_rating': m.rtb.get_totalrating(m.rca) if m.rtb
                               else start_rating(r['plb_country'], m.period_id),
-                'pla_dev':    rta.get_totaldev(m.rcb) if rta else sqrt(2)*INIT_DEV,
-                'plb_dev':    rtb.get_totaldev(m.rca) if rtb else sqrt(2)*INIT_DEV,
+                'pla_dev':    m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
+                'plb_dev':    m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
             })
         # }}}
 

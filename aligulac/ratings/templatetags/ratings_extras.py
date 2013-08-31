@@ -28,6 +28,12 @@ def addf(value, arg):
     return float(value) + float(arg)
 # }}}
 
+# {{{ subf: Subtracts floating point numbers.
+@register.filter
+def subf(value, arg):
+    return float(value) - float(arg)
+# }}}
+
 # {{{ sub: Subtracts integers.
 @register.filter
 def sub(value, arg):
@@ -209,11 +215,11 @@ def ratscalediff(value):
 # {{{ ratscaleplus: Like ratscale, but takes infinities and N/A into account (for performances)
 @register.filter
 def ratscaleplus(value):
-    if value <= MININF:
+    if value <= PRF_MININF:
         return '–\u221E'
-    elif value <= INF:
+    elif value <= PRF_INF:
         return '+\u221E'
-    elif value <= NA:
+    elif value <= PRF_NA:
         return 'N/A'
     else:
         return ratscale(value)

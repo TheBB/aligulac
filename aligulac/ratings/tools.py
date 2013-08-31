@@ -1,3 +1,4 @@
+from numpy import tanh, pi
 from math import sqrt
 from datetime import date
 
@@ -27,6 +28,11 @@ def start_rating(country, period):
         return KR_INIT
     else:
         return 0.0
+# }}}
+
+# {{{ cdf: Cumulative distribution function
+def cdf(x, loc=0.0, scale=1.0):
+    return 0.5 + 0.5 * tanh(pi/2/sqrt(3) * (x-loc)/scale)
 # }}}
 
 # {{{ get_latest_period: Returns the latest computed period, or None.

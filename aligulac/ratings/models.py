@@ -1099,21 +1099,6 @@ class Rating(models.Model):
         return self.player.tag + ' P' + str(self.period.id)
     # }}}
 
-    # {{{ get_prev: Get previous rating object for the same player
-    def get_prev(self):
-        try:
-            if self.prev:
-                return self.prev
-        except:
-            pass
-
-        try:
-            self.prev = Rating.objects.get(period__id=self.period.id-1, player=self.player)
-            return self.prev
-        except:
-            return None
-    # }}}
-
     # {{{ get_next: Get next rating object for the same palyer
     def get_next(self):
         try:
@@ -1123,7 +1108,7 @@ class Rating(models.Model):
             pass
 
         try:
-            self.next = Rating.objects.get(period__id=self.period.id+1, player=self.player)
+            self.next = Rating.objects.get(prev=self)
             return self.next
         except:
             return None
@@ -1141,10 +1126,10 @@ class Rating(models.Model):
 
     # {{{ rating_diff(_vx): Differences in rating between this and previous period
     def rating_diff(self, race=None):
-        if self.get_prev() is not None:
-            a = self.get_rating(race) - self.get_prev().get_rating(race)
+        if self.prev is not None:
+            a = self.get_totalrating(race) - self.prev.get_totalrating(race)
             return a
-        return self.get_rating(race)
+        return self.get_totalrating(race) - ratings.tools.start_rating(self.player.country, self.period)
 
     def rating_diff_vp(self):
         return self.rating_diff('P')

@@ -1,5 +1,6 @@
 from datetime import datetime, date, timedelta
 from functools import partial
+from math import sqrt
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -9,12 +10,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
-from aligulac.tools import Message, base_ctx, generate_messages, StrippedCharField
+from aligulac.tools import Message, base_ctx, generate_messages, StrippedCharField, etn
 from aligulac.settings import INACTIVE_THRESHOLD
 
-from ratings.models import Match, Player
+from ratings.models import Match, Period, Player, Rating
 from ratings.tools import PATCHES, total_ratings, ntz, split_matchset, count_winloss_games, display_matches,\
-                          filter_flags
+                          filter_flags, cdf
 
 from countries import data, transformations
 
@@ -271,4 +272,80 @@ def player(request, player_id):
     # }}}
 
     return render_to_response('player.html', base)
+# }}}
+
+# {{{ adjustment view
+@cache_page
+def adjustment(request, player_id, period_id):
+    # {{{ Get objects
+    period = get_object_or_404(Period, id=period_id, computed=True)
+    player = get_object_or_404(Player, id=player_id)
+    rating = get_object_or_404(Rating, player=player, period=period)
+    base = base_ctx('Ranking', 'Adjustments', request, context=player)
+
+    base.update({
+        'period': period,
+        'player': player,
+        'rating': rating,
+        'prevlink': etn(lambda: player.rating_set.filter(period__lt=period, decay=0).latest('period')),
+        'nextlink': etn(lambda: player.rating_set.filter(period__gt=period, decay=0).earliest('period')),
+    })
+    # }}}
+
+    # {{{ Matches
+    matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj'])\
+                    .filter(period=period)
+
+    # If there are no matches, we don't need to continue
+    if not matches.exists():
+        return render_to_response('ratingdetails.html', base)
+
+    base.update({
+        'matches': display_matches(matches, fix_left=player, ratings=True),
+        'has_treated': False,
+        'has_nontreated': False,
+    })
+    # }}}
+
+    # {{{ Perform calculations
+    tot_rating = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
+    ngames = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
+    expwins = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
+    nwins = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
+
+    for m in base['matches']:
+        if not m['match'].treated:
+            base['has_nontreated'] = True
+            continue
+        base['has_treated'] = True
+
+        scale = sqrt(1 + m['pla_dev']**2 + m['plb_dev']**2)
+        expected = (m['pla_score'] + m['plb_score']) * cdf(m['pla_rating'] - m['plb_rating'], scale=scale)
+
+        ngames['M'] += m['pla_score'] + m['plb_score']
+        tot_rating['M'] += m['plb_rating'] * (m['pla_score'] + m['plb_score'])
+        expwins['M'] += expected
+        nwins['M'] += m['pla_score']
+
+        vs_races = [m['plb_race']] if m['plb_race'] in 'PTZ' else 'PTZ'
+        weight = 1/len(vs_races)
+        for r in vs_races:
+            ngames[r] += weight * (m['pla_score'] + m['plb_score'])
+            tot_rating[r] += weight * m['plb_rating'] * (m['pla_score'] + m['plb_score'])
+            expwins[r] += weight * expected
+            nwins[r] += weight * m['pla_score']
+
+    for r in 'MPTZ':
+        if ngames[r] > 0:
+            tot_rating[r] /= ngames[r]
+
+    base.update({
+        'ngames': ngames,
+        'tot_rating': tot_rating,
+        'expwins': expwins,
+        'nwins': nwins,
+    })
+    # }}}
+
+    return render_to_response('ratingdetails.html', base)
 # }}}

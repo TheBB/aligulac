@@ -165,3 +165,11 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     return base
 # }}}
+
+# {{{ etn: Executes a function and returns its result if it doesn't throw an exception, or None if it does.
+def etn(f):
+    try:
+        return f()
+    except:
+        return None
+# }}}

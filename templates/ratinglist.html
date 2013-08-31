@@ -59,11 +59,11 @@ arguments:
             {% endif %}
         </td>
         <td class="rl_icon">
-            {% if entry.position and entry.get_prev.position and rl_pos_arrow %}
+            {% if entry.position and entry.prev.position and rl_pos_arrow %}
                 {% if entry.prev.position < entry.position %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" class="btm" 
                      title="{{ entry.prev.position|sub:entry.position }}" />
-                {% elif entry.get_prev.position > entry.position %}
+                {% elif entry.prev.position > entry.position %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" class="btm"
                      title="+{{ entry.prev.position|sub:entry.position }}" />
                 {% endif %}
@@ -89,11 +89,11 @@ arguments:
         </td>
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>
         <td class="rl_icon">
-            {% if entry.get_prev %}
-                {% if entry.get_prev.rating > entry.rating %}
+            {% if entry.prev %}
+                {% if entry.prev.rating > entry.rating %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
                      title="{{ entry.rating_diff|ratscalediff }}" />
-                {% elif entry.get_prev.rating < entry.rating %}
+                {% elif entry.prev.rating < entry.rating %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
                      title="+{{ entry.rating_diff|ratscalediff }}" />
                 {% endif %}
@@ -101,11 +101,11 @@ arguments:
         </td>
         <td class="rl_rating">{{ entry.rating_vp|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
-            {% if entry.get_prev %}
-                {% if entry.get_prev.rating|addf:entry.get_prev.rating_vp > entry.rating|addf:entry.rating_vp %}
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vp > entry.rating|addf:entry.rating_vp %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
                      title="{{ entry.rating_diff_vp|ratscalediff }}" />
-                {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vp < entry.rating|addf:entry.rating_vp %}
+                {% elif entry.prev.rating|addf:entry.prev.rating_vp < entry.rating|addf:entry.rating_vp %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
                      title="+{{ entry.rating_diff_vp|ratscalediff }}" />
                 {% endif %}
@@ -113,11 +113,11 @@ arguments:
         </td>
         <td class="rl_rating">{{ entry.rating_vt|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
-            {% if entry.get_prev %}
-                {% if entry.get_prev.rating|addf:entry.get_prev.rating_vt > entry.rating|addf:entry.rating_vt %}
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vt > entry.rating|addf:entry.rating_vt %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
                      title="{{ entry.rating_diff_vt|ratscalediff }}" />
-                {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vt < entry.rating|addf:entry.rating_vt %}
+                {% elif entry.prev.rating|addf:entry.prev.rating_vt < entry.rating|addf:entry.rating_vt %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
                      title="+{{ entry.rating_diff_vt|ratscalediff }}" />
                 {% endif %}
@@ -125,11 +125,11 @@ arguments:
         </td>
         <td class="rl_rating">{{ entry.rating_vz|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
-            {% if entry.get_prev %}
-                {% if entry.get_prev.rating|addf:entry.get_prev.rating_vz > entry.rating|addf:entry.rating_vz %}
+            {% if entry.prev %}
+                {% if entry.prev.rating|addf:entry.prev.rating_vz > entry.rating|addf:entry.rating_vz %}
                 <img src="{{ "downarrow.png"|static }}" alt="down" style="vertical-align: text-bottom;" 
                      title="{{ entry.rating_diff_vz|ratscalediff }}" />
-                {% elif entry.get_prev.rating|addf:entry.get_prev.rating_vz < entry.rating|addf:entry.rating_vz %}
+                {% elif entry.prev.rating|addf:entry.prev.rating_vz < entry.rating|addf:entry.rating_vz %}
                 <img src="{{ "uparrow.png"|static }}" alt="up" style="vertical-align: text-bottom;" 
                      title="+{{ entry.rating_diff_vz|ratscalediff }}" />
                 {% endif %}

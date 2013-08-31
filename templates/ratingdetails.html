@@ -36,7 +36,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
 {% endif %}
 
 {% if matches %}
-{% if treated %}
+{% if has_treated %}
 {% if period.is_preview %}
 <p>This period started on {{ period.start|date:"F jS, Y" }} and will end on {{ period.end|date:"F jS" }}. The
 numbers given below are projected adjustments and can change before then.</p>
@@ -58,85 +58,97 @@ numbers given below are projected adjustments and can change before then.</p>
     <div class="row row1">
         <div class="rowe">vP</div>
         <div class="rowe" style="text-align: right;">
-            {{ prevrat.1.P|ratscale }}
+            {{ rating.prev.rating|addf:rating.prev.rating_vp|ratscale }}
         </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ tot_rating.1.P|ratscale }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ expwins.1.P|floatformat:1 }}–{{ explosses.1.P|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ nwins.1.P|floatformat:1 }}–{{ nlosses.1.P|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.P > 0 %}{{ rating.comp_rat_vp|dispperf }}{% endif %}
-        </div>
+        <div class="rowe" style="text-align: right;">{% if ngames.P > 0 %}
+            {{ tot_rating.P|ratscale }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.P > 0 %}
+            {{ expwins.P|floatformat:1 }}–{{ ngames.P|subf:expwins.P|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.P > 0 %}
+            {{ nwins.P|floatformat:1 }}–{{ ngames.P|subf:nwins.P|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.P > 0 %}
+            {{ rating.comp_rat_vp|ratscaleplus }}
+        {% endif %}</div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vp|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
-            {% if diff.1.P < 0 %}<span style="color: #aa0000;">
-                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.1.P|ratscaled }}</span>
+            {% if rating.rating_diff_vp < 0 %}<span style="color: #aa0000;">
+            {% else %}<span style="color: #00aa00;">+{% endif %}{{ rating.rating_diff_vp|ratscalediff }}</span>
         </div>
     </div>
     <div class="row row2">
         <div class="rowe">vT</div>
         <div class="rowe" style="text-align: right;">
-            {{ prevrat.1.T|ratscale }}
+            {{ rating.prev.rating|addf:rating.prev.rating_vt|ratscale }}
         </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ tot_rating.1.T|ratscale }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ expwins.1.T|floatformat:1 }}–{{ explosses.1.T|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ nwins.1.T|floatformat:1 }}–{{ nlosses.1.T|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.T > 0 %}{{ rating.comp_rat_vt|dispperf }}{% endif %}
-        </div>
+        <div class="rowe" style="text-align: right;">{% if ngames.T > 0 %}
+            {{ tot_rating.T|ratscale }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.T > 0 %}
+            {{ expwins.T|floatformat:1 }}–{{ ngames.T|subf:expwins.T|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.T > 0 %}
+            {{ nwins.T|floatformat:1 }}–{{ ngames.T|subf:nwins.T|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.T > 0 %}
+            {{ rating.comp_rat_vt|ratscaleplus }}
+        {% endif %}</div>
         <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vt|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
-            {% if diff.1.T < 0 %}<span style="color: #aa0000;">
-                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.1.T|ratscaled }}</span>
+            {% if rating.rating_diff_vt < 0 %}<span style="color: #aa0000;">
+            {% else %}<span style="color: #00aa00;">+{% endif %}{{ rating.rating_diff_vt|ratscalediff }}</span>
         </div>
     </div>
     <div class="row row1">
         <div class="rowe">vZ</div>
         <div class="rowe" style="text-align: right;">
-            {{ prevrat.1.Z|ratscale }}
+            {{ rating.prev.rating|addf:rating.prev.rating_vz|ratscale }}
+        </div>
+        <div class="rowe" style="text-align: right;">{% if ngames.Z > 0 %}
+            {{ tot_rating.Z|ratscale }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.Z > 0 %}
+            {{ expwins.Z|floatformat:1 }}–{{ ngames.Z|subf:expwins.Z|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.Z > 0 %}
+            {{ nwins.Z|floatformat:1 }}–{{ ngames.Z|subf:nwins.Z|floatformat:1 }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">{% if ngames.Z > 0 %}
+            {{ rating.comp_rat_vz|ratscaleplus }}
+        {% endif %}</div>
+        <div class="rowe" style="text-align: right;">
+            {{ rating.rating|addf:rating.rating_vz|ratscale }}
         </div>
         <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ tot_rating.1.Z|ratscale }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ expwins.1.Z|floatformat:1 }}–{{ explosses.1.Z|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ nwins.1.Z|floatformat:1 }}–{{ nlosses.1.Z|floatformat:1 }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">
-            {% if ngames.1.Z > 0 %}{{ rating.comp_rat_vz|dispperf }}{% endif %}
-        </div>
-        <div class="rowe" style="text-align: right;">{{ rating.rating|addf:rating.rating_vz|ratscale }}</div>
-        <div class="rowe" style="text-align: right;">
-            {% if diff.1.Z < 0 %}<span style="color: #aa0000;">
-                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.1.Z|ratscaled }}</span>
+            {% if rating.rating_diff_vz < 0 %}<span style="color: #aa0000;">
+            {% else %}<span style="color: #00aa00;">+{% endif %}{{ rating.rating_diff_vz|ratscalediff }}</span>
         </div>
     </div>
     <div class="row row2">
         <div class="rowe"></div>
         <div class="rowe" style="text-align: right;">
-            {{ prevrat.0|ratscale }}
+            {{ rating.prev.rating|ratscale }}
         </div>
-        <div class="rowe" style="text-align: right;">{{ tot_rating.0|ratscale }}</div>
-        <div class="rowe" style="text-align: right;">{{ expwins.0|floatformat:1 }}–{{ explosses.0|floatformat:1 }}</div>
-        <div class="rowe" style="text-align: right;">{{ nwins.0|floatformat:1 }}–{{ nlosses.0|floatformat:1 }}</div>
-        <div class="rowe" style="text-align: right;">{{ rating.comp_rat|dispperf }}</div>
-        <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
         <div class="rowe" style="text-align: right;">
-            {% if diff.0 < 0 %}<span style="color: #aa0000;">
-                {% else %}<span style="color: #00aa00;">+{% endif %}{{ diff.0|ratscaled }}</span>
+            {{ tot_rating.M|ratscale }}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {{ expwins.M|floatformat:1 }}–{{ ngames.M|subf:expwins.M|floatformat:1 }}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {{ nwins.M|floatformat:1 }}–{{ ngames.M|subf:nwins.M|floatformat:1 }}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {{ rating.comp_rat|ratscaleplus }}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {{ rating.rating|ratscale }}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {% if rating.rating_diff < 0 %}<span style="color: #aa0000;">
+            {% else %}<span style="color: #00aa00;">+{% endif %}{{ rating.rating_diff|ratscalediff }}</span>
         </div>
     </div>
 </div>
@@ -146,7 +158,7 @@ numbers given below are projected adjustments and can change before then.</p>
     <table class="results">
     {% include "matchlist.html" with lm_list=matches lm_header="info" %}
     </table>
-    {% if nontreated %} 
+    {% if has_nontreated %} 
         <p><strong>Note:</strong> Some games have not been included in the rating calculations because they
         were just recently submitted or modified. They will be included in the next update. This happens every
         six hours. The time of the last update can be found <a href="/db/">here</a>.</p>

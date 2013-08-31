@@ -141,7 +141,10 @@ def smallhash(value):
 @register.filter
 def makedate(value):
     if isinstance(value, str):
-        value = datetime.strptime(value, '%Y-%m-%d').date()
+        try:
+            value = datetime.strptime(value, '%Y-%m-%d').date()
+        except:
+            value = None
     return value
 # }}}
 # }}}

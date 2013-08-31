@@ -4,13 +4,14 @@ from math import sqrt
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
-from aligulac.tools import Message, base_ctx, generate_messages, StrippedCharField, etn
+from aligulac.tools import Message, base_ctx, generate_messages, StrippedCharField, etn, get_param_date,\
+                           get_param
 from aligulac.settings import INACTIVE_THRESHOLD
 
 from ratings.models import Match, Period, Player, Rating
@@ -121,6 +122,59 @@ class PlayerModForm(forms.Form):
         return ret
     # }}}
 # }}} 
+
+# {{{ ResultsFilterForm: Form for filtering results.
+class ResultsFilterForm(forms.Form):
+    after = forms.DateField(required=False, label='After')
+    before = forms.DateField(required=False, label='Before')
+    race = forms.ChoiceField(
+        choices=[
+            ('ptzr','All'),
+            ('p','Protoss'),
+            ('t','Terran'),
+            ('z','Zerg'),
+            ('tzr','No Protoss'),
+            ('pzr','No Terran'),
+            ('ptr','No Zerg'),
+        ],
+        required=False, label='Opponent race', initial='ptzr'
+    )
+    country = forms.ChoiceField(
+        choices=[('all','All'),('foreigners','Non-Koreans')]+data.countries,
+        required=False, label='Country', initial='all'
+    )
+    bestof = forms.ChoiceField(
+        choices=[
+            ('all','All'),
+            ('3','Best of 3+'),
+            ('5','Best of 5+'),
+        ],
+        required=False, label='Match format', initial='all'
+    )
+    offline = forms.ChoiceField(
+        choices=[
+            ('both','Both'),
+            ('offline','Offline'),
+            ('online','Online'),
+        ],
+        required=False, label='On/offline', initial='both',
+    )
+    game = forms.ChoiceField(
+        choices=[('all','All')]+Match.GAMES, required=False, label='Game version', initial='all')
+
+    # {{{ Cleaning with default values
+    def clean_default(self, field):
+        if not self[field].html_name in self.data:
+            return self.fields[field].initial
+        return self.cleaned_data[field]
+
+    clean_race = lambda s: s.clean_default('race')
+    clean_country = lambda s: s.clean_default('country')
+    clean_bestof = lambda s: s.clean_default('bestof')
+    clean_offline = lambda s: s.clean_default('offline')
+    clean_game = lambda s: s.clean_default('game')
+    # }}}
+# }}}
 
 # {{{ player view
 @cache_page
@@ -348,4 +402,65 @@ def adjustment(request, player_id, period_id):
     # }}}
 
     return render_to_response('ratingdetails.html', base)
+# }}}
+
+# {{{ results view
+@cache_page
+def results(request, player_id):
+    # {{{ Get objects
+    player = get_object_or_404(Player, id=player_id)
+    base = base_ctx('Ranking', 'Match history', request, context=player)
+
+    base['player'] = player
+    # }}}
+
+    # {{{ Filtering
+    matches = player.get_matchset(related=['pla','plb','eventobj'])
+
+    form = ResultsFilterForm(request.GET)
+    if not form.is_valid():
+        print('Wut?')
+    base['form'] = form
+
+    q = Q()
+    for r in form.cleaned_data['race'].upper():
+        q |= Q(pla=player, rcb=r) | Q(plb=player, rca=r)
+    matches = matches.filter(q)
+
+    if form.cleaned_data['country'] == 'foreigners':
+        matches = matches.exclude(Q(pla=player, plb__country='KR') | Q(plb=player, pla__country='KR'))
+    elif form.cleaned_data['country'] != 'all':
+        matches = matches.filter(
+            Q(pla=player, plb__country=form.cleaned_data['country']) |
+            Q(plb=player, pla__country=form.cleaned_data['country'])
+        )
+
+    if form.cleaned_data['bestof'] != 'all':
+        sc = int(form.cleaned_data['bestof'])//2 + 1
+        matches = matches.filter(Q(sca__gte=sc) | Q(scb__gte=sc))
+
+    if form.cleaned_data['offline'] != 'both':
+        matches = matches.filter(offline=(form.cleaned_data['offline']=='offline'))
+
+    if form.cleaned_data['game'] != 'all':
+        matches = matches.filter(game=form.cleaned_data['game'])
+
+    if form.cleaned_data['after'] is not None:
+        matches = matches.filter(date__gte=form.cleaned_data['after'])
+
+    if form.cleaned_data['before'] is not None:
+        matches = matches.filter(date__lte=form.cleaned_data['before'])
+    # }}}
+
+    # {{{ Statistics
+    base['matches'] = display_matches(matches, fix_left=player)
+    base.update({
+        'sc_my': sum([m['pla_score'] for m in base['matches']]),
+        'sc_op': sum([m['plb_score'] for m in base['matches']]),
+        'msc_my': sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in base['matches']]),
+        'msc_op': sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in base['matches']]),
+    })
+    # }}}
+
+    return render_to_response('player_results.html', base)
 # }}}

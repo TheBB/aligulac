@@ -99,12 +99,12 @@ class Event(models.Model):
 
     # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category
     def get_ancestors_event(self):
-        ancestors = self.get_ancestors().filter(type__in=[Event.TYPE_CATEGORY, Event.TYPE_EVENT])
+        return self.get_ancestors().filter(type__in=[Event.TYPE_CATEGORY, Event.TYPE_EVENT])
     # }}}
 
     # {{{ get_root: Returns the farthest removed ancestor
     def get_root(self):
-        return self.get_ancestors(id=True)[0]
+        return self.get_ancestors(id=True).first()
     # }}}
 
     # {{{ get_children(types=[category,event,round], id=False): Returns a queryset containing the children
@@ -138,12 +138,12 @@ class Event(models.Model):
     # {{{ get_event_fullname: Returns the fullname of the nearest ancestor of type event or category
     # This is not cached and will query the DB!
     def get_event_fullname(self):
-        return self.get_ancestors_event().order_by('-lft')[0].fullname
+        return self.get_ancestors_event().latest('lft').fullname
     # }}}
 
     # {{{ get_event: Returns the nearest ancestor of type event or category
     def get_event_event(self):
-        return self.get_ancestors_event().order_by('-lft')[0]
+        return self.get_ancestors_event().latest('lft')
     # }}}
     
     # {{{ get_parent(levels): Returns the ancestor of this event by number of levels, or itself if none

@@ -1,5 +1,6 @@
 import random
 import string
+from datetime import datetime, date
 
 from django.core.context_processors import csrf
 from django import forms
@@ -54,6 +55,15 @@ class StrippedCharField(forms.CharField):
 def get_param(request, param, default):
     try:
         return request.GET[param]
+    except:
+        return default
+# }}}
+
+# {{{ get_param_date(request, param, default): Converts a GET param to a date.
+def get_param_date(request, param, default):
+    param = get_param(request, param, None)
+    try:
+        return datetime.strptime(param, '%Y-%m-%d').date()
     except:
         return default
 # }}}

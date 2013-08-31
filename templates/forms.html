@@ -4,7 +4,7 @@
 <tr>
     <td class="form_left">{{ field.label_tag }}</td>
     <td class="form_right">
-        <input class="wideinput"
+        <input class="{{ class }}"
                type="{{ field_type|default:"text" }}"
                name="{{ field.html_name }}" 
                id="{{ field.auto_id }}"
@@ -17,7 +17,7 @@
 <tr>
     <td class="form_left">{{ field.label_tag }}</td>
     <td class="form_right">
-        <select class="wideinput"
+        <select class="{{ class }}"
                 name="{{ field.html_name }}"
                 id="{{ field.auto_id }}">
         {% for value, label in field.field.choices %}
@@ -66,11 +66,37 @@
 </tr>
 {% endblock %}
 
+{% block daterange %}
+<tr>
+    <td class="form_left">{{ label }}</td>
+    <td class="form_right">
+        between <input type="text" class="date" name="{{ after.html_name }}" 
+                       id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
+        and     <input type="text" class="date" name="{{ before.html_name }}" 
+                       id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
+        <script type="text/javascript">
+        // <![CDATA[  
+            var opts = {                            
+                formElements: {"before": "Y-ds-m-ds-d"},
+                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
+            };
+            datePickerController.createDatePicker(opts);
+            var opts2 = {                            
+                formElements: {"after": "Y-ds-m-ds-d"},
+                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
+            };
+            datePickerController.createDatePicker(opts2);
+        // ]]>
+        </script>
+    </td>
+</tr>
+{% endblock %}
+
 {% block submit %}
 <tr>
     <td class="form_left"></td>
     <td class="form_right">
-        <input type="submit" name="op" value="Submit" />
+        <input type="submit" name="op" value="{{ text|default:"Submit" }}" />
     </td>
 </tr>
 {% endblock %}

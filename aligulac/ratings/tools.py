@@ -7,6 +7,7 @@ from django.db.models import Sum
 import ccy
 from countries import data
 
+import aligulac
 from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV
 
 from ratings.models import Match, Period, Player, Rating

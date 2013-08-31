@@ -523,6 +523,10 @@ td.va_top {
     width: 35em;
 }
 
+.narrowinput {
+    width: 15em;
+}
+
 textarea {
     width: 35em;
 }

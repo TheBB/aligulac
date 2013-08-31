@@ -5,6 +5,7 @@ This is the template for the match history of a player. It's called from ratings
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}{{ player.tag }} match history{% endblock %}
 
@@ -12,92 +13,17 @@ This is the template for the match history of a player. It's called from ratings
 <h2>{{ player.tag }} match history</h2>
 
 <form method="get" action="/players/{{ player.id }}/results/">
-<p>Filter by</p>
+<p>Filter by</b>
 <table class="bigform">
-<tr>
-    <td class="form_left">
-        <label for="after">Date</label>
-    </td>
-    <td class="form_right">
-        between <input type="text" class="date" name="after"  id="after"  value="{{ after }}"  />
-        and     <input type="text" class="date" name="before" id="before" value="{{ before }}" />
-        inclusive
-        <script type="text/javascript">
-            // <![CDATA[  
-            var opts = {                            
-                formElements:{"before":"Y-ds-m-ds-d"},
-                statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts);
-            var opts2 = {                            
-                formElements:{"after":"Y-ds-m-ds-d"},
-                statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts2);
-            // ]]>
-        </script>
-    </td>
-</tr>
-<tr>
-<td class="form_left"><label for="race">Opponent race</label></td>
-<td class="form_right">
-<select name="race" id="race" style="width: 15em;">
-    <option value="ptzr"        {% if race == "ptzr" %}selected{% endif %}>All</option>
-    <option value="p"           {% if race == "p" %}selected{% endif %}>Protoss</option>
-    <option value="t"           {% if race == "t" %}selected{% endif %}>Terran</option>
-    <option value="z"           {% if race == "z" %}selected{% endif %}>Zerg</option>
-    <option value="tzr"         {% if race == "tzr" %}selected{% endif %}>No Protoss</option>
-    <option value="pzr"         {% if race == "pzr" %}selected{% endif %}>No Terran</option>
-    <option value="ptr"         {% if race == "ptr" %}selected{% endif %}>No Zerg</option>
-</select>
-</td>
-</tr>
-<tr>
-<td class="form_left"><label for="nats">Nationality</label></td>
-<td class="form_right">
-<select name="nats" id="nats" style="width: 15em;">
-    <option value="all"         {% if nats == "all" %}selected{% endif %}>All</option>
-    <option value="foreigners"  {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
-    <option value="kr"          {% if nats == "kr" %}selected{% endif %}>Koreans</option>
-</select>
-    </td>
-</tr>
-<tr>
-    <td class="form_left"><label for="bo">Match format</label></td>
-    <td class="form_right">
-    <select name="bo" id="bo" style="width: 15em;">
-        <option value="all"         {% if bo == "all" %}selected{% endif %}>All</option>
-        <option value="3"           {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
-        <option value="5"           {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
-    </select>
-    </td>
-</tr>
-<tr>
-    <td class="form_left"><label for="offline">On/offline</label></td>
-    <td class="form_right">
-    <select name="offline" id="offline" style="width: 15em;">
-        <option value="both"        {% if offline == "both" %}selected{% endif %}>Both</option>
-        <option value="online"      {% if offline == "online" %}selected{% endif %}>Online</option>
-        <option value="offline"     {% if offline == "offline" %}selected{% endif %}>Offline</option>
-    </select>
-    </td>
-</tr>
-<tr>
-    <td class="form_left"><label for="game">Game version</label></td>
-    <td class="form_right">
-    <select name="game" id="game" style="width: 15em;">
-        <option value="all"         {% if game == "all" %}selected{% endif %}>All</option>
-        <option value="WoL"         {% if game == "WoL" %}selected{% endif %}>Wings of Liberty</option>
-        <option value="HotS"        {% if game == "HotS" %}selected{% endif %}>Heart of the Swarm</option>
-    </select>
-    </td>
-</tr>
-<tr>
-    <td class="form_left"></td>
-    <td class="form_right">
-    <input type="submit" value="Filter" />
-    </td>
-</tr>
+{% form "forms.html" %}
+    {% use "daterange" label="Date" after=form.after before=form.before %}
+    {% field "select"       form.race       class="narrowinput" %}
+    {% field "select"       form.country    class="narrowinput" %}
+    {% field "select"       form.bestof     class="narrowinput" %}
+    {% field "select"       form.offline    class="narrowinput" %}
+    {% field "select"       form.game       class="narrowinput" %}
+    {% use "submit" text="Filter" %}
+{% endform %}
 </table>
 </form>
 
@@ -105,6 +31,6 @@ This is the template for the match history of a player. It's called from ratings
 and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg:msc_op }}%) in matches.</p>
 
 <table class="results">
-{% include "matchlist.html" with lm_list=matches lm_header="partial" %}
+{% include "matchlist.html" with lm_list=matches lm_header="info" %}
 </table>
 {% endblock %}

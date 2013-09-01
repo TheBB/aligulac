@@ -96,7 +96,7 @@ class Event(models.Model):
 
     # {{{ get_ancestors_print: Returns a queryset containing the printable ancestors
     def get_ancestors_print(self):
-        return self.get_ancestors().filter(noprint=False)
+        return self.get_ancestors(id=True).filter(noprint=False)
     # }}}
 
     # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category

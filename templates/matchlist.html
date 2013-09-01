@@ -34,12 +34,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% comment %}Check for headers.{% endcomment %}
 {% if lm_header == "full" %}
-    {% ifchanged m.match.event_check_fullpath %}
+    {% ifchanged m.match.event_fullpath %}
     {% if not forloop.first %}</tbody>{% endif %}
     <tr class="header">
         <td colspan="5">
             {% if m.match.eventobj %} ▸
-                {% for event in m.match.eventobj.get_path %}
+                {% for event in m.match.eventobj.get_ancestors_print %}
                     <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
                 {% endfor %}
             {% elif m.match.event %}
@@ -57,15 +57,15 @@ NB! The calling code is responsible for starting and ending the HTML table:
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_fullpath|smallhash}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_fullpath|smallhash}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">unchk</a>
             {% endif %}
         </td>
     </tr>
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
     {% endifchanged %}
 {% elif lm_header == "partial" %}
-    {% ifchanged m.match.event_check_partpath %}
+    {% ifchanged m.match.event_partpath %}
     {% if not forloop.first %}</tbody>{% endif %}
     <tr class="header">
         <td colspan="5">
@@ -88,8 +88,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_check_partpath|smallhash}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_check_partpath|smallhash}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">chk</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">unchk</a>
             {% endif %}
         </td>
     </tr>
@@ -146,9 +146,9 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 {% if lm_header == "info" %}
                 <input type="checkbox" name="match-{{ m.match_id }}" value="y" />
                 {% elif lm_header == "partial" %}
-                <input type="checkbox" name="match-{{ m.match.event_check_partpath|smallhash }}-{{ m.match_id }}" value="y" />
+                <input type="checkbox" name="match-{{ m.match.event_partpath|smallhash }}-{{ m.match_id }}" value="y" />
                 {% else %}
-                <input type="checkbox" name="match-{{ m.match.event_check_fullpath|smallhash }}-{{ m.match_id }}" value="y" />
+                <input type="checkbox" name="match-{{ m.match.event_fullpath|smallhash }}-{{ m.match_id }}" value="y" />
                 {% endif %}
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>

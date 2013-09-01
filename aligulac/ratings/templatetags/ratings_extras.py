@@ -240,7 +240,7 @@ def ratingdev(event, race):
 
 # {{{ pctg_add: Percentage of value to value+arg.
 @register.filter
-def pctg(value, arg):
+def pctg_add(value, arg):
     if float(value) + float(arg) > 0:
         return int(round(100*float(value)/(float(value)+float(arg))))
     else:
@@ -255,7 +255,7 @@ def pctg2(value):
 
 # {{{ pctg: Percentage of value to arg.
 @register.filter
-def pctg3(value, arg):
+def pctg(value, arg):
     if float(arg) > 0:
         return '%.2f' % (100*float(value)/float(arg))
     else:

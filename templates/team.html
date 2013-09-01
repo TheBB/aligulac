@@ -5,6 +5,7 @@ This shows a team page. Called from ratings.teamviews.team.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}{{ team.name }}{% endblock %}
 
@@ -17,7 +18,7 @@ This shows a team page. Called from ratings.teamviews.team.
     {% csrf_token %}
     <div class="ibox" style="width: 25em;">
         <div class="iboxh">{{ team.name }}
-        	{% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/group/{{ team.id }}/">admin</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_form(); return false;">edit</a>, <a href="/admin/ratings/group/{{ team.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
         {% if adm %}
@@ -29,7 +30,9 @@ This shows a team page. Called from ratings.teamviews.team.
         {% if aliases %}
             <div class="row infobox">
                 <div class="rowel" style="width: 10em;">AKA</div>
-                <div class="rower" style="width: 20em;">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+                <div class="rower" style="width: 20em;">
+                    {% for alias in team.aliases_set %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                </div>
             </div>
         {% endif %}
         {% if adm %}
@@ -65,27 +68,27 @@ This shows a team page. Called from ratings.teamviews.team.
                 <div class="rower" style="width: 20em;">{{ team.disbanded|date:"F jS, Y" }}</div>
             </div>
         {% endif %}
-        {% if players %}
+        {% if nplayers %}
             <div class="row">
                 <div class="rowel" style="width: 10em;">Players</div>
                 <div class="rower" style="width: 20em;">
-                    {{ players.count }}
-                    ({{ protoss.count }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
-                    {{ terran.count }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
-                    {{ zerg.count }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
+                    {{ nplayers }}
+                    ({{ nprotoss }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
+                    {{ nterran }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
+                    {{ nzerg }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
                 </div>
             </div>
-		{% endif %}
-		{% if earnings %}
+        {% endif %}
+        {% if earnings %}
             <div class="row">
                 <div class="rowel" style="width: 10em;">Total earnings</div>
                 <div class="rower" style="width: 20em;">${{ earnings|add_separator }}</div>
             </div>
-		{% endif %}
-		{% if players %}
+        {% endif %}
+        {% if nmatches %}
             <div class="row">
                 <div class="rowel" style="width: 10em;">Offline matches</div>
-                <div class="rower" style="width: 20em;">{{ offline }}%</div>
+                <div class="rower" style="width: 20em;">{{ noffline|pctg:nmatches }}%</div>
             </div>
         {% endif %}
         {% if team.homepage or team.lp_name %}
@@ -110,7 +113,7 @@ This shows a team page. Called from ratings.teamviews.team.
                 <div class="rowel">Liquipedia</div>
                 <div class="rower"><input type="text" name="lp_name" {% if team.lp_name %}value="{{ team.lp_name }}"{% endif %} /></div>
             </div>
-            <div class="row edit" style="display: none;"">
+            <div class="row edit" style="display: none;">
                 <div class="rowel"></div>
                 <div class="rower"><input type="submit" name="op" value="Submit" /></div>
             </div>
@@ -118,15 +121,25 @@ This shows a team page. Called from ratings.teamviews.team.
         </div>
     </div>
     </form>
-    
-    {% comment %}
-    <p style="text-align: center;">
-    {% if team.id|haslogo %}
-    <img style="margin-bottom: 15px; float: right;" src="{{ team.id|imgfolder:"teams"|static }}" alt="{{ team.name }}" title="{{ team.name }}" />
-    {% endif %}
-    </p>
-    {% endcomment %}
 
+{% if adm %}
+<div class="hiddenform" style="display: none;">
+<table class="hiddenform bigform">
+<form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% field "basic"        form.name       class="wideinput" %}
+    {% field "basic"        form.akas       class="wideinput" %}
+    {% field "basic"        form.shortname  class="wideinput" %}
+    {% field "basic"        form.homepage   class="wideinput" %}
+    {% field "basic"        form.lp_name    class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</form>
+</table>
+</div>
+{% endif %}
+    
     {% if team.founded and team.disbanded %}
     <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
     {% elif team.founded %}

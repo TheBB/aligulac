@@ -15,11 +15,15 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
     <div class="rowh">
         <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
         <div class="rowe" style="width: 20em;">Name</div>
-        <div class="rowe" style="width: 10em; text-align: right;"><a href="/teams/?sort=ak">All-kill score</a></div>
-        <div class="rowe" style="width: 14em; text-align: right;"><a href="/teams/?sort=pl">Proleague score</a></div>
-        <div class="rowe" style="width: 20.5em;"></div>
+        <div class="rowe" style="width: 10em; text-align: right;">
+            <a href="/teams/?sort=ak">All-kill score</a></div>
+        <div class="rowe" style="width: 14em; text-align: right;">
+            <a href="/teams/?sort=pl">Proleague score</a>
+        </div>
+        <div class="rowe" style="width: 10em; text-align: right;">Players</div>
+        <div class="rowe" style="width: 10.5em;"></div>
     </div>
-    {% for team in teams %}
+    {% for team in active %}
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe" style="text-align: right;"> {{ forloop.counter }}.</div>
         <div class="rowe">
@@ -34,6 +38,9 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
             {% if team.scorepl > 0.0 %}
                 {{ team.scorepl|pctg2 }}%
             {% endif %}
+        </div>
+        <div class="rowe" style="text-align: right;">
+            {{ team.nplayers }}
         </div>
         <div class="rowe"></div>
     </div>

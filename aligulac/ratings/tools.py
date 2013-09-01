@@ -126,7 +126,6 @@ def get_placements(event):
     return ret
 # }}}
 
-
 # {{{ count_winloss_games: Counts wins and losses over a queryset relative to player A.
 def count_winloss_games(queryset):
     agg = queryset.aggregate(Sum('sca'), Sum('scb'))

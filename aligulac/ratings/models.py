@@ -645,10 +645,15 @@ class Group(models.Model):
             new = [x for x in aliases if x not in old]
 
             for alias in new:
-                Alias.add_player_alias(self, alias)
+                Alias.add_group_alias(self, alias)
 
         else:
             Alias.objects.filter(group=self).delete()
+    # }}}
+
+    # {{{ get_aliases: Returns all aliases as a list
+    def get_aliases(self):
+        return [a.name for a in self.alias_set.all()]
     # }}}
 # }}}
 
@@ -694,7 +699,7 @@ class Alias(models.Model):
         new.save()
 
     @staticmethod
-    def add_team_alias(group, name):
+    def add_group_alias(group, name):
         new = Alias(group=group, name=name)
         new.save()
     # }}}

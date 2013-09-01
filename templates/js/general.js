@@ -83,7 +83,8 @@ function toggle_form()
 {
     var elements = document.getElementsByClassName('hiddenform');
     for (var i = 0, length = elements.length; i < length; i++)
-        elements[i].style.display = 'block';
+        if (elements[i].style.display == 'none')
+            elements[i].style.display = 'block';
 }
 
 function hide_charts()

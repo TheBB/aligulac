@@ -54,7 +54,7 @@ class PlayerModForm(forms.Form):
     tag = StrippedCharField(max_length=30, required=True, label='Tag')
     race = forms.ChoiceField(choices=Player.RACES, required=True, label='Race')
     name = StrippedCharField(max_length=100, required=False, label='Name')
-    akas = forms.CharField(max_length=200, label='AKAs')
+    akas = forms.CharField(max_length=200, required=False, label='AKAs')
     birthday = forms.DateField(required=False, label='Birthday')
 
     tlpd_id = forms.IntegerField(required=False, label='TLPD ID')

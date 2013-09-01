@@ -22,6 +22,9 @@ urlpatterns = patterns('',
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/historical/$', 'ratings.player_views.historical'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/earnings/$', 'ratings.player_views.earnings'),
 
+    url(r'^teams/$', 'ratings.team_views.teams'),
+    url(r'^teams/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.team_views.team'),
+
     url(r'^admin/', include(admin.site.urls)),
 )
 

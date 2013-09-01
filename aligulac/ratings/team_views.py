@@ -1,3 +1,5 @@
+from datetime import date
+
 from django import forms
 from django.db.models import Q, Sum, Count
 from django.shortcuts import render_to_response, get_object_or_404
@@ -6,7 +8,7 @@ from django.views.decorators.csrf import csrf_protect
 from aligulac.cache import cache_page
 from aligulac.tools import get_param, base_ctx, StrippedCharField, generate_messages, Message
 
-from ratings.models import Earnings, Group, Match, Player, Rating
+from ratings.models import Earnings, Group, GroupMembership, Match, Player, Rating
 from ratings.tools import filter_active, filter_inactive, total_ratings
 
 # {{{ TeamModForm: Form for modifying a teasm.
@@ -143,6 +145,53 @@ def team(request, team_id):
                             .annotate(null_end=Count('end'))\
                             .select_related('player').order_by('-null_end', '-end', 'player__tag'),
     })
+    # }}}
 
     return render_to_response('team.html', base)
+# }}}
+
+# {{{
+@cache_page
+def transfers(request):
+    base = base_ctx('Teams', 'Transfers', request)
+
+    # {{{ Get relevant groupmembership objects
+    trades = GroupMembership.objects.exclude(start__isnull=True, end__isnull=True)\
+                            .filter(group__is_team=True)\
+                            .select_related('player')\
+                            .extra(select={
+                                'cdate': 'CASE\
+                                              WHEN start IS NULL THEN "end"\
+                                              WHEN "end" IS NULL THEN start\
+                                              WHEN start > "end" THEN start\
+                                              ELSE "end"\
+                                          END'
+                            })\
+                            .order_by('-cdate', 'player__tag')[0:50]
+    # }}}
+
+    # {{{ Separate them into joins and leaves
+    pretrades = []
+    for t in trades:
+        if t.start is not None and t.start <= date.today():
+            pretrades.append({'date': t.start, 'player': t.player, 'joined': t.group})
+        if t.end is not None and t.end <= date.today():
+            pretrades.append({'date': t.end, 'player': t.player, 'left': t.group})
+    pretrades.sort(key=lambda t: t['player'].tag.upper())
+    pretrades.sort(key=lambda t: t['date'], reverse=True)
+    # }}}
+
+    # {{{ Combine joins and leaves for the same player on the same date
+    ind = 0
+    while ind < len(pretrades) - 1:
+        if pretrades[ind]['player'] == pretrades[ind+1]['player'] and\
+           pretrades[ind]['date'] == pretrades[ind+1]['date']:
+            pretrades[ind].update(pretrades[ind+1])
+            del pretrades[ind+1]
+        ind += 1
+    # }}}
+
+    base['trades'] = pretrades[0:25]
+
+    return render_to_response('player_transfers.html', base)
 # }}}

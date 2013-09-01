@@ -7,12 +7,13 @@
 <h2>Recent player transfers</h2>
 <table class="results">
     <tr class="header">
-        <td class="rl_name" style="width: 15em;">Player</td>
+        <td class="rl_name" style="width: 8em;">Player</td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
-        <td class="rl_name" style="width: 12em; text-align: right;"></td>
-        <td class="rl_name" style="width: 24em;">Team</td>
-        <td class="lm_date" style="width: 14em;">Date</td>
+        <td class="rl_name" style="width: 20em; text-align: right;">Left</td>
+        <td class="rl_name" style="width: 2em; text-align: center;"></td>
+        <td class="rl_name" style="width: 20em;">Joined</td>
+        <td class="lm_date" style="width: 12em;">Date</td>
     </tr>
     {% for trade in trades %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
@@ -28,15 +29,23 @@
         <img src="{{ trade.player.race|imgfolder|static }}" alt="{{ trade.player.race }}" class="btm" />
     </td>
     <td style="text-align: right;">
-        {% if not trade.start or trade.end > trade.start %}left
-        {% elif not trade.end or trade.start > trade.end %}joined{% endif %} 
+        {% if trade.left %}
+        <a href="/teams/{{ trade.left.id }}-{{ trade.left.name|urlfilter }}/">
+            {{ trade.left.name }}
+        </a>
+        {% endif %}
+    </td>
+    <td style="text-align: center;">
+        →
     </td>
     <td>
-        <a href="/teams/{{ trade.group.id }}-{{ trade.group.name|urlfilter }}/">
-            {{ trade.group.name }}
+        {% if trade.joined %}
+        <a href="/teams/{{ trade.joined.id }}-{{ trade.joined.name|urlfilter }}/">
+            {{ trade.joined.name }}
         </a>
+        {% endif %}
     </td>
-    <td class="lm_date">{{ trade.cdate }}</td>
+    <td class="lm_date">{{ trade.date }}</td>
     </tr>
     {% endfor %}
 </table>

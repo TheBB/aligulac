@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/period/(?P<period_id>\d+)/$',
         'ratings.player_views.adjustment'),
     url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/results/$', 'ratings.player_views.results'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/historical/$', 'ratings.player_views.historical'),
+    url(r'^players/(?P<player_id>\d+)(-[^ /]*)?/earnings/$', 'ratings.player_views.earnings'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

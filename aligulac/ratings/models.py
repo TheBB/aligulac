@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models, transaction
 from django.db.models import Max, F, Q
 
+from aligulac.settings import start_rating
+
 from math import sqrt
 
 from countries import transformations, data
@@ -99,7 +101,7 @@ class Event(models.Model):
 
     # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category
     def get_ancestors_event(self):
-        return self.get_ancestors().filter(type__in=[Event.TYPE_CATEGORY, Event.TYPE_EVENT])
+        return self.get_ancestors(id=True).filter(type__in=[Event.TYPE_CATEGORY, Event.TYPE_EVENT])
     # }}}
 
     # {{{ get_root: Returns the farthest removed ancestor
@@ -1129,7 +1131,7 @@ class Rating(models.Model):
         if self.prev is not None:
             a = self.get_totalrating(race) - self.prev.get_totalrating(race)
             return a
-        return self.get_totalrating(race) - ratings.tools.start_rating(self.player.country, self.period)
+        return self.get_totalrating(race) - start_rating(self.player.country, self.period)
 
     def rating_diff_vp(self):
         return self.rating_diff('P')
@@ -1169,6 +1171,15 @@ class Rating(models.Model):
             return self.rating + self.get_rating(race)
         else:
             return self.rating
+
+    def get_totalrating_vp(self):
+        return self.get_totalrating('P')
+
+    def get_totalrating_vt(self):
+        return self.get_totalrating('T')
+
+    def get_totalrating_vz(self):
+        return self.get_totalrating('Z')
     # }}}
 
     # {{{ get_totaldev(race): Return total RD by race (expected total RD if None)

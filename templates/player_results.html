@@ -13,7 +13,7 @@ This is the template for the match history of a player. It's called from ratings
 <h2>{{ player.tag }} match history</h2>
 
 <form method="get" action="/players/{{ player.id }}/results/">
-<p>Filter by</b>
+<p>Filter by</p>
 <table class="bigform">
 {% form "forms.html" %}
     {% use "daterange" label="Date" after=form.after before=form.before %}

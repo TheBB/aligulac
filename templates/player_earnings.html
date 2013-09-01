@@ -11,14 +11,15 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% block content %}
 <h2>{{ player.tag }} earnings</h2>
-<p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.
-{% if earningsByCurrency %}<br>Broken down by currency, that's 
-{% for currency, earnings in earningsByCurrency.items %}
+<p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.</p>
+{% if by_currency %}<p>Broken down by currency, that's 
+{% for currency, earnings in by_currency.items %}
     {{ earnings|add_sep_and_cur:currency }}{% if forloop.revcounter == 2 %} and  
     {% elif forloop.last %}.
     {% else %}, {% endif %} 
 {% endfor %}
-{% endif %}</p>
+</p>
+{% endif %}
 <table class="results" style="width: 67em;">
     <tr class="header">
         <td style="width: 6em; text-align: right;">Placement</td>
@@ -31,17 +32,17 @@ This is the template for the earnings of a player. It's called from ratings.view
     {% for earning in earnings %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
             <td style="text-align: right;">
-            {% if earning.min != 0 %}
-                {% if earning.min != earning.max %}
-                    {{ earning.min|ordinal }}&ndash;{{ earning.max|ordinal }}
+            {% if earning.rng %}
+                {% if earning.rng.0 != earning.rng.1 %}
+                    {{ earning.rng.0|ordinal }}&ndash;{{ earning.rng.1|ordinal }}
                 {% else %}
-                    {{ earning.min|ordinal }}
+                    {{ earning.rng.0|ordinal }}
                 {% endif %}
             {% endif %}
             </td>
             <td></td>
             <td>
-                {% for event in earning.event.get_event_path %}
+                {% for event in earning.event.get_ancestors_event %}
                     <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.name }}</a>
                 {% endfor %}
             </td>

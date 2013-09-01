@@ -317,11 +317,16 @@ This is the template for the main player page, called from ratings.views.player.
                 },
                 {% endfor %}]
             },
-            yAxis: {
+            yAxis: [{
                 title: {
-                    text: null
+                    text: 'Rating'
                 }
-            },
+            }, {
+                opposite: true,
+                title: {
+                    text: 'Games'
+                }
+            }],
             tooltip: {
                 xDateFormat: '%B %e, %Y'
             },
@@ -347,11 +352,23 @@ This is the template for the main player page, called from ratings.views.player.
                 }
             },
             series: [{
+                name: 'Games',
+                color: 'rgba(100,100,100,0.4)',
+                lineWidth: 5,
+                enableMouseTracking: false,
+                yAxis: 1,
+                type: 'column',
+                data: [{% for r in ratings %} {
+                          x: {{ r.period.end|milliseconds }},
+                          y: {{ r.ngames }}
+                      },{% endfor %}]
+            }, {
                 name: 'vs. Protoss',
                 color: '#00dd00',
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 enableMouseTracking: false,
+                yAxis: 0,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -363,6 +380,7 @@ This is the template for the main player page, called from ratings.views.player.
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 enableMouseTracking: false,
+                yAxis: 0,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -374,6 +392,7 @@ This is the template for the main player page, called from ratings.views.player.
                 lineWidth: 1,
                 dashStyle: 'Dash',
                 enableMouseTracking: false,
+                yAxis: 0,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -384,6 +403,7 @@ This is the template for the main player page, called from ratings.views.player.
                 color: '#000000',
                 lineWidth: 3,
                 enableMouseTracking: false,
+                yAxis: 0,
                 data: [{% for r in ratings %} {
                           name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
@@ -394,6 +414,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: 'Stories',
                 type: 'scatter',
                 color: '#ffaa00',
+                yAxis: 0,
                 marker: {
                     enabled: true,
                     symbol: 'circle',
@@ -410,6 +431,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: 'Team switches',
                 type: 'scatter',
                 color: '#FF0000',
+                yAxis: 0,
                 marker: {
                     enabled: true,
                     symbol: 'circle',

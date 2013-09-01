@@ -4,7 +4,7 @@ from math import sqrt
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -16,7 +16,7 @@ from aligulac.settings import INACTIVE_THRESHOLD
 
 from ratings.models import Match, Period, Player, Rating
 from ratings.tools import PATCHES, total_ratings, ntz, split_matchset, count_winloss_games, display_matches,\
-                          filter_flags, cdf
+                          filter_flags, cdf, add_counts, get_placements
 
 from countries import data, transformations
 
@@ -269,6 +269,7 @@ def player(request, player_id):
     if base['charts']:
         ratings = total_ratings(player.rating_set.filter(period_id__lte=base['recentchange'].period_id))\
                   .select_related('period__end')\
+                  .prefetch_related('prev__rta', 'prev__rtb')\
                   .order_by('period')
 
         # {{{ Add stories and other extra information
@@ -316,7 +317,7 @@ def player(request, player_id):
         # }}}
 
         base.update({
-            'ratings': ratings,
+            'ratings': add_counts(ratings),
             'patches': PATCHES,
             'stories': stories,
             'teampoints': teampoints,
@@ -463,4 +464,67 @@ def results(request, player_id):
     # }}}
 
     return render_to_response('player_results.html', base)
+# }}}
+
+# {{{ historical view
+@cache_page
+def historical(request, player_id):
+    player = get_object_or_404(Player, id=player_id)
+    base = base_ctx('Ranking', 'Match history', request, context=player)
+
+    latest = player.rating_set.filter(period__computed=True, decay=0).latest('period')
+    historical = player.rating_set.filter(period_id__lte=latest.period_id)\
+                       .prefetch_related('prev__rta', 'prev__rtb')\
+                       .select_related('period', 'prev')\
+                       .order_by('-period')
+
+    historical = add_counts(historical)
+
+    base.update({
+        'player': player,
+        'historical': historical,
+    })
+
+    return render_to_response('historical.html', base)
+# }}}
+
+# {{{ earnings view
+@cache_page
+def earnings(request, player_id):
+    player = get_object_or_404(Player, id=player_id)
+    base = base_ctx('Ranking', 'Match history', request, context=player)
+
+    # {{{ Gather data
+    earnings = player.earnings_set.prefetch_related('event__earnings_set')\
+                     .order_by('-event__latest')
+    totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
+
+    # Get placement range for each prize
+    for e in earnings:
+        placements = get_placements(e.event)
+        for prize, rng in placements.items():
+            if rng[0] <= e.placement <= rng[1]:
+                e.rng = rng
+    # }}}
+
+    # {{{ Sum up earnings by currency
+    by_currency = {}
+    for e in earnings:
+        try:
+            by_currency[e.currency] += e.origearnings
+        except:
+            by_currency[e.currency] = e.origearnings
+
+    if len(by_currency) == 1 and 'USD' in by_currency:
+        by_currency = None
+    # }}}
+
+    base.update({
+        'player': player,
+        'earnings': earnings,
+        'totalearnings': totalearnings,
+        'by_currency': by_currency
+    })
+
+    return render_to_response('player_earnings.html', base)
 # }}}

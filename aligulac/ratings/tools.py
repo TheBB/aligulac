@@ -8,7 +8,7 @@ import ccy
 from countries import data
 
 import aligulac
-from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV
+from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV, start_rating
 
 from ratings.models import Match, Period, Player, Rating
 
@@ -21,14 +21,6 @@ PATCHES = [
     (date(year=2013, month=3,  day=12), 'HotS'),
     (date(year=2013, month=7,  day=11), '2.0.9 BU'),
 ]
-# }}}
-
-# {{{ start_rating: Gets the initial rating of a player.
-def start_rating(country, period):
-    if country == 'KR':
-        return KR_INIT
-    else:
-        return 0.0
 # }}}
 
 # {{{ cdf: Cumulative distribution function
@@ -120,6 +112,21 @@ def split_matchset(queryset, player):
     return queryset.filter(pla=player), queryset.filter(plb=player)
 # }}}
 
+# {{{ get_placements: Returns a dict mapping prizemoney to tuple (min,max) placements for a given event.
+def get_placements(event):
+    ret = {}
+    for earning in event.earnings_set.order_by('placement'):
+        try:
+            ret[earning.earnings] = (
+                min(min(ret[earning.earnings]), earning.placement),
+                max(max(ret[earning.earnings]), earning.placement)
+            )
+        except:
+            ret[earning.earnings] = (earning.placement, earning.placement)
+    return ret
+# }}}
+
+
 # {{{ count_winloss_games: Counts wins and losses over a queryset relative to player A.
 def count_winloss_games(queryset):
     agg = queryset.aggregate(Sum('sca'), Sum('scb'))
@@ -137,6 +144,24 @@ def count_matchup_games(queryset, rca, rcb):
 def count_mirror_games(queryset, race):
     w, l = count_winloss_games(queryset.filter(rca=race, rcb=race))
     return w + l
+# }}}
+
+# {{{ add_counts: Add match and game counts to a rating queryset (should have prefetched prev__rt(a,b)).
+# Will probably result in two queries being run.
+def add_counts(queryset):
+    for r in queryset:
+        if r.prev is not None:
+            r.ngames, r.nmatches = 0, 0
+            for s in [r.prev.rta.all(), r.prev.rtb.all()]:
+                for m in s:
+                    r.ngames += m.sca + m.scb
+                    r.nmatches += 1
+        else:
+            initial = r.player.get_matchset().filter(period=r.period)\
+                              .aggregate(Sum('sca'), Sum('scb'))
+            r.ngames = ntz(initial['sca__sum']) + ntz(initial['scb__sum'])
+            r.nmatches = r.player.get_matchset().filter(period_id=r.period_id).count()
+    return queryset
 # }}}
 
 # {{{ display_matches: Prepare a match queryset for display. Works for both Match and PreMatch objects.

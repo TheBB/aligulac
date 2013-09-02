@@ -65,7 +65,7 @@ def period(request, period_id):
     # }}}
 
     # {{{ Initial filtering of ratings
-    entries = filter_active(period.rating_set)
+    entries = filter_active(period.rating_set).select_related('player')
 
     # Race filter
     race = get_param(request, 'race', 'ptzrs')

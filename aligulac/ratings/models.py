@@ -46,6 +46,7 @@ class Period(models.Model):
 # {{{ Events
 class Event(models.Model):
     class Meta:
+        ordering = ['lft']
         db_table = 'event'
 
     name = models.CharField('Name', max_length=100)
@@ -64,6 +65,13 @@ class Event(models.Model):
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
     TLPD_DB_KOREAN, TLPD_DB_INTERNATIONAL, TLPD_DB_HOTS, TLPD_DB_HOTSBETA, TLPD_DB_WOLBETA = 1,2,4,8,16
+    TLPD_DBS = [
+        (TLPD_DB_WOLBETA,       'WoL Beta'),
+        (TLPD_DB_KOREAN,        'WoL Korean'),
+        (TLPD_DB_INTERNATIONAL, 'WoL International'),
+        (TLPD_DB_HOTSBETA,      'HotS Beta'),
+        (TLPD_DB_HOTS,          'HotS'),
+    ]
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
@@ -119,7 +127,7 @@ class Event(models.Model):
 
     # {{{ get_immediate_children: Returns a queryset of immediate children
     def get_immediate_children(self):
-        return Event.objects.filter(parent=self).order_by('lft')
+        return self.event_set.all()
     # }}}
 
     # {{{ has_children: Returns true if this event has children, false if not
@@ -179,7 +187,7 @@ class Event(models.Model):
         if not res:
             return None
 
-        event = res[0]
+        event = res.first()
 
         names = [(Event.TLPD_DB_KOREAN,          "KR"),
                  (Event.TLPD_DB_INTERNATIONAL,   "IN"),
@@ -193,7 +201,12 @@ class Event(models.Model):
     # {{{ get_tl_thread: Returns the ID of the TL thread if one can be found, None otherwise
     def get_tl_thread(self):
         res = self.get_ancestors(id=True).filter(tl_thread__isnull=False).order_by('-lft')
-        return res[0].tl_thread if res else None
+        return res.first().tl_thread if res else None
+    # }}}
+
+    # {{{ get_matchset: Returns a queryset of matches
+    def get_matchset(self):
+        return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt)
     # }}}
 
     # {{{ update_dates: Updates the fields earliest and latest
@@ -237,6 +250,10 @@ class Event(models.Model):
     # }}}
 
     # {{{ Standard setters
+    def set_big(self, big):
+        self.big = big
+        self.save()
+
     def set_prizepool(self, prizepool):
         self.prizepool = prizepool
         self.save()

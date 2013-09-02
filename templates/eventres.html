@@ -6,6 +6,7 @@ ratings.views.events.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}{{ event }}{% endblock %}
 
@@ -419,93 +420,33 @@ ratings.views.events.
 
     {% include "messages.html" %}
 
-    <form method="post" action="/results/events/{{ event.id }}/" onsubmit="return validate_infobox();">
-    {% csrf_token %}
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
-            {% if adm %} (<a href="#" onclick="toggle_infobox(); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_form('modevent'); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
-            <div class="row edit" style="display: none;">
-                <div class="rowel" style="width: 7em;"><big><strong>Note</strong></big></div>
-                <div class="rower" style="width: 18em;"><big>Date, Game and On-/Offline will apply to <strong>ALL</strong> subevents!</big>
-                </div>
-            </div>
             <div class="row infobox">
-                <div class="rowel" style="width: 7em;">Date{% ifnotequal earliest latest %}s{% endifnotequal %}</div>
+                <div class="rowel" style="width: 7em;">Date{% ifnotequal event.earliest event.latest %}s{% endifnotequal %}</div>
                 <div class="rower" style="width: 18em;">
-                    {% if earliest and latest %}
-                        {% ifequal earliest latest %}
-                        {{ earliest }}
+                    {% if event.earliest and event.latest %}
+                        {% ifequal event.earliest event.latest %}
+                        {{ event.earliest }}
                         {% else %}
-                        {{ earliest }} to {{ latest }}
+                        {{ event.earliest }} to {{ event.latest }}
                         {% endifequal %}
                     {% endif %}
                 </div>
             </div>
-            {% if adm %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Name</div>
-                    <div class="rower">
-                        <input type="text" name="name" id="name"
-                            {% for e in path %}
-                                {% if forloop.last %}
-                                    value="{{ e.name }}"
-                                {% endif %}
-                            {% endfor %}
-                        />
-                    </div>
-                </div>
-                <div class="row edit" style="display: none;">
-                <div class="rowel">Date</div>
-                <div class="rower"><input type="text" name="date" class="date" id="date"
-                                    value="No change" />
-                    <script type="text/javascript" src="/js/datepicker.js" /></script>
-                    <script type="text/javascript">
-                        // <![CDATA[  
-                        var opts = {                            
-                        formElements:{"date":"Y-ds-m-ds-d"},
-                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                        };           
-                        datePickerController.createDatePicker(opts);
-                        // ]]>
-                    </script></div>
-                </div>
-            {% endif %}
             {% if game %}
             <div class="row infobox">
                 <div class="rowel">Game</div>
                 <div class="rower">{{ game }}</div>
             </div>
             {% endif %}
-            {% if adm %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Game</div>
-                    <div class="rower">
-                    <select name="game" id="game">
-                        <option value="nochange" {% if not game %}selected{% endif %}>No change</option>
-                        <option value="WoL" {% if game == "Wings of Liberty" %}selected{% endif %}>Wings of Liberty</option>
-                        <option value="HotS" {% if game == "Heart of the Swarm" %}selected{% endif %}>Heart of the Swarm</option>
-                    </select>
-                    </div>
-                </div>
-            {% endif %}
             <div class="row infobox">
                 <div class="rowel">On-/Offline</div>
                 <div class="rower">{{ offline|yesno:"Offline,Online,Both" }}</div>
             </div>
-            {% if adm %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">On-/Offline</div>
-                    <div class="rower">
-                    <select name="offline" id="offline">
-                        <option value="nochange" {% if offline == None %}selected{% endif %}>No change</option>
-                        <option value="online" {% if offline != None %}selected{% endif %}>Online</option>
-                        <option value="offline" {% if offline %}selected{% endif %}>Offline</option>
-                    </select>
-                    </div>
-                </div>
-            {% endif %}
             {% if prizepoolorig %}
             <div class="row infobox">
                 <div class="rowel">Prize pool</div>
@@ -514,45 +455,14 @@ ratings.views.events.
             </div>
             {% endif %}
             {% if adm %}
-                {% if event.type == "event" %}
-                    <div class="row edit" style="display: none;">
-                        <div class="rowel">No prize pool?</div>
-                        <div class="rower">
-                            <input type="checkbox" id="prizepoolselect" name="prizepoolselect" value="prizepoolselect"
-                                {% if event.prizepool|is_false %}checked{% endif %}
-                            >
-                        </div>
-                    </div>
-                {% endif %}
-                <div class="row infobox">
-                    <div class="rowel">Type</div>
-                    <div class="rower">{{ event.type|capfirst }}</div>
-                </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Type</div>
-                    <div class="rower">
-                    <select name="type" id="type">
-                        <option value="nochange" {% if not event.type %}selected{% endif %}>No change</option>
-                        <option value="category" {% if event.type == "category" %}selected{% endif %}/>Category</option>
-                        <option value="event" {% if event.type == "event" %}selected{% endif %}/>Event</option>
-                        {% if event.parent %}
-                            <option value="round" {% if event.type == "round" %}selected{% endif %}/>Round</option>
-                        {% endif %}
-                    </select>
-                    </div>
-                </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">
-                    <input type="checkbox" id="siblings" name="siblings" value="siblings" />
-                    </div>
-                    <div class="rower">
-                    <label for="siblings">Apply to events on the same level</label>
-                    </div>
-                </div>
+            <div class="row infobox">
+                <div class="rowel">Type</div>
+                <div class="rower">{{ event.type|capfirst }}</div>
+            </div>
             {% endif %}
             <div class="row">
                 <div class="rowel">Players</div>
-                <div class="rower">{{ players|length }}</div>
+                <div class="rower">{{ nplayers }}</div>
             </div>
             <div class="row">
                 <div class="rowel">Games</div>
@@ -565,19 +475,19 @@ ratings.views.events.
             <div class="row">
                 <div class="rowel">PvT</div>
                 <div class="rower">
-                    {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg:pvt_loss }}%)
+                    {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)
                 </div>
             </div>
             <div class="row">
                 <div class="rowel">PvZ</div>
                 <div class="rower">
-                    {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg:pvz_loss }}%)
+                    {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)
                 </div>
             </div>
             <div class="row">
                 <div class="rowel">TvZ</div>
                 <div class="rower">
-                    {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
+                    {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)
                 </div>
             </div>
             <div class="row">
@@ -631,45 +541,6 @@ ratings.views.events.
                     {% endif %}
                 </div>
             </div>
-            {% endif %}
-            {% if adm %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Homepage</div>
-                    <div class="rower"><input type="text" name="homepage" {% if event.get_homepage %}value="{{ event.get_homepage }}"{% endif %} /></div>
-                </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD ID</div>
-                    <div class="rower"><input type="number" name="TLPD" {% if event.tlpd_id %}value="{{ event.tlpd_id }}"{% endif %} /></div>
-                </div>
-                {% with tlpds=event.get_tlpd_id %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">TLPD Database</div>
-                    <div class="rower">
-                        <label for="TLPDKR">Korea</label>
-                        <input type="radio" id="TLPDKR" name="TLPDDB" value="TLPDKR" {% if tlpds.KR %}checked{% endif %}>
-                        <label for="TLPDIN">International</label>
-                        <input type="radio" id="TLPDIN" name="TLPDDB" value="TLPDIN" {% if tlpds.IN %}checked{% endif %}><br>
-                        <label for="TLPDHOTS">HotS</label>
-                        <input type="radio" id="TLPDHOTS" name="TLPDDB" value="TLPDHOTS" {% if tlpds.HotS %}checked{% endif %}><br>
-                        <label for="TLPDHOTSBETA">HotS beta</label>
-                        <input type="radio" id="TLPDHOTSBETA" name="TLPDDB" value="TLPDHOTSBETA" {% if tlpds.HotSbeta %}checked{% endif %}>
-                        <label for="TLPDWOLBETA">WoL beta</label>
-                        <input type="radio" id="TLPDWOLBETA" name="TLPDDB" value="TLPDWOLBETA" {% if tlpds.WoLbeta %}checked{% endif %}>
-                    </div>
-                </div>
-                {% endwith %}
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Teamliquid.net thread ID</div>
-                    <div class="rower"><input type="text" name="tl_thread" {% if event.get_tl_thread %}value="{{ event.get_tl_thread }}"{% endif %} /></div>
-                </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel">Liquipedia title</div>
-                    <div class="rower"><input type="text" name="lp_name" {% if event.get_lp_name %}value="{{ event.get_lp_name }}"{% endif %} /></div>
-                </div>
-                <div class="row edit" style="display: none;">
-                    <div class="rowel"></div>
-                    <div class="rower"><input type="submit" name="op" value="Modify" /></div>
-                </div>
             {% endif %}
         </div>
     </div>
@@ -766,6 +637,33 @@ ratings.views.events.
     </form>
     <br>
     {% endif %}
+
+{% if adm %}
+<div class="hiddenform" style="display: none;" id="modevent">
+    <p style="margin: 3em;"><strong>Warning:</strong> Changes to date, game and offline will modify all
+    matches associated with all events in this tree. Changing type will potentially change all children and
+    ancestor events! Make sure you know what you are doing!</p>
+<table class="hiddenform bigform">
+<form method="post" action="/results/events/{{ event.id }}/">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% field "basic"        form.name       class="wideinput" %}
+    {% field "date"         form.date       class="wideinput" %}
+    {% field "select"       form.game       class="wideinput" %}
+    {% field "select"       form.offline    class="wideinput" %}
+    {% field "select"       form.type       class="wideinput" %}
+    {% field "checkbox"     form.same_level class="wideinput" %}
+    {% field "basic"        form.homepage   class="wideinput" %}
+    {% field "basic"        form.tlpd_id    class="wideinput" %}
+    {% field "selectmulti"  form.tlpd_db    class="wideinput" %}
+    {% field "basic"        form.tl_thread  class="wideinput" %}
+    {% field "basic"        form.lp_name    class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+{% endif %}
     
     {% if matches %}
         <table class="results">

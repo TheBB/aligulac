@@ -14,7 +14,7 @@ def home(request):
 
     entries = filter_active(Rating.objects.filter(period=base['curp']))\
               .order_by('-rating')\
-              .select_related('player__group', 'player__groupmembership')[0:10]
+              .select_related('player')[0:10]
 
     populate_teams(entries)
 

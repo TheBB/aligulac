@@ -98,7 +98,7 @@ def team(request, team_id):
     team = get_object_or_404(Group, id=team_id)
     base = base_ctx('Ranking', None, request)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and base['adm']:
         form = TeamModForm(request)
         base['messages'] += form.update_team(team)
     else:

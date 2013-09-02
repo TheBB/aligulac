@@ -27,6 +27,8 @@ urlpatterns = patterns('',
     url(r'^transfers/$', 'ratings.team_views.transfers'),
 
     url(r'^results/$', 'ratings.results_views.results'),
+    url(r'^results/events/$', 'ratings.results_views.events'),
+    url(r'^results/events/(?P<event_id>\d+)(-[^ /]*)?/$', 'ratings.results_views.events'),
 
     url(r'^admin/', include(admin.site.urls)),
 )

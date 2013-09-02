@@ -79,14 +79,16 @@ function switch_to(id, all)
     }
 }
 
-function toggle_form()
+/* Toggles a popup form.
+ */
+function toggle_form(id)
 {
-    var elements = document.getElementsByClassName('hiddenform');
-    for (var i = 0, length = elements.length; i < length; i++)
-        if (elements[i].style.display == 'none')
-            elements[i].style.display = 'block';
+    var element = document.getElementById(id);
+    element.style.display = 'block';
 }
 
+/* Hides charts in a player page. Sometimes necessary for popup forms to look OK.
+ */
 function hide_charts()
 {
     if (document.getElementById('chart'))

@@ -18,7 +18,7 @@ This shows a team page. Called from ratings.teamviews.team.
     {% csrf_token %}
     <div class="ibox" style="width: 25em;">
         <div class="iboxh">{{ team.name }}
-            {% if adm %} (<a href="#" onclick="toggle_form(); return false;">edit</a>, <a href="/admin/ratings/group/{{ team.id }}/">admin</a>){% endif %}
+            {% if adm %} (<a href="#" onclick="toggle_form('modteam'); return false;">edit</a>, <a href="/admin/ratings/group/{{ team.id }}/">admin</a>){% endif %}
         </div>
         <div class="iboxtable">
         {% if adm %}
@@ -123,7 +123,7 @@ This shows a team page. Called from ratings.teamviews.team.
     </form>
 
 {% if adm %}
-<div class="hiddenform" style="display: none;">
+<div class="hiddenform" style="display: none;" id="modteam">
 <table class="hiddenform bigform">
 <form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
 {% csrf_token %}

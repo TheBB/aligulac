@@ -82,7 +82,7 @@ class PlayerModForm(forms.Form):
                 'sc2e_id': player.sc2e_id,
                 'lp_name': player.lp_name,
                 'tlpd_id': player.tlpd_id,
-                'tlpd_db': filter_flags(player.tlpd_db),
+                'tlpd_db': filter_flags(player.tlpd_db if player.tlpd_db else 0),
             })
 
         self.label_suffix = ''
@@ -184,7 +184,7 @@ def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and base['adm']:
         form = PlayerModForm(request)
         base['messages'] += form.update_player(player)
     else:

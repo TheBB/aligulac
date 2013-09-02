@@ -121,6 +121,23 @@ class EventModForm(forms.Form):
     # }}}
 # }}} 
 
+# {{{ PrizepoolModForm: Form for changing prizepools.
+class PrizepoolModForm(forms.Form):
+    sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
+    currencies = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
+    currency = forms.ChoiceField(choices=currencies, required=True, label='Currency')
+
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(PrizepoolModForm, self).__init__(request.POST)
+        else:
+            super(PrizepoolModForm, self).__init__(initial={
+                'currency': 'USD',
+            })
+
+        self.label_suffix = ''
+# }}}
+
 # {{{ results view
 @cache_page
 def results(request):
@@ -178,11 +195,12 @@ def events(request, event_id=None):
     event = get_object_or_404(Event, id=event_id)
     base['messages'] += generate_messages(event)
 
-    if request.method == 'POST' and base['adm']:
+    if request.method == 'POST' and 'modevent' in request.POST and base['adm']:
         form = EventModForm(request=request)
         base['messages'] += form.update_event(event)
     else:
         form = EventModForm(event=event)
+        ppform = PrizepoolModForm(event=event)
 
     matches = event.get_matchset()
     if matches.count() > 200 and not event.big:
@@ -191,6 +209,7 @@ def events(request, event_id=None):
     base.update({
         'event':             event,
         'form':              form,
+        'ppform':            ppform,
         'siblings':          event.parent.event_set.exclude(id=event.id) if event.parent else None,
         'path':              event.get_ancestors(id=True),
         'children':          event.event_set.all(),

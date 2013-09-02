@@ -31,7 +31,7 @@
 
 {% block selectmulti %}
 <tr>
-    <td class="form_left">{{ field.label_tag }}</td>
+    <td class="form_left" style="vertical-align: top;">{{ field.label_tag }}</td>
     <td class="form_right">
         {% for value, label in field.field.choices %}
         <label for="{{ field.auto_id }}_{{ forloop.counter0 }}">
@@ -100,6 +100,10 @@
         </script>
     </td>
 </tr>
+{% endblock %}
+
+{% block hidden %}
+<input type="hidden" name="{{ name }}" value="{{ value }}" />
 {% endblock %}
 
 {% block submit %}

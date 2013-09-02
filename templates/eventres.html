@@ -422,7 +422,13 @@ ratings.views.events.
 
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
-            {% if adm %} (<a href="#" onclick="toggle_form('modevent'); return false;">edit</a>, <a href="/admin/ratings/event/{{ event.id }}/">admin</a>){% endif %}
+        {% if adm %} 
+            (<a href="#" onclick="toggle_form('modevent'); return false;">edit</a>, 
+            {% if event.type == "event" %}
+                <a href="#" onclick="toggle_form('modpp'); return false;">pp</a>, 
+            {% endif %}
+            <a href="/admin/ratings/event/{{ event.id }}/">admin</a>)
+        {% endif %}
         </div>
         <div class="iboxtable">
             <div class="row infobox">
@@ -611,6 +617,7 @@ ratings.views.events.
         level to see a complete list.</p>
     {% endif %}
     
+    {% comment %}
     {% if adm %}    
     <form method="post" name="rankedprizepool" action="/results/events/{{ event.id }}/" onsubmit="return validate(this.name)">
     {% csrf_token %}
@@ -637,8 +644,23 @@ ratings.views.events.
     </form>
     <br>
     {% endif %}
+    {% endcomment %}
 
 {% if adm %}
+{% if event.type == "event" %}
+<div class="hiddenform" style="display: none;" id="modpp">
+<form method="post" action="/results/events/{{ event.id }}/">
+<table class="hiddenform bigform">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% use "hidden" name="modpp" value="modpp" %}
+    {% field "select"       ppform.currency   class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+{% endif %}
 <div class="hiddenform" style="display: none;" id="modevent">
     <p style="margin: 3em;"><strong>Warning:</strong> Changes to date, game and offline will modify all
     matches associated with all events in this tree. Changing type will potentially change all children and
@@ -647,6 +669,7 @@ ratings.views.events.
 <table class="hiddenform bigform">
 {% csrf_token %}
 {% form "forms.html" %}
+    {% use "hidden" name="modevent" value="modevent" %}
     {% field "basic"        form.name       class="wideinput" %}
     {% field "date"         form.date       class="wideinput" %}
     {% field "select"       form.game       class="wideinput" %}

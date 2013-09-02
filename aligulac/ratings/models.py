@@ -103,8 +103,8 @@ class Event(models.Model):
     # }}}
 
     # {{{ get_ancestors_print: Returns a queryset containing the printable ancestors
-    def get_ancestors_print(self):
-        return self.get_ancestors(id=True).filter(noprint=False)
+    def get_ancestors_print(self, id=True):
+        return self.get_ancestors(id=id).filter(noprint=False)
     # }}}
 
     # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category
@@ -136,12 +136,13 @@ class Event(models.Model):
     # }}}
 
     # {{{ update_name: Refreshes the fullname field (must be called after changing name of ancestors)
-    def update_name(self):
+    def update_name(self, newname=None):
+        if newname is not None:
+            self.name = newname
+            self.save()
+
         ancestors = self.get_ancestors_print()
-        q = ' '.join([e.name for e in ancestors])
-        if q != '':
-            q += ' '
-        self.fullname = q + self.name
+        self.fullname = ' '.join([e.name for e in ancestors])
         self.save()
     # }}}
 
@@ -266,19 +267,18 @@ class Event(models.Model):
         self.lp_name = lp_name if lp_name != '' else None
         self.save()
 
-    def set_tlpd_id(self, tlpd_id, tlpd_db):
-        if tlpd_id == '' or tlpd_db == 0:
-            self.tlpd_id = None
-            self.tlpd_db = None
-        else:
-            self.tlpd_id = tlpd_id
-            self.tlpd_db = tlpd_db
+    def set_tlpd_id(self, tlpd_id):
+        self.tlpd_id = tlpd_id
         self.save()
-        
+
+    def set_tlpd_db(self, tlpd_db):
+        self.tlpd_db = tlpd_db
+        self.save()
+
     def set_tl_thread(self, tl_thread):
         self.tl_thread = tl_thread if tl_thread != '' else None
         self.save()
-    
+
     def set_earliest(self, date):
         self.earliest = date
         self.save()
@@ -456,6 +456,10 @@ class Player(models.Model):
 
     def set_tlpd_id(self, tlpd_id):
         self.tlpd_id = tlpd_id
+        self.save()
+
+    def set_tlpd_db(self, tlpd_db):
+        self.tlpd_db = tlpd_db
         self.save()
 
     def set_sc2e_id(self, sc2e_id):

@@ -94,7 +94,6 @@ class PlayerModForm(forms.Form):
 
         if not self.is_valid():
             ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
-            print(repr(self.errors))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -419,8 +418,6 @@ def results(request, player_id):
     matches = player.get_matchset(related=['pla','plb','eventobj'])
 
     form = ResultsFilterForm(request.GET)
-    if not form.is_valid():
-        print('Wut?')
     base['form'] = form
 
     q = Q()

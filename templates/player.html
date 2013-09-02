@@ -259,8 +259,8 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modplayer">
-<table class="hiddenform bigform">
 <form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
+<table class="hiddenform bigform">
 {% csrf_token %}
 {% form "forms.html" %}
     {% field "basic"        form.tag        class="wideinput" %}

@@ -41,7 +41,6 @@ class TeamModForm(forms.Form):
 
         if not self.is_valid():
             ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
-            print(repr(self.errors))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))

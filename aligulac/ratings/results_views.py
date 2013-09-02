@@ -38,12 +38,12 @@ class EventModForm(forms.Form):
         required=True, label='Offline'
     )
     type = forms.ChoiceField(choices=[('nochange','No change')]+Event.TYPES, required=True, label='Type')
-    same_level = forms.BooleanField(required=True, label='Apply to all events on the same level')
+    same_level = forms.BooleanField(required=False, label='Apply to all events on the same level')
     homepage = StrippedCharField(max_length=200, required=False, label='Homepage')
     tlpd_id = forms.IntegerField(required=False, label='TLPD ID')
     tlpd_db = forms.MultipleChoiceField(
         required=False, choices=Event.TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
-    tl_thread = forms.IntegerField(required=False, label='TLPD ID')
+    tl_thread = forms.IntegerField(required=False, label='TL thread')
     lp_name = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
 
     # {{{ Constructor
@@ -68,36 +68,54 @@ class EventModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ update_player: Pushes updates to player, responds with messages
-    def update_player(self, player):
+    # {{{ update_event: Pushes updates to event, responds with messages
+    def update_event(self, event):
         ret = []
 
         if not self.is_valid():
             ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
-            print(repr(self.errors))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
+        if self.cleaned_data['name'] != event.name:
+            event.update_name(self.cleaned_data['name'])
+            for e in event.get_children(id=False):
+                e.update_name()
+            ret.append(Message('Changed event name.', type=Message.SUCCESS))
+
+        if self.cleaned_data['date'] is not None:
+            nchanged = event.get_matchset().update(date=self.cleaned_data['date'])
+            ret.append(Message('Changed date for %i matches.' % nchanged, type=Message.SUCCESS))
+
+        if self.cleaned_data['game'] != 'nochange':
+            nchanged = event.get_matchset().update(game=self.cleaned_data['game'])
+            ret.append(Message('Changed game for %i matches.' % nchanged, type=Message.SUCCESS))
+
+        if self.cleaned_data['offline'] != 'nochange':
+            nchanged = event.get_matchset().update(offline=(self.cleaned_data['offline']=='offline'))
+            ret.append(Message('Changed type for %i matches.' % nchanged, type=Message.SUCCESS))
+
+        events = [event] if not self.cleaned_data['same_level'] else event.event_set.all()
+        for e in events:
+            nchanged = 0
+            if e.type != self.cleaned_data['type']:
+                e.change_type(self.cleaned_data['type'])
+                nchanged += 1
+            if nchanged > 0:
+                ret.append(Message('Changed type for %i event(s).' % nchanged, type=Message.SUCCESS))
+
         def update(value, attr, setter, label):
-            if value != getattr(player, attr):
-                getattr(player, setter)(value)
+            if value != getattr(event, attr):
+                getattr(event, setter)(value)
                 ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['tag'], 'tag', 'set_tag', 'tag')
-        update(self.cleaned_data['race'], 'race', 'set_race', 'race')
-        update(self.cleaned_data['country'], 'country', 'set_country', 'country')
-        update(self.cleaned_data['name'], 'name', 'set_name', 'name')
-        update(self.cleaned_data['birthday'], 'birthday', 'set_birthday', 'birthday')
+        update(self.cleaned_data['homepage'], 'homepage', 'set_homepage', 'homepage')
         update(self.cleaned_data['tlpd_id'], 'tlpd_id', 'set_tlpd_id', 'TLPD ID')
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
         update(self.cleaned_data['lp_name'], 'lp_name', 'set_lp_name', 'Liquipedia title')
-        update(self.cleaned_data['sc2c_id'], 'sc2c_id', 'set_sc2c_id', 'SC2Charts.net ID')
-        update(self.cleaned_data['sc2e_id'], 'sc2e_id', 'set_sc2e_id', 'SC2Earnings.com ID')
-
-        if player.set_aliases(self.cleaned_data['akas'].split(',')):
-            ret.append(Message('Changed aliases.', type=Message.SUCCESS))
+        update(self.cleaned_data['tl_thread'], 'tl_thread', 'set_th_thread', 'TL thread')
 
         return ret
     # }}}
@@ -162,6 +180,7 @@ def events(request, event_id=None):
 
     if request.method == 'POST' and base['adm']:
         form = EventModForm(request=request)
+        base['messages'] += form.update_event(event)
     else:
         form = EventModForm(event=event)
 
@@ -181,7 +200,6 @@ def events(request, event_id=None):
 
     # {{{ Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__lft__gte=event.lft, event__rgt__lte=event.rgt)
-    print(total_earnings.values('currency').distinct())
     currencies = [r['currency'] for r in total_earnings.values('currency').distinct()]
     base.update({
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],

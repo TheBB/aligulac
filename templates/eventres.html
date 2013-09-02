@@ -643,8 +643,8 @@ ratings.views.events.
     <p style="margin: 3em;"><strong>Warning:</strong> Changes to date, game and offline will modify all
     matches associated with all events in this tree. Changing type will potentially change all children and
     ancestor events! Make sure you know what you are doing!</p>
-<table class="hiddenform bigform">
 <form method="post" action="/results/events/{{ event.id }}/">
+<table class="hiddenform bigform">
 {% csrf_token %}
 {% form "forms.html" %}
     {% field "basic"        form.name       class="wideinput" %}

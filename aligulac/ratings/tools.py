@@ -1,11 +1,13 @@
 from numpy import tanh, pi
 from math import sqrt
 from datetime import date
+import shlex
 
-from django.db.models import Sum
+from django.db.models import Sum, Q
 
 import ccy
 from countries import data
+from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 import aligulac
 from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV, start_rating
@@ -21,6 +23,101 @@ PATCHES = [
     (date(year=2013, month=3,  day=12), 'HotS'),
     (date(year=2013, month=7,  day=11), '2.0.9 BU'),
 ]
+# }}}
+
+# {{{ find_player: Magic!
+def find_player(query=None, lst=None, make=False, soft=False):
+    queryset = Player.objects.all()
+
+    if not lst:
+        lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
+
+    # {{{ Build filter
+    for s in lst:
+        # If numeric, assume a restriction on ID
+        if s.isdigit():
+            queryset = queryset.filter(id=int(s))
+            continue
+
+        # If only one character, assume a restriction on race
+        if len(s) == 1 and s.upper() in 'PTZSR':
+            queryset = queryset.filter(race=s.upper())
+            continue
+
+        # Otherwise, always search by player tag, team and aliases
+        if soft:
+            q = Q(tag__icontains=s) | Q(alias__name__icontains=s) |\
+                Q(groupmembership__current=True,
+                  groupmembership__group__name__icontains=s,
+                  groupmembership__group__is_team=True) |\
+                Q(groupmembership__current=True,
+                  groupmembership__group__alias__name__icontains=s,
+                  groupmembership__group__is_team=True)
+        else:
+            q = Q(tag__icontains=s) | Q(alias__name__icontains=s) |\
+                Q(groupmembership__current=True,
+                  groupmembership__group__name__icontains=s,
+                  groupmembership__group__is_team=True) |\
+                Q(groupmembership__current=True,
+                  groupmembership__group__alias__name__icontains=s,
+                  groupmembership__group__is_team=True)
+
+        # ...and perhaps country codes
+        if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+            q |= Q(country=s.upper())
+        elif len(s) == 3 and s.upper() in data.cca3_to_ccn:
+            q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+        renorm = s[0].upper() + s[1:].lower()
+        if renorm in data.cn_to_ccn:
+            q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+
+        queryset = queryset.filter(q)
+    # }}}
+
+    # {{{ If no results, make player if allowed
+    if not queryset.exists() and make:
+        tag, country, race = None, None, None
+
+        # {{{ Get tag, country and race from query
+        for s in lst:
+            if s.isdigit():
+                continue
+
+            if len(s) == 1 and s.upper() in 'PTZSR':
+                race = s.upper()
+                continue
+
+            if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+                country = s.upper()
+                continue
+            elif len(s) == 3 and s.upper() in data.cca3_to_ccn:
+                country = ccn_to_cca2(cca3_to_ccn(s.upper()))
+                continue
+            renorm = s[0].upper() + s[1:].lower()
+            if renorm in data.cn_to_ccn:
+                country = ccn_to_cca2(cn_to_ccn(renorm))
+                continue
+
+            tag = s
+        # }}}
+
+        # {{{ Raise exceptions if missing crucial data
+        if tag == None:
+            msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
+            raise Exception(msg)
+
+        if race == None:
+            msg = "Player '%s' was not found and cound not be made (missing race)" % ' '.join(lst)
+            raise Exception(msg)
+        # }}}
+
+        p = Player(tag=tag, country=country, race=race)
+        p.save()
+
+        return Player.objects.filter(id=p.id)
+    # }}}
+
+    return queryset.distinct()
 # }}}
 
 # {{{ cdf: Cumulative distribution function

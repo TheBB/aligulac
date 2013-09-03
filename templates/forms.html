@@ -13,6 +13,18 @@
 </tr>
 {% endblock %}
 
+{% block textarea %}
+<tr>
+    <td class="form_left" style="vertical-align: top;">{{ field.label_tag }}</td>
+    <td class="form_right">
+        <textarea class="{{ class }}"
+                  name="{{ field.html_name }}"
+                  id="{{ field.auto_id }}"
+                  rows="15">{{ field.value }}</textarea>
+    </td>
+</tr>
+{% endblock %}
+
 {% block select %}
 <tr>
     <td class="form_left">{{ field.label_tag }}</td>

@@ -956,36 +956,35 @@ class Earnings(models.Model):
     currency = models.CharField('Original currency', max_length=30)
     placement = models.IntegerField('Place')
 
-    # {{{ set_earnings(event, players, origearnings, currency, placements): Sets earnings for a given event.
+    # {{{ set_earnings(event, payouts, currency): Sets earnings for a given event.
+    # Payouts is a list of dicts with keys 'player', 'prize' and 'placement'.
     # TODO: Probably should be more subtle and not delete everything on change
     @staticmethod
-    def set_earnings(event, players, origearnings, currency, placements):
-        if not (len(players) == len(origearnings) == len(placements)):
-            return None
-
+    def set_earnings(event, payouts, currency, ranked):
         # Delete existent earnings of the given type
         if Earnings.objects.filter(event=event).exists():
-            event.delete_earnings(ranked=(placements[0] != -1))
+            event.delete_earnings(ranked=ranked)
 
-        for i in range(0,len(players)):
-            new = Earnings(event=event, 
-                           player=players[i], 
-                           placement=placements[i]+1,
-                           origearnings=origearnings[i],
-                           currency=currency)
+        for payout in payouts:
+            new = Earnings(
+                event=event,
+                player=payout['player'],
+                placement=payout['placement']+1,
+                origearnings=payout['prize'],
+                currency=currency
+            )
             new.save()
 
-        convert_earnings(event)
+        Earnings.convert_earnings(event)
 
         event.set_prizepool(True)
-        return new
     # }}}
 
     # {{{ convert_earnings(event): Performs currency conversion for all earnings associated to an event.
     @staticmethod
     def convert_earnings(event):
         earningobjs = Earnings.objects.filter(event=event)
-        date = event.get_latest()
+        date = event.latest
 
         for earning in earningobjs:
             if earning.currency == 'USD':

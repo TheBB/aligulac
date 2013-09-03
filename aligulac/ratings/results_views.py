@@ -13,8 +13,8 @@ from aligulac.cache import cache_page
 from aligulac.tools import get_param, base_ctx, StrippedCharField, generate_messages, Message, etn
 
 from ratings.models import Earnings, Event, Match, Player
-from ratings.tools import display_matches, count_winloss_games, count_matchup_games, count_mirror_games,\
-                          filter_flags
+from ratings.tools import (display_matches, count_winloss_games, count_matchup_games, count_mirror_games,
+                           filter_flags, find_player)
 
 # {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
 def collect(lst, n=2):
@@ -26,6 +26,13 @@ def collect(lst, n=2):
     ret[-1] = ret[-1] + [None] * (n-len(ret[-1]))
 
     return ret
+# }}}
+
+# {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
+def earnings_code(queryset):
+    if not queryset.exists():
+        return '[prize] [player]'
+    return '\n'.join(['%i %s %i' % (e.origearnings, e.player.tag, e.player_id) for e in queryset])
 # }}}
 
 # {{{ EventModForm: Form for modifying an event.
@@ -126,17 +133,97 @@ class PrizepoolModForm(forms.Form):
     sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
     currencies = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
     currency = forms.ChoiceField(choices=currencies, required=True, label='Currency')
+    ranked = forms.CharField(required=False, max_length=10000, label='Ranked')
+    unranked = forms.CharField(required=False, max_length=10000, label='Unranked')
 
+    # {{{ Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(PrizepoolModForm, self).__init__(request.POST)
         else:
-            super(PrizepoolModForm, self).__init__(initial={
-                'currency': 'USD',
-            })
+            initial = {
+                'ranked':   earnings_code(event.earnings_set.filter(placement__gt=0).order_by('-earnings')),
+                'unranked': earnings_code(event.earnings_set.filter(placement=0).order_by('-earnings')),
+            }
+
+            try:
+                initial['currency'] = event.earnings_set.all().first().currency
+            except:
+                initial['currency'] = 'USD'
+
+            super(PrizepoolModForm, self).__init__(initial=initial)
 
         self.label_suffix = ''
+    # }}}
+
+    # {{{ Function for parsing a single line
+    def line_to_data(self, line):
+        ind = line.find(' ')
+        prize = int(line[:ind])
+
+        queryset = find_player(query=line[ind+1:])
+        if not queryset.exists():
+            raise Exception("No such player: '%s'." % line[ind+1:])
+        elif queryset.count() > 1:
+            raise Exception("Unamiguous player: '%s'." % line[ind+1:])
+        else:
+            return prize, queryset.first()
+    # }}}
+
+    # {{{ update_event: Pushes changes to event object
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        # {{{ Gather data
+        ranked, unranked, ok = [], [], True
+        for line in self.cleaned_data['ranked'].split('\n'):
+            if line.strip() == '':
+                continue
+            try:
+                prize, player = self.line_to_data(line)
+                ranked.append({'prize': prize, 'player': player, 'placement': 0})
+            except Exception as e:
+                ret.append(Message(str(e), type=Message.ERROR))
+                ok = False
+        for line in self.cleaned_data['unranked'].split('\n'):
+            if line.strip() == '':
+                continue
+            try:
+                prize, player = self.line_to_data(line)
+                unranked.append({'prize': prize, 'player': player, 'placement': -1})
+            except Exception as e:
+                ret.append(Message(str(e), type=Message.ERROR))
+                ok = False
+
+        if not ok:
+            ret.append(Message('Errors occured, no changes made.', type=Message.ERROR))
+            return ret
+        # }}}
+
+        # {{{ Fix placements of ranked prizes
+        ranked.sort(key=lambda a: a['placement'])
+        for i, e in enumerate(ranked):
+            ranked[i]['placement'] = i
+        # }}}
+
+        # {{{ Commit
+        Earnings.set_earnings(event, ranked, self.cleaned_data['currency'], True)
+        Earnings.set_earnings(event, unranked, self.cleaned_data['currency'], False)
+        # }}}
+
+        ret.append(Message('New prizes committed.', type=Message.SUCCESS))
+
+        return ret
+    # }}}
 # }}}
+
 
 # {{{ results view
 @cache_page
@@ -195,12 +282,23 @@ def events(request, event_id=None):
     event = get_object_or_404(Event, id=event_id)
     base['messages'] += generate_messages(event)
 
-    if request.method == 'POST' and 'modevent' in request.POST and base['adm']:
-        form = EventModForm(request=request)
-        base['messages'] += form.update_event(event)
-    else:
-        form = EventModForm(event=event)
-        ppform = PrizepoolModForm(event=event)
+    if base['adm']:
+        if request.method == 'POST' and 'modevent' in request.POST:
+            form = EventModForm(request=request)
+            base['messages'] += form.update_event(event)
+        else:
+            form = EventModForm(event=event)
+
+        if request.method == 'POST' and 'modpp' in request.POST:
+            ppform = PrizepoolModForm(request=request)
+            base['messages'] += ppform.update_event(event)
+        else:
+            ppform = PrizepoolModForm(event=event)
+
+        base.update({
+            'form':   form,
+            'ppform': ppform,
+        })
 
     matches = event.get_matchset()
     if matches.count() > 200 and not event.big:
@@ -208,8 +306,6 @@ def events(request, event_id=None):
 
     base.update({
         'event':             event,
-        'form':              form,
-        'ppform':            ppform,
         'siblings':          event.parent.event_set.exclude(id=event.id) if event.parent else None,
         'path':              event.get_ancestors(id=True),
         'children':          event.event_set.all(),
@@ -267,7 +363,7 @@ def events(request, event_id=None):
         'zvz_games': count_mirror_games(matches, 'Z'),
         'matches':   display_matches(matches.prefetch_related('message_set')\
                                             .select_related('pla', 'plb', 'eventobj')\
-                                            .order_by('-date', '-eventobj__lft', '-id')[0:200]),
+                                            .order_by('-eventobj__lft', '-date', '-id')[0:200]),
         'nplayers':  Player.objects.filter(
                          Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))).count(),
     })

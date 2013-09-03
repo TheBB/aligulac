@@ -116,7 +116,7 @@ def find_duplicates(pla, plb, sca, scb, date, incl_prematches=True):
 
 def find_player(lst, make=False, soft=False):
     qset = Player.objects.all()
-    
+
     for s in [s.strip() for s in lst if s.strip() != '']:
         # If numeric, assume it's a restriction on ID and nothing else
         if s.isdigit():

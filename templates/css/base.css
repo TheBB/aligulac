@@ -214,6 +214,18 @@ div.ibox div.iboxh {
     padding: 0.15em;
 }
 
+div.iboxh a:link {
+    color: #aaaaaa;
+}
+
+div.iboxh a:visited {
+    color: #aaaaaa;
+}
+
+div.iboxh a:hover {
+    color: #777777;
+}
+
 div.ibox div.iboxtable {
     display: table;
     border-collapse: collapse;

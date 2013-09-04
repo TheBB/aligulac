@@ -3,7 +3,7 @@
 {% block basic %}
 <tr>
     <td class="form_left">{{ field.label_tag }}</td>
-    <td class="form_right">
+    <td class="form_right">{{ before }}
         <input class="{{ class }}"
                type="{{ field_type|default:"text" }}"
                name="{{ field.html_name }}" 

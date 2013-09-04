@@ -19,11 +19,16 @@ ratings.views.events.
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
         {% if adm %} 
-            (<a href="#" onclick="toggle_form('modevent'); return false;">edit</a>, 
+            (<a href="#" onclick="toggle_form('modevent'); return false;" title="Edit info">edit</a>, 
+            <a href="#" onclick="toggle_form('addevent'); return false;" title="Add subevents">sub</a>, 
             {% if event.type == "event" %}
-                <a href="#" onclick="toggle_form('modpp'); return false;">pp</a>, 
+                <a href="#" onclick="toggle_form('modpp'); return false;" title="Prize pool">pp</a>, 
             {% endif %}
-            <a href="/admin/ratings/event/{{ event.id }}/">admin</a>)
+            {% if not event.has_children %}
+                <a href="#" onclick="toggle_form('modstories'); return false;" title="Stories">st</a>, 
+            {% endif %}
+            <a href="/admin/ratings/event/{{ event.id }}/" title="Admin interface">admin</a>,
+            <a href="/add/?eventid={{ event.id }}" title="Add more matches">matches</a>)
         {% endif %}
         </div>
         <div class="iboxtable">
@@ -214,6 +219,43 @@ ratings.views.events.
 {% endif %}
     
 {% if adm %}
+<div class="hiddenform" style="display: none;" id="addevent">
+<form method="post" action="/results/events/{{ event.id }}/">
+<table class="hiddenform bigform">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% use "hidden" name="addevent" value="addevent" %}
+    {% field "basic"        addform.name      class="narrowinput" before=event.fullname %}
+    {% field "select"       addform.type      class="wideinput" %}
+    {% field "checkbox"     addform.noprint   class="wideinput" %}
+    {% field "checkbox"     addform.closed    class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+
+{% if not event.has_children and stform %}
+<div class="hiddenform" style="display: none;" id="modstories">
+    {% if stform.existing_stories %}
+    <p style="margin: 3em;">This event already has stories for the following players: 
+    {% for p in stform.existing_stories %}{{ p }}{% if not forloop.last %},{% endif %}{% endfor %}.</p>
+    {% endif %}
+<form method="post" action="/results/events/{{ event.id }}/">
+<table class="hiddenform bigform">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% use "hidden" name="modstories" value="modstories" %}
+    {% field "select"       stform.player     class="wideinput" %}
+    {% field "date"         stform.date       class="wideinput" %}
+    {% field "basic"        stform.text       class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+{% endif %}
+
 {% if event.type == "event" %}
 <div class="hiddenform" style="display: none;" id="modpp">
 <form method="post" action="/results/events/{{ event.id }}/">
@@ -230,10 +272,11 @@ ratings.views.events.
 </form>
 </div>
 {% endif %}
+
 <div class="hiddenform" style="display: none;" id="modevent">
-    <p style="margin: 3em;"><strong>Warning:</strong> Changes to date, game and offline will modify all
-    matches associated with all events in this tree. Changing type will potentially change all children and
-    ancestor events! Make sure you know what you are doing!</p>
+<p style="margin: 3em;"><strong>Warning:</strong> Changes to date, game and offline will modify all
+matches associated with all events in this tree. Changing type will potentially change all children and
+ancestor events! Make sure you know what you are doing!</p>
 <form method="post" action="/results/events/{{ event.id }}/">
 <table class="hiddenform bigform">
 {% csrf_token %}
@@ -271,148 +314,6 @@ ratings.views.events.
         <p>Go <a href="/add/?eventid={{ event.id }}">here</a> to 
         {% if event.closed %}reopen the event and {% endif %}
         add matches.</p>
-        {% endif %}
-
-        <h3>Add subevent</h3>
-        <form method="post" action="/results/events/{{ event.id }}/">
-        {% csrf_token %}
-        
-        <input type="hidden" name="action" value="subevents" />
-        <input type="hidden" name="parent" value="{{ event }}" />
-        <table class="bigform">
-            <tr>
-                <td class="form_left">
-                    <label for="subevent">Event name</label>
-                </td>
-                <td class="form_right">
-                    <label for="subevent">{{ event }} </label><input type="text" name="subevent" id="subevent" />
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    Type
-                </td>
-                <td class="form_right">
-                    <input type="radio" id="category" name="type" value="category"/>
-                    <label for="category">Category</label>
-                    <input type="radio" id="event" name="type" value="event" {% if event.type == 'category' %}checked{% endif %}/>
-                    <label for="event">Event</label>
-                    <input type="radio" id="round" name="type" value="round" {% if event.type == 'event' or event.type == 'round' %}checked{% endif %}/>
-                    <label for="round">Round</label>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                </td>
-                <td class="form_right">
-                    <input type="checkbox" id="noprint" name="noprint" value="noprint"/>
-                    <label for="noprint">No Print</label>
-                    <input type="checkbox" id="closed" name="closed" value="closed" checked/>
-                    <label for="closed">Closed</label>
-                </td>
-            </tr>                                
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    <input type="Submit" name="add" value="Add" />
-                </td>
-            </tr>
-            </form>
-            {% if surroundingevents %}
-            <form method="post" action="/results/events/{{ event.id }}/">
-            {% csrf_token %}
-            <tr>
-                <td class="form_left">
-                    <label for="moveevent">Move this event</label>
-                </td>
-                <td class="form_right">
-                    <select name="moveevent" id="moveevent">
-                        {% for events in surroundingevents %} 
-                        {% if events != event %}
-                        <option value="{{ events.id }}" >{{ events }}</option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>                                
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    <input type="Submit" name="move" value="Move" />
-                </td>
-            </tr>
-            </form>
-            {% endif %}
-            {% if childevents %}{% if rearnings or urearnings %}
-            <form method="post" action="/results/events/{{ event.id }}/">
-            {% csrf_token %}
-            <tr>
-                <td class="form_left">
-                    <label for="moveevent">Move prize pools</label>
-                </td>
-                <td class="form_right">
-                    <select name="moveprizepool" id="moveprizepool">
-                        {% for events in childevents %} 
-                        <option value="{{ events.id }}" >{{ events }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    Warning: This will change the type of the event the prize pool is moved to to "event".<br>
-                    This event will be subsequently turned into a category.<br>
-                    <input type="Submit" name="movepp" value="Move" />
-                </td>
-            </tr>
-            </form>
-            {% endif %}{% endif %}
-        </table>
-
-        {% if event.type == "round" or event.type == "event" %}
-        <h3>Add story</h3>
-        <form method="post" action="/results/events/{{ event.id }}/">
-        {% csrf_token %}
-
-        <table class="bigform">
-            <tr>
-                <td class="form_left">Player</td>
-                <td class="form_right">
-                    <select name="player">
-                        {% for p in players %}
-                        <option value="{{ p.id }}">{{ p.tag }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">Date</td>
-                <td class="form_right">
-                    <input type="text" id="d" name="date" value="{{ event.latest|date:"Y-m-d" }}" maxlength="10" style="width: 6.5em;" />
-                    <script type="text/javascript">
-                    // <![CDATA[  
-                    var opts = {                            
-                        formElements:{"d":"Y-ds-m-ds-d"},
-                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    };
-                    datePickerController.createDatePicker(opts);
-                    // ]]>
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">Text</td>
-                <td class="form_right">
-                    <input type="text" name="text" style="width: 30em;" />
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    <input type="submit" name="addstory" value="Add story" />
-                </td>
-            </tr>
-        </table>
         {% endif %}
     {% endif %}
 

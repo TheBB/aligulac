@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from aligulac.cache import cache_page
 from aligulac.tools import get_param, base_ctx, StrippedCharField, generate_messages, Message, etn
 
-from ratings.models import Earnings, Event, Match, Player
+from ratings.models import Earnings, Event, Match, Player, Story
 from ratings.tools import (display_matches, count_winloss_games, count_matchup_games, count_mirror_games,
                            filter_flags, find_player)
 
@@ -224,6 +224,97 @@ class PrizepoolModForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ StoryModForm: Form for adding stories.
+class StoryModForm(forms.Form):
+    player = forms.ChoiceField(required=True, label='Player')
+    date = forms.DateField(required=True, label='Date')
+    text = StrippedCharField(max_length=200, required=True, label='Text')
+
+    # {{{ Constructor
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(StoryModForm, self).__init__(request.POST)
+        else:
+            super(StoryModForm, self).__init__(initial={'date': event.latest})
+
+        matches = event.get_immediate_matchset()
+        players = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
+        self.fields['player'].choices = [(str(p.id), str(p)) for p in players]
+
+        self.label_suffix = ''
+
+        self.existing_stories = Player.objects.filter(story__event=event)
+    # }}}
+
+    # {{{ update_event: Pushes changes
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        story = Story(
+            event=event,
+            player_id=self.cleaned_data['player'],
+            date=self.cleaned_data['date'],
+            text=self.cleaned_data['text'],
+        )
+        story.save()
+
+        ret.append(Message('Added a story.', type=Message.SUCCESS))
+
+        return ret
+    # }}}
+# }}}
+
+# {{{ AddForm: Form for adding subevents.
+class AddForm(forms.Form):
+    name = StrippedCharField(max_length=100, required=True, label='Name')
+    type = forms.ChoiceField(choices=Event.TYPES, required=True, label='Type')
+    noprint = forms.BooleanField(required=False, label='No Print')
+    closed = forms.BooleanField(required=False, label='Closed')
+
+    # {{{ Constructor
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(AddForm, self).__init__(request.POST)
+        else:
+            super(AddForm, self).__init__(initial={
+                'type': Event.TYPE_EVENT if event.type == Event.TYPE_CATEGORY else Event.TYPE_ROUND,
+                'noprint': False,
+                'closed': event.closed
+            })
+
+        self.label_suffix = ''
+    # }}}
+
+    # {{{ update_event: Pushes changes
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        event.add_child(
+            self.cleaned_data['name'],
+            self.cleaned_data['type'],
+            self.cleaned_data['noprint'],
+            self.cleaned_data['closed'],
+        )
+
+        ret.append(Message('Added a subevent.', type=Message.SUCCESS))
+
+        return ret
+    # }}}
+# }}}
 
 # {{{ results view
 @cache_page
@@ -278,27 +369,9 @@ def events(request, event_id=None):
         return render_to_response('events.html', base)
     # }}}
 
-    # {{{ Get object, generate messages, and ensure big is set. Find familial relationships.
+    # {{{ Get object, generate messages, make forms and ensure big is set. Find familial relationships.
     event = get_object_or_404(Event, id=event_id)
     base['messages'] += generate_messages(event)
-
-    if base['adm']:
-        if request.method == 'POST' and 'modevent' in request.POST:
-            form = EventModForm(request=request)
-            base['messages'] += form.update_event(event)
-        else:
-            form = EventModForm(event=event)
-
-        if request.method == 'POST' and 'modpp' in request.POST:
-            ppform = PrizepoolModForm(request=request)
-            base['messages'] += ppform.update_event(event)
-        else:
-            ppform = PrizepoolModForm(event=event)
-
-        base.update({
-            'form':   form,
-            'ppform': ppform,
-        })
 
     matches = event.get_matchset()
     if matches.count() > 200 and not event.big:
@@ -313,6 +386,24 @@ def events(request, event_id=None):
     })
     # }}}
 
+    # {{{ Make forms
+    if base['adm']:
+        def check_form(formname, cl, check):
+            if request.method == 'POST' and check in request.POST:
+                f = cl(request=request, event=event)
+                base['messages'] += f.update_event(event)
+            else:
+                f = cl(event=event)
+            base[formname] = f
+
+        check_form('form', EventModForm, 'modevent')
+        check_form('addform', AddForm, 'addevent')
+        if event.type == Event.TYPE_EVENT:
+            check_form('ppform', PrizepoolModForm, 'modpp')
+        if not event.has_children() and event.get_immediate_matchset().exists():
+            check_form('stform', StoryModForm, 'modstories')
+    # }}}
+
     # {{{ Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__lft__gte=event.lft, event__rgt__lte=event.rgt)
     currencies = [r['currency'] for r in total_earnings.values('currency').distinct()]
@@ -325,31 +416,6 @@ def events(request, event_id=None):
                             'cur': k,
                          } for k in currencies],
     })
-    # }}}
-
-    # {{{ Player list for admins, if event is small enough (prizepools and stories)
-    if event.type in [Event.TYPE_EVENT, Event.TYPE_ROUND] and base['adm']:
-        base['players'] = Player.objects.filter(
-            Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
-    # }}}
-
-    # {{{ Prizepool information for the admins, if event is of type EVENT
-    if event.type == Event.TYPE_EVENT and base['adm']:
-        total_earnings_event = event.earnings_set.order_by('placement')
-
-        sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
-        currencies = [{'name': ccy.currency(c).name, 'code': ccy.currency(c).code} for c in sorted_curs]
-
-        base.update({
-            'rearnings':    total_earnings_event.exclude(placement__exact=0),
-            'urearnings':   total_earnings_event.filter(placement__exact=0),
-            'currencies':   currencies,
-        })
-
-        try:
-            base['prizepoolcur'] = total_earnings_event.first().currency
-        except:
-            base['prizepoolcur'] = 'USD'
     # }}}
 
     # {{{ Other easy statistics

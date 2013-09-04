@@ -210,6 +210,12 @@ class Event(models.Model):
         return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt)
     # }}}
 
+    # {{{ get_immediate_matchset: Returns a queryset of matches attached to this event only. (May be faster
+    # leaves.)
+    def get_immediate_matchset(self):
+        return self.match_set.all()
+    # }}}
+
     # {{{ update_dates: Updates the fields earliest and latest
     # Raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def update_dates(self):
@@ -288,11 +294,11 @@ class Event(models.Model):
         self.save()
     # }}}
 
-    # {{{ add_child(name type, noprint=False, closed=False): Adds a new child to the right of all existing
+    # {{{ add_child(name, type, noprint=False, closed=False): Adds a new child to the right of all existing
     # children
     @transaction.atomic
     def add_child(self, name, type, noprint=False, closed=False):
-        new = Event(name=name, parent=self, noprint=noprint)
+        new = Event(name=name, parent=self, noprint=noprint, closed=closed)
 
         if self.has_children():
             new.lft = self.get_immediate_children().aggregate(Max('rgt'))['rgt__max'] + 1
@@ -304,8 +310,6 @@ class Event(models.Model):
         Event.objects.filter(rgt__gt=new.rgt-2).update(rgt=F('rgt')+2)
 
         new.update_name()
-        if closed:
-            new.close()
         new.save()
 
         new.change_type(type)

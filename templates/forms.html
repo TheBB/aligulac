@@ -20,7 +20,7 @@
         <textarea class="{{ class }}"
                   name="{{ field.html_name }}"
                   id="{{ field.auto_id }}"
-                  rows="15">{{ field.value }}</textarea>
+                  rows="{{ rows|default:"15" }}">{{ field.value }}</textarea>
     </td>
 </tr>
 {% endblock %}
@@ -96,6 +96,7 @@
                        id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
         and     <input type="text" class="date" name="{{ before.html_name }}" 
                        id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
+        inclusive
         <script type="text/javascript">
         // <![CDATA[  
             var opts = {                            

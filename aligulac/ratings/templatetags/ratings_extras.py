@@ -133,7 +133,7 @@ def is_false(b):
 @register.filter
 def smallhash(value):
     m = hashlib.md5()
-    m.update(value)
+    m.update(value.encode('utf-8'))
     return m.hexdigest()[:6]
 # }}}
 

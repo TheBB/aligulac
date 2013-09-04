@@ -5,6 +5,7 @@ This is the results search function. Called from ratings.views.results_search.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}Search{% endblock %}
 
@@ -14,94 +15,20 @@ This is the results search function. Called from ratings.views.results_search.
     {% include "messages.html" %}
 
     <form method="get" action="/results/search/">
-    <input type="hidden" name="op" value="search" />
-
     <table class="bigform">
-        <tr>
-            <td class="form_left">
-                <label for="after">Date</label>
-            </td>
-            <td class="form_right">
-                between <input type="text" class="date" name="after"  id="after"  value="{{ after }}"  />
-                and     <input type="text" class="date" name="before" id="before" value="{{ before }}" />
-                inclusive
-                <script type="text/javascript">
-                    // <![CDATA[  
-                    var opts = {                            
-                        formElements:{"before":"Y-ds-m-ds-d"},
-                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    };
-                    datePickerController.createDatePicker(opts);
-                    var opts2 = {                            
-                        formElements:{"after":"Y-ds-m-ds-d"},
-                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    };
-                    datePickerController.createDatePicker(opts2);
-                    // ]]>
-                </script>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left va_top">
-                <label for="players">Involving players</label>
-            </td>
-            <td class="form_right">
-                <textarea name="players" id="players" rows="6">{{ pls }}</textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                <label for="eventtext">Event</label>
-            </td>
-            <td class="form_right">
-                <input type="text" class="text" id="eventtext" name="eventtext" value="{{ eventtext }}"/>
-            </td>
-        </tr>
+    {% form "forms.html" %}
+        {% use "hidden" name="search" value="" %}
+        {% use "daterange" label="Date" after=searchform.after before=searchform.before %}
+        {% field "textarea"     searchform.players      class="wideinput" rows="6" %}
+        {% field "basic"        searchform.event        class="wideinput" %}
         {% if adm %}
-        <tr class="row">
-            <td class="form_left"></td>
-            <td class="form_right">
-                <input type="checkbox" name="unassigned" id="unassigned" value="yes" {% if unassigned %}checked{% endif %} />
-                <label for="unassigned">Only show unassigned matches</label>
-            </td>
-        </tr>
+            {% field "checkbox"     searchform.unassigned       class="narrowinput" %}
         {% endif %}
-        <tr class="row">
-            <td class="form_left">Match format</td>
-            <td class="form_right">
-                <select name="bo" style="width: 15em;">
-                    <option value="all" {% if bo == "all" %}selected{% endif %}>All</option>
-                    <option value="3"   {% if bo == "3" %}selected{% endif %}>Best of 3+</option>
-                    <option value="5"   {% if bo == "5" %}selected{% endif %}>Best of 5+</option>
-                </select>
-            </td>
-        </tr>
-        <tr class="row">
-            <td class="form_left">On/offline</td>
-            <td class="form_right">
-                <select name="offline" style="width: 15em;">
-                    <option value="both"    {% if offline == "both" %}selected{% endif %}>Both</option>
-                    <option value="online"  {% if offline == "online" %}selected{% endif %}>Online</option>
-                    <option value="offline" {% if offline == "offline" %}selected{% endif %}>Offline</option>
-                </select>
-            </td>
-        </tr>
-        <tr class="row">
-            <td class="form_left">Game version</td>
-            <td class="form_right">
-                <select name="game" style="width: 15em;">
-                    <option value="all"  {% if game == "all" %}selected{% endif %}>All</option>
-                    <option value="WoL"  {% if game == "WoL" %}selected{% endif %}>Wings of Liberty</option>
-                    <option value="HotS" {% if game == "HotS" %}selected{% endif %}>Heart of the Swarm</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left"></td>
-            <td class="form_right">
-                <input type="submit" value="Search" />
-            </td>
-        </tr>
+        {% field "select"       searchform.bestof       class="narrowinput" %}
+        {% field "select"       searchform.offline      class="narrowinput" %}
+        {% field "select"       searchform.game         class="narrowinput" %}
+        {% use "submit" text="Search" %}
+    {% endform %}
     </table>
     </form>
 
@@ -126,14 +53,13 @@ This is the results search function. Called from ratings.views.results_search.
 
     {% if sc_my or sc_op %}
     <p>In these games, <a href="/players/{{ left.id }}-{{ left.tag|urlfilter}}/">{{ left.tag }}</a> 
-    is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg:sc_op }}%) in games and 
-    {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg:msc_op }}%) in matches
+    is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg_add:sc_op }}%) in games and 
+    {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches
     {% if right %}against <a href="/players/{{ right.id }}-{{ right.tag|urlfilter }}/">{{ right.tag }}</a>{% endif %}.</p>
     {% endif %}
 
     {% if adm %}
-        <form method="post"
-            action="/results/search/?op=search&amp;after={{after}}&amp;before={{before}}&amp;players={{pls|urlencode}}&amp;eventtext={{eventtext|urlencode}}&amp;unassigned={{unassigned_get}}">
+        <form method="post" action="{{ request.get_full_path|escape }}">
         {% csrf_token %}
 
         <p>
@@ -141,6 +67,7 @@ This is the results search function. Called from ratings.views.results_search.
             <input type="button" onclick="mark_all(false, 'match-');" value="Uncheck all" />
         </p>
     {% endif %}
+
     <table class="results">
     {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_check=1 lm_header="full" %}
     </table>
@@ -151,69 +78,17 @@ This is the results search function. Called from ratings.views.results_search.
         </p>
 
         <p>The following modifications will be made to all checked matches:</p>
-        <table class="bigform">
-            <tr>
-                <td class="form_left">
-                    <label for="event">Event object</label>
-                </td>
-                <td class="form_right">
-                    <select name="event" id="event">
-                        <option value="nochange" {% if not markevent %}selected{% endif %}>No change</option>
-                        {% for event in events %}
-                        <option value="{{ event.id }}" {% ifequal event.id markevent.id %}selected{% endifequal %}>{{ event }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="date">Date</label>
-                </td>
-                <td class="form_right">
-                    <input type="text" class="date" name="date" id="date" {% if markdate %}value="{{ markdate }}"{% endif %} />
-                    <script type="text/javascript">
-                        // <![CDATA[  
-                        var opts = {                            
-                            formElements:{"date":"Y-ds-m-ds-d"},
-                            statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                        };
-                        datePickerController.createDatePicker(opts);
-                        // ]]>
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="type">Type</label>
-                </td>
-                <td class="form_right">
-                    <select name="type" id="type">
-                        <option value="nochange" {% if not markoffline %}selected{% endif %}>No change</option>
-                        <option value="online" {% if markoffline == "online" %}selected{% endif %}>Online</option>
-                        <option value="offline" {% if markoffline == "offline" %}selected{% endif %}>Offline</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left">
-                    <label for="game">Game version</label>
-                </td>
-                <td class="form_right">
-                    <select name="game" id="game">
-                        <option value="nochange" {% if not markgame %}selected{% endif %}>No change</option>
-                        <option value="WoL" {% if markgame == "WoL" %}selected{% endif %}>Wings of Liberty</option>
-                        <option value="HotS" {% if markgame == "HotS" %}selected{% endif %}>Heart of the Swarm</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="form_left"></td>
-                <td class="form_right">
-                    <input type="Submit" name="op" value="Modify" />
-                </td>
-            </tr>
-        </table>
 
+        <table class="bigform">
+        {% form "forms.html" %}
+            {% use "hidden" name="search" value="" %}
+            {% field "select"       modform.event           class="wideinput" %}
+            {% field "date"         modform.date %}
+            {% field "select"       modform.offline         class="narrowinput" %}
+            {% field "select"       modform.game            class="narrowinput" %}
+            {% use "submit" text="Modify" %}
+        {% endform %}
+        </table>
         </form>
     {% endif %}
 

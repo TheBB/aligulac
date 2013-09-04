@@ -1,16 +1,19 @@
 from datetime import datetime, date
 import operator
+import shlex
 
 import ccy
 
 from django import forms
-from django.db.models import Min, Max, Sum, Q
+from django.db.models import Min, Max, Sum, Q, F
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
-from aligulac.tools import get_param, base_ctx, StrippedCharField, generate_messages, Message, etn
+from aligulac.tools import (get_param, base_ctx, StrippedCharField, generate_messages, Message, etn,
+                            NotUniquePlayerMessage)
 
 from ratings.models import Earnings, Event, Match, Player, Story
 from ratings.tools import (display_matches, count_winloss_games, count_matchup_games, count_mirror_games,
@@ -42,7 +45,7 @@ class EventModForm(forms.Form):
     game = forms.ChoiceField(choices=[('nochange','No change')]+Match.GAMES, required=True, label='Game')
     offline = forms.ChoiceField(
         choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
-        required=True, label='Offline'
+        required=True, label='On/offline'
     )
     type = forms.ChoiceField(choices=[('nochange','No change')]+Event.TYPES, required=True, label='Type')
     same_level = forms.BooleanField(required=False, label='Apply to all events on the same level')
@@ -316,6 +319,216 @@ class AddForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ SearchForm: Form for searching.
+class SearchForm(forms.Form):
+    after = forms.DateField(required=False, label='After', initial=None)
+    before = forms.DateField(required=False, label='Before', initial=None)
+    players = forms.CharField(max_length=10000, required=False, label='Involving players', initial='')
+    event = StrippedCharField(max_length=200, required=False, label='Event', initial='')
+    unassigned = forms.BooleanField(required=False, label='Only show unassigned matches')
+    bestof = forms.ChoiceField(
+        choices=[
+            ('all','All'),
+            ('3','Best of 3+'),
+            ('5','Best of 5+'),
+        ],
+        required=False, label='Match format', initial='all'
+    )
+    offline = forms.ChoiceField(
+        choices=[
+            ('both','Both'),
+            ('offline','Offline'),
+            ('online','Online'),
+        ],
+        required=False, label='On/offline', initial='both',
+    )
+    game = forms.ChoiceField(
+        choices=[('all','All')]+Match.GAMES, required=False, label='Game version', initial='all')
+
+    # {{{ Constructor
+    def __init__(self, request=None):
+        if request is not None:
+            super(SearchForm, self).__init__(request.GET)
+        else:
+            super(SearchForm, self).__init__()
+
+        self.label_suffix = ''
+    # }}}
+
+    # {{{ search: Performs a search, returns a dict with results to be added to the rendering context
+    def search(self, adm):
+        # {{{ Check validity (lol)
+        if not self.is_valid():
+            msgs = []
+            msgs.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    msgs.append(Message(error=error, field=self.fields[field].label))
+            return {'messages': msgs}
+        # }}}
+
+        matches = Match.objects.all().prefetch_related('message_set').select_related('pla','plb','period')
+
+        # {{{ All the easy filtering
+        if self.cleaned_data['after'] is not None:
+            matches = matches.filter(date__gte=self.cleaned_data['after'])
+
+        if self.cleaned_data['before'] is not None:
+            matches = matches.filter(date__gte=self.cleaned_data['before'])
+
+        if self.cleaned_data['unassigned'] and adm:
+            matches = matches.filter(eventobj__isnull=True)
+
+        if self.cleaned_data['bestof'] == '3':
+            matches = matches.filter(Q(sca__gte=2) | Q(scb__gte=2))
+        elif self.cleaned_data['bestof'] == '5':
+            matches = matches.filter(Q(sca__gte=3) | Q(scb__gte=3))
+
+        if self.cleaned_data['offline'] != 'both':
+            matches = matches.filter(offline=(self.cleaned_data['offline']=='offline'))
+
+        if self.cleaned_data['game'] != 'all':
+            matches = matches.filter(game=self.cleaned_data['game'])
+        # }}}
+
+        # {{{ Filter by event
+        if self.cleaned_data['event'] != None:
+            queries = [s.strip() for s in shlex.split(self.cleaned_data['event']) if s.strip() != '']
+            for q in queries:
+                matches = matches.filter(
+                    Q(eventobj__isnull=True, event__icontains=query) |\
+                    Q(eventobj__isnull=False, eventobj__fullname__icontains=query)
+                )
+        # }}}
+
+        ret = {'messages': []}
+
+        # {{{ Filter by players
+        lines = self.cleaned_data['players'].splitlines()
+        lineno, ok, players = -1, True, []
+        for line in lines:
+            lineno += 1
+            if line.strip() == '':
+                continue
+
+            pls = find_player(query=line, make=False)
+            if not pls.exists():
+                ret['messages'].append(Message("No matches found: '%s'." % line.strip(), type=Message.ERROR))
+                ok = False
+            else:
+                if pls.count() > 1:
+                    ret['messages'].append(NotUniquePlayerMessage(
+                        line.strip(), pls, update=self['players'].auto_id,
+                        updateline=lineno, type=Message.WARNING
+                    ))
+
+                players.append(list(pls))
+
+        if not ok:
+            return ret
+
+        pls = []
+        for p in players:
+            pls += p
+
+        if len(pls) > 1:
+            matches = matches.filter(pla__in=pls, plb__in=pls)
+        elif len(pls) == 1:
+            matches = matches.filter(Q(pla__in=pls) | Q(plb__in=pls))
+        # }}}
+
+        # {{{ Collect data
+        ret['count'] = matches.count()
+        if ret['count'] > 1000:
+            ret['messages'].append(Message(
+                'Too many results (%i). Please add restrictions.' % ret['count'],
+                type=Message.ERROR
+            ))
+            return ret
+
+        matches = matches.order_by('-date', 'eventobj__lft', 'event', 'id')
+        if 1 <= len(pls) <= 2:
+            ret['matches'] = display_matches(matches, date=True, fix_left=pls[0])
+            ret['sc_my'], ret['sc_op'] = (
+                sum([m['pla_score'] for m in ret['matches']]),
+                sum([m['plb_score'] for m in ret['matches']])
+            )
+            ret['msc_my'], ret['msc_op'] = (
+                sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in ret['matches']]),
+                sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in ret['matches']])
+            )
+            ret['left'] = pls[0]
+            if len(pls) == 2:
+                ret['right'] = pls[1]
+        else:
+            ret['matches'] = display_matches(matches, date=True)
+
+        return ret
+        # }}}
+    # }}}
+# }}}
+
+# {{{ ResultsModForm: Form for modifying search results.
+class ResultsModForm(forms.Form):
+    event = forms.ChoiceField(required=True, label='Event')
+    date = forms.DateField(required=False, label='Date', initial=None)
+    offline = forms.ChoiceField(
+        choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
+        required=True, label='On/offline', initial='nochange'
+    )
+    game = forms.ChoiceField(
+        choices=[('nochange','No change')]+Match.GAMES,
+        required=True, label='Game version', initial='nochange'
+    )
+
+    # {{{ Constructor
+    def __init__(self, request=None):
+        if request is not None:
+            super(ResultsModForm, self).__init__(request.POST)
+        else:
+            super(ResultsModForm, self).__init__()
+
+        self.fields['event'].choices = [(0, 'No change')] + [
+            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False, rgt=F('lft')+1)\
+                                                          .order_by('lft')\
+                                                          .values('id','fullname')
+        ]
+    # }}}
+
+    # {{{ modify: Commits modifications
+    def modify(self, ids):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        print(ids)
+        matches = Match.objects.filter(id__in=ids)
+
+        if self.cleaned_data['event'] != 0:
+            try:
+                event = Event.objects.get(id=self.cleaned_data['event'])
+                matches.update(eventobj=event)
+            except:
+                pass
+
+        if self.cleaned_data['date'] != None:
+            matches.update(date=self.cleaned_data['date'])
+
+        if self.cleaned_data['offline'] != 'nochange':
+            matches.update(offline=(self.cleaned_data['offline']=='offline'))
+
+        if self.cleaned_data['game'] != 'nochange':
+            matches.update(game=self.cleaned_data['game'])
+
+        return [Message('Updated %i matches.' % matches.count(), type=Message.SUCCESS)]
+    # }}}
+# }}}
+
 # {{{ results view
 @cache_page
 def results(request):
@@ -369,7 +582,7 @@ def events(request, event_id=None):
         return render_to_response('events.html', base)
     # }}}
 
-    # {{{ Get object, generate messages, make forms and ensure big is set. Find familial relationships.
+    # {{{ Get object, generate messages, and ensure big is set. Find familial relationships.
     event = get_object_or_404(Event, id=event_id)
     base['messages'] += generate_messages(event)
 
@@ -440,4 +653,36 @@ def events(request, event_id=None):
     # }}}
 
     return render_to_response('eventres.html', base)
+# }}}
+
+# {{{ search view
+@cache_page
+@csrf_protect
+def search(request):
+    base = base_ctx('Results', 'Search', request)
+
+    # {{{ Filtering and modifying
+    if base['adm']:
+        if request.method == 'POST':
+            modform = ResultsModForm(request=request)
+            print(request.POST)
+            base['messages'] += modform.modify([
+                int(k.split('-')[-1]) for k in request.POST if 'y' in request.POST[k] and k[0:6] == 'match-'
+            ])
+        else:
+            modform = ResultsModForm()
+        base['modform'] = modform
+
+    if 'search' in request.GET:
+        searchform = SearchForm(request=request)
+        q = searchform.search(base['adm'])
+        base['messages'] += q['messages']
+        del q['messages']
+        base.update(q)
+    else:
+        searchform = SearchForm()
+    base['searchform'] = searchform
+    # }}}
+
+    return render_to_response('results_search.html', base, context_instance=RequestContext(request))
 # }}}

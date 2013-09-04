@@ -32,6 +32,49 @@ class Message:
         self.id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
 # }}}
 
+# {{{ NotUniquePlayerMessage
+class NotUniquePlayerMessage(Message):
+
+    def __init__(self, search, players, update=None, updateline=None, type='error'):
+        id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
+
+        lst = []
+        for p in players:
+            s = ''
+            if p.country is not None and p.country != '':
+                s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
+            s += '<img src="http://static.aligulac.com/%s.png" /> ' % p.race
+
+            if update is None:
+                s += '<a href="/players/%i-%s/">%s</a>' % (p.id, p.tag, p.tag)
+            elif updateline is None:
+                s += ('<a href="#" onclick="set_textbox(\'%s\',\'%s %i\');' +\
+                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
+                     % (update, p.tag, p.id, id, p.tag)
+            else:
+                s += ('<a href="#" onclick="set_textarea_line(\'%s\',\'%s %i\',%i);' +\
+                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
+                     % (update, p.tag, p.id, updateline, id, p.tag)
+
+            lst.append(s)
+
+        num = 5
+        if len(lst) < num:
+            s = 'Possible matches: ' + ', '.join(lst[:-1]) + ' and ' + lst[-1] + '.'
+        else:
+            rand = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
+            s = 'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1])\
+              + ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand\
+              + 'togvis(\'%s-b\',\'inline\'); return false;">' % rand\
+              + '%i more</a></span>' % (len(lst) - num + 1)\
+              + '<span id="%s-b" style="display: none;">%s</span>'\
+                % (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1])\
+              + '.'
+
+        Message.__init__(self, s, '\'%s\' not unique' % search, type)
+        self.id = id
+# }}}
+
 # {{{ generate_messages: Generates a list of message objects for an object that supports them.
 def generate_messages(obj):
     return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]

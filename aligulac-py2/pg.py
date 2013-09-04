@@ -237,7 +237,7 @@ for m in MiniURL.objects.all():
                 m.nb_access))
 s = 'INSERT INTO "miniurl" VALUES ' + ', '.join(tbl) + ';'
 print s.encode('utf-8');
-print (fixer % ('miniurl','miniurl')).encode('utf-8')
+#print (fixer % ('miniurl','miniurl')).encode('utf-8')
 
 print 'DELETE FROM period;'
 tbl = []
@@ -373,5 +373,33 @@ for s in Story.objects.all():
 s = 'INSERT INTO "story" VALUES ' + ', '.join(tbl) + ';'
 print s.encode('utf-8');
 print (fixer % ('story','story')).encode('utf-8')
+
+print('''UPDATE match
+    SET rta_id = (SELECT id
+                      FROM rating
+                      WHERE rating.player_id = match.pla_id
+                        AND rating.period_id = match.period_id-1)
+    WHERE EXISTS (SELECT id
+                      FROM rating
+                      WHERE rating.player_id = match.pla_id
+                        AND rating.period_id = match.period_id-1);''')
+print('''UPDATE match
+    SET rtb_id = (SELECT id
+                      FROM rating
+                      WHERE rating.player_id = match.plb_id
+                        AND rating.period_id = match.period_id-1)
+    WHERE EXISTS (SELECT id
+                      FROM rating
+                      WHERE rating.player_id = match.plb_id
+                        AND rating.period_id = match.period_id-1);''')
+print('''UPDATE rating
+    SET prev_id = (SELECT id
+                       FROM rating AS rt
+                       WHERE rt.player_id = rating.player_id
+                         AND rt.period_id = rating.period_id-1)
+    WHERE EXISTS (SELECT id
+                      FROM rating AS rt
+                      WHERE rt.player_id = rating.player_id
+                        AND rt.period_id = rating.period_id-1);''')
 
 print "END;"

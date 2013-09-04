@@ -30,7 +30,15 @@ This is the subroutine for printing a record list, used by records.html.
         <img src="{{ h.player.race|imgfolder|static }}" class="btm" />
     </div>
     <div class="rowe" style="text-align: right;">
-        {% if scaled %}{{ h.rat|ratscaled }}{% else %}{{ h.rat|ratscale }}{% endif %}
+        {% if race == "P" %}
+            {{ h.get_totalrating_vp|ratscale }}
+        {% elif race == "T" %}
+            {{ h.get_totalrating_vt|ratscale }}
+        {% elif race == "Z" %}
+            {{ h.get_totalrating_vz|ratscale }}
+        {% else %}
+            {{ h.rating|ratscale }}
+        {% endif %}
     </div>
     <div class="rowe"></div>
     <div class="rowe">

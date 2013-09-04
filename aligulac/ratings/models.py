@@ -1072,6 +1072,7 @@ class PreMatch(models.Model):
 # {{{ Ratings
 class Rating(models.Model):
     class Meta:
+        ordering = ['period']
         db_table = 'rating'
 
     period = models.ForeignKey(Period, null=False, verbose_name='Period')

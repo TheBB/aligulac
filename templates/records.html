@@ -11,21 +11,13 @@ This is the basic records page, called from ratings.views.records.
 {% block content %}
     <h2>Records{% if race %} for {{ race|racefull }}{% endif %}</h2>
 
-    <p>To avoid rating artifacts, these records are only counted after 25 periods (i.e. list 25, on February
-    9th, 2011).</p>
+    <p>To avoid rating artifacts, the earliest periods are not counted.</p>
 
     <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
     {% include "recordlist.html" with high=hightot rt="Rating" %}
 
-    {% comment %}
-    This has been removed since a change to dominations.py accidentally broke this.
-    Need to add another domination field to the database to properly track rating gaps.
-    <h3>Most dominant #1s</h3>
-    {% include "recordlist.html" with high=dom rt="Rating gap" scaled=1 %}
-    {% endcomment %}
-
     <h3>Highest ratings ever achieved by matchup</h3>
-    {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" %}
-    {% include "recordlist.html" with high=hight rt="Rating "|add:race|add:"vT" %}
-    {% include "recordlist.html" with high=highz rt="Rating "|add:race|add:"vZ" %}
+    {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" race="P" %}
+    {% include "recordlist.html" with high=hight rt="Rating "|add:race|add:"vT" race="T" %}
+    {% include "recordlist.html" with high=highz rt="Rating "|add:race|add:"vZ" race="Z" %}
 {% endblock %}

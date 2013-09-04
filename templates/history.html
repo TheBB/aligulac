@@ -14,12 +14,12 @@ This is the Hall of Fame template. It's called from ratings.views.records.
 
 <form method="get" action="/records/history/">
     <p>Show the:
-    <select name="numPlayers">
-        <option value=5 {% if numPlayers == 5 %}selected{% endif %}>5</option>
-        <option value=10 {% if numPlayers == 10 %}selected{% endif %}>10</option>
-        <option value=20 {% if numPlayers == 20 %}selected{% endif %}>20</option>
-        <option value=50 {% if numPlayers == 50 %}selected{% endif %}>50</option>
-        <option value=100 {% if numPlayers == 100 %}selected{% endif %}>100</option>
+    <select name="nplayers">
+        <option value=5 {% if nplayers == 5 %}selected{% endif %}>5</option>
+        <option value=10 {% if nplayers == 10 %}selected{% endif %}>10</option>
+        <option value=20 {% if nplayers == 20 %}selected{% endif %}>20</option>
+        <option value=50 {% if nplayers == 50 %}selected{% endif %}>50</option>
+        <option value=100 {% if nplayers == 100 %}selected{% endif %}>100</option>
     </select>
     best players by races:
     <select name="race">
@@ -134,21 +134,20 @@ This is the Hall of Fame template. It's called from ratings.views.records.
                 },
             },
              series: [
-
-             {% for player, rating in records %}
+             {% for p in players %}
              { 
-                name: '{{ player.player__tag }}',
-                {% if player.player__race == "T" %}
+                name: '{{ p.0.tag }}',
+                {% if p.0.race == "T" %}
                     color: '#0000dd',
-                {% elif player.player__race == "Z" %}
+                {% elif p.0.race == "Z" %}
                     color: '#dd0000',
-                {% elif player.player__race == "P" %}
+                {% elif p.0.race == "P" %}
                     color: '#00aa00',
                 {% else %}
                     color: '#000000',
                 {% endif %}
                 lineWidth: 1,
-                data: [{% for r in rating %} {
+                data: [{% for r in p.1 %} {
                           name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
                           x: {{ r.period.end|milliseconds }},
                           y: {{ r.bf_rating|ratscale }}

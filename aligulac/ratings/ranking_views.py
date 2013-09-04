@@ -2,8 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q, Sum
 
 from ratings.models import Earnings, Period, Player, Rating
-from ratings.tools import filter_active, total_ratings, count_matchup_games, count_mirror_games,\
-                          populate_teams, country_list, currency_list
+from ratings.tools import (filter_active, total_ratings, count_matchup_games, count_mirror_games,
+                            populate_teams, country_list, currency_list)
 
 from aligulac.cache import cache_page
 from aligulac.tools import Message, base_ctx, get_param

@@ -31,6 +31,10 @@ urlpatterns = patterns('',
     url(r'^results/events/(?P<event_id>\d+)(-[^ /]*)?/$', 'ratings.results_views.events'),
     url(r'^results/search/$', 'ratings.results_views.search'),
 
+    url(r'^records/race/$', 'ratings.records_views.race'),
+    url(r'^records/history/$', 'ratings.records_views.history'),
+    url(r'^records/hof/$', 'ratings.records_views.hof'),
+
     url(r'^admin/', include(admin.site.urls)),
 )
 

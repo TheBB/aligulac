@@ -97,17 +97,17 @@ class PlayerModForm(forms.Form):
             super(PlayerModForm, self).__init__(request.POST)
         else:
             super(PlayerModForm, self).__init__(initial={
-                'tag': player.tag,
-                'race': player.race,
-                'country': player.country,
-                'name': player.name,
-                'akas': ', '.join(player.get_aliases()),
-                'birthday': player.birthday,
-                'sc2c_id': player.sc2c_id,
-                'sc2e_id': player.sc2e_id,
-                'lp_name': player.lp_name,
-                'tlpd_id': player.tlpd_id,
-                'tlpd_db': filter_flags(player.tlpd_db if player.tlpd_db else 0),
+                'tag':       player.tag,
+                'race':      player.race,
+                'country':   player.country,
+                'name':      player.name,
+                'akas':      ', '.join(player.get_aliases()),
+                'birthday':  player.birthday,
+                'sc2c_id':   player.sc2c_id,
+                'sc2e_id':   player.sc2e_id,
+                'lp_name':   player.lp_name,
+                'tlpd_id':   player.tlpd_id,
+                'tlpd_db':   filter_flags(player.tlpd_db if player.tlpd_db else 0),
             })
 
         self.label_suffix = ''
@@ -153,14 +153,14 @@ class ResultsFilterForm(forms.Form):
     before = forms.DateField(required=False, label='Before')
     race   = forms.ChoiceField(
         choices=[
-            ('ptzr','All'),
-            ('p','Protoss'),
-            ('t','Terran'),
-            ('z','Zerg'),
-            ('tzr','No Protoss'),
-            ('pzr','No Terran'),
-            ('ptr','No Zerg'),
-        ],
+            ('ptzr',  'All'),
+            ('p',     'Protoss'),
+            ('t',     'Terran'),
+            ('z',     'Zerg'),
+            ('tzr',   'No Protoss'),
+            ('pzr',   'No Terran'),
+            ('ptr',   'No Zerg'),
+        ]
         required=False, label='Opponent race', initial='ptzr'
     )
     country = forms.ChoiceField(
@@ -169,17 +169,17 @@ class ResultsFilterForm(forms.Form):
     )
     bestof = forms.ChoiceField(
         choices=[
-            ('all','All'),
-            ('3','Best of 3+'),
-            ('5','Best of 5+'),
+            ('all',  'All'),
+            ('3',    'Best of 3+'),
+            ('5',    'Best of 5+'),
         ],
         required=False, label='Match format', initial='all'
     )
     offline = forms.ChoiceField(
         choices=[
-            ('both','Both'),
-            ('offline','Offline'),
-            ('online','Online'),
+            ('both',     'Both'),
+            ('offline',  'Offline'),
+            ('online',   'Online'),
         ],
         required=False, label='On/offline', initial='both',
     )
@@ -274,9 +274,9 @@ def player(request, player_id):
                 ratings.latest('tot_vt'),
                 ratings.latest('tot_vz'),
             ),
-            'recentchange': player.get_latest_rating_update(),
-            'firstrating': ratings.earliest('period'),
-            'rating': rating,
+            'recentchange':  player.get_latest_rating_update(),
+            'firstrating':   ratings.earliest('period'),
+            'rating':        rating,
         })
 
         if rating.decay >= INACTIVE_THRESHOLD:
@@ -306,15 +306,15 @@ def player(request, player_id):
         for mem in base['teammems']:
             if mem.start and earliest.period.end < mem.start < latest.period.end:
                 teampoints.append({
-                    'date': mem.start,
-                    'rating': interp_rating(mem.start, ratings),
-                    'data': [{'date': mem.start, 'team': mem.group, 'jol': 'joins'}],
+                    'date':    mem.start,
+                    'rating':  interp_rating(mem.start, ratings),
+                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': 'joins'}],
                 })
             if mem.end and earliest.period.end < mem.end < latest.period.end:
                 teampoints.append({
-                    'date': mem.end,
-                    'rating': interp_rating(mem.end, ratings),
-                    'data': [{'date': mem.end, 'team': mem.group, 'jol': 'leaves'}],
+                    'date':    mem.end,
+                    'rating':  interp_rating(mem.end, ratings),
+                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': 'leaves'}],
                 })
         teampoints.sort(key=lambda p: p['date'])
 
@@ -342,10 +342,10 @@ def player(request, player_id):
         # }}}
 
         base.update({
-            'ratings': add_counts(ratings),
-            'patches': PATCHES,
-            'stories': stories,
-            'teampoints': teampoints,
+            'ratings':     add_counts(ratings),
+            'patches':     PATCHES,
+            'stories':     stories,
+            'teampoints':  teampoints,
         })
     else:
         base['messages'].append(Message(msg_nochart % player.tag, type=Mesage.INFO))
@@ -364,11 +364,11 @@ def adjustment(request, player_id, period_id):
     base = base_ctx('Ranking', 'Adjustments', request, context=player)
 
     base.update({
-        'period': period,
-        'player': player,
-        'rating': rating,
-        'prevlink': etn(lambda: player.rating_set.filter(period__lt=period, decay=0).latest('period')),
-        'nextlink': etn(lambda: player.rating_set.filter(period__gt=period, decay=0).earliest('period')),
+        'period':    period,
+        'player':    player,
+        'rating':    rating,
+        'prevlink':  etn(lambda: player.rating_set.filter(period__lt=period, decay=0).latest('period')),
+        'nextlink':  etn(lambda: player.rating_set.filter(period__gt=period, decay=0).earliest('period')),
     })
     # }}}
 
@@ -456,8 +456,8 @@ def results(request, player_id):
         matches = matches.exclude(Q(pla=player, plb__country='KR') | Q(plb=player, pla__country='KR'))
     elif form.cleaned_data['country'] != 'all':
         matches = matches.filter(
-            Q(pla=player, plb__country=form.cleaned_data['country']) |
-            Q(plb=player, pla__country=form.cleaned_data['country'])
+              Q(pla=player, plb__country=form.cleaned_data['country'])
+            | Q(plb=player, pla__country=form.cleaned_data['country'])
         )
 
     if form.cleaned_data['bestof'] != 'all':
@@ -533,13 +533,8 @@ def earnings(request, player_id):
     # }}}
 
     # {{{ Sum up earnings by currency
-    by_currency = {}
-    for e in earnings:
-        try:
-            by_currency[e.currency] += e.origearnings
-        except:
-            by_currency[e.currency] = e.origearnings
-
+    currencies = {e.currency for e in earnings}
+    by_currency = {cur: sum([e.origearnings for e in earnings if e.currency == cur]) for cur in currencies}
     if len(by_currency) == 1 and 'USD' in by_currency:
         by_currency = None
     # }}}

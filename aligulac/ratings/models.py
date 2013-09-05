@@ -16,6 +16,69 @@ from countries import transformations, data
 countries = [(code, transformations.cc_to_cn(code)) for code in data.ccn_to_cca2.values()]
 countries.sort(key=lambda a: a[1])
 
+# {{{ Various enum-types
+TLPD_DB_KOREAN        = 0b00001
+TLPD_DB_INTERNATIONAL = 0b00010
+TLPD_DB_HOTS          = 0b00100
+TLPD_DB_HOTSBETA      = 0b01000
+TLPD_DB_WOLBETA       = 0b10000
+TLPD_DBS = [
+    (TLPD_DB_WOLBETA,          'WoL Beta'),
+    (TLPD_DB_WOLKOREAN,        'WoL Korean'),
+    (TLPD_DB_WOLINTERNATIONAL, 'WoL International'),
+    (TLPD_DB_HOTSBETA,         'HotS Beta'),
+    (TLPD_DB_HOTS,             'HotS'),
+]
+
+CAT_INDIVIDUAL = 'individual'
+CAT_TEAM       = 'team'
+CAT_FREQUENT   = 'frequent'
+EVENT_CATEGORIES = [
+    (CAT_INDIVIDUAL, 'Individual'),
+    (CAT_TEAM,       'Team'),
+    (CAT_FREQUENT,   'Frequent'),
+]
+
+TYPE_CATEGORY = 'category'
+TYPE_EVENT    = 'event'
+TYPE_ROUND    = 'round'
+EVENT_TYPES = [
+    (TYPE_CATEGORY, 'Category'),
+    (TYPE_EVENT,    'Event'),
+    (TYPE_ROUND,    'Round'),
+]
+
+P, T, Z, R, S = 'PTZRS'
+RACES = [
+    (P, 'Protoss'),
+    (T, 'Terran'),
+    (Z, 'Zerg'),
+    (R, 'Random'),
+    (S, 'Switcher'),
+]
+MRACES = RACES[:-1]
+
+WOL  = 'WoL'
+HOTS = 'HotS'
+LOTV = 'LotV'
+GAMES = [
+    (WOL,  'Wings of Liberty'),
+    (HOTS, 'Heart of the Swarm'),
+    (LOTV, 'Legacy of the Void'),
+]
+
+TYPE_INFO    = 'info'
+TYPE_WARNING = 'warning'
+TYPE_ERROR   = 'error'
+TYPE_SUCCESS = 'success'
+MESSAGE_TYPES = [
+    (INFO,    'info'),
+    (WARNING, 'warning'),
+    (ERROR,   'error'),
+    (SUCCESS, 'success'),
+]
+# }}}
+
 # {{{ Periods
 class Period(models.Model):
     class Meta:
@@ -59,19 +122,11 @@ class Event(models.Model):
     fullname = models.CharField('Full name', max_length=500, default='')
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
-    
+
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    TLPD_DB_KOREAN, TLPD_DB_INTERNATIONAL, TLPD_DB_HOTS, TLPD_DB_HOTSBETA, TLPD_DB_WOLBETA = 1,2,4,8,16
-    TLPD_DBS = [
-        (TLPD_DB_WOLBETA,       'WoL Beta'),
-        (TLPD_DB_KOREAN,        'WoL Korean'),
-        (TLPD_DB_INTERNATIONAL, 'WoL International'),
-        (TLPD_DB_HOTSBETA,      'HotS Beta'),
-        (TLPD_DB_HOTS,          'HotS'),
-    ]
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
@@ -81,13 +136,8 @@ class Event(models.Model):
     earliest = models.DateField('Earliest match', blank=True, null=True)
     latest = models.DateField('Latest match', blank=True, null=True)
 
-    CAT_INDIVIDUAL, CAT_TEAM, CAT_FREQUENT = 'individual', 'team', 'frequent'
-    CATEGORIES = [(CAT_INDIVIDUAL, 'Individual'), (CAT_TEAM, 'Team'), (CAT_FREQUENT, 'Frequent')]
-    category = models.CharField('Category', max_length=50, null=True, blank=True, choices=CATEGORIES)
-    
-    TYPE_CATEGORY, TYPE_EVENT, TYPE_ROUND = 'category', 'event', 'round'
-    TYPES = [(TYPE_CATEGORY, 'Category'), (TYPE_EVENT, 'Event'), (TYPE_ROUND, 'Round')]
-    type = models.CharField(max_length=50, null=False, choices=TYPES)
+    category = models.CharField('Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES)
+    type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES)
 
     # {{{ String representation
     def __str__(self):
@@ -109,7 +159,7 @@ class Event(models.Model):
 
     # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category
     def get_ancestors_event(self):
-        return self.get_ancestors(id=True).filter(type__in=[Event.TYPE_CATEGORY, Event.TYPE_EVENT])
+        return self.get_ancestors(id=True).filter(type__in=[TYPE_CATEGORY, TYPE_EVENT])
     # }}}
 
     # {{{ get_root: Returns the farthest removed ancestor
@@ -181,24 +231,6 @@ class Event(models.Model):
         return res[0].lp_name if res else None
     # }}}
 
-    # {{{ get_tlpd_id: Returns a dictionary of db : id pairs, where the keys are TLPD databases
-    # ("KR", "IN", "HotS", "HotSbeta", "WoLbeta") and the values are TLPD IDs.
-    def get_tlpd_id(self):
-        res = self.get_ancestors(id=True).filter(tlpd_id__isnull=False).order_by('-lft')
-        if not res:
-            return None
-
-        event = res.first()
-
-        names = [(Event.TLPD_DB_KOREAN,          "KR"),
-                 (Event.TLPD_DB_INTERNATIONAL,   "IN"),
-                 (Event.TLPD_DB_HOTS,            "HotS"),
-                 (Event.TLPD_DB_HOTSBETA,        "HotSbeta"),
-                 (Event.TLPD_DB_WOLBETA,         "WoLbeta")]
-
-        return dict.fromkeys([n[1] for n in names if event.tlpd_db & n[0]], event.tlpd_id)
-    # }}}
-
     # {{{ get_tl_thread: Returns the ID of the TL thread if one can be found, None otherwise
     def get_tl_thread(self):
         res = self.get_ancestors(id=True).filter(tl_thread__isnull=False).order_by('-lft')
@@ -248,12 +280,12 @@ class Event(models.Model):
         self.save()
 
         # If EVENT or ROUND, children must be ROUND
-        if type == Event.TYPE_EVENT or type == Event.TYPE_ROUND:
-            self.get_children().update(type=Event.TYPE_ROUND)
+        if type == TYPE_EVENT or type == TYPE_ROUND:
+            self.get_children().update(type=TYPE_ROUND)
 
         # If EVENT or CATEGORY, parents must be CATEGORY
-        if type == Event.TYPE_EVENT or type == Event.TYPE_CATEGORY:
-            self.get_ancestors().update(type=Event.TYPE_CATEGORY)
+        if type == TYPE_EVENT or type == TYPE_CATEGORY:
+            self.get_ancestors().update(type=TYPE_CATEGORY)
     # }}}
 
     # {{{ Standard setters
@@ -398,14 +430,6 @@ class Player(models.Model):
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    TLPD_DB_KOREAN, TLPD_DB_INTERNATIONAL, TLPD_DB_HOTS, TLPD_DB_HOTSBETA, TLPD_DB_WOLBETA = 1,2,4,8,16
-    TLPD_DBS = [
-        (TLPD_DB_WOLBETA,       'WoL Beta'),
-        (TLPD_DB_KOREAN,        'WoL Korean'),
-        (TLPD_DB_INTERNATIONAL, 'WoL International'),
-        (TLPD_DB_HOTSBETA,      'HotS Beta'),
-        (TLPD_DB_HOTS,          'HotS'),
-    ]
     tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
 
@@ -413,11 +437,9 @@ class Player(models.Model):
     sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
     sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
 
-    country = models.CharField('Country', max_length=2, choices=countries, 
-                               blank=True, null=True, db_index=True)
+    country = models.CharField(
+        'Country', max_length=2, choices=countries, blank=True, null=True, db_index=True)
 
-    P, T, Z, R, S = "PTZRS"
-    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random'), (S, 'Switcher')]
     race = models.CharField('Race', max_length=1, choices=RACES, null=False, db_index=True)
 
     # Domination fields (for use in the hall of fame)
@@ -525,22 +547,6 @@ class Player(models.Model):
         return [a.name for a in self.alias_set.all()]
     # }}}
 
-    # {{{ get_tlpd_id: Gets TLPD databases
-    # Returns a dictionary of database : id key-value pairs, where the keys are
-    # strings (IN, KR, HotS, HotSbeta, WoLbeta), and the values are TLPD IDs.
-    def get_tlpd_id(self):
-        if self.tlpd_id is None:
-            return None
-
-        names = [(Player.TLPD_DB_KOREAN,          "KR"),
-                 (Player.TLPD_DB_INTERNATIONAL,   "IN"),
-                 (Player.TLPD_DB_HOTS,            "HotS"),
-                 (Player.TLPD_DB_HOTSBETA,        "HotSbeta"),
-                 (Player.TLPD_DB_WOLBETA,         "WoLbeta")]
-
-        return dict.fromkeys([n[1] for n in names if self.tlpd_db & n[0]], self.tlpd_id)
-    # }}}
-
     # {{{ get_current_teammembership: Gets the current team membership object of this player, if any.
     def get_current_teammembership(self):
         try:
@@ -552,10 +558,12 @@ class Player(models.Model):
     # {{{ get_current_team: Gets the current team object of this player, if any.
     def get_current_team(self):
         try:
-            return self.groupmembership_set\
-                       .filter(current=True, group__is_team=True)\
-                       .select_related('group')\
-                       .first().group
+            return (
+                self.groupmembership_set
+                    .filter(current=True, group__is_team=True)
+                    .select_related('group')
+                    .first().group
+            )
         except:
             return None
     # }}}
@@ -563,9 +571,11 @@ class Player(models.Model):
     # {{{ get_current_rating: Gets the current rating, if any.
     def get_current_rating(self):
         try:
-            return self.rating_set\
-                       .filter(period__computed=True)\
-                       .latest('period')
+            return (
+                self.rating_set
+                    .filter(period__computed=True)
+                    .latest('period')
+            )
         except:
             return None
     # }}}
@@ -697,8 +707,10 @@ class GroupMembership(models.Model):
     
     # {{{ String representation
     def __str__(self):
-        return 'Player: %s Group: %s (%s - %s)' % (self.player.tag, self.group.name, 
-                                                   str(self.start), str(self.end))
+        return (
+            'Player: %s Group: %s (%s - %s)' % 
+            (self.player.tag, self.group.name, str(self.start), str(self.end))
+        )
     # }}}
 # }}}
 
@@ -743,20 +755,16 @@ class Match(models.Model):
     sca = models.SmallIntegerField('Score for player A', null=False, db_index=True)
     scb = models.SmallIntegerField('Score for player B', null=False, db_index=True)
 
-    P, T, Z, R = "PTZR"
-    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
-    rca = models.CharField(max_length=1, choices=RACES, null=False, verbose_name='Race A', db_index=True)
-    rcb = models.CharField(max_length=1, choices=RACES, null=False, verbose_name='Race B', db_index=True)
+    rca = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True)
+    rcb = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True)
 
     treated = models.BooleanField('Computed', default=False, null=False)
     event = models.CharField('Event text (deprecated)', max_length=200, default='', blank=True)
     eventobj = models.ForeignKey(Event, null=True, blank=True, verbose_name='Event')
     submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
 
-    WOL, HOTS, LOTV = 'WoL', 'HotS', 'LotV'
-    GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm'), (LOTV, 'Legacy of the Void')]
-    game = models.CharField('Game', max_length=10, default=WOL, 
-                            blank=False, null=False, choices=GAMES, db_index=True)
+    game = models.CharField(
+        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True)
     offline = models.BooleanField('Offline', default=False, null=False, db_index=True)
 
     # Helper fields for fast loading of frequently accessed information
@@ -787,9 +795,11 @@ class Match(models.Model):
 
     # {{{ changed_effect: Returns true if an effective change (requiring recomputation) has been made.
     def changed_effect(self):
-        return self.orig_pla != self.pla_id or self.orig_plb != self.plb_id or\
-               self.orig_rca != self.rca    or self.orig_rcb != self.rcb or\
-               self.orig_sca != self.sca    or self.orig_scb != self.scb
+        return (
+              self.orig_pla != self.pla_id or self.orig_plb != self.plb_id
+            or self.orig_rca != self.rca    or self.orig_rcb != self.rcb
+            or self.orig_sca != self.sca    or self.orig_scb != self.scb
+        )
     # }}}
 
     # {{{ changed_date: Returns true if the date has been changed.
@@ -935,9 +945,7 @@ class Message(models.Model):
     class Meta:
         db_table = 'message'
 
-    INFO, WARNING, ERROR, SUCCESS = 'info', 'warning', 'error', 'success'
-    TYPES = [(INFO, 'info'), (WARNING, 'warning'), (ERROR, 'error'), (SUCCESS, 'success')]
-    type = models.CharField('Type', max_length=10, choices=TYPES)
+    type = models.CharField('Type', max_length=10, choices=MESSAGE_TYPES)
 
     title = models.CharField('Title', max_length=100, null=True)
     text = models.TextField('Text')
@@ -975,7 +983,7 @@ class Earnings(models.Model):
                 player=payout['player'],
                 placement=payout['placement']+1,
                 origearnings=payout['prize'],
-                currency=currency
+                currency=currency,
             )
             new.save()
 
@@ -1018,8 +1026,6 @@ class PreMatchGroup(models.Model):
     contact = models.CharField('Contact', max_length=200, default='', null=True, blank=True)
     notes = models.TextField('Notes', default='', null=True, blank=True)
 
-    WOL, HOTS, LOTV = 'WoL', 'HotS', 'LotV'
-    GAMES = [(WOL, 'Wings of Liberty'), (HOTS, 'Heart of the Swarm'), (LOTV, 'Legacy of the Void')]
     game = models.CharField('Game', max_length=10, default='wol', blank=False, null=False, choices=GAMES)
     offline = models.BooleanField(default=False, null=False)
 
@@ -1036,20 +1042,18 @@ class PreMatch(models.Model):
         verbose_name_plural = 'prematches'
 
     group = models.ForeignKey(PreMatchGroup, null=False, blank=False, verbose_name='Group')
-    pla = models.ForeignKey(Player, related_name='prematch_pla', 
-                            verbose_name='Player A', null=True, blank=True)
-    plb = models.ForeignKey(Player, related_name='prematch_plb', 
-                            verbose_name='Player B', null=True, blank=True)
+    pla = models.ForeignKey(
+        Player, related_name='prematch_pla', verbose_name='Player A', null=True, blank=True)
+    plb = models.ForeignKey(
+        Player, related_name='prematch_plb', verbose_name='Player B', null=True, blank=True)
     pla_string = models.CharField('Player A (str)', max_length=200, default='', null=True, blank=True)
     plb_string = models.CharField('Player A (str)', max_length=200, default='', null=True, blank=True)
     sca = models.SmallIntegerField('Score for player A', null=False)
     scb = models.SmallIntegerField('Score for player B', null=False)
     date = models.DateField('Date', null=False)
 
-    P, T, Z, R = "PTZR"
-    RACES = [(P, 'Protoss'), (T, 'Terran'), (Z, 'Zerg'), (R, 'Random')]
-    rca = models.CharField(max_length=1, choices=RACES, null=True, verbose_name='Race A')
-    rcb = models.CharField(max_length=1, choices=RACES, null=True, verbose_name='Race B')
+    rca = models.CharField(max_length=1, choices=MRACES, null=True, verbose_name='Race A')
+    rcb = models.CharField(max_length=1, choices=MRACES, null=True, verbose_name='Race B')
 
     # {{{ String representation
     def __str__(self):

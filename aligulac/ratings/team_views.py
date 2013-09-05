@@ -13,11 +13,11 @@ from ratings.tools import filter_active, filter_inactive, total_ratings
 
 # {{{ TeamModForm: Form for modifying a teasm.
 class TeamModForm(forms.Form):
-    name = StrippedCharField(max_length=100, required=True, label='Name')
-    akas = forms.CharField(max_length=200, required=False, label='AKAs')
+    name      = StrippedCharField(max_length=100, required=True, label='Name')
+    akas      = forms.CharField(max_length=200, required=False, label='AKAs')
     shortname = StrippedCharField(max_length=100, required=False, label='Name')
-    homepage = StrippedCharField(max_length=200, required=False, label='Homepage')
-    lp_name = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
+    homepage  = StrippedCharField(max_length=200, required=False, label='Homepage')
+    lp_name   = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
 
     # {{{ Constructor
     def __init__(self, request=None, team=None):
@@ -25,11 +25,11 @@ class TeamModForm(forms.Form):
             super(TeamModForm, self).__init__(request.POST)
         else:
             super(TeamModForm, self).__init__(initial={
-                'name': team.name,
-                'akas': ', '.join(team.get_aliases()),
-                'shortname': team.shortname,
-                'homepage': team.homepage,
-                'lp_name': team.lp_name,
+                'name':       team.name,
+                'akas':       ', '.join(team.get_aliases()),
+                'shortname':  team.shortname,
+                'homepage':   team.homepage,
+                'lp_name':    team.lp_name,
             })
 
         self.label_suffix = ''
@@ -51,10 +51,10 @@ class TeamModForm(forms.Form):
                 getattr(team, setter)(value)
                 ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['name'], 'name', 'set_name', 'name')
-        update(self.cleaned_data['lp_name'], 'lp_name', 'set_lp_name', 'Liquipedia title')
-        update(self.cleaned_data['shortname'], 'shortname', 'set_shortname', 'short name')
-        update(self.cleaned_data['homepage'], 'homepage', 'set_homepage', 'homepage')
+        update(self.cleaned_data['name'],       'name',       'set_name',       'name')
+        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    'Liquipedia title')
+        update(self.cleaned_data['shortname'],  'shortname',  'set_shortname',  'short name')
+        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   'homepage')
 
         if team.set_aliases(self.cleaned_data['akas'].split(',')):
             ret.append(Message('Changed aliases.', type=Message.SUCCESS))
@@ -116,33 +116,40 @@ def team(request, team_id):
     matches = Match.objects.filter(Q(pla__in=player_ids) | Q(plb__in=player_ids))
 
     base.update({
-        'nplayers': players.count(),
-        'nprotoss': players.filter(player__race=Player.P).count(),
-        'nterran':  players.filter(player__race=Player.T).count(),
-        'nzerg':    players.filter(player__race=Player.Z).count(),
-        'earnings': Earnings.objects.filter(player__in=player_ids)\
-                            .aggregate(Sum('earnings'))['earnings__sum'],
-        'nmatches': matches.count(),
-        'noffline': matches.filter(offline=True).count(),
+        'nplayers':  players.count(),
+        'nprotoss':  players.filter(player__race=Player.P).count(),
+        'nterran':   players.filter(player__race=Player.T).count(),
+        'nzerg':     players.filter(player__race=Player.Z).count(),
+        'earnings':  (
+            Earnings.objects.filter(player__in=player_ids).aggregate(Sum('earnings'))['earnings__sum']
+        ),
+        'nmatches':  matches.count(),
+        'noffline':  matches.filter(offline=True).count(),
     })
     # }}}
 
     # {{{ Player lists
-    all_members = total_ratings(Rating.objects.filter(
-        player__groupmembership__group=team,
-        player__groupmembership__current=True,
-        player__groupmembership__playing=True,
-        period=base['curp']
-    )).order_by('-rating')
+    all_members = total_ratings(
+        Rating.objects.all().order_by('-rating').filter(
+            player__groupmembership__group=team,
+            player__groupmembership__current=True,
+            player__groupmembership__playing=True,
+            period=base['curp']
+        )
+    )
 
     base.update({
-        'active':       filter_active(all_members),
-        'inactive':     filter_inactive(all_members),
-        'nonplaying':   team.groupmembership_set.filter(current=True, playing=False)\
-                            .select_related('player').order_by('player__tag'),
-        'past':         team.groupmembership_set.filter(current=False)\
-                            .annotate(null_end=Count('end'))\
-                            .select_related('player').order_by('-null_end', '-end', 'player__tag'),
+        'active':      filter_active(all_members),
+        'inactive':    filter_inactive(all_members),
+        'nonplaying':  (
+            team.groupmembership_set.filter(current=True, playing=False)
+                .select_related('player').order_by('player__tag')
+        ),
+        'past':        (
+            team.groupmembership_set.filter(current=False)
+                .annotate(null_end=Count('end'))
+                .select_related('player').order_by('-null_end', '-end', 'player__tag')
+        ),
     })
     # }}}
 
@@ -155,18 +162,22 @@ def transfers(request):
     base = base_ctx('Teams', 'Transfers', request)
 
     # {{{ Get relevant groupmembership objects
-    trades = GroupMembership.objects.exclude(start__isnull=True, end__isnull=True)\
-                            .filter(group__is_team=True)\
-                            .select_related('player')\
-                            .extra(select={
-                                'cdate': 'CASE\
-                                              WHEN start IS NULL THEN "end"\
-                                              WHEN "end" IS NULL THEN start\
-                                              WHEN start > "end" THEN start\
-                                              ELSE "end"\
-                                          END'
-                            })\
-                            .order_by('-cdate', 'player__tag')[0:50]
+    trades = (
+        GroupMembership.objects
+            .exclude(start__isnull=True, end__isnull=True)
+            .filter(group__is_team=True)
+            .select_related('player')
+            .extra(select={
+                'cdate': (
+                    'CASE '
+                        'WHEN start IS NULL THEN "end" '
+                        'WHEN "end" IS NULL THEN start '
+                        'WHEN start > "end" THEN start '
+                        'ELSE "end" '
+                    'END'
+            )})
+            .order_by('-cdate', 'player__tag')[0:50]
+    )
     # }}}
 
     # {{{ Separate them into joins and leaves

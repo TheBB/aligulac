@@ -48,13 +48,15 @@ class NotUniquePlayerMessage(Message):
             if update is None:
                 s += '<a href="/players/%i-%s/">%s</a>' % (p.id, p.tag, p.tag)
             elif updateline is None:
-                s += ('<a href="#" onclick="set_textbox(\'%s\',\'%s %i\');' +\
-                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
-                     % (update, p.tag, p.id, id, p.tag)
+                s += ((
+                    '<a href="#" onclick="set_textbox(\'%s\',\'%s %i\'); '
+                    'togvis(\'%s\',\'none\'); return false;">%s</a>'
+                ) % (update, p.tag, p.id, id, p.tag))
             else:
-                s += ('<a href="#" onclick="set_textarea_line(\'%s\',\'%s %i\',%i);' +\
-                                         ' togvis(\'%s\',\'none\'); return false;">%s</a>')\
-                     % (update, p.tag, p.id, updateline, id, p.tag)
+                s += ((
+                    '<a href="#" onclick="set_textarea_line(\'%s\',\'%s %i\',%i); '
+                    'togvis(\'%s\',\'none\'); return false;">%s</a>'
+                ) % (update, p.tag, p.id, updateline, id, p.tag))
 
             lst.append(s)
 
@@ -63,13 +65,15 @@ class NotUniquePlayerMessage(Message):
             s = 'Possible matches: ' + ', '.join(lst[:-1]) + ' and ' + lst[-1] + '.'
         else:
             rand = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
-            s = 'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1])\
-              + ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand\
-              + 'togvis(\'%s-b\',\'inline\'); return false;">' % rand\
-              + '%i more</a></span>' % (len(lst) - num + 1)\
-              + '<span id="%s-b" style="display: none;">%s</span>'\
-                % (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1])\
-              + '.'
+            s = (
+                'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1]) +
+                ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand +
+                'togvis(\'%s-b\',\'inline\'); return false;">' % rand +
+                '%i more</a></span>' % (len(lst) - num + 1) +
+                '<span id="%s-b" style="display: none;">%s</span>' %
+                    (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1]) +
+                '.'
+            )
 
         Message.__init__(self, s, '\'%s\' not unique' % search, type)
         self.id = id
@@ -102,6 +106,16 @@ def get_param(request, param, default):
         return default
 # }}}
 
+# {{{ get_param_choice(request, param, choices, default): Returns request.GET[param] if available and in
+# the list choices, default if not.
+def get_param_choice(request, param, choices, default):
+    try:
+        val = request.GET[param]
+        assert(val in choices)
+    except:
+        return default
+# }}}
+
 # {{{ get_param_date(request, param, default): Converts a GET param to a date.
 def get_param_date(request, param, default):
     param = get_param(request, param, None)
@@ -130,13 +144,13 @@ def post_param(request, param, default):
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
-    menu = [('Ranking', '/periods/%i' % curp.id),\
-            ('Teams', '/teams/'),\
-            ('Records', '/records/history'),\
-            ('Results', '/results/'),\
-            ('Reports', '/reports/'),\
-            ('Predict', '/predict/'),\
-            ('About', '/faq/'),\
+    menu = [('Ranking', '/periods/%i' % curp.id),
+            ('Teams', '/teams/'),
+            ('Records', '/records/history'),
+            ('Results', '/results/'),
+            ('Reports', '/reports/'),
+            ('Predict', '/predict/'),
+            ('About', '/faq/'),
             ('Submit', '/add/')]
 
     base = {
@@ -155,29 +169,29 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     # Fill in submenu depending on section.
     if section == 'Records':
-        base['submenu'] = [('History', '/records/history/'),
-                           ('HoF', '/records/hof/'),\
-                           ('All', '/records/race/?race=all'),\
-                           ('Protoss', '/records/race/?race=P'),\
-                           ('Terran', '/records/race/?race=T'),\
+        base['submenu'] = [('History', '/records/history/')
+                           ('HoF', '/records/hof/'),
+                           ('All', '/records/race/?race=all'),
+                           ('Protoss', '/records/race/?race=P'),
+                           ('Terran', '/records/race/?race=T'),
                            ('Zerg', '/records/race/?race=Z')]
     elif section == 'Results':
-        base['submenu'] = [('By Date', '/results/'),\
-                           ('By Event', '/results/events/'),\
+        base['submenu'] = [('By Date', '/results/'),
+                           ('By Event', '/results/events/'),
                            ('Search', '/results/search/')]
     elif section == 'Submit' and base['adm']:
-        base['submenu'] = [('Matches', '/add/'),\
-                           ('Review', '/add/review/'),\
-                           ('Events', '/add/events/'),\
-                           ('Open events', '/add/open_events/'),\
-                           ('Integrity', '/add/integrity/'),\
+        base['submenu'] = [('Matches', '/add/'),
+                           ('Review', '/add/review/'),
+                           ('Events', '/add/events/'),
+                           ('Open events', '/add/open_events/'),
+                           ('Integrity', '/add/integrity/'),
                            ('Misc', '/add/misc/')]
     elif section == 'Teams':
-        base['submenu'] = [('Ranking', '/teams/'),\
+        base['submenu'] = [('Ranking', '/teams/'),
                            ('Transfers', '/transfers/')]
     elif section == 'Ranking':
-        base['submenu'] = [('Current', '/periods/%i' % curp.id),\
-                           ('History', '/periods/'),\
+        base['submenu'] = [('Current', '/periods/%i' % curp.id),
+                           ('History', '/periods/'),
                            ('Earnings', '/earnings/')]
     elif section == 'Predict':
         base['submenu'] = [('Predict', '/predict/'),
@@ -226,3 +240,9 @@ def etn(f):
     except:
         return None
 # }}}
+
+# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
+# AS IT FUCKING SHOULD BE.
+ntz = lambda k: k if k is not None else 0
+# }}}
+

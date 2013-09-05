@@ -2,7 +2,7 @@ from django.db.models import Q, Max, Count
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
-from aligulac.tools import base_ctx, get_param
+from aligulac.tools import base_ctx, get_param, get_param_choice
 
 from ratings.models import Player, Rating
 from ratings.tools import PATCHES, filter_active, country_list, total_ratings
@@ -15,13 +15,8 @@ def history(request):
 
     # {{{ Filtering (appears faster with custom SQL)
     nplayers = int(get_param(request, 'nplayers', '5'))
-    race = get_param(request, 'race', 'ptzrs')
-    nats = get_param(request, 'nats', 'all')
-
-    if race not in ['ptzrs', 'p', 't', 'z', 'ptrs', 'tzrs', 'pzrs']:
-        race = 'ptzrs'
-    if nats not in ['all','foreigners'] + list(data.ccn_to_cca2.values()):
-        nats = 'all'
+    race = get_param_choice(request, 'race', ['ptzrs','p','t','z','ptrs','tzrs','pzrs'], 'ptzrs')
+    nats = get_param_choice(request, 'nats', ['all','foreigners'] + list(data.ccn_to_cca2.values()), 'all')
 
     query = '''SELECT player.id, player.tag, player.race, player.country, MAX(rating.rating) AS high
                FROM player JOIN rating ON player.id=rating.player_id'''
@@ -56,10 +51,11 @@ def history(request):
 # {{{ hof view
 def hof(request):
     base = base_ctx('Records', 'HoF', request)
-    base['high'] = Player.objects.filter(dom_val__isnull=False,
-                                         dom_start__isnull=False,
-                                         dom_end__isnull=False,
-                                         dom_val__gt=0).order_by('-dom_val')
+    base['high'] = (
+        Player.objects.filter(
+            dom_val__isnull=False, dom_start__isnull=False, dom_end__isnull=False, dom_val__gt=0
+        ).order_by('-dom_val')
+    )
     return render_to_response('hof.html', base)
 # }}}
 
@@ -82,8 +78,10 @@ def race(request):
                 return ret
         return ret
 
-    high = filter_active(total_ratings(Rating.objects.all()))\
-                .filter(period__id__gt=16).select_related('player', 'period')
+    high = (
+        filter_active(total_ratings(Rating.objects.all()))
+            .filter(period__id__gt=16).select_related('player', 'period')
+    )
     if race != 'all':
         high = high.filter(player__race=race)
 

@@ -11,6 +11,7 @@ from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
 
 import aligulac
 from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV, start_rating
+from aligulac.tools import ntz
 
 from ratings.models import Match, Period, Player, Rating
 
@@ -32,6 +33,8 @@ def find_player(query=None, lst=None, make=False, soft=False):
     if not lst:
         lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
 
+    tag, country, race = None, None, None
+
     # {{{ Build filter
     for s in lst:
         # If numeric, assume a restriction on ID
@@ -41,34 +44,46 @@ def find_player(query=None, lst=None, make=False, soft=False):
 
         # If only one character, assume a restriction on race
         if len(s) == 1 and s.upper() in 'PTZSR':
+            race = s.upper()
             queryset = queryset.filter(race=s.upper())
             continue
 
         # Otherwise, always search by player tag, team and aliases
         if soft:
-            q = Q(tag__icontains=s) | Q(alias__name__icontains=s) |\
-                Q(groupmembership__current=True,
-                  groupmembership__group__name__icontains=s,
-                  groupmembership__group__is_team=True) |\
-                Q(groupmembership__current=True,
-                  groupmembership__group__alias__name__icontains=s,
-                  groupmembership__group__is_team=True)
+            q = (
+                Q(
+                    groupmembership__current=True,
+                    groupmembership__group__name__icontains=s,
+                    groupmembership__group__is_team=True,
+                ) | Q(
+                    groupmembership__current=True,
+                    groupmembership__group__alias__name__icontains=s,
+                    groupmembership__group__is_team=True,
+                ) | Q(tag__icontains=s) | Q(alias__name__icontains=s)
+            )
         else:
-            q = Q(tag__icontains=s) | Q(alias__name__icontains=s) |\
-                Q(groupmembership__current=True,
-                  groupmembership__group__name__icontains=s,
-                  groupmembership__group__is_team=True) |\
-                Q(groupmembership__current=True,
-                  groupmembership__group__alias__name__icontains=s,
-                  groupmembership__group__is_team=True)
+            q = (
+                Q(
+                    groupmembership__current=True,
+                    groupmembership__group__name__iexact=s,
+                    groupmembership__group__is_team=True,
+                ) | Q(
+                    groupmembership__current=True,
+                    groupmembership__group__alias__name__iexact=s,
+                    groupmembership__group__is_team=True,
+                ) | Q(tag__iexact=s) | Q(alias__name__iexact=s)
+            )
 
         # ...and perhaps country codes
         if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+            country = s.upper()
             q |= Q(country=s.upper())
         elif len(s) == 3 and s.upper() in data.cca3_to_ccn:
+            country = ccn_to_cca2(cca3_to_ccn(s.upper()))
             q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
         renorm = s[0].upper() + s[1:].lower()
-        if renorm in data.cn_to_ccn:
+        if renorm in data.cn_to_ccnj:
+            country = ccn_to_cca2(cn_to_ccn(renorm))
             q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
 
         queryset = queryset.filter(q)
@@ -76,31 +91,6 @@ def find_player(query=None, lst=None, make=False, soft=False):
 
     # {{{ If no results, make player if allowed
     if not queryset.exists() and make:
-        tag, country, race = None, None, None
-
-        # {{{ Get tag, country and race from query
-        for s in lst:
-            if s.isdigit():
-                continue
-
-            if len(s) == 1 and s.upper() in 'PTZSR':
-                race = s.upper()
-                continue
-
-            if len(s) == 2 and s.upper() in data.cca2_to_ccn:
-                country = s.upper()
-                continue
-            elif len(s) == 3 and s.upper() in data.cca3_to_ccn:
-                country = ccn_to_cca2(cca3_to_ccn(s.upper()))
-                continue
-            renorm = s[0].upper() + s[1:].lower()
-            if renorm in data.cn_to_ccn:
-                country = ccn_to_cca2(cn_to_ccn(renorm))
-                continue
-
-            tag = s
-        # }}}
-
         # {{{ Raise exceptions if missing crucial data
         if tag == None:
             msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
@@ -166,6 +156,7 @@ def populate_teams(queryset):
             e.team = membership.group.shortname
             e.teamfull = membership.group.name
             e.teamid = membership.group.id
+
     return queryset
 # }}}
 
@@ -181,14 +172,11 @@ def country_list(queryset):
 # {{{ currency_list: Creates a list of currencies in the given queryset (of Earnings).
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
-    currency_dict = [{'name': ccy.currency(c['currency']).name,
-                      'code': ccy.currency(c['currency']).code} for c in currencies]
+    currency_dict = [
+        {'name': ccy.currency(c['currency']).name, 'code': ccy.currency(c['currency']).code} 
+        for c in currencies
+    ]
     return currency_dict
-# }}}
-
-# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
-# AS IT FUCKING SHOULD BE.
-ntz = lambda k: k if k is not None else 0
 # }}}
 
 # {{{ filter_flags: Splits an integer representing bitwise or into a list of each flag.
@@ -216,7 +204,7 @@ def get_placements(event):
         try:
             ret[earning.earnings] = (
                 min(min(ret[earning.earnings]), earning.placement),
-                max(max(ret[earning.earnings]), earning.placement)
+                max(max(ret[earning.earnings]), earning.placement),
             )
         except:
             ret[earning.earnings] = (earning.placement, earning.placement)
@@ -253,8 +241,9 @@ def add_counts(queryset):
                     r.ngames += m.sca + m.scb
                     r.nmatches += 1
         else:
-            initial = r.player.get_matchset().filter(period=r.period)\
-                              .aggregate(Sum('sca'), Sum('scb'))
+            initial = (
+                r.player.get_matchset().filter(period=r.period).aggregate(Sum('sca'), Sum('scb'))
+            )
             r.ngames = ntz(initial['sca__sum']) + ntz(initial['scb__sum'])
             r.nmatches = r.player.get_matchset().filter(period_id=r.period_id).count()
     return queryset
@@ -271,21 +260,21 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
     for idx, m in enumerate(matches):
         # {{{ Basic stuff
         r = {
-            'match': m,
-            'match_id': m.id,
-            'game': m.game if isinstance(m, Match) else m.group.game,
-            'offline': m.offline if isinstance(m, Match) else m.group.offline,
-            'treated': isinstance(m, Match) and m.treated,
-            'pla_id': m.pla_id,
-            'plb_id': m.plb_id,
-            'pla_tag': m.pla.tag if m.pla is not None else m.pla_string,
-            'plb_tag': m.plb.tag if m.plb is not None else m.plb_string,
-            'pla_race': m.rca,
-            'plb_race': m.rcb,
-            'pla_country': m.pla.country if m.pla else None,
-            'plb_country': m.plb.country if m.plb else None,
-            'pla_score': m.sca,
-            'plb_score': m.scb,
+            'match':        m,
+            'match_id':     m.id,
+            'game':         m.game if isinstance(m, Match) else m.group.game,
+            'offline':      m.offline if isinstance(m, Match) else m.group.offline,
+            'treated':      isinstance(m, Match) and m.treated,
+            'pla_id':       m.pla_id,
+            'plb_id':       m.plb_id,
+            'pla_tag':      m.pla.tag if m.pla is not None else m.pla_string,
+            'plb_tag':      m.plb.tag if m.plb is not None else m.plb_string,
+            'pla_race':     m.rca,
+            'plb_race':     m.rcb,
+            'pla_country':  m.pla.country if m.pla else None,
+            'plb_country':  m.plb.country if m.plb else None,
+            'pla_score':    m.sca,
+            'plb_score':    m.scb,
         }
 
         if isinstance(m, Match):
@@ -297,19 +286,21 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             r['date'] = m.date
 
         if messages:
-            r['messages'] = [aligulac.tools.Message(msg.text, msg.title, msg.type + '-small')\
-                             for msg in m.message_set.all()]
+            r['messages'] = [
+                aligulac.tools.Message(msg.text, msg.title, msg.type + '-small')
+                for msg in m.message_set.all()
+            ]
         # }}}
 
         # {{{ Check ratings if needed
         if ratings and isinstance(m, Match):
             r.update({
-                'pla_rating': m.rta.get_totalrating(m.rcb) if m.rta
-                              else start_rating(r['pla_country'], m.period_id),
-                'plb_rating': m.rtb.get_totalrating(m.rca) if m.rtb
-                              else start_rating(r['plb_country'], m.period_id),
-                'pla_dev':    m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
-                'plb_dev':    m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
+                'pla_rating':  m.rta.get_totalrating(m.rcb) if m.rta
+                               else start_rating(r['pla_country'], m.period_id),
+                'plb_rating':  m.rtb.get_totalrating(m.rca) if m.rtb
+                               else start_rating(r['plb_country'], m.period_id),
+                'pla_dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
+                'plb_dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
             })
         # }}}
 

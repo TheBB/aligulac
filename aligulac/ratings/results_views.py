@@ -12,12 +12,15 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
-from aligulac.tools import (get_param, base_ctx, StrippedCharField, generate_messages, Message, etn,
-                            NotUniquePlayerMessage)
+from aligulac.tools import (
+    get_param, base_ctx, StrippedCharField, generate_messages, Message, etn, NotUniquePlayerMessage
+)
 
 from ratings.models import Earnings, Event, Match, Player, Story
-from ratings.tools import (display_matches, count_winloss_games, count_matchup_games, count_mirror_games,
-                           filter_flags, find_player)
+from ratings.tools import (
+    display_matches, count_winloss_games, count_matchup_games, count_mirror_games, filter_flags, find_player,
+    EVENT_TYPES, GAMES, TLPD_DBS
+)
 
 # {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
 def collect(lst, n=2):
@@ -40,21 +43,21 @@ def earnings_code(queryset):
 
 # {{{ EventModForm: Form for modifying an event.
 class EventModForm(forms.Form):
-    name = StrippedCharField(max_length=100, required=True, label='Name')
-    date = forms.DateField(required=False, label='Date')
-    game = forms.ChoiceField(choices=[('nochange','No change')]+Match.GAMES, required=True, label='Game')
-    offline = forms.ChoiceField(
+    name       = StrippedCharField(max_length=100, required=True, label='Name')
+    date       = forms.DateField(required=False, label='Date')
+    game       = forms.ChoiceField(choices=[('nochange','No change')]+GAMES, required=True, label='Game')
+    offline    = forms.ChoiceField(
         choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
         required=True, label='On/offline'
     )
-    type = forms.ChoiceField(choices=[('nochange','No change')]+Event.TYPES, required=True, label='Type')
+    type       = forms.ChoiceField(choices=[('nochange','No change')]+EVENT_TYPES, required=True, label='Type')
     same_level = forms.BooleanField(required=False, label='Apply to all events on the same level')
-    homepage = StrippedCharField(max_length=200, required=False, label='Homepage')
-    tlpd_id = forms.IntegerField(required=False, label='TLPD ID')
-    tlpd_db = forms.MultipleChoiceField(
-        required=False, choices=Event.TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
-    tl_thread = forms.IntegerField(required=False, label='TL thread')
-    lp_name = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
+    homepage   = StrippedCharField(max_length=200, required=False, label='Homepage')
+    tlpd_id    = forms.IntegerField(required=False, label='TLPD ID')
+    tlpd_db    = forms.MultipleChoiceField(
+        required=False, choices=TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
+    tl_thread  = forms.IntegerField(required=False, label='TL thread')
+    lp_name    = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -121,11 +124,11 @@ class EventModForm(forms.Form):
                 getattr(event, setter)(value)
                 ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['homepage'], 'homepage', 'set_homepage', 'homepage')
-        update(self.cleaned_data['tlpd_id'], 'tlpd_id', 'set_tlpd_id', 'TLPD ID')
+        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   'homepage')
+        update(self.cleaned_data['tlpd_id'],    'tlpd_id',    'set_tlpd_id',    'TLPD ID')
+        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    'Liquipedia title')
+        update(self.cleaned_data['tl_thread'],  'tl_thread',  'set_th_thread',  'TL thread')
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
-        update(self.cleaned_data['lp_name'], 'lp_name', 'set_lp_name', 'Liquipedia title')
-        update(self.cleaned_data['tl_thread'], 'tl_thread', 'set_th_thread', 'TL thread')
 
         return ret
     # }}}
@@ -134,10 +137,10 @@ class EventModForm(forms.Form):
 # {{{ PrizepoolModForm: Form for changing prizepools.
 class PrizepoolModForm(forms.Form):
     sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
-    currencies = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
-    currency = forms.ChoiceField(choices=currencies, required=True, label='Currency')
-    ranked = forms.CharField(required=False, max_length=10000, label='Ranked')
-    unranked = forms.CharField(required=False, max_length=10000, label='Unranked')
+    currencies  = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
+    currency    = forms.ChoiceField(choices=currencies, required=True, label='Currency')
+    ranked      = forms.CharField(required=False, max_length=10000, label='Ranked')
+    unranked    = forms.CharField(required=False, max_length=10000, label='Unranked')
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -186,6 +189,7 @@ class PrizepoolModForm(forms.Form):
 
         # {{{ Gather data
         ranked, unranked, ok = [], [], True
+
         for line in self.cleaned_data['ranked'].split('\n'):
             if line.strip() == '':
                 continue
@@ -195,6 +199,7 @@ class PrizepoolModForm(forms.Form):
             except Exception as e:
                 ret.append(Message(str(e), type=Message.ERROR))
                 ok = False
+
         for line in self.cleaned_data['unranked'].split('\n'):
             if line.strip() == '':
                 continue
@@ -217,7 +222,7 @@ class PrizepoolModForm(forms.Form):
         # }}}
 
         # {{{ Commit
-        Earnings.set_earnings(event, ranked, self.cleaned_data['currency'], True)
+        Earnings.set_earnings(event, ranked,   self.cleaned_data['currency'], True)
         Earnings.set_earnings(event, unranked, self.cleaned_data['currency'], False)
         # }}}
 
@@ -230,8 +235,8 @@ class PrizepoolModForm(forms.Form):
 # {{{ StoryModForm: Form for adding stories.
 class StoryModForm(forms.Form):
     player = forms.ChoiceField(required=True, label='Player')
-    date = forms.DateField(required=True, label='Date')
-    text = StrippedCharField(max_length=200, required=True, label='Text')
+    date   = forms.DateField(required=True, label='Date')
+    text   = StrippedCharField(max_length=200, required=True, label='Text')
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -276,10 +281,10 @@ class StoryModForm(forms.Form):
 
 # {{{ AddForm: Form for adding subevents.
 class AddForm(forms.Form):
-    name = StrippedCharField(max_length=100, required=True, label='Name')
-    type = forms.ChoiceField(choices=Event.TYPES, required=True, label='Type')
+    name    = StrippedCharField(max_length=100, required=True, label='Name')
+    type    = forms.ChoiceField(choices=Event.TYPES, required=True, label='Type')
     noprint = forms.BooleanField(required=False, label='No Print')
-    closed = forms.BooleanField(required=False, label='Closed')
+    closed  = forms.BooleanField(required=False, label='Closed')
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -321,12 +326,12 @@ class AddForm(forms.Form):
 
 # {{{ SearchForm: Form for searching.
 class SearchForm(forms.Form):
-    after = forms.DateField(required=False, label='After', initial=None)
-    before = forms.DateField(required=False, label='Before', initial=None)
-    players = forms.CharField(max_length=10000, required=False, label='Involving players', initial='')
-    event = StrippedCharField(max_length=200, required=False, label='Event', initial='')
+    after      = forms.DateField(required=False, label='After', initial=None)
+    before     = forms.DateField(required=False, label='Before', initial=None)
+    players    = forms.CharField(max_length=10000, required=False, label='Involving players', initial='')
+    event      = StrippedCharField(max_length=200, required=False, label='Event', initial='')
     unassigned = forms.BooleanField(required=False, label='Only show unassigned matches')
-    bestof = forms.ChoiceField(
+    bestof     = forms.ChoiceField(
         choices=[
             ('all','All'),
             ('3','Best of 3+'),
@@ -451,11 +456,11 @@ class SearchForm(forms.Form):
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0])
             ret['sc_my'], ret['sc_op'] = (
                 sum([m['pla_score'] for m in ret['matches']]),
-                sum([m['plb_score'] for m in ret['matches']])
+                sum([m['plb_score'] for m in ret['matches']]),
             )
             ret['msc_my'], ret['msc_op'] = (
                 sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in ret['matches']]),
-                sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in ret['matches']])
+                sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in ret['matches']]),
             )
             ret['left'] = pls[0]
             if len(pls) == 2:
@@ -470,8 +475,8 @@ class SearchForm(forms.Form):
 
 # {{{ ResultsModForm: Form for modifying search results.
 class ResultsModForm(forms.Form):
-    event = forms.ChoiceField(required=True, label='Event')
-    date = forms.DateField(required=False, label='Date', initial=None)
+    event   = forms.ChoiceField(required=True, label='Event')
+    date    = forms.DateField(required=False, label='Date', initial=None)
     offline = forms.ChoiceField(
         choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
         required=True, label='On/offline', initial='nochange'
@@ -489,9 +494,9 @@ class ResultsModForm(forms.Form):
             super(ResultsModForm, self).__init__()
 
         self.fields['event'].choices = [(0, 'No change')] + [
-            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False, rgt=F('lft')+1)\
-                                                          .order_by('lft')\
-                                                          .values('id','fullname')
+            (e['id'], e['fullname']) for e in (
+                Event.objects.filter(closed=False, rgt=F('lft')+1).order_by('lft').values('id','fullname')
+            )
         ]
     # }}}
 
@@ -547,8 +552,10 @@ def results(request):
         'td':      day,
     })
 
-    matches = Match.objects.filter(date=day).order_by('eventobj__lft', 'event', 'id')\
-                   .prefetch_related('message_set')
+    matches = (
+        Match.objects.filter(date=day).order_by('eventobj__lft', 'event', 'id')
+            .prefetch_related('message_set')
+    )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True)
 
     return render_to_response('results.html', base)
@@ -567,9 +574,9 @@ def events(request, event_id=None):
 
     # {{{ Display the main table if event ID is not given
     if event_id is None:
-        root_events = Event.objects.filter(parent__isnull=True)\
-                           .prefetch_related('event_set')\
-                           .order_by('lft')
+        root_events = (
+            Event.objects.filter(parent__isnull=True).prefetch_related('event_set').order_by('lft')
+        )
         base.update({
             'ind_bigs':    collect(root_events.filter(big=True, category=Event.CAT_INDIVIDUAL), 2),
             'ind_smalls':  root_events.filter(big=False, category=Event.CAT_INDIVIDUAL).order_by('name'),
@@ -624,10 +631,9 @@ def events(request, event_id=None):
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],
         'nousdpp':       len(currencies) > 1 or len(currencies) == 1 and currencies[0] != 'USD',
         'prizepoolorig': [{
-                            'pp':  total_earnings.filter(currency=k)\
-                                                 .aggregate(Sum('origearnings'))['origearnings__sum'],
-                            'cur': k,
-                         } for k in currencies],
+            'pp':  total_earnings.filter(currency=k).aggregate(Sum('origearnings'))['origearnings__sum'],
+            'cur': k,
+        } for k in currencies],
     })
     # }}}
 
@@ -640,11 +646,14 @@ def events(request, event_id=None):
         'pvp_games': count_mirror_games(matches, 'P'),
         'tvt_games': count_mirror_games(matches, 'T'),
         'zvz_games': count_mirror_games(matches, 'Z'),
-        'matches':   display_matches(matches.prefetch_related('message_set')\
-                                            .select_related('pla', 'plb', 'eventobj')\
-                                            .order_by('-eventobj__lft', '-date', '-id')[0:200]),
+        'matches':   display_matches(
+            matches.prefetch_related('message_set')
+                .select_related('pla', 'plb', 'eventobj')
+                .order_by('-eventobj__lft', '-date', '-id')[0:200]
+        ),
         'nplayers':  Player.objects.filter(
-                         Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))).count(),
+            Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))
+        ).count(),
     })
 
     base['pvt_wins'], base['pvt_loss'] = count_matchup_games(matches, 'P', 'T')

@@ -1,3 +1,4 @@
+# {{{ Imports
 from datetime import datetime, date, timedelta
 from functools import partial
 from math import sqrt
@@ -11,19 +12,36 @@ from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    Message, StrippedCharField, 
-    base_ctx, etn, generate_messages, get_param, get_param_date, ntz
+    Message,
+    StrippedCharField,
+    base_ctx,
+    etn,
+    generate_messages,
+    get_param,
+    get_param_date,
+    ntz,
 )
 from aligulac.settings import INACTIVE_THRESHOLD
 
 from ratings.models import Match, Period, Player, Rating
 from ratings.tools import (
-    GAMES, PATCHES,
-    add_counts, cdf, count_winloss_games, display_matches, filter_flags, get_placements, split_matchset, 
-    total_ratings
+    GAMES,
+    PATCHES,
+    add_counts,
+    cdf,
+    count_winloss_games,
+    display_matches,
+    filter_flags,
+    get_placements,
+    split_matchset,
+    total_ratings,
 )
 
-from countries import data, transformations
+from countries import (
+    data,
+    transformations,
+)
+# }}}
 
 msg_inactive = (
     'Due to %s\'s lack of recent games, they have been marked as <em>inactive</em> and '

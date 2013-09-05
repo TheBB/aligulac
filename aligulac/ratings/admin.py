@@ -1,10 +1,29 @@
-from ratings.models import Player, Group, Period, Match, Rating, Event, Alias, Earnings,\
-                           PreMatchGroup, PreMatch, Story, Message
+# {{{ Imports
 from django.contrib import admin
 from django.contrib.admin import DateFieldListFilter
-from django.db.models import Q, F
+from django.db.models import (
+    Q,
+    F,
+)
 from django import forms
+
+from ratings.models import (
+    Player,
+    Group,
+    Period,
+    Match,
+    Rating,
+    Event,
+    Alias,
+    Earnings,
+    PreMatchGroup,
+    PreMatch,
+    Story,
+    Message,
+)
+
 from countries import transformations
+# }}}
 
 def player_country(p):
     try:

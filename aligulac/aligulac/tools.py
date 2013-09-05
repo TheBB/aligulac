@@ -1,15 +1,24 @@
+# {{{ Imports
 import random
 import string
-from datetime import datetime, date
+from datetime import (
+    date, 
+    datetime,
+)
 
 from django.core.context_processors import csrf
 from django import forms
 
 from aligulac.settings import DEBUG
 
-from ratings.models import Player, Rating, Earnings
+from ratings.models import (
+    Earnings,
+    Player,
+    Rating,
+)
 from ratings.tools import get_latest_period
 from ratings.templatetags.ratings_extras import urlfilter
+# }}}
 
 # {{{ Message
 # This class encodes error/success/warning messages sent to the templates.

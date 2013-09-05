@@ -1,26 +1,54 @@
-from datetime import datetime, date
+# {{{ Imports
+from datetime import (
+    datetime,
+    date,
+)
 import operator
 import shlex
 
 import ccy
 
 from django import forms
-from django.db.models import Min, Max, Sum, Q, F
+from django.db.models import (
+    Min,
+    Max,
+    Sum,
+    Q,
+    F,
+)
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import (
+    redirect,
+    render_to_response,
+    get_object_or_404,
+)
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    get_param, base_ctx, StrippedCharField, generate_messages, Message, etn, NotUniquePlayerMessage
+    base_ctx,
+    etn,
+    generate_messages,
+    get_param,
+    Message,
+    NotUniquePlayerMessage
+    StrippedCharField,
 )
 
 from ratings.models import Earnings, Event, Match, Player, Story
 from ratings.tools import (
-    display_matches, count_winloss_games, count_matchup_games, count_mirror_games, filter_flags, find_player,
-    EVENT_TYPES, GAMES, TLPD_DBS
+    count_matchup_games,
+    count_mirror_games,
+    count_winloss_games,
+    display_matches,
+    EVENT_TYPES,
+    filter_flags,
+    find_player,
+    GAMES,
+    TLPD_DBS
 )
+# }}}
 
 # {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
 def collect(lst, n=2):

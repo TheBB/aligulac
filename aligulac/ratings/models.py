@@ -1,14 +1,26 @@
+# {{{ Imports
 import datetime
 
 from django.contrib.auth.models import User
-from django.db import models, transaction
-from django.db.models import Max, F, Q
+from django.db import (
+    models,
+    transaction,
+)
+from django.db.models import (
+    Max,
+    F,
+    Q,
+)
 
 from aligulac.settings import start_rating
 
 from math import sqrt
 
-from countries import transformations, data
+from countries import (
+    transformations,
+    data,
+)
+# }}}
 
 # List of countries
 # This is used in a couple of models, although it adds a bit of overhead, it would be better to do this

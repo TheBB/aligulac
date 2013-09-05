@@ -1,13 +1,31 @@
-from django.db.models import Q, Max, Count
+# {{{ Imports
+from django.db.models import (
+    Q,
+    Max,
+    Count,
+)
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
-from aligulac.tools import base_ctx, get_param, get_param_choice
+from aligulac.tools import (
+    base_ctx,
+    get_param,
+    get_param_choice,
+)
 
-from ratings.models import Player, Rating
-from ratings.tools import PATCHES, filter_active, country_list, total_ratings
+from ratings.models import (
+    Player,
+    Rating,
+)
+from ratings.tools import (
+    PATCHES,
+    filter_active,
+    country_list,
+    total_ratings,
+)
 
 from countries import data
+# }}}
 
 # {{{ history view
 def history(request):

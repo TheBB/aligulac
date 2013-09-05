@@ -1,14 +1,36 @@
-from django.shortcuts import render_to_response, get_object_or_404
-from django.db.models import Q, Sum
+# {{{ Imports
+from django.shortcuts import (
+    get_object_or_404,
+    render_to_response,
+)
+from django.db.models import (
+    Q,
+    Sum,
+)
 
-from ratings.models import Earnings, Period, Player, Rating
+from ratings.models import (
+    Earnings,
+    Period,
+    Player,
+    Rating,
+)
 from ratings.tools import (
-    filter_active, total_ratings, count_matchup_games, count_mirror_games, populate_teams, country_list, 
-    currency_list
+    count_matchup_games,
+    count_mirror_games,
+    country_list,
+    currency_list,
+    filter_active,
+    populate_teams,
+    total_ratings,
 ) 
 from aligulac.cache import cache_page
-from aligulac.tools import Message, base_ctx, get_param
+from aligulac.tools import (
+    Message,
+    base_ctx,
+    get_param,
+)
 from aligulac.settings import INACTIVE_THRESHOLD
+# }}}
 
 msg_preview = 'This is a <em>preview</em> of the next rating list. It will not be finalized until %s.'
 

@@ -1,3 +1,4 @@
+# {{{ Imports
 from django.shortcuts import render_to_response
 
 from aligulac.cache import cache_page
@@ -6,7 +7,11 @@ from aligulac.tools import base_ctx
 from blog.models import Post
 
 from ratings.models import Rating
-from ratings.tools import filter_active, populate_teams
+from ratings.tools import (
+    filter_active,
+    populate_teams,
+)
+# }}}
 
 @cache_page
 def home(request):

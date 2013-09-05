@@ -1,19 +1,41 @@
-from numpy import tanh, pi
+# {{{ Imports
+from numpy import (
+    tanh,
+    pi,
+)
 from math import sqrt
 from datetime import date
 import shlex
 
-from django.db.models import Sum, Q
+from django.db.models import (
+    Sum,
+    Q,
+)
 
 import ccy
 from countries import data
-from countries.transformations import cca3_to_ccn, ccn_to_cca2, cn_to_ccn
+from countries.transformations import (
+    cca3_to_ccn,
+    ccn_to_cca2,
+    cn_to_ccn,
+)
 
 import aligulac
-from aligulac.settings import INACTIVE_THRESHOLD, KR_INIT, INIT_DEV, start_rating
+from aligulac.settings import (
+    INACTIVE_THRESHOLD,
+    KR_INIT,
+    INIT_DEV,
+    start_rating,
+)
 from aligulac.tools import ntz
 
-from ratings.models import Match, Period, Player, Rating
+from ratings.models import (
+    Match,
+    Period,
+    Player,
+    Rating,
+)
+# }}}
 
 # {{{ Patchlist
 PATCHES = [

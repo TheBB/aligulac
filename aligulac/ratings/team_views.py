@@ -1,15 +1,41 @@
+# {{{ Imports
 from datetime import date
 
 from django import forms
-from django.db.models import Q, Sum, Count
-from django.shortcuts import render_to_response, get_object_or_404
+from django.db.models import (
+    Q,
+    Sum,
+    Count,
+)
+from django.shortcuts import (
+    render_to_response,
+    get_object_or_404,
+)
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
-from aligulac.tools import get_param, base_ctx, StrippedCharField, generate_messages, Message
+from aligulac.tools import (
+    get_param,
+    base_ctx,
+    StrippedCharField,
+    generate_messages,
+    Message,
+)
 
-from ratings.models import Earnings, Group, GroupMembership, Match, Player, Rating
-from ratings.tools import filter_active, filter_inactive, total_ratings
+from ratings.models import (
+    Earnings,
+    Group,
+    GroupMembership,
+    Match,
+    Player,
+    Rating,
+)
+from ratings.tools import (
+    filter_active,
+    filter_inactive,
+    total_ratings,
+)
+# }}}
 
 # {{{ TeamModForm: Form for modifying a teasm.
 class TeamModForm(forms.Form):

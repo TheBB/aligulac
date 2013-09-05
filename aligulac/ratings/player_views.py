@@ -11,14 +11,16 @@ from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    Message, base_ctx, generate_messages, StrippedCharField, etn, ntz, get_param_date, get_param
+    Message, StrippedCharField, 
+    base_ctx, etn, generate_messages, get_param, get_param_date, ntz
 )
 from aligulac.settings import INACTIVE_THRESHOLD
 
 from ratings.models import Match, Period, Player, Rating
 from ratings.tools import (
-    GAMES, PATCHES, total_ratings, split_matchset, count_winloss_games, display_matches, filter_flags, cdf,
-    add_counts, get_placements
+    GAMES, PATCHES,
+    add_counts, cdf, count_winloss_games, display_matches, filter_flags, get_placements, split_matchset, 
+    total_ratings
 )
 
 from countries import data, transformations

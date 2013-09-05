@@ -112,6 +112,7 @@ def get_param_choice(request, param, choices, default):
     try:
         val = request.GET[param]
         assert(val in choices)
+        return val
     except:
         return default
 # }}}

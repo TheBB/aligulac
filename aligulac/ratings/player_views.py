@@ -23,16 +23,23 @@ from aligulac.tools import (
 )
 from aligulac.settings import INACTIVE_THRESHOLD
 
-from ratings.models import Match, Period, Player, Rating
-from ratings.tools import (
+from ratings.models import (
     GAMES,
-    PATCHES,
+    Match,
+    Period,
+    Player,
+    RACES,
+    Rating,
+    TLPD_DBS,
+)
+from ratings.tools import (
     add_counts,
     cdf,
     count_winloss_games,
     display_matches,
     filter_flags,
     get_placements,
+    PATCHES,
     split_matchset,
     total_ratings,
 )
@@ -77,14 +84,14 @@ def interp_rating(date, ratings):
 # {{{ PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
     tag      = StrippedCharField(max_length=30, required=True, label='Tag')
-    race     = forms.ChoiceField(choices=Player.RACES, required=True, label='Race')
+    race     = forms.ChoiceField(choices=RACES, required=True, label='Race')
     name     = StrippedCharField(max_length=100, required=False, label='Name')
     akas     = forms.CharField(max_length=200, required=False, label='AKAs')
     birthday = forms.DateField(required=False, label='Birthday')
 
     tlpd_id  = forms.IntegerField(required=False, label='TLPD ID')
     tlpd_db  = forms.MultipleChoiceField(
-        required=False, choices=Player.TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
+        required=False, choices=TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
     lp_name  = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
     sc2c_id  = forms.IntegerField(required=False, label='SC2Charts.net ID')
     sc2e_id  = forms.IntegerField(required=False, label='SC2Earnings.com ID')
@@ -160,7 +167,7 @@ class ResultsFilterForm(forms.Form):
             ('tzr',   'No Protoss'),
             ('pzr',   'No Terran'),
             ('ptr',   'No Zerg'),
-        ]
+        ],
         required=False, label='Opponent race', initial='ptzr'
     )
     country = forms.ChoiceField(

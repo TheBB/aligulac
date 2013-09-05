@@ -169,4 +169,5 @@ settings.py
 *.pickle
 *.sql
 aligulac/aligulac/settings.py
+aligulac/update
 requirements.txt

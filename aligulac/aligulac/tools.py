@@ -6,6 +6,10 @@ from datetime import (
     datetime,
 )
 
+from django.contrib.auth import (
+    authenticate,
+    login,
+)
 from django.core.context_processors import csrf
 from django import forms
 
@@ -93,6 +97,19 @@ def generate_messages(obj):
     return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]
 # }}}
 
+# {{{ login_message: Generates a message notifying about login status.
+def login_message(base, extra=''):
+    if not base['adm']:
+        text = ' '.join(['You are not logged in.', extra, '(<a href="/login/">login</a>)'])
+    else:
+        text = ' '.join([
+            'You are logged in as',
+            base['user'],
+            '(<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)'
+        ])
+    base['messages'].append(Message(text, type=Message.INFO))
+# }}}
+
 # {{{ StrippedCharField: Subclass of CharField that performs stripping.
 class StrippedCharField(forms.CharField):
     def clean(self, value):
@@ -171,6 +188,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         'messages': [],
     }
     base.update(csrf(request))
+
+    # Log in if possible
+    if request.method == 'POST' and 'username' in request.POST and 'password' in request.POST:
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user != None and user.is_active:
+            login(request, user)
 
     # Check for admin rights.
     if request != None:
@@ -255,4 +278,3 @@ def etn(f):
 # AS IT FUCKING SHOULD BE.
 ntz = lambda k: k if k is not None else 0
 # }}}
-

@@ -26,44 +26,44 @@ dump. Called from aligulac.views.db.
     <div class="row">
         <div class="rowel">Wings of Liberty</div>
         <div class="rower">
-            {{ nwolgames }} games <span class="small">({{ nwolgames|pctg3:ngames }}%)</span>,
-            {{ nwol }} matches <span class="small">({{ nwol|pctg3:nmatches }}%)</span>
+            {{ nwolgames }} games <span class="small">({{ nwolgames|pctg:ngames }}%)</span>,
+            {{ nwol }} matches <span class="small">({{ nwol|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Heart of the Swarm</div>
         <div class="rower">
-            {{ nhotsgames }} games <span class="small">({{ nhotsgames|pctg3:ngames }}%)</span>,
-            {{ nhots }} matches <span class="small">({{ nhots|pctg3:nmatches }}%)</span>
+            {{ nhotsgames }} games <span class="small">({{ nhotsgames|pctg:ngames }}%)</span>,
+            {{ nhots }} matches <span class="small">({{ nhots|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Online</div>
         <div class="rower">
-            {{ nonlinegames }} games <span class="small">({{ nonlinegames|pctg3:ngames}}%)</span>,
-            {{ nonline }} matches <span class="small">({{ nonline|pctg3:nmatches}}%)</span>
+            {{ nonlinegames }} games <span class="small">({{ nonlinegames|pctg:ngames}}%)</span>,
+            {{ nonline }} matches <span class="small">({{ nonline|pctg:nmatches}}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Offline</div>
         <div class="rower">
-            {{ nofflinegames }} games <span class="small">({{ nofflinegames|pctg3:ngames}}%)</span>,
-            {{ noffline }} matches <span class="small">({{ noffline|pctg3:nmatches }}%)</span>
+            {{ nofflinegames }} games <span class="small">({{ nofflinegames|pctg:ngames}}%)</span>,
+            {{ noffline }} matches <span class="small">({{ noffline|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row">
         <div class="rowel">Matches with event info</div>
-        <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg3:nmatches }}%)</span></div>
+        <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg:nmatches }}%)</span></div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Uncatalogued matches</div>
-        <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg3:nmatches }}%)</span></div>
+        <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg:nmatches }}%)</span></div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel">Players</div>
         <div class="rower">
             {{ nplayers }}, 
-            of which {{ nkoreans }} Koreans <span class="small">({{ nkoreans|pctg3:nplayers }}%)</span>
+            of which {{ nkoreans }} Koreans <span class="small">({{ nkoreans|pctg:nplayers }}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
@@ -77,7 +77,7 @@ dump. Called from aligulac.views.db.
         <div class="rowel">Top submitters (number of matches)</div>
         <div class="rower">
             {% for s in submitters %}
-            {{ s.0.username }} ({{ s.1}}){% if not forloop.last %},{% endif %}
+            {{ s.username }} ({{ s.nmatches}}){% if not forloop.last %},{% endif %}
             {% endfor %}
         </div>
     </div>

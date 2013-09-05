@@ -29,11 +29,11 @@ countries = [(code, transformations.cc_to_cn(code)) for code in data.ccn_to_cca2
 countries.sort(key=lambda a: a[1])
 
 # {{{ Various enum-types
-TLPD_DB_KOREAN        = 0b00001
-TLPD_DB_INTERNATIONAL = 0b00010
-TLPD_DB_HOTS          = 0b00100
-TLPD_DB_HOTSBETA      = 0b01000
-TLPD_DB_WOLBETA       = 0b10000
+TLPD_DB_WOLKOREAN        = 0b00001
+TLPD_DB_WOLINTERNATIONAL = 0b00010
+TLPD_DB_HOTS             = 0b00100
+TLPD_DB_HOTSBETA         = 0b01000
+TLPD_DB_WOLBETA          = 0b10000
 TLPD_DBS = [
     (TLPD_DB_WOLBETA,          'WoL Beta'),
     (TLPD_DB_WOLKOREAN,        'WoL Korean'),
@@ -84,10 +84,10 @@ TYPE_WARNING = 'warning'
 TYPE_ERROR   = 'error'
 TYPE_SUCCESS = 'success'
 MESSAGE_TYPES = [
-    (INFO,    'info'),
-    (WARNING, 'warning'),
-    (ERROR,   'error'),
-    (SUCCESS, 'success'),
+    (TYPE_INFO,    'info'),
+    (TYPE_WARNING, 'warning'),
+    (TYPE_ERROR,   'error'),
+    (TYPE_SUCCESS, 'success'),
 ]
 # }}}
 

@@ -32,21 +32,27 @@ from aligulac.tools import (
     generate_messages,
     get_param,
     Message,
-    NotUniquePlayerMessage
+    NotUniquePlayerMessage,
     StrippedCharField,
 )
 
-from ratings.models import Earnings, Event, Match, Player, Story
+from ratings.models import (
+    Earnings,
+    Event,
+    EVENT_TYPES,
+    GAMES,
+    Match,
+    Player,
+    Story,
+    TLPD_DBS,
+)
 from ratings.tools import (
     count_matchup_games,
     count_mirror_games,
     count_winloss_games,
     display_matches,
-    EVENT_TYPES,
     filter_flags,
     find_player,
-    GAMES,
-    TLPD_DBS
 )
 # }}}
 
@@ -310,7 +316,7 @@ class StoryModForm(forms.Form):
 # {{{ AddForm: Form for adding subevents.
 class AddForm(forms.Form):
     name    = StrippedCharField(max_length=100, required=True, label='Name')
-    type    = forms.ChoiceField(choices=Event.TYPES, required=True, label='Type')
+    type    = forms.ChoiceField(choices=EVENT_TYPES, required=True, label='Type')
     noprint = forms.BooleanField(required=False, label='No Print')
     closed  = forms.BooleanField(required=False, label='Closed')
 
@@ -376,7 +382,7 @@ class SearchForm(forms.Form):
         required=False, label='On/offline', initial='both',
     )
     game = forms.ChoiceField(
-        choices=[('all','All')]+Match.GAMES, required=False, label='Game version', initial='all')
+        choices=[('all','All')]+GAMES, required=False, label='Game version', initial='all')
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -510,7 +516,7 @@ class ResultsModForm(forms.Form):
         required=True, label='On/offline', initial='nochange'
     )
     game = forms.ChoiceField(
-        choices=[('nochange','No change')]+Match.GAMES,
+        choices=[('nochange','No change')]+GAMES,
         required=True, label='Game version', initial='nochange'
     )
 

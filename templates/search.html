@@ -16,7 +16,7 @@ aligulac.views.search.
         No such player, team or event '{{ query }}' found.
     {% else %}
         {% if teams %}
-            <h3>Teams</h3>
+            <h3>Teams ({{ teams.count }})</h3>
             <ul>
             {% for team in teams %}
             <li><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></li>
@@ -24,7 +24,7 @@ aligulac.views.search.
             </ul>
         {% endif %}
         {% if players %}
-            <h3>Players</h3>
+            <h3>Players ({{ players.count }})</h3>
             <ul>
                 {% for player in players %}
                 <li>
@@ -36,10 +36,14 @@ aligulac.views.search.
             </ul>
         {% endif %}
         {% if events %}
-            <h3>Events</h3>
+            <h3>Events ({{ events.count }})</h3>
             <ul>
                 {% for event in events %}
-                <li><a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">{{ event.fullname }}</a>
+                <li>
+                <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">
+                    {{ event.fullname }}
+                </a>
+                </li>
                 {% endfor %}
             </ul>
         {% endif %}

@@ -82,26 +82,26 @@ that means Protoss is doing well and Terran poorly.</p>
             series: [{ 
                 name: 'PvT',
                 color: '#00aaaa',
-                data: [{% for r in pvt %} { 
-                    'name': '{{r.2|date:"F Y"}}<br/>PvT: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
-                    'x': {{r.2|milliseconds}},
-                    'y': {{r.0}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>PvT: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} games',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.pvt_wins|pctg_add_f:r.pvt_losses}} 
                 },{% endfor %}]
             }, {
                 name: 'PvZ',
                 color: '#aaaa00',
-                data: [{% for r in pvz %} { 
-                    'name': '{{r.2|date:"F Y"}}<br/>PvZ: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
-                    'x': {{r.2|milliseconds}},
-                    'y': {{r.0}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>PvZ: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} games',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.pvz_wins|pctg_add_f:r.pvz_losses}} 
                 },{% endfor %}]
             }, {
                 name: 'TvZ',
                 color: '#aa00aa',
-                data: [{% for r in tvz %} { 
-                    'name': '{{r.2|date:"F Y"}}<br/>TvZ: {{r.0|floatformat:1}}%<br/>{{r.1|floatformat:0}} games',
-                    'x': {{r.2|milliseconds}},
-                    'y': {{r.0}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>TvZ: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} games',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.tvz_wins|pctg_add_f:r.tvz_losses}} 
                 },{% endfor %}]
             }] 
         });
@@ -180,26 +180,26 @@ players, this chart will tend toward equilibrium, even if balance never changes.
             series: [{ 
                 name: 'Protoss',
                 color: '#00aa00',
-                data: [{% for r in p_diff %} { 
-                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
-                    'x': {{r.1|milliseconds}},
-                    'y': {{r.0|ratscaled}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.p_gains|ratscalediff}} 
                 },{% endfor %}]
             }, {
                 name: 'Terran',
                 color: '#0000aa',
-                data: [{% for r in t_diff %} { 
-                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
-                    'x': {{r.1|milliseconds}},
-                    'y': {{r.0|ratscaled}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.t_gains|ratscalediff}} 
                 },{% endfor %}]
             }, {
                 name: 'Zerg',
                 color: '#aa0000',
-                data: [{% for r in z_diff %} { 
-                    'name': '{{r.1|date:"F Y"}}<br/>Difference: {% if r.0 > 0 %}+{% endif %}{{r.0|ratscaled}} points',
-                    'x': {{r.1|milliseconds}},
-                    'y': {{r.0|ratscaled}} 
+                data: [{% for r in entries %} { 
+                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
+                    'x': {{r.date|milliseconds}},
+                    'y': {{r.z_gains|ratscalediff}} 
                 },{% endfor %}]
             }] 
         });

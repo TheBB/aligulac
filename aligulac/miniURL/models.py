@@ -25,5 +25,5 @@ class MiniURL(models.Model):
         super(MiniURL, self).save(*args, **kwargs)
 
     def generate(self, N=16):
-        characters = string.letters + string.digits
-        self.code = ''.join([random.choice(characters) for _ in xrange(N)])
+        characters = string.ascii_letters + string.digits
+        self.code = ''.join([random.choice(characters) for _ in range(N)])

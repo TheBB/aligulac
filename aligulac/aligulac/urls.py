@@ -41,6 +41,25 @@ urlpatterns = patterns('',
     url(r'^records/history/$', 'ratings.records_views.history'),
     url(r'^records/hof/$', 'ratings.records_views.hof'),
 
+    url(r'^faq/$', 'faq.views.faq'),
+    url(r'^blog/$', 'blog.views.blog'),
+    #url(r'^staff/$', 'aligulac.views.staff'),
+    url(r'^db/$', 'aligulac.views.db'),
+    url(r'^search/$', 'aligulac.views.search'),
+    url(r'^m/', include('miniURL.urls')),
+
+    url(r'^reports/$', 'ratings.reports_views.balance'),
+    url(r'^reports/balance/$', 'ratings.reports_views.balance'),
+
+    url(r'^add/$', 'ratings.staff_views.add_matches'),
+
+    url(r'^login/$', 'aligulac.views.login_view'),
+    url(r'^logout/$', 'aligulac.views.logout_view'),
+    url(r'^changepwd/$', 'aligulac.views.changepwd'),
+
+    url(r'^404/$', 'aligulac.views.h404'),
+    url(r'^500/$', 'aligulac.views.h500'),
+
     url(r'^admin/', include(admin.site.urls)),
 )
 

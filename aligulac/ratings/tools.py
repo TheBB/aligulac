@@ -1,5 +1,6 @@
 # {{{ Imports
 from numpy import (
+    arctanh,
     tanh,
     pi,
 )
@@ -27,7 +28,6 @@ from aligulac.settings import (
     INIT_DEV,
     start_rating,
 )
-from aligulac.tools import ntz
 
 from ratings.models import (
     Match,
@@ -104,7 +104,7 @@ def find_player(query=None, lst=None, make=False, soft=False):
             country = ccn_to_cca2(cca3_to_ccn(s.upper()))
             q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
         renorm = s[0].upper() + s[1:].lower()
-        if renorm in data.cn_to_ccnj:
+        if renorm in data.cn_to_ccn:
             country = ccn_to_cca2(cn_to_ccn(renorm))
             q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
 
@@ -135,6 +135,11 @@ def find_player(query=None, lst=None, make=False, soft=False):
 # {{{ cdf: Cumulative distribution function
 def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5 * tanh(pi/2/sqrt(3) * (x-loc)/scale)
+# }}}
+
+# {{{ icdf: Inverse cumulative distribution function
+def icdf(c, loc=0.0, scale=1.0):
+    return loc + scale * 2*sqrt(3)/pi * arctanh(2*c - 1)
 # }}}
 
 # {{{ get_latest_period: Returns the latest computed period, or None.
@@ -231,6 +236,11 @@ def get_placements(event):
         except:
             ret[earning.earnings] = (earning.placement, earning.placement)
     return ret
+# }}}
+
+# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
+# AS IT FUCKING SHOULD BE.
+ntz = lambda k: k if k is not None else 0
 # }}}
 
 # {{{ count_winloss_games: Counts wins and losses over a queryset relative to player A.

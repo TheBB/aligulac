@@ -262,22 +262,22 @@ def match(request):
     # {{{ Scores and other data
     base['tot_w_a'], base['tot_l_a'] = count_winloss_player(dbpl[0].get_matchset(), dbpl[0])
     base['frm_w_a'], base['frm_l_a'] = count_winloss_player(
-        dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=4)), dbpl[0]
+        dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), dbpl[0]
     )
     base['tot_w_b'], base['tot_l_b'] = count_winloss_player(dbpl[1].get_matchset(), dbpl[1])
     base['frm_w_b'], base['frm_l_b'] = count_winloss_player(
-        dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=4)), dbpl[1]
+        dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), dbpl[1]
     )
     if dbpl[1].race in 'PTZ':
         base['mu_w_a'], base['mu_l_a'] = count_matchup_player(dbpl[0].get_matchset(), dbpl[0], dbpl[1].race)
         base['fmu_w_a'], base['fmu_l_a'] = count_matchup_player(
-            dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=4)),
+            dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)),
             dbpl[0], dbpl[1].race
         )
     if dbpl[0].race in 'PTZ':
         base['mu_w_b'], base['mu_l_b'] = count_matchup_player(dbpl[1].get_matchset(), dbpl[1], dbpl[0].race)
         base['fmu_w_b'], base['fmu_l_b'] = count_matchup_player(
-            dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=4)), 
+            dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), 
             dbpl[1], dbpl[0].race
         )
     wa_a, wb_a = count_winloss_games(Match.objects.filter(pla=dbpl[0], plb=dbpl[1]))

@@ -70,47 +70,67 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
         </tr>
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
+            {% if tot_w_a|pctg_add_f:tot_l_a > tot_w_b|pctg_add_f:tot_l_b %}<strong>{% endif %}
                 {{ tot_w_a }}–{{ tot_l_a }} ({{ tot_w_a|pctg_add:tot_l_a }}%)
+            {% if tot_w_a|pctg_add_f:tot_l_a > tot_w_b|pctg_add_f:tot_l_b %}</strong>{% endif %}
             </td>
             <td style="text-align: center;" colspan="3">Historical score</td>
             <td style="padding-left: 2em;">
+            {% if tot_w_a|pctg_add_f:tot_l_a < tot_w_b|pctg_add_f:tot_l_b %}<strong>{% endif %}
                 ({{ tot_w_b|pctg_add:tot_l_b }}%) {{ tot_w_b }}–{{ tot_l_b }} 
+            {% if tot_w_a|pctg_add_f:tot_l_a < tot_w_b|pctg_add_f:tot_l_b %}</strong>{% endif %}
             </td>
         </tr>
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
+            {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
                 {{ mu_w_a }}–{{ mu_l_a }} ({{ mu_w_a|pctg_add:mu_l_a }}%)
+            {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
             </td>
             <td style="text-align: center;" colspan="3">Score vs. opposing race</td>
             <td style="padding-left: 2em;">
+            {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
                 ({{ mu_w_b|pctg_add:mu_l_b }}%) {{ mu_w_b }}–{{ mu_l_b }} 
+            {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
             </td>
         </tr>
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
+            {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}<strong>{% endif %}
                 {{ frm_w_a }}–{{ frm_l_a }} ({{ frm_w_a|pctg_add:frm_l_a }}%)
+            {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}</strong>{% endif %}
             </td>
             <td style="text-align: center;" colspan="3">Form</td>
             <td style="padding-left: 2em;">
+            {% if frm_w_a|pctg_add_f:frm_l_a < frm_w_b|pctg_add_f:frm_l_b %}<strong>{% endif %}
                 ({{ frm_w_b|pctg_add:frm_l_b }}%) {{ frm_w_b }}–{{ frm_l_b }} 
+            {% if frm_w_a|pctg_add_f:frm_l_a < frm_w_b|pctg_add_f:frm_l_b %}</strong>{% endif %}
             </td>
         </tr>
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
+            {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}<strong>{% endif %}
                 {{ fmu_w_a }}–{{ fmu_l_a }} ({{ fmu_w_a|pctg_add:fmu_l_a }}%)
+            {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}</strong>{% endif %}
             </td>
             <td style="text-align: center;" colspan="3">Form vs. opposing race</td>
             <td style="padding-left: 2em;">
+            {% if fmu_w_a|pctg_add_f:fmu_l_a < fmu_w_b|pctg_add_f:fmu_l_b %}<strong>{% endif %}
                 ({{ fmu_w_b|pctg_add:fmu_l_b }}%) {{ fmu_w_b }}–{{ fmu_l_b }} 
+            {% if fmu_w_a|pctg_add_f:fmu_l_a < fmu_w_b|pctg_add_f:fmu_l_b %}</strong>{% endif %}
             </td>
         </tr>
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
+            {% if vs_a > vs_b %}<strong>{% endif %}
                 {{ vs_a }}–{{ vs_b }} ({{ vs_a|pctg_add:vs_b }}%)
+            {% if vs_a > vs_b %}</strong>{% endif %}
             </td>
             <td style="text-align: center;" colspan="3">Score vs. each other</td>
             <td style="padding-left: 2em;">
+            {% if vs_a < vs_b %}<strong>{% endif %}
                 ({{ vs_b|pctg_add:vs_a }}%) {{ vs_b }}–{{ vs_a }} 
+            {% if vs_a < vs_b %}</strong>{% endif %}
             </td>
         </tr>
     </table>

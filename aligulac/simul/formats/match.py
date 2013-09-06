@@ -44,6 +44,9 @@ class Match(Format):
         self._loser_links.append((target, slot))
         target.add_dependency(self)
 
+    def get_result(self):
+        return self._result
+
     def can_modify(self):
         if not self.is_ready():
             return False

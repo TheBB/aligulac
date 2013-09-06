@@ -4,7 +4,6 @@ from functools import partial
 from math import sqrt
 
 from django import forms
-from django.core.exceptions import ValidationError
 from django.db.models import Sum, Q, Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
@@ -26,16 +25,20 @@ from aligulac.settings import INACTIVE_THRESHOLD
 from ratings.models import (
     GAMES,
     Match,
+    P,
     Period,
     Player,
     RACES,
     Rating,
+    T,
     TLPD_DBS,
+    Z,
 )
 from ratings.tools import (
     add_counts,
     cdf,
-    count_winloss_games,
+    count_winloss_player,
+    count_matchup_player,
     display_matches,
     filter_flags,
     get_placements,
@@ -226,15 +229,6 @@ def player(request, player_id):
 
     # {{{ Various easy data
     matches = player.get_matchset()
-    matches_a, matches_b = split_matchset(matches, player)
-    w_tot_a, l_tot_a = count_winloss_games(matches_a)
-    l_tot_b, w_tot_b = count_winloss_games(matches_b)
-    w_vp_a, l_vp_a   = count_winloss_games(matches_a.filter(rcb = Player.P))
-    l_vp_b, w_vp_b   = count_winloss_games(matches_b.filter(rca = Player.P))
-    w_vt_a, l_vt_a   = count_winloss_games(matches_a.filter(rcb = Player.T))
-    l_vt_b, w_vt_b   = count_winloss_games(matches_b.filter(rca = Player.T))
-    w_vz_a, l_vz_a   = count_winloss_games(matches_a.filter(rcb = Player.Z))
-    l_vz_b, w_vz_b   = count_winloss_games(matches_b.filter(rca = Player.Z))
 
     base.update({
         'player':           player,
@@ -246,10 +240,10 @@ def player(request, player_id):
         'aliases':          player.alias_set.all(),
         'earnings':         ntz(player.earnings_set.aggregate(Sum('earnings'))['earnings__sum']),
         'team':             player.get_current_team(),
-        'total':            (w_tot_a + w_tot_b, l_tot_a, l_tot_b),
-        'vp':               (w_vp_a + w_vp_b, l_vp_a, l_vp_b),
-        'vt':               (w_vt_a + w_vt_b, l_vt_a, l_vt_b),
-        'vz':               (w_vz_a + w_vz_b, l_vz_a, l_vz_b),
+        'total':            count_winloss_player(matches, player),
+        'vp':               count_matchup_player(matches, player, P),
+        'vt':               count_matchup_player(matches, player, T),
+        'vz':               count_matchup_player(matches, player, Z),
     })
 
     if player.country is not None:

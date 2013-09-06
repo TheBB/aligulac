@@ -4,13 +4,14 @@ from aligulac.settings import (
     INIT_DEV,
     start_rating,
 )
-from aligulac.tools import ntz
+from aligulac.tools import etn
+
 from ratings.models import (
     Player,
     Rating, 
 )
 from ratings.tools import (
-    etn,
+    cdf,
     get_latest_period,
 )
 
@@ -38,6 +39,8 @@ def make_player(player):
             INIT_DEV, INIT_DEV, INIT_DEV, INIT_DEV,
         )
 
+    pl.dbpl = player
+
     return pl
 
 class Player:
@@ -60,6 +63,9 @@ class Player:
             self.dev = copy.dev
             self.dev_race = copy.dev_race
             self.flag = copy.flag
+
+    def __str__(self):
+        return self.name
 
     def elo_vs_opponent(self, opponent):
         if opponent.race in 'PTZ':

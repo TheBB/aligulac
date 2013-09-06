@@ -143,6 +143,16 @@ def get_param_choice(request, param, choices, default):
         return default
 # }}}
 
+# {{{ get_param_range(request, param, range, default): Returns request.GET[param] as an int, restricted to the
+# range given (a tuple (min,max)), or default if not.
+def get_param_range(request, param, rng, default):
+    try:
+        val = int(request.GET[param])
+        return min(max(val, rng[0]), rng[1])
+    except:
+        return default
+# }}}
+
 # {{{ get_param_date(request, param, default): Converts a GET param to a date.
 def get_param_date(request, param, default):
     param = get_param(request, param, None)
@@ -171,21 +181,21 @@ def post_param(request, param, default):
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
-    menu = [('Ranking', '/periods/%i' % curp.id),
-            ('Teams', '/teams/'),
-            ('Records', '/records/history'),
-            ('Results', '/results/'),
-            ('Reports', '/reports/'),
-            ('Predict', '/predict/'),
-            ('About', '/faq/'),
-            ('Submit', '/add/')]
+    menu = [('Ranking',    '/periods/%i' % curp.id),
+            ('Teams',      '/teams/'),
+            ('Records',    '/records/history'),
+            ('Results',    '/results/'),
+            ('Reports',    '/reports/'),
+            ('Inference',  '/inference/'),
+            ('About',      '/faq/'),
+            ('Submit',     '/add/')]
 
     base = {
-        'curp': curp,
-        'menu': menu,
-        'debug': DEBUG,
-        'cur_path': request.get_full_path(),
-        'messages': [],
+        'curp':      curp,
+        'menu':      menu,
+        'debug':     DEBUG,
+        'cur_path':  request.get_full_path(),
+        'messages':  [],
     }
     base.update(csrf(request))
 
@@ -226,10 +236,10 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['submenu'] = [('Current', '/periods/%i' % curp.id),
                            ('History', '/periods/'),
                            ('Earnings', '/earnings/')]
-    elif section == 'Predict':
-        base['submenu'] = [('Predict', '/predict/'),
+    elif section == 'Inference':
+        base['submenu'] = [('Predict', '/inference/'),
                            #('Factoids', '/factoids/'),
-                           ('Compare', '/compare/')]
+                           ('Compare', '/inference/compare/')]
     elif section == 'About':
         base['submenu'] = [('FAQ', '/faq/'),
                            ('Blog', '/blog/'),

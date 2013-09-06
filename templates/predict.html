@@ -5,6 +5,7 @@ This is the main prediction page, showing all available options. It's called fro
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}Predict{% endblock %}
 
@@ -13,42 +14,25 @@ This is the main prediction page, showing all available options. It's called fro
 
     {% include "messages.html" %}
 
-    <form method="get" action="/predict/">
-    <div class="table" style="width: 50em;">
-        <div class="row">
-            <div class="rowel" style="width: 10em;">Format</div>
-            <div class="rower" style="width: 40em;">
-                <select name="format" style="width: 20em;"
-                    onchange="format_change(this);">
-                    {% for format in formats %}
-                    <option value="{{ forloop.counter0 }}"
-                        {% if forloop.counter0 == fmt %}selected{% endif %}>{{ format }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">Best of</div>
-            <div class="rower">
-                <input name="bo" style="width: 20em;" value="{{ bo|default:"1" }}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel" style="vertical-align: top;">Players</div>
-            <div class="rower">
-                <textarea id="players" name="players" rows="10" style="width: 40em;">{{ pls }}</textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel"></div>
-            <div class="rower">
-                <input type="submit" value="Show me the future!" /> 
+    
+    <form method="get" action="/inference/">
+    <table class="bigform">
+    {% form "forms.html" %}
+        {% use "hidden" name="submitted" value="" %}
+        {% field "select"       form.format     class="wideinput" %}
+        {% field "basic"        form.bestof     class="wideinput" %}
+        {% field "textarea"     form.players    class="wideinput" rows="10" %}
+        <tr>
+            <td class="form_left"></td>
+            <td class="form_right">
+                <input type="submit" value="Show me the future!" />
                 <input type="submit" value="Parse Liquipedia Bracket!"
                 onclick="parseLP(); return false;" id="lp_button"
                 style="display:none;" />
-            </div>
-        </div>
-    </div>
+            </td>
+        </tr>
+    {% endform %}
+    </table>
     </form>
 
     <p>Enter one player per line. The player information must uniquely identify the player, and should be

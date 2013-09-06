@@ -6,10 +6,10 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
 
 {% load ratings_extras %}
 
-{% block title %}{{ p1.tag }} vs. {{ p2.tag }}{% endblock %}
+{% block title %}{{ dbpl.0.tag }} vs. {{ dbpl.1.tag }}{% endblock %}
 
 {% block content %}
-    <h2>{{ p1.tag }} vs. {{ p2.tag }}</h2>
+    <h2>{{ dbpl.0.tag }} vs. {{ dbpl.1.tag }}</h2>
 
     <p>Verdict: 
     {% if   max <= 0.55 %}Even chances.
@@ -18,203 +18,128 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
     {% elif max <= 0.90 %}Large advantage for {{ fav.tag }}.
     {% else %}Overwhelming advantage for {{ fav.tag }}.{% endif %}</p>
 
-    <br/>
-
-    <div class="table" style="width: 30em;">
-        <div class="row">
-            <div class="rowel">&nbsp;</div>
-            <div class="rower">
-                <u>{{ p1.tag }}</u>
-            </div>
-            <div class="rower">
-                <u>{{ p2.tag }}</u>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="rowel" style="width: 10em;">Overall</div>
-            <div class="rower" style="width: 10em">
-                {% if w1.total %}
-                    {{ w1.total.0 }}/{{ w1.total.1|add:w1.total.0 }}
-                    <span class="small">({{ w1.total.0|pctg:w1.total.1 }}%)</span>
-                {% endif %}
-            </div>
-            <div class="rower" style="width: 10em">
-                {% if w2.total %}
-                    {{ w2.total.0 }}/{{ w2.total.1|add:w2.total.0 }}
-                    <span class="small">({{ w2.total.0|pctg:w2.total.1 }}%)</span>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">vP</div>
-            <div class="rower">
-                {% if w1.vp %}
-                    <font style="
-                    {% if w1.vp.0|pctg:w1.vp.1 == w1.max and w1.max > 0 %}color:green;
-                    {% elif w1.vp.0|pctg:w1.vp.1 == w1.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p2.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w1.vp.0 }}/{{ w1.vp.1|add:w1.vp.0 }}
-                    <span class="small">({{ w1.vp.0|pctg:w1.vp.1 }}%)</span>
-                    </font>
-                {% endif %}
-            </div>
-            <div class="rower">
-                {% if w2.vp %}
-                    <font style="
-                    {% if w2.vp.0|pctg:w2.vp.1 == w2.max and w2.max > 0 %}color:green;
-                    {% elif w2.vp.0|pctg:w2.vp.1 == w2.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p1.race == "P" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w2.vp.0 }}/{{ w2.vp.1|add:w2.vp.0 }}
-                    <span class="small">({{ w2.vp.0|pctg:w2.vp.1 }}%)</span>
-                </font>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">vT</div>
-            <div class="rower">
-                {% if w1.vt %}
-                    <font style="
-                    {% if w1.vt.0|pctg:w1.vt.1 == w1.max and w1.max > 0 %}color:green;
-                    {% elif w1.vt.0|pctg:w1.vt.1 == w1.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p2.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w1.vt.0 }}/{{ w1.vt.1|add:w1.vt.0 }}
-                    <span class="small">({{ w1.vt.0|pctg:w1.vt.1 }}%)</span>
-                    </font>
-                {% endif %}
-            </div>
-            <div class="rower">
-                {% if w2.vt %}
-                    <font style="
-                    {% if w2.vt.0|pctg:w2.vt.1 == w2.max and w2.max > 0 %}color:green;
-                    {% elif w2.vt.0|pctg:w2.vt.1 == w2.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p1.race == "T" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w2.vt.0 }}/{{ w2.vt.1|add:w2.vt.0 }}
-                    <span class="small">({{ w2.vt.0|pctg:w2.vt.1 }}%)</span>
-                </font>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">vZ</div>
-            <div class="rower">
-                {% if w1.vz %}
-                    <font style="
-                    {% if w1.vz.0|pctg:w1.vz.1 == w1.max and w1.max > 0 %}color:green;
-                    {% elif w1.vz.0|pctg:w1.vz.1 == w1.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p2.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w1.vz.0 }}/{{ w1.vz.1|add:w1.vz.0 }}
-                    <span class="small">({{ w1.vz.0|pctg:w1.vz.1 }}%)</span>
-                    </font>
-                {% endif %}
-            </div>
-            <div class="rower">
-                {% if w2.vz %}
-                    <font style="
-                    {% if w2.vz.0|pctg:w2.vz.1 == w2.max and w2.max > 0 %}color:green;
-                    {% elif w2.vz.0|pctg:w2.vz.1 == w2.min %}color:firebrick;{% endif %}
-                    {% comment %}{% if p1.race == "Z" %}font-weight:bold;{% endif %}{% endcomment %}
-                    ">
-                    {{ w2.vz.0 }}/{{ w2.vz.1|add:w2.vz.0 }}
-                    <span class="small">({{ w2.vz.0|pctg:w2.vz.1 }}%)</span>
-                </font>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">Each Other</div>
-            <div class="rower">
-                {% if w1.vo %}
-                    {{ w1.vo.0 }}/{{ w1.vo.1|add:w1.vo.0 }}
-                    <span class="small">({{ w1.vo.0|pctg:w1.vo.1 }}%)</span>
-                {% endif %}
-            </div>
-            <div class="rower">
-                {% if w2.vo %}
-                    {{ w2.vo.0 }}/{{ w2.vo.1|add:w2.vo.0 }}
-                    <span class="small">({{ w2.vo.0|pctg:w2.vo.1 }}%)</span>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <br/><br/>
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh2">
-            <div class="rowe" style="width: 26em; text-align: right;">
-                ({{ r1|ratscale }}) <a href="/players/{{ p1.id }}-{{ p1.tag|urlfilter }}/">{{ p1.tag }}</a>
-            </div>
-            <div class="rowe" style="width: 5em;">
-                <img src="{{ p1.country|lower|imgfolder:"flags"|static }}" alt="{{ p1.country }}" />
-                <img src="{{ p1.race|imgfolder|static }}" alt="{{ p1.race|racefull }}" class="btm" />
-            </div>
-            <div class="rowe" style="width: 5em; text-align: center;">{{ s1 }}–{{ s2 }}</div>
-            <div class="rowe" style="width: 5em; text-align: right;">
-                <img src="{{ p2.race|imgfolder|static }}" alt="{{ p2.race|racefull }}" class="btm" />
-                <img src="{{ p2.country|lower|imgfolder:"flags"|static }}" alt="{{ p2.country }}" />
-            </div>
-            <div class="rowe" style="width: 26em;">
-                <a href="/players/{{ p2.id }}-{{ p2.tag|urlfilter }}/">{{ p2.tag }}</a> ({{ r2|ratscale }})
-            </div>
-        </div>
+    <table class="results" style="width: 67em;">
+        <tr class="header">
+            <td style="width: 26em; text-align: right;">
+                ({{ rta|ratscale }}) 
+                <a href="/players/{{ dbpl.0.id }}-{{ dbpl.0.tag|urlfilter }}/">
+                    {{ dbpl.0.tag }}</a>
+            </td>
+            <td style="width: 5em;">
+                <img src="{{ dbpl.0.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.0.country }}" />
+                <img src="{{ dbpl.0.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.0.race|racefull }}" class="btm" />
+            </td>
+            <td style="width: 5em; text-align: center;">
+                {{ match.get_result.0 }}–{{ match.get_result.1 }}
+            </td>
+            <td style="width: 5em; text-align: right;">
+                <img src="{{ dbpl.1.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.1.race|racefull }}" class="btm" />
+                <img src="{{ dbpl.1.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.1.country }}" />
+            </td>
+            <td style="width: 26em;">
+                <a href="/players/{{ dbpl.1.id }}-{{ dbpl.1.tag|urlfilter }}/">
+                    {{ dbpl.1.tag }}</a>
+                ({{ rtb|ratscale }})
+            </td>
+        </tr>
         {% for r in res %}
         {% if r.0 or r.1 %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right; padding-right: 2em;">
-                {% if r.0 %}{{ r.0.2|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: left;">
-                {% if r.0 %}{{ r.0.0 }}–{{ r.0.1 }}{% endif %}
-            </div>
-            <div class="rowe"></div>
-            <div class="rowe" style="text-align: right;">
-                {% if r.1 %}{{ r.1.0 }}–{{ r.1.1 }}{% endif %}
-            </div>
-            <div class="rowe" style="padding-left: 2em;">
-                {% if r.1 %}{{ r.1.2|prob }}%{% endif %}
-            </div>
-        </div>
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+            <td style="text-align: right; padding-right: 2em;">
+                {% if r.0 %}{{ r.0.prob|pctg_one }}%{% endif %}
+            </td>
+            <td style="text-align: left;">
+                {% if r.0 %}{{ r.0.sca }}–{{ r.0.scb }}{% endif %}
+            </td>
+            <td></td>
+            <td style="text-align: right;">
+                {% if r.1 %}{{ r.1.sca }}–{{ r.1.scb }}{% endif %}
+            </td>
+            <td style="padding-left: 2em;">
+                {% if r.1 %}{{ r.1.prob|pctg_one }}%{% endif %}
+            </td>
+        </tr>
         {% endif %}
         {% endfor %}
-        <div class="rowh">
-            <div class="rowe" style="text-align: right; padding-right: 2em;">{{ t1|prob }}%</div>
-            <div class="rowe"></div>
-            <div class="rowe"></div>
-            <div class="rowe"></div>
-            <div class="rowe" style="padding-left: 2em;">{{ t2|prob }}%</div>
-        </div>
-    </div>
+        <tr class="header">
+            <td style="text-align: right; padding-right: 2em;">{{ proba|pctg_one }}%</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="padding-left: 2em;">{{ probb|pctg_one }}%</td>
+        </tr>
+        <tr class="nonheader row2">
+            <td style="text-align: right; padding-right: 2em;">
+                {{ tot_w_a }}–{{ tot_l_a }} ({{ tot_w_a|pctg_add:tot_l_a }}%)
+            </td>
+            <td style="text-align: center;" colspan="3">Historical score</td>
+            <td style="padding-left: 2em;">
+                ({{ tot_w_b|pctg_add:tot_l_b }}%) {{ tot_w_b }}–{{ tot_l_b }} 
+            </td>
+        </tr>
+        <tr class="nonheader row1">
+            <td style="text-align: right; padding-right: 2em;">
+                {{ mu_w_a }}–{{ mu_l_a }} ({{ mu_w_a|pctg_add:mu_l_a }}%)
+            </td>
+            <td style="text-align: center;" colspan="3">Score vs. opposing race</td>
+            <td style="padding-left: 2em;">
+                ({{ mu_w_b|pctg_add:mu_l_b }}%) {{ mu_w_b }}–{{ mu_l_b }} 
+            </td>
+        </tr>
+        <tr class="nonheader row2">
+            <td style="text-align: right; padding-right: 2em;">
+                {{ frm_w_a }}–{{ frm_l_a }} ({{ frm_w_a|pctg_add:frm_l_a }}%)
+            </td>
+            <td style="text-align: center;" colspan="3">Form</td>
+            <td style="padding-left: 2em;">
+                ({{ frm_w_b|pctg_add:frm_l_b }}%) {{ frm_w_b }}–{{ frm_l_b }} 
+            </td>
+        </tr>
+        <tr class="nonheader row1">
+            <td style="text-align: right; padding-right: 2em;">
+                {{ fmu_w_a }}–{{ fmu_l_a }} ({{ fmu_w_a|pctg_add:fmu_l_a }}%)
+            </td>
+            <td style="text-align: center;" colspan="3">Form vs. opposing race</td>
+            <td style="padding-left: 2em;">
+                ({{ fmu_w_b|pctg_add:fmu_l_b }}%) {{ fmu_w_b }}–{{ fmu_l_b }} 
+            </td>
+        </tr>
+        <tr class="nonheader row2">
+            <td style="text-align: right; padding-right: 2em;">
+                {{ vs_a }}–{{ vs_b }} ({{ vs_a|pctg_add:vs_b }}%)
+            </td>
+            <td style="text-align: center;" colspan="3">Score vs. each other</td>
+            <td style="padding-left: 2em;">
+                ({{ vs_b|pctg_add:vs_a }}%) {{ vs_b }}–{{ vs_a }} 
+            </td>
+        </tr>
+    </table>
 
     <h3>Update match progress</h3>
 
-    <form method="get" action="/predict/match/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-        <div class="table" style="width: 30em;">
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Score for {{ p1.tag }}</div>
-                <div class="rower" style="width: 15em;">
-                    <input name="s1" type="text" style="width: 150px;" value="{{ s1 }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Score for {{ p2.tag }}</div>
-                <div class="rower">
-                    <input name="s2" type="text" style="width: 150px;" value="{{ s2 }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel"></div>
-                <div class="rower">
-                    <input type="submit" value="Update" />
-                </div>
-            </div>
-        </div>
+    <form method="get" action="/inference/match/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <table class="bigform">
+        <tr>
+            <td class="form_left">Score for {{ dbpl.0.tag }}</td>
+            <td class="form_right">
+                <input name="s1" type="text" class="narrowform" value="{{ match.get_result.0 }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left">Score for {{ dbpl.1.tag }}</td>
+            <td class="form_right">
+                <input name="s2" type="text" class="narrowform" value="{{ match.get_result.1 }}" />
+            </td>
+        </tr>
+        <tr>
+            <td class="form_left"></td>
+            <td class="form_right">
+                <input type="submit" value="Update" />
+            </td>
+        </tr>
+    </table>
     </form>
 
     <script type="text/javascript">

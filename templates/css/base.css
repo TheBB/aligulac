@@ -108,12 +108,12 @@ div.rowh a:hover {
 
 div.rowh2 a {
     color: #ffffff;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 div.rowh2 a:hover {
     color: #bbbbbb;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 div.rowevent a {
@@ -138,6 +138,7 @@ div.table div.rowh2 {
     color: #ffffff;
     font-weight: bold;
     font-variant: small-caps;
+    font-family: 'Marcellus SC';
 }
 
 div.table div.rowe {

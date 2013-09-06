@@ -249,10 +249,24 @@ def count_winloss_games(queryset):
     return ntz(agg['sca__sum']), ntz(agg['scb__sum'])
 # }}}
 
+# {{{ count_winloss_player(queryset, player): Counts wins and losses over a queryset for a given player.
+def count_winloss_player(queryset, player):
+    wa, la = count_winloss_games(queryset.filter(pla=player))
+    lb, wb = count_winloss_games(queryset.filter(plb=player))
+    return wa+wb, la+lb
+# }}}
+
 # {{{ count_matchup_games: Gets the matchup W-L data for a queryset.
 def count_matchup_games(queryset, rca, rcb):
     wa, la = count_winloss_games(queryset.filter(rca=rca, rcb=rcb))
     lb, wb = count_winloss_games(queryset.filter(rca=rcb, rcb=rca))
+    return wa+wb, la+lb
+# }}}
+
+# {{{ count_matchup_player: Gets the matcup W-L data for a queryset for a given player.
+def count_matchup_player(queryset, player, race):
+    wa, la = count_winloss_games(queryset.filter(pla=player, rcb=race))
+    lb, wb = count_winloss_games(queryset.filter(plb=player, rca=race))
     return wa+wb, la+lb
 # }}}
 

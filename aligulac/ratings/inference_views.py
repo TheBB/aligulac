@@ -23,6 +23,7 @@ from ratings.models import (
     Match,
     Player,
 )
+from ratings.templatetags.ratings_extras import ratscale
 from ratings.tools import (
     count_matchup_player,
     count_winloss_games,
@@ -256,29 +257,26 @@ def match(request):
         resa = [None] * (len(resb) - len(resa)) + resa
     else:
         resb = [None] * (len(resa) - len(resb)) + resb
-    base['res'] = zip(resa, resb)
+    base['res'] = list(zip(resa, resb))
     # }}}
 
     # {{{ Scores and other data
-    base['tot_w_a'], base['tot_l_a'] = count_winloss_player(dbpl[0].get_matchset(), dbpl[0])
-    base['frm_w_a'], base['frm_l_a'] = count_winloss_player(
-        dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), dbpl[0]
-    )
-    base['tot_w_b'], base['tot_l_b'] = count_winloss_player(dbpl[1].get_matchset(), dbpl[1])
-    base['frm_w_b'], base['frm_l_b'] = count_winloss_player(
-        dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), dbpl[1]
-    )
+    thr = date.today() - relativedelta(months=2)
+    pla_matches = dbpl[0].get_matchset()
+    plb_matches = dbpl[1].get_matchset()
+    base['tot_w_a'], base['tot_l_a'] = count_winloss_player(pla_matches, dbpl[0])
+    base['frm_w_a'], base['frm_l_a'] = count_winloss_player(pla_matches.filter(date__gte=thr), dbpl[0])
+    base['tot_w_b'], base['tot_l_b'] = count_winloss_player(plb_matches, dbpl[1])
+    base['frm_w_b'], base['frm_l_b'] = count_winloss_player(plb_matches.filter(date__gte=thr), dbpl[1])
     if dbpl[1].race in 'PTZ':
-        base['mu_w_a'], base['mu_l_a'] = count_matchup_player(dbpl[0].get_matchset(), dbpl[0], dbpl[1].race)
+        base['mu_w_a'], base['mu_l_a'] = count_matchup_player(pla_matches, dbpl[0], dbpl[1].race)
         base['fmu_w_a'], base['fmu_l_a'] = count_matchup_player(
-            dbpl[0].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)),
-            dbpl[0], dbpl[1].race
+            pla_matches.filter(date__gte=thr), dbpl[0], dbpl[1].race
         )
     if dbpl[0].race in 'PTZ':
-        base['mu_w_b'], base['mu_l_b'] = count_matchup_player(dbpl[1].get_matchset(), dbpl[1], dbpl[0].race)
+        base['mu_w_b'], base['mu_l_b'] = count_matchup_player(plb_matches, dbpl[1], dbpl[0].race)
         base['fmu_w_b'], base['fmu_l_b'] = count_matchup_player(
-            dbpl[1].get_matchset().filter(date__gte=date.today()-relativedelta(months=2)), 
-            dbpl[1], dbpl[0].race
+            plb_matches.filter(date__gte=thr), dbpl[1], dbpl[0].race
         )
     wa_a, wb_a = count_winloss_games(Match.objects.filter(pla=dbpl[0], plb=dbpl[1]))
     wb_b, wa_b = count_winloss_games(Match.objects.filter(pla=dbpl[1], plb=dbpl[0]))
@@ -286,5 +284,113 @@ def match(request):
     base['vs_b'] = wb_a + wb_b
     # }}}
 
+    postable_match(base)
+
     return render_to_response('pred_match.html', base)
+# }}}
+
+# {{{ Postables
+
+# {{{ Headers and footers
+TL_HEADER = '[center][code]'
+TL_FOOTER = (
+    '[/code][/center]\n'
+    '[small]Esimated by [url=http://aligulac.com/]Aligulac[/url]. '
+    '[url=%s]Modify[/url].[/small]'
+)
+
+REDDIT_HEADER = ''
+REDDIT_FOOTER = '\n\n^(Estimated by) [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
+# }}}
+
+# {{{ left_center_right(strings, gap=2, justify=True, indent=0): Aid for pretty-printing tables
+# Takes a list of triples (strings), each element a line with left, center and right entries.
+# gap: The number of spaces between columns
+# justify: If true, makes the left and right columns equally wide
+# indent: Extra indentation to add to the left
+def left_center_right(strings, gap=2, justify=True, indent=0):
+    width = lambda i: max([len(s[i]) for s in strings if s is not None])
+    width_l = width(0) + 4
+    width_c = width(1)
+    width_r = width(2) + 4
+
+    if justify:
+        width_l = max(width_l, width_r)
+        width_r = width_l
+
+    width_l += indent
+
+    out = []
+    for s in strings:
+        if s is None:
+            out.append(' '*indent + '-'*(width_l + width_r + width_c + 2*gap - indent))
+            continue
+
+        R = (width_c - len(s[1])) // 2
+        L = width_c - len(s[1]) - R
+        out.append(
+              ' '*(width_l-len(s[0])) + s[0]
+            + ' '*(L+gap) + s[1] + ' '*(R+gap) 
+            + s[2] + ' '*(width_r-len(s[2]))
+        )
+
+    return '\n'.join(out)
+# }}}
+
+# {{{ postable_match
+def postable_match(base):
+    pla = base['match'].get_player(0)
+    plb = base['match'].get_player(1)
+
+    numlen = len(str(base['match'].get_num()))
+
+    strings = [(
+        '({rat}) {name}'.format(rat=ratscale(pla.elo_vs_opponent(plb)), name=pla.name),
+        '{sca: >{nl}}-{scb: <{nl}}'.format(
+            sca=base['match'].get_result()[0],
+            scb=base['match'].get_result()[1],
+            nl=numlen
+        ),
+        '{name} ({rat})'.format(rat=ratscale(plb.elo_vs_opponent(pla)), name=plb.name),
+    ), None]
+
+    for resa, resb in base['res']:
+        L = ('{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(
+            pctg=100*resa['prob'], sca=resa['sca'], scb=resa['scb'], nl=numlen
+        ) if resa else None)
+        R = ('{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(
+            pctg=100*resb['prob'], sca=resb['sca'], scb=resb['scb'], nl=numlen
+        ) if resb else None)
+        strings.append((L, '', R))
+
+    strings += [None, (
+        '{pctg: >6.2f}%'.format(pctg=100*base['proba']), '',
+        '{pctg: >6.2f}%'.format(pctg=100*base['probb']),
+    )]
+
+    median = base['match'].find_lsup()
+    url = (
+        'http://aligulac.com/inference/match/?bo=%s&ps=%s'
+        % (base['form']['bo'].value(), base['form']['ps'].value())
+    )
+
+    print(strings)
+
+    base['postable_tl'] = (
+          TL_HEADER
+        + left_center_right(strings)
+        + ('\n\nMedian outcome: {pla} {sca}-{scb} {plb}'.format(
+            pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
+        + TL_FOOTER % url
+    )
+
+    base['postable_reddit'] = (
+          REDDIT_HEADER 
+        + left_center_right(strings, justify=False, indent=4) 
+        + ('\n\n    Median outcome: {pla} {sca}-{scb} {plb}'.format(
+            pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
+        + REDDIT_FOOTER % url
+    )
+# }}}
+
 # }}}

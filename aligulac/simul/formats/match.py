@@ -47,6 +47,9 @@ class Match(Format):
     def get_result(self):
         return self._result
 
+    def get_num(self):
+        return self._num
+
     def can_modify(self):
         if not self.is_ready():
             return False

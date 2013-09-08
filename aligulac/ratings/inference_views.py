@@ -547,6 +547,8 @@ def rrgroup(request):
     base['mplayers'] = group.table
     # }}}
 
+    postable_rrgroup(base, request)
+
     return render_to_response('pred_rrgroup.html', base)
 # }}}
 
@@ -572,6 +574,18 @@ TL_FOOTER = (
 REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^(Estimated by) [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
 # }}}
+
+# {{{ ordinal: Converts an integer to its ordinal (string) representation
+def ordinal(value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        return value
+    suffixes = ('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th')
+    if value % 100 in (11, 12, 13):
+        return "%d%s" % (value, suffixes[0])
+    return "%d%s" % (value, suffixes[value % 10])
+## }}}
 
 # {{{ left_center_right(strings, gap=2, justify=True, indent=0): Aid for pretty-printing tables
 # Takes a list of triples (strings), each element a line with left, center and right entries.
@@ -771,6 +785,34 @@ def create_postable_bracket(bracket, indent=0):
         postable_result += ' '*indent + ''.join(block[line] for block in result if line < len(block)) + '\n'
 
     return postable_result.rstrip()
+# }}}
+
+# {{{ postable_rrgroup
+def postable_rrgroup(base, request):
+    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+
+    strings = [(''.join([
+        ('{s: <9}'.format(s=ordinal(i+1)) if i < len(base['players'])-1 else ordinal(i+1))
+        for i in range(0, len(base['players']))
+    ]), '', ''), None]
+
+    for p in base['players']:
+        strings.append((''.join(
+            ['{name: >{nl}}  '.format(name=p.dbpl.tag if p.dbpl is not None else 'BYE', nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+        ), '', ''))
+
+    base['postable_tl'] = (
+          TL_HEADER
+        + left_center_right(strings, justify=False, gap=0)
+        + TL_FOOTER % request.build_absolute_uri()
+    )
+
+    base['postable_reddit'] = (
+          REDDIT_HEADER
+        + left_center_right(strings, justify=False, gap=0, indent=4)
+        + REDDIT_FOOTER % request.build_absolute_uri()
+    )
 # }}}
 
 # }}}

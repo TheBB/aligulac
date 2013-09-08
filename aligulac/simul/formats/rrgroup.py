@@ -147,16 +147,12 @@ class RRGroup(Composite):
         gens = [m.instances_detail() for m in self._matches]
         total = 0
         for instances in itertools.product(*gens):
-            print('#### TRYING ####')
-            for i in instances:
-                print('  ', i[3].name, '>', i[4].name)
             base = 1
             for inst in instances:
                 base *= inst[0]
             if self.compute_instances(instances, base):
                 total += base
 
-        print('Total:', total)
         for t in self._tally.values():
             t.scale(total)
 
@@ -177,7 +173,6 @@ class RRGroup(Composite):
         if table != False:
             return True
         else:
-            print('   >>> :( Returning False')
             return False
 
     def compute_table(self, instances, prob=1):
@@ -219,8 +214,6 @@ class RRGroup(Composite):
         or tie[0] == 'imscore' or tie[0] == 'isscore' or tie[0] == 'iswins':
             key = attrgetter('temp_' + tie[0])
             table = sorted(table, key=key, reverse=True)
-
-            print('   #### TIEBREAK: ' + tie[0] + ' ####')
 
             keyval = key(table[0])
             keyind = 0

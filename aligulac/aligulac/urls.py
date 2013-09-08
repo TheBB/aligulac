@@ -50,6 +50,7 @@ urlpatterns = patterns('',
 
     url(r'^inference/$', 'ratings.inference_views.predict'),
     url(r'^inference/match/$', 'ratings.inference_views.match'),
+    url(r'^inference/dual/$', 'ratings.inference_views.dual'),
 
     url(r'^reports/$', 'ratings.reports_views.balance'),
     url(r'^reports/balance/$', 'ratings.reports_views.balance'),

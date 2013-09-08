@@ -18,6 +18,18 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% load ratings_extras %}
 
+{% if lm_predict %}
+    <script type="text/javascript">
+    <!--
+    function lm_toggle_visibility(id)
+    {
+        document.getElementById("fix" + id).style.display = 'none';
+        document.getElementById("inp" + id).style.display = 'inline';
+    }
+    //-->
+    </script>
+{% endif %}
+
 {% if lm_header == "info" %}
     <tr class="header">
         <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
@@ -70,9 +82,9 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <tr class="header">
         <td colspan="5">
             {% if m.match.eventobj %} ▸
-            	{% with event=m.match.eventobj.get_event_event %}
-            	<a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter}}">{{ event.fullname }}</a>
-            	{% endwith %}
+                {% with event=m.match.eventobj.get_event_event %}
+                <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter}}">{{ event.fullname }}</a>
+                {% endwith %}
             {% elif m.match.event %}
                 {{ m.match.event }}
             {% elif m.match.group.event %}
@@ -95,6 +107,22 @@ NB! The calling code is responsible for starting and ending the HTML table:
     </tr>
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
     {% endifchanged %}
+{% elif lm_header == "custom" %}
+    {% ifchanged m.eventtext %}
+    {% if not forloop.first %}</tbody>{% endif %}
+    <tr class="header">
+        <td colspan="5">
+            {{ m.eventtext }}
+        </td>
+        <td colspan="2" style="text-align: right;">
+            <a id="lma-{{ m.match_id }}" href="#"
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
+                {% if lm_autohide %}show{% else %}hide{% endif %}
+            </a>
+        </td>
+    </tr>
+    <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+    {% endifchanged %}
 {% endif %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
     <td class="lm_date">
@@ -104,7 +132,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% if m.pla_rating %}{{ m.pla_rating|ratscale }}{% endif %}
     </td>
     <td class="lm_pla">
-        {% if m.pla_score > m.plb_score %}<strong>{% endif %}
+        {% if m.pla_score > m.plb_score and not m.unfixed %}<strong>{% endif %}
         {% if m.pla_id %}<a href="/players/{{ m.pla_id }}-{{ m.pla_tag|urlfilter }}/">{% endif %}
         {% if not m.pla_id and lm_adm %}
             <input type="text" class="player" name="match-{{ m.match_id }}-pla" 
@@ -117,10 +145,24 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% if m.pla_race %}
             <img src="{{ m.pla_race|imgfolder|static }}" alt="{{ m.pla_race }}" class="btm" />
         {% endif %}
-        {% if m.pla_score > m.plb_score %}</strong>{% endif %}
+        {% if m.pla_score > m.plb_score and not m.unfixed %}</strong>{% endif %}
     </td>
     <td class="lm_score">
-        {{ m.pla_score }}–{{ m.plb_score }}
+        {% if lm_predict %}
+            <span id="fix{{ m.identifier }}">
+                <a href="#" onclick="lm_toggle_visibility('{{ m.identifier }}'); return false;">
+                    {{ m.pla_score }}–{{ m.plb_score }}
+                </a>
+            </span>
+            <span id="inp{{ m.identifier }}" style="display: none;">
+                <input type="text" name="{{ m.identifier }}_1" style="text-align: right; width: 1.5em;"
+                    value="{{ m.pla_score }}" />
+                <input type="text" name="{{ m.identifier }}_2" style="width: 1.5em;" 
+                    value="{{ m.plb_score }}" />
+            </span>
+        {% else %}
+            {{ m.pla_score }}–{{ m.plb_score }}
+        {% endif %}
     </td>
     <td class="lm_plb">
         {% if m.plb_score > m.pla_score %}<strong>{% endif %}
@@ -152,7 +194,9 @@ NB! The calling code is responsible for starting and ending the HTML table:
                 {% endif %}
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
-        {% else %}
+        {% elif lm_predict %}
+            <a target="new" href="{{ m.sim|makematchlink|safe }}">→</a>
+        {% elif not lm_noright %}
             {% if m.messages %}
             {% for msg in m.messages %}
                 <img src="{{ msg.type|imgfolder|static }}" class="btm" title="{{ msg.text }}" />
@@ -171,4 +215,4 @@ NB! The calling code is responsible for starting and ending the HTML table:
 </tr>
 {% endfor %}
 
-{% if lm_header == "full" %} </tbody> {% endif %}
+{% if lm_header == "full" or lm_header == "custom" %} </tbody> {% endif %}

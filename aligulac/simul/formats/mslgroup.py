@@ -39,15 +39,15 @@ class MSLGroup(Composite):
 
     def get_match(self, key):
         key = key.split(' ')[0]
-        if key.lower() == 'first':
+        if key.lower() == '1':
             return self._first[0]
-        elif key.lower() == 'second':
+        elif key.lower() == '2':
             return self._first[1]
-        elif key.lower() == 'winners':
+        elif key.lower() == 'w':
             return self._second[0]
-        elif key.lower() == 'losers':
+        elif key.lower() == 'l':
             return self._second[1]
-        elif key.lower() == 'final':
+        elif key.lower() == 'f':
             return self._final
         else:
             raise Exception('No such match found \'' + key + '\'')

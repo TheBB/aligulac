@@ -6,204 +6,106 @@ This is the prediction page for four player Swiss groups. It's called from ratin
 
 {% load ratings_extras %}
 
-{% block title %}Four-player Swiss group{% endblock %}
+{% block title %}Dual tournament{% endblock %}
 
 {% block content %}
-    <h2>Four-player Swiss group</h2>
+<h2>Dual tournament</h2>
 
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh">
-            <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-            <div class="rowe" style="width: 18em;">Player</div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 12.5em; text-align: right;">Top 2</div>
-            <div class="rowe" style="width: 8em; text-align: right;">1st</div>
-            <div class="rowe" style="width: 8em; text-align: right;">2nd</div>
-            <div class="rowe" style="width: 8em; text-align: right;">3rd</div>
-            <div class="rowe" style="width: 8em; text-align: right;">4th</div>
-        </div>
-        {% for p in players %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right;">
-                {{ forloop.counter }}.
-            </div>
-            <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
-            </div>
-            <div class="rowe" style="width: 1em;">
-                {% if p.dbpl.country != "" %}
-                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-                {% endif %}
-            </div>
-            <div class="rowe" style="width: 1em;">
-                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {% if p.tally.2 > 0 or p.tally.3 > 0 %}{{ p.tally.2|addf:p.tally.3|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {% if p.tally.3 > 0 %}{{ p.tally.3|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {% if p.tally.2 > 0 %}{{ p.tally.2|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {% if p.tally.1 > 0 %}{{ p.tally.1|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {% if p.tally.0 > 0 %}{{ p.tally.0|prob }}%{% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <h3>Median outcome</h3>
-
-<div class="table numtable" style="width: 67em;">
-    {% for m in meanres %}
-    {% if forloop.counter == 1 or forloop.counter == 3 or forloop.counter == 5 %}
-    <div class="rowh">
-        <div class="rowe" style="width: 30em;">
-            {% if forloop.counter == 1 %}Initial round
-            {% elif forloop.counter == 3 %}Winners' and losers' matches
-            {% else %}Final match{% endif %}
-        </div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-    </div>
-    {% endif %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 31em; text-align: right;">
-            {% if m.sca > m.scb %}<strong>{% endif %}
-                <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
-            {% if m.pla.country != "" %}
-                <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td style="width: 2.5em; text-align: right;">#</div>
+        <td style="width: 18em;">Player</div>
+        <td style="width: 1em;"></div>
+        <td style="width: 1em;"></div>
+        <td style="width: 12.5em; text-align: right;">Top 2</div>
+        <td style="width: 8em; text-align: right;">1st</div>
+        <td style="width: 8em; text-align: right;">2nd</div>
+        <td style="width: 8em; text-align: right;">3rd</div>
+        <td style="width: 8em; text-align: right;">4th</div>
+    </tr>
+    {% for p in players %}
+    <tr class="nonheader {% cycle 'row2' 'row1' %}">
+        <td style="text-align: right;">
+            {{ forloop.counter }}.
+        </td>
+        <td>
+            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+        </td>
+        <td style="width: 1em;">
+            {% if p.dbpl.country %}
+            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
             {% endif %}
-            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
-            {% if m.sca > m.scb %}</strong>{% endif %}
-        </div>
-        <div class="rowe" style="width: 5em; text-align: center;">
-            {{ m.sca }}–{{ m.scb }}
-        </div>
-        <div class="rowe" style="width: 31em; text-align: left;">
-            {% if m.scb > m.sca %}<strong>{% endif %}
-            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
-            {% if m.plb.country != "" %}
-                <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
-            {% endif %}
-            <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
-            {% if m.scb > m.sca %}</strong>{% endif %}
-        </div>
-    </div>
+        </td>
+        <td style="width: 1em;">
+            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+        </td>
+        <td style="text-align: right;">
+            {% if p.tally.2 > 0 or p.tally.3 > 0 %}{{ p.tally.2|addf:p.tally.3|pctg_one }}%{% endif %}
+        </td>
+        <td style="text-align: right;">
+            {% if p.tally.3 > 0 %}{{ p.tally.3|pctg_one }}%{% endif %}
+        </td>
+        <td style="text-align: right;">
+            {% if p.tally.2 > 0 %}{{ p.tally.2|pctg_one }}%{% endif %}
+        </td>
+        <td style="text-align: right;">
+            {% if p.tally.1 > 0 %}{{ p.tally.1|pctg_one }}%{% endif %}
+        </td>
+        <td style="text-align: right;">
+            {% if p.tally.0 > 0 %}{{ p.tally.0|pctg_one }}%{% endif %}
+        </td>
+    </tr>
     {% endfor %}
-</div>
+</table>
 
-    <h3>Update group progress</h3>
+<h3>Median outcome</h3>
 
-    <form method="get" action="/predict/4pswiss/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
+<p>This is the median outcome <em>assuming the already entered results</em>.</p>
 
-        <p>To modify a result, click the score in the table below. To view detailed predictions for each match,
-        click the arrow.</p>
-        
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility(id)
-    {
-        document.getElementById("fix" + id).style.display = 'none';
-        document.getElementById("inp" + id).style.display = 'inline';
-    }
-    //-->
-    </script>
+<table class="results">
+{% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True %}
+</table>
 
-<div class="table numtable" style="width: 67em;">
-    {% for m in matches %}
-    {% if forloop.counter == 1 or forloop.counter == 3 or forloop.counter == 5 %}
-    <div class="rowh">
-        <div class="rowe" style="width: 30em;">
-            {% if forloop.counter == 1 %}Initial round
-            {% elif forloop.counter == 3 %}Winners' and losers' matches
-            {% else %}Final match{% endif %}
-        </div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-    </div>
-    {% endif %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 28.5em; text-align: right;">
-            {% if m.canmod %}
-            {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
-                <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
-            {% if m.pla.country != "" %}
-                <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
-            {% endif %}
-            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
-            {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 10em; text-align: center;">
-            {% if m.canmod %}
-            <span id="fix{{ forloop.counter }}">
-                <a href="#" onclick="toggle_visibility('{{ forloop.counter }}'); return false;">
-                    {{ m.sca }}–{{ m.scb }}
-                </a>
-            </span>
-            <span id="inp{{ forloop.counter }}" style="display: none;">
-                <input type="text" name="{{ forloop.counter }}1" style="text-align: right; width: 2em;"
-                    value="{{ m.sca }}" /> –
-                <input type="text" name="{{ forloop.counter }}2" style="width: 2em;" 
-                    value="{{ m.scb }}" />
-            </span>
-            {% else %}
-                N/A
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 24.5em; text-align: left;">
-            {% if m.canmod %}
-            {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
-            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
-            {% if m.plb.country != "" %}
-                <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
-            {% endif %}
-            <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
-            {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 4em; text-align: right;">
-            {% if m.canmod %}
-            <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
-            {% endif %}
-        </div>
-    </div>
-    {% endfor %}
-</div>
+<h3>Update group progress</h3>
 
-    <div style="text-align: right;">
+<p>To modify a result, click on the score in the table below. To view detailed predictions for a match, click
+the arrow.</p>
+
+<form method="get" action="/inference/dual/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_header="custom" lm_predict=True %}
+    </table>
+    <div style="margin-top: 0.2em; text-align: right;">
         <input type="submit" value="Update results" />
     </div>
-
 </form>
+<div style="margin-top: 0.2em; text-align: right;">
+    <form method="get" action="/inference/dual/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <input type="submit" value="Clear results" />
+    </form>
+</div>
 
-    <script type="text/javascript">
-    <!--
-        togs = ['tl','reddit'];
-    //-->
-    </script>
+<h3>Postable</h3>
 
-    <h3>Postable</h3>
+<script type="text/javascript">
+<!--
+    togs = ['tl','reddit'];
+//-->
+</script>
 
-    <div id="tl">
-        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
-    </div>
-    <div id="reddit" style="display: none;">
-        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
-    </div>
+<div id="tl">
+    <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+</div>
+<div id="reddit" style="display: none;">
+    <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+</div>
 
-    <p>Formats: 
-    <a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
-    <a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
+<p>Formats: 
+<a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
+<a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
 
 {% endblock %}

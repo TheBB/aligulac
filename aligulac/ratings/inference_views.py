@@ -23,7 +23,10 @@ from ratings.models import (
     Match,
     Player,
 )
-from ratings.templatetags.ratings_extras import ratscale
+from ratings.templatetags.ratings_extras import (
+    ratscale,
+    smallhash,
+)
 from ratings.tools import (
     count_matchup_player,
     count_winloss_games,
@@ -33,6 +36,7 @@ from ratings.tools import (
 
 from simul.playerlist import make_player
 from simul.formats.match import Match as MatchSim
+from simul.formats.mslgroup import MSLGroup
 # }}}
 
 # {{{ Prediction formats
@@ -190,6 +194,88 @@ class SetupForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ Auxiliary functions for prediction
+
+# {{{ update_matches(sim, lst, request): Updates the matches in sim from the data in request, according to the
+# list lst, which is a list of triples (match name, get param player A, get param player B)
+def update_matches(sim, lst, request):
+    for m in lst:
+        try:
+            match = sim.get_match(m)
+            num = match.get_num()
+            if match.can_modify():
+                match.modify(
+                    get_param_range(request, '%s_1' % m, (0, num), 0),
+                    get_param_range(request, '%s_2' % m, (0, num), 0),
+                )
+        except:
+            pass
+# }}}
+
+# {{{ create_matches: Creates a list of dicts that will work as match objects in the templates, given a sim
+# object and a list of match names
+def create_matches(sim, lst):
+    ret = []
+    for rnd, matches in lst:
+        for m in matches:
+            match = sim.get_match(m)
+            if not match.can_modify():
+                continue
+
+            pla, plb = match.get_player(0).dbpl, match.get_player(1).dbpl
+            ret.append({
+                'pla_id':       pla.id,
+                'plb_id':       plb.id,
+                'pla_tag':      pla.tag,
+                'plb_tag':      plb.tag,
+                'pla_race':     pla.race,
+                'plb_race':     plb.race,
+                'pla_country':  plb.country,
+                'plb_country':  plb.country,
+                'pla_score':    match.get_result()[0],
+                'plb_score':    match.get_result()[1],
+                'unfixed':      not match.is_fixed(),
+                'eventtext':    rnd,
+                'match_id':     smallhash(rnd),
+                'sim':          match,
+                'identifier':   m,
+            })
+
+    return ret
+# }}}
+
+# {{{ create_median_matches: Creates a list of dicts taht will work as match objects in the templates, given a
+# sim object and a list of matc names. Generates MEDIAN RESULTS only.
+def create_median_matches(sim, lst):
+    ret = []
+    for rnd, matches in lst:
+        for m in matches:
+            match = sim.get_match(m)
+            match.compute()
+            mean = match.find_lsup()
+            match.broadcast_instance((0, [mean[4], mean[3]], match))
+
+            pla, plb = match.get_player(0).dbpl, match.get_player(1).dbpl
+            ret.append({
+                'pla_id':       pla.id,
+                'plb_id':       plb.id,
+                'pla_tag':      pla.tag,
+                'plb_tag':      plb.tag,
+                'pla_race':     pla.race,
+                'plb_race':     plb.race,
+                'pla_country':  plb.country,
+                'plb_country':  plb.country,
+                'pla_score':    mean[1],
+                'plb_score':    mean[2],
+                'eventtext':    rnd,
+                'match_id':     smallhash(rnd),
+            })
+
+    return ret
+# }}}
+
+# }}}
+
 # {{{ predict view
 @cache_page
 def predict(request):
@@ -284,9 +370,56 @@ def match(request):
     base['vs_b'] = wb_a + wb_b
     # }}}
 
-    postable_match(base)
+    postable_match(base, request)
 
     return render_to_response('pred_match.html', base)
+# }}}
+
+# {{{ dual tournament prediction view
+@cache_page
+def dual(request):
+    base = base_ctx('Inference', 'Predict', request=request)
+
+    # {{{ Get data, set up and simulate
+    form = SetupForm(request.GET)
+    if not form.is_valid():
+        return redirect('inference')
+
+    num = form.cleaned_data['bo'][0]
+    dbpl = form.cleaned_data['ps']
+    sipl = [make_player(p) for p in dbpl]
+
+    group = MSLGroup(num)
+    group.set_players(sipl)
+    update_matches(group, '12wlf', request)
+
+    group.compute()
+    # }}}
+
+    # {{{ Post-processing
+    players = list(sipl)
+    for p in players:
+        p.tally = group.get_tally()[p]
+    for i in range(0, 4):
+        players.sort(key=lambda p: p.tally[i], reverse=True)
+
+    rounds = [
+        ('Intial round',                    '12'),
+        ('Winners\' and losers\' matches',  'wl'),
+        ('Final match',                     'f'),
+    ]
+
+    base.update({
+        'players':  players,
+        'matches':  create_matches(group, rounds),
+        'meanres':  create_median_matches(group, rounds),
+        'form':     form,
+    })
+    # }}}
+
+    postable_dual(base, request)
+
+    return render_to_response('pred_4pswiss.html', base)
 # }}}
 
 # {{{ Postables
@@ -309,6 +442,8 @@ REDDIT_FOOTER = '\n\n^(Estimated by) [^Aligulac](http://aligulac.com/)^. [^Modif
 # justify: If true, makes the left and right columns equally wide
 # indent: Extra indentation to add to the left
 def left_center_right(strings, gap=2, justify=True, indent=0):
+    print(strings)
+
     width = lambda i: max([len(s[i]) for s in strings if s is not None])
     width_l = width(0) + 4
     width_c = width(1)
@@ -338,7 +473,7 @@ def left_center_right(strings, gap=2, justify=True, indent=0):
 # }}}
 
 # {{{ postable_match
-def postable_match(base):
+def postable_match(base, request):
     pla = base['match'].get_player(0)
     plb = base['match'].get_player(1)
 
@@ -357,10 +492,10 @@ def postable_match(base):
     for resa, resb in base['res']:
         L = ('{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(
             pctg=100*resa['prob'], sca=resa['sca'], scb=resa['scb'], nl=numlen
-        ) if resa else None)
+        ) if resa else '')
         R = ('{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(
             pctg=100*resb['prob'], sca=resb['sca'], scb=resb['scb'], nl=numlen
-        ) if resb else None)
+        ) if resb else '')
         strings.append((L, '', R))
 
     strings += [None, (
@@ -369,19 +504,13 @@ def postable_match(base):
     )]
 
     median = base['match'].find_lsup()
-    url = (
-        'http://aligulac.com/inference/match/?bo=%s&ps=%s'
-        % (base['form']['bo'].value(), base['form']['ps'].value())
-    )
-
-    print(strings)
 
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings)
         + ('\n\nMedian outcome: {pla} {sca}-{scb} {plb}'.format(
             pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
-        + TL_FOOTER % url
+        + TL_FOOTER % request.build_absolute_uri()
     )
 
     base['postable_reddit'] = (
@@ -389,7 +518,37 @@ def postable_match(base):
         + left_center_right(strings, justify=False, indent=4) 
         + ('\n\n    Median outcome: {pla} {sca}-{scb} {plb}'.format(
             pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
-        + REDDIT_FOOTER % url
+        + REDDIT_FOOTER % request.build_absolute_uri()
+    )
+# }}}
+
+# {{{ postable_dual
+def postable_dual(base, request):
+    numlen = max([len(p.dbpl.tag) for p in base['players']])
+
+    strings = (
+        [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
+        [('{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'.format(
+            top2 = 100*(p.tally[2]+p.tally[3]),
+            p1   = 100*p.tally[3],
+            p2   = 100*p.tally[2],
+            p3   = 100*p.tally[1],
+            p4   = 100*p.tally[0],
+            name = p.dbpl.tag,
+            nl   = numlen,
+        ), '', '') for p in base['players']]
+    )
+
+    base['postable_tl'] = (
+          TL_HEADER
+        + left_center_right(strings, justify=False, gap=0)
+        + TL_FOOTER % request.build_absolute_uri()
+    )
+
+    base['postable_reddit'] = (
+          REDDIT_HEADER
+        + left_center_right(strings, justify=False, gap=0, indent=4)
+        + REDDIT_FOOTER % request.build_absolute_uri()
     )
 # }}}
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+
 os.environ['HOME'] = '/root'
 
 from aligulac.cache import cache_page
@@ -142,6 +143,7 @@ def predict(request):
 def pred_match(request):
     base = base_ctx('Predict', 'Predict', request=request)
     base['short_url_button'] = True
+
 
     dbpl = [get_object_or_404(Player, id=int(i)) for i in request.GET['ps'].split(',')]
     sipl = [make_player(pl) for pl in dbpl]

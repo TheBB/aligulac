@@ -65,9 +65,14 @@ def haslogo(value):
 # {{{ Creates match prediction links.
 @register.filter
 def makematchlink(value):
-    return "/predict/match/?bo=%i&amp;ps=%i%%2C%i&amp;s1=%i&amp;s2=%i" % \
-            (2*value._num-1, value.get_player(0).dbpl.id, value.get_player(1).dbpl.id,\
-             value._result[0], value._result[1])
+    return (
+        '/inference/match/?bo=%i&amp;ps=%i%%2C%i&amp;s1=%i&amp;s2=%i' % (
+            2*value._num-1,
+            value.get_player(0).dbpl.id,
+            value.get_player(1).dbpl.id,
+            value._result[0],
+            value._result[1],
+    ))
 # }}}
 
 # {{{ milliseconds: Converts a date (not datetime) to millisecond format, needed for using the charts.

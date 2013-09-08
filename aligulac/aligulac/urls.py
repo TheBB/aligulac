@@ -52,7 +52,7 @@ urlpatterns = patterns('',
     url(r'^inference/match/$', 'ratings.inference_views.match'),
     url(r'^inference/dual/$', 'ratings.inference_views.dual'),
     url(r'^inference/sebracket/$', 'ratings.inference_views.sebracket'),
-    #url(r'^inference/rrgroup/$', 'ratings.inference_views.rrgroup'),
+    url(r'^inference/rrgroup/$', 'ratings.inference_views.rrgroup'),
     #url(r'^inference/proleague/$', 'ratings.inference_views.proleague'),
 
     url(r'^reports/$', 'ratings.reports_views.balance'),

@@ -5,8 +5,6 @@ from simul.formats.composite import Composite
 from simul.formats.match import Match
 from simul.formats.format import Tally as ParentTally
 
-from simul import progressbar
-
 def get_ending(s):
     if (s[-1] == '1') and (s[0] != '1' or len(s) == 1):
         return 'st'
@@ -27,6 +25,9 @@ class Tally(ParentTally):
         self.mwins = [0] * nplayers
         self.sscore = [0] * (2*(nplayers-1)*num + 1)
         self.swins = [0] * ((nplayers-1) * num + 1)
+
+    def save_tally(self):
+        self._saved_tally = self._tally
 
     def get_sscore(self, key):
         return self.sscore[key + (self._nplayers - 1) * self._num]
@@ -87,26 +88,26 @@ class RRGroup(Composite):
         return int(round(i*(len(self._schema_out) - float(i+3)/2))) + j - 1
 
     def get_match(self, key):
+        key = int(key)
         ex = 'No such match found \'' + str(key) + '\''
 
-        if type(key) == int:
-            return self._matches[key]
+        return self._matches[key]
 
-        key = key.lower().split(' ')
-        if len(key) < 2:
-            raise Exception(ex)
+        #key = key.lower().split(' ')
+        #if len(key) < 2:
+            #raise Exception(ex)
 
-        fits_a = lambda m: (m.get_player(0).name.lower() == key[0] and\
-                            m.get_player(1).name.lower() == key[1])
-        fits_b = lambda m: (m.get_player(1).name.lower() == key[0] and\
-                            m.get_player(0).name.lower() == key[1])
-        fits = lambda m: fits_a(m) or fits_b(m)
-        gen = (m for m in self._matches if fits(m))
+        #fits_a = lambda m: (m.get_player(0).name.lower() == key[0] and\
+                            #m.get_player(1).name.lower() == key[1])
+        #fits_b = lambda m: (m.get_player(1).name.lower() == key[0] and\
+                            #m.get_player(0).name.lower() == key[1])
+        #fits = lambda m: fits_a(m) or fits_b(m)
+        #gen = (m for m in self._matches if fits(m))
 
-        try:
-            return next(gen)
-        except:
-            raise Exception(ex)
+        #try:
+            #return next(gen)
+        #except:
+            #raise Exception(ex)
     
     def should_use_mc(self):
         np = len(self._schema_out)
@@ -146,12 +147,16 @@ class RRGroup(Composite):
         gens = [m.instances_detail() for m in self._matches]
         total = 0
         for instances in itertools.product(*gens):
+            print('#### TRYING ####')
+            for i in instances:
+                print('  ', i[3].name, '>', i[4].name)
             base = 1
             for inst in instances:
                 base *= inst[0]
             if self.compute_instances(instances, base):
                 total += base
 
+        print('Total:', total)
         for t in self._tally.values():
             t.scale(total)
 
@@ -172,6 +177,7 @@ class RRGroup(Composite):
         if table != False:
             return True
         else:
+            print('   >>> :( Returning False')
             return False
 
     def compute_table(self, instances, prob=1):
@@ -213,6 +219,8 @@ class RRGroup(Composite):
         or tie[0] == 'imscore' or tie[0] == 'isscore' or tie[0] == 'iswins':
             key = attrgetter('temp_' + tie[0])
             table = sorted(table, key=key, reverse=True)
+
+            print('   #### TIEBREAK: ' + tie[0] + ' ####')
 
             keyval = key(table[0])
             keyind = 0

@@ -10,217 +10,129 @@ This is the prediction page for single elimination brackets. It's called from ra
 {% block title %}Round robin group{% endblock %}
 
 {% block content %}
-    <h2>Round robin group</h2>
+<h2>Round robin group</h2>
 
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh">
-            <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-            <div class="rowe" style="width: 10em;">Player</div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 1em;"></div>
-            {% for t in players.0.tally %}
-            <div class="rowe" style="width: 8em; text-align: right;">
-                {{ forloop.counter|ordinal }}
-            </div>
-            {% endfor %}
-        </div>
-        {% for p in players %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right;">
-                {{ forloop.counter }}.
-            </div>
-            <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
-            </div>
-            <div class="rowe" style="width: 1em;">
-                {% if p.dbpl.country != "" %}
-                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-                {% endif %}
-            </div>
-            <div class="rowe" style="width: 1em;">
-                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
-            </div>
-            {% for t in p.tally %}
-            <div class="rowe" style="text-align: right;">
-                {% if t > 0 %}{{ t|prob }}%{% endif %}
-            </div>
-            {% endfor %}
-        </div>
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td style="width: 2.5em; text-align: right;">#</td>
+        <td style="width: 10em;">Player</td>
+        <td style="width: 1em;"></td>
+        <td style="width: 1em;"></td>
+        {% for t in players.0.tally %}
+        <td style="width: 8em; text-align: right;">
+            {{ forloop.counter|ordinal }}
+        </td>
         {% endfor %}
-    </div>
-
-    <h3>Median outcome</h3>
-
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh">
-            <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-            <div class="rowe" style="width: 14em;">Player</div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 9em; text-align: right;">Matches</div>
-            <div class="rowe" style="width: 5em; text-align: right;">Sets</div>
-            <div class="rowe" style="width: 25.5em;"></div>
-        </div>
-        {% for p in mplayers %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right;">
-                {{ forloop.counter }}.
-            </div>
-            <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
-            </div>
-            <div class="rowe" style="width: 1em;">
-                {% if p.dbpl.country != "" %}
-                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-                {% endif %}
-            </div>
-            <div class="rowe" style="width: 1em;">
-                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
-            </div>
-            <div class="rowe" style="text-align: right;">
-                {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
-            </div>
-            <div class="rowe"></div>
-        </div>
+    </tr>
+    {% for p in players %}
+    <tr class="nonheader {% cycle 'row2' 'row1' %}">
+        <td style="text-align: right;">
+            {{ forloop.counter }}.
+        </td>
+        <td>
+            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+        </td>
+        <td>
+            {% if p.dbpl.country != "" %}
+            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% endif %}
+        </td>
+        <td>
+            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+        </td>
+        {% for t in p.tally %}
+        <td style="text-align: right;">
+            {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
+        </td>
         {% endfor %}
-    </div>
-    {% comment %}
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Median outcome</h3>
+
+<p>This is the median outcome <em>assuming the already entered results</em>.</p>
+
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 30em;">Matches</div>
-        <div class="rowe"></div>
+        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
+        <div class="rowe" style="width: 14em;">Player</div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 1em;"></div>
+        <div class="rowe" style="width: 9em; text-align: right;">Matches</div>
+        <div class="rowe" style="width: 5em; text-align: right;">Sets</div>
+        <div class="rowe" style="width: 25.5em;"></div>
+    </div>
+    {% for p in mplayers %}
+    <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe" style="text-align: right;">
+            {{ forloop.counter }}.
         </div>
-    </div>
-    {% for m in meanres %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 31em; text-align: right;">
-            {% if m.sca > m.scb %}<strong>{% endif %}
-            <a href="/players/{{ m.pla.id }}/">{{ m.pla.tag }}</a>
-            {% if m.pla.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ m.pla.country|lower }}.png" alt="{{ m.pla.country }}" />
+        <div class="rowe">
+            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+        </div>
+        <div class="rowe" style="width: 1em;">
+            {% if p.dbpl.country != "" %}
+            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
             {% endif %}
-            <img src="http://aligulac.com:81/al/{{ m.pla.race }}.png" alt="{{ m.pla.race }}" class="btm" />
-            {% if m.sca > m.scb %}</strong>{% endif %}
         </div>
-        <div class="rowe" style="width: 5em; text-align: center;">
-            {{ m.sca }}–{{ m.scb }}
+        <div class="rowe" style="width: 1em;">
+            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
         </div>
-        <div class="rowe" style="width: 31em; text-align: left;">
-            {% if m.scb > m.sca %}<strong>{% endif %}
-            <img src="http://aligulac.com:81/al/{{ m.plb.race }}.png" alt="{{ m.plb.race }}" class="btm" />
-            {% if m.plb.country != "" %}
-                <img src="http://aligulac.com:81/al/flags/{{ m.plb.country|lower }}.png" alt="{{ m.plb.country }}" />
-            {% endif %}
-            <a href="/players/{{ m.plb.id }}/">{{ m.plb.tag }}</a>
-            {% if m.scb > m.sca %}</strong>{% endif %}
+        <div class="rowe" style="text-align: right;">
+            {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
         </div>
-    </div>
-    {% endfor %}
-</div>
-{% endcomment %}
-
-    <h3>Update bracket progress</h3>
-
-    <form method="get" action="/predict/rrgroup/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-
-        <p>To modify a result, click the score in the table below. To view detailed predictions for each match,
-        click the arrow.</p>
-        
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility(id)
-    {
-        document.getElementById("fix" + id).style.display = 'none';
-        document.getElementById("inp" + id).style.display = 'inline';
-    }
-    //-->
-    </script>
-
-<div class="table numtable" style="width: 67em;">
-    <div class="rowh">
-        <div class="rowe" style="width: 30em;">Matches</div>
+        <div class="rowe" style="text-align: right;">
+            {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
+        </div>
         <div class="rowe"></div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-    </div>
-    {% for m in matches %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 28.5em; text-align: right;">
-            {% if m.canmod %}
-            {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
-            <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
-            {% if m.pla.country != "" %}
-                <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
-            {% endif %}
-            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
-            {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 10em; text-align: center;">
-            {% if m.canmod %}
-            <span id="fix{{ forloop.counter }}">
-                <a href="#" onclick="toggle_visibility('{{ forloop.counter }}'); return false;">
-                    {{ m.sca }}–{{ m.scb }}
-                </a>
-            </span>
-            <span id="inp{{ forloop.counter }}" style="display: none;">
-                <input type="text" name="m{{ forloop.counter0 }}-1" style="text-align: right; width: 2em;"
-                    value="{{ m.sca }}" /> –
-                <input type="text" name="m{{ forloop.counter0 }}-2" style="width: 2em;" 
-                    value="{{ m.scb }}" />
-            </span>
-            {% else %}
-                N/A
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 24.5em; text-align: left;">
-            {% if m.canmod %}
-            {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
-            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
-            {% if m.plb.country != "" %}
-                <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
-            {% endif %}
-            <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
-            {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 4em; text-align: right;">
-            {% if m.canmod %}
-            <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
-            {% endif %}
-        </div>
     </div>
     {% endfor %}
 </div>
 
-    <div style="text-align: right;">
+<table class="results">
+{% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True lm_autohide=True %}
+</table>
+
+<h3>Update group progress</h3>
+
+<p>To modify a result, click on the score in the table below. To view detailed predictions for a match, click
+the arrow.</p>
+
+<form method="get" action="/inference/rrgroup/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_header="custom" lm_predict=True %}
+    </table>
+    <div style="margin-top: 0.2em; text-align: right;">
         <input type="submit" value="Update results" />
     </div>
-
 </form>
+<div style="margin-top: 0.2em; text-align: right;">
+    <form method="get" action="/inference/rrgroup/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <input type="submit" value="Clear results" />
+    </form>
+</div>
 
-    <script type="text/javascript">
-    <!--
-        var togs = ['tl', 'reddit'];
-    //-->
-    </script>
+<h3>Postable</h3>
 
-    <h3>Postable</h3>
+<script type="text/javascript">
+<!--
+    var togs = ['tl', 'reddit'];
+//-->
+</script>
 
-    <div id="tl">
-        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
-    </div>
-    <div id="reddit" style="display: none;">
-        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
-    </div>
+<div id="tl">
+    <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+</div>
+<div id="reddit" style="display: none;">
+    <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+</div>
 
-    <a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
-    <a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
+<a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
+<a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
 
 {% endblock %}

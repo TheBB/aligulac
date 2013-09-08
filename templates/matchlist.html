@@ -195,7 +195,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% endif %}
             <a href="/admin/ratings/match/{{ m.match_id }}/">→</a>
         {% elif lm_predict %}
-            <a target="new" href="{{ m.sim|makematchlink|safe }}">→</a>
+            <a target="new" href="{{ m|makematchlink|safe }}">→</a>
         {% elif not lm_noright %}
             {% if m.messages %}
             {% for msg in m.messages %}

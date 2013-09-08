@@ -1,6 +1,7 @@
 # {{{ Imports
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from math import log
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -37,6 +38,7 @@ from ratings.tools import (
 from simul.playerlist import make_player
 from simul.formats.match import Match as MatchSim
 from simul.formats.mslgroup import MSLGroup
+from simul.formats.sebracket import SEBracket
 # }}}
 
 # {{{ Prediction formats
@@ -196,6 +198,35 @@ class SetupForm(forms.Form):
 
 # {{{ Auxiliary functions for prediction
 
+# {{{ group_by: Works the same as itertools.groupby but makes a list.
+def group_by(lst, key):
+    ret = [(key(lst[0]), [lst[0]])]
+    for e in lst[1:]:
+        if key(e) != ret[-1][0]:
+            ret.append((key(e), [e]))
+        else:
+            ret[-1][1].append(e)
+    return ret
+# }}}
+
+# {{{ player_data: Creates a dict with player data
+def player_data(player, prefix):
+    if player is not None:
+        return {
+            prefix + '_id':       player.id,
+            prefix + '_tag':      player.tag,
+            prefix + '_race':     player.race,
+            prefix + '_country':  player.country,
+        }
+    else:
+        return {
+            prefix + '_id':       None,
+            prefix + '_tag':      'BYE',
+            prefix + '_race':     None,
+            prefix + '_country':  None,
+        }
+# }}}
+
 # {{{ update_matches(sim, lst, request): Updates the matches in sim from the data in request, according to the
 # list lst, which is a list of triples (match name, get param player A, get param player B)
 def update_matches(sim, lst, request):
@@ -222,21 +253,15 @@ def create_matches(sim, lst):
             if not match.can_modify():
                 continue
 
-            pla, plb = match.get_player(0).dbpl, match.get_player(1).dbpl
-            ret.append({
-                'pla_id':       pla.id,
-                'plb_id':       plb.id,
-                'pla_tag':      pla.tag,
-                'plb_tag':      plb.tag,
-                'pla_race':     pla.race,
-                'plb_race':     plb.race,
-                'pla_country':  plb.country,
-                'plb_country':  plb.country,
+            ret.append({})
+            ret[-1].update(player_data(match.get_player(0).dbpl, 'pla'))
+            ret[-1].update(player_data(match.get_player(1).dbpl, 'plb'))
+            ret[-1].update({
                 'pla_score':    match.get_result()[0],
                 'plb_score':    match.get_result()[1],
                 'unfixed':      not match.is_fixed(),
                 'eventtext':    rnd,
-                'match_id':     smallhash(rnd),
+                'match_id':     smallhash(rnd) + '-ent',
                 'sim':          match,
                 'identifier':   m,
             })
@@ -255,20 +280,14 @@ def create_median_matches(sim, lst):
             mean = match.find_lsup()
             match.broadcast_instance((0, [mean[4], mean[3]], match))
 
-            pla, plb = match.get_player(0).dbpl, match.get_player(1).dbpl
-            ret.append({
-                'pla_id':       pla.id,
-                'plb_id':       plb.id,
-                'pla_tag':      pla.tag,
-                'plb_tag':      plb.tag,
-                'pla_race':     pla.race,
-                'plb_race':     plb.race,
-                'pla_country':  plb.country,
-                'plb_country':  plb.country,
+            ret.append({})
+            ret[-1].update(player_data(match.get_player(0).dbpl, 'pla'))
+            ret[-1].update(player_data(match.get_player(1).dbpl, 'plb'))
+            ret[-1].update({
                 'pla_score':    mean[1],
                 'plb_score':    mean[2],
                 'eventtext':    rnd,
-                'match_id':     smallhash(rnd),
+                'match_id':     smallhash(rnd) + '-med',
             })
 
     return ret
@@ -293,7 +312,7 @@ def predict(request):
     return redirect(base['form'].generate_url())
 # }}}
 
-# {{{ match prediction view
+# {{{ Match prediction view
 @cache_page
 def match(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -375,7 +394,7 @@ def match(request):
     return render_to_response('pred_match.html', base)
 # }}}
 
-# {{{ dual tournament prediction view
+# {{{ Dual tournament prediction view
 @cache_page
 def dual(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -383,7 +402,7 @@ def dual(request):
     # {{{ Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
-        return redirect('inference')
+        return redirect('/inference/')
 
     num = form.cleaned_data['bo'][0]
     dbpl = form.cleaned_data['ps']
@@ -422,13 +441,76 @@ def dual(request):
     return render_to_response('pred_4pswiss.html', base)
 # }}}
 
+# {{{ Single elimination prediction view
+@cache_page
+def sebracket(request):
+    base = base_ctx('Inference', 'Predict', request=request)
+
+    # {{{ Get data, set up and simulate
+    form = SetupForm(request.GET)
+    if not form.is_valid():
+        return redirect('/inference/')
+
+    num = form.cleaned_data['bo']
+    dbpl = form.cleaned_data['ps']
+    sipl = [make_player(p) for p in dbpl]
+
+    nrounds = int(log(len(sipl), 2))
+    num = [num[0]] * (nrounds - len(num)) + num
+    if len(num) > nrounds:
+        num = num[-nrounds:]
+
+    bracket = SEBracket(num)
+    bracket.set_players(sipl)
+    matchlist = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
+    update_matches(bracket, matchlist, request)
+
+    bracket.compute()
+    # }}}
+
+    # {{{ Post-processing
+    players = list(sipl)
+    for p in players:
+        p.tally = bracket.get_tally()[p][::-1]
+    for i in range(len(players[0].tally)-1, -1, -1):
+        players.sort(key=lambda p: p.tally[i], reverse=True)
+
+    rounds = [
+        ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
+        for rnd in range(1, nrounds+1)
+    ]
+    
+    base.update({
+        'players':  players,
+        'matches':  create_matches(bracket, rounds),
+        'meanres':  create_median_matches(bracket, rounds),
+        'nrounds':  nrounds,
+        'form':     form,
+    })
+    # }}}
+
+    print(base['meanres'])
+    postable_sebracket(base, request, group_by(base['meanres'], key=lambda a: a['eventtext']))
+
+    return render_to_response('pred_sebracket.html', base)
+# }}}
+
 # {{{ Postables
 
 # {{{ Headers and footers
 TL_HEADER = '[center][code]'
+TL_SEBRACKET_MIDDLE = (
+    '[/code][/center][b]Median Outcome Bracket[/b]\n'
+    '[spoiler][code]'
+)
+TL_SEBRACKET_FOOTER = (
+    '[/code][/spoiler]\n'
+    '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '
+    '[url=%s]Modify[/url].[/small]'
+)
 TL_FOOTER = (
     '[/code][/center]\n'
-    '[small]Esimated by [url=http://aligulac.com/]Aligulac[/url]. '
+    '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '
     '[url=%s]Modify[/url].[/small]'
 )
 
@@ -524,7 +606,7 @@ def postable_match(base, request):
 
 # {{{ postable_dual
 def postable_dual(base, request):
-    numlen = max([len(p.dbpl.tag) for p in base['players']])
+    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
 
     strings = (
         [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
@@ -550,6 +632,90 @@ def postable_dual(base, request):
         + left_center_right(strings, justify=False, gap=0, indent=4)
         + REDDIT_FOOTER % request.build_absolute_uri()
     )
+# }}}
+
+# {{{ postable_sebracket
+def postable_sebracket(base, request, bracket):
+    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+
+    strings = [(''.join(
+        ['Win    '] + 
+        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['players']),2)))] +
+        ['Top {i}'.format(i=len(base['players']))]
+    ), '', ''), None]
+
+    for p in base['players']:
+        if p.dbpl is None:
+            continue
+        strings.append((''.join(
+            ['{name: >{nl}}  '.format(name=p.dbpl.tag, nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+        ), '', ''))
+
+    base['postable_tl'] = (
+          TL_HEADER
+        + left_center_right(strings, justify=False, gap=0)
+        + TL_SEBRACKET_MIDDLE
+        + create_postable_bracket(bracket)
+        + TL_SEBRACKET_FOOTER % request.build_absolute_uri()
+    )
+
+    base['postable_reddit'] = (
+          REDDIT_HEADER
+        + left_center_right(strings, justify=False, gap=0, indent=4)
+        + REDDIT_FOOTER % request.build_absolute_uri()
+    )
+
+    base['postable_bracket_reddit'] = (
+          REDDIT_HEADER
+        + create_postable_bracket(bracket, indent=4)
+        + REDDIT_FOOTER % request.build_absolute_uri()
+    )
+# }}}
+
+# {{{ create_postable_bracket
+def create_postable_bracket(bracket, indent=0):
+    nrounds = len(bracket)
+
+    result = []
+    for r, (rnd_name, matches) in enumerate(bracket):
+        result.append([])
+        result[r].extend([''] * (2**r - 1))
+
+        for i, m in enumerate(matches):
+            pla = m['pla_tag']
+            plascore = m['pla_score']
+            plb = m['plb_tag']
+            plbscore = m['plb_score']
+
+            if r != 0:
+                pla = (' ' + pla).rjust(12, '─')
+                plb = (' ' + plb).rjust(12, '─')
+            else:
+                pla = (' ' + pla).rjust(12)
+                plb = (' ' + plb).rjust(12)
+            result[r].append('{0} {1:>1} ┐ '.format(pla, plascore))
+            result[r].extend(['               │ '] * (2**r - 1))
+            result[r].append('               ├─')
+            result[r].extend(['               │ '] * (2**r - 1))
+            result[r].append('{0} {1:>1} ┘ '.format(plb, plbscore))
+
+            if i < len(matches):
+                result[r].extend(['                 '] * int(2**(r + 1) - 1))
+
+    result.append([''] * (2**(r + 1) - 1))
+    final = bracket[-1][1][0]
+    result[-1].append(' ' + (
+        final['pla_tag'] 
+        if final['pla_score'] > final['plb_score'] 
+        else final ['plb_tag']
+    ))
+
+    postable_result = ''
+    for line in range(len(result[0])):
+        postable_result += ' '*indent + ''.join(block[line] for block in result if line < len(block)) + '\n'
+
+    return postable_result.rstrip()
 # }}}
 
 # }}}

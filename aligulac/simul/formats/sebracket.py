@@ -4,8 +4,6 @@ from simul.formats.composite import Composite
 from simul.formats.match import Match
 from simul.formats.format import Tally as ParentTally
 
-import simul.progressbar
-
 class Tally(ParentTally):
 
     def __init__(self, rounds, players):
@@ -76,17 +74,8 @@ class SEBracket(Composite):
         for m in self._bracket[0]:
             m.compute_partial()
 
-        progress = simul.progressbar.ProgressBar(N, exp='Monte Carlo')
         for i in range(0,N):
             self.compute_mc_round(0, 1.0/N)
-
-            if i % 500 == 0:
-                progress.update_time(i)
-                print(progress.dyn_str())
-
-        progress.update_time(N)
-        print(progress.dyn_str())
-        print('')
 
     def compute_mc_round(self, r, base=1):
         num = len(self._bracket[r])

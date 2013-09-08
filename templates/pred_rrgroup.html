@@ -53,42 +53,42 @@ This is the prediction page for single elimination brackets. It's called from ra
 
 <p>This is the median outcome <em>assuming the already entered results</em>.</p>
 
-<div class="table numtable" style="width: 67em;">
-    <div class="rowh">
-        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-        <div class="rowe" style="width: 14em;">Player</div>
-        <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 9em; text-align: right;">Matches</div>
-        <div class="rowe" style="width: 5em; text-align: right;">Sets</div>
-        <div class="rowe" style="width: 25.5em;"></div>
-    </div>
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td style="width: 2.5em; text-align: right;">#</td>
+        <td style="width: 14em;">Player</td>
+        <td style="width: 1em;"></td>
+        <td style="width: 1em;"></td>
+        <td style="width: 9em; text-align: right;">Matches</td>
+        <td style="width: 5em; text-align: right;">Sets</td>
+        <td style="width: 25.5em;"></td>
+    </tr>
     {% for p in mplayers %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="text-align: right;">
+    <tr class="nonheader {% cycle 'row2' 'row1' %}">
+        <td style="text-align: right;">
             {{ forloop.counter }}.
-        </div>
-        <div class="rowe">
+        </td>
+        <td>
             <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
-        </div>
-        <div class="rowe" style="width: 1em;">
+        </td>
+        <td>
             {% if p.dbpl.country != "" %}
             <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
             {% endif %}
-        </div>
-        <div class="rowe" style="width: 1em;">
+        </td>
+        <td>
             <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
-        </div>
-        <div class="rowe" style="text-align: right;">
+        </td>
+        <td style="text-align: right;">
             {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
-        </div>
-        <div class="rowe" style="text-align: right;">
+        </td>
+        <td style="text-align: right;">
             {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
-        </div>
-        <div class="rowe"></div>
-    </div>
+        </td>
+        <td></td>
+    </tr>
     {% endfor %}
-</div>
+</table>
 
 <table class="results">
 {% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True lm_autohide=True %}

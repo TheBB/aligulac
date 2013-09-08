@@ -9,46 +9,46 @@ This is the prediction page for single elimination brackets. It's called from ra
 {% block title %}Single elimination bracket{% endblock %}
 
 {% block content %}
-    <h2>Single elimination bracket</h2>
+<h2>Single elimination bracket</h2>
 
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh">
-            <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-            <div class="rowe" style="width: 10em;">Player</div>
-            <div class="rowe" style="width: 1em;"></div>
-            <div class="rowe" style="width: 1em;"></div>
-            {% for t in players.0.tally %}
-            <div class="rowe" style="width: 8em; text-align: right;">
-                {% if forloop.first %}Win{%else %}Top {{ 2|pow:forloop.counter0 }}{% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% for p in players %}
-        {% if p.dbpl %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right;">
-                {{ forloop.counter }}.
-            </div>
-            <div class="rowe">
-                <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
-            </div>
-            <div class="rowe" style="width: 1em;">
-                {% if p.dbpl.country != "" %}
-                <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-                {% endif %}
-            </div>
-            <div class="rowe" style="width: 1em;">
-                <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
-            </div>
-            {% for t in p.tally %}
-            <div class="rowe" style="text-align: right;">
-                {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td style="width: 2.5em; text-align: right;">#</td>
+        <td style="width: 10em;">Player</td>
+        <td style="width: 1em;"></td>
+        <td style="width: 1em;"></td>
+        {% for t in players.0.tally %}
+        <td style="width: 8em; text-align: right;">
+            {% if forloop.first %}Win{%else %}Top {{ 2|pow:forloop.counter0 }}{% endif %}
+        </td>
         {% endfor %}
-    </div>
+    </tr>
+    {% for p in players %}
+    {% if p.dbpl %}
+    <tr class="nonheader {% cycle 'row2' 'row1' %}">
+        <td style="text-align: right;">
+            {{ forloop.counter }}.
+        </td>
+        <td>
+            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+        </td>
+        <td>
+            {% if p.dbpl.country != "" %}
+            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% endif %}
+        </td>
+        <td>
+            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+        </td>
+        {% for t in p.tally %}
+        <td style="text-align: right;">
+            {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
 
 <h3>Median outcome</h3>
 

@@ -27,9 +27,11 @@ class TeamPL:
         self._num = num
 
     def set_players(self, players):
-        self._pla = players[:len(players)/2]
-        self._plb = players[len(players)/2:]
+        self._pla = players[:len(players)//2]
+        self._plb = players[len(players)//2:]
         self._nplayers = len(self._pla)
+        self._numw = self._nplayers//2 + 1
+        self._nums = (self._nplayers - 1)//2
 
         self._matches = []
         for i in range(0,self._nplayers):
@@ -38,7 +40,7 @@ class TeamPL:
             self._matches.append(m)
 
     def get_match(self, i):
-        return self._matches[i]
+        return self._matches[int(i)]
 
     def get_tally(self):
         return self._tally
@@ -61,8 +63,11 @@ class TeamPL:
                 sca += 1
             else:
                 scb += 1
-        self._tally[0][sca] += base
-        self._tally[1][scb] += base
+            if sca >= self._numw or scb >= self._numw:
+                break
+
+        self._tally[0][sca + max(self._nums - scb, 0)] += base
+        self._tally[1][scb + max(self._nums - sca, 0)] += base
         if sca > scb:
             self._tally[0].win += base
             self._tally[1].loss += base

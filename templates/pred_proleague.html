@@ -6,151 +6,95 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
 
 {% load ratings_extras %}
 
-{% block title %}{{ matches.0.pla.tag }} et al. vs. {{ matches.0.plb.tag }} et al.{% endblock %}
+{% block title %}Team {{ matches.0.pla_tag }} vs. Team {{ matches.0.plb_tag }}{% endblock %}
 
 {% block content %}
-    <h2>Proleague team match</h2>
+<h2>Proleague team match</h2>
 
-    <div class="table numtable" style="width: 67em;">
-        <div class="rowh2">
-            <div class="rowe" style="width: 26em; text-align: right;">{{ matches.0.pla.tag }} et al.</div>
-            <div class="rowe" style="width: 5em;"></div>
-            <div class="rowe" style="width: 5em; text-align: center;">{{ s1 }}–{{ s2 }}</div>
-            <div class="rowe" style="width: 5em;"></div>
-            <div class="rowe" style="width: 26em;">{{ matches.0.plb.tag }} et al.</div>
-        </div>
-        {% for r in results %}
-        {% if r.proba or r.probb %}
-        <div class="row {% cycle 'row2' 'row1' %}">
-            <div class="rowe" style="text-align: right; padding-right: 2em;">
-                {% if r.proba %}{{ r.proba|prob }}%{% endif %}
-            </div>
-            <div class="rowe" style="text-align: left;">
-                {% if r.proba %}{{ r.scw }}–{{ r.scl }}{% endif %}
-            </div>
-            <div class="rowe"></div>
-            <div class="rowe" style="text-align: right;">
-                {% if r.probb %}{{ r.scl }}–{{ r.scw }}{% endif %}
-            </div>
-            <div class="rowe" style="padding-left: 2em;">
-                {% if r.probb %}{{ r.probb|prob }}%{% endif %}
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        <div class="rowh">
-            <div class="rowe" style="text-align: right; padding-right: 2em;">{{ t1|prob }}%</div>
-            <div class="rowe"></div>
-            <div class="rowe"></div>
-            <div class="rowe"></div>
-            <div class="rowe" style="padding-left: 2em;">{{ t2|prob }}%</div>
-        </div>
-    </div>
-
-    {% if prob_draw %}
-    <p>In addition, there is a {{ prob_draw|prob }}% probability for a draw or ace match after the given
-    matches.</p>
+<table class="results" style="width: 67em;">
+    <tr class="header">
+        <td class="rowe" style="width: 26em; text-align: right;">Team {{ matches.0.pla_tag }}</td>
+        <td class="rowe" style="width: 5em;"></td>
+        <td class="rowe" style="width: 5em; text-align: center;">{{ s1 }}–{{ s2 }}</td>
+        <td class="rowe" style="width: 5em;"></td>
+        <td class="rowe" style="width: 26em;">Team {{ matches.0.plb_tag }}</td>
+    </tr>
+    {% for r in results %}
+    {% if r.proba or r.probb %}
+    <tr class="row {% cycle 'row2' 'row1' %}">
+        <td class="rowe" style="text-align: right; padding-right: 2em;">
+            {% if r.proba %}{{ r.proba|pctg_one }}%{% endif %}
+        </td>
+        <td class="rowe" style="text-align: left;">
+            {% if r.proba %}{{ r.scw }}–{{ r.scl }}{% endif %}
+        </td>
+        <td class="rowe"></td>
+        <td class="rowe" style="text-align: right;">
+            {% if r.probb %}{{ r.scl }}–{{ r.scw }}{% endif %}
+        </td>
+        <td class="rowe" style="padding-left: 2em;">
+            {% if r.probb %}{{ r.probb|pctg_one }}%{% endif %}
+        </td>
+    </tr>
     {% endif %}
-
-    <h3>Update match progress</h3>
-
-    <form method="get" action="/predict/proleague/">
-        <input type="hidden" name="bo" value="{{ bo }}" />
-        <input type="hidden" name="ps" value="{{ ps }}" />
-
-        <p>To modify a result, click the score in the table below. To view detailed predictions for each match,
-        click the arrow.</p>
-        
-    <script type="text/javascript">
-    <!--
-    function toggle_visibility(id)
-    {
-        document.getElementById("fix" + id).style.display = 'none';
-        document.getElementById("inp" + id).style.display = 'inline';
-    }
-    //-->
-    </script>
-
-<div class="table numtable" style="width: 67em;">
-    <div class="rowh">
-        <div class="rowe" style="width: 30em;">Matches</div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-        <div class="rowe"></div>
-    </div>
-    {% for m in matches %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe" style="width: 28.5em; text-align: right;">
-            {% if m.canmod %}
-            {% if m.fixed and m.sca > m.scb %}<strong>{% endif %}
-            <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{ m.pla.tag }}</a>
-            {% if m.pla.country != "" %}
-                <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
-            {% endif %}
-            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
-            {% if m.fixed and m.sca > m.scb %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 10em; text-align: center;">
-            {% if m.canmod %}
-            <span id="fix{{ forloop.counter }}">
-                <a href="#" onclick="toggle_visibility('{{ forloop.counter }}'); return false;">
-                    {{ m.sca }}–{{ m.scb }}
-                </a>
-            </span>
-            <span id="inp{{ forloop.counter }}" style="display: none;">
-                <input type="text" name="m{{ forloop.counter0 }}-1" style="text-align: right; width: 2em;"
-                    value="{{ m.sca }}" /> –
-                <input type="text" name="m{{ forloop.counter0 }}-2" style="width: 2em;" 
-                    value="{{ m.scb }}" />
-            </span>
-            {% else %}
-                N/A
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 24.5em; text-align: left;">
-            {% if m.canmod %}
-            {% if m.fixed and m.scb > m.sca %}<strong>{% endif %}
-            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
-            {% if m.plb.country != "" %}
-                <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
-            {% endif %}
-            <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{ m.plb.tag }}</a>
-            {% if m.fixed and m.scb > m.sca %}</strong>{% endif %}
-            {% endif %}
-        </div>
-        <div class="rowe" style="width: 4em; text-align: right;">
-            {% if m.canmod %}
-            <a target="new" href="{{ m.obj|makematchlink|safe }}">→</a>
-            {% endif %}
-        </div>
-    </div>
     {% endfor %}
-</div>
+    <tr class="header">
+        <td style="text-align: right; padding-right: 2em;">{{ ta|pctg_one }}%</td>
+        <td></td>
+        <td style="text-align: center;">{% if prob_draw %}{{ prob_draw|pctg_one }}%{% endif %}</td>
+        <td></td>
+        <td style="padding-left: 2em;">{{ tb|pctg_one }}%</td>
+    </tr>
+</table>
 
-    <div style="text-align: right;">
+<h3>Median outcome</h3>
+
+<p>This is the median outcome <em>assuming the already entered results</em>.</p>
+
+<table class="results">
+{% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True %}
+</table>
+
+<h3>Update match progress</h3>
+
+<p>To modify a result, click on the score in the table below. To view detailed predictions for a match, click
+the arrow.</p>
+
+<form method="get" action="/inference/proleague/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_header="custom" lm_predict=True %}
+    </table>
+    <div style="margin-top: 0.2em; text-align: right;">
         <input type="submit" value="Update results" />
     </div>
-
-    <script type="text/javascript">
-    <!--
-        var togs = ['tl', 'reddit'];
-    //-->
-    </script>
-
-    <h3>Postable</h3>
-
-    <div id="tl">
-        <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
-    </div>
-    <div id="reddit" style="display: none;">
-        <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
-    </div>
-
-    <p>Formats: 
-    <a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
-    <a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
-
 </form>
+<div style="margin-top: 0.2em; text-align: right;">
+    <form method="get" action="/inference/proleague/">
+    <input type="hidden" name="bo" value="{{ form.bo.value }}" />
+    <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+    <input type="submit" value="Clear results" />
+    </form>
+</div>
+
+<h3>Postable</h3>
+
+<script type="text/javascript">
+<!--
+    var togs = ['tl', 'reddit'];
+//-->
+</script>
+
+<div id="tl">
+    <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+</div>
+<div id="reddit" style="display: none;">
+    <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+</div>
+
+<p>Formats: 
+<a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
+<a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
 
 {% endblock %}

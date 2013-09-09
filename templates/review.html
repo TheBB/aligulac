@@ -6,7 +6,7 @@ ratings.submitviews.review.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load markup %}
+{% load formulation %}
 
 {% block title %}Review results{% endblock %}
 
@@ -54,7 +54,7 @@ ratings.submitviews.review.
         </tr>
         <tr class="nonheader row1">
             <td colspan="1">Source:</td>
-            <td colspan="6"><a href="{{ g.source }}">{{ g.source }}</a></td>
+            <td colspan="6">{{ g.source|urlify }}</td>
         </tr>
         <tr class="nonheader row1">
             <td colspan="1">Contact:</td>
@@ -76,52 +76,14 @@ ratings.submitviews.review.
     <p>To all checked submissions, do the following:</p>
 
     <table class="bigform">
-        <tr>
-            <td class="form_left">
-                <label for="eobj">Event object</label>
-            </td>
-            <td class="form_right">
-                <select name="eobj" id="eobj">
-                    {% for event in events %}
-                    <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                <label for="date">Date</label>
-            </td>
-            <td class="form_right">
-                <input type="text" class="date" name="date" id="date" value="" />
-                <script type="text/javascript">
-                    // <![CDATA[  
-                    var opts = {                            
-                        formElements:{"date":"Y-ds-m-ds-d"},
-                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    };
-                    datePickerController.createDatePicker(opts);
-                    // ]]>
-                </script>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                <label for="act">Action</label>
-            </td>
-            <td class="form_right">
-                <select name="act" id="act">
-                    <option value="approve">Approve</option>
-                    <option value="reject">Reject (delete)</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left"></td>
-            <td class="form_right">
-                <input type="submit" value="Go" />
-            </td>
-        </tr>
+        {% form "forms.html" %}
+        {% field "select" form.eventobj class="wideinput" %}
+        {% field "date" form.date %}
+        {% field "checkbox" form.approve %}
+        {% field "checkbox" form.reject %}
+        {% field "checkbox" form.dup_flag %}
+        {% use "submit" text="Commit" %}
+        {% endform %}
     </table>
 
     </form>

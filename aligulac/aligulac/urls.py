@@ -59,6 +59,7 @@ urlpatterns = patterns('',
     url(r'^reports/balance/$', 'ratings.reports_views.balance'),
 
     url(r'^add/$', 'ratings.staff_views.add_matches'),
+    url(r'^add/review/$', 'ratings.staff_views.review_matches'),
 
     url(r'^login/$', 'aligulac.views.login_view'),
     url(r'^logout/$', 'aligulac.views.logout_view'),

@@ -1,5 +1,6 @@
 # {{{ Imports
 import datetime
+from math import sqrt
 
 from django.contrib.auth.models import User
 from django.db import (
@@ -13,8 +14,6 @@ from django.db.models import (
 )
 
 from aligulac.settings import start_rating
-
-from math import sqrt
 
 from countries import (
     transformations,
@@ -891,6 +890,19 @@ class Match(models.Model):
         self.period = pers[0]
     # }}}
 
+    # {{{ set_ratings: Sets the ratings of the players if they exist.
+    def set_ratings(self):
+        try:
+            self.rta = Rating.objects.get(player=self.pla, period_id=self.period_id-1)
+        except:
+            pass
+
+        try:
+            self.rtb = Rating.objects.get(player=self.plb, period_id=self.period_id-1)
+        except:
+            pass
+    # }}}
+
     # {{{ set_date(date): Exactly what it says on the tin.
     def set_date(self, date):
         self.date = date
@@ -1082,6 +1094,14 @@ class PreMatch(models.Model):
 
     def event_partpath(self):
         return self.group.event
+    # }}}
+
+    # {{{ is_valid: Checks if this can be turned into a Match.
+    def is_valid(self):
+        return (
+            self.pla is not None and self.plb is not None and
+            self.rca is not None and self.rcb is not None
+        )
     # }}}
 # }}}
 

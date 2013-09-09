@@ -1,13 +1,14 @@
+import hashlib
+import markdown2
+from math import sqrt
+import re
+
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 
 from datetime import timedelta, date, datetime
 from dateutil.relativedelta import relativedelta
-
-import markdown2
-import hashlib
-from math import sqrt
 
 from aligulac.settings import PRF_NA, PRF_INF, PRF_MININF, DEBUG
 
@@ -20,6 +21,29 @@ register = template.Library()
 @stringfilter
 def markdown(value):
     return mark_safe(markdown2.markdown(value, safe_mode=True))
+# }}}
+
+# {{{ urlify: Adds links to URLs.
+@register.filter
+@stringfilter
+def urlify(value):
+    #urlfinder  = re.compile(r'^(http://\S+)')
+    #urlfinder2 = re.compile(r'\s(http://\S+)')
+    #value = urlfinder.sub(r'<a href="\1">\1</a>', value)
+    #return mark_safe(urlfinder.sub(r' <a href="\1">\1</a>', value))
+
+    pat1 = re.compile(
+        r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)",
+        re.IGNORECASE | re.DOTALL
+    )
+    pat2 = re.compile(
+        r"(^|[\n ])(((www|ftp)\.[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)",
+        re.IGNORECASE | re.DOTALL
+    )
+
+    value = pat1.sub(r'\1<a href="\2">\3</a>', value)
+    value = pat2.sub(r'\1<a href="http://\2">\3</a>', value)
+    return mark_safe(value)
 # }}}
 
 # {{{ addf: Adds floating point numbers.

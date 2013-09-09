@@ -139,7 +139,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
                    style="text-align: right;" value="{{ m.pla_tag }}" />
         {% else %}{{ m.pla_tag }}{% endif %}
         {% if m.pla_id %}</a>{% endif %}
-        {% if m.pla_country != "" %}
+        {% if m.pla_country %}
             <img src="{{ m.pla_country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla_country }}" />
         {% endif %}
         {% if m.pla_race %}
@@ -169,7 +169,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% if m.plb_race %}
             <img src="{{ m.plb_race|imgfolder|static }}" alt="{{ m.plb_race }}" class="btm" />
         {% endif %}
-        {% if m.plb_country != "" %}
+        {% if m.plb_country %}
             <img src="{{ m.plb_country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb_country }}" />
         {% endif %}
         {% if m.plb_id %} <a href="/players/{{ m.plb_id }}-{{ m.plb_tag|urlfilter }}/">{% endif %}

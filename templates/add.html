@@ -6,6 +6,7 @@ ratings.submitviews.add_matches.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}Submit results{% endblock %}
 
@@ -14,11 +15,11 @@ ratings.submitviews.add_matches.
 
     {% include "messages.html" %}
 
-    {% if success %}
+    {% if matches %}
     <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
     before being visible.{% endif %}</p>
         <table class="results">
-        {% include "matchlist.html" with lm_list=success lm_adm=adm lm_header="full" %}
+        {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_header="full" %}
         </table>
     {% endif %}
 
@@ -176,114 +177,24 @@ ratings.submitviews.add_matches.
     <form method="post" action="/add/">
     {% csrf_token %}
     <table class="bigform">
-        {% if not adm %}
-        <tr>
-            <td class="form_left">
-                Event
-            </td>
-            <td class="form_right">
-                <input type="text" class="text" name="event" value="{{ event }}" />
-            </td>
-        </tr>
-        {% endif %}
+        {% form "forms.html" %}
+        {% use "hidden" name="submit" value="submit" %}
         {% if adm %}
-        <tr>
-            <td class="form_left">
-                Event object
-            </td>
-            <td class="form_right">
-                <select name="eobj">
-                    {% for event in events %}
-                    <option value="{{ event.id }}" {% if eobj == event.id %}selected{% endif %}>{{ event }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
+            {% field "select" form.eventobj class="wideinput" %}
+        {% else %}
+            {% field "basic" form.eventtext class="wideinput" %}
         {% endif %}
-        <tr>
-            <td class="form_left">
-                Date played
-            </td>
-            <td class="form_right">
-                <input type="text" name="date" class="date" id="date"
-                        value="{% if date %}{{ date }}{% else %}{% now "Y-m-d" %}{% endif %}" />
-                <script type="text/javascript" src="/js/datepicker.js" /></script>
-                <script type="text/javascript">
-                    // <![CDATA[  
-                    var opts = {                            
-                        formElements:{"date":"Y-ds-m-ds-d"},
-                        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-                    };           
-                    datePickerController.createDatePicker(opts);
-                    // ]]>
-                </script>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                Game
-            </td>
-            <td class="form_right">
-                <select name="game" class="small">
-                    <option value="HotS"{% ifequal game "HotS" %} selected{% endifequal %}>Heart of the Swarm</option>
-                    <option value="WoL"{% ifequal game "WoL" %} selected{% endifequal %}>Wings of Liberty</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                Type
-            </td>
-            <td class="form_right">
-                <select name="type" class="small">
-                    <option value="online"{% ifequal type "online" %} selected{% endifequal %}>Online</option>
-                    <option value="offline"{% ifequal type "offline" %} selected{% endifequal %}>Offline</option>
-                </select>
-            </td>
-        </tr>
+        {% field "date" form.date %}
+        {% field "select" form.game class="wideinput" %}
+        {% field "checkbox" form.offline class="wideinput" %}
         {% if not adm %}
-        <tr>
-            <td class="form_left">
-                Source
-            </td>
-            <td class="form_right">
-                <input type="text" class="text" name="source"value="{{ source }}" />
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left">
-                Contact
-            </td>
-            <td class="form_right">
-                <input type="text" class="text" name="contact" value="{{ contact }}" />
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left va_top">
-                Notes
-            </td>
-            <td class="form_right">
-                <textarea name="notes" class="wide" rows="5">{{ notes }}</textarea>
-            </td>
-        </tr>
+            {% field "basic" form.source class="verywideinput" %}
+            {% field "basic" form.contact class="verywideinput" %}
+            {% field "textarea" form.notes class="verywideinput" rows="5" %}
         {% endif %}
-        <tr>
-            <td class="form_left va_top">
-                Matches
-            </td>
-            <td class="form_right">
-                <textarea name="matches" class="wide" rows="20">{% if not matches %}Player A-Player B 3-2{% else %}{{ matches }}{% endif %}</textarea>
-            </td>
-        </tr>
-        <tr>
-            <td class="form_left"></td>
-            <td class="form_right">
-                <input type="submit" name="action" value="Add" />
-                {% if adm %}
-                <input type="submit" name="action" value="Add and close event" />
-                {% endif %}
-            </td>
-        </tr>
+        {% field "textarea" form.matches class="verywideinput" rows="20" %}
+        {% use "submit" text="Commit" %}
+        {% endform %}
     </table>
     </form>
 

@@ -116,7 +116,7 @@
 {% endblock %}
 
 {% block hidden %}
-<input type="hidden" name="{{ name }}" value="{{ value }}" />
+<input type="hidden" name="{{ name }}" value="{{ value }}" {% if id %}id="{{ id }}"{% endif %} />
 {% endblock %}
 
 {% block submit %}
@@ -124,6 +124,17 @@
     <td class="form_left"></td>
     <td class="form_right">
         <input type="submit" name="op" value="{{ text|default:"Submit" }}" />
+    </td>
+</tr>
+{% endblock %}
+
+{% block text %}
+<tr>
+    <td class="form_left" {% if left_id %}id="{{ left_id }}"{% endif %}>
+        {{ left|default:"" }}
+    </td>
+    <td class="form_right" {% if right_id %}id="{{ right_id }}"{% endif %}>
+        {{ right|default:"" }}
     </td>
 </tr>
 {% endblock %}

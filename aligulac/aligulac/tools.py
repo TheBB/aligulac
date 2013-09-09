@@ -227,7 +227,6 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                            ('Review', '/add/review/'),
                            ('Events', '/add/events/'),
                            ('Open events', '/add/open_events/'),
-                           ('Integrity', '/add/integrity/'),
                            ('Misc', '/add/misc/')]
     elif section == 'Teams':
         base['submenu'] = [('Ranking', '/teams/'),

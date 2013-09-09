@@ -4,19 +4,23 @@ import shlex
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db import connection
 from django.db.models import F, Q
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
 from aligulac.tools import (
     base_ctx,
+    etn,
     login_message,
     Message,
+    ntz,
     StrippedCharField,
 )
 
 from ratings.models import (
     Event,
+    EVENT_TYPES,
     GAMES,
     HOTS,
     Match,
@@ -420,6 +424,53 @@ class AddMatchesForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ AddEventsForm: Form for adding events.
+class AddEventsForm(forms.Form):
+    parent_id = forms.IntegerField(required=True, label='Parent ID')
+    predef_names = forms.ChoiceField([
+        ('other', 'Other'),
+        ('Group Stage, Playoffs', 'Group stage and playoffs'),
+        ('Group A,Group B,Group C,Group D', 'Groups A through D'),
+        ('Group A,Group B,Group C,Group D,Group E,Group F,Group G,Group H', 'Groups A through H'),
+        ('Ro64,Ro32,Ro16,Ro8,Ro4,Final', 'Ro64→Final'),
+        ('Ro32,Ro16,Ro8,Ro4,Final', 'Ro32→Final'),
+        ('Ro16,Ro8,Ro4,Final', 'Ro16→Final'),
+        ('Ro8,Ro4,Final', 'Ro8→Final'),
+        ('Ro4,Final', 'Ro4→Final'),
+        ('Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro64→Final + 3rd place'),
+        ('Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro32→Final + 3rd place'),
+        ('Ro16,Ro8,Ro4,Third place match,Final', 'Ro16→Final + 3rd place'),
+        ('Ro8,Ro4,Third place match,Final', 'Ro8→Final + 3rd place'),
+        ('Ro4,Third place match,Final', 'Ro4→Final + 3rd place'),
+        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Final', 'Ro64→Final + early rounds'),
+        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Final', 'Ro32→Final + early rounds'),
+        ('Early rounds,Ro16,Ro8,Ro4,Final', 'Ro16→Final + early rounds'),
+        ('Early rounds,Ro8,Ro4,Final', 'Ro8→Final + early rounds'),
+        ('Early rounds,Ro4,Final', 'Ro4→Final + early rounds'),
+        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 
+            'Ro64→Final + 3rd place and early rounds'),
+        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro32→Final + 3rd place and early rounds'),
+        ('Early rounds,Ro16,Ro8,Ro4,Third place match,Final', 'Ro16→Final + 3rd place and early rounds'),
+        ('Early rounds,Ro8,Ro4,Third place match,Final', 'Ro8→Final + 3rd place and early rounds'),
+        ('Early rounds,Ro4,Third place match,Final', 'Ro4→Final + 3rd place and early rounds'),
+        ('WB,LB,Final', 'WB, LB, Final'),
+        ('Round 1,Round 2', 'LB: Round 1->Round 2'),
+        ('Round 1,Round 2,Round 3,Round 4', 'LB: Round 1->Round 4'),
+        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6', 'LB: Round 1->Round 6'),
+        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6,Round 7,Round 8', 'LB: Round 1->Round 8'),
+    ], required=True, label='Predefined names')
+    custom_names = forms.CharField(max_length=400, required=False, label='Names')
+    type = forms.ChoiceField(choices=EVENT_TYPES, required=True, label='Type')
+    big = forms.BooleanField(required=False, label='Big', initial=False)
+    noprint = forms.BooleanField(required=False, label='No print', initial=False)
+
+    # {{{ Constructor
+    def __init__(self, *args, **kwargs):
+        super(AddEventsForm, self).__init__(*args, **kwargs)
+        self.label_suffix = ''
+    # }}}
+# }}}
+
 # {{{ Add matches view
 def add_matches(request):
     base = base_ctx('Submit', 'Matches', request)
@@ -463,4 +514,46 @@ def review_matches(request):
         g.prematches = display_matches(g.prematch_set.all(), messages=False)
 
     return render_to_response('review.html', base)
+# }}}
+
+# {{{ Event manager view
+def events(request):
+    base = base_ctx('Submit', 'Events', request)
+    if not base['adm']:
+        return redirect('/login/')
+    login_message(base)
+
+    form = AddEventsForm()
+    base['form'] = form
+
+    # {{{ Build event list
+    cur = connection.cursor()
+    cur.execute(
+          'SELECT e.id, e.name, (COUNT(p.id)-1) AS depth, e.parent_id, e.fullname, e.type '
+            'FROM event AS e, event AS p '
+           'WHERE e.lft BETWEEN p.lft and p.rgt AND e.id != 2 AND e.closed = False '
+        'GROUP BY e.id ORDER BY e.lft'
+    )
+    nodes = cur.fetchall()
+
+    foldnodes, total_fold = [], 0
+    for i, node in enumerate(nodes):
+        fold = ntz(etn(lambda: nodes[i+1][2] - node[2]))
+        if i == len(nodes) - 1:
+            fold = -total_fold
+        foldnodes.append({
+            'id':         node[0],
+            'name':       node[1],
+            'depth':      node[2],
+            'fold':       fold,
+            'parent_id':  node[3],
+            'fullname':   node[4],
+            'type':       node[5],
+        })
+        total_fold += fold
+
+    base['nodes'] = foldnodes
+    # }}}
+
+    return render_to_response('eventmgr.html', base)
 # }}}

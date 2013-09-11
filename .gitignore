@@ -3,6 +3,7 @@
 #################
 
 untracked/
+secret.py
 
 #################
 ## Eclipse

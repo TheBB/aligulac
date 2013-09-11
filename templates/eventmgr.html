@@ -56,8 +56,8 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 {% form "forms.html" %}
     {% use "hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
     {% use "text" left="Parent" right_id="parent_name" %}
-    {% field "select" form.predef_names class="wideinput" %}
-    {% field "basic" form.custom_names class="wideinput" %}
+    {% field "select" form.predef_names class="wideinput" onchange="if (document.getElementById('id_predef_names').selectedIndex > 0) document.getElementById('id_custom_names').value = '';" %}
+    {% field "basic" form.custom_names class="wideinput" onkeypress="if (document.getElementById('id_custom_names').value != '') document.getElementById('id_predef_names').selectedIndex = 0;" %}
     {% field "select" form.type class="wideinput" %}
     {% field "checkbox" form.big class="wideinput" %}
     {% field "checkbox" form.noprint class="wideinput" %}

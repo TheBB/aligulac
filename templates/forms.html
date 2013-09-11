@@ -8,6 +8,7 @@
                type="{{ field_type|default:"text" }}"
                name="{{ field.html_name }}" 
                id="{{ field.auto_id }}"
+               {% if onkeypress %}onkeypress="{{ onkeypress }}"{% endif %}
                value="{{ field.value|default:"" }}" />
     </td>
 </tr>
@@ -31,6 +32,7 @@
     <td class="form_right">
         <select class="{{ class }}"
                 name="{{ field.html_name }}"
+                {% if onchange %}onchange="{{ onchange }}"{% endif %}
                 id="{{ field.auto_id }}">
         {% for value, label in field.field.choices %}
             <option value="{{ value }}"

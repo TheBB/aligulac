@@ -459,15 +459,89 @@ class AddEventsForm(forms.Form):
         ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6', 'LB: Round 1->Round 6'),
         ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6,Round 7,Round 8', 'LB: Round 1->Round 8'),
     ], required=True, label='Predefined names')
-    custom_names = forms.CharField(max_length=400, required=False, label='Names')
+    custom_names = StrippedCharField(max_length=400, required=False, label='Custom names')
     type = forms.ChoiceField(choices=EVENT_TYPES, required=True, label='Type')
     big = forms.BooleanField(required=False, label='Big', initial=False)
     noprint = forms.BooleanField(required=False, label='No print', initial=False)
 
     # {{{ Constructor
-    def __init__(self, *args, **kwargs):
-        super(AddEventsForm, self).__init__(*args, **kwargs)
+    def __init__(self, request=None):
+        if request is None:
+            super(AddEventsForm, self).__init__()
+        else:
+            super(AddEventsForm, self).__init__(request.POST)
+            if 'op' in request.POST and request.POST['op'] == 'Commit new sub-events':
+                self.action = 'add'
+            else:
+                self.action = 'close'
+
         self.label_suffix = ''
+    # }}}
+
+    # {{{ Custom validation
+    def clean_parent_id(self):
+        try:
+            if int(self.cleaned_data['parent_id']) != -1:
+                return Event.objects.get(id=int(self.cleaned_data['parent_id']))
+            return None
+        except:
+            raise ValidationError('Could not find event ID %s.' % self.cleaned_data['parent_id'])
+
+    def clean(self):
+        if self.action != 'add':
+            if self.cleaned_data['parent_id'] is None:
+                raise ValidationError('Must specify an event to close.')
+            return self.cleaned_data
+
+        if self.cleaned_data['predef_names'] == 'other' and self.cleaned_data['custom_names'] in ['', None]:
+            raise ValidationError('No event names specified.')
+
+        names = (
+            self.cleaned_data['predef_names']
+            if self.cleaned_data['predef_names'] != 'other'
+            else self.cleaned_data['custom_names']
+        )
+
+        self.cleaned_data['names'] = [s.strip() for s in names.split(',') if s.strip() != '']
+        return self.cleaned_data
+    # }}}
+
+    # {{{ Commit changes
+    def commit(self):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    if field == '__all__':
+                        ret.append(Message(error, type=Message.ERROR))
+                    else:
+                        ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        if self.action == 'add':
+            adder = (
+                self.cleaned_data['parent_id'].add_child
+                if self.cleaned_data['parent_id'] is not None else
+                Event.add_root
+            )
+            for name in self.cleaned_data['names']:
+                adder(
+                    name=name, 
+                    type=self.cleaned_data['type'],
+                    big=self.cleaned_data['big'],
+                    noprint=self.cleaned_data['noprint'],
+                )
+            ret.append(
+                Message('Successfully created %i new events.' % len(self.cleaned_data['names']),
+                type=Message.SUCCESS)
+            )
+        elif self.action == 'close':
+            self.cleaned_data['parent_id'].close()
+            ret.append(Message('Successfully closed event.', type=Message.SUCCESS))
+
+        return ret
     # }}}
 # }}}
 
@@ -523,7 +597,12 @@ def events(request):
         return redirect('/login/')
     login_message(base)
 
-    form = AddEventsForm()
+    if request.method == 'POST':
+        form = AddEventsForm(request=request)
+        base['messages'] += form.commit()
+    else:
+        form = AddEventsForm()
+
     base['form'] = form
 
     # {{{ Build event list

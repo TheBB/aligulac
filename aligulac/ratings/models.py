@@ -340,8 +340,8 @@ class Event(models.Model):
     # {{{ add_child(name, type, noprint=False, closed=False): Adds a new child to the right of all existing
     # children
     @transaction.atomic
-    def add_child(self, name, type, noprint=False, closed=False):
-        new = Event(name=name, parent=self, noprint=noprint, closed=closed)
+    def add_child(self, name, type, big=False, noprint=False):
+        new = Event(name=name, parent=self, big=big, noprint=noprint)
 
         if self.has_children():
             new.lft = self.get_immediate_children().aggregate(Max('rgt'))['rgt__max'] + 1

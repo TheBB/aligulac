@@ -10,6 +10,7 @@ import ccy
 
 from django import forms
 from django.db.models import (
+    Count,
     Min,
     Max,
     Sum,
@@ -37,6 +38,9 @@ from aligulac.tools import (
 )
 
 from ratings.models import (
+    CAT_FREQUENT,
+    CAT_INDIVIDUAL,
+    CAT_TEAM,
     Earnings,
     Event,
     EVENT_TYPES,
@@ -45,6 +49,9 @@ from ratings.models import (
     Player,
     Story,
     TLPD_DBS,
+    TYPE_CATEGORY,
+    TYPE_EVENT,
+    TYPE_ROUND,
 )
 from ratings.tools import (
     count_matchup_games,
@@ -326,7 +333,7 @@ class AddForm(forms.Form):
             super(AddForm, self).__init__(request.POST)
         else:
             super(AddForm, self).__init__(initial={
-                'type': Event.TYPE_EVENT if event.type == Event.TYPE_CATEGORY else Event.TYPE_ROUND,
+                'type': TYPE_EVENT if event.type == TYPE_CATEGORY else TYPE_ROUND,
                 'noprint': False,
                 'closed': event.closed
             })
@@ -406,7 +413,11 @@ class SearchForm(forms.Form):
             return {'messages': msgs}
         # }}}
 
-        matches = Match.objects.all().prefetch_related('message_set').select_related('pla','plb','period')
+        matches = (
+            Match.objects.all().prefetch_related('message_set')
+                .select_related('pla','plb','period')
+                .annotate(Count('eventobj__match'))
+        )
 
         # {{{ All the easy filtering
         if self.cleaned_data['after'] is not None:
@@ -487,7 +498,7 @@ class SearchForm(forms.Form):
 
         matches = matches.order_by('-date', 'eventobj__lft', 'event', 'id')
         if 1 <= len(pls) <= 2:
-            ret['matches'] = display_matches(matches, date=True, fix_left=pls[0])
+            ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (
                 sum([m['pla_score'] for m in ret['matches']]),
                 sum([m['plb_score'] for m in ret['matches']]),
@@ -500,7 +511,7 @@ class SearchForm(forms.Form):
             if len(pls) == 2:
                 ret['right'] = pls[1]
         else:
-            ret['matches'] = display_matches(matches, date=True)
+            ret['matches'] = display_matches(matches, date=True, eventcount=True)
 
         return ret
         # }}}
@@ -589,8 +600,10 @@ def results(request):
     matches = (
         Match.objects.filter(date=day).order_by('eventobj__lft', 'event', 'id')
             .prefetch_related('message_set')
+            .select_related('rta', 'rtb')
+            .annotate(Count('eventobj__match'))
     )
-    base['matches'] = display_matches(matches, date=False, ratings=True, messages=True)
+    base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
     return render_to_response('results.html', base)
 # }}}
@@ -612,12 +625,12 @@ def events(request, event_id=None):
             Event.objects.filter(parent__isnull=True).prefetch_related('event_set').order_by('lft')
         )
         base.update({
-            'ind_bigs':    collect(root_events.filter(big=True, category=Event.CAT_INDIVIDUAL), 2),
-            'ind_smalls':  root_events.filter(big=False, category=Event.CAT_INDIVIDUAL).order_by('name'),
-            'team_bigs':   collect(root_events.filter(big=True, category=Event.CAT_TEAM), 2),
-            'team_smalls': root_events.filter(big=False, category=Event.CAT_TEAM).order_by('name'),
-            'freq_bigs':   collect(root_events.filter(big=True, category=Event.CAT_FREQUENT), 2),
-            'freq_smalls': root_events.filter(big=False, category=Event.CAT_FREQUENT).order_by('name'),
+            'ind_bigs':    collect(root_events.filter(big=True, category=CAT_INDIVIDUAL), 2),
+            'ind_smalls':  root_events.filter(big=False, category=CAT_INDIVIDUAL).order_by('name'),
+            'team_bigs':   collect(root_events.filter(big=True, category=CAT_TEAM), 2),
+            'team_smalls': root_events.filter(big=False, category=CAT_TEAM).order_by('name'),
+            'freq_bigs':   collect(root_events.filter(big=True, category=CAT_FREQUENT), 2),
+            'freq_smalls': root_events.filter(big=False, category=CAT_FREQUENT).order_by('name'),
         })
 
         return render_to_response('events.html', base)
@@ -652,7 +665,7 @@ def events(request, event_id=None):
 
         check_form('form', EventModForm, 'modevent')
         check_form('addform', AddForm, 'addevent')
-        if event.type == Event.TYPE_EVENT:
+        if event.type == TYPE_EVENT:
             check_form('ppform', PrizepoolModForm, 'modpp')
         if not event.has_children() and event.get_immediate_matchset().exists():
             check_form('stform', StoryModForm, 'modstories')
@@ -683,7 +696,9 @@ def events(request, event_id=None):
         'matches':   display_matches(
             matches.prefetch_related('message_set')
                 .select_related('pla', 'plb', 'eventobj')
-                .order_by('-eventobj__lft', '-date', '-id')[0:200]
+                .annotate(Count('eventobj__match'))
+                .order_by('-eventobj__lft', '-date', '-id')[0:200],
+            eventcount=True,
         ),
         'nplayers':  Player.objects.filter(
             Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))

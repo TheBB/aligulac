@@ -556,14 +556,6 @@ td.va_top {
     width: 15em;
 }
 
-textarea {
-    width: 35em;
-}
-
-textarea.wide {
-    width: 50em;
-}
-
 input.text {
     width: 35em;
 }

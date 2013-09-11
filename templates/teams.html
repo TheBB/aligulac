@@ -31,12 +31,12 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
         </div>
         <div class="rowe" style="text-align: right;">
             {% if team.scoreak > 0.0 %}
-                {{ team.scoreak|pctg2 }}%
+                {{ team.scoreak|pctg_one }}%
             {% endif %}
         </div>
         <div class="rowe" style="text-align: right;">
             {% if team.scorepl > 0.0 %}
-                {{ team.scorepl|pctg2 }}%
+                {{ team.scorepl|pctg_one }}%
             {% endif %}
         </div>
         <div class="rowe" style="text-align: right;">

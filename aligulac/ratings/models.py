@@ -124,7 +124,7 @@ class Event(models.Model):
         db_table = 'event'
 
     name = models.CharField('Name', max_length=100)
-    parent = models.ForeignKey('Event', null=True, blank=True)
+    parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
     lft = models.IntegerField('Left', null=False, db_index=True)
     rgt = models.IntegerField('Right', null=False, db_index=True)
     closed = models.BooleanField('Closed', default=False)
@@ -149,6 +149,8 @@ class Event(models.Model):
 
     category = models.CharField('Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES)
     type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES)
+
+    family = models.ManyToManyField('Event', through='EventAdjacency')
 
     # {{{ String representation
     def __str__(self):
@@ -423,6 +425,21 @@ class Event(models.Model):
         self.set_prizepool(None)
         new_event.set_prizepool(True)
         new_event.change_type(Event.EVENT)
+    # }}}
+# }}}
+
+# {{{ EventAdjacencies
+class EventAdjacency(models.Model):
+    class Meta:
+        db_table = 'eventadjacency'
+
+    parent = models.ForeignKey(Event, null=False, db_index=True, related_name='downlink')
+    child = models.ForeignKey(Event, null=False, db_index=True, related_name='uplink')
+    distance = models.IntegerField(null=True, default=None)
+
+    # {{{ String representation
+    def __str__(self):
+        return str(self.parent) + ' -> ' + str(self.child) + ' (' + str(self.distance) + ')'
     # }}}
 # }}}
 

@@ -101,6 +101,7 @@ Changes here will mostly be visible on the entire site.
             </tr>
             <tr>
                 <td class="menu">
+                &nbsp;
                 {% for main in menu %}
                     <span id="submenu_{{ main.name }}" {% if curpage != main.name %}style="display: none;"{% endif %}>
                     {% for subname, suburl in main.submenu %}
@@ -113,6 +114,7 @@ Changes here will mostly be visible on the entire site.
                     {% endfor %}
                     </span>
                 {% endfor %}
+                &nbsp;
                 </td>
             </tr>
             </tbody>

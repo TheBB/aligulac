@@ -19,6 +19,7 @@ from aligulac.tools import (
 )
 
 from ratings.models import (
+    CAT_TEAM,
     Event,
     EVENT_TYPES,
     GAMES,
@@ -26,6 +27,9 @@ from ratings.models import (
     Match,
     PreMatch,
     PreMatchGroup,
+    TYPE_CATEGORY,
+    TYPE_EVENT,
+    TYPE_ROUND,
 )
 from ratings.tools import (
     display_matches,
@@ -635,4 +639,24 @@ def events(request):
     # }}}
 
     return render_to_response('eventmgr.html', base)
+# }}}
+
+# {{{ Open events view
+def open_events(request):
+    base = base_ctx('Submit', 'Open events', request)
+    if not base['adm']:
+        return redirect('/login/')
+    login_message(base)
+
+    # {{{ Breadth-first search for closed events with unknown prizepool status
+    pp_events = []
+    search = Event.objects.filter(parent__isnull=True).exclude(category=CAT_TEAM, type=TYPE_ROUND)
+    while search.exists():
+        pp_events += list(search.filter(type=TYPE_EVENT, prizepool__isnull=True, closed=True))
+        search = Event.objects.filter(parent__in=search).exclude(type=TYPE_ROUND)
+    pp_events.sort(key=lambda e: e.fullname)
+    base['pp_events'] = pp_events
+    # }}}
+
+    return render_to_response('events_open.html', base)
 # }}}

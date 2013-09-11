@@ -16,44 +16,44 @@ event has finished, please make sure that all matches have been added before clo
 <form method="post" action="/add/open_events/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
-	<tr class="header">
-		<td style="width: 50m;">Open events with games</td>
-		<td style="width: 16m;">External links</td>
-		<td class="rl_icon"></td>
-	</tr>
-	{% for event in openevents %}
-		<tr class="nonheader {% cycle 'row2' 'row1' %}">
-			<td>
-				{% for e in event.get_path_print %}
-					<a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>
-				{% endfor %}
-				(<a href="../events/#{{ event.id }}">manage</a>)
-			</td>
-			<td>
-            	{% if event.get_homepage %}
-                	<a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
+    <tr class="header">
+        <td style="width: 50m;">Open events with games</td>
+        <td style="width: 16m;">External links</td>
+        <td class="rl_icon"></td>
+    </tr>
+    {% for event in openevents %}
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+            <td>
+                {% for e in event.get_path_print %}
+                    <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>
+                {% endfor %}
+                (<a href="../events/#{{ event.id }}">manage</a>)
+            </td>
+            <td>
+                {% if event.get_homepage %}
+                    <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                 {% endif %}
                 {% if event.get_tlpd_kr_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tlpd_in_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tl_thread %}
-                	<a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                 {% endif %}
                 {% if event.get_lp_name %}
-                	<a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
                 {% endif %}
-			</td>
-			<td>
-				<input type="checkbox" name="openevent" value="{{ event.id }}">
-			</td>
-		</tr>
-	{% endfor %}
-	<tr class="nonheader">
-		<td colspan="3" style="text-align: right;"><input type="Submit" name="openevents" value="Close events" /></td>
-	</tr>
+            </td>
+            <td>
+                <input type="checkbox" name="openevent" value="{{ event.id }}">
+            </td>
+        </tr>
+    {% endfor %}
+    <tr class="nonheader">
+        <td colspan="3" style="text-align: right;"><input type="Submit" name="openevents" value="Close events" /></td>
+    </tr>
 </table>
 </form>
 <br>
@@ -63,39 +63,39 @@ not yet in the database.  In the latter case, feel free to use the external link
 to the database and close the event when you are done.</p>
 
 <table class="results" style="width: 67em;">
-	<tr class="header">
-		<td style="width: 50m;">Open events without games</td>
-		<td style="width: 16m;">External links</td>
-		<td class="rl_icon"></td>
-	</tr>
-	{% for event in emptyopenevents %}
-		<tr class="nonheader {% cycle 'row2' 'row1' %}">
-			<td>
-				{% for e in event.get_path_print %}
-					<a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>
-				{% endfor %}
-				(<a href="../events/#{{ event.id }}">manage</a>)
-			</td>
-			<td>
-            	{% if event.get_homepage %}
-                	<a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
+    <tr class="header">
+        <td style="width: 50m;">Open events without games</td>
+        <td style="width: 16m;">External links</td>
+        <td class="rl_icon"></td>
+    </tr>
+    {% for event in emptyopenevents %}
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+            <td>
+                {% for e in event.get_path_print %}
+                    <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>
+                {% endfor %}
+                (<a href="../events/#{{ event.id }}">manage</a>)
+            </td>
+            <td>
+                {% if event.get_homepage %}
+                    <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                 {% endif %}
                 {% if event.get_tlpd_kr_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tlpd_in_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tl_thread %}
-                	<a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                 {% endif %}
                 {% if event.get_lp_name %}
-                	<a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
                 {% endif %}
-			</td>
-			<td></td>
-		</tr>
-	{% endfor %} 
+            </td>
+            <td></td>
+        </tr>
+    {% endfor %} 
 </table>
 
 <h2>Missing prize pool information</h2>
@@ -110,43 +110,43 @@ to the database and close the event when you are done.</p>
 <form method="post" action="/add/open_events/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
-	<tr class="header">
-		<td style="width: 50m;">Events with no prize pool information</td>
-		<td style="width: 16m;">External links</td>
-		<td class="rl_icon"></td>
-	</tr>
-	{% for event in noprizepoolevents %}
-		<tr class="nonheader {% cycle 'row2' 'row1' %}">
-			<td>
-				{% for e in event.get_path_print %}
-					<a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>
-				{% endfor %}
-			</td>
-			<td>
-            	{% if event.get_homepage %}
-                	<a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
+    <tr class="header">
+        <td style="width: 50m;">Events with no prize pool information</td>
+        <td style="width: 16m;">External links</td>
+        <td class="rl_icon"></td>
+    </tr>
+    {% for event in pp_events %}
+        <tr class="nonheader {% cycle 'row2' 'row1' %}">
+            <td>
+                <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">
+                    {{ event.fullname }}
+                </a>
+            </td>
+            <td>
+                {% if event.get_homepage %}
+                    <a href="{{ event.get_homepage }}" target="_blank">Homepage</a>
                 {% endif %}
                 {% if event.get_tlpd_kr_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ event.get_tlpd_kr_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tlpd_in_id %}
-                	<a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ event.get_tlpd_in_id }}" target="_blank">TLPD</a>
                 {% endif %}
                 {% if event.get_tl_thread %}
-                	<a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">TL</a>
                 {% endif %}
                 {% if event.get_lp_name %}
-                	<a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">LP</a>
                 {% endif %}
-			</td>
-			<td>
-				<input type="checkbox" name="prizepool" value="{{ event.id }}">
-			</td>
-		</tr>
-	{% endfor %} 
-	<tr class="nonheader">
-		<td colspan="3" style="text-align: right;"><input type="Submit" name="prizepools" value="Marked events have no prize pool" /></td>
-	</tr>
+            </td>
+            <td>
+                <input type="checkbox" name="prizepool" value="{{ event.id }}">
+            </td>
+        </tr>
+    {% endfor %} 
+    <tr class="nonheader">
+        <td colspan="3" style="text-align: right;"><input type="Submit" name="prizepools" value="Marked events have no prize pool" /></td>
+    </tr>
 </table>
 </form>
 {% endblock %}

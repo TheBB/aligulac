@@ -3,6 +3,20 @@
  * ======================================================================
  */
 
+/* Checks for element relationship
+ */
+function is_descendant(par, child)
+{
+    var node = child;
+    while (node != null) 
+    {
+        if (node == par)
+            return true;
+        node = node.parentNode;
+    }
+    return false;
+}
+
 /* Trims whitespace
  */
 function trim(s)

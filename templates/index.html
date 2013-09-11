@@ -55,6 +55,24 @@ Changes here will mostly be visible on the entire site.
                 document.getElementById('lma-' + id).innerHTML = 'show';
             }
         }
+
+        function hover(id)
+        {
+            submenus = [{% for page in menu %}'submenu_{{ page }}',{% endfor %}];
+            for (var i = 0; i < submenus.length; i++)
+                if (submenus[i] == 'submenu_' + id)
+                    document.getElementById(submenus[i]).style.display = 'inline';
+                else
+                    document.getElementById(submenus[i]).style.display = 'none';
+        }
+
+        document.onmouseover = function (e)
+        {
+            if (!is_descendant(document.getElementById('menu_container'), e.target))
+            {
+                console.log('hovering');
+            }
+        }
         //-->
         </script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
@@ -75,31 +93,31 @@ Changes here will mostly be visible on the entire site.
                     {% endif %}
                 </td>
             </tr>
+            <tbody id="menu_container">
             <tr>
-                <td id="menu">
-                    {% for m in menu %}
-                    {% if curpage == m.0 %}
-                        <a href="{{ m.1 }}" class="menu menucur">{{ m.0 }}</a>
-                    {% else %}
-                        <a href="{{ m.1 }}" class="menu">{{ m.0 }}</a>
-                    {% endif %}
-                    {% endfor %}
+                <td class="menu">
+                {% for page, contents in menu.items %}
+                    <a href="{{ contents.url }}" onmouseover="hover('{{ page }}');" class="menu {% if curpage == page %}menucur{% endif %}">{{ page }}</a>
+                {% endfor %}
                 </td>
             </tr>
-            {% if submenu %}
             <tr>
-                <td id="menu">
-                    {% for m in submenu %}
-                    {% if not m %} || {% else %}
-                    {% if cursubpage == m.0 %}
-                        <a href="{{ m.1 }}" class="menu menucur">{{ m.0 }}</a>
+                <td class="menu">
+                {% for page, contents in menu.items %}
+                    <span id="submenu_{{ page }}" {% if curpage != page %}style="display: none;"{% endif %}>
+                    {% for subname, suburl in contents.submenu.items %}
+                    {% if not suburl %} || {% else %}
+                    {% if cursubpage == subname and curpage == page %}
+                        <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
                     {% else %}
-                        <a href="{{ m.1 }}" class="menu">{{ m.0 }}</a>
+                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
                     {% endif %} {% endif %}
                     {% endfor %}
+                    </span>
+                {% endfor %}
                 </td>
             </tr>
-            {% endif %}
+            </tbody>
             <tr>
                 <td style="text-align: right;"> <form action="/search/" method="get">
                     Find player, team or event: <input type="text" name="q" />

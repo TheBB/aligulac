@@ -27,7 +27,7 @@ td#subheading {
     padding-bottom: 0.2em;
 }
 
-td#menu {
+td.menu {
     font-family: 'Donegal One', Times, serif;
     font-variant: small-caps;
     border-style: none none solid none;

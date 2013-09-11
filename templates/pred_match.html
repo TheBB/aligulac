@@ -134,6 +134,9 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             </td>
         </tr>
     </table>
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_header="fixed" lm_fixedheader="Match history" lm_autohide=True %}
+    </table>
 
     <h3>Update match progress</h3>
 

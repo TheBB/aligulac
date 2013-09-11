@@ -125,6 +125,21 @@ NB! The calling code is responsible for starting and ending the HTML table:
     </tr>
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
     {% endifchanged %}
+{% elif lm_header == "fixed" %}
+    {% if forloop.first %}
+    <tr class="header">
+        <td colspan="5">
+            {{ lm_fixedheader }}
+        </td>
+        <td colspan="2" style="text-align: right;">
+            <a id="lma-{{ m.match_id }}" href="#"
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
+                {% if lm_autohide %}show{% else %}hide{% endif %}
+            </a>
+        </td>
+    </tr>
+    <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+    {% endif %}
 {% endif %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
     <td class="lm_date">
@@ -217,4 +232,4 @@ NB! The calling code is responsible for starting and ending the HTML table:
 </tr>
 {% endfor %}
 
-{% if lm_header == "full" or lm_header == "custom" %} </tbody> {% endif %}
+{% if lm_header == "full" or lm_header == "custom" or lm_header == "fixed"%} </tbody> {% endif %}

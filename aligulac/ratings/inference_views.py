@@ -5,6 +5,7 @@ from math import log
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import (
     redirect, 
@@ -32,6 +33,7 @@ from ratings.tools import (
     count_matchup_player,
     count_winloss_games,
     count_winloss_player,
+    display_matches,
     find_player,
 )
 
@@ -391,6 +393,13 @@ def match(request):
     wb_b, wa_b = count_winloss_games(Match.objects.filter(pla=dbpl[1], plb=dbpl[0]))
     base['vs_a'] = wa_a + wa_b
     base['vs_b'] = wb_a + wb_b
+
+    base['matches'] = display_matches(
+        Match.objects.filter(Q(pla=dbpl[0], plb=dbpl[1]) | Q(plb=dbpl[0], pla=dbpl[1]))
+            .select_related('period', 'pla', 'plb')
+            .order_by('-date', 'id'),
+        fix_left=dbpl[0],
+    )
     # }}}
 
     postable_match(base, request)

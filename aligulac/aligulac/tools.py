@@ -196,74 +196,65 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         'debug':     DEBUG,
         'cur_path':  request.get_full_path(),
         'messages':  [],
-        'menu':      {
-            'Ranking': {
-                'url': '/periods/%i' % curp.id,
-                'submenu': {
-                    'Current':  '/periods/%i/' % curp.id,
-                    'History':  '/periods/',
-                    'Earnings': '/earnings/',
-                },
-            },
-            'Teams': {
-                'url': '/teams/',
-                'submenu': {
-                    'Ranking': '/teams/',
-                    'Transfers': '/transfers/',
-                },
-            },
-            'Records': {
-                'url': '/records/history/',
-                'submenu': {
-                    'History': '/records/history/',
-                    'HoF': '/records/hof/',
-                    'All': '/records/race/?race=all',
-                    'Protoss': '/records/race/?race=P',
-                    'Terran': '/records/race/?race=T',
-                    'Zerg': '/records/race/?race=Z',
-                },
-            },
-            'Results': {
-                'url': '/results/',
-                'submenu': {
-                    'By Date': '/results/',
-                    'By Event': '/results/events/',
-                    'Search': '/results/search/',
-                },
-            },
-            'Reports': {
-                'url': '/reports/',
-                'submenu': {
-                    'Balance': '/reports/balance/',
-                },
-            },
-            'Inference': {
-                'url': '/inference/',
-                'submenu': {
-                    'Predict': '/inference/',
-                    'Compare': '/inference/compare/',
-                },
-            },
-            'About': {
-                'url': '/faq/',
-                'submenu': {
-                    'FAQ': '/faq/',
-                    'Blog': '/blog/',
-                    'Staff': '/staff/',
-                    'Database': '/db/',
-                },
-            },
-            'Submit': {
-                'url': '/add/',
-                'submenu': {
-                    'Matches': '/add/',
-                    'Review': '/add/review/',
-                    'Events': '/add/events/',
-                    'Open events': '/add/open_events/',
-                    'Misc': '/add/misc/',
-                },
-            },
-        },
+        'menu':      [{
+            'name': 'Ranking',
+            'url': '/periods/%i' % curp.id,
+            'submenu': [
+                ('Current',  '/periods/%i/' % curp.id),
+                ('History',  '/periods/'),
+                ('Earnings', '/earnings/'),
+        ]}, {
+            'name': 'Teams',
+            'url': '/teams/',
+            'submenu': [
+                ('Ranking', '/teams/'),
+                ('Transfers', '/transfers/'),
+        ]}, {
+            'name': 'Records',
+            'url': '/records/history/',
+            'submenu': [
+                ('History', '/records/history/'),
+                ('HoF', '/records/hof/'),
+                ('All', '/records/race/?race=all'),
+                ('Protoss', '/records/race/?race=P'),
+                ('Terran', '/records/race/?race=T'),
+                ('Zerg', '/records/race/?race=Z'),
+        ]}, {
+            'name': 'Results',
+            'url': '/results/',
+            'submenu': [
+                ('By Date', '/results/'),
+                ('By Event', '/results/events/'),
+                ('Search', '/results/search/'),
+        ]}, {
+            'name': 'Reports',
+            'url': '/reports/',
+            'submenu': [
+                ('Balance', '/reports/balance/'),
+        ]}, {
+            'name': 'Inference',
+            'url': '/inference/',
+            'submenu': [
+                ('Predict', '/inference/'),
+                ('Compare', '/inference/compare/'),
+        ]}, {
+            'name': 'About',
+            'url': '/faq/',
+            'submenu': [
+                ('FAQ', '/faq/'),
+                ('Blog', '/blog/'),
+                ('Staff', '/staff/'),
+                ('Database', '/db/'),
+        ]}, {
+            'name': 'Submit',
+            'url': '/add/',
+            'submenu': [
+                ('Matches', '/add/'),
+                ('Review', '/add/review/'),
+                ('Events', '/add/events/'),
+                ('Open events', '/add/open_events/'),
+                ('Misc', '/add/misc/'),
+        ]}]
     }
     base.update(csrf(request))
 

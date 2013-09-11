@@ -58,7 +58,7 @@ Changes here will mostly be visible on the entire site.
 
         function hover(id)
         {
-            submenus = [{% for page in menu %}'submenu_{{ page }}',{% endfor %}];
+            submenus = [{% for main in menu %}'submenu_{{ main.name }}',{% endfor %}];
             for (var i = 0; i < submenus.length; i++)
                 if (submenus[i] == 'submenu_' + id)
                     document.getElementById(submenus[i]).style.display = 'inline';
@@ -69,9 +69,7 @@ Changes here will mostly be visible on the entire site.
         document.onmouseover = function (e)
         {
             if (!is_descendant(document.getElementById('menu_container'), e.target))
-            {
-                console.log('hovering');
-            }
+                hover('{{ curpage }}');
         }
         //-->
         </script>
@@ -96,18 +94,18 @@ Changes here will mostly be visible on the entire site.
             <tbody id="menu_container">
             <tr>
                 <td class="menu">
-                {% for page, contents in menu.items %}
-                    <a href="{{ contents.url }}" onmouseover="hover('{{ page }}');" class="menu {% if curpage == page %}menucur{% endif %}">{{ page }}</a>
+                {% for main in menu %}
+                    <a href="{{ main.url }}" onmouseover="hover('{{ main.name }}');" class="menu {% if curpage == main.name %}menucur{% endif %}">{{ main.name }}</a>
                 {% endfor %}
                 </td>
             </tr>
             <tr>
                 <td class="menu">
-                {% for page, contents in menu.items %}
-                    <span id="submenu_{{ page }}" {% if curpage != page %}style="display: none;"{% endif %}>
-                    {% for subname, suburl in contents.submenu.items %}
+                {% for main in menu %}
+                    <span id="submenu_{{ main.name }}" {% if curpage != main.name %}style="display: none;"{% endif %}>
+                    {% for subname, suburl in main.submenu %}
                     {% if not suburl %} || {% else %}
-                    {% if cursubpage == subname and curpage == page %}
+                    {% if cursubpage == subname and curpage == main.name %}
                         <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
                     {% else %}
                         <a href="{{ suburl }}" class="menu">{{ subname }}</a>

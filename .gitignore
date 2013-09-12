@@ -3,7 +3,7 @@
 #################
 
 untracked/
-secret.py
+local.py
 
 #################
 ## Eclipse
@@ -166,9 +166,7 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
-settings.py
 *.pickle
 *.sql
-aligulac/aligulac/settings.py
 aligulac/update
 requirements.txt

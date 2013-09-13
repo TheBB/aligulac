@@ -1,6 +1,9 @@
 # {{{ Imports
 from django.contrib import admin
-from django.contrib.admin import DateFieldListFilter
+from django.contrib.admin import (
+    AllValuesFieldListFilter,
+    DateFieldListFilter,
+)
 from django.db.models import (
     Q,
     F,
@@ -90,7 +93,11 @@ class MatchForm(forms.ModelForm):
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]
-    #list_filter = [('date', DateFieldListFilter)]
+    exclude = ('rta', 'rtb')
+    list_filter = [
+        ('date', DateFieldListFilter), 
+        ('game', AllValuesFieldListFilter),
+    ]
     form = MatchForm
 
     def get_res(self, obj):

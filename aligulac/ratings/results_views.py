@@ -496,7 +496,7 @@ class SearchForm(forms.Form):
             ))
             return ret
 
-        matches = matches.order_by('-date', 'eventobj__lft', 'event', 'id')
+        matches = matches.order_by('-date', 'eventobj__fullname', 'event', 'id')
         if 1 <= len(pls) <= 2:
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (
@@ -539,9 +539,10 @@ class ResultsModForm(forms.Form):
             super(ResultsModForm, self).__init__()
 
         self.fields['event'].choices = [(0, 'No change')] + [
-            (e['id'], e['fullname']) for e in (
-                Event.objects.filter(closed=False, rgt=F('lft')+1).order_by('lft').values('id','fullname')
-            )
+            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
+                .exclude(downlink__distance__gt=0)
+                .order_by('fullname')
+                .values('id', 'fullname')
         ]
     # }}}
 
@@ -598,7 +599,7 @@ def results(request):
     })
 
     matches = (
-        Match.objects.filter(date=day).order_by('eventobj__lft', 'event', 'id')
+        Match.objects.filter(date=day).order_by('eventobj__fullname', 'event', 'id')
             .prefetch_related('message_set')
             .select_related('rta', 'rtb')
             .annotate(Count('eventobj__match'))
@@ -621,9 +622,7 @@ def events(request, event_id=None):
 
     # {{{ Display the main table if event ID is not given
     if event_id is None:
-        root_events = (
-            Event.objects.filter(parent__isnull=True).prefetch_related('event_set').order_by('lft')
-        )
+        root_events = Event.objects.exclude(uplink__distance__gt=0).order_by('name')
         base.update({
             'ind_bigs':    collect(root_events.filter(big=True, category=CAT_INDIVIDUAL), 2),
             'ind_smalls':  root_events.filter(big=False, category=CAT_INDIVIDUAL).order_by('name'),
@@ -645,11 +644,11 @@ def events(request, event_id=None):
         event.set_big(True)
 
     base.update({
-        'event':             event,
-        'siblings':          event.parent.event_set.exclude(id=event.id) if event.parent else None,
-        'path':              event.get_ancestors(id=True),
-        'children':          event.event_set.all(),
-        'surroundingevents': event.parent.event_set.exclude(lft__lte=event.lft, rgt__lte=event.rgt),
+        'event':            event,
+        'siblings':         event.get_parent().get_immediate_children().exclude(id=event.id) 
+                                if event.get_parent() else None,
+        'path':             event.get_ancestors(id=True),
+        'children':         event.get_immediate_children(),
     })
     # }}}
 
@@ -672,7 +671,7 @@ def events(request, event_id=None):
     # }}}
 
     # {{{ Prizepool information for the public
-    total_earnings = Earnings.objects.filter(event__lft__gte=event.lft, event__rgt__lte=event.rgt)
+    total_earnings = Earnings.objects.filter(event__uplink__parent=event)
     currencies = [r['currency'] for r in total_earnings.values('currency').distinct()]
     base.update({
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],
@@ -697,7 +696,7 @@ def events(request, event_id=None):
             matches.prefetch_related('message_set')
                 .select_related('pla', 'plb', 'eventobj')
                 .annotate(Count('eventobj__match'))
-                .order_by('-eventobj__lft', '-date', '-id')[0:200],
+                .order_by('-eventobj__earliest', '-date', '-id')[0:200],
             eventcount=True,
         ),
         'nplayers':  Player.objects.filter(

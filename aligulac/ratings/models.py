@@ -120,7 +120,7 @@ class Period(models.Model):
 # {{{ Events
 class Event(models.Model):
     class Meta:
-        ordering = ['lft']
+        ordering = ['latest', 'fullname']
         db_table = 'event'
 
     name = models.CharField('Name', max_length=100)
@@ -157,12 +157,22 @@ class Event(models.Model):
         return self.fullname
     # }}}
 
+    # {{{ get_parent(): Returns the parent, or null
+    def get_parent(self):
+        try:
+            return Event.uplink.get(distance=1).parent
+        except:
+            return None
+    # }}}
+
     # {{{ get_ancestors(id=False): Returns a queryset containing the ancestors
     # If id=True, the queryset contains the object itself.
     def get_ancestors(self, id=False):
         if not id:
-            return Event.objects.filter(lft__lt=self.lft, rgt__gt=self.rgt).order_by('lft')
-        return Event.objects.filter(lft__lte=self.lft, rgt__gte=self.rgt).order_by('lft')
+            qset = Event.objects.filter(downlink__child=self, downlink__distance__gt=0)
+        else:
+            qset = Event.objects.filter(downlink__child=self)
+        return qset.order_by('-downlink__distance')
     # }}}
 
     # {{{ get_ancestors_print: Returns a queryset containing the printable ancestors
@@ -184,18 +194,20 @@ class Event(models.Model):
     # of this event, with the matching criteria
     def get_children(self, types=[TYPE_CATEGORY, TYPE_EVENT, TYPE_ROUND], id=False):
         if not id:
-            return Event.objects.filter(lft__gt=self.lft, rgt__lt=self.rgt, type__in=types).order_by('lft')
-        return Event.objects.filter(lft__gte=self.lft, rgt__lte=self.rgt, type__in=types).order_by('lft')
+            qset = Event.objects.filter(uplink__parent=self, uplink__distance__gt=0)
+        else:
+            qset = Event.objects.filter(uplink__parent=self)
+        return qset.filter(type__in=types).order_by('fullname')
     # }}}
 
     # {{{ get_immediate_children: Returns a queryset of immediate children
     def get_immediate_children(self):
-        return self.event_set.all()
+        return Event.objects.filter(uplink__parent=self, uplink__distance=1).order_by('fullname')
     # }}}
 
     # {{{ has_children: Returns true if this event has children, false if not
     def has_children(self):
-        return self.rgt > self.lft + 1
+        return self.downlink.filter(distance__gt=0).exists()
     # }}}
 
     # {{{ update_name: Refreshes the fullname field (must be called after changing name of ancestors)
@@ -212,47 +224,43 @@ class Event(models.Model):
     # {{{ get_event_fullname: Returns the fullname of the nearest ancestor of type event or category
     # This is not cached and will query the DB!
     def get_event_fullname(self):
-        return self.get_ancestors_event().latest('lft').fullname
+        return self.get_ancestors_event().last().fullname
     # }}}
 
     # {{{ get_event: Returns the nearest ancestor of type event or category
     def get_event_event(self):
-        return self.get_ancestors_event().latest('lft')
+        return self.get_ancestors_event().last()
     # }}}
     
-    # {{{ get_parent(levels): Returns the ancestor of this event by number of levels, or itself if none
-    # TODO: This should return None, not itself.
-    # TODO: Catch an explicit exception.
-    def get_parent(self, levels=1):
-        try:
-            return self.get_ancestors().order_by('-lft')[levels-1]
-        except:
-            return self
-    # }}}
-
     # {{{ get_homepage: Returns the URL if one can be found, None otherwise
     # This is not cached and will query the DB!
     def get_homepage(self):
-        res = self.get_ancestors(id=True).filter(homepage__isnull=False).order_by('-lft')
-        return res[0].homepage if res else None
+        try:
+            return self.get_ancestors(id=True).filter(homepage__isnull=False).last().homepage
+        except:
+            return None
     # }}}
 
     # {{{ get_lp_name: Returns the Liquipedia title if one can be found, None otherwise
     # This is not cached and will query the DB!
     def get_lp_name(self):
-        res = self.get_ancestors(id=True).filter(lp_name__isnull=False).order_by('-lft')
-        return res[0].lp_name if res else None
+        try:
+            return self.get_ancestors(id=True).filter(lp_name__isnull=False).last().lp_name
+        except:
+            return None
     # }}}
 
     # {{{ get_tl_thread: Returns the ID of the TL thread if one can be found, None otherwise
     def get_tl_thread(self):
-        res = self.get_ancestors(id=True).filter(tl_thread__isnull=False).order_by('-lft')
-        return res.first().tl_thread if res else None
+        try:
+            return self.get_ancestors(id=True).filter(tl_thread__isnull=False).last().tl_thread
+        except:
+            return None
     # }}}
 
     # {{{ get_matchset: Returns a queryset of matches
     def get_matchset(self):
-        return Match.objects.filter(eventobj__lft__gte=self.lft, eventobj__rgt__lte=self.rgt)
+        return Match.objects.filter(eventobj__uplink__parent=self)
     # }}}
 
     # {{{ get_immediate_matchset: Returns a queryset of matches attached to this event only. (May be faster
@@ -264,27 +272,9 @@ class Event(models.Model):
     # {{{ update_dates: Updates the fields earliest and latest
     # Raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def update_dates(self):
-        from django.db import connection
-        cursor = connection.cursor()
-
-        try:
-            query = '''SELECT date, id FROM match ]
-                       WHERE eventobj_id IN (SELECT id FROM event 
-                                             WHERE lft >= %i
-                                               AND rgt <= %i
-                                            )
-                       ORDER BY date %s LIMIT 1;'''
-
-            cursor.execute(query % (self.lft, self.rgt, 'DESC'))
-            self.latest = cursor.fetchone()[0]
-
-            cursor.execute(query % (self.lft, self.rgt, 'ASC'))
-            self.latest = cursor.fetchone()[0]
-        except:
-            self.latest = None
-            self.earliest = None
-        finally:
-            self.save()
+        res = self.get_matchset().aggregate(Max('date'), Min('date'))
+        self.latest = res['date__max']
+        self.earliest = res['date__min']
     # }}}
 
     # {{{ change_type(type): Modifies the type of this event, and possibly all ancestors and events
@@ -294,11 +284,11 @@ class Event(models.Model):
 
         # If EVENT or ROUND, children must be ROUND
         if type == TYPE_EVENT or type == TYPE_ROUND:
-            self.get_children().update(type=TYPE_ROUND)
+            self.get_children(id=False).update(type=TYPE_ROUND)
 
         # If EVENT or CATEGORY, parents must be CATEGORY
         if type == TYPE_EVENT or type == TYPE_CATEGORY:
-            self.get_ancestors().update(type=TYPE_CATEGORY)
+            self.get_ancestors(id=False).update(type=TYPE_CATEGORY)
     # }}}
 
     # {{{ Standard setters
@@ -344,19 +334,16 @@ class Event(models.Model):
     @transaction.atomic
     def add_child(self, name, type, big=False, noprint=False):
         new = Event(name=name, parent=self, big=big, noprint=noprint)
-
-        if self.has_children():
-            new.lft = self.get_immediate_children().aggregate(Max('rgt'))['rgt__max'] + 1
-        else:
-            new.lft = self.lft + 1
-        new.rgt = new.lft + 1
-
-        Event.objects.filter(lft__gt=new.rgt-2).update(lft=F('lft')+2)
-        Event.objects.filter(rgt__gt=new.rgt-2).update(rgt=F('rgt')+2)
-
-        new.update_name()
         new.save()
 
+        links = [
+            EventAdjacency(parent_id=l.parent_id, child=new, distance=l.distance+1) 
+            for l in self.uplink_all()
+        ]
+        EventAdjacency.objects.bulk_create(links)
+        EventAdjacency.objects.create(parent=new, child=new, distance=0)
+
+        new.update_name()
         new.change_type(type)
 
         return new
@@ -368,16 +355,11 @@ class Event(models.Model):
     @transaction.atomic
     def add_root(name, type, big=False, noprint=False):
         new = Event(name=name, big=big, noprint=noprint)
-
-        try:
-            new.lft = Event.objects.aggregate(Max('rgt'))['rgt__max'] + 1
-        except:
-            new.lft = 0
-        new.rgt = new.lft + 1
-
-        new.update_name()
         new.save()
 
+        EventAdjacency.objects.create(parent=new, child=new, distance=0)
+
+        new.update_name()
         new.change_type(type)
 
         return new
@@ -386,27 +368,6 @@ class Event(models.Model):
     # {{{ close: Closes this event and all children
     def close(self):
         self.get_children(id=True).update(closed=True)
-    # }}}
-
-    # {{{ slide(shift): Shifts this event right by the indicated amount (and of course, also its children)
-    def slide(self, shift):
-        self.get_children(id=True).update(lft=F('lft')+shift, rgt=F('rgt')+shift)
-    # }}}
-
-    # {{{ move(newleft): Moves this event so that lft=newleft by fully refreshing the subtree, fixing
-    # inconsistencies. This is VERY EXPENSIVE. Returns the new rgt-value.
-    @transaction.atomic
-    def reorganize(self, newleft):
-        self.lft = newleft
-
-        nextleft = newleft + 1
-        for c in self.get_immediate_children():
-            nextleft = c.reorganize(nextleft) + 1
-
-        self.rgt = nextleft
-        self.save()
-
-        return self.rgt
     # }}}
 
     # {{{ delete_earnings(ranked=True): Deletes earnings objects associated to this event fulfilling the
@@ -879,7 +840,7 @@ class Match(models.Model):
         self.populate_orig()
 
         if update_dates:
-            for event in self.eventobj.get_parents(id=True):
+            for event in self.eventobj.get_ancestors(id=True):
                 if self.date < event.earliest:
                     event.set_earliest(self.date)
                 if self.date > event.latest:
@@ -897,7 +858,7 @@ class Match(models.Model):
 
         # This is very slow if used for many matches, but that should rarely happen. 
         if eventobj:
-            for event in self.eventobj.get_parents(id=True):
+            for event in self.eventobj.get_ancestors(id=True):
                 event.update_dates()
     # }}}
 
@@ -932,7 +893,7 @@ class Match(models.Model):
         self.eventobj = event
         self.save()
 
-        for e in event.get_parents(id=True):
+        for e in event.get_ancestors(id=True):
             if self.date < e.earliest:
                 e.set_earliest(self.date)
             if self.date > e.latest:
@@ -940,7 +901,7 @@ class Match(models.Model):
 
         # This is very slow if used for many matches, but that should rarely happen.
         if oldevent:
-            for event in oldevent.get_parents(id=True):
+            for event in oldevent.get_ancestors(id=True):
                 event.update_dates()
     # }}}
 

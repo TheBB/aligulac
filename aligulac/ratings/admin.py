@@ -85,10 +85,11 @@ match_period.short_description = 'Period'
 class MatchForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MatchForm, self).__init__(*args, **kwargs)
-        q = Q(closed=False, lft=F('rgt')-1)
+        ids = Event.objects.filter(closed=False).exclude(downlink__distance__gt=0)
+        q = Q(id__in=ids)
         if self.instance.eventobj != None:
             q = q | Q(id=self.instance.eventobj.id)
-        self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('-id')
+        self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('fullname')
 
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
@@ -105,9 +106,8 @@ class MatchAdmin(admin.ModelAdmin):
     get_res.short_description = 'Result'
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type', 'lft', 'rgt')
+    list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
-    exclude = ('lft', 'rgt')
     search_fields = ['fullname']
 
 class PreMatchGroupAdmin(admin.ModelAdmin):

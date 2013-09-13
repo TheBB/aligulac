@@ -399,7 +399,8 @@ def unfold(value):
 # {{{ indent: Returns 4 x value times &nbsp;
 @register.filter
 def indent(value):
-    if int(value) < 1:
+    value = int(value) - 1
+    if value < 1:
         return ''
     q = ''
     for i in range(0,int(value)):

@@ -5,7 +5,11 @@ import shlex
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import connection
-from django.db.models import F, Q
+from django.db.models import (
+    Count,
+    F,
+    Q,
+)
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
@@ -117,8 +121,10 @@ def fill_players(pm):
 class ReviewMatchesForm(forms.Form):
     eventobj = forms.ChoiceField(
         choices=[
-            (e['id'], e['fullname'])
-            for e in Event.objects.filter(rgt=F('lft')+1, closed=False).values('id', 'fullname')
+            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
+                .exclude(downlink__distance__gt=0)
+                .order_by('fullname')
+                .values('id', 'fullname')
         ],
         required=False, label='Event',
     )
@@ -238,8 +244,10 @@ class ReviewMatchesForm(forms.Form):
 class AddMatchesForm(forms.Form):
     eventobj = forms.ChoiceField(
         choices=[
-            (e['id'], e['fullname'])
-            for e in Event.objects.filter(rgt=F('lft')+1, closed=False).values('id', 'fullname')
+            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
+                .exclude(downlink__distance__gt=0)
+                .order_by('fullname')
+                .values('id', 'fullname')
         ],
         required=False, label='Event',
     )
@@ -610,32 +618,16 @@ def events(request):
     base['form'] = form
 
     # {{{ Build event list
-    cur = connection.cursor()
-    cur.execute(
-          'SELECT e.id, e.name, (COUNT(p.id)-1) AS depth, e.parent_id, e.fullname, e.type '
-            'FROM event AS e, event AS p '
-           'WHERE e.lft BETWEEN p.lft and p.rgt AND e.id != 2 AND e.closed = False '
-        'GROUP BY e.id ORDER BY e.lft'
-    )
-    nodes = cur.fetchall()
-
-    foldnodes, total_fold = [], 0
-    for i, node in enumerate(nodes):
-        fold = ntz(etn(lambda: nodes[i+1][2] - node[2]))
-        if i == len(nodes) - 1:
+    events = list(Event.objects.filter(closed=False).annotate(Count('uplink')).order_by('fullname'))
+    total_fold = 0
+    for i, e in enumerate(events):
+        fold = ntz(etn(lambda: events[i+1].uplink__count - e.uplink__count))
+        if i == len(events) - 1:
             fold = -total_fold
-        foldnodes.append({
-            'id':         node[0],
-            'name':       node[1],
-            'depth':      node[2],
-            'fold':       fold,
-            'parent_id':  node[3],
-            'fullname':   node[4],
-            'type':       node[5],
-        })
+        e.fold = fold
         total_fold += fold
 
-    base['nodes'] = foldnodes
+    base['nodes'] = events
     # }}}
 
     return render_to_response('eventmgr.html', base)

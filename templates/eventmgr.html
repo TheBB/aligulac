@@ -72,7 +72,7 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 {% for node in nodes %}
 <table class="results" style="width: 67em; border-style: dotted; border-width: 0.05em;" id="{{ node.id }}"> 
     <tr class="nonheader row2" style="{% if node.type == "event" %}background: #ffcccc;{% elif node.type == "round" %}background: #ccffcc;{% endif %}">
-        <td> {{ node.depth|indent|safe }}
+        <td> {{ node.uplink__count|indent|safe }}
         {% if node.fold > 0 %}
             <a href="" onclick="togvis_div('list-{{node.id}}'); return false;">{{ node.name }}</a>
         {% else %}

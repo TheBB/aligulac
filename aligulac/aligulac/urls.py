@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     url(r'^add/$', 'ratings.staff_views.add_matches'),
     url(r'^add/review/$', 'ratings.staff_views.review_matches'),
     url(r'^add/events/$', 'ratings.staff_views.events'),
+    url(r'^add/events/children/(?P<id>\d+)/$', 'ratings.staff_views.event_children'),
     url(r'^add/open_events/$', 'ratings.staff_views.open_events'),
 
     url(r'^login/$', 'aligulac.views.login_view'),

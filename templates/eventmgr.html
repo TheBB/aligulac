@@ -69,28 +69,139 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 </div>
 {% endif %}
 
+<script type="text/javascript">
+// <![CDATA[  
+function change_and_toggle_form(html, id, cat)
+{
+    document.getElementById('parent_name').innerHTML = html;
+    document.getElementById('parent_id_field').value = id;
+    document.getElementById('id_type').selectedIndex = cat;
+    toggle_form('addevent');
+    window.scroll(0,0);
+}
+
+function add_node(id, obj, div)
+{
+    var tbl = document.createElement('table');
+    tbl.setAttribute('class', 'results');
+    tbl.setAttribute('style', 'width: 67em; border-style: dotted; border-width: 0.05em;');
+    tbl.setAttribute('id', obj['id']);
+
+    var tr = document.createElement('tr');
+    tbl.appendChild(tr);
+    tr.setAttribute('class', 'nonheader row2');
+    if (obj['type'] == 'event')
+        tr.setAttribute('style', 'background: #ffcccc;');
+    else if (obj['type'] == 'round')
+        tr.setAttribute('style', 'background: #ccffcc;');
+
+    var td1 = document.createElement('td');
+    tr.appendChild(td1);
+    for (var i = 0; i < 4*obj['uplink__distance__max']; i++)
+        td1.appendChild(document.createTextNode('\u00a0'));
+    if (obj['has_subtree'])
+    {
+        var a_exp = document.createElement('a');
+        td1.appendChild(a_exp);
+        a_exp.setAttribute('href', '#');
+        a_exp.setAttribute('onclick', "toggle_sub('" + obj['id'] + "'); return false;");
+        a_exp.setAttribute('id', 'expand-' + obj['id']);
+        a_exp.innerHTML = '[+]';
+    }
+    else
+    {
+        var nothing = document.createElement('span');
+        td1.appendChild(nothing);
+        nothing.setAttribute('style', 'color: #aaaaaa;');
+        nothing.innerHTML = '[ ]';
+    }
+    td1.appendChild(document.createTextNode(' ' + obj['name'] + ' '));
+    var small = document.createElement('span');
+    td1.appendChild(small);
+    small.setAttribute('class', 'small');
+    small.appendChild(document.createTextNode('('));
+    a1 = document.createElement('a');
+    a1.setAttribute('href', '/admin/ratings/event/' + obj['id'] + '/');
+    a1.innerHTML = 'a';
+    small.appendChild(a1);
+    small.appendChild(document.createTextNode(', '));
+    a1 = document.createElement('a');
+    a1.setAttribute('href', '/results/events/' + obj['id'] + '/');
+    a1.innerHTML = 'e';
+    small.appendChild(a1);
+    small.appendChild(document.createTextNode(', ' + obj['type'] + ')'));
+
+    var td2 = document.createElement('td');
+    tr.appendChild(td2);
+    td2.setAttribute('style', 'text-align: right;');
+    mod = document.createElement('a');
+    td2.appendChild(mod);
+    mod.setAttribute('href', '#');
+    var s = "change_and_toggle_form('" + obj['fullname'] + " (" + obj['type'] + ")'";
+    s = s + ", '" + obj['id'] + "'";
+    if (obj['type'] == 'category')
+        s = s + ", 0";
+    else
+        s = s + ", 2";
+    s = s + "); return false;";
+    mod.setAttribute('onclick', s);
+    mod.innerHTML = 'modify';
+
+    div.appendChild(tbl);
+
+    var ndiv = document.createElement('div');
+    ndiv.setAttribute('id', 'list-' + obj['id']);
+    ndiv.setAttribute('style', 'display: none;');
+    ndiv.innerHTML = 'unloaded';
+    div.appendChild(ndiv);
+}
+
+function toggle_sub(id)
+{
+    var div = document.getElementById('list-' + id);
+
+    if (div.innerHTML == 'unloaded')
+    {
+        var http = new XMLHttpRequest();
+        http.open('GET', '/add/events/children/' + id + '/', false);
+        http.send();
+
+        div.innerHTML = '';
+
+        res = eval(http.responseText);
+        for (var i = 0; i < res.length; i++)
+            add_node(id, res[i], div);
+    }
+
+    if (div.style.display == 'none')
+        div.style.display = 'block';
+    else
+        div.style.display = 'none';
+}
+// ]]>
+</script> 
+
 {% for node in nodes %}
 <table class="results" style="width: 67em; border-style: dotted; border-width: 0.05em;" id="{{ node.id }}"> 
     <tr class="nonheader row2" style="{% if node.type == "event" %}background: #ffcccc;{% elif node.type == "round" %}background: #ccffcc;{% endif %}">
-        <td> {{ node.uplink__count|indent|safe }}
-        {% if node.fold > 0 %}
-            <a href="" onclick="togvis_div('list-{{node.id}}'); return false;">{{ node.name }}</a>
+        <td>
+        {% if node.has_subtree %}
+            <a href="#" onclick="toggle_sub('{{ node.id }}'); return false;" id="expand-{{ node.id }}">[+]</a>
         {% else %}
-            {{ node.name }}
+            <span style="color: #aaaaaa;">[ ]</span>
         {% endif %}
+            {{ node.name }}
+            <span class="small">
             (<a href="/admin/ratings/event/{{ node.id }}/">a</a>, 
             <a href="/results/events/{{ node.id }}-{{ node.fullname|urlfilter }}/">e</a>,
             {{ node.type }})
+            </span>
         </td>
         <td style="text-align: right;">
-            <a href="#" onclick="document.getElementById('parent_name').innerHTML = '{{ node.fullname }} ({{ node.type }})'; document.getElementById('parent_id_field').value = '{{ node.id }}'; document.getElementById('id_type').selectedIndex = {% if node.type == "category" %}0{% else %}2{% endif %}; toggle_form('addevent'); window.scroll(0,0); return false;">modify</a>
+            <a href="#" onclick="change_and_toggle_form('{{ node.fullname }} ({{ node.type }})', '{{ node.id }}', '{% if node.type == "category" %}0{% else %}2{% endif %}'); return false;">modify</a>
         </td>
     </tr> 
 </table>
-{% if node.fold > 0 %}
-    <div id="list-{{ node.id }}" style="display: block;">
-{% elif node.fold < 0 %}
-    {{ node.fold|unfold|safe }}
-{% endif %}
+<div id="list-{{ node.id }}" style="display: none;">unloaded</div>
 {% endfor %}
 {% endblock %}

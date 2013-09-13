@@ -1,13 +1,14 @@
 # {{{ Imports
 from datetime import date, timedelta
 import shlex
+import simplejson
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import connection
 from django.db.models import (
-    Count,
     F,
+    Max,
     Q,
 )
 from django.http import HttpResponse
@@ -618,20 +619,35 @@ def events(request):
     base['form'] = form
 
     # {{{ Build event list
-    events = list(Event.objects.filter(closed=False).annotate(Count('uplink')).order_by('fullname'))
-    total_fold = 0
-    for i, e in enumerate(events):
-        fold = ntz(etn(lambda: events[i+1].uplink__count - e.uplink__count))
-        if i == len(events) - 1:
-            fold = -total_fold
-        e.fold = fold
-        total_fold += fold
-
+    events = Event.objects.filter(closed=False).exclude(uplink__distance__gt=0).order_by('fullname')
+    for e in events:
+        e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
     base['nodes'] = events
     # }}}
 
     return render_to_response('eventmgr.html', base)
 # }}}
+
+# {{{ Auxiliary view for event manager
+def event_children(request, id):
+    event = Event.objects.get(id=id)
+    ret = [dict(q) for q in
+        event.get_immediate_children().filter(closed=False)
+            .order_by('name')
+            .values('id','type','name','fullname')
+    ]
+
+    depth = ntz(event.uplink.aggregate(Max('distance'))['distance__max'])
+
+    for q in ret:
+        q['has_subtree'] = (
+            Event.objects.filter(uplink__parent_id=q['id'], uplink__distance=1, closed=False).exists()
+        )
+        q['uplink__distance__max'] = depth + 1
+
+    return HttpResponse(simplejson.dumps(ret))
+# }}}
+
 
 # {{{ Open events view
 def open_events(request):

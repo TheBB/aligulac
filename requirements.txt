@@ -16,3 +16,4 @@ psycopg2 2.5.1
 Django 1.6
 South 0.8.2
 ccy 0.5.1
+simplejson 3.3.0

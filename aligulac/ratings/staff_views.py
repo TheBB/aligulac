@@ -25,13 +25,17 @@ from aligulac.tools import (
 
 from ratings.models import (
     CAT_TEAM,
+    Earnings,
     Event,
     EVENT_TYPES,
     GAMES,
+    GroupMembership,
     HOTS,
     Match,
+    Player,
     PreMatch,
     PreMatchGroup,
+    Rating,
     TYPE_CATEGORY,
     TYPE_EVENT,
     TYPE_ROUND,
@@ -569,6 +573,77 @@ class AddEventsForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ MergePlayersForm: Form for merging players.
+class MergePlayersForm(forms.Form):
+    source = forms.IntegerField(required=True, label='Source ID')
+    target = forms.IntegerField(required=True, label='Target ID')
+    confirm = forms.BooleanField(required=False, label='Confirm', initial=False)
+
+    # {{{ Constructor
+    def __init__(self, request=None):
+        if request is not None:
+            super(MergePlayersForm, self).__init__(request.POST)
+        else:
+            super(MergePlayersForm, self).__init__()
+        self.label_suffix = ''
+    # }}}
+
+    # {{{ Validation
+    def clean_source(self):
+        try:
+            return Player.objects.get(id=int(self.cleaned_data['source']))
+        except:
+            raise ValidationError('No player with ID %i.' % self.cleaned_data['source'])
+
+    def clean_target(self):
+        try:
+            return Player.objects.get(id=int(self.cleaned_data['target']))
+        except:
+            raise ValidationError('No player with ID %i.' % self.cleaned_data['target'])
+    # }}}
+
+    # {{{ Do stuff
+    def merge(self):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        if not self.cleaned_data['confirm']:
+            ret.append(Message('Please confirm player merge.', type=Message.WARNING))
+            return ret
+
+        source, target = self.cleaned_data['source'], self.cleaned_data['target']
+
+        Match.objects.filter(pla=source).update(pla=target, treated=False)
+        Match.objects.filter(plb=source).update(plb=target, treated=False)
+
+        try:
+            recompute = Rating.objects.filter(player=source).earliest('period').period
+            recompute.needs_recompute = True
+            recompute.save()
+        except:
+            pass
+
+        Rating.objects.filter(player=source).delete()
+        GroupMembership.objects.filter(player=source).delete()
+        Earnings.objects.filter(player=source).update(player=target)
+
+        ret.append(Message(
+            '%s was successfully merged into %s.' % (source.tag, target.tag),
+            title='The merging is complete', type=Message.SUCCESS
+        ))
+
+        source.delete()
+
+        return ret
+    # }}}
+# }}}
+
 # {{{ Add matches view
 def add_matches(request):
     base = base_ctx('Submit', 'Matches', request)
@@ -722,4 +797,22 @@ def open_events(request):
     fill_aux_event(base['pp_events'])
 
     return render_to_response('events_open.html', base)
+# }}}
+
+# {{{ Misc management view
+def misc(request):
+    base = base_ctx('Submit', 'Open events', request)
+    if not base['adm']:
+        return redirect('/login/')
+    login_message(base)
+
+    if request.method == 'POST' and 'merge' in request.POST:
+        mergeform = MergePlayersForm(request=request)
+    else:
+        mergeform = MergePlayersForm()
+
+    base['messages'] += mergeform.merge()
+    base['mergeform'] = mergeform
+
+    return render_to_response('manage.html', base)
 # }}}

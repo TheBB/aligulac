@@ -5,84 +5,58 @@ This is the page for miscellaneous administrative functions. Called from ratings
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load formulation %}
 
 {% block title %}Miscellaneous{% endblock %}
 
 {% block content %}
-    <h2>Miscellaneous administration</h2>
+<h2>Miscellaneous administration</h2>
 
-    {% include "messages.html" %}
+{% include "messages.html" %}
 
-    <h3>Merge players</h3>
-    {% if merge_conf %}
-        <p><span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
-            <a href="/players/{{ source.id }}-{{ source.tag|urlfilter }}/">{{ source.tag }}</a>
-            {% if source.country != "" %}
-                <img src="{{ source.country|lower|imgfolder:"flags"|static }}" alt="{{ source.country }}" />
-            {% endif %}
-            <img src="{{ source.race|imgfolder|static }}" alt="{{ source.race }}" class="btm" />
+<h2>Merge players</h2>
+
+<form method="post" action="/add/misc/">
+{% csrf_token %}
+{% if mergeform.is_bound and mergeform.is_valid and not mergeform.cleaned_data.confirm %}
+<table class="bigform">
+    <tr>
+        <td class="form_left"></td>
+        <td class="form_right">
+            <span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
+            {% with pl=mergeform.cleaned_data.source %}
+                <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
+                {% if pl.country != "" %}
+                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                {% endif %}
+                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+            {% endwith %}
             into
-            <a href="/players/{{ target.id }}-{{ target.tag|urlfilter }}/">{{ target.tag }}</a>
-            {% if target.country != "" %}
-                <img src="{{ target.country|lower|imgfolder:"flags"|static }}" alt="{{ target.country }}" />
-            {% endif %}
-            <img src="{{ target.race|imgfolder|static }}" alt="{{ target.race }}" class="btm" />
-        </p>
-        <form method="post" action="/add/misc/">
-            {% csrf_token %}
-            <input type="hidden" name="op" value="merge" />
-            <input type="hidden" name="player_source" value="{{ source.id }}" />
-            <input type="hidden" name="player_target" value="{{ target.id }}" />
-            <input type="hidden" name="conf" value="yes" />
-            <input type="submit" value="Merge" />
-        </form>
-    {% else %}
-        <form method="post" action="/add/misc/">
-            {% csrf_token %}
-            <input type="hidden" name="op" value="merge" />
-        <div class="table" style="width: 50em;">
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Source ID</div>
-                <div class="rower" style="width: 40em;">
-                    <input type="text" name="player_source" style="width: 15em;" value="{{ player_source }}" />
-                    (will be deleted)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Target ID</div>
-                <div class="rower" style="width: 40em;">
-                    <input type="text" name="player_target" style="width: 15em;" value="{{ player_target }}" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel" style="width: 10em;"></div>
-                <div class="rower" style="width: 40em;">
-                    <input type="submit" value="Merge" />
-                </div>
-            </div>
-        </div>
-        </form>
-    {% endif %}
+            {% with pl=mergeform.cleaned_data.target %}
+                <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
+                {% if pl.country != "" %}
+                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                {% endif %}
+                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+            {% endwith %}.
+        </td>
+    </tr>
+{% form "forms.html" %}
+    {% use "hidden" name=mergeform.source.html_name value=mergeform.cleaned_data.source.id %}
+    {% use "hidden" name=mergeform.target.html_name value=mergeform.cleaned_data.target.id %}
+    {% field "checkbox" mergeform.confirm %}
+    {% use "submit" text="Merge" name="merge" %}
+{% endform %}
+</table>
+{% else %}
+<table class="bigform">
+{% form "forms.html" %}
+    {% field "basic"        mergeform.source        class="narrowinput" %}
+    {% field "basic"        mergeform.target        class="narrowinput" %}
+    {% use "submit" text="Merge" name="merge" %}
+{% endform %}
+</table>
+{% endif %}
+</form>
 
-    <h3>Event tree NSM restoration</h3>
-    <p>This restores the NSM (Nested Set Model) of the event tree. Use it if you have deleted an event, changed a parent, or
-    otherwise modified the tree structure via the admin interface (this does not include simple edits to a single event
-    object such as changing names). Also use this if there are concurrency bugs caused by several people working on the tree
-    at the same time.</p>
-    <p><strong>This could take some time. Please wait for the page to load after pressing the button.</strong></p>
-    <form method="post" action="/add/misc/">
-        {% csrf_token %}
-        <input type="hidden" name="op" value="treerestore" />
-        <input type="submit" value="Restore NSM" />
-    </form>
-
-    <h3>Event names update</h3>
-    <p>This updates the cache of the full event names (which includes all the parent names). You should do
-    this after renaming events or changing parents.</p>
-    <p><strong>This could take some time. Please wait for the page to load after pressing the button.</strong></p>
-    <form method="post" action="/add/misc/">
-        {% csrf_token %}
-        <input type="hidden" name="op" value="namerestore" />
-        <input type="submit" value="Update event names" />
-    </form>
 {% endblock %}

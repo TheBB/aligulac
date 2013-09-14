@@ -136,6 +136,11 @@ def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5 * tanh(pi/2/sqrt(3) * (x-loc)/scale)
 # }}}
 
+# {{{ pdf: Probability distribution function
+def pdf(x, loc=0.0, scale=1.0):
+    return pi/4/sqrt(3)/scale * (1 - tanh(pi/2/sqrt(3)*(x-loc)/scale)**2)
+# }}}
+
 # {{{ icdf: Inverse cumulative distribution function
 def icdf(c, loc=0.0, scale=1.0):
     return loc + scale * 2*sqrt(3)/pi * arctanh(2*c - 1)

@@ -349,7 +349,7 @@ def player(request, player_id):
             'teampoints':  teampoints,
         })
     else:
-        base['messages'].append(Message(msg_nochart % player.tag, type=Mesage.INFO))
+        base['messages'].append(Message(msg_nochart % player.tag, type=Message.INFO))
     # }}}
 
     return render_to_response('player.html', base)

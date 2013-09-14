@@ -72,7 +72,7 @@ arguments:
             {% endif %}
         </td>
         <td class="rl_icon">
-            {% if entry.player.country != "" %}
+            {% if entry.player.country %}
             <img src="{{ entry.player.country|lower|imgfolder:"flags"|static }}" alt="{{ entry.player.country }}" />
             {% endif %}
         </td>

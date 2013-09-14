@@ -37,7 +37,7 @@ from ratings.tools import (
 )
 # }}}
 
-# {{{ TeamModForm: Form for modifying a teasm.
+# {{{ TeamModForm: Form for modifying a team.
 class TeamModForm(forms.Form):
     name      = StrippedCharField(max_length=100, required=True, label='Name')
     akas      = forms.CharField(max_length=200, required=False, label='AKAs')
@@ -182,7 +182,7 @@ def team(request, team_id):
     return render_to_response('team.html', base)
 # }}}
 
-# {{{
+# {{{ transfers view
 @cache_page
 def transfers(request):
     base = base_ctx('Teams', 'Transfers', request)

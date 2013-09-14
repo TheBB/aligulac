@@ -1118,12 +1118,6 @@ class Rating(models.Model):
     comp_rat_vt = models.FloatField('P-del vT', null=True, blank=True)
     comp_rat_vz = models.FloatField('P-del vZ', null=True, blank=True)
 
-    # Computed performance rating deviations
-    comp_dev = models.FloatField('PD', null=True, blank=True)
-    comp_dev_vp = models.FloatField('PD vP', null=True, blank=True)
-    comp_dev_vt = models.FloatField('PD vT', null=True, blank=True)
-    comp_dev_vz = models.FloatField('PD vZ', null=True, blank=True)
-
     # Backwards filtered rating numbers
     bf_rating = models.FloatField('BF', default=0, null=False)
     bf_rating_vp = models.FloatField('BF-del vP', default=0, null=False)

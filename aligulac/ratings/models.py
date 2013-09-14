@@ -370,6 +370,11 @@ class Event(models.Model):
         self.get_children(id=True).update(closed=True)
     # }}}
 
+    # {{{ open: Opens this event and all ancestors
+    def open(self):
+        self.get_ancestors(id=True).update(closed=False)
+    # }}}
+
     # {{{ delete_earnings(ranked=True): Deletes earnings objects associated to this event fulfilling the
     # criteria.
     def delete_earnings(self, ranked=True):

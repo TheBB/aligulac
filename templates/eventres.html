@@ -299,23 +299,14 @@ ancestor events! Make sure you know what you are doing!</p>
 </form>
 </div>
 {% endif %}
-    
-    {% if matches %}
-        <table class="results">
-        {% include "matchlist.html" with lm_list=matches lm_adm=0 lm_header="full" %}
-        </table>
-    {% else %}
-        <p>This event has no registered games... yet.</p>
-    {% endif %}
 
-    {% if adm %}
-        {% if not event.has_children %}
-        <h3>Add matches</h3>
-        <p>Go <a href="/add/?eventid={{ event.id }}">here</a> to 
-        {% if event.closed %}reopen the event and {% endif %}
-        add matches.</p>
-        {% endif %}
-    {% endif %}
+{% if matches %}
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_adm=0 lm_header="full" %}
+    </table>
+{% else %}
+    <p>This event has no registered games... yet.</p>
+{% endif %}
 
 <p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>
 {% endblock %}

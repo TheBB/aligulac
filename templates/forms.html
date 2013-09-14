@@ -36,7 +36,9 @@
                 id="{{ field.auto_id }}">
         {% for value, label in field.field.choices %}
             <option value="{{ value }}"
-                {% if field.value == value|safe %}selected="selected"{% endif %}>{{ label }}</option>
+                {% if value == override %}selected="selected"
+                {% elif not override and field.value = value|safe %}selected="selected"{% endif %}>
+                {{ label }}</option>
         {% endfor %}
         </select>
     </td>

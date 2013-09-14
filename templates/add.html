@@ -180,7 +180,7 @@ ratings.submitviews.add_matches.
         {% form "forms.html" %}
         {% use "hidden" name="submit" value="submit" %}
         {% if adm %}
-            {% field "select" form.eventobj class="wideinput" %}
+            {% field "select" form.eventobj override=event_override class="wideinput" %}
         {% else %}
             {% field "basic" form.eventtext class="wideinput" %}
         {% endif %}
@@ -193,7 +193,8 @@ ratings.submitviews.add_matches.
             {% field "textarea" form.notes class="verywideinput" rows="5" %}
         {% endif %}
         {% field "textarea" form.matches class="verywideinput" rows="20" %}
-        {% use "submit" text="Commit" %}
+        {% use "submit" name="commit" text="Commit" %}
+        {% use "submit" name="commit_close" text="Commit and close event" %}
         {% endform %}
     </table>
     </form>

@@ -135,15 +135,6 @@ def fill_aux_event(qset):
 
 # {{{ ReviewMatchesForm: Form for reviewing matches.
 class ReviewMatchesForm(forms.Form):
-    eventobj = forms.ChoiceField(
-        choices=[
-            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                .exclude(downlink__distance__gt=0)
-                .order_by('fullname')
-                .values('id', 'fullname')
-        ],
-        required=False, label='Event',
-    )
     date = forms.DateField(required=False, label='Date', initial=None)
     approve = forms.BooleanField(required=False, label='Approve', initial=False)
     reject = forms.BooleanField(required=False, label='Reject', initial=False)
@@ -158,6 +149,16 @@ class ReviewMatchesForm(forms.Form):
             super(ReviewMatchesForm, self).__init__()
 
         self.label_suffix = ''
+
+        self.fields['eventobj'] = forms.ChoiceField(
+            choices=[
+                (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
+                    .exclude(downlink__distance__gt=0)
+                    .order_by('fullname')
+                    .values('id', 'fullname')
+            ],
+            required=False, label='Event',
+        )
     # }}}
     
     # {{{ Custom validation
@@ -258,15 +259,6 @@ class ReviewMatchesForm(forms.Form):
 
 # {{{ AddMatchesForm: Form for adding matches (duh).
 class AddMatchesForm(forms.Form):
-    eventobj = forms.ChoiceField(
-        choices=[
-            (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                .exclude(downlink__distance__gt=0)
-                .order_by('fullname')
-                .values('id', 'fullname')
-        ],
-        required=False, label='Event',
-    )
     eventtext = StrippedCharField(max_length=200, required=False, label='Event')
     date      = forms.DateField(required=True, label='Date', initial=date.today())
     game      = forms.ChoiceField(choices=GAMES, label='Game version', initial=HOTS)
@@ -277,10 +269,26 @@ class AddMatchesForm(forms.Form):
     matches   = forms.CharField(max_length=10000, required=True, label='Matches', initial='')
 
     # {{{ Constructor
-    def __init__(self, is_adm, *args, **kwargs):
-        super(AddMatchesForm, self).__init__(*args, **kwargs)
+    def __init__(self, is_adm, request=None):
+        if request is not None:
+            super(AddMatchesForm, self).__init__(request.POST)
+            self.close_after = 'commit_close' in request.POST
+        else:
+            super(AddMatchesForm, self).__init__()
+            self.close_after = False
+
         self.label_suffix = ''
         self.is_adm = is_adm
+
+        self.fields['eventobj'] = forms.ChoiceField(
+            choices=[
+                (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
+                    .exclude(downlink__distance__gt=0)
+                    .order_by('fullname')
+                    .values('id', 'fullname')
+            ],
+            required=False, label='Event',
+        )
     # }}}
 
     # {{{ Validation
@@ -380,6 +388,11 @@ class AddMatchesForm(forms.Form):
         if len(matches) > 0:
             self.messages.append(
                 Message('Successfully added %i matches.' % len(matches), type=Message.SUCCESS))
+
+        if self.close_after:
+            self.cleaned_data['eventobj'].close()
+            self.messages.append(
+                Message("Closed '%s'." % self.cleaned_data['eventobj'].fullname, type=Message.SUCCESS))
 
         self.data = self.data.copy()
         self.data['matches'] = '\n'.join(error_lines)
@@ -650,11 +663,21 @@ def add_matches(request):
     login_message(base)
 
     if request.method == 'POST' and 'submit' in request.POST:
-        form = AddMatchesForm(base['adm'], request.POST)
+        form = AddMatchesForm(base['adm'], request=request)
         base['matches'] = display_matches(form.parse_matches(request.user), messages=False)
         base['messages'] += form.messages
     else:
         form = AddMatchesForm(base['adm'])
+        try:
+            get_event = Event.objects.get(id=request.GET['eventid'])
+            if get_event.closed:
+                get_event.open()
+                base['messages'].append(Message("Reopened '%s'." % get_event.fullname, type=Message.SUCCESS))
+            form['eventobj'].field.choices.append((get_event.id, get_event.fullname))
+            form['eventobj'].field.choices.sort(key=lambda e: e[1])
+            base['event_override'] = get_event.id
+        except:
+            pass
 
     base['form'] = form
 

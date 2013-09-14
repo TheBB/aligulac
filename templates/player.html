@@ -103,35 +103,21 @@ This is the template for the main player page, called from ratings.views.player.
                     <div class="rowel">External</div>
                     <div class="rower">
                         {% if player.sc2c_id %}
-                        <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">SC2C</a>
+                        <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" 
+                           target="_blank">SC2C</a>
                         {% endif %}
-                        {% with tlpds=player.get_tlpd_id %}
-                            {% if tlpds.WoLbeta %}
-                            <a href="http://www.teamliquid.net/tlpd/sc2-beta/players/{{ tlpds.WoLbeta }}"
-                               target="_blank">TLPD:WoL:B</a>
-                            {% endif %}
-                            {% if tlpds.KR %}
-                            <a href="http://www.teamliquid.net/tlpd/sc2-korean/players/{{ tlpds.KR }}"
-                               target="_blank">TLPD:WoL:KR</a>
-                            {% endif %}
-                            {% if tlpds.IN %}
-                            <a href="http://www.teamliquid.net/tlpd/sc2-international/players/{{ tlpds.IN }}"
-                               target="_blank">TLPD:WoL:IN</a>
-                            {% endif %}
-                            {% if tlpds.HotS %}
-                            <a href="http://www.teamliquid.net/tlpd/hots/players/{{ tlpds.HotS }}" 
-                               target="_blank">TLPD:HotS</a>
-                            {% endif %}
-                            {% if tlpds.HotSbeta %}
-                            <a href="http://www.teamliquid.net/tlpd/hots-beta/players/{{ tlpds.HotSbeta }}"
-                               target="_blank">TLPD:HotS:B</a>
-                            {% endif %}
-                        {% endwith %}
+                        {% if player.tlpd_id %}
+                            {% for tl, human in player.tlpd_db|get_tlpd_list %}
+                            <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}"
+                               target="_blank">{{ human }}</a>
+                            {% endfor %}
+                        {% endif %}
                         {% if player.sc2e_id %}
                         <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
                         {% endif %}
                         {% if player.lp_name %}
-                        <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">LP</a>
+                        <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" 
+                           target="_blank">LP</a>
                         {% endif %}
                     </div>
                 </div>

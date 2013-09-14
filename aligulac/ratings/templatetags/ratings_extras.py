@@ -1,17 +1,35 @@
+# {{{ Imports
 import hashlib
 import markdown2
 from math import sqrt
 import re
+from datetime import (
+    timedelta,
+    date,
+    datetime,
+)
+from dateutil.relativedelta import relativedelta
 
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 
-from datetime import timedelta, date, datetime
-from dateutil.relativedelta import relativedelta
+from aligulac.settings import (
+    PRF_NA,
+    PRF_INF,
+    PRF_MININF,
+    DEBUG,
+)
 
-from aligulac.settings import PRF_NA, PRF_INF, PRF_MININF, DEBUG
-
+from ratings.models import (
+    TLPD_DB_WOLKOREAN,
+    TLPD_DB_WOLINTERNATIONAL,
+    TLPD_DB_HOTS,
+    TLPD_DB_HOTSBETA,
+    TLPD_DB_WOLBETA,
+)
+# }}}
+    
 register = template.Library()
 
 # {{{ Miscellaneous filters
@@ -110,7 +128,7 @@ def milliseconds(value):
 def add_separator(value):
     string = str(value)
     newstring = ''
-    
+
     while True:
         if len(string) <= 3:
             newstring = string + newstring
@@ -166,7 +184,7 @@ def smallhash(value):
     return m.hexdigest()[:6]
 # }}}
 
-# {{{
+# {{{ makedate: Produces a date in the right format, or none.
 @register.filter
 def makedate(value):
     if isinstance(value, str):
@@ -175,6 +193,26 @@ def makedate(value):
         except:
             value = None
     return value
+# }}}
+
+# {{{ get_tlpd_list: Takes a TLPD DB bit-flag integer and returns a list of databases.
+@register.filter
+def get_tlpd_list(value):
+    value = int(value) if value is not None else 0
+
+    dbs = [
+        (TLPD_DB_WOLBETA,           'sc2-beta',           'TLPD:WoL:B'),
+        (TLPD_DB_WOLKOREAN,         'sc2-korean',         'TLPD:WoL:KR'),
+        (TLPD_DB_WOLINTERNATIONAL,  'sc2-international',  'TLPD:WoL:IN'),
+        (TLPD_DB_HOTSBETA,          'hots-beta',          'TLPD:HotS:B'),
+        (TLPD_DB_HOTS,              'hots',               'TLPD:HotS'),
+    ]
+
+    ret = []
+    for db_flag, tlpd_db_name, human_db_name in dbs:
+        if value & db_flag != 0:
+            ret.append((tlpd_db_name, human_db_name))
+    return ret
 # }}}
 # }}}
 

@@ -116,6 +116,17 @@ def fill_players(pm):
             pm.rcb = override if override is not None else pm.plb.race
 
     return messages
+
+def fill_aux_event(qset):
+    for e in qset:
+        e.up_homepage, e.up_tl_thread, e.up_lp_name, e.up_tlpd_id, e.up_tlpd_db = None, None, None, None, None
+        for l in e.uplink.all():
+            e.up_homepage = l.parent.homepage or e.up_homepage
+            e.up_tl_thread = l.parent.tl_thread or e.up_tl_thread
+            e.up_lp_name = l.parent.lp_name or e.up_lp_name
+            if l.parent.tlpd_db is not None:
+                e.up_tlpd_db = l.parent.tlpd_db
+                e.up_tlpd_id = l.parent.tlpd_id
 # }}}
 
 # {{{ ReviewMatchesForm: Form for reviewing matches.
@@ -619,9 +630,15 @@ def events(request):
     base['form'] = form
 
     # {{{ Build event list
-    events = Event.objects.filter(closed=False).exclude(uplink__distance__gt=0).order_by('fullname')
-    for e in events:
-        e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
+    events = (
+        Event.objects.filter(closed=False)
+            .exclude(uplink__distance__gt=0)
+            .filter(downlink__child__closed=False)
+            .annotate(Max('downlink__distance'))
+            .order_by('fullname')
+    )
+    #for e in events:
+        #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
     base['nodes'] = events
     # }}}
 
@@ -648,7 +665,6 @@ def event_children(request, id):
     return HttpResponse(simplejson.dumps(ret))
 # }}}
 
-
 # {{{ Open events view
 def open_events(request):
     base = base_ctx('Submit', 'Open events', request)
@@ -656,15 +672,54 @@ def open_events(request):
         return redirect('/login/')
     login_message(base)
 
-    # {{{ Breadth-first search for closed events with unknown prizepool status
-    pp_events = []
-    search = Event.objects.filter(parent__isnull=True).exclude(category=CAT_TEAM, type=TYPE_ROUND)
-    while search.exists():
-        pp_events += list(search.filter(type=TYPE_EVENT, prizepool__isnull=True, closed=True))
-        search = Event.objects.filter(parent__in=search).exclude(type=TYPE_ROUND)
-    pp_events.sort(key=lambda e: e.fullname)
-    base['pp_events'] = pp_events
+    # {{{ Handle modifications
+    if base['adm'] and 'open_games' in request.POST:
+        ids = [int(i) for i in request.POST.getlist('open_games_ids')]
+        for id in ids:
+            Event.objects.get(id=id).close()
+        base['messages'].append(Message('Successfully closed %i events.' % len(ids), type=Message.SUCCESS))
+    elif base['adm'] and 'pp_events' in request.POST:
+        ids = [int(i) for i in request.POST.getlist('pp_events_ids')]
+        nevents = Event.objects.filter(id__in=ids).update(prizepool=False)
+        base['messages'].append(Message(
+            'Successfully marked %i events as having no prize pool.' % nevents, type=Message.SUCCESS))
     # }}}
+
+    # {{{ Open events with games
+    base['open_games'] = (
+        Event.objects.filter(type=TYPE_EVENT, closed=False)
+            .filter(downlink__child__match__isnull=False)
+            .distinct()
+            .prefetch_related('uplink__parent')
+            .order_by('latest')
+    )
+    # }}}
+
+    # {{{ Open events without games
+    base['open_nogames'] = (
+        Event.objects.filter(type=TYPE_EVENT, closed=False)
+            .exclude(downlink__child__match__isnull=False)
+            .exclude(id=2)
+            .distinct()
+            .prefetch_related('uplink__parent')
+            .order_by('fullname')
+    )
+    # }}}
+
+    # {{{ Closed non-team events with unknown prizepool status.
+    base['pp_events'] = (
+        Event.objects.filter(type=TYPE_EVENT, prizepool__isnull=True)
+            .filter(match__isnull=False, closed=True)
+            .exclude(uplink__parent__category=CAT_TEAM)
+            .distinct()
+            .prefetch_related('uplink__parent')
+            .order_by('fullname')
+    )
+    # }}}
+
+    fill_aux_event(base['open_games'])
+    fill_aux_event(base['open_nogames'])
+    fill_aux_event(base['pp_events'])
 
     return render_to_response('events_open.html', base)
 # }}}

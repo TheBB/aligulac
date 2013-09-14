@@ -269,15 +269,6 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['adm'] = request.user.is_authenticated()
         base['user'] = request.user.username
 
-    # Fill in submenu depending on section.
-    elif section == 'About':
-        base['submenu'] = [('FAQ', '/faq/'),
-                           ('Blog', '/blog/'),
-                           #('Staff', '/staff/'),
-                           ('Database', '/db/')]
-    elif section == 'Reports':
-        pass
-
     if section is not None:
         base['curpage'] = section
 
@@ -290,18 +281,18 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             earnings = context.has_earnings()
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
-            base['submenu'] += [None, ('%s:' % context.tag, base_url)]
+            base['menu'][0]['submenu'] += [None, ('%s:' % context.tag, base_url)]
 
             if rating is not None:
-                base['submenu'].append(('Rating history', base_url + 'historical/'))
+                base['menu'][0]['submenu'].append(('Rating history', base_url + 'historical/'))
 
-            base['submenu'].append(('Match history', base_url + 'results/'))
+            base['menu'][0]['submenu'].append(('Match history', base_url + 'results/'))
 
             if context.has_earnings():
-                base['submenu'].append(('Earnings', base_url + 'earnings/'))
+                base['menu'][0]['submenu'].append(('Earnings', base_url + 'earnings/'))
 
             if rating is not None:
-                base['submenu'].append(('Adjustments', base_url + 'period/%i/' % rating.period.id))
+                base['menu'][0]['submenu'].append(('Adjustments', base_url + 'period/%i/' % rating.period.id))
 
     return base
 # }}}

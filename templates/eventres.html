@@ -18,7 +18,7 @@ ratings.views.events.
 
     <div class="ibox" style="margin-left: 2em;">
         <div class="iboxh">Details
-        {% if adm %} 
+        {% if adm %} <br/>
             (<a href="#" onclick="toggle_form('modevent'); return false;" title="Edit info">edit</a>, 
             <a href="#" onclick="toggle_form('addevent'); return false;" title="Add subevents">sub</a>, 
             {% if event.type == "event" %}
@@ -27,8 +27,8 @@ ratings.views.events.
             {% if not event.has_children %}
                 <a href="#" onclick="toggle_form('modstories'); return false;" title="Stories">st</a>, 
             {% endif %}
-            <a href="/admin/ratings/event/{{ event.id }}/" title="Admin interface">admin</a>,
-            <a href="/add/?eventid={{ event.id }}" title="Add more matches">matches</a>)
+            <a href="/admin/ratings/event/{{ event.id }}/" title="Admin interface">adm</a>,
+            <a href="/add/?eventid={{ event.id }}" title="Add more matches">add</a>)
         {% endif %}
         </div>
         <div class="iboxtable">

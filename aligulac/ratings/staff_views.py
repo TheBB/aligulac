@@ -13,7 +13,9 @@ from django.db.models import (
 )
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_protect
 
+from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
     etn,
@@ -27,6 +29,7 @@ from ratings.models import (
     CAT_TEAM,
     Earnings,
     Event,
+    EventAdjacency,
     EVENT_TYPES,
     GAMES,
     GroupMembership,
@@ -657,7 +660,94 @@ class MergePlayersForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ MoveEventForm: Form for merging players.
+class MoveEventForm(forms.Form):
+    subject = forms.IntegerField(required=True, label='Event ID to move')
+    target = forms.IntegerField(required=True, label='New parent ID')
+    confirm = forms.BooleanField(required=False, label='Confirm', initial=False)
+
+    # {{{ Constructor
+    def __init__(self, request=None):
+        if request is not None:
+            super(MoveEventForm, self).__init__(request.POST)
+        else:
+            super(MoveEventForm, self).__init__()
+        self.label_suffix = ''
+    # }}}
+
+    # {{{ Validation
+    def clean_subject(self):
+        try:
+            return Event.objects.get(id=int(self.cleaned_data['subject']))
+        except:
+            raise ValidationError('No event with ID %i.' % self.cleaned_data['subject'])
+
+    def clean_target(self):
+        try:
+            return Event.objects.get(id=int(self.cleaned_data['target']))
+        except:
+            raise ValidationError('No event with ID %i.' % self.cleaned_data['target'])
+
+    def clean(self):
+        if EventAdjacency.objects.filter(
+            parent=self.cleaned_data['subject'],
+            child=self.cleaned_data['target'],
+        ).exists():
+            raise ValidationError("Can't move an event to one of its descendants.")
+        return self.cleaned_data
+    # }}}
+
+    # {{{ Do stuff
+    def move(self):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    if field == '__all__':
+                        ret.append(Message(error, type=Message.ERROR))
+                    else:
+                        ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        if not self.cleaned_data['confirm']:
+            ret.append(Message('Please confirm event move.', type=Message.WARNING))
+            return ret
+
+        subject, target = self.cleaned_data['subject'], self.cleaned_data['target']
+
+        downlinks = EventAdjacency.objects.filter(parent=subject).select_related('child')
+        child_ids = [dl.child_id for dl in downlinks]
+        EventAdjacency.objects.filter(child_id__in=child_ids).exclude(parent_id__in=child_ids).delete()
+
+        links = []
+        for ul in EventAdjacency.objects.filter(child=target):
+            for dl in downlinks:
+                links.append(EventAdjacency(
+                    parent_id = ul.parent_id,
+                    child_id  = dl.child_id,
+                    distance  = ul.distance + dl.distance + 1,
+                ))
+        EventAdjacency.objects.bulk_create(links)
+
+        prevname = subject.fullname
+
+        for dl in downlinks:
+            dl.child.update_name()
+
+        ret.append(Message(
+            "Moved '%s' to '%s'. It's now called '%s'." % (prevname, target.fullname, subject.fullname), 
+            type=Message.SUCCESS
+        ))
+
+        return ret
+    # }}}
+# }}}
+
 # {{{ Add matches view
+@cache_page
+@csrf_protect
 def add_matches(request):
     base = base_ctx('Submit', 'Matches', request)
     login_message(base)
@@ -685,6 +775,8 @@ def add_matches(request):
 # }}}
 
 # {{{ Review matches view
+@cache_page
+@csrf_protect
 def review_matches(request):
     base = base_ctx('Submit', 'Review', request)
     if not base['adm']:
@@ -713,6 +805,8 @@ def review_matches(request):
 # }}}
 
 # {{{ Event manager view
+@cache_page
+@csrf_protect
 def events(request):
     base = base_ctx('Submit', 'Events', request)
     if not base['adm']:
@@ -764,6 +858,8 @@ def event_children(request, id):
 # }}}
 
 # {{{ Open events view
+@cache_page
+@csrf_protect
 def open_events(request):
     base = base_ctx('Submit', 'Open events', request)
     if not base['adm']:
@@ -829,13 +925,26 @@ def misc(request):
         return redirect('/login/')
     login_message(base)
 
-    if request.method == 'POST' and 'merge' in request.POST:
-        mergeform = MergePlayersForm(request=request)
-    else:
-        mergeform = MergePlayersForm()
+    mergeform = (
+        MergePlayersForm(request=request)
+        if request.method == 'POST' and 'merge' in request.POST
+        else MergePlayersForm()
+    )
+    moveform = (
+        MoveEventForm(request=request)
+        if request.method == 'POST' and 'move' in request.POST
+        else MoveEventForm()
+    )
 
-    base['messages'] += mergeform.merge()
-    base['mergeform'] = mergeform
+    if mergeform.is_bound:
+        base['messages'] += mergeform.merge()
+    if moveform.is_bound:
+        base['messages'] += moveform.move()
+
+    base.update({
+        'mergeform':  mergeform,
+        'moveform':   moveform,
+    })
 
     return render_to_response('manage.html', base)
 # }}}

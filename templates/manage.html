@@ -59,4 +59,37 @@ This is the page for miscellaneous administrative functions. Called from ratings
 {% endif %}
 </form>
 
+<h2>Move events</h2>
+
+<form method="post" action="/add/misc/">
+{% csrf_token %}
+{% if moveform.is_bound and moveform.is_valid and not moveform.cleaned_data.confirm %}
+<table class="bigform">
+    <tr>
+        <td class="form_left"></td>
+        <td class="form_right">
+            <span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will move
+            {{ moveform.cleaned_data.subject.fullname }} and all events under it 
+            ({{ moveform.cleaned_data.subject.get_children.count }}) to
+            {{ moveform.cleaned_data.target.fullname }}.
+        </td>
+    </tr>
+{% form "forms.html" %}
+    {% use "hidden" name=moveform.subject.html_name value=moveform.cleaned_data.subject.id %}
+    {% use "hidden" name=moveform.target.html_name value=moveform.cleaned_data.target.id %}
+    {% field "checkbox" moveform.confirm %}
+    {% use "submit" text="Move" name="move" %}
+{% endform %}
+</table>
+{% else %}
+<table class="bigform">
+{% form "forms.html" %}
+    {% field "basic"        moveform.subject        class="narrowinput" %}
+    {% field "basic"        moveform.target         class="narrowinput" %}
+    {% use "submit" text="Move" name="move" %}
+{% endform %}
+</table>
+{% endif %}
+</form>
+
 {% endblock %}

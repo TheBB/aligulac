@@ -21,6 +21,7 @@ public_tables = [
     'period',
     'player',
     'rating',
+    'story',
 ]
 
 dt = datetime.now()

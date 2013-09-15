@@ -1097,8 +1097,6 @@ class Rating(models.Model):
     period = models.ForeignKey(Period, null=False, verbose_name='Period')
     player = models.ForeignKey(Player, null=False, verbose_name='Player')
 
-    temp = models.FloatField('Temp', null=True)
-
     # Helper fields for fast loading of frequently accessed information
     prev = models.ForeignKey('Rating', related_name='prevrating', verbose_name='Previous rating', null=True)
 

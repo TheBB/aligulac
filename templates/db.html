@@ -91,153 +91,260 @@ dump. Called from aligulac.views.db.
 (UTC {{ modified|date:"O" }})). It is free to use for non-commercial purposes if you credit this website when
 doing so.</p>
 
-<p>The dump contains six tables, all prefixed with <code>ratings_</code> (this is a Django thing). Some
-columns are foreign keys to tables that have been removed from the dump. This includes anything to do with
-ratings (which take up an awful lot of space) and user accounts.</p>
+<p>The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump
+(primarily involving user accounts).</p>
 
-<p><strong>ratings_player</strong><br/>
+<p><strong>player</strong><br/>
 Contains player information.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - tag varchar(30) NOT NULL          in-game name of the player
-    - name varchar(100)                 real name
-    - country varchar(2)                ISO-3166-1 alpha-2 country code
-    - birthday date                     birthday
-    - race varchar(1) NOT NULL          P, T or Z for normal races, R for random and S for race switcher
-    - sc2c_id int(11)                   external sc2charts.net ID
-    - sc2e_id int(11)                   external sc2earnings.com ID
-    - lp_name varchar(200)              title of Liquipedia page (the part after http://wiki.teamliquid.net/starcraft2/)
-    - dom_val double                    their PP score (see Hall of Fame)
-    - dom_start_id int(11)              foreign key to a table removed from the dump
-    - dom_end_id int(11)                foreign key to a table removed from the dump
-    - goodynum int(11)                  a Player's MC number (yes, it used to be Goody number)
-    - tlpd_id int(11)                   external TLPD ID
-    - tlpd_db int(11)                   bit-flag value denoting which TLPD databases this player is in
-                                        1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta
+    id              integer not null                        primary key
+    tag             character varying(30) not null          in-game name of the player
+    name            character varying(100)                  real name
+    birthday        date                                    birthday
+    mcnum           integer                                 MC number
+    tlpd_id         integer                                 external TLPD ID
+    tlpd_db         integer                                 bit-flag value denoting which TLPD databases this 
+                                                              player is in: 1 = KR WoL, 2 = IN WoL, 4 = HotS, 
+                                                              8 = HotS beta, 16 = WoL beta
+    lp_name         character varying(200)                  title of Liquipedia page (the part after 
+                                                              http://wiki.teamliquid.net/starcraft2/)
+    sc2c_id         integer                                 external sc2charts.net ID
+    sc2e_id         integer                                 external sc2earnings.com ID
+    country         character varying(2)                    ISO-3166-1 alpha-2 country code
+    race            character varying(1) not null           P, T or Z for normal races, R for random and S for
+                                                              race switcher
+    dom_val         double precision                        their PP score (see Hall of Fame)
+    dom_start_id    integer                                 foreign key to period; start of PP-period
+    dom_end_id      integer                                 foreign key to period; first period after end of 
+                                                              PP-period
     </pre>
 </code>
 
-<p><strong>ratings_match</strong><br/>
+<p><strong>match</strong><br/>
 Contains game information.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - period_id int(11) NOT NULL        foreign key to a table removed from the dump
-    - date date NOT NULL                date the match was played (approximate in many cases)
-    - pla_id int(11) NOT NULL           foreign key to ratings_player (player A)
-    - plb_id int(11) NOT NULL           foreign key to ratings_player (player B)
-    - sca smallint(6) NOT NULL          games won by player A
-    - scb smallint(6) NOT NULL          games won by player B
-    - rca varchar(1) NOT NULL           race played by player A (may not correspond to pla.race)
-    - rcb varchar(1) NOT NULL           race played by player B (may not correspond to plb.race)
-    - treated tinyint(4)                boolean (true means the match has been rated, false means it hasn't)
-    - event varchar(200)                tournament, round, group etc.
-    - eventobj_id int(11)               foreign key to ratings_event (serves the same function as event)
-    - submitter_id int(11)              foreign key to a table removed from the dump
-    - game varchar(10) NOT NULL         game version used (WoL, HotS, LotV)
-    - offline tinyint(4) NOT NULL       boolean (true of the match was played offline, false if not)
+    id              integer not null                        primary key
+    period_id       integer not null                        foreign key to period; the period this match was 
+                                                              played in
+    date            date not null                           when the match was played (often approximate)
+    pla_id          integer not null                        foreign key to player; player A
+    plb_id          integer not null                        foreign key to player; player B
+    sca             smallint not null                       score for player A
+    scb             smallint not null                       score for player B
+    rca             character varying(1) not null           race for player A (not necessarily same as 
+                                                              pla.race, S is not allowed)
+    rcb             character varying(1) not null           race for player B (not necessarily same as
+                                                              plb.race, S is not allowed)
+    treated         boolean not null                        true if the match has been rated
+    event           character varying(200) not null         tournament, round, group etc. (superceded by
+                                                              eventobj_id if not null)
+    eventobj_id     integer                                 foreign key to event (supercedes event field)
+    submitter_id    integer                                 foreign key to a table removed from the dump
+    game            character varying(200) not null         game version used (WoL, HotS, LotV)
+    offline         boolean not null                        whether this match was played offline
+    rta_id          integer                                 foreign key to rating; rating of player A at the
+                                                              time of the match
+    rtb_id          integer                                 foreign key to rating; rating of player B at the
+                                                              time of the match
     </pre>
 </code>
 
-<p><strong>ratings_event</strong><br/>
-Contains event information. Events are organized in a tree according to the Nested Set Model (NSM), encoded by
-the columns <code>lft</code> and <code>rgt</code>. The <code>parent</code> field provides some redundancy
-here.  «Event» in this case means anything from organizer, season, tournament, round (incl. qualifiers),
+<p><strong>event</strong><br/>
+Contains event information. Events are organized in a tree as defined by the <strong>eventadjacency</strong>
+table. «Event» in this case means anything from organizer, season, tournament, round (incl. qualifiers),
 group, days and weeks, etc.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - name varchar(100) NOT NULL        name of this node
-    - fullname varchar(500) NOT NULL    full name (concatenation of ancestor names)
-    - parent_id int(11)                 foreign key to this table
-    - lft int(11) NOT NULL              nested set model left
-    - rgt int(11) NOT NULL              nested set model right
-    - closed tinyint(4) NOT NULL        boolean (true if the event is over)
-    - big tinyint(4)                    boolean (true if the event contains many games)
-    - noprint tinyint(4)                boolean (false if this event should be skipped in the fullname of descendants)
-    - category varchar(50)              event category (team, individual or frequent), only set for root nodes
-    - type varchar(50)                  event type (category, event (i.e. tournament) or round), you can
-                                        assume that ancestors of events are always categories, and descendants
-                                        of events are always rounds, and that in each subtree from root to
-                                        leaf there is at most one event
-    - homepage varchar(200)             URL of the event website
-    - lp_name varchar(200)              title of Liquipedia page (the part after http://wiki.teamliquid.net/starcraft2/)
-    - tl_thread int(11)                 TL.net forum thread ID
-    - prizepool tinyint(4)              boolean (true if this event has a prize pool)
-    - tlpd_id int(11)                   external TLPD ID
-    - tlpd_db int(11)                   bit-flag value denoting which TLPD databases this event is in
-                                        1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta
-    - earliest date                     date of earliest match
-    - latest date                       date of latest match
+    id              integer not null                        primary key
+    name            character varying(100) not null         name of this node
+    parent_id       integer                                 parent node (deprecated)
+    lft             integer not null                        (deprecated)
+    rgt             integer not null                        (deprecated)
+    closed          boolean not null                        whether the event is finished or not
+    big             boolean not null                        whether the event is considered large (many games)
+    noprint         boolean not null                        whether this event should be skipped in the 
+                                                              fullname of descendants
+    fullname        character varying(500) not null         full name of this event (including names of
+                                                              ancestors)
+    homepage        character varying(200)                  URL of the event website
+    lp_name         character varying(200)                  title of Liquipedia page (the part after
+                                                              http://wiki.teamliquid.net/starcraft2/)
+    tlpd_id         integer                                 external TLPD ID
+    tlpd_db         integer                                 bit-flag value denoting which TLPD databases this 
+                                                              event is in: 1 = KR WoL, 2 = IN WoL, 4 = HotS, 
+                                                              8 = HotS beta, 16 = WoL beta
+    tl_thread       integer                                 TL.net forum thread ID
+    prizepool       boolean                                 whether this event has an associated prizepool
+                                                              (NULL if unknown)
+    earliest        date                                    date of earliest match
+    latest          date                                    date of latest match
+    category        character varying(50)                   team, individual or frequent; only set for root
+                                                              nodes
+    type            character varying(50) not null          category, event (i.e. tournament) or round; you
+                                                              can assume that ancestors of events are always
+                                                              categories and that descendants of events are
+                                                              always rounds
     </pre>
 </code>
 
-<p><strong>ratings_team</strong><br/>
-Contains team information.</p>
+<p><strong>eventadjacency</strong><br/>
+Contains the tree information for events. There is a row here for every ancestor-descendant relationship. This
+table contains the transitive closure, so links of any distance are listed.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - name varchar(100) NOT NULL        team name
-    - scoreak double                    all-kill rating
-    - scorepl double                    proleague-style rating
-    - founded date                      date founded
-    - disbanded date                    date disbanded
-    - active tinyint(4)                 boolean (true of this team is active)
-    - shortname varchar(25)             short team name for use in rating tables
-    - homepage varchar(200)             URL of the team website
-    - lp_name varchar(200)              title of Liquipedia page (the part after http://wiki.teamliquid.net/starcraft2/)
+    id              integer not null                        primary key
+    parent_id       integer not null                        foreign key to event
+    child_id        integer not null                        foreign key to event
+    distance        integer                                 how many edges between the nodes
     </pre>
 </code>
 
-<p><strong>ratings_teammembership</strong><br/>
+<p><strong>rating</strong><br/>
+Contains rating information.</p>
+<code>
+    <pre>
+    id              integer not null                        primary key
+    period_id       integer not null                        foreign key to period
+    player_id       integer not null                        foreign key to player
+    rating          double precision not null               current rating
+    rating_vp       double precision not null               current rating delta vP
+    rating_vt       double precision not null               current rating delta vT
+    rating_vz       double precision not null               current rating delta vZ
+    dev             double precision not null               current RD
+    dev_vp          double precision not null               current RD vP
+    dev_vt          double precision not null               current RD vT
+    dev_vz          double precision not null               current RD vZ
+    comp_rat        double precision                        performance rating in this period
+    comp_rat_vp     double precision                        performance rating vP in this period
+    comp_rat_vz     double precision                        performance rating vT in this period
+    comp_rat_vt     double precision                        performance rating vZ in this period
+    bf_rating       double precision not null               smoothed rating
+    bf_rating_vp    double precision not null               smoothed rating vP
+    bf_rating_vt    double precision not null               smoothed rating vT
+    bf_rating_vz    double precision not null               smoothed rating vZ
+    bf_dev          double precision                        smoothed RD
+    bf_dev_vp       double precision                        smoothed RD vP
+    bf_dev_vt       double precision                        smoothed RD vZ
+    bf_dev_vz       double precision                        smoothed RD vT
+    position        integer                                 rank
+    position_vp     integer                                 rank vP
+    position_vt     integer                                 rank vT
+    position_vz     integer                                 rank vZ
+    decay           integer not null                        number of periods since last game
+    domination      double precision                        rating gap to number 7 (used in the hall of fame)
+    prev_id         integer                                 foreign key to rating; previous rating for this
+                                                              player
+    </pre>
+</code>
+
+<p><strong>period</strong><br/>
+A period represents a discrete time interval used for rating computation purposes.</p>
+<code>
+    <pre>
+    id              integer not null                        primary key
+    start           date                                    starting date (inclusive)
+    end             date                                    ending date (inclusive)
+    computed        boolean not null                        whether this period has been rated
+    needs_recompute boolean not null                        whether this period needs re-rating (something
+                                                              has changed)
+    num_retplayers  integer not null                        number of returning players
+    num_newplayers  integer not null                        number of new players
+    num_games       integer not null                        number of games played
+    dom_p           double precision                        OP-score for Protoss
+    dom_t           double precision                        OP-score for Terran
+    dom_p           double precision                        OP-score for Zerg
+    </pre>
+</code>
+
+<p><strong>group</strong><br/>
+Contains group information (for now, this means teams).</p>
+<code>
+    <pre>
+    id              integer not null                        primary key
+    name            character varying (100) not null        name of group
+    shortname       character varying (25)                  short name of group
+    scoreak         double precision                        all-kill score (if team)
+    scorepl         double precision                        proleague score (if team)
+    founded         date                                    date founded
+    disbanded       date                                    date disbanded
+    active          boolean not null                        whether the group is active
+    homepage        character varying (200)                 URL of team website
+    lp_name         character varying (200)                 title of Liquipedia page (the part after
+                                                              http://wiki.teamliquid.net/starcraft2/)
+    is_team         boolean not null                        whether this group is a proper team
+    is_manual       boolean not null                        whether this group has manually added members
+                                                              or not (currently has no effect, there are no
+                                                              automatic groups)
+    </pre>
+</code>
+
+<p><strong>groupmembership</strong><br/>
 Links teams and players together in a many-to-many relationship.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - player_id int(11) NOT NULL        foreign key to ratings_player
-    - team_id int(11) NOT NULL          foreign key to ratings_team
-    - start date                        start date of this membership (when the player joined the team)
-    - end date                          end date of this membership (when the player left the team)
-    - current tinyint(4) NOT NULL       boolean (true if the contract is not over), needed since many end dates aren't known
-    - playing tinyint(4) NOT NULL       boolean (false if the contract is non-playing, e.g. for coaches)
+    id              integer not null                        primary key
+    player_id       integer not null                        foreign key to player
+    group_id        integer not null                        foreign key to group
+    start           date                                    start date of membership
+    end             date                                    end date of membership
+    current         boolean not null                        whether the membership is in effect (many end
+                                                              dates are unknown, so this is needed)
+    playing         boolean not null                        whether the player is a playing member (false e.g. 
+                                                              for coaches)
     </pre>
 </code>
 
-<p><strong>ratings_earnings</strong><br/>
-Contains prize pool information.</p>
+<p><strong>earnings</strong><br/>
+Contains prize pool information. Each row represents a single payout to a single player.</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - event_id int(11) NOT NULL         foreign key to ratings_event
-    - player_id int(11) NOT NULL        foreign key to ratings_player
-    - earnings int(11)                  amount in USD (converted if necessary)
-    - placement int(11) NOT NULL        place in the event
-    - currency varchar(30) NOT NULL     currency code
-    - origearnings int(11) NOT NULL     amount in the original currency (given by the currency field)
+    id              integer not null                        primary key
+    event_id        integer not null                        foreign key to event
+    player_id       integer not null                        foreign key to player
+    earnings        integer                                 amount in USD
+    origearnings    integer                                 amount in original currency
+    currency        character varying(30) not null          currency code
+    placement       integer not null                        place in the event
     </pre>
 </code>
 
-<p><strong>ratings_alias</strong><br/>
+<p><strong>alias</strong><br/>
 Contains aliases for teams and players (common nicknames and shortened names).</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - name varchar(30) NOT NULL         the alias
-    - player_id int(11)                 foreign key to ratings_player (alias applies to this player)
-    - team_id int(11)                   foreign key to ratings_team (alias applies to this team)
+    id              integer not null                        primary key
+    name            character varying(100)                  the alias
+    player_id       integer                                 foreign key to player
+    group_id        integer                                 foreign key to group
     </pre>
 </code>
 
-<p><strong>ratings_story</strong><br/>
+<p><strong>message</strong><br/>
+Contains messages associated with some objects, containing perhaps relevant information.</p>
+<code>
+    <pre>
+    id              integer not null                        primary key
+    type            character varying(10) not null          info, warning, sucess or error
+    title           character varying(100)                  a title
+    text            text not null                           the message text
+    player_id       integer                                 foreign key to player
+    event_id        integer                                 foreign key to event
+    group_id        integer                                 foreign key to group
+    match_id        integer                                 foreign key to match
+    </pre>
+</code>
+
+<p><strong>story</strong><br/>
 Contains stories (dots plotted in some players' rating charts).</p>
 <code>
     <pre>
-    - id int(11) NOT NULL               primary key
-    - player_id int(11) NOT NULL        foreign key to ratings_player
-    - text varchar(200) NOT NULL        text describing this story or event
-    - date date NOT NULL                when it happened
-    - event_id int(11)                  foreign key to ratings_event (story links to this event)
+    id              integer not null                        primary key
+    player_id       integer not null                        foreign key to player
+    text            character varying(200) not null         text describing this story
+    date            date not null                           when it happened
+    event_id        integer                                 foreign key to event (if applicable)
     </pre>
 </code>
 {% endif %}

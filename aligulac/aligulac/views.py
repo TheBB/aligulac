@@ -117,7 +117,7 @@ def db(request):
     })
 
     if base['dump']:
-        stat = os.stat(DUMP_PATH)
+        stat = os.stat(DUMP_PATH + 'aligulac.sql')
         base.update({
             'megabytes':  stat.st_size / 1048576,
             'modified':   datetime.fromtimestamp(stat.st_mtime),

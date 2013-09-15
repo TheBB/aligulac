@@ -201,7 +201,7 @@ div.table a.row2 {
 div.ibox {
     border-style: solid;
     border-width: 0.1em;
-    float: right;
+    /*float: right;*/
     margin-bottom: 1.5em;
 }
 
@@ -357,6 +357,21 @@ table.results td {
  * TABLES
  * =====================================================================
  */
+
+tbody.dottedint tr td {
+    border-top: dotted 0.1em;
+    border-left: dotted 0.1em;
+    text-align: center;
+    padding: 0.2em;
+}
+
+tbody.dottedint tr:first-child td {
+    border-top: none;
+}
+
+tbody.dottedint tr td:first-child {
+    border-left: none;
+}
 
 table.results {
     width: 67em;
@@ -570,4 +585,25 @@ input.player {
 
 select.small {
     width: 15em;
+}
+
+/* PERCENTAGES */
+
+.progress {
+    width: 95%;   
+    border: 1px solid black;
+    position: relative;
+}
+
+.percent {
+    position: absolute;
+    left: 0.3em;
+    top: 0.35em;
+    height: 100%;
+}
+
+.bar {
+    height: 2em;
+    background-color: #ddd;
+    border-right: 0.1em dotted #555;
 }

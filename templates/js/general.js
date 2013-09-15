@@ -93,6 +93,17 @@ function switch_to(id, all)
     }
 }
 
+function switch_to_tbody(id, all)
+{
+    for (var i = 0; i < all.length; i++)
+    {
+        if (all[i] == id)
+            document.getElementById(all[i]).style.display = 'table-row-group';
+        else
+            document.getElementById(all[i]).style.display = 'none';
+    }
+}
+
 /* Toggles a popup form.
  */
 function toggle_form(id)

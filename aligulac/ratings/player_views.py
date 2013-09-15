@@ -1,5 +1,6 @@
 # {{{ Imports
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 from functools import partial
 from math import sqrt
 
@@ -229,6 +230,7 @@ def player(request, player_id):
 
     # {{{ Various easy data
     matches = player.get_matchset()
+    recent = matches.filter(date__gte=(date.today() - relativedelta(months=2)))
 
     base.update({
         'player':           player,
@@ -244,6 +246,10 @@ def player(request, player_id):
         'vp':               count_matchup_player(matches, player, P),
         'vt':               count_matchup_player(matches, player, T),
         'vz':               count_matchup_player(matches, player, Z),
+        'totalf':           count_winloss_player(recent, player),
+        'vpf':              count_matchup_player(recent, player, P),
+        'vtf':              count_matchup_player(recent, player, T),
+        'vzf':              count_matchup_player(recent, player, Z),
     })
 
     if player.country is not None:

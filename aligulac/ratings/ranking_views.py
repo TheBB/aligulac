@@ -10,9 +10,12 @@ from django.db.models import (
 
 from ratings.models import (
     Earnings,
+    P,
     Period,
     Player,
     Rating,
+    T,
+    Z,
 )
 from ratings.tools import (
     count_matchup_games,
@@ -58,15 +61,39 @@ def period(request, period_id):
     # }}}
 
     # {{{ Best and most specialised players
-    qset = total_ratings(filter_active(Rating.objects.filter(period=period)))
+    qset = total_ratings(filter_active(Rating.objects.filter(period=period))).select_related('player')
+    qsetp = qset.filter(player__race=P)
+    qsett = qset.filter(player__race=T)
+    qsetz = qset.filter(player__race=Z)
     base.update({
-        'best':   qset.latest('rating'),
-        'bestvp': qset.latest('tot_vp'),
-        'bestvt': qset.latest('tot_vt'),
-        'bestvz': qset.latest('tot_vz'),
-        'specvp': qset.extra(select={'d':'rating_vp/dev_vp*rating'}).latest('d'),
-        'specvt': qset.extra(select={'d':'rating_vt/dev_vt*rating'}).latest('d'),
-        'specvz': qset.extra(select={'d':'rating_vz/dev_vz*rating'}).latest('d'),
+        'best':     qset.latest('rating'),
+        'bestvp':   qset.latest('tot_vp'),
+        'bestvt':   qset.latest('tot_vt'),
+        'bestvz':   qset.latest('tot_vz'),
+        'bestp':    qsetp.latest('rating'),
+        'bestpvp':  qsetp.latest('tot_vp'),
+        'bestpvt':  qsetp.latest('tot_vt'),
+        'bestpvz':  qsetp.latest('tot_vz'),
+        'bestt':    qsett.latest('rating'),
+        'besttvp':  qsett.latest('tot_vp'),
+        'besttvt':  qsett.latest('tot_vt'),
+        'besttvz':  qsett.latest('tot_vz'),
+        'bestz':    qsetz.latest('rating'),
+        'bestzvp':  qsetz.latest('tot_vp'),
+        'bestzvt':  qsetz.latest('tot_vt'),
+        'bestzvz':  qsetz.latest('tot_vz'),
+        'specvp':   qset.extra(select={'d':   'rating_vp/dev_vp*rating'}).latest('d'),
+        'specvt':   qset.extra(select={'d':   'rating_vt/dev_vt*rating'}).latest('d'),
+        'specvz':   qset.extra(select={'d':   'rating_vz/dev_vz*rating'}).latest('d'),
+        'specpvp':  qsetp.extra(select={'d':  'rating_vp/dev_vp*rating'}).latest('d'),
+        'specpvt':  qsetp.extra(select={'d':  'rating_vt/dev_vt*rating'}).latest('d'),
+        'specpvz':  qsetp.extra(select={'d':  'rating_vz/dev_vz*rating'}).latest('d'),
+        'spectvp':  qsett.extra(select={'d':  'rating_vp/dev_vp*rating'}).latest('d'),
+        'spectvt':  qsett.extra(select={'d':  'rating_vt/dev_vt*rating'}).latest('d'),
+        'spectvz':  qsett.extra(select={'d':  'rating_vz/dev_vz*rating'}).latest('d'),
+        'speczvp':  qsetz.extra(select={'d':  'rating_vp/dev_vp*rating'}).latest('d'),
+        'speczvt':  qsetz.extra(select={'d':  'rating_vt/dev_vt*rating'}).latest('d'),
+        'speczvz':  qsetz.extra(select={'d':  'rating_vz/dev_vz*rating'}).latest('d'),
     })
     # }}}
 

@@ -12,9 +12,9 @@ This prints a table of root events. Called from events.html.
         {% if e %}
             <div class="eventh"><a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a></div>
             <div class="events">
-            {% if e.event_set.all|eventliststart %}
+            {% if e.get_immediate_children.all|eventliststart %}
                 <span id="inv-{{e.id}}" style="display: none;">
-                {% for f in e.event_set.all|eventliststart %}
+                {% for f in e.get_immediate_children.all|eventliststart %}
                     <a href="/results/events/{{ f.id }}-{{ f.fullname|urlfilter }}/">{{ f.name }}</a>,
                 {% endfor %}
                 </span>
@@ -22,7 +22,7 @@ This prints a table of root events. Called from events.html.
                     <a href="#" onclick="togvis_span('inv-{{e.id}}'); togvis_span('clc-{{e.id}}'); return false;">(...)</a>
                 </span>
                 {% endif %}
-                {% for f in e.event_set.all|eventlistend %}
+                {% for f in e.get_immediate_children.all|eventlistend %}
                     <a href="/results/events/{{ f.id }}-{{ f.fullname|urlfilter }}/">{{ f.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </div>

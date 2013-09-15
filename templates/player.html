@@ -10,239 +10,366 @@ This is the template for the main player page, called from ratings.views.player.
 {% block title %}{{ player.tag }}{% endblock %}
 
 {% block content %}
-    <h2>{{ player.tag }}</h2>
+<h2>{{ player.tag }}</h2>
 
-    {% include "messages.html" %}
+{% include "messages.html" %}
 
-    <div class="ibox" style="width: 25em;">
-        <div class="iboxh">
-            {{ player.tag }}
-            {% if adm %} 
-                (<a href="#" onclick="toggle_form('modplayer'); hide_charts(); return false;"
-                  title="Edit info">edit</a>,
-                <a href="/admin/ratings/player/{{ player.id }}/" title="Admin interface">admin</a>)
-            {% endif %}
-        </div>
-        <div class="iboxtable">
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Race</div>
-                <div class="rower" style="width: 20em;">
-                    <img src="{{ player.race|imgfolder|static }}" class="btm" />
-                    {{ player.race|racefull }}
-                </div>
-            </div>
-            {% if player.country %}
-            <div class="row infobox">
-                <div class="rowel">Country</div>
-                <div class="rower">
-                    {% if player.country != "" %}
-                    <img src="{{ player.country|lower|imgfolder:"flags"|static }}" class="btm" />
-                    {{ countryfull }}
-                    {% endif %}
-                </div>
-            </div>
-            {% endif %}
-            {% if player.name %}
-            <div class="row infobox">
-                <div class="rowel">Full name</div>
-                <div class="rower">{{ player.name }}</div>
-            </div>
-            {% endif %}
-            {% if aliases %}
-            <div class="row infobox">
-                <div class="rowel">AKA</div>
-                <div class="rower">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
-            </div>
-            {% endif %}
-            {% if player.birthday %}
-            <div class="row infobox">
-                <div class="rowel">Birthday</div>
-                <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
-            </div>
-            {% endif %}
-            {% if team %}
-            <div class="row">
-                <div class="rowel">Team</div>
-                <div class="rower"><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></div>
-            </div>
-            {% endif %}
-            {% if first %}
-            <div class="row">
-                <div class="rowel">First match</div>
-                <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
-            </div>
-            {% endif %}
-            {% if last %}
-            <div class="row">
-                <div class="rowel">Last match</div>
-                <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
-            </div>
-            {% endif %}
-            {% if earnings %}
-            <div class="row">
-                <div class="rowel">Total earnings</div>
-                <div class="rower">${{ earnings|add_separator }}</div>
-            </div>
-            {% endif %}
-            <div class="row">
-                <div class="rowel">Matches played</div>
-                <div class="rower">{{ totalmatches }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel">Offline matches</div>
-                <div class="rower">{{ offlinematches|pctg:totalmatches }}%</div>
-            </div>
-            {% if player.mcnum or player.mcnum == 0 %}
-            <div class="row">
-                <div class="rowel">MC number</div>
-                <div class="rower">{{ player.mcnum }}</div>
-            </div>
-            {% endif %}
-            {% if player.tlpd_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
-                <div class="row infobox">
-                    <div class="rowel">External</div>
-                    <div class="rower">
-                        {% if player.sc2c_id %}
-                        <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" 
-                           target="_blank">SC2C</a>
-                        {% endif %}
-                        {% if player.tlpd_id %}
-                            {% for tl, human in player.tlpd_db|get_tlpd_list %}
-                            <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}"
-                               target="_blank">{{ human }}</a>
-                            {% endfor %}
-                        {% endif %}
-                        {% if player.sc2e_id %}
-                        <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
-                        {% endif %}
-                        {% if player.lp_name %}
-                        <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" 
-                           target="_blank">LP</a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+<script type="text/javascript">
+<!--
+    tables = ['alltime', 'form', 'highs'];
+-->
+</script>
 
-{% if rating %}
-<p>Standings:</p>
-
-<div class="table" style="width: 30em;">
-    <div class="row">
-        <div class="rowel" style="width: 10em;">General</div>
-        <div class="rower" style="width: 10em;">{{ rating.rating|ratscale }} 
-            ± {{ rating.dev|ratscalediff }}
+<table style="width: 67em;"><tr>
+<td style="width: 42em; vertical-align: top;">
+<table style="width: 42em;">
+    <tr>
+        <td colspan="3" style="text-align: center; padding-bottom: 1em;">
+            Show:
+            <a href="#" onclick="switch_to_tbody('alltime', tables); return false;">all-time</a>,
+            <a href="#" onclick="switch_to_tbody('form', tables); return false;">form</a>,
+            <a href="#" onclick="switch_to_tbody('highs', tables); return false;">highest ratings</a>
+        </td>
+    </tr>
+    <tbody id="alltime">
+    <tr style="height: 2.5em;">
+        <td style="width: 3em;">All</td>
+        <td style="width: 20em;">
+            <div class="progress">
+                <span class="percent">
+                    {{ total.0|pctg_add:total.1 }}%
+                    ({{ total.0 }}/{{ total.1|add:total.0 }})
+                </span>
+                <div class="bar" style="width: {{ total.0|pctg_add:total.1 }}%;"></div>
+            </div>
+        </td>
+        <td style="width: 8em;">
+            {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
             {% if rating.position %}
                 <span class="small">(#{{ rating.position }})</span>
             {% endif %}
-        </div>
-        <div class="rower" style="width: 10em">
-            {% if total %}
-            {{ total.0 }}/{{ total.1|add:total.0 }}
-            <span class="small">({{ total.0|pctg_add:total.1 }}%)</span>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vP</div>
-        <div class="rower">{{ rating.rating|addf:rating.rating_vp|ratscale }} 
-            ± {{ rating|ratingdev:"P"|ratscalediff }}
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vp.0|pctg_add:vp.1 }}%
+                    ({{ vp.0 }}/{{ vp.1|add:vp.0 }})
+                </span>
+                <div class="bar" style="width: {{ vp.0|pctg_add:vp.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
             {% if rating.position_vp %}
                 <span class="small">(#{{ rating.position_vp }})</span>
             {% endif %}
-        </div>
-        <div class="rower">
-            {% if vp %}
-            {{ vp.0 }}/{{ vp.1|add:vp.0 }}
-            <span class="small">({{ vp.0|pctg_add:vp.1 }}%)</span>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vT</div>
-        <div class="rower">{{ rating.rating|addf:rating.rating_vt|ratscale }} 
-            ± {{ rating|ratingdev:"T"|ratscalediff }}
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vt.0|pctg_add:vt.1 }}%
+                    ({{ vt.0 }}/{{ vt.1|add:vt.0 }})
+                </span>
+                <div class="bar" style="width: {{ vt.0|pctg_add:vt.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
             {% if rating.position_vt %}
                 <span class="small">(#{{ rating.position_vt }})</span>
             {% endif %}
-        </div>
-        <div class="rower">
-            {% if vt %}
-            {{ vt.0 }}/{{ vt.1|add:vt.0 }}
-            <span class="small">({{ vt.0|pctg_add:vt.1 }}%)</span>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vZ</div>
-        <div class="rower">{{ rating.rating|addf:rating.rating_vz|ratscale }} 
-            ± {{ rating|ratingdev:"Z"|ratscalediff }}
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vz.0|pctg_add:vz.1 }}%
+                    ({{ vt.0 }}/{{ vt.1|add:vt.0 }})
+                </span>
+                <div class="bar" style="width: {{ vz.0|pctg_add:vz.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
             {% if rating.position_vz %}
                 <span class="small">(#{{ rating.position_vz }})</span>
             {% endif %}
-        </div>
-        <div class="rower">
-            {% if vz %}
-            {{ vz.0 }}/{{ vz.1|add:vz.0 }}
-            <span class="small">({{ vz.0|pctg_add:vz.1 }}%)</span>
+        </td>
+    </tr>
+    </tbody>
+    <tbody id="form" style="display: none;">
+    <tr style="height: 2.5em;">
+        <td style="width: 3em;">All</td>
+        <td style="width: 20em;">
+            <div class="progress">
+                <span class="percent">
+                    {{ totalf.0|pctg_add:totalf.1 }}%
+                    ({{ totalf.0 }}/{{ totalf.1|add:totalf.0 }})
+                </span>
+                <div class="bar" style="width: {{ totalf.0|pctg_add:totalf.1 }}%;"></div>
+            </div>
+        </td>
+        <td style="width: 8em;">
+            {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
+            {% if rating.position %}
+                <span class="small">(#{{ rating.position }})</span>
             {% endif %}
-        </div>
-    </div>
-</div>
-
-<p>Career highs:</p>
-
-<div class="table" style="width: 30em;">
-    <div class="row">
-        <div class="rowel" style="width: 10em;">General</div>
-        <div class="rower" style="width: 10em;">{{ highs.0.rating|ratscale }} 
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vpf.0|pctg_add:vpf.1 }}%
+                    ({{ vpf.0 }}/{{ vpf.1|add:vpf.0 }})
+                </span>
+                <div class="bar" style="width: {{ vpf.0|pctg_add:vpf.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
+            {% if rating.position_vp %}
+                <span class="small">(#{{ rating.position_vp }})</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vtf.0|pctg_add:vtf.1 }}%
+                    ({{ vtf.0 }}/{{ vtf.1|add:vtf.0 }})
+                </span>
+                <div class="bar" style="width: {{ vtf.0|pctg_add:vtf.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
+            {% if rating.position_vt %}
+                <span class="small">(#{{ rating.position_vt }})</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>
+            <div class="progress">
+                <span class="percent">
+                    {{ vzf.0|pctg_add:vzf.1 }}%
+                    ({{ vzf.0 }}/{{ vzf.1|add:vzf.0 }})
+                </span>
+                <div class="bar" style="width: {{ vzf.0|pctg_add:vzf.1 }}%;"></div>
+            </div>
+        </td>
+        <td>
+            {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
+            {% if rating.position_vz %}
+                <span class="small">(#{{ rating.position_vz }})</span>
+            {% endif %}
+        </td>
+    </tr>
+    </tbody>
+    <tbody id="highs" style="display: none;">
+    <tr style="height: 2.5em;">
+        <td style="width: 3em;">All</td>
+        <td style="width: 8em;">
+            {{ highs.0.rating|ratscale }} 
             ± {{ highs.0.dev|ratscalediff }}
             {% if highs.0.position %}
                 <span class="small">(#{{ highs.0.position }})</span>
             {% endif %}
-        </div>
-        <div class="rower" style="width: 10em">
-            <a href="/periods/{{ highs.0.period.id }}/">{{ highs.0.period.end }}</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vP</div>
-        <div class="rower">{{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
+        </td>
+        <td style="width: 20em; text-decoration: none;">
+            on <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
+                {{ highs.0.period.end|date:"F jS, Y" }}
+            </a>
+            &nbsp;&nbsp;
+            <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.0.period.id }}/"
+               style="text-decoration: none;">→</a>
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>
+            {{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
             ± {{ highs.1|ratingdev:"P"|ratscalediff }}
             {% if highs.1.position_vp %}
-                <span class="small">(#{{ highs.1.position_vp }})</span>
+                <span class="small">(#{{ highs.2.position_vp }})</span>
             {% endif %}
-        </div>
-        <div class="rower">
-            <a href="/periods/{{ highs.1.period.id }}/">{{ highs.1.period.end }}</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vT</div>
-        <div class="rower">{{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
+        </td>
+        <td>
+            on <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
+                {{ highs.1.period.end|date:"F jS, Y" }}
+            </a>
+            &nbsp;&nbsp;
+            <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.1.period.id }}/"
+               style="text-decoration: none;">→</a>
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>
+            {{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
             ± {{ highs.2|ratingdev:"T"|ratscalediff }}
             {% if highs.2.position_vt %}
                 <span class="small">(#{{ highs.2.position_vt }})</span>
             {% endif %}
-        </div>
-        <div class="rower">
-            <a href="/periods/{{ highs.2.period.id }}/">{{ highs.2.period.end }}</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="rowel">vZ</div>
-        <div class="rower">{{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
+        </td>
+        <td>
+            on <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
+                {{ highs.2.period.end|date:"F jS, Y" }}
+            </a>
+            &nbsp;&nbsp;
+            <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.2.period.id }}/"
+               style="text-decoration: none;">→</a>
+        </td>
+    </tr>
+    <tr style="height: 2.5em;">
+        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>
+            {{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
             ± {{ highs.3|ratingdev:"Z"|ratscalediff }}
             {% if highs.3.position_vz %}
                 <span class="small">(#{{ highs.3.position_vz }})</span>
             {% endif %}
+        </td>
+        <td>
+            on <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
+                {{ highs.3.period.end|date:"F jS, Y" }}
+            </a>
+            &nbsp;&nbsp;
+            <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.3.period.id }}/"
+               style="text-decoration: none;">→</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</td>
+<td style="width: 25em; vertical-align: top;">
+<div class="ibox" style="width: 25em;">
+    <div class="iboxh">
+    {{ player.tag }}
+    {% if adm %}
+        (<a href="#" onclick="toggle_form('modplayer'); hide_charts(); return false;"
+          title="Edit info">edit</a>,
+        <a href="/admin/ratings/player/{{ player.id }}/" title="Admin interface">admin</a>)
+    {% endif %}
+    </div>
+    <div class="iboxtable">
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Race</div>
+            <div class="rower" style="width: 20em;">
+                <img src="{{ player.race|imgfolder|static }}" class="btm" />
+                {{ player.race|racefull }}
+            </div>
         </div>
-        <div class="rower">
-            <a href="/periods/{{ highs.3.period.id }}/">{{ highs.3.period.end }}</a>
+        {% if player.country %}
+        <div class="row infobox">
+            <div class="rowel">Country</div>
+            <div class="rower">
+                {% if player.country != "" %}
+                <img src="{{ player.country|lower|imgfolder:"flags"|static }}" class="btm" />
+                {{ countryfull }}
+                {% endif %}
+            </div>
         </div>
+        {% endif %}
+        {% if player.name %}
+        <div class="row infobox">
+            <div class="rowel">Full name</div>
+            <div class="rower">{{ player.name }}</div>
+        </div>
+        {% endif %}
+        {% if aliases %}
+        <div class="row infobox">
+            <div class="rowel">AKA</div>
+            <div class="rower">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
+        </div>
+        {% endif %}
+        {% if player.birthday %}
+        <div class="row infobox">
+            <div class="rowel">Birthday</div>
+            <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
+        </div>
+        {% endif %}
+        {% if team %}
+        <div class="row">
+            <div class="rowel">Team</div>
+            <div class="rower">
+                <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>
+            </div>
+        </div>
+        {% endif %}
+        {% if first %}
+        <div class="row">
+            <div class="rowel">First match</div>
+            <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
+        </div>
+        {% endif %}
+        {% if last %}
+        <div class="row">
+            <div class="rowel">Last match</div>
+            <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
+        </div>
+        {% endif %}
+        {% if earnings %}
+        <div class="row">
+            <div class="rowel">Total earnings</div>
+            <div class="rower">${{ earnings|add_separator }}</div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="rowel">Matches played</div>
+            <div class="rower">{{ totalmatches }}</div>
+        </div>
+        <div class="row">
+            <div class="rowel">Offline matches</div>
+            <div class="rower">{{ offlinematches|pctg:totalmatches }}%</div>
+        </div>
+        {% if player.mcnum or player.mcnum == 0 %}
+        <div class="row">
+            <div class="rowel">MC number</div>
+            <div class="rower">{{ player.mcnum }}</div>
+        </div>
+        {% endif %}
+        {% if player.tlpd_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+        <div class="row infobox">
+            <div class="rowel">External</div>
+            <div class="rower">
+                {% if player.sc2c_id %}
+                <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" 
+                   target="_blank">SC2C</a>
+                {% endif %}
+                {% if player.tlpd_id %}
+                    {% for tl, human in player.tlpd_db|get_tlpd_list %}
+                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}"
+                       target="_blank">{{ human }}</a>
+                    {% endfor %}
+                {% endif %}
+                {% if player.sc2e_id %}
+                <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
+                {% endif %}
+                {% if player.lp_name %}
+                <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" 
+                   target="_blank">LP</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
+</td>
+</tr></table>
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modplayer">
@@ -436,8 +563,7 @@ This is the template for the main player page, called from ratings.views.player.
         });
     });
 </script>
-<div id="chart" style="width: 67em; height: 30em; margin-top: 4em;"> </div>
-{% endif %}
+<div id="chart" style="width: 67em; height: 30em; margin-top: 0em;"> </div>
 {% endif %}
 
 {% if matches %}

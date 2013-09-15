@@ -10,120 +10,96 @@ This shows a team page. Called from ratings.teamviews.team.
 {% block title %}{{ team.name }}{% endblock %}
 
 {% block content %}
-    <h2>{{ team.name }}</h2>
+<h2>{{ team.name }}</h2>
 
-    {% include "messages.html" %}
+{% include "messages.html" %}
 
-    <form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
-    {% csrf_token %}
-    <div class="ibox" style="width: 25em;">
-        <div class="iboxh">{{ team.name }}
-            {% if adm %} 
-                (<a href="#" onclick="toggle_form('modteam'); return false;" title="Edit info">edit</a>, 
-                <a href="/admin/ratings/group/{{ team.id }}/" title="Admin interface">admin</a>)
-            {% endif %}
-        </div>
-        <div class="iboxtable">
-        {% if adm %}
-            <div class="row edit" style="display: none;">
-                <div class="rowel">Team name</div>
-                <div class="rower"><input type="text" name="name" value="{{ team.name }}" /></div>
-            </div>
-        {% endif %}
-        {% if aliases %}
-            <div class="row infobox">
-                <div class="rowel" style="width: 10em;">AKA</div>
-                <div class="rower" style="width: 20em;">
-                    {% for alias in team.aliases_set %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                </div>
-            </div>
-        {% endif %}
-        {% if adm %}
-            <div class="row edit" style="display: none;">
-                <div class="rowel">AKA</div>
-                <div class="rower"><input type="text" name="AKA"
-                    {% if aliases%} value=
-                        "{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %},{% endif %}{% endfor %}"
-                    {% endif %} /></div>
-            </div>
-        {% endif %}
-        {% if team.shortname and adm %}
-            <div class="row infobox">
-                <div class="rowel" style="width: 10em;">Short name</div>
-                <div class="rower" style="width: 20em;">{{ team.shortname }}</div>
-            </div>
-        {% endif %}
-        {% if adm %}
-            <div class="row edit" style="display: none;">
-                <div class="rowel">Short name</div>
-                <div class="rower"><input type="text" name="shortname" {% if team.shortname %}value="{{ team.shortname }}"{% endif %} /></div>
-            </div>
-        {% endif %}
-        {% if team.founded %}
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Founded</div>
-                <div class="rower" style="width: 20em;">{{ team.founded|date:"F jS, Y" }}</div>
-            </div>
-        {% endif %}
-        {% if team.disbanded %}
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Disbanded</div>
-                <div class="rower" style="width: 20em;">{{ team.disbanded|date:"F jS, Y" }}</div>
-            </div>
-        {% endif %}
-        {% if nplayers %}
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Players</div>
-                <div class="rower" style="width: 20em;">
-                    {{ nplayers }}
-                    ({{ nprotoss }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
-                    {{ nterran }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
-                    {{ nzerg }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
-                </div>
-            </div>
-        {% endif %}
-        {% if earnings %}
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Total earnings</div>
-                <div class="rower" style="width: 20em;">${{ earnings|add_separator }}</div>
-            </div>
-        {% endif %}
-        {% if nmatches %}
-            <div class="row">
-                <div class="rowel" style="width: 10em;">Offline matches</div>
-                <div class="rower" style="width: 20em;">{{ noffline|pctg:nmatches }}%</div>
-            </div>
-        {% endif %}
-        {% if team.homepage or team.lp_name %}
-            <div class="row infobox" id="external">
-                <div class="rowel">External</div>
-                <div class="rower">
-                        {% if team.homepage %}
-                        <a href="{{ team.homepage }}" target="_blank">Homepage</a>
-                        {% endif %} 
-                        {% if team.lp_name %}
-                        <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">LP</a>
-                        {% endif %}
-                </div>
-            </div>
-        {% endif %}
-        {% if adm %}
-            <div class="row edit" style="display: none;">
-                <div class="rowel">Homepage</div>
-                <div class="rower"><input type="text" name="homepage" {% if team.homepage %}value="{{ team.homepage}}"{% endif %} /></div>
-            </div>
-            <div class="row edit" style="display: none;">
-                <div class="rowel">Liquipedia</div>
-                <div class="rower"><input type="text" name="lp_name" {% if team.lp_name %}value="{{ team.lp_name }}"{% endif %} /></div>
-            </div>
-            <div class="row edit" style="display: none;">
-                <div class="rowel"></div>
-                <div class="rower"><input type="submit" name="op" value="Submit" /></div>
-            </div>
-        {% endif %}
-        </div>
+<table style="width: 67em;"><tr>
+<td style="width: 42em; vertical-align: top;">
+{% if team.founded and team.disbanded %}
+    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on 
+    {{ team.disbanded|date:"F jS, Y" }}.</p>
+{% elif team.founded %}
+    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }}.</p>
+{% elif team.disbanded %}
+    <p>{{ team.name }} was disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
+{% endif %}
+</td>
+<td style="width: 25em; vertical-align: top;">
+<div class="ibox" style="width: 25em;">
+    <div class="iboxh">{{ team.name }}
+    {% if adm %} 
+        (<a href="#" onclick="toggle_form('modteam'); return false;" title="Edit info">edit</a>, 
+        <a href="/admin/ratings/group/{{ team.id }}/" title="Admin interface">admin</a>)
+    {% endif %}
     </div>
-    </form>
+    <div class="iboxtable">
+    {% if aliases %}
+        <div class="row infobox">
+            <div class="rowel" style="width: 10em;">AKA</div>
+            <div class="rower" style="width: 20em;">
+                {% for alias in team.aliases_set %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if team.shortname and adm %}
+        <div class="row infobox">
+            <div class="rowel" style="width: 10em;">Short name</div>
+            <div class="rower" style="width: 20em;">{{ team.shortname }}</div>
+        </div>
+    {% endif %}
+    {% if team.founded %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Founded</div>
+            <div class="rower" style="width: 20em;">{{ team.founded|date:"F jS, Y" }}</div>
+        </div>
+    {% endif %}
+    {% if team.disbanded %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Disbanded</div>
+            <div class="rower" style="width: 20em;">{{ team.disbanded|date:"F jS, Y" }}</div>
+        </div>
+    {% endif %}
+    {% if nplayers %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Players</div>
+            <div class="rower" style="width: 20em;">
+                {{ nplayers }}
+                ({{ nprotoss }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
+                {{ nterran }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
+                {{ nzerg }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
+            </div>
+        </div>
+    {% endif %}
+    {% if earnings %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Total earnings</div>
+            <div class="rower" style="width: 20em;">${{ earnings|add_separator }}</div>
+        </div>
+    {% endif %}
+    {% if nmatches %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Offline matches</div>
+            <div class="rower" style="width: 20em;">{{ noffline|pctg:nmatches }}%</div>
+        </div>
+    {% endif %}
+    {% if team.homepage or team.lp_name %}
+        <div class="row infobox" id="external">
+            <div class="rowel">External</div>
+            <div class="rower">
+                {% if team.homepage %}
+                <a href="{{ team.homepage }}" target="_blank">Homepage</a>
+                {% endif %} 
+                {% if team.lp_name %}
+                <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">LP</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    </div>
+</div>
+</td>
+</tr></table>
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modteam">
@@ -143,39 +119,31 @@ This shows a team page. Called from ratings.teamviews.team.
 </div>
 {% endif %}
     
-    {% if team.founded and team.disbanded %}
-    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
-    {% elif team.founded %}
-    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }}.</p>
-    {% elif team.disbanded %}
-    <p>{{ team.name }} was disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
-    {% endif %}
+{% if active %}
+    <h3>Active roster</h3>
+    <p>{{ team.name }} has {{ active.count }} players who have played a ranked game within the last
+    two months.</p>
+    {% include "ratinglist.html" with entries=active rl_pos_arrow=0 displayteams=0 %}
+{% endif %}
 
-    {% if active %}
-        <h3>Active roster</h3>
-        <p>{{ team.name }} has {{ active.count }} players who have played a ranked game within the last
-        two months.</p>
-        {% include "ratinglist.html" with entries=active rl_pos_arrow=0 displayteams=0 %}
-    {% endif %}
+{% if inactive %}
+    <h3>Inactive roster</h3>
+    <p>{{ team.name }} has {{ inactive.count }} players who have been temporarily removed from the
+    ranking due to inactivity.</p>
+    {% include "ratinglist.html" with entries=inactive rl_pos_arrow=0 displayteams=0 %}
+{% endif %}
 
-    {% if inactive %}
-        <h3>Inactive roster</h3>
-        <p>{{ team.name }} has {{ inactive.count }} players who have been temporarily removed from the
-        ranking due to inactivity.</p>
-        {% include "ratinglist.html" with entries=inactive rl_pos_arrow=0 displayteams=0 %}
-    {% endif %}
+{% if nonplaying %}
+    <h3>Non-playing members</h3>
+    <p>{% for p in nonplaying %}
+    <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">{{ p.player.tag }}</a>{% if forloop.revcounter > 2 %}, 
+    {% elif forloop.revcounter == 2 %} and {% endif %}{% endfor %} 
+    {% if nonplaying|length > 1 %}are{% else %}is{% endif %} assigned to {{ team.name }} in a
+    non-playing capacity.</p>
+{% endif %}
 
-    {% if nonplaying %}
-        <h3>Non-playing members</h3>
-        <p>{% for p in nonplaying %}
-        <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">{{ p.player.tag }}</a>{% if forloop.revcounter > 2 %}, 
-        {% elif forloop.revcounter == 2 %} and {% endif %}{% endfor %} 
-        {% if nonplaying|length > 1 %}are{% else %}is{% endif %} assigned to {{ team.name }} in a
-        non-playing capacity.</p>
-    {% endif %}
-
-    {% if past %}
-        <h3>Past members</h3>
+{% if past %}
+<h3>Past members</h3>
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
@@ -203,5 +171,5 @@ This shows a team page. Called from ratings.teamviews.team.
     </div>
     {% endfor %}
 </div>
-    {% endif %}
+{% endif %}
 {% endblock %}

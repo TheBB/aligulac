@@ -27,8 +27,11 @@ from ratings.models import (
     Group,
     GroupMembership,
     Match,
+    P,
     Player,
     Rating,
+    T,
+    Z,
 )
 from ratings.tools import (
     filter_active,
@@ -143,9 +146,9 @@ def team(request, team_id):
 
     base.update({
         'nplayers':  players.count(),
-        'nprotoss':  players.filter(player__race=Player.P).count(),
-        'nterran':   players.filter(player__race=Player.T).count(),
-        'nzerg':     players.filter(player__race=Player.Z).count(),
+        'nprotoss':  players.filter(player__race=P).count(),
+        'nterran':   players.filter(player__race=T).count(),
+        'nzerg':     players.filter(player__race=Z).count(),
         'earnings':  (
             Earnings.objects.filter(player__in=player_ids).aggregate(Sum('earnings'))['earnings__sum']
         ),

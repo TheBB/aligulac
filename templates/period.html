@@ -9,140 +9,253 @@ This template shows a rating list for a given period.
 {% block title %}List {{ period.id }}{% endblock %}
 
 {% block content %}
-    <h2>List {{ period.id }}: {{ period.end|date:"F jS, Y" }}</h2>
+<h2>List {{ period.id }}: {{ period.end|date:"F jS, Y" }}</h2>
 
-    {% include "messages.html" %}
+{% include "messages.html" %}
 
-    <div class="ibox" style="width: 25em; margin-left: 2em;">
-        <div class="iboxh"> List {{ period.id }} </div>
-        <div class="iboxtable">
-            <div class="row">
-                <div class="rowel" style="width: 15em;">Start</div>
-                <div class="rower" style="width: 15em;">{{ period.start|date:"F jS, Y" }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel">End</div>
-                <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel">Active players</div>
-                <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
-            </div>
-            <div class="row">
-                <div class="rowel">Leading race</div>
-                <div class="rower">
-                    <img src="{{ period|oprace|imgfolder|static }}" class="btm" alt="{{ period|oprace|racefull }}" /> 
-                    {{ period|oprace|racefull }} ({{ period|oppctg }}%)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Lagging race</div>
-                <div class="rower">
-                    <img src="{{ period|uprace|imgfolder|static }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
-                    {{ period|uprace|racefull}} ({{ period|uppctg }}%)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">Games</div>
-                <div class="rower">{{ period.num_games }}</div>
-            </div>
-            <div class="row">
-                <div class="rowel">PvT</div>
-                <div class="rower">
-                    {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg:pvt_loss }}%)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">PvZ</div>
-                <div class="rower">
-                    {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg:pvz_loss }}%)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">TvZ</div>
-                <div class="rower">
-                    {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg:tvz_loss }}%)
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">PvP</div>
-                <div class="rower">
-                    {{ pvp_games }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">TvT</div>
-                <div class="rower">
-                    {{ tvt_games }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="rowel">ZvZ</div>
-                <div class="rower">
-                    {{ zvz_games }}
-                </div>
-            </div>
-        </div>
-    </div>
+<script type="text/javascript">
+<!--
+    tables = ['best', 'spec'];
+-->
+</script>
 
-    {% comment %}
-    {% if period.is_preview %}
-    <p>This is a <strong>preview</strong> of the next rating list. It will not be finalized until 
-    {{ period.end|date:"F jS" }}.</p>
-    {% endif %}
-    {% endcomment %}
-
-<div class="table" style="width: 30em;">
-    <div class="row">
-        <div class="rowel" style="width: 15em;">Best overall</div>
-        <div class="rower" style="width: 15em;">
-            <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{ best.player.tag }}</a>
-            <span class="small">({{ best.rating|ratscale }})</span>
+<table style="width: 67em;"><tr>
+<td style="width: 45em; vertical-align: top;">
+<table style="width: 42em;">
+    <tr>
+        <td colspan="5" style="text-align: center; padding-bottom: 1em;">
+            Show:
+            <a href="#" onclick="switch_to_tbody('best', tables); return false;">best</a>,
+            <a href="#" onclick="switch_to_tbody('spec', tables); return false;">most specialized</a>
+        </td>
+    </tr>
+    <tbody class="dottedint" id="best">
+    <tr>
+        <td style="width: 2em;"></td>
+        <td style="width: 10em; text-align: center;">All</td>
+        <td style="width: 10em; text-align: center;">Protoss</td>
+        <td style="width: 10em; text-align: center;">Terran</td>
+        <td style="width: 10em; text-align: center;">Zerg</td>
+    </tr>
+    <tr>
+        <td>All</td>
+        <td>
+            <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{best.player.tag}}</a>
+            <br/><span class="small">({{ best.rating|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestp.player.id}}-{{bestp.player.tag|urlfilter}}/">{{bestp.player.tag}}</a>
+            <br/><span class="small">({{ bestp.rating|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestt.player.id}}-{{bestt.player.tag|urlfilter}}/">{{bestt.player.tag}}</a>
+            <br/><span class="small">({{ bestt.rating|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestz.player.id}}-{{bestz.player.tag|urlfilter}}/">{{bestz.player.tag}}</a>
+            <br/><span class="small">({{ bestz.rating|ratscale }})</span>
+        </td>
+    </tr>
+    <tr>
+        <td>vP</td>
+        <td>
+            <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{bestvp.player.tag}}</a>
+            <br/><span class="small">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestpvp.player.id}}-{{bestpvp.player.tag|urlfilter}}/">{{bestpvp.player.tag}}</a>
+            <br/><span class="small">({{ bestpvp.rating|addf:bestpvp.rating_vp|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{besttvp.player.id}}-{{besttvp.player.tag|urlfilter}}/">{{besttvp.player.tag}}</a>
+            <br/><span class="small">({{ besttvp.rating|addf:besttvp.rating_vp|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestzvp.player.id}}-{{bestzvp.player.tag|urlfilter}}/">{{bestzvp.player.tag}}</a>
+            <br/><span class="small">({{ bestzvp.rating|addf:bestzvp.rating_vp|ratscale }})</span>
+        </td>
+    </tr>
+    <tr>
+        <td>vT</td>
+        <td>
+            <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{bestvt.player.tag}}</a>
+            <br/><span class="small">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestpvt.player.id}}-{{bestpvt.player.tag|urlfilter}}/">{{bestpvt.player.tag}}</a>
+            <br/><span class="small">({{ bestpvt.rating|addf:bestpvt.rating_vt|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{besttvt.player.id}}-{{besttvt.player.tag|urlfilter}}/">{{besttvt.player.tag}}</a>
+            <br/><span class="small">({{ besttvt.rating|addf:besttvt.rating_vt|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestzvt.player.id}}-{{bestzvt.player.tag|urlfilter}}/">{{bestzvt.player.tag}}</a>
+            <br/><span class="small">({{ bestzvt.rating|addf:bestzvt.rating_vt|ratscale }})</span>
+        </td>
+    </tr>
+    <tr>
+        <td>vZ</td>
+        <td>
+            <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{bestvz.player.tag}}</a>
+            <br/><span class="small">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestpvz.player.id}}-{{bestpvz.player.tag|urlfilter}}/">{{bestpvz.player.tag}}</a>
+            <br/><span class="small">({{ bestpvz.rating|addf:bestpvz.rating_vz|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{besttvz.player.id}}-{{besttvz.player.tag|urlfilter}}/">{{besttvz.player.tag}}</a>
+            <br/><span class="small">({{ besttvz.rating|addf:besttvz.rating_vz|ratscale }})</span>
+        </td>
+        <td>
+            <a href="/players/{{bestzvz.player.id}}-{{bestzvz.player.tag|urlfilter}}/">{{bestzvz.player.tag}}</a>
+            <br/><span class="small">({{ bestzvz.rating|addf:bestzvz.rating_vz|ratscale }})</span>
+        </td>
+    </tr>
+    </tbody>
+    <tbody class="dottedint" id="spec" style="display: none;">
+    <tr>
+        <td style="width: 2em;"></td>
+        <td style="width: 10em; text-align: center;">All</td>
+        <td style="width: 10em; text-align: center;">Protoss</td>
+        <td style="width: 10em; text-align: center;">Terran</td>
+        <td style="width: 10em; text-align: center;">Zerg</td>
+    </tr>
+    <tr>
+        <td>vP</td>
+        <td>
+            <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{specvp.player.tag}}</a>
+            <br/><span class="small">(+{{ specvp.rating_vp|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{specpvp.player.id}}-{{specpvp.player.tag|urlfilter}}/">{{specpvp.player.tag}}</a>
+            <br/><span class="small">(+{{ specpvp.rating_vp|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{spectvp.player.id}}-{{spectvp.player.tag|urlfilter}}/">{{spectvp.player.tag}}</a>
+            <br/><span class="small">(+{{ spectvp.rating_vp|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{speczvp.player.id}}-{{speczvp.player.tag|urlfilter}}/">{{speczvp.player.tag}}</a>
+            <br/><span class="small">(+{{ speczvp.rating_vp|ratscalediff }})</span>
+        </td>
+    </tr>
+    <tr>
+        <td>vT</td>
+        <td>
+            <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{specvt.player.tag}}</a>
+            <br/><span class="small">(+{{ specvt.rating_vt|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{specpvt.player.id}}-{{specpvt.player.tag|urlfilter}}/">{{specpvt.player.tag}}</a>
+            <br/><span class="small">(+{{ specpvt.rating_vt|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{spectvt.player.id}}-{{spectvt.player.tag|urlfilter}}/">{{spectvt.player.tag}}</a>
+            <br/><span class="small">(+{{ spectvt.rating_vt|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{speczvt.player.id}}-{{speczvt.player.tag|urlfilter}}/">{{speczvt.player.tag}}</a>
+            <br/><span class="small">(+{{ speczvt.rating_vt|ratscalediff }})</span>
+        </td>
+    </tr>
+    <tr>
+        <td>vZ</td>
+        <td>
+            <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{specvz.player.tag}}</a>
+            <br/><span class="small">(+{{ specvz.rating_vz|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{specpvz.player.id}}-{{specpvz.player.tag|urlfilter}}/">{{specpvz.player.tag}}</a>
+            <br/><span class="small">(+{{ specpvz.rating_vz|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{spectvz.player.id}}-{{spectvz.player.tag|urlfilter}}/">{{spectvz.player.tag}}</a>
+            <br/><span class="small">(+{{ spectvz.rating_vz|ratscalediff }})</span>
+        </td>
+        <td>
+            <a href="/players/{{speczvz.player.id}}-{{speczvz.player.tag|urlfilter}}/">{{speczvz.player.tag}}</a>
+            <br/><span class="small">(+{{ speczvz.rating_vz|ratscalediff }})</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</td>
+<td style="width: 22em; vertical-align: top;">
+<div class="ibox" style="width: 22em;">
+    <div class="iboxh"> List {{ period.id }} </div>
+    <div class="iboxtable">
+        <div class="row">
+            <div class="rowel" style="width: 11em;">Start</div>
+            <div class="rower" style="width: 17em;">{{ period.start|date:"F jS, Y" }}</div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Best vs. Protoss</div>
-        <div class="rower">
-            <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{ bestvp.player.tag }}</a>
-            <span class="small">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</span>
+        <div class="row">
+            <div class="rowel">End</div>
+            <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Best vs. Terran</div>
-        <div class="rower">
-            <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{ bestvt.player.tag }}</a>
-            <span class="small">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</span>
+        <div class="row">
+            <div class="rowel">Active players</div>
+            <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Best vs. Zerg</div>
-        <div class="rower">
-            <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{ bestvz.player.tag }}</a>
-            <span class="small">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</span>
+        <div class="row">
+            <div class="rowel">Leading race</div>
+            <div class="rower">
+                <img src="{{ period|oprace|imgfolder|static }}" class="btm" alt="{{ period|oprace|racefull }}" /> 
+                {{ period|oprace|racefull }} ({{ period|oppctg }}%)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Most specialised vP</div>
-        <div class="rower">
-            <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{ specvp.player.tag }}</a>
-            <span class="small">(+{{ specvp.rating_vp|ratscalediff }})</span>
+        <div class="row">
+            <div class="rowel">Lagging race</div>
+            <div class="rower">
+                <img src="{{ period|uprace|imgfolder|static }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
+                {{ period|uprace|racefull}} ({{ period|uppctg }}%)
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Most specialised vT</div>
-        <div class="rower">
-            <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{ specvt.player.tag }}</a>
-            <span class="small">(+{{ specvt.rating_vt|ratscalediff }})</span>
+        <div class="row">
+            <div class="rowel">Games</div>
+            <div class="rower">{{ period.num_games }}</div>
         </div>
-    </div>
-    <div class="row">
-        <div class="rowel">Most specialised vZ</div>
-        <div class="rower">
-            <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{ specvz.player.tag }}</a>
-            <span class="small">(+{{ specvz.rating_vz|ratscalediff }})</span>
+        <div class="row">
+            <div class="rowel">PvT</div>
+            <div class="rower">
+                {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">PvZ</div>
+            <div class="rower">
+                {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">TvZ</div>
+            <div class="rower">
+                {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">PvP</div>
+            <div class="rower">
+                {{ pvp_games }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">TvT</div>
+            <div class="rower">
+                {{ tvt_games }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowel">ZvZ</div>
+            <div class="rower">
+                {{ zvz_games }}
+            </div>
         </div>
     </div>
 </div>
+</td>
+</tr></table>
 
 <form method="get" action="/periods/{{ period.id }}/">
     <input type="hidden" name="page" value="{{ page }}" />
@@ -169,6 +282,6 @@ This template shows a rating list for a given period.
     </p>
 </form>
 
-    {% include "ratinglist.html" with rl_pos_arrow=1 displayteams=1 %}
+{% include "ratinglist.html" with rl_pos_arrow=1 displayteams=1 %}
 
 {% endblock %}

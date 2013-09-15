@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # {{{ Imports
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
 
+from datetime import datetime
 from math import sqrt
 from numpy import array
 import sys
@@ -45,13 +46,13 @@ from ratings.tools import (
 try:
     period = Period.objects.get(id=sys.argv[1])
 except:
-    print('No such period')
+    print('[%s] No such period' % str(datetime.now()))
     sys.exit(1)
 
-print('Recomputing #{0} ({1} -> {2})'.format(period.id, period.start, period.end))
+print('[%s] Recomputing #{0} ({1} -> {2})'.format(str(datetime.now()), period.id, period.start, period.end))
 
 if Period.objects.filter(id__lt=period.id).filter(Q(computed=False) | Q(needs_recompute=True)).exists():
-    print('Earlier period not refreshed. Aborting.')
+    print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()))
     sys.exit(1)
 
 prev = etn(lambda: Period.objects.get(id=period.id-1))
@@ -122,7 +123,7 @@ for m in Match.objects.filter(period=period).select_related('pla','plb'):
     ngames += m.sca + m.scb
 # }}}
 
-print('Initialized %i players and %i games' % (len(players), ngames))
+print('[%s] Initialized %i players and %i games' % (str(datetime.now()), len(players), ngames))
 
 # {{{ Compute new ratings, devs and performances
 for p in players.values():
@@ -246,4 +247,7 @@ cur.execute('''
 )
 # }}}
 
-print('Deleted: %i, Updated: %i, Inserted: %i' % (len(delete_ids), len(update_ids), len(insert_ids)))
+print(
+    '[%s] Deleted: %i, Updated: %i, Inserted: %i'
+    % (str(datetime.now()), len(delete_ids), len(update_ids), len(insert_ids))
+)

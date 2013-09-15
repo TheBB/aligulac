@@ -45,8 +45,7 @@ class TeamPL:
     def get_tally(self):
         return self._tally
 
-    def compute(self):
-        N = 1000
+    def compute(self, N=1000):
         self._tally = [Tally(self._nplayers+1), Tally(self._nplayers+1)]
 
         for m in self._matches:

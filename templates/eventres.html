@@ -268,62 +268,6 @@ ratings.views.events.
 </td>
 </tr></table>
 
-<p><a href="/results/events/">Root</a> →
-{% for e in path %}
-    {% if forloop.last %}{{ e.name }}{% else %}
-    <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a> →{% endif %}
-{% endfor %}
-
-{% if children or siblings %}
-<div class="table" style="width: 35em;">
-
-{% if siblings %}
-<div class="row">
-    <div class="rowel" style="width: 7em;">Same level:</div>
-    <div class="rower" style="width: 28em;">
-    {% if siblings.count > 9 %}
-        <form method="get" action="/results/events/">
-        <select name="goto">
-            {% for e in siblings %}
-            <option value="{{ e.id }}">{{ e.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Go" />
-        </form>
-    {% else %}
-    {% for e in siblings %}
-        <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    {% endif %}
-    </div>
-</div>
-{% endif %}
-
-{% if children %}
-<div class="row">
-    <div class="rowel" style="width: 7em;">Next level:</div>
-    <div class="rower" style="width: 28em;">
-    {% if children.count > 9 %}
-        <form method="get" action="/results/events/">
-        <select name="goto">
-            {% for e in children %}
-            <option value="{{ e.id }}">{{ e.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Go" />
-        </form>
-    {% else %}
-    {% for e in children %}
-        <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    {% endif %}
-    </div>
-</div>
-{% endif %}
-
-</div>
-{% endif %}
-
 {% if not event.closed %}
     <p>This event is still <strong>open</strong>. Games may be added.</p>
 {% endif %}

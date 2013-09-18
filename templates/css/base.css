@@ -48,19 +48,21 @@ td#footer {
 
 a:link {
     color: #0000aa;
+    text-decoration: none;
 }
 
 a:visited {
     color: #0000aa;
+    text-decoration: none;
 }
 
 a:hover {
     color: #5555ff;
+    text-decoration: none;
 }
 
 a.menu {
     color: #000000;
-    text-decoration: none;
     padding-left: 0.7em;
     padding-right: 0.7em;
 }
@@ -71,7 +73,6 @@ a.menucur {
 
 a#title {
     color: #000000;
-    text-decoration: none;
 }
 
 img.btm {
@@ -88,32 +89,23 @@ div.numtable {
 }
 
 div.table a {
-    text-decoration: none;
     color: #000088;
-}
-
-div.table a:hover {
-    color: #5555ff;
 }
 
 div.rowh a {
     color: #ffffff;
-    text-decoration: none;
 }
 
 div.rowh a:hover {
     color: #bbbbbb;
-    text-decoration: none;
 }
 
 div.rowh2 a {
     color: #ffffff;
-    text-decoration: none;
 }
 
 div.rowh2 a:hover {
     color: #bbbbbb;
-    text-decoration: none;
 }
 
 div.rowevent a {
@@ -358,18 +350,22 @@ table.results td {
  * =====================================================================
  */
 
-tbody.dottedint tr td {
+table.dottedint {
+    border-collapse: collapse;
+}
+
+table.dottedint tr td {
     border-top: dotted 0.1em;
     border-left: dotted 0.1em;
     text-align: center;
     padding: 0.2em;
 }
 
-tbody.dottedint tr:first-child td {
+table.dottedint tr:first-child td {
     border-top: none;
 }
 
-tbody.dottedint tr td:first-child {
+table.dottedint tr td:first-child {
     border-left: none;
 }
 
@@ -593,6 +589,9 @@ select.small {
     width: 95%;   
     border: 1px solid black;
     position: relative;
+    font-size: 0px;
+    letter-spacing: 0px;
+    word-spacing: 0px;
 }
 
 .percent {
@@ -600,10 +599,54 @@ select.small {
     left: 0.3em;
     top: 0.35em;
     height: 100%;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
 }
 
 .bar {
-    height: 2em;
-    background-color: #ddd;
+    height: 25px;
+    background-color: #bbb;
     border-right: 0.1em dotted #555;
+    display: inline-block;
+    margin-bottom: -1em;
+}
+
+/* TABS */
+
+td.tabsel {
+    text-align: center;
+    border: solid 0.1em #000000;
+    background: #555555;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Marcellus SC', Times, serif; 
+    padding: 0.3em;
+    font-size: 1.1em;
+}
+
+td.tabunsel {
+    text-align: center;
+    border: solid 0.1em #000000;
+    background: #cccccc;
+    color: #000000;
+    font-weight: bold;
+    font-family: 'Marcellus SC', Times, serif; 
+    padding: 0.3em;
+    font-size: 1.1em;
+}
+
+td.tabsel a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+td.tabunsel a {
+    color: #222222;
+    text-decoration: none;
+}
+
+td.tabunsel a:hover {
+    color: #555555;
+    text-decoration: none;
 }

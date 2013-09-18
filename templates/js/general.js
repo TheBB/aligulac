@@ -93,14 +93,20 @@ function switch_to(id, all)
     }
 }
 
-function switch_to_tbody(id, all)
+function switch_tab(id, all)
 {
     for (var i = 0; i < all.length; i++)
     {
         if (all[i] == id)
+        {
             document.getElementById(all[i]).style.display = 'table-row-group';
+            document.getElementById(all[i] + '-tab').className = 'tabsel';
+        }
         else
+        {
             document.getElementById(all[i]).style.display = 'none';
+            document.getElementById(all[i] + '-tab').className = 'tabunsel';
+        }
     }
 }
 

@@ -160,7 +160,7 @@ class Event(models.Model):
     # {{{ get_parent(): Returns the parent, or null
     def get_parent(self):
         try:
-            return Event.uplink.get(distance=1).parent
+            return self.uplink.get(distance=1).parent
         except:
             return None
     # }}}

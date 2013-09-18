@@ -107,6 +107,8 @@ def period(request, period_id):
         'tvt_games': count_mirror_games(qset, 'T'),
         'zvz_games': count_mirror_games(qset, 'Z'),
     })
+
+    base['tot_mirror'] = base['pvp_games'] + base['tvt_games'] + base['zvz_games']
     # }}}
 
     # {{{ Build country list

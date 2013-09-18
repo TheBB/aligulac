@@ -645,7 +645,7 @@ def events(request, event_id=None):
 
     base.update({
         'event':            event,
-        'siblings':         event.get_parent().get_immediate_children().exclude(id=event.id) 
+        'siblings':         event.get_parent().get_immediate_children().exclude(id=event.id)
                                 if event.get_parent() else None,
         'path':             event.get_ancestors(id=True),
         'children':         event.get_immediate_children(),
@@ -707,6 +707,7 @@ def events(request, event_id=None):
     base['pvt_wins'], base['pvt_loss'] = count_matchup_games(matches, 'P', 'T')
     base['pvz_wins'], base['pvz_loss'] = count_matchup_games(matches, 'P', 'Z')
     base['tvz_wins'], base['tvz_loss'] = count_matchup_games(matches, 'T', 'Z')
+    base['tot_mirror'] = base['pvp_games'] + base['tvt_games'] + base['zvz_games']
     # }}}
 
     return render_to_response('eventres.html', base)

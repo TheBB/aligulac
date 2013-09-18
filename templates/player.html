@@ -22,16 +22,20 @@ This is the template for the main player page, called from ratings.views.player.
 
 <table style="width: 67em;"><tr>
 <td style="width: 42em; vertical-align: top;">
-<table style="width: 42em;">
+<table style="width: 42em; border-collapse: collapse;">
     <tr>
-        <td colspan="3" style="text-align: center; padding-bottom: 1em;">
-            Show:
-            <a href="#" onclick="switch_to_tbody('alltime', tables); return false;">all-time</a>,
-            <a href="#" onclick="switch_to_tbody('form', tables); return false;">form</a>,
-            <a href="#" onclick="switch_to_tbody('highs', tables); return false;">highest ratings</a>
+        <td class="tabsel" style="width: 33%;" id="alltime-tab">
+            <a href="#" onclick="switch_tab('alltime', tables); return false;">all-time</a>
+        </td>
+        <td class="tabunsel" style="width: 33%;" id="form-tab">
+            <a href="#" onclick="switch_tab('form', tables); return false;">form</a>
+        </td>
+        <td class="tabunsel" style="width: 33%;" id="highs-tab">
+            <a href="#" onclick="switch_tab('highs', tables); return false;">highest</a>
         </td>
     </tr>
     <tbody id="alltime">
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 20em;">
@@ -104,8 +108,9 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </td>
     </tr>
-    </tbody>
-    <tbody id="form" style="display: none;">
+    </table> </td> </tr> </tbody>
+    <tbody id="form" style="display: none;"> 
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 20em;">
@@ -178,11 +183,12 @@ This is the template for the main player page, called from ratings.views.player.
             {% endif %}
         </td>
     </tr>
-    </tbody>
-    <tbody id="highs" style="display: none;">
+    </table> </td> </tr> </tbody>
+    <tbody id="highs" style="display: none;"> 
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
-        <td style="width: 8em;">
+        <td style="width: 12em;">
             {{ highs.0.rating|ratscale }} 
             ± {{ highs.0.dev|ratscalediff }}
             {% if highs.0.position %}
@@ -191,9 +197,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td style="width: 20em; text-decoration: none;">
             on <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
-                {{ highs.0.period.end|date:"F jS, Y" }}
-            </a>
-            &nbsp;&nbsp;
+                {{ highs.0.period.end|date:"F jS, Y" }} </a>
+        </td>
+        <td style="width: 6em;">
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.0.period.id }}/"
                style="text-decoration: none;">→</a>
         </td>
@@ -209,9 +215,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             on <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
-                {{ highs.1.period.end|date:"F jS, Y" }}
-            </a>
-            &nbsp;&nbsp;
+                {{ highs.1.period.end|date:"F jS, Y" }} </a>
+        </td>
+        <td>
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.1.period.id }}/"
                style="text-decoration: none;">→</a>
         </td>
@@ -227,9 +233,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             on <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
-                {{ highs.2.period.end|date:"F jS, Y" }}
-            </a>
-            &nbsp;&nbsp;
+                {{ highs.2.period.end|date:"F jS, Y" }} </a>
+        </td>
+        <td>
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.2.period.id }}/"
                style="text-decoration: none;">→</a>
         </td>
@@ -245,18 +251,18 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             on <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
-                {{ highs.3.period.end|date:"F jS, Y" }}
-            </a>
-            &nbsp;&nbsp;
+                {{ highs.3.period.end|date:"F jS, Y" }} </a>
+        </td>
+        <td>
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.3.period.id }}/"
                style="text-decoration: none;">→</a>
         </td>
     </tr>
-    </tbody>
+    </table> </td> </tr> </tbody>
 </table>
 </td>
-<td style="width: 25em; vertical-align: top;">
-<div class="ibox" style="width: 25em;">
+<td style="width: 22em; vertical-align: top;">
+<div class="ibox" style="width: 22em;">
     <div class="iboxh">
     {{ player.tag }}
     {% if adm %}
@@ -267,8 +273,8 @@ This is the template for the main player page, called from ratings.views.player.
     </div>
     <div class="iboxtable">
         <div class="row">
-            <div class="rowel" style="width: 10em;">Race</div>
-            <div class="rower" style="width: 20em;">
+            <div class="rowel" style="width: 11em;">Race</div>
+            <div class="rower" style="width: 17em;">
                 <img src="{{ player.race|imgfolder|static }}" class="btm" />
                 {{ player.race|racefull }}
             </div>
@@ -330,11 +336,7 @@ This is the template for the main player page, called from ratings.views.player.
         {% endif %}
         <div class="row">
             <div class="rowel">Matches played</div>
-            <div class="rower">{{ totalmatches }}</div>
-        </div>
-        <div class="row">
-            <div class="rowel">Offline matches</div>
-            <div class="rower">{{ offlinematches|pctg:totalmatches }}%</div>
+            <div class="rower">{{ totalmatches }} ({{ offlinematches|pctg:totalmatches }}% offline)</div>
         </div>
         {% if player.mcnum or player.mcnum == 0 %}
         <div class="row">

@@ -15,21 +15,26 @@ This template shows a rating list for a given period.
 
 <script type="text/javascript">
 <!--
-    tables = ['best', 'spec'];
+    tables = ['best', 'spec', 'matchup'];
 -->
 </script>
 
 <table style="width: 67em;"><tr>
 <td style="width: 45em; vertical-align: top;">
-<table style="width: 42em;">
+<table style="width: 42em; border-collapse: collapse;">
     <tr>
-        <td colspan="5" style="text-align: center; padding-bottom: 1em;">
-            Show:
-            <a href="#" onclick="switch_to_tbody('best', tables); return false;">best</a>,
-            <a href="#" onclick="switch_to_tbody('spec', tables); return false;">most specialized</a>
+        <td class="tabsel" style="width: 33%;" id="best-tab">
+            <a href="#" onclick="switch_tab('best', tables); return false;">best</a>
+        </td>
+        <td class="tabunsel" style="width: 33%;" id="spec-tab">
+            <a href="#" onclick="switch_tab('spec', tables); return false;">most specialized</a>
+        </td>
+        <td class="tabunsel" style="width: 33%;" id="matchup-tab">
+            <a href="#" onclick="switch_tab('matchup', tables); return false;">matchups</a>
         </td>
     </tr>
-    <tbody class="dottedint" id="best">
+    <tbody id="best">
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
         <td style="width: 10em; text-align: center;">All</td>
@@ -113,8 +118,9 @@ This template shows a rating list for a given period.
             <br/><span class="small">({{ bestzvz.rating|addf:bestzvz.rating_vz|ratscale }})</span>
         </td>
     </tr>
-    </tbody>
-    <tbody class="dottedint" id="spec" style="display: none;">
+    </table> </td> </tr> </tbody>
+    <tbody id="spec" style="display: none;"> 
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
         <td style="width: 10em; text-align: center;">All</td>
@@ -179,7 +185,55 @@ This template shows a rating list for a given period.
             <br/><span class="small">(+{{ speczvz.rating_vz|ratscalediff }})</span>
         </td>
     </tr>
-    </tbody>
+    </table> </td> </tr> </tbody>
+    <tbody id="matchup" style="display: none;"> 
+    <tr> <td colspan="3" style="border: solid 0.1em;"> <table>
+    {% if pvt_wins or pvt_loss %}
+    <tr style="height: 2.5em;">
+        <td style="width: 5em;">PvT</td>
+        <td style="width: 37em;">
+            <div class="progress">
+                <div class="bar" style="width: {{ pvt_wins|pctg_add:pvt_loss }}%; background: #5a5;"></div>
+                <div class="bar" style="width: {{ pvt_loss|pctg_add:pvt_wins }}%; background: #55a;"></div>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+    {% if pvz_wins or pvz_loss %}
+    <tr style="height: 2.5em;">
+        <td style="width: 5em;">PvZ</td>
+        <td style="width: 37em;">
+            <div class="progress">
+                <div class="bar" style="width: {{ pvz_wins|pctg_add:pvz_loss }}%; background: #5a5;"></div>
+                <div class="bar" style="width: {{ pvz_loss|pctg_add:pvz_wins }}%; background: #a55;"></div>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+    {% if tvz_wins or tvz_loss %}
+    <tr style="height: 2.5em;">
+        <td style="width: 5em;">TvZ</td>
+        <td style="width: 37em;">
+            <div class="progress">
+                <div class="bar" style="width: {{ tvz_wins|pctg_add:tvz_loss }}%; background: #55a;"></div>
+                <div class="bar" style="width: {{ tvz_loss|pctg_add:tvz_wins }}%; background: #a55;"></div>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+    {% if pvp_games or tvt_games or zvz_games %}
+    <tr style="height: 2.5em;">
+        <td style="width: 5em;">Mirrors</td>
+        <td style="width: 37em;">
+            <div class="progress" style="word-wrap: normal;">
+                <div class="bar" style="width: {{ pvp_games|pctg_scl:tot_mirror }}%; background: #5a5;"></div>
+                <div class="bar" style="width: {{ tvt_games|pctg_scl:tot_mirror }}%; background: #55a;"></div>
+                <div class="bar" style="width: {{ zvz_games|pctg_scl:tot_mirror }}%; background: #a55;"></div>
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+    </table> </td> </tr> </tbody>
 </table>
 </td>
 <td style="width: 22em; vertical-align: top;">
@@ -235,21 +289,9 @@ This template shows a rating list for a given period.
             </div>
         </div>
         <div class="row">
-            <div class="rowel">PvP</div>
+            <div class="rowel">Mirrors</div>
             <div class="rower">
-                {{ pvp_games }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">TvT</div>
-            <div class="rower">
-                {{ tvt_games }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="rowel">ZvZ</div>
-            <div class="rower">
-                {{ zvz_games }}
+                {{ pvp_games }} PvP, {{ tvt_games }} TvT, {{ zvz_games }} ZvZ
             </div>
         </div>
     </div>

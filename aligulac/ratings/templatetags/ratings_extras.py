@@ -334,6 +334,13 @@ def pctg(value, arg):
         return '%.2f' % (100*float(value)/float(arg))
     else:
         return '%.2f' % 0.0
+
+@register.filter
+def pctg_scl(value, arg):
+    if float(arg) > 0:
+        return '%.2f' % (100*float(value)/(1.0001*float(arg)))
+    else:
+        return '%.2f' % 0.0
 # }}}
 
 # }}}

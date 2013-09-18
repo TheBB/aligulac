@@ -197,6 +197,13 @@ class ResultsFilterForm(forms.Form):
     game = forms.ChoiceField(
         choices=[('all','All')]+GAMES, required=False, label='Game version', initial='all')
 
+    # {{{ Constructor
+    def __init__(self, *args, **kwargs):
+        super(ResultsFilterForm, self).__init__(*args, **kwargs)
+
+        self.label_suffix = ''
+    # }}}
+
     # {{{ Cleaning with default values
     def clean_default(self, field):
         if not self[field].html_name in self.data:
@@ -453,6 +460,8 @@ def results(request, player_id):
 
     form = ResultsFilterForm(request.GET)
     base['form'] = form
+
+    form.is_valid()
 
     q = Q()
     for r in form.cleaned_data['race'].upper():

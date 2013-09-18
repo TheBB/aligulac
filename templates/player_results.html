@@ -27,8 +27,8 @@ This is the template for the match history of a player. It's called from ratings
 </table>
 </form>
 
-<p>In these games, {{ player.tag }} is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg:sc_op }}%) in games
-and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg:msc_op }}%) in matches.</p>
+<p>In these games, {{ player.tag }} is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg_add:sc_op }}%) in games
+and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches.</p>
 
 <table class="results">
 {% include "matchlist.html" with lm_list=matches lm_header="info" %}

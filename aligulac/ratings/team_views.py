@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    get_param,
+    get_param_choice,
     base_ctx,
     StrippedCharField,
     generate_messages,
@@ -98,15 +98,23 @@ def teams(request):
     base = base_ctx('Teams', 'Ranking', request)
 
     all_teams = Group.objects.filter(is_team=True).prefetch_related('groupmembership_set')
+    active = all_teams.filter(active=True)
 
-    sort = get_param(request, 'sort', 'ak')
+    sort = get_param_choice(request, 'sort', ['ak','pl','rt','np'], 'ak')
     if sort == 'pl':
-        active = all_teams.filter(active=True).order_by('-scorepl', '-scoreak')
+        active = active.order_by('-scorepl', 'name')
+    elif sort == 'ak':
+        active = active.order_by('-scoreak', 'name')
+    elif sort == 'rt':
+        active = active.order_by('-meanrating', 'name')
     else:
-        active = all_teams.filter(active=True).order_by('-scoreak', '-scorepl')
+        active = active.order_by('name')
 
     for t in active:
         t.nplayers = sum([1 if m.current and m.playing else 0 for m in t.groupmembership_set.all()])
+
+    if sort == 'np':
+        active = sorted(list(active), key=lambda a: -a.nplayers)
 
     inactive = all_teams.filter(active=False).order_by('name')
 

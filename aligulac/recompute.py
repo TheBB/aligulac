@@ -7,6 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
 from datetime import date, datetime
 import sys
 
+from django.db import connection
 from django.db.models import Q
 
 from aligulac.settings import PROJECT_PATH
@@ -38,6 +39,7 @@ if not 'debug' in sys.argv:
     os.system(PROJECT_PATH + 'domination.py')
     os.system(PROJECT_PATH + 'teamranks.py ak')
     os.system(PROJECT_PATH + 'teamranks.py pl')
+    os.system(PROJECT_PATH + 'teamratings.py')
 
     print('[%s] Updating MC numbers' % str(datetime.now()))
     Player.objects.exclude(id=36).update(mcnum=None)
@@ -59,5 +61,10 @@ if not 'debug' in sys.argv:
         g += 1
 
     os.system('touch ' + PROJECT_PATH + 'update')
+
+    print('[%s] Refreshing event dates' % str(datetime.now()))
+    cur = connection.cursor()
+    cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match WHERE evenobj_id=event.id)')
+    cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match WHERE evenobj_id=event.id)')
 
 print('[%s] Finished' % str(datetime.now()))

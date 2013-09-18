@@ -181,14 +181,16 @@ def post_param(request, param, default):
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
-    menu = [('Ranking',    '/periods/%i' % curp.id),
-            ('Teams',      '/teams/'),
-            ('Records',    '/records/history'),
-            ('Results',    '/results/'),
-            ('Reports',    '/reports/'),
-            ('Inference',  '/inference/'),
-            ('About',      '/faq/'),
-            ('Submit',     '/add/')]
+    menu = [
+        ('Ranking',    '/periods/%i' % curp.id),
+        ('Teams',      '/teams/'),
+        ('Records',    '/records/history'),
+        ('Results',    '/results/'),
+        ('Reports',    '/reports/'),
+        ('Inference',  '/inference/'),
+        ('About',      '/faq/'),
+        ('Submit',     '/add/'),
+    ]
 
     base = {
         'curp':      curp,
@@ -236,14 +238,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             'url': '/inference/',
             'submenu': [
                 ('Predict', '/inference/'),
-                ('Compare', '/inference/compare/'),
         ]}, {
             'name': 'About',
             'url': '/faq/',
             'submenu': [
                 ('FAQ', '/faq/'),
                 ('Blog', '/blog/'),
-                ('Staff', '/staff/'),
                 ('Database', '/db/'),
         ]}, {
             'name': 'Submit',

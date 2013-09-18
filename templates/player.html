@@ -96,7 +96,7 @@ This is the template for the main player page, called from ratings.views.player.
             <div class="progress">
                 <span class="percent">
                     {{ vz.0|pctg_add:vz.1 }}%
-                    ({{ vt.0 }}/{{ vt.1|add:vt.0 }})
+                    ({{ vz.0 }}/{{ vz.1|add:vz.0 }})
                 </span>
                 <div class="bar" style="width: {{ vz.0|pctg_add:vz.1 }}%;"></div>
             </div>

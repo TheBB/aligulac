@@ -626,6 +626,7 @@ class Group(models.Model):
     members = models.ManyToManyField(Player, through='GroupMembership')
     scoreak = models.FloatField('AK score', null=True, default=0.0)
     scorepl = models.FloatField('PL score', null=True, default=0.0)
+    meanrating = models.FloatField('Rating', null=True, default=0.0)
     founded = models.DateField('Date founded', null=True, blank=True)
     disbanded = models.DateField('Date disbanded', null=True, blank=True)
     active = models.BooleanField('Active', null=False, default=True)

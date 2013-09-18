@@ -71,6 +71,12 @@ This shows a team page. Called from ratings.teamviews.team.
             </div>
         </div>
     {% endif %}
+    {% if team.meanrating > -10 %}
+        <div class="row">
+            <div class="rowel" style="width: 10em;">Top 5 rating</div>
+            <div class="rower" style="width: 20em;">{{ team.meanrating|ratscale }}</div>
+        </div>
+    {% endif %}
     {% if earnings %}
         <div class="row">
             <div class="rowel" style="width: 10em;">Total earnings</div>

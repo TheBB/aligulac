@@ -176,3 +176,4 @@ pip-log.txt
 *.sql
 aligulac/update
 requirements.txt
+settings.py

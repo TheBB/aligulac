@@ -84,7 +84,7 @@ ratings.views.events.
         <td style="width: 7em;">
             {% if forloop.first %}Full path:{% endif %}
         </td>
-        <td style="text-align: right;">
+        <td style="text-align: right; width: 2.7em;">
             {% if forloop.first %}<a href="/results/events/">Root</a>{% endif %}
         </td>
         <td>→ <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a></td>

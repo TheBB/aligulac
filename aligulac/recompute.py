@@ -64,7 +64,9 @@ if not 'debug' in sys.argv:
 
     print('[%s] Refreshing event dates' % str(datetime.now()))
     cur = connection.cursor()
-    cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match WHERE evenobj_id=event.id)')
-    cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match WHERE evenobj_id=event.id)')
+    cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match JOIN eventadjacency '
+                'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
+    cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match JOIN eventadjacency '
+                'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
 
 print('[%s] Finished' % str(datetime.now()))

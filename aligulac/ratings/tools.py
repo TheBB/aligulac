@@ -327,7 +327,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             'plb_score':    m.scb,
         }
 
-        if eventcount:
+        if False and eventcount:
             r['eventcount'] = m.eventobj__match__count
 
         if isinstance(m, Match):

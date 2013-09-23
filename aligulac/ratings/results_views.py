@@ -416,7 +416,7 @@ class SearchForm(forms.Form):
         matches = (
             Match.objects.all().prefetch_related('message_set')
                 .select_related('pla','plb','period')
-                .annotate(Count('eventobj__match'))
+                #.annotate(Count('eventobj__match'))
         )
 
         # {{{ All the easy filtering
@@ -601,9 +601,10 @@ def results(request):
     matches = (
         Match.objects.filter(date=day).order_by('eventobj__latest', 'eventobj__fullname', 'event', 'id')
             .prefetch_related('message_set')
-            .select_related('rta', 'rtb')
-            .annotate(Count('eventobj__match'))
+            .select_related('rta','rtb')
+            #.annotate(Count('eventobj__match'))
     )
+    print(matches)
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
     return render_to_response('results.html', base)
@@ -695,7 +696,7 @@ def events(request, event_id=None):
         'matches':   display_matches(
             matches.prefetch_related('message_set')
                 .select_related('pla', 'plb', 'eventobj')
-                .annotate(Count('eventobj__match'))
+                #.annotate(Count('eventobj__match'))
                 .order_by('-eventobj__latest', 'eventobj__fullname', '-date', '-id')[0:200],
             eventcount=True,
         ),

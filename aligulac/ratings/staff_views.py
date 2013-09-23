@@ -637,6 +637,8 @@ class MergePlayersForm(forms.Form):
 
         Match.objects.filter(pla=source).update(pla=target, treated=False)
         Match.objects.filter(plb=source).update(plb=target, treated=False)
+        Match.objects.filter(rta__player=source).update(rta=None)
+        Match.objects.filter(rtb__player=source).update(rtb=None)
 
         try:
             recompute = Rating.objects.filter(player=source).earliest('period').period

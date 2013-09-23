@@ -184,29 +184,50 @@ cur.executemany(
 
 # {{{ Insert new ratings
 Rating.objects.bulk_create([Rating(
-    period=period, player=p['player'], prev=p['rating'],
-    rating=p['new_ratings']['M'], 
-    rating_vp=p['new_ratings']['P'],
-    rating_vt=p['new_ratings']['T'],
-    rating_vz=p['new_ratings']['Z'],
-    dev=p['new_devs']['M'], 
-    dev_vp=p['new_devs']['P'],
-    dev_vt=p['new_devs']['T'],
-    dev_vz=p['new_devs']['Z'],
-    comp_rat=p['perfs']['M'], 
-    comp_rat_vp=p['perfs']['P'],
-    comp_rat_vt=p['perfs']['T'],
-    comp_rat_vz=p['perfs']['Z'],
-    bf_rating=p['new_ratings']['M'], 
-    bf_rating_vp=p['new_ratings']['P'],
-    bf_rating_vt=p['new_ratings']['T'],
-    bf_rating_vz=p['new_ratings']['Z'],
-    bf_dev=p['new_devs']['M'], 
-    bf_dev_vp=p['new_devs']['P'],
-    bf_dev_vt=p['new_devs']['T'],
-    bf_dev_vz=p['new_devs']['Z'],
-    decay=0,
+    period       = period,
+    player       = p['player'],
+    prev         = p['rating'],
+    rating       = p['new_ratings']['M'],
+    rating_vp    = p['new_ratings']['P'],
+    rating_vt    = p['new_ratings']['T'],
+    rating_vz    = p['new_ratings']['Z'],
+    dev          = p['new_devs']['M'],
+    dev_vp       = p['new_devs']['P'],
+    dev_vt       = p['new_devs']['T'],
+    dev_vz       = p['new_devs']['Z'],
+    comp_rat     = p['perfs']['M'],
+    comp_rat_vp  = p['perfs']['P'],
+    comp_rat_vt  = p['perfs']['T'],
+    comp_rat_vz  = p['perfs']['Z'],
+    bf_rating    = p['new_ratings']['M'],
+    bf_rating_vp = p['new_ratings']['P'],
+    bf_rating_vt = p['new_ratings']['T'],
+    bf_rating_vz = p['new_ratings']['Z'],
+    bf_dev       = p['new_devs']['M'],
+    bf_dev_vp    = p['new_devs']['P'],
+    bf_dev_vt    = p['new_devs']['T'],
+    bf_dev_vz    = p['new_devs']['Z'],
+    decay        = 0,
 ) for p in players.values() if p['player'].id in insert_ids])
+
+cur.execute('''
+    UPDATE match SET rta_id =
+        (SELECT id FROM rating 
+          WHERE rating.player_id=match.pla_id
+            AND rating.period_id=%i
+        )
+     WHERE period_id=%i AND pla_id IN (%s)'''
+    % (period.id, period.id+1, ','.join(insert_ids))
+)
+cur.execute('''
+    UPDATE match SET rtb_id =
+        (SELECT id FROM rating 
+          WHERE rating.player_id=match.plb_id
+            AND rating.period_id=%i
+        )
+     WHERE period_id=%i AND plb_id IN (%s)'''
+    % (period.id, period.id+1, ','.join(insert_ids))
+)
 # }}}
 
 # {{{ Bookkeeping

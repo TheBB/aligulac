@@ -177,3 +177,6 @@ pip-log.txt
 aligulac/update
 requirements.txt
 settings.py
+
+# Used for testing bugs.
+aligulac/bugrep/

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 import os
 import sys
@@ -39,6 +39,8 @@ def fnull(f):
 
 print "BEGIN;"
 print "SET CONSTRAINTS ALL DEFERRED;"
+
+print "DELETE FROM eventadjacency CASCADE;"
 
 print "DELETE FROM auth_user;"
 tbl = []
@@ -155,7 +157,7 @@ print (fixer % ('faq_post','faq_post')).encode('utf-8')
 print 'DELETE FROM "group";'
 tbl = []
 for g in Group.objects.all():
-    tbl.append("(%i,'%s',%s,%.20f,%.20f,%s,%s,%s,%s,%s,%s,%s)" %\
+    tbl.append("(%i,'%s',%s,%.20f,%.20f,%s,%s,%s,%s,%s,%s,%s,NULL)" %\
                (g.id,
                 san(g.name),
                 snull(g.shortname),
@@ -190,7 +192,7 @@ print (fixer % ('groupmembership','groupmembership')).encode('utf-8')
 print 'DELETE FROM match;'
 tbl = []
 for m in Match.objects.all():
-    tbl.append("(%i,%i,'%s',%i,%i,%i,%i,'%s','%s',%s,'%s',%s,%s,'%s',%s)" %\
+    tbl.append("(%i,%i,'%s',%i,%i,%i,%i,'%s','%s',%s,'%s',%s,%s,'%s',%s,NULL,NULL)" %\
                (m.id,
                 m.period_id,
                 str(m.date),
@@ -319,8 +321,8 @@ print (fixer % ('prematchgroup','prematchgroup')).encode('utf-8')
 print 'DELETE FROM rating;'
 tbl = []
 for r in Rating.objects.all():
-    tbl.append(("(%i,%i,%i,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%s,%s,%s,%s,%s,%s,%s,%s,"\
-             + "%.20f,%.20f,%.20f,%.20f,%s,%s,%s,%s,%s,%s,%s,%s,%i,%s)") %\
+    tbl.append(("(%i,%i,%i,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%.20f,%s,%s,%s,%s,"\
+             + "%.20f,%.20f,%.20f,%.20f,%s,%s,%s,%s,%s,%s,%s,%s,%i,%s,NULL)") %\
                (r.id,
                 r.period_id,
                 r.player_id,
@@ -336,10 +338,6 @@ for r in Rating.objects.all():
                 fnull(r.comp_rat_vp),
                 fnull(r.comp_rat_vt),
                 fnull(r.comp_rat_vz),
-                fnull(r.comp_dev),
-                fnull(r.comp_dev_vp),
-                fnull(r.comp_dev_vt),
-                fnull(r.comp_dev_vz),
                 r.bf_rating,
                 r.bf_rating_vp,
                 r.bf_rating_vt,

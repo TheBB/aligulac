@@ -49,7 +49,7 @@ except:
     print('[%s] No such period' % str(datetime.now()))
     sys.exit(1)
 
-print('[%s] Recomputing #{0} ({1} -> {2})'.format(str(datetime.now()), period.id, period.start, period.end))
+print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.id, period.start, period.end))
 
 if Period.objects.filter(id__lt=period.id).filter(Q(computed=False) | Q(needs_recompute=True)).exists():
     print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()))
@@ -210,24 +210,26 @@ Rating.objects.bulk_create([Rating(
     decay        = 0,
 ) for p in players.values() if p['player'].id in insert_ids])
 
-cur.execute('''
-    UPDATE match SET rta_id =
-        (SELECT id FROM rating 
-          WHERE rating.player_id=match.pla_id
-            AND rating.period_id=%i
-        )
-     WHERE period_id=%i AND pla_id IN (%s)'''
-    % (period.id, period.id+1, ','.join(insert_ids))
-)
-cur.execute('''
-    UPDATE match SET rtb_id =
-        (SELECT id FROM rating 
-          WHERE rating.player_id=match.plb_id
-            AND rating.period_id=%i
-        )
-     WHERE period_id=%i AND plb_id IN (%s)'''
-    % (period.id, period.id+1, ','.join(insert_ids))
-)
+if insert_ids:
+    str_ids = {str(i) for i in insert_ids}
+    cur.execute('''
+        UPDATE match SET rta_id =
+            (SELECT id FROM rating 
+              WHERE rating.player_id=match.pla_id
+                AND rating.period_id=%i
+            )
+         WHERE period_id=%i AND pla_id IN (%s)'''
+        % (period.id, period.id+1, ','.join(str_ids))
+    )
+    cur.execute('''
+        UPDATE match SET rtb_id =
+            (SELECT id FROM rating 
+              WHERE rating.player_id=match.plb_id
+                AND rating.period_id=%i
+            )
+         WHERE period_id=%i AND plb_id IN (%s)'''
+        % (period.id, period.id+1, ','.join(str_ids))
+    )
 # }}}
 
 # {{{ Bookkeeping

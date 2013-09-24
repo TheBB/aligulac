@@ -557,7 +557,6 @@ class ResultsModForm(forms.Form):
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
-        print(ids)
         matches = Match.objects.filter(id__in=ids)
 
         if self.cleaned_data['event'] != 0:
@@ -604,7 +603,6 @@ def results(request):
             .select_related('rta','rtb')
             #.annotate(Count('eventobj__match'))
     )
-    print(matches)
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
     return render_to_response('results.html', base)
@@ -724,7 +722,6 @@ def search(request):
     if base['adm']:
         if request.method == 'POST':
             modform = ResultsModForm(request=request)
-            print(request.POST)
             base['messages'] += modform.modify([
                 int(k.split('-')[-1]) for k in request.POST if 'y' in request.POST[k] and k[0:6] == 'match-'
             ])

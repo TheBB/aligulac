@@ -12,7 +12,7 @@ from django.db.models import Q
 
 from aligulac.settings import PROJECT_PATH
 
-from ratings.models import Period
+from ratings.models import Period, Player
 
 if 'all' in sys.argv:
     earliest = Period.objects.earliest('id')

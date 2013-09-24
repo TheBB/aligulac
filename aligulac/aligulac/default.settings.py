@@ -69,7 +69,6 @@ INSTALLED_APPS = [
     'formulation',
     'miniURL',
     'ratings',
-    'bugrep',
 ]
 
 if DEBUG:

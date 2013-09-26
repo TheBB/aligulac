@@ -18,8 +18,8 @@ Changes here will mostly be visible on the entire site.
         <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="{{ "general"|js }}"></script>
         <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
+        <script src="{{ "jquery-1.10.2.min"|js }}"></script>
         {% if charts %}
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
             <script src="http://code.highcharts.com/highcharts.js"></script>
             <script src="http://code.highcharts.com/modules/exporting.js"></script>
         {% endif %}
@@ -41,36 +41,12 @@ Changes here will mostly be visible on the entire site.
         </script>
         <script type="text/javascript">
         <!--
-        function lm_toggle(id)
-        {
-            var d = document.getElementById('lm-' + id);
-            if (d.style.display == 'none')
-            {
-                d.style.display = 'table-row-group';
-                document.getElementById('lma-' + id).innerHTML = 'hide';
-            }
-            else
-            {
-                d.style.display = 'none';
-                document.getElementById('lma-' + id).innerHTML = 'show';
-            }
-        }
-
-        function hover(id)
-        {
-            submenus = [{% for main in menu %}'submenu_{{ main.name }}',{% endfor %}];
-            for (var i = 0; i < submenus.length; i++)
-                if (submenus[i] == 'submenu_' + id)
-                    document.getElementById(submenus[i]).style.display = 'inline';
-                else
-                    document.getElementById(submenus[i]).style.display = 'none';
-        }
-
-        document.onmouseover = function (e)
-        {
-            if (!is_descendant(document.getElementById('menu_container'), e.target))
-                hover('{{ curpage }}');
-        }
+        $(document).ready(function() {
+            $(".menu > .menu").mouseenter(function(){
+                $(".menu span").each(function() {$(this).hide();});
+                $("#submenu_" + $(this).attr("data-sub-menu")).show();
+            });
+        });
         //-->
         </script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
@@ -95,7 +71,7 @@ Changes here will mostly be visible on the entire site.
             <tr>
                 <td class="menu">
                 {% for main in menu %}
-                    <a href="{{ main.url }}" onmouseover="hover('{{ main.name }}');" class="menu {% if curpage == main.name %}menucur{% endif %}">{{ main.name }}</a>
+                <a href="{{ main.url }}" data-sub-menu="{{ main.name }}" class="menu{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
                 {% endfor %}
                 </td>
             </tr>

@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     'ratings',
 ]
 
-if DEBUG_TOOLBAR:
+if DEBUG and DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
 
 INSTALLED_APPS.append('south')

@@ -24,3 +24,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Cache backend (use DummyCache in development)
 CACHE_BACKEND = 'django.core.cache.backends.dummy.DummyCache'
+
+# Debug mode (boolean, should be True in development)
+DEBUG = True
+
+# Include debug toolbar in debug mode?
+DEBUG_TOOLBAR = True

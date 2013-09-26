@@ -48,7 +48,7 @@ def history(request):
         elif nats != 'all':
             ands.append("(player.country='%s')" % nats)
         query += ' AND '.join(ands)
-    query += ' GROUP BY player.id ORDER BY high DESC LIMIT %i' % nplayers
+    query += ' GROUP BY player.id, player.tag, player.race, player.country ORDER BY high DESC LIMIT %i' % nplayers
 
     players = Player.objects.raw(query)
     # }}}

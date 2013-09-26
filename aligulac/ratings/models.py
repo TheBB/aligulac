@@ -95,10 +95,10 @@ class Period(models.Model):
     class Meta:
         db_table = 'period'
 
-    start = models.DateField('Start date', null=False)
-    end = models.DateField('End date', null=False)
-    computed = models.BooleanField('Computed', null=False, default=False)
-    needs_recompute = models.BooleanField('Requires recomputation', null=False, default=False)
+    start = models.DateField('Start date', null=False, db_index=True)
+    end = models.DateField('End date', null=False, db_index=True)
+    computed = models.BooleanField('Computed', null=False, default=False, db_index=True)
+    needs_recompute = models.BooleanField('Requires recomputation', null=False, default=False, db_index=True)
     num_retplayers = models.IntegerField('# returning players', default=0)
     num_newplayers = models.IntegerField('# new players', default=0)
     num_games = models.IntegerField('# games', default=0)
@@ -125,11 +125,11 @@ class Event(models.Model):
 
     name = models.CharField('Name', max_length=100)
     parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
-    lft = models.IntegerField('Left', null=False, db_index=True)
-    rgt = models.IntegerField('Right', null=False, db_index=True)
-    closed = models.BooleanField('Closed', default=False)
+    lft = models.IntegerField('Left', null=False)
+    rgt = models.IntegerField('Right', null=False)
+    closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
-    noprint = models.BooleanField('No print', default=False)
+    noprint = models.BooleanField('No print', default=False, db_index=True)
     fullname = models.CharField('Full name', max_length=500, default='')
     homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
@@ -142,13 +142,14 @@ class Event(models.Model):
     tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
     tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
 
-    prizepool = models.NullBooleanField('Has prize pool', blank=True, null=True)
+    prizepool = models.NullBooleanField('Has prize pool', blank=True, null=True, db_index=True)
 
-    earliest = models.DateField('Earliest match', blank=True, null=True)
-    latest = models.DateField('Latest match', blank=True, null=True)
+    earliest = models.DateField('Earliest match', blank=True, null=True, db_index=True)
+    latest = models.DateField('Latest match', blank=True, null=True, db_index=True)
 
-    category = models.CharField('Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES)
-    type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES)
+    category = models.CharField(
+        'Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES, db_index=True)
+    type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES, db_index=True)
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
 
@@ -415,8 +416,8 @@ class Player(models.Model):
         ordering = ['tag']
         db_table = 'player'
 
-    tag = models.CharField('In-game name', max_length=30, null=False)
-    name = models.CharField('Full name', max_length=100, blank=True, null=True, db_index=True)
+    tag = models.CharField('In-game name', max_length=30, null=False, db_index=True)
+    name = models.CharField('Full name', max_length=100, blank=True, null=True)
     birthday = models.DateField('Birthday', blank=True, null=True)
     mcnum = models.IntegerField('MC number', blank=True, null=True, default=None)
 
@@ -629,11 +630,11 @@ class Group(models.Model):
     meanrating = models.FloatField('Rating', null=True, default=0.0)
     founded = models.DateField('Date founded', null=True, blank=True)
     disbanded = models.DateField('Date disbanded', null=True, blank=True)
-    active = models.BooleanField('Active', null=False, default=True)
+    active = models.BooleanField('Active', null=False, default=True, db_index=True)
     homepage = models.CharField('Homepage', null=True, blank=True, max_length=200)
     lp_name = models.CharField('Liquipedia title', null=True, blank=True, max_length=200) 
 
-    is_team = models.BooleanField('Team', null=False, default=True)
+    is_team = models.BooleanField('Team', null=False, default=True, db_index=True)
     is_manual = models.BooleanField('Manual entry', null=False, default=True)
 
     # {{{ String representation

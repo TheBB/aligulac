@@ -19,11 +19,12 @@ import aligulac.local as local
 SECRET_KEY = local.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = local.DEBUG
+DEBUG_TOOLBAR = local.DEBUG_TOOLBAR
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.aligulac.com']
 
 
 # CUSTOM
@@ -71,7 +72,7 @@ INSTALLED_APPS = [
     'ratings',
 ]
 
-if DEBUG:
+if DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
 
 INSTALLED_APPS.append('south')
@@ -85,7 +86,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if DEBUG:
+if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'aligulac.urls'

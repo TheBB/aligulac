@@ -16,7 +16,8 @@ dump. Called from aligulac.views.db.
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel" style="width: 33.5em;">Last ratings update</div>
         <div class="rower" style="width: 33.5em;">
-           {{ updated|date:"F jS Y, H:i e" }} (UTC {{ updated|date:"O" }})
+            {{ updated|date:"F jS Y, H:i e" }} (UTC {{ updated|date:"O" }})
+            (<a href="{{ "update.txt"|static }}">log</a>)
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">

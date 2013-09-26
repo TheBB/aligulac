@@ -70,4 +70,3 @@ if not 'debug' in sys.argv:
 print('[%s] Finished' % str(datetime.now()))
 
 os.system('touch ' + PROJECT_PATH + 'update')
-

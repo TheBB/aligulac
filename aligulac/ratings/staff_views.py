@@ -280,6 +280,8 @@ class AddMatchesForm(forms.Form):
             super(AddMatchesForm, self).__init__()
             self.close_after = False
 
+        self.requested_close_after = self.close_after
+
         self.label_suffix = ''
         self.is_adm = is_adm
 
@@ -360,6 +362,7 @@ class AddMatchesForm(forms.Form):
             except Exception as e:
                 self.messages.append(
                     Message("Could not parse '%s' (%s)." % (line, str(e)), type=Message.ERROR))
+                self.close_after = False
                 error_lines.append(line)
                 continue
 
@@ -379,6 +382,7 @@ class AddMatchesForm(forms.Form):
             except Exception as e:
                 self.messages.append(
                     Message("Error creating match '%s' (%s)." % (line, str(e)), type=Message.ERROR))
+                self.close_after = False
                 error_lines.append(line)
                 continue
 
@@ -396,6 +400,9 @@ class AddMatchesForm(forms.Form):
             self.cleaned_data['eventobj'].close()
             self.messages.append(
                 Message("Closed '%s'." % self.cleaned_data['eventobj'].fullname, type=Message.SUCCESS))
+        elif self.requested_close_after:
+            self.messages.append(
+                Message("Did not close '%s'." % self.cleaned_data['eventobj'].fullname, type=Message.INFO))
 
         self.data = self.data.copy()
         self.data['matches'] = '\n'.join(error_lines)
@@ -461,6 +468,7 @@ class AddMatchesForm(forms.Form):
                     "Could not make match %s vs %s: possible duplicate found." % (pla.tag, plb.tag),
                     type=Message.ERROR,
                 ))
+                self.close_after = False
                 return None
             match.set_period()
             match.set_ratings()

@@ -125,8 +125,8 @@ class Event(models.Model):
 
     name = models.CharField('Name', max_length=100)
     parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
-    lft = models.IntegerField('Left', null=False)
-    rgt = models.IntegerField('Right', null=False)
+    lft = models.IntegerField('Left', null=True, default=None)
+    rgt = models.IntegerField('Right', null=True, default=None)
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)
@@ -339,7 +339,7 @@ class Event(models.Model):
 
         links = [
             EventAdjacency(parent_id=l.parent_id, child=new, distance=l.distance+1) 
-            for l in self.uplink_all()
+            for l in self.uplink.all()
         ]
         EventAdjacency.objects.bulk_create(links)
         EventAdjacency.objects.create(parent=new, child=new, distance=0)

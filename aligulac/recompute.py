@@ -60,8 +60,6 @@ if not 'debug' in sys.argv:
             break
         g += 1
 
-    os.system('touch ' + PROJECT_PATH + 'update')
-
     print('[%s] Refreshing event dates' % str(datetime.now()))
     cur = connection.cursor()
     cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match JOIN eventadjacency '
@@ -70,3 +68,6 @@ if not 'debug' in sys.argv:
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
 
 print('[%s] Finished' % str(datetime.now()))
+
+os.system('touch ' + PROJECT_PATH + 'update')
+

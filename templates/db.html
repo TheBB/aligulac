@@ -161,8 +161,8 @@ group, days and weeks, etc.</p>
     id              integer not null                        primary key
     name            character varying(100) not null         name of this node
     parent_id       integer                                 parent node (deprecated)
-    lft             integer not null                        (deprecated)
-    rgt             integer not null                        (deprecated)
+    lft             integer                                 (deprecated)
+    rgt             integer                                 (deprecated)
     closed          boolean not null                        whether the event is finished or not
     big             boolean not null                        whether the event is considered large (many games)
     noprint         boolean not null                        whether this event should be skipped in the 

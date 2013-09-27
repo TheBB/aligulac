@@ -189,46 +189,68 @@ This template shows a rating list for a given period.
     <tbody id="matchup" style="display: none;"> 
     <tr> <td colspan="3" style="border: solid 0.1em;"> <table>
     {% if pvt_wins or pvt_loss %}
+    {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
     <tr style="height: 2.5em;">
         <td style="width: 5em;">PvT</td>
         <td style="width: 37em;">
             <div class="progress">
-                <div class="bar" style="width: {{ pvt_wins|pctg_add:pvt_loss }}%; background: #5a5;"></div>
-                <div class="bar" style="width: {{ pvt_loss|pctg_add:pvt_wins }}%; background: #55a;"></div>
+                <span class="percent">{{ p1 }}%</span>
+                <div class="bar" style="width: 100%; background: #55a;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #5a5;" title="{{ p1 }}%"></div>
+                </div>
+                <span class="percent percent-right">{{ p2 }}%</span>
             </div>
         </td>
     </tr>
+    {% endwith %}
     {% endif %}
     {% if pvz_wins or pvz_loss %}
+    {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
     <tr style="height: 2.5em;">
         <td style="width: 5em;">PvZ</td>
         <td style="width: 37em;">
             <div class="progress">
-                <div class="bar" style="width: {{ pvz_wins|pctg_add:pvz_loss }}%; background: #5a5;"></div>
-                <div class="bar" style="width: {{ pvz_loss|pctg_add:pvz_wins }}%; background: #a55;"></div>
+                <span class="percent">{{ p1 }}%</span>
+                <div class="bar" style="width: 100%; background: #a55;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #5a5;" title="{{ p1 }}%"></div>
+                </div>
+                <span class="percent percent-right">{{ p2 }}%</span>
             </div>
         </td>
     </tr>
+    {% endwith %}
     {% endif %}
     {% if tvz_wins or tvz_loss %}
+    {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
     <tr style="height: 2.5em;">
         <td style="width: 5em;">TvZ</td>
         <td style="width: 37em;">
             <div class="progress">
-                <div class="bar" style="width: {{ tvz_wins|pctg_add:tvz_loss }}%; background: #55a;"></div>
-                <div class="bar" style="width: {{ tvz_loss|pctg_add:tvz_wins }}%; background: #a55;"></div>
+                <span class="percent">{{ p1 }}%</span>
+                <div class="bar" style="width: 100%; background: #a55;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #55a;" title="{{ p1 }}%"></div>
+                </div>
+                <span class="percent percent-right">{{ p2 }}%</span>
             </div>
         </td>
     </tr>
+    {% endwith %}
     {% endif %}
     {% if pvp_games or tvt_games or zvz_games %}
     <tr style="height: 2.5em;">
         <td style="width: 5em;">Mirrors</td>
         <td style="width: 37em;">
             <div class="progress" style="word-wrap: normal;">
-                <div class="bar" style="width: {{ pvp_games|pctg_scl:tot_mirror }}%; background: #5a5;"></div>
-                <div class="bar" style="width: {{ tvt_games|pctg_scl:tot_mirror }}%; background: #55a;"></div>
-                <div class="bar" style="width: {{ zvz_games|pctg_scl:tot_mirror }}%; background: #a55;"></div>
+                <div class="bar" style="width: 100%; background: #a55;"
+                     title="{{ zvz_games|pctg_scl:tot_mirror }}%">
+                    {% with tvtpvp=tvt_games|add:pvp_games %}
+                    <div class="bar" style="width: {{ tvtpvp|pctg_scl:tot_mirror }}%; background: #55a;"
+                         title="{{ tvt_games|pctg_scl:tot_mirror }}%">
+                        <div class="bar" style="width: {{ pvp_games|pctg_scl:tvtpvp }}%; background: #5a5;"
+                             title="{{ pvp_games|pctg_scl:tot_mirror }}%"></div>
+                    </div>
+                    {% endwith %}
+                </div>
             </div>
         </td>
     </tr>

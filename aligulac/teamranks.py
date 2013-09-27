@@ -83,18 +83,9 @@ for ta, tb in combinations(allowed_teams, 2):
     if proleague:
         scores[ta] += sim._tally[0].win/(nteams-1)
         scores[tb] += sim._tally[1].win/(nteams-1)
-        s = (
-            '%s (%.f%%) vs. %s (%.f%%)' 
-            % (ta.shortname, 100*sim._tally[0].win, tb.shortname, 100*sim._tally[1].win)
-        )
     else:
         scores[ta] += sim._tally[0][1]/(nteams-1)
         scores[tb] += sim._tally[1][1]/(nteams-1)
-        s = (
-            '%s (%.f%%) vs. %s (%.f%%)' 
-            % (ta.shortname, 100*sim._tally[0][1], tb.shortname, 100*sim._tally[1][1])
-        )
-    print('[%s] %s' % (str(datetime.now()), s))
 # }}}
 
 # {{{ Save

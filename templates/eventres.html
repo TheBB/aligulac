@@ -100,8 +100,8 @@ ratings.views.events.
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
-                <div class="bar" style="width: 100%; background: #55a;" title="{{ p2 }}%">
-                    <div class="bar" style="width: {{ p1 }}%; background: #5a5;" title="{{ p1 }}%"></div>
+                <div class="bar" style="width: 100%; background: #88d;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #7c7;" title="{{ p1 }}%"></div>
                 </div>
                 <span class="percent percent-right">{{ p2 }}%</span>
             </div>
@@ -116,8 +116,8 @@ ratings.views.events.
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
-                <div class="bar" style="width: 100%; background: #a55;" title="{{ p2 }}%">
-                    <div class="bar" style="width: {{ p1 }}%; background: #5a5;" title="{{ p1 }}%"></div>
+                <div class="bar" style="width: 100%; background: #c77;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #7c7;" title="{{ p1 }}%"></div>
                 </div>
                 <span class="percent percent-right">{{ p2 }}%</span>
             </div>
@@ -132,8 +132,8 @@ ratings.views.events.
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
-                <div class="bar" style="width: 100%; background: #a55;" title="{{ p2 }}%">
-                    <div class="bar" style="width: {{ p1 }}%; background: #55a;" title="{{ p1 }}%"></div>
+                <div class="bar" style="width: 100%; background: #c77;" title="{{ p2 }}%">
+                    <div class="bar" style="width: {{ p1 }}%; background: #88d;" title="{{ p1 }}%"></div>
                 </div>
                 <span class="percent percent-right">{{ p2 }}%</span>
             </div>
@@ -146,12 +146,12 @@ ratings.views.events.
         <td style="width: 5em;">Mirrors</td>
         <td style="width: 37em;">
             <div class="progress" style="word-wrap: normal;">
-                <div class="bar" style="width: 100%; background: #a55;"
+                <div class="bar" style="width: 100%; background: #c77;"
                      title="{{ zvz_games|pctg_scl:tot_mirror }}%">
                     {% with tvtpvp=tvt_games|add:pvp_games %}
-                    <div class="bar" style="width: {{ tvtpvp|pctg_scl:tot_mirror }}%; background: #55a;"
+                    <div class="bar" style="width: {{ tvtpvp|pctg_scl:tot_mirror }}%; background: #88d;"
                          title="{{ tvt_games|pctg_scl:tot_mirror }}%">
-                        <div class="bar" style="width: {{ pvp_games|pctg_scl:tvtpvp }}%; background: #5a5;"
+                        <div class="bar" style="width: {{ pvp_games|pctg_scl:tvtpvp }}%; background: #7c7;"
                              title="{{ pvp_games|pctg_scl:tot_mirror }}%"></div>
                     </div>
                     {% endwith %}

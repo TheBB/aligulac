@@ -8,12 +8,10 @@ simplejson==3.3.0
 pyparsing==1.5.7
 python-dateutil==2.1
 numpy==1.7.1
-scipy==0.12.0
 
 New Py3 config
 
 numpy 1.7.1
-scipy 0.12.0
 python-markdown2 2.1.1
 python-dateutil 2.1
 psycopg2 2.5.1
@@ -32,4 +30,3 @@ South==0.8.2
 ccy==0.5.1
 simplejson==3.3.0
 numpy==1.7.1
-scipy==0.12.0

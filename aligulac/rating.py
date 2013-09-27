@@ -3,7 +3,6 @@ This is where the rating magic happens. Imported by period.py.
 '''
 
 from numpy import *
-import scipy.optimize as opt
 
 from aligulac.settings import (
     INIT_DEV,
@@ -18,62 +17,43 @@ from ratings.tools import (
 )
 
 LOG_CAP = 1e-10
+TOL = 1e-3 / 2
 
-def check_grad(f, df, pts):
-    eps = 1e-8
-    ret = 0.0
-    for p in pts:
-        ret += abs((f(p+eps)-f(p))/eps - df(p))**2
-    return sqrt(ret)
-
-def check_max(func, x, i, name, disp):
-    """Auxiliary function to perform numerical optimization. Will check the return flags and return the
-    argmin, or None if an error occured."""
-    try:
-        ret = func(x)
-        if ret[i] == 0:
-            return ret[0]
-        print(' >> OPT.' + name + ': did not converge')
-    except Exception as e:
-        print(' >> OPT.' + name + ': error: ', e)
-    return None
-
-def maximize(L, DL, D2L, x, method=None, disp=False):
+def maximize(L, DL, D2L, x, disp=False):
     """Main function to perform numerical optimization. L, DL and D2L are the objective function and its
-    derivative and Hessian, and x is the initial guess (current rating).
-    
-    It will attempt the maximization using four different methods, from fastest and least robust, to slowest
-    and most robust. It returns the argmin, or None if an error occured."""
+    derivative and Hessian, and x is the initial guess (current rating)."""
     mL = lambda x: -L(x)
     mDL = lambda x: -DL(x)
     mD2L = lambda x: -D2L(x)
 
-    # Newton Conjugate Gradient
-    if method == None or method == 'ncg':
-        func = lambda x0: opt.fmin_ncg(mL, x0, fprime=mDL, fhess=mD2L, disp=disp, 
-                                       full_output=True, avextol=1e-5)
-        xm = check_max(func, x, 5, 'NCG', disp)
-        if xm != None:
-            return xm
+    for i in range(100):
+        y = linalg.solve(mD2L(x), mDL(x))
+        if linalg.norm(y, ord=inf) < TOL:
+            break
+        x = x - y
 
-    # Broyden-Fletcher-Goldfarb-Shanno
-    if method == None or method == 'bfgs':
-        func = lambda x0: opt.fmin_bfgs(mL, x0, fprime=mDL, disp=disp, full_output=True, gtol=1e-5)
-        xm = check_max(func, x, 6, 'BFGS', disp)
-        if xm != None:
-            return xm
+    if i == 100:
+        print('Returning None!')
+        return None
+    return x
 
-    # Powell
-    if method == None or method == 'powell':
-        func = lambda x0: opt.fmin_powell(mL, x0, disp=disp, full_output=True, ftol=1e-5)
-        xm = check_max(func, x, 5, 'POWELL', disp)
-        if xm != None:
-            return xm
 
-    # Downhill simplex (last resort)
-    func = lambda x0: opt.fmin(mL, x0, disp=disp, full_output=True, ftol=1e-5)
-    xm = check_max(func, x, 4, 'DOWNHILL_SIMPLEX', disp)
-    return xm
+def maximize_1d(L, DL, D2L, x, disp=False):
+    mL = lambda x: -L(x)
+    mDL = lambda x: -DL(x)
+    mD2L = lambda x: -D2L(x)
+
+    for i in range(100):
+        y = mDL(x) / mD2L(x)
+        if abs(y) < TOL:
+            break
+        x = x - y
+
+    if i == 100:
+        print('Returning None! (perf)')
+        return None
+    return x
+
 
 def fix_ww(myr, mys, oppr, opps, oppc, W, L):
     """This function adds fake games to the oppr, opps, oppc, W and L arrays if the player has 0-N or N-0
@@ -101,6 +81,7 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
 
     # Return the new arrays
     return (oppr, opps, oppc, W, L)
+
 
 def performance(oppr, opps, oppc, W, L):
     opp = zip(oppr, opps, oppc, W, L)
@@ -153,8 +134,8 @@ def performance(oppr, opps, oppc, W, L):
                     ret -= p[3]*alpha*(alpha+Mv) + p[4]*beta*(beta-Mv)
                 return ret
 
-            perf = maximize(logL, DlogL, D2logL, 0.0, method='powell')
-            ret[cat+1] = perf.item()
+            perf = maximize_1d(logL, DlogL, D2logL, 0.0)
+            ret[cat+1] = perf
 
     if meanok:
         ret[0] = sum(ret[1:]) / 3
@@ -227,7 +208,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     myrc = myr[[0]+played_cats_p1]
     mysc = mys[[0]+played_cats_p1]
 
-    # Objective function
+    # {{{ Objective function
     def logL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
@@ -239,8 +220,9 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return sum(log(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2))
 
     logF = lambda x: logL(x) + logE(x)
+    # }}}
 
-    # Derivative
+    # {{{ Derivative
     def DlogL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
@@ -254,8 +236,9 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return ret
 
     DlogF = lambda x: DlogL(x) + DlogE(x)
+    # }}}
 
-    # Hessian
+    # {{{ Hessian
     def D2logL(x, DM, C):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
@@ -279,10 +262,11 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return diag(diags)
 
     D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
+    # }}}
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
-    x = maximize(logF, DlogF, D2logF, x, method='powell', disp=pr)
+    x = maximize(logF, DlogF, D2logF, x, disp=pr)
     x = dim(x)
 
     # If maximization failed, return the current rating and print an error message

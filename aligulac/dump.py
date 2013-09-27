@@ -26,7 +26,7 @@ public_tables = [
 
 dt = datetime.now()
 table_string = ' '.join(['-t ' + tbl for tbl in public_tables])
-call = 'pg_dump -U %s' % DATABASES['default']['USER']
+call = 'pg_dump -O -c -U %s' % DATABASES['default']['USER']
 
 # {{{ Backup and private dump
 os.system(call + ' aligulac > ' + BACKUP_PATH + dt.isoformat() + '.sql')

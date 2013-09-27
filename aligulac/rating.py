@@ -153,7 +153,7 @@ def performance(oppr, opps, oppc, W, L):
                     ret -= p[3]*alpha*(alpha+Mv) + p[4]*beta*(beta-Mv)
                 return ret
 
-            perf = maximize(logL, DlogL, D2logL, 0.0, method=None)[0]
+            perf = maximize(logL, DlogL, D2logL, 0.0, method='powell')
             ret[cat+1] = perf
 
     if meanok:
@@ -166,17 +166,17 @@ def performance(oppr, opps, oppc, W, L):
 def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     """This function updates the rating of a player according to the ratings of the opponents and the games
     against them."""
-
+    
     if len(W) == 0:
         return(myr, mys)
 
     if pr:
         print(text)
-        print(oppr)
-        print(opps)
-        print(oppc)
-        print(W)
-        print(L)
+        print(oppr, len(oppr))
+        print(opps, len(opps))
+        print(oppc, len(oppc))
+        print(W, len(W))
+        print(L, len(L))
 
     played_cats = sorted(unique(oppc))          # The categories against which the player played
     played_cats_p1 = [p+1 for p in played_cats]
@@ -282,7 +282,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
-    x = maximize(logF, DlogF, D2logF, x, method=None, disp=pr)
+    x = maximize(logF, DlogF, D2logF, x, method='powell', disp=pr)
     x = dim(x)
 
     # If maximization failed, return the current rating and print an error message

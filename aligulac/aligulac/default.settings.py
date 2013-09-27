@@ -37,6 +37,7 @@ INTERNAL_IPS = local.INTERNAL_IPS
 CACHES = {
     'default': {
         'BACKEND': local.CACHE_BACKEND,
+        'LOCATION': local.CACHE_LOCATION,
     }
 }
 

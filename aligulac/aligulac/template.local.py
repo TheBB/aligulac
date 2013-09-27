@@ -25,6 +25,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 # Cache backend (use DummyCache in development)
 CACHE_BACKEND = 'django.core.cache.backends.dummy.DummyCache'
 
+# Cache location (where to store cached views with FileBasedCache, just leave empty if DummyCache)
+CACHE_LOCATION = '/home/efonn/repos/aligulac/untracked/cache/'
+
 # Debug mode (boolean, should be True in development)
 DEBUG = True
 

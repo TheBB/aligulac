@@ -4,6 +4,7 @@
 
 untracked/
 local.py
+cache/
 
 #################
 ## ctags

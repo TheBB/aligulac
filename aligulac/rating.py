@@ -154,7 +154,7 @@ def performance(oppr, opps, oppc, W, L):
                 return ret
 
             perf = maximize(logL, DlogL, D2logL, 0.0, method='powell')
-            ret[cat+1] = perf
+            ret[cat+1] = perf.item()
 
     if meanok:
         ret[0] = sum(ret[1:]) / 3

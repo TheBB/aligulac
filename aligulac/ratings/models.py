@@ -153,6 +153,17 @@ class Event(models.Model):
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
 
+    @staticmethod
+    def open_events():
+        qset = (
+            Event.objects.filter(closed=False)
+                .exclude(downlink__distance__gt=0)
+                .order_by('fullname')
+                .values('id', 'fullname')
+        )
+        for e in qset:
+            yield (e['id'], e['fullname'])
+
     # {{{ String representation
     def __str__(self):
         return self.fullname

@@ -182,7 +182,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
     menu = [
-        ('Ranking',    '/periods/%i' % curp.id),
+        ('Ranking',    '/periods/%i/' % curp.id),
         ('Teams',      '/teams/'),
         ('Records',    '/records/history'),
         ('Results',    '/results/'),
@@ -268,6 +268,11 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
     if request != None:
         base['adm'] = request.user.is_authenticated()
         base['user'] = request.user.username
+    else:
+        base['adm'] = False
+
+    if not base['adm']:
+        base['menu'][-1]['submenu'] = base['menu'][-1]['submenu'][:1]
 
     if section is not None:
         base['curpage'] = section

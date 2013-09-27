@@ -147,6 +147,7 @@ class ReviewMatchesForm(forms.Form):
     def __init__(self, request=None, submitter=None):
         if request is not None:
             super(ReviewMatchesForm, self).__init__(request.POST)
+            self.eobj = request.POST['eventobj']
             self.commit(request.POST, submitter)
         else:
             super(ReviewMatchesForm, self).__init__()
@@ -165,15 +166,15 @@ class ReviewMatchesForm(forms.Form):
     # }}}
     
     # {{{ Custom validation
-    def clean_eventobj(self):
-        try:
-            return Event.objects.get(id=self.cleaned_data['eventobj'])
-        except:
-            raise ValidationError('Could not find this event object.')
-
     def clean(self):
         if self.cleaned_data['approve'] == self.cleaned_data['reject']:
             raise ValidationError('You must either approve or reject.')
+
+        try:
+            self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
+        except:
+            raise ValidationError('Could not find this event object.')
+
         return self.cleaned_data
     # }}}
 
@@ -276,6 +277,7 @@ class AddMatchesForm(forms.Form):
         if request is not None:
             super(AddMatchesForm, self).__init__(request.POST)
             self.close_after = 'commit_close' in request.POST
+            self.eobj = request.POST['eventobj']
         else:
             super(AddMatchesForm, self).__init__()
             self.close_after = False
@@ -297,14 +299,6 @@ class AddMatchesForm(forms.Form):
     # }}}
 
     # {{{ Validation
-    def clean_eventobj(self):
-        if not self.is_adm:
-            return self.cleaned_data['eventobj']
-        try:
-            return Event.objects.get(id=self.cleaned_data['eventobj'])
-        except:
-            raise ValidationError('Could not find this event object.')
-
     def clean_eventtext(self):
         if self.is_adm:
             return self.cleaned_data['eventtext']
@@ -318,6 +312,13 @@ class AddMatchesForm(forms.Form):
         if self.cleaned_data['source'] in [None, '']:
             raise ValidationError('This field is required.')
         return self.cleaned_data['source']
+
+    def clean(self):
+        try:
+            self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
+        except:
+            raise ValidationError('Could not find this event object.')
+        return self.cleaned_data
     # }}}
 
     # {{{ Parse the matches

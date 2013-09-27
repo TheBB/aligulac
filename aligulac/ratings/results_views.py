@@ -496,7 +496,7 @@ class SearchForm(forms.Form):
             ))
             return ret
 
-        matches = matches.order_by('-eventobj_latest', 'eventobj__fullname' '-date', 'event', 'id')
+        matches = matches.order_by('-eventobj__latest', 'eventobj__fullname', '-date', 'event', 'id')
         if 1 <= len(pls) <= 2:
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (

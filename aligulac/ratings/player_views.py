@@ -510,7 +510,7 @@ def results(request, player_id):
 @cache_page
 def historical(request, player_id):
     player = get_object_or_404(Player, id=player_id)
-    base = base_ctx('Ranking', 'Match history', request, context=player)
+    base = base_ctx('Ranking', 'Rating history', request, context=player)
 
     latest = player.rating_set.filter(period__computed=True, decay=0).latest('period')
     historical = (
@@ -534,7 +534,7 @@ def historical(request, player_id):
 @cache_page
 def earnings(request, player_id):
     player = get_object_or_404(Player, id=player_id)
-    base = base_ctx('Ranking', 'Match history', request, context=player)
+    base = base_ctx('Ranking', 'Earnings', request, context=player)
 
     # {{{ Gather data
     earnings = player.earnings_set.prefetch_related('event__earnings_set').order_by('-event__latest')

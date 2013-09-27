@@ -623,6 +623,7 @@ td.tabsel {
     font-family: 'Marcellus SC', Times, serif; 
     padding: 0.3em;
     font-size: 1.1em;
+    cursor: pointer;
 }
 
 td.tabunsel {
@@ -634,6 +635,7 @@ td.tabunsel {
     font-family: 'Marcellus SC', Times, serif; 
     padding: 0.3em;
     font-size: 1.1em;
+    cursor: pointer;
 }
 
 td.tabsel a {

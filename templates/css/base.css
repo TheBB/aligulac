@@ -604,6 +604,11 @@ select.small {
     word-spacing: 0.1em;
 }
 
+.percent-right {
+    left: inherit;
+    right: 0.3em;
+}
+
 .bar {
     height: 25px;
     background-color: #bbb;

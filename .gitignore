@@ -172,6 +172,16 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
+#############
+## Emacs
+#############
+
+*~
+
+#############
+## Aligulac
+#############
+
 *.pickle
 *.sql
 aligulac/update

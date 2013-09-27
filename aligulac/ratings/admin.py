@@ -108,6 +108,7 @@ class MatchAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
+    exclude = ('lft', 'rgt',)
     search_fields = ['fullname']
 
 class PreMatchGroupAdmin(admin.ModelAdmin):

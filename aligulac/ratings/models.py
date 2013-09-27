@@ -125,8 +125,8 @@ class Event(models.Model):
 
     name = models.CharField('Name', max_length=100)
     parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
-    lft = models.IntegerField('Left', null=True, default=None)
-    rgt = models.IntegerField('Right', null=True, default=None)
+    lft = models.IntegerField('Left', null=True, blank=True, default=None)
+    rgt = models.IntegerField('Right', null=True, blank=True, default=None)
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)

@@ -38,7 +38,7 @@ ratings.views.events.
     {% if siblings %}
     <tr>
         <td>Same level:</td>
-        <td colspan="2">{{ event.get_parent.name }}…
+        <td colspan="2">
             {% if siblings.count > 9 %}
                 <form method="get" action="/results/events/">
                 <select name="goto">
@@ -48,7 +48,7 @@ ratings.views.events.
                 </select>
                 <input type="submit" value="Go" />
                 </form>
-            {% else %}
+            {% else %}{{ event.get_parent.name }}…
             {% for e in siblings %}
                 <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
             {% endfor %}
@@ -60,7 +60,7 @@ ratings.views.events.
     {% if children %}
     <tr>
         <td>Next level:</td>
-        <td colspan="2">{{ event.name }}…
+        <td colspan="2">
             {% if children.count > 9 %}
                 <form method="get" action="/results/events/">
                 <select name="goto">
@@ -70,7 +70,7 @@ ratings.views.events.
                 </select>
                 <input type="submit" value="Go" />
                 </form>
-            {% else %}
+            {% else %}{{ event.name }}…
             {% for e in children %}
                 <a href="/results/events/{{ e.id }}-{{ e.fullname|urlfilter }}/">{{ e.name }}</a>{% if not forloop.last %}, {% endif %}
             {% endfor %}
@@ -174,6 +174,8 @@ ratings.views.events.
         {% endif %}
         {% if not event.has_children %}
             <a href="#" onclick="toggle_form('modstories'); return false;" title="Stories">st</a>, 
+        {% else %}
+            <a href="#" onclick="toggle_form('reorder'); return false;" title="Reorder children">ord</a>,
         {% endif %}
         <a href="/admin/ratings/event/{{ event.id }}/" title="Admin interface">adm</a>,
         <a href="/add/?eventid={{ event.id }}" title="Add more matches">add</a>)
@@ -298,8 +300,42 @@ ratings.views.events.
     <p>This event is <strong>big</strong>, so the list of games has been cut-off. Go to an event on the next
     level to see a complete list.</p>
 {% endif %}
-    
+
 {% if adm %}
+{% if event.has_children %}
+<div class="hiddenform" style="display: none; overflow: auto; height: 70%;" id="reorder">
+<ul id="sortable">
+    {% for e in children %}
+    <li class="ui-state-default" id="{{ e.id }}">{{ e.name }}</li>
+    {% endfor %}
+</ul>
+<script>
+    $(function() {
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+    });
+
+    function get_order() {
+        var ul = document.getElementById('sortable');
+        var str = '';
+        for (var i = 0; i < ul.children.length; i++)
+            str += ul.children[i].id + ',';
+        document.getElementById('order').value = str;
+    }
+</script>
+<form method="post" action="/results/events/{{ event.id }}/">
+<table class="hiddenform bigform" style="width: 90%">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% use "hidden" name="reorder" value="reorder" %}
+    {% use "hidden" name="order" value="" id="order" %}
+    {% use "submit" onclick="get_order();" %}
+{% endform %}
+</table>
+</form>
+</div>
+{% endif %}
+
 <div class="hiddenform" style="display: none;" id="addevent">
 <form method="post" action="/results/events/{{ event.id }}/">
 <table class="hiddenform bigform">

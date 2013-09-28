@@ -127,7 +127,10 @@
 <tr>
     <td class="form_left"></td>
     <td class="form_right">
-        <input type="submit" name="{{ name|default:"op" }}" value="{{ text|default:"Submit" }}" />
+        <input type="submit"
+               name="{{ name|default:"op" }}"
+               {% if onclick %}onclick="{{ onclick }}"{% endif %}
+               value="{{ text|default:"Submit" }}" />
     </td>
 </tr>
 {% endblock %}

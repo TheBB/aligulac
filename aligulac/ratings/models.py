@@ -120,14 +120,14 @@ class Period(models.Model):
 # {{{ Events
 class Event(models.Model):
     class Meta:
-        ordering = ['lft', 'latest', 'fullname']
+        ordering = ['idx', 'latest', 'fullname']
         db_table = 'event'
 
     name = models.CharField('Name', max_length=100)
     parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
     lft = models.IntegerField('Left', null=True, blank=True, default=None)
     rgt = models.IntegerField('Right', null=True, blank=True, default=None)
-    idx = models.IntegerField('Index', null=False, blank=False, default=0, db_index=True)
+    idx = models.IntegerField('Index', null=False, blank=False, db_index=True)
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)
@@ -160,7 +160,7 @@ class Event(models.Model):
         qset = (
             Event.objects.filter(closed=False)
                 .exclude(downlink__distance__gt=0)
-                .order_by('fullname')
+                .order_by('idx', 'fullname')
                 .values('id', 'fullname')
         )
         for e in qset:
@@ -212,12 +212,12 @@ class Event(models.Model):
             qset = Event.objects.filter(uplink__parent=self, uplink__distance__gt=0)
         else:
             qset = Event.objects.filter(uplink__parent=self)
-        return qset.filter(type__in=types).order_by('fullname')
+        return qset.filter(type__in=types)
     # }}}
 
     # {{{ get_immediate_children: Returns a queryset of immediate children
     def get_immediate_children(self):
-        return Event.objects.filter(uplink__parent=self, uplink__distance=1).order_by('fullname')
+        return Event.objects.filter(uplink__parent=self, uplink__distance=1)
     # }}}
 
     # {{{ has_children: Returns true if this event has children, false if not
@@ -342,13 +342,18 @@ class Event(models.Model):
     def set_latest(self, date):
         self.latest = date
         self.save()
+
+    def set_idx(self, idx):
+        self.idx = idx
+        self.save()
     # }}}
 
     # {{{ add_child(name, type, noprint=False, closed=False): Adds a new child to the right of all existing
     # children
     @transaction.atomic
     def add_child(self, name, type, big=False, noprint=False):
-        new = Event(name=name, parent=self, big=big, noprint=noprint)
+        idx = self.get_children(id=True).aggregate(Max('idx'))['idx__max'] + 1
+        new = Event(name=name, parent=self, big=big, noprint=noprint, idx=idx)
         new.save()
 
         links = [
@@ -365,11 +370,11 @@ class Event(models.Model):
     # }}}
 
     # {{{ add_root(name, type, big=False, noprint=False): Adds a new root node
-    # TODO: Catch explicit exception
     @staticmethod
     @transaction.atomic
     def add_root(name, type, big=False, noprint=False):
-        new = Event(name=name, big=big, noprint=noprint)
+        idx = Event.objects.aggregate(Max('idx'))['idx__max'] + 1
+        new = Event(name=name, big=big, noprint=noprint, idx=idx)
         new.save()
 
         EventAdjacency.objects.create(parent=new, child=new, distance=0)

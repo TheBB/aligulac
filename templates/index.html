@@ -18,10 +18,11 @@ Changes here will mostly be visible on the entire site.
         <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="{{ "general"|js }}"></script>
         <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
-        <script src="{{ "jquery-1.10.2.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
         {% if charts %}
-            <script src="http://code.highcharts.com/highcharts.js"></script>
-            <script src="http://code.highcharts.com/modules/exporting.js"></script>
+            <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+            <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
         {% endif %}
         {% if curpage == "Predict" %}
             <script type="text/javascript" src="{{ "lp-bracket-parser"|js }}" ></script>

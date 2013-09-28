@@ -657,3 +657,35 @@ td.tabunsel a:hover {
     color: #555555;
     text-decoration: none;
 }
+
+/* SORTABLE LISTS */
+
+#sortable {
+    list-style-type: none;
+    margin: 2em;
+    padding: 0;
+}
+
+#sortable li {
+    margin: 0 3px 3px 3px;
+    padding: 0.4em;
+    padding-left: 1.5em;
+    font-size: 1em;
+    height: 18px;
+}
+
+#sortable li span {
+    position: absolute;
+    margin-left: -1.3em;
+}
+
+.ui-state-default {
+    background: #fff;
+    border: dotted 0.1em #000;
+    color: #000;
+    font-weight: normal;
+}
+
+.ui-sortable-helper {
+    background: #eee;
+}

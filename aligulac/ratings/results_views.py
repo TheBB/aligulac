@@ -366,6 +366,59 @@ class AddForm(forms.Form):
     # }}}
 # }}}
 
+# {{{ ReorderForm: Form for reordering events.
+class ReorderForm(forms.Form):
+    order = StrippedCharField(max_length=10000, required=True)
+
+    # {{{ Constructor
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(ReorderForm, self).__init__(request.POST)
+        else:
+            super(ReorderForm, self).__init__()
+    # }}}
+
+    # {{{ Custom validation
+    def clean_order(self):
+        try:
+            ids = [int(s) for s in self.cleaned_data['order'].split(',') if s.strip() != '']
+            events = Event.objects.in_bulk(ids)
+        except:
+            raise ValidationError('Unable to get these events.')
+
+        return [events[i] for i in ids]
+    # }}}
+
+    # {{{ update_event: Pushes changes
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        if len(self.cleaned_data['order']) != event.get_immediate_children().count():
+            return [Message('Order invalid, try again?', type=Message.ERROR)]
+
+        for e in self.cleaned_data['order']:
+            if e.parent != event:
+                return [Message('Non-child event found. This should never happen.', type=Message.ERROR)]
+
+        min_idx = min([e.idx for idx in self.cleaned_data['order']])
+        for idx, e in enumerate(self.cleaned_data['order']):
+            e.set_idx(min_idx + idx)
+
+        return [Message(
+            'Successfully reordered %i children. Any inconsistencies will be fixed next update '
+            '(no more than six hours away).' % len(self.cleaned_data['order']),
+            type=Message.SUCCESS
+        )]
+    # }}}
+# }}}
+
 # {{{ SearchForm: Form for searching.
 class SearchForm(forms.Form):
     after      = forms.DateField(required=False, label='After', initial=None)
@@ -417,7 +470,7 @@ class SearchForm(forms.Form):
         matches = (
             Match.objects.all().prefetch_related('message_set')
                 .select_related('pla','plb','period')
-                #.annotate(Count('eventobj__match'))
+                .annotate(Count('eventobj__match'))
         )
 
         # {{{ All the easy filtering
@@ -447,8 +500,8 @@ class SearchForm(forms.Form):
             queries = [s.strip() for s in shlex.split(self.cleaned_data['event']) if s.strip() != '']
             for q in queries:
                 matches = matches.filter(
-                    Q(eventobj__isnull=True, event__icontains=query) |\
-                    Q(eventobj__isnull=False, eventobj__fullname__icontains=query)
+                    Q(eventobj__isnull=True, event__icontains=q) |\
+                    Q(eventobj__isnull=False, eventobj__fullname__icontains=q)
                 )
         # }}}
 
@@ -497,7 +550,7 @@ class SearchForm(forms.Form):
             ))
             return ret
 
-        matches = matches.order_by('-eventobj__latest', 'eventobj__fullname', '-date', 'event', 'id')
+        matches = matches.order_by('-eventobj__latest', 'eventobj__idx', '-date', 'event', 'id')
         if 1 <= len(pls) <= 2:
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (
@@ -542,7 +595,7 @@ class ResultsModForm(forms.Form):
         self.fields['event'].choices = [(0, 'No change')] + [
             (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
                 .exclude(downlink__distance__gt=0)
-                .order_by('fullname')
+                .order_by('idx')
                 .values('id', 'fullname')
         ]
     # }}}
@@ -599,10 +652,10 @@ def results(request):
     })
 
     matches = (
-        Match.objects.filter(date=day).order_by('eventobj__latest', 'eventobj__fullname', 'event', 'id')
+        Match.objects.filter(date=day).order_by('eventobj__latest', 'eventobj__idx', 'event', 'id')
             .prefetch_related('message_set')
             .select_related('rta','rtb')
-            #.annotate(Count('eventobj__match'))
+            .annotate(Count('eventobj__match'))
     )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
@@ -663,6 +716,8 @@ def events(request, event_id=None):
 
         check_form('form', EventModForm, 'modevent')
         check_form('addform', AddForm, 'addevent')
+        if event.has_children():
+            check_form('reorderform', ReorderForm, 'reorder')
         if event.type == TYPE_EVENT:
             check_form('ppform', PrizepoolModForm, 'modpp')
         if not event.has_children() and event.get_immediate_matchset().exists():
@@ -694,8 +749,8 @@ def events(request, event_id=None):
         'matches':   display_matches(
             matches.prefetch_related('message_set')
                 .select_related('pla', 'plb', 'eventobj')
-                #.annotate(Count('eventobj__match'))
-                .order_by('-eventobj__latest', 'eventobj__fullname', '-date', '-id')[0:200],
+                .annotate(Count('eventobj__match'))
+                .order_by('-eventobj__latest', 'eventobj__idx', '-date', '-id')[0:200],
             eventcount=True,
         ),
         'nplayers':  Player.objects.filter(

@@ -78,12 +78,9 @@ def check_duplicates(match, dup_flag):
         return False
 
     day = timedelta(days=1)
-    matches = (
-        Match.objects.filter(date__gte=(match.date - day), date__lte=(match.date + day))
-            .filter(
-                Q(pla=match.pla, plb=match.plb, sca=match.sca, scb=match.scb) |
-                Q(pla=match.plb, plb=match.pla, sca=match.scb, scb=match.sca)
-            )
+    matches = Match.objects.filter(date__gte=(match.date - day), date__lte=(match.date + day)).filter(
+        Q(pla=match.pla, plb=match.plb, sca=match.sca, scb=match.scb) |
+        Q(pla=match.plb, plb=match.pla, sca=match.scb, scb=match.sca)
     )
 
     return matches.exists()
@@ -156,7 +153,7 @@ class ReviewMatchesForm(forms.Form):
             choices=[
                 (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
                     .exclude(downlink__distance__gt=0)
-                    .order_by('fullname')
+                    .order_by('idx')
                     .values('id', 'fullname')
             ],
             required=False, label='Event',
@@ -289,7 +286,7 @@ class AddMatchesForm(forms.Form):
             choices=[
                 (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
                     .exclude(downlink__distance__gt=0)
-                    .order_by('fullname')
+                    .order_by('idx')
                     .values('id', 'fullname')
             ],
             required=False, label='Event',
@@ -830,7 +827,7 @@ def events(request):
             .exclude(uplink__distance__gt=0)
             .filter(downlink__child__closed=False)
             .annotate(Max('downlink__distance'))
-            .order_by('fullname')
+            .order_by('idx')
     )
     #for e in events:
         #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
@@ -886,7 +883,7 @@ def open_events(request):
             .filter(downlink__child__match__isnull=False)
             .distinct()
             .prefetch_related('uplink__parent')
-            .order_by('latest')
+            .order_by('latest', 'idx', 'fullname')
     )
     # }}}
 
@@ -908,7 +905,7 @@ def open_events(request):
             .exclude(uplink__parent__category=CAT_TEAM)
             .distinct()
             .prefetch_related('uplink__parent')
-            .order_by('fullname')
+            .order_by('idx', 'fullname')
     )
     # }}}
 

@@ -67,6 +67,8 @@ if not 'debug' in sys.argv:
     cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
 
+    os.system(PROJECT_PATH + 'event_sort.py')
+
 print('[%s] Finished' % str(datetime.now()), flush=True)
 
 os.system('touch ' + PROJECT_PATH + 'update')

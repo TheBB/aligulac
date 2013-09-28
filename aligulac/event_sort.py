@@ -5,12 +5,15 @@ import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
 
+from datetime import datetime
 from itertools import chain
 
 from django.db import connection, transaction
 
 from ratings.models import Event
 # }}}
+
+print('[%s] Refreshing event sort indices' % str(datetime.now()), flush=True)
 
 roots = Event.objects.filter(parent__isnull=True).order_by('fullname').values('id')
 next_ids = [e['id'] for e in roots]

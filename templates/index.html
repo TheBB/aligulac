@@ -80,13 +80,12 @@ Changes here will mostly be visible on the entire site.
                 &nbsp;
                 {% for main in menu %}
                     <span id="submenu_{{ main.name }}" {% if curpage != main.name %}style="display: none;"{% endif %}>
-                    {% for subname, suburl in main.submenu %}
-                    {% if not suburl %} || {% else %}
+                    {% for subname, suburl in main.submenu %}               
                     {% if cursubpage == subname and curpage == main.name %}
                         <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
                     {% else %}
                         <a href="{{ suburl }}" class="menu">{{ subname }}</a>
-                    {% endif %} {% endif %}
+                    {% endif %}
                     {% endfor %}
                     </span>
                 {% endfor %}
@@ -102,7 +101,18 @@ Changes here will mostly be visible on the entire site.
             <tr>
                 <td id="content">
                     {% if title %}
-                    <h2>{{ title }}</h2>
+                    <h2>
+                        {{ title }}
+                        {% if subnav %}
+                        {% for subname, suburl in subnav %}
+                            {% if cursubpage == subname %}
+                            <a href="{{ suburl }}" style="font-size: small" class="menu menucur">{{ subname }}</a>
+                            {% else %}
+                            <a href="{{ suburl }}" style="font-size: small" class="menu">{{ subname }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </h2>
                     {% endif %}
                     {% block content %}
                     <h2>Current top 10</h2>

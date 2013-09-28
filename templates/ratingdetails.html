@@ -21,7 +21,9 @@ This is the page showing the details of a rating adjustment. It's called from ra
             </a>
             {% endif %}
         </div>
-        <div class="rowe" style="width: 10em; text-align: center;"></div>
+        <div class="rowe" style="width: 10em; text-align: center;">
+        List {{ period.id }}
+        </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if nextlink %}
             <a href="/players/{{ nextlink.player.id }}-{{ nextlink.player.tag|urlfilter }}/period/{{ nextlink.period.id }}/">

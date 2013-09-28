@@ -9,7 +9,6 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
 {% block title %}{{ dbpl.0.tag }} vs. {{ dbpl.1.tag }}{% endblock %}
 
 {% block content %}
-    <h2>{{ dbpl.0.tag }} vs. {{ dbpl.1.tag }}</h2>
 
     <p>Verdict: 
     {% if   max <= 0.55 %}Even chances.

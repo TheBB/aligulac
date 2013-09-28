@@ -10,7 +10,6 @@ This is the template for the earnings of a player. It's called from ratings.view
 {% block title %}{{ player.tag }} earnings{% endblock %}
 
 {% block content %}
-<h2>{{ player.tag }} earnings</h2>
 <p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.</p>
 {% if by_currency %}<p>Broken down by currency, that's 
 {% for currency, earnings in by_currency.items %}

@@ -9,4 +9,6 @@ from faq.models import Post
 def faq(request):
     base = base_ctx('About', 'FAQ', request)
     base['posts'] = Post.objects.all()
+
+    base.update({"title": "Frequently asked questions"})
     return render_to_response('faq.html', base)

@@ -10,7 +10,6 @@ This is the template for the earnings of a player. It's called from ratings.view
 {% block title %}Earnings ranking{% endblock %}
 
 {% block content %}
-<h2>Earnings ranking</h2>
 <p>{% if not empty %}
 In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %}, 
 {% if filters.currency != 'all' %}{{ totalorigprizepool|add_sep_and_cur:filters.currency }}

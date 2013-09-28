@@ -24,6 +24,9 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.template import RequestContext
+from django.template.defaultfilters import (
+    date as django_date_filter
+)
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
@@ -659,6 +662,8 @@ def results(request):
     )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
+    base.update({"title": django_date_filter(day)})
+
     return render_to_response('results.html', base)
 # }}}
 
@@ -764,6 +769,8 @@ def events(request, event_id=None):
     base['tot_mirror'] = base['pvp_games'] + base['tvt_games'] + base['zvz_games']
     # }}}
 
+    base.update({"title": event})
+
     return render_to_response('eventres.html', base)
 # }}}
 
@@ -793,6 +800,8 @@ def search(request):
         searchform = SearchForm()
     base['searchform'] = searchform
     # }}}
+
+    base.update({"title": "Search results"})
 
     return render_to_response('results_search.html', base, context_instance=RequestContext(request))
 # }}}

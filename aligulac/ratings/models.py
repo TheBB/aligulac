@@ -120,13 +120,14 @@ class Period(models.Model):
 # {{{ Events
 class Event(models.Model):
     class Meta:
-        ordering = ['latest', 'fullname']
+        ordering = ['lft', 'latest', 'fullname']
         db_table = 'event'
 
     name = models.CharField('Name', max_length=100)
     parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
     lft = models.IntegerField('Left', null=True, blank=True, default=None)
     rgt = models.IntegerField('Right', null=True, blank=True, default=None)
+    idx = models.IntegerField('Index', null=False, blank=False, default=0, db_index=True)
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)
@@ -153,6 +154,7 @@ class Event(models.Model):
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
 
+    # {{{ open_events: Not used... is this useful?
     @staticmethod
     def open_events():
         qset = (
@@ -163,6 +165,7 @@ class Event(models.Model):
         )
         for e in qset:
             yield (e['id'], e['fullname'])
+    # }}}
 
     # {{{ String representation
     def __str__(self):

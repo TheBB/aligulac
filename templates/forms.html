@@ -37,7 +37,7 @@
         {% for value, label in field.field.choices %}
             <option value="{{ value }}"
                 {% if value == override %}selected="selected"
-                {% elif not override and field.value = value|safe %}selected="selected"{% endif %}>
+                {% elif not override and field.value == value|safe %}selected="selected"{% endif %}>
                 {{ label }}</option>
         {% endfor %}
         </select>

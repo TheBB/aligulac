@@ -48,9 +48,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td style="width: 8em;">
+            {% if rating %}
             {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
             {% if rating.position %}
                 <span class="small">(#{{ rating.position }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -66,9 +68,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
             {% if rating.position_vp %}
                 <span class="small">(#{{ rating.position_vp }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -84,9 +88,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
             {% if rating.position_vt %}
                 <span class="small">(#{{ rating.position_vt }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -102,9 +108,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
             {% if rating.position_vz %}
                 <span class="small">(#{{ rating.position_vz }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -123,9 +131,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td style="width: 8em;">
+            {% if rating %}
             {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
             {% if rating.position %}
                 <span class="small">(#{{ rating.position }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -141,9 +151,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
             {% if rating.position_vp %}
                 <span class="small">(#{{ rating.position_vp }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -159,9 +171,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
             {% if rating.position_vt %}
                 <span class="small">(#{{ rating.position_vt }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -177,9 +191,11 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </td>
         <td>
+            {% if rating %}
             {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
             {% if rating.position_vz %}
                 <span class="small">(#{{ rating.position_vz }})</span>
+            {% endif %}
             {% endif %}
         </td>
     </tr>
@@ -189,73 +205,97 @@ This is the template for the main player page, called from ratings.views.player.
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 12em;">
+            {% if highs %}
             {{ highs.0.rating|ratscale }} 
             ± {{ highs.0.dev|ratscalediff }}
             {% if highs.0.position %}
                 <span class="small">(#{{ highs.0.position }})</span>
             {% endif %}
+            {% endif %}
         </td>
         <td style="width: 20em; text-decoration: none;">
+            {% if highs %}
             on <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
                 {{ highs.0.period.end|date:"F jS, Y" }} </a>
+            {% endif %}
         </td>
         <td style="width: 6em;">
+            {% if highs %}
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.0.period.id }}/"
                style="text-decoration: none;">→</a>
+           {% endif %}
         </td>
     </tr>
     <tr style="height: 2.5em;">
         <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
         <td>
+            {% if highs %}
             {{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
             ± {{ highs.1|ratingdev:"P"|ratscalediff }}
             {% if highs.1.position_vp %}
                 <span class="small">(#{{ highs.2.position_vp }})</span>
             {% endif %}
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             on <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
                 {{ highs.1.period.end|date:"F jS, Y" }} </a>
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.1.period.id }}/"
                style="text-decoration: none;">→</a>
+           {% endif %}
         </td>
     </tr>
     <tr style="height: 2.5em;">
         <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
         <td>
+            {% if highs %}
             {{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
             ± {{ highs.2|ratingdev:"T"|ratscalediff }}
             {% if highs.2.position_vt %}
                 <span class="small">(#{{ highs.2.position_vt }})</span>
             {% endif %}
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             on <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
                 {{ highs.2.period.end|date:"F jS, Y" }} </a>
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.2.period.id }}/"
                style="text-decoration: none;">→</a>
+           {% endif %}
         </td>
     </tr>
     <tr style="height: 2.5em;">
         <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
         <td>
+            {% if highs %}
             {{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
             ± {{ highs.3|ratingdev:"Z"|ratscalediff }}
             {% if highs.3.position_vz %}
                 <span class="small">(#{{ highs.3.position_vz }})</span>
             {% endif %}
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             on <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
                 {{ highs.3.period.end|date:"F jS, Y" }} </a>
+            {% endif %}
         </td>
         <td>
+            {% if highs %}
             <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.3.period.id }}/"
                style="text-decoration: none;">→</a>
+           {% endif %}
         </td>
     </tr>
     </table> </td> </tr> </tbody>

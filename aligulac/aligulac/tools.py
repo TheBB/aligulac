@@ -306,8 +306,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
 # {{{ cache_login_protect: Decorator for caching only if user is not logged in.
 # Use this in place of BOTH cache_page and csrf_protect, and only on pages that require a CSRF token IF AND
-# ONLY IF the user is logged in. If the view ALWAYS issues a CSRF token, use @cache_page @csrf_protect, and if
-# the view NEVER issues a CSRF token, use @cache_page alone.
+# ONLY IF the user is logged in. If the view ALWAYS issues a CSRF token (or SOMETIMES does, but you can't tell
+# when easily), use neither cache_page nor csrf_protect. If the view NEVER issues a CSRF token, use cache_page
+# alone.
 def cache_login_protect(view):
     def handler(request, *args, **kwargs):
         if request.user.is_authenticated():

@@ -142,7 +142,7 @@ def search(request):
     players = find_player(lst=terms, make=False, soft=True)
 
     teams = Group.objects.filter(is_team=True)
-    events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('fullname')
+    events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('idx')
     for term in terms:
         teams = teams.filter(Q(name__icontains=term) | Q(alias__name__icontains=term))
         events = events.filter(Q(fullname__icontains=term))

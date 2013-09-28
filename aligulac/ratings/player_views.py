@@ -12,14 +12,15 @@ from django.shortcuts import render_to_response, get_object_or_404
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    Message,
-    StrippedCharField,
     base_ctx,
+    cache_login_protect,
     etn,
     generate_messages,
     get_param,
     get_param_date,
+    Message,
     ntz,
+    StrippedCharField,
 )
 from aligulac.settings import INACTIVE_THRESHOLD
 
@@ -219,8 +220,7 @@ class ResultsFilterForm(forms.Form):
 # }}}
 
 # {{{ player view
-@cache_page
-@csrf_protect
+@cache_login_protect
 def player(request, player_id):
     # {{{ Get player object and base context, generate messages and make changes if needed
     player = get_object_or_404(Player, id=player_id)

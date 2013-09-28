@@ -6,13 +6,15 @@ from datetime import (
     datetime,
 )
 
+from django import forms
 from django.contrib.auth import (
     authenticate,
     login,
 )
 from django.core.context_processors import csrf
-from django import forms
+from django.views.decorators.csrf import csrf_protect
 
+from aligulac.cache import cache_page
 from aligulac.settings import DEBUG
 
 from ratings.models import (
@@ -300,6 +302,20 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 base['menu'][0]['submenu'].append(('Adjustments', base_url + 'period/%i/' % rating.period.id))
 
     return base
+# }}}
+
+# {{{ cache_login_protect: Decorator for caching only if user is not logged in.
+# Use this in place of BOTH cache_page and csrf_protect, and only on pages that require a CSRF token IF AND
+# ONLY IF the user is logged in. If the view ALWAYS issues a CSRF token, use @cache_page @csrf_protect, and if
+# the view NEVER issues a CSRF token, use @cache_page alone.
+def cache_login_protect(view):
+    def handler(request, *args, **kwargs):
+        if request.user.is_authenticated():
+            final_view = view
+        else:
+            final_view = cache_page(view)
+        return final_view(request, *args, **kwargs)
+    return handler
 # }}}
 
 # {{{ etn: Executes a function and returns its result if it doesn't throw an exception, or None if it does.

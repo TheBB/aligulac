@@ -15,11 +15,12 @@ from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
-    get_param_choice,
     base_ctx,
-    StrippedCharField,
+    cache_login_protect,
     generate_messages,
+    get_param_choice,
     Message,
+    StrippedCharField,
 )
 
 from ratings.models import (
@@ -127,8 +128,7 @@ def teams(request):
 # }}}
 
 # {{{ team view
-@cache_page
-@csrf_protect
+@cache_login_protect
 def team(request, team_id):
     # {{{ Get team object and base context, generate messages and make changes if needed
     team = get_object_or_404(Group, id=team_id)

@@ -29,6 +29,7 @@ from django.views.decorators.csrf import csrf_protect
 from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
+    cache_login_protect,
     etn,
     generate_messages,
     get_param,
@@ -609,8 +610,7 @@ def results(request):
 # }}}
 
 # {{{ events view
-@cache_page
-@csrf_protect
+@cache_login_protect
 def events(request, event_id=None):
     # {{{ Get base context, redirect if necessary
     if 'goto' in request.GET:
@@ -713,8 +713,7 @@ def events(request, event_id=None):
 # }}}
 
 # {{{ search view
-@cache_page
-@csrf_protect
+@cache_login_protect
 def search(request):
     base = base_ctx('Results', 'Search', request)
 

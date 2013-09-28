@@ -13,9 +13,7 @@ from django.db.models import (
 )
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect
 
-from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
     etn,
@@ -757,8 +755,6 @@ class MoveEventForm(forms.Form):
 # }}}
 
 # {{{ Add matches view
-@cache_page
-@csrf_protect
 def add_matches(request):
     base = base_ctx('Submit', 'Matches', request)
     login_message(base)
@@ -786,8 +782,6 @@ def add_matches(request):
 # }}}
 
 # {{{ Review matches view
-@cache_page
-@csrf_protect
 def review_matches(request):
     base = base_ctx('Submit', 'Review', request)
     if not base['adm']:
@@ -816,8 +810,6 @@ def review_matches(request):
 # }}}
 
 # {{{ Event manager view
-@cache_page
-@csrf_protect
 def events(request):
     base = base_ctx('Submit', 'Events', request)
     if not base['adm']:
@@ -869,8 +861,6 @@ def event_children(request, id):
 # }}}
 
 # {{{ Open events view
-@cache_page
-@csrf_protect
 def open_events(request):
     base = base_ctx('Submit', 'Open events', request)
     if not base['adm']:

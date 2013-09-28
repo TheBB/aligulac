@@ -65,7 +65,7 @@ class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
             (None,          {'fields': ['tag','race']}),
             ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_id','tlpd_db','lp_name','sc2c_id','sc2e_id']})
+            ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']
@@ -94,7 +94,7 @@ class MatchForm(forms.ModelForm):
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]
-    exclude = ('rta', 'rtb')
+    exclude = ('rta', 'rtb', 'period')
     list_filter = [
         ('date', DateFieldListFilter), 
         ('game', AllValuesFieldListFilter),
@@ -108,7 +108,8 @@ class MatchAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
-    exclude = ('lft', 'rgt',)
+    exclude = ('lft', 'rgt', 'idx', 'tlpd_db')
+    readonly_fields = ('parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname')
     search_fields = ['fullname']
 
 class PreMatchGroupAdmin(admin.ModelAdmin):
@@ -116,6 +117,7 @@ class PreMatchGroupAdmin(admin.ModelAdmin):
 
 class PreMatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', 'get_event')
+    readonly_fields = ('group',)
 
     def get_res(self, obj):
         s = obj.pla_string if obj.pla is None else str(obj.pla)

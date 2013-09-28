@@ -19,7 +19,7 @@ from ratings.models import (
     Rating,
 )
 
-print('[%s] Backwards smoothing' % str(datetime.now()))
+print('[%s] Backwards smoothing' % str(datetime.now()), flush=True)
 
 # {{{ Copy data for the last period
 last = Period.objects.filter(computed=True).latest('id')
@@ -38,7 +38,7 @@ Rating.objects.filter(period=last).update(
 cur = connection.cursor()
 
 for period_id in range(last.id-1, 0, -1):
-    print('[%s] Smoothing period %i' % (str(datetime.now()), period_id))
+    print('[%s] Smoothing period %i' % (str(datetime.now()), period_id), flush=True)
 
     # {{{ Update RDs
     cur.execute('''

@@ -23,13 +23,13 @@ else:
                 .filter(start__lte=date.today()).earliest('id')
         )
     except:
-        print('[%s] Nothing to do' % str(datetime.now()))
+        print('[%s] Nothing to do' % str(datetime.now()), flush=True)
         os.system('touch ' + PROJECT_PATH + 'update')
         sys.exit(0)
 
 latest = Period.objects.filter(start__lte=date.today()).latest('id')
 
-print('[%s] Recomputing periods %i through %i' % (str(datetime.now()), earliest.id, latest.id))
+print('[%s] Recomputing periods %i through %i' % (str(datetime.now()), earliest.id, latest.id), flush=True)
 
 for i in range(earliest.id, latest.id+1):
     os.system(PROJECT_PATH + 'period.py %i' % i)
@@ -41,7 +41,7 @@ if not 'debug' in sys.argv:
     os.system(PROJECT_PATH + 'teamranks.py pl')
     os.system(PROJECT_PATH + 'teamratings.py')
 
-    print('[%s] Updating MC numbers' % str(datetime.now()))
+    print('[%s] Updating MC numbers' % str(datetime.now()), flush=True)
     Player.objects.exclude(id=36).update(mcnum=None)
     Player.objects.filter(id=36).update(mcnum=0)
     g = 0
@@ -60,13 +60,13 @@ if not 'debug' in sys.argv:
             break
         g += 1
 
-    print('[%s] Refreshing event dates' % str(datetime.now()))
+    print('[%s] Refreshing event dates' % str(datetime.now()), flush=True)
     cur = connection.cursor()
     cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
     cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
 
-print('[%s] Finished' % str(datetime.now()))
+print('[%s] Finished' % str(datetime.now()), flush=True)
 
 os.system('touch ' + PROJECT_PATH + 'update')

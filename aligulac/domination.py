@@ -22,17 +22,17 @@ LIMIT = 7
 FIRST_PERIOD = 25
 
 # {{{ Evaluate the domination scores
-print('[%s] Erasing domination scores' % str(datetime.now()))
+print('[%s] Erasing domination scores' % str(datetime.now()), flush=True)
 Rating.objects.update(domination=None)
 
-print('[%s] Reevaluating domination scores' % str(datetime.now()))
+print('[%s] Reevaluating domination scores' % str(datetime.now()), flush=True)
 for period in Period.objects.filter(computed=True, id__gte=FIRST_PERIOD):
     benchmark = filter_active(period.rating_set.all()).order_by('-rating')[LIMIT-1].rating
     filter_active(period.rating_set.all()).update(domination=F('rating')-benchmark)
 # }}}
 
 # {{{ Hall of fame
-print('[%s] Reevaluating hall of fame' % str(datetime.now()))
+print('[%s] Reevaluating hall of fame' % str(datetime.now()), flush=True)
 for player in Player.objects.all():
     ratings = list(
         player.rating_set.filter(period__id__gte=FIRST_PERIOD)

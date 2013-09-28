@@ -51,7 +51,11 @@ nteams = len(allowed_teams)
 # }}}
 
 # {{{ Simulate
-print('[%s] Simulating %s for %i teams' % (str(datetime.now()), 'PL' if proleague else 'AK', nteams))
+print(
+    '[%s] Simulating %s for %i teams' 
+    % (str(datetime.now()), 'PL' if proleague else 'AK', nteams), 
+    flush=True
+)
 
 scores = {t: 0.0 for t in allowed_teams}
 for ta, tb in combinations(allowed_teams, 2):
@@ -89,7 +93,11 @@ for ta, tb in combinations(allowed_teams, 2):
 # }}}
 
 # {{{ Save
-print('[%s] Saving %s scores for %i teams' % (str(datetime.now()), 'PL' if proleague else 'AK', nteams))
+print(
+    '[%s] Saving %s scores for %i teams'
+    % (str(datetime.now()), 'PL' if proleague else 'AK', nteams),
+    flush=True
+)
 for team in allowed_teams:
     if proleague:
         team.scorepl = scores[team]

@@ -20,7 +20,7 @@ from simul.formats.teamak import TeamAK
 from simul.formats.teampl import TeamPL
 from simul.playerlist import make_player
 
-print('[%s] Updating team ratings' % str(datetime.now()))
+print('[%s] Updating team ratings' % str(datetime.now()), flush=True)
 
 # {{{ Update ratings
 curp = get_latest_period()

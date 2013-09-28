@@ -46,13 +46,14 @@ from ratings.tools import (
 try:
     period = Period.objects.get(id=sys.argv[1])
 except:
-    print('[%s] No such period' % str(datetime.now()))
+    print('[%s] No such period' % str(datetime.now()), flush=True)
     sys.exit(1)
 
-print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.id, period.start, period.end))
+print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.id, period.start, period.end),
+      flush=True)
 
 if Period.objects.filter(id__lt=period.id).filter(Q(computed=False) | Q(needs_recompute=True)).exists():
-    print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()))
+    print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()), flush=True)
     sys.exit(1)
 
 prev = etn(lambda: Period.objects.get(id=period.id-1))
@@ -123,7 +124,7 @@ for m in Match.objects.filter(period=period).select_related('pla','plb'):
     ngames += m.sca + m.scb
 # }}}
 
-print('[%s] Initialized %i players and %i games' % (str(datetime.now()), len(players), ngames))
+print('[%s] Initialized %i players and %i games' % (str(datetime.now()), len(players), ngames), flush=True)
 
 # {{{ Compute new ratings, devs and performances
 for p in players.values():
@@ -272,5 +273,6 @@ cur.execute('''
 
 print(
     '[%s] Deleted: %i, Updated: %i, Inserted: %i'
-    % (str(datetime.now()), len(delete_ids), len(update_ids), len(insert_ids))
+    % (str(datetime.now()), len(delete_ids), len(update_ids), len(insert_ids)),
+    flush=True
 )

@@ -99,13 +99,18 @@ def find_player(query=None, lst=None, make=False, soft=False):
         if len(s) == 2 and s.upper() in data.cca2_to_ccn:
             country = s.upper()
             q |= Q(country=s.upper())
-        elif len(s) == 3 and s.upper() in data.cca3_to_ccn:
+            continue
+        if len(s) == 3 and s.upper() in data.cca3_to_ccn:
             country = ccn_to_cca2(cca3_to_ccn(s.upper()))
             q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+            continue
         renorm = s[0].upper() + s[1:].lower()
         if renorm in data.cn_to_ccn:
             country = ccn_to_cca2(cn_to_ccn(renorm))
             q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+            continue
+
+        tag = s
 
         queryset = queryset.filter(q)
     # }}}

@@ -224,7 +224,7 @@ class ResultsFilterForm(forms.Form):
 def player(request, player_id):
     # {{{ Get player object and base context, generate messages and make changes if needed
     player = get_object_or_404(Player, id=player_id)
-    base = base_ctx('Ranking', '%s:' % player.tag, request, context=player)
+    base = base_ctx('Ranking', 'Summary', request, context=player)
 
     if request.method == 'POST' and base['adm']:
         form = PlayerModForm(request)
@@ -365,6 +365,8 @@ def player(request, player_id):
         base['messages'].append(Message(msg_nochart % player.tag, type=Message.INFO))
     # }}}
 
+    base.update({"title": player.tag})
+
     return render_to_response('player.html', base)
 # }}}
 
@@ -388,6 +390,8 @@ def adjustment(request, player_id, period_id):
 
     # {{{ Matches
     matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj']).filter(period=period)
+
+    base.update({"title": player.tag})
 
     # If there are no matches, we don't need to continue
     if not matches.exists():
@@ -503,6 +507,8 @@ def results(request, player_id):
     })
     # }}}
 
+    base.update({"title": player.tag})
+    
     return render_to_response('player_results.html', base)
 # }}}
 
@@ -527,6 +533,7 @@ def historical(request, player_id):
         'historical': historical,
     })
 
+    base.update({"title": player.tag})
     return render_to_response('historical.html', base)
 # }}}
 
@@ -561,6 +568,8 @@ def earnings(request, player_id):
         'totalearnings': totalearnings,
         'by_currency': by_currency,
     })
+
+    base.update({"title": player.tag})
 
     return render_to_response('player_earnings.html', base)
 # }}}

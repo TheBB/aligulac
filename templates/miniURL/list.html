@@ -7,7 +7,6 @@ The list of all registered shortened URLs called from miniURL.views.list.
 {% block title %}Short URLs list{% endblock %}
 
 {% block content %}
-    <h2>List of short URLs</h2>
         <ul>
         {% for mini in minis %}
             <li> {{ mini.longURL }} via <a href="/m/{{ mini.code }}/">/m/{{ mini.code }}</a>

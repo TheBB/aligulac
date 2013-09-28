@@ -63,6 +63,8 @@ def history(request):
         'patches': PATCHES,
     })
 
+    base.update({"title": "History"})
+
     return render_to_response('history.html', base)
 # }}}
 
@@ -74,7 +76,14 @@ def hof(request):
             dom_val__isnull=False, dom_start__isnull=False, dom_end__isnull=False, dom_val__gt=0
         ).order_by('-dom_val')
     )
+
+    base.update({"title": "Hall of Fame"})
     return render_to_response('hof.html', base)
+# }}}
+
+# {{{ filter stolen from templatetags/ratings_extras.py
+def racefull(value):
+    return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
 # }}}
 
 # {{{ race view
@@ -102,6 +111,10 @@ def race(request):
     )
     if race != 'all':
         high = high.filter(player__race=race)
+        
+        base.update({"title": "Records for {}".format(racefull(race))})
+    else:
+        base.update({"title": "Records"})
 
     base.update({
         'hightot': sift(high.order_by('-rating')[:200]),

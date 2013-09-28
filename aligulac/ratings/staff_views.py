@@ -775,6 +775,8 @@ def add_matches(request):
 
     base['form'] = form
 
+    base.update({"title": "Submit results"})
+
     return render_to_response('add.html', base)
 # }}}
 
@@ -802,6 +804,8 @@ def review_matches(request):
 
     for g in base['groups']:
         g.prematches = display_matches(g.prematch_set.all(), messages=False)
+
+    base.update({"title": "Review results"})
 
     return render_to_response('review.html', base)
 # }}}
@@ -833,6 +837,8 @@ def events(request):
         #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
     base['nodes'] = events
     # }}}
+
+    base.update({"title": "Manage events"})
 
     return render_to_response('eventmgr.html', base)
 # }}}
@@ -912,6 +918,8 @@ def open_events(request):
     fill_aux_event(base['open_games'])
     fill_aux_event(base['open_nogames'])
     fill_aux_event(base['pp_events'])
+
+    base.update({"title": "Open events"})
 
     return render_to_response('events_open.html', base)
 # }}}

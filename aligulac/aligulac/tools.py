@@ -258,6 +258,11 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 ('Misc', '/add/misc/'),
         ]}]
     }
+    base.update({"subnav": None})
+    def add_subnav(title, url):
+        if base["subnav"] is None:
+            base["subnav"] = []
+        base["subnav"].append((title, url))
     base.update(csrf(request))
 
     # Log in if possible
@@ -288,18 +293,18 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             earnings = context.has_earnings()
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
-            base['menu'][0]['submenu'] += [None, ('%s:' % context.tag, base_url)]
+            add_subnav('Summary', base_url)
 
             if rating is not None:
-                base['menu'][0]['submenu'].append(('Rating history', base_url + 'historical/'))
+                add_subnav('Rating history', base_url + 'historical/')
 
-            base['menu'][0]['submenu'].append(('Match history', base_url + 'results/'))
+            add_subnav('Match history', base_url + 'results/')
 
             if context.has_earnings():
-                base['menu'][0]['submenu'].append(('Earnings', base_url + 'earnings/'))
+                add_subnav('Earnings', base_url + 'earnings/')
 
             if rating is not None:
-                base['menu'][0]['submenu'].append(('Adjustments', base_url + 'period/%i/' % rating.period.id))
+                add_subnav('Adjustments', base_url + 'period/%i/' % rating.period.id)
 
     return base
 # }}}

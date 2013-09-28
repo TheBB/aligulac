@@ -123,6 +123,8 @@ def db(request):
             'modified':   datetime.fromtimestamp(stat.st_mtime),
         })
 
+    base.update({"title": "Database status"})
+
     return render_to_response('db.html', base)
 # }}}
 
@@ -165,6 +167,8 @@ def search(request):
         'query':    query,
     })
 
+    base.update({"title": "Search results"})
+
     return render_to_response('search.html', base)
 # }}}
 
@@ -172,6 +176,8 @@ def search(request):
 def login_view(request):
     base = base_ctx(request=request)
     login_message(base)
+
+    base.update({"title": "Login"})
     return render_to_response('login.html', base)
 
 def logout_view(request):
@@ -206,6 +212,8 @@ def changepwd(request):
         Message('The password for %s was successfully changed.' % request.user.username, type=Message.SUCCESS)
     )
 
+    base.update({"title": "Change password"})
+
     return render_to_response('changepwd.html', base)
 # }}}
 
@@ -213,10 +221,12 @@ def changepwd(request):
 @cache_page
 def h404(request):
     base = base_ctx(request=request)
+    base.update({"title": "404: Not found"})
     return HttpResponseNotFound(render_to_string('404.html', base))
 
 @cache_page
 def h500(request):
     base = base_ctx(request=request)
+    base.update({"title": "500: Internal Server Error"})
     return HttpResponseNotFound(render_to_string('500.html', base))
 # }}}

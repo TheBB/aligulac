@@ -101,6 +101,9 @@ Changes here will mostly be visible on the entire site.
             </tr>
             <tr>
                 <td id="content">
+                    {% if title %}
+                    <h2>{{ title }}</h2>
+                    {% endif %}
                     {% block content %}
                     <h2>Current top 10</h2>
 

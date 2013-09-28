@@ -111,5 +111,7 @@ def balance(request):
         'entries':  BalanceEntry.objects.all().order_by('date'),
     })
 
+    base.update({"title": "Balance report"})
+
     return render_to_response('reports_balance.html', base)
 # }}}

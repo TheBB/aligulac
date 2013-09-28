@@ -7,7 +7,9 @@ from django.db.models import (
     Q,
     Sum,
 )
-
+from django.template.defaultfilters import (
+    date as django_date_filter
+)
 from ratings.models import (
     Earnings,
     P,
@@ -42,6 +44,8 @@ msg_preview = 'This is a <em>preview</em> of the next rating list. It will not b
 def periods(request):
     base = base_ctx('Ranking', 'History', request)
     base['periods'] = Period.objects.filter(computed=True).order_by('-id')
+    
+    base.update({"title": "Historical overview"})
     return render_to_response('periods.html', base)
 # }}}
 
@@ -169,6 +173,9 @@ def period(request, period_id):
         'localcount': True,
     })
         
+    fmt_date = django_date_filter(period.end, "F jS, Y")
+    base.update({"title": "List {}: {}".format(period.id, fmt_date)})
+
     return render_to_response('period.html', base)
 # }}}
 
@@ -248,6 +255,8 @@ def earnings(request):
 
     base['ranking'] = ranking
     # }}}
+
+    base.update({"title": "Earnings ranking"})
 
     return render_to_response('earnings.html', base)
 # }}}

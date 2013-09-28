@@ -306,6 +306,8 @@ def create_median_matches(sim, lst, modify=True):
 def predict(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
+    base.update({"title": "Predict"})
+
     if 'submitted' not in request.GET:
         base['form'] = PredictForm()
         return render_to_response('predict.html', base)
@@ -404,6 +406,8 @@ def match(request):
 
     postable_match(base, request)
 
+    base.update({"title": "{} vs. {}".format(dbpl[0].tag, dbpl[1].tag)})
+
     return render_to_response('pred_match.html', base)
 # }}}
 
@@ -450,6 +454,8 @@ def dual(request):
     # }}}
 
     postable_dual(base, request)
+
+    base.update({"title": "Dual tournament"})
 
     return render_to_response('pred_4pswiss.html', base)
 # }}}
@@ -503,6 +509,8 @@ def sebracket(request):
     # }}}
 
     postable_sebracket(base, request, group_by(base['meanres'], key=lambda a: a['eventtext']))
+
+    base.update({"title": "Single elimination bracket"})
 
     return render_to_response('pred_sebracket.html', base)
 # }}}
@@ -558,6 +566,8 @@ def rrgroup(request):
     # }}}
 
     postable_rrgroup(base, request)
+
+    base.update({"title": "Round robin group"})
 
     return render_to_response('pred_rrgroup.html', base)
 # }}}
@@ -615,6 +625,8 @@ def proleague(request):
     # }}}
 
     postable_proleague(base, request)
+
+    base.update({"title": "Proleague team match"})
 
     return render_to_response('pred_proleague.html', base)
 # }}}

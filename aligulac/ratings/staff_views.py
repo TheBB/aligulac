@@ -415,9 +415,11 @@ class AddMatchesForm(forms.Form):
                 if players.count() == 0:
                     self.messages.append(
                         Message("Could not find player: '%s'." % ' '.join(query), type=Message.ERROR))
+                    self.close_after = False
                 elif players.count() > 1:
                     self.messages.append(
                         Message("Not unique player: '%s'." % ' '.join(query), type=Message.ERROR))
+                    self.close_after = False
             return None
 
         return players.first()

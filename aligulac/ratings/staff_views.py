@@ -408,6 +408,7 @@ class AddMatchesForm(forms.Form):
 
     # {{{ get_player: Auxiliary function for searching for players
     def get_player(self, query, make_flag):
+        print(query)
         players = find_player(lst=query, make=make_flag, soft=False)
 
         if players.count() != 1:

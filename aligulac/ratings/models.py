@@ -8,8 +8,9 @@ from django.db import (
     transaction,
 )
 from django.db.models import (
-    Max,
     F,
+    Max,
+    Min,
     Q,
 )
 

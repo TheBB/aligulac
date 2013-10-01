@@ -278,9 +278,8 @@ def player(request, player_id):
     # }}}
 
     # {{{ If the player has at least one rating
-    ratings = total_ratings(player.rating_set.filter(period__computed=True)).select_related('period')
-    if ratings.exists():
-        rating = player.get_current_rating()
+    if player.current_rating:
+        ratings = total_ratings(player.rating_set.filter(period__computed=True)).select_related('period')
         base.update({
             'highs': (
                 ratings.latest('rating'),
@@ -290,10 +289,10 @@ def player(request, player_id):
             ),
             'recentchange':  player.get_latest_rating_update(),
             'firstrating':   ratings.earliest('period'),
-            'rating':        rating,
+            'rating':        player.current_rating,
         })
 
-        if rating.decay >= INACTIVE_THRESHOLD:
+        if player.current_rating.decay >= INACTIVE_THRESHOLD:
             base['messages'].append(Message(msg_inactive % player.tag, 'Inactive', type=Message.INFO))
 
         base['charts'] = base['recentchange'].period_id > base['firstrating'].period_id

@@ -166,11 +166,17 @@ def get_latest_period():
 # {{{ filter_active: Filters a rating queryset by removing inactive ratings.
 def filter_active(queryset):
     return queryset.filter(decay__lt=INACTIVE_THRESHOLD)
+
+def filter_active_players(queryset):
+    return queryset.filter(current_rating__decay__lt=INACTIVE_THRESHOLD)
 # }}}
 
 # {{{ filter_inactive: Filters a rating queryset by removing active ratings.
 def filter_inactive(queryset):
     return queryset.exclude(decay__lt=INACTIVE_THRESHOLD)
+
+def filter_inactive_players(queryset):
+    return queryset.exclude(current_rating__decay__lt=INACTIVE_THRESHOLD)
 # }}}
 
 # {{{ total_ratings: Annotates a rating queryset by adding tot_vp, tot_vt and tot_vz.

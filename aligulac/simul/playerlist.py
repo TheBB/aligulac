@@ -24,7 +24,7 @@ def make_player(player):
         return pl
 
     try:
-        rating = player.get_current_rating()
+        rating = player.current_rating
         pl = Player(
             player.tag,
             player.race,

@@ -414,6 +414,9 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modplayer">
+<div class="close-button">
+    <a href="#" onclick="$('#modplayer').hide(); return false;">close</a>
+</div>
 <form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
 <table class="hiddenform bigform">
 {% csrf_token %}

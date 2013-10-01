@@ -523,7 +523,7 @@ div.hiddenform {
     border-color: #000000;
     background-color: #ffffff;
     width: 65em;
-    position: absolute;
+    position: fixed;
     top: 15em;
     left: 50%;
     margin-left: -32.5em;
@@ -581,6 +581,13 @@ input.player {
 
 select.small {
     width: 15em;
+}
+
+div.close-button {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-family: Verdana, Geneva, sans-serif;
 }
 
 /* PERCENTAGES */

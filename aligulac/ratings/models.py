@@ -457,6 +457,8 @@ class Player(models.Model):
 
     race = models.CharField('Race', max_length=1, choices=RACES, null=False, db_index=True)
 
+    current_rating = models.ForeignKey('Rating', blank=True, null=True, related_name='current')
+
     # Domination fields (for use in the hall of fame)
     dom_val = models.FloatField('Domination', blank=True, null=True)
     dom_start = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_start')

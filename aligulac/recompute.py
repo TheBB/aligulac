@@ -60,12 +60,14 @@ if not 'debug' in sys.argv:
             break
         g += 1
 
-    print('[%s] Refreshing event dates' % str(datetime.now()), flush=True)
+    print('[%s] Refreshing miscellaneous data' % str(datetime.now()), flush=True)
     cur = connection.cursor()
     cur.execute('UPDATE event SET earliest = (SELECT MIN(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
     cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
+    cur.execute('UDPATE player SET current_rating_id = (SELECT rating.id FROM rating '
+                'WHERE rating.period_id=%i AND rating.player_id=player.id)' % latest.id)
 
     os.system(PROJECT_PATH + 'event_sort.py')
 

@@ -30,6 +30,6 @@ This is the template for the match history of a player. It's called from ratings
 and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches.</p>
 
 <table class="results">
-{% include "matchlist.html" with lm_list=matches lm_header="info" %}
+{% include "matchlist.html" with lm_list=matches lm_header="partial" %}
 </table>
 {% endblock %}

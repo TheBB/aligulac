@@ -44,11 +44,14 @@ off.</p>
 the number. Third place matches should be named exactly that (not «3rd»).</p>
 
 <p>
-    <a href="#" onclick="document.getElementById('parent_name').innerHTML = 'Root (N/A)'; document.getElementById('parent_id_field').value = '-1'; document.getElementById('id_type').selectedIndex = 0; toggle_form('addevent'); window.scroll(0,0); return false;">Add root event</a>.
+    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">Add root event</a>.
 </p>
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="addevent">
+<div class="close-button">
+    <a href="#" onclick="$('#addevent').hide(); return false;">close</a>
+</div>
 <form method="post" action="/add/events/">
 <table class="hiddenform bigform">
 {% csrf_token %}
@@ -72,11 +75,10 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 // <![CDATA[  
 function change_and_toggle_form(html, id, cat)
 {
-    document.getElementById('parent_name').innerHTML = html;
-    document.getElementById('parent_id_field').value = id;
-    document.getElementById('id_type').selectedIndex = cat;
-    toggle_form('addevent');
-    window.scroll(0,0);
+    $("#parent_name").html(html);
+    $("#parent_id_field")[0].value = id;
+    $("#id_type")[0].selectedIndex = cat;
+    $("#addevent").show();
 }
 
 function add_node(id, obj, div)
@@ -157,25 +159,18 @@ function add_node(id, obj, div)
 
 function toggle_sub(id)
 {
-    var div = document.getElementById('list-' + id);
-
-    if (div.innerHTML == 'unloaded')
+    var div = $("#list-" + id);
+    if (div.text() == 'unloaded')
     {
-        var http = new XMLHttpRequest();
-        http.open('GET', '/add/events/children/' + id + '/', false);
-        http.send();
-
-        div.innerHTML = '';
-
-        res = eval(http.responseText);
-        for (var i = 0; i < res.length; i++)
-            add_node(id, res[i], div);
+        div.html("");
+        $.getJSON('/add/events/children/' + id + '/', function(data, status, xhr) {
+            for (i in data) {
+                add_node(id, data[i], div[0]);
+            }
+        });
     }
 
-    if (div.style.display == 'none')
-        div.style.display = 'block';
-    else
-        div.style.display = 'none';
+    div.toggle();
 }
 // ]]>
 </script> 

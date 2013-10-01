@@ -259,7 +259,7 @@ class ReviewMatchesForm(forms.Form):
 # {{{ AddMatchesForm: Form for adding matches (duh).
 class AddMatchesForm(forms.Form):
     eventtext = StrippedCharField(max_length=200, required=False, label='Event')
-    date      = forms.DateField(required=True, label='Date', initial=date.today())
+    date      = forms.DateField(required=True, label='Date')
     game      = forms.ChoiceField(choices=GAMES, label='Game version', initial=HOTS)
     offline   = forms.BooleanField(required=False, label='Offline', initial=False)
     source    = StrippedCharField(max_length=1000, required=False, label='Source')
@@ -274,7 +274,7 @@ class AddMatchesForm(forms.Form):
             self.close_after = 'commit_close' in request.POST
             self.eobj = request.POST['eventobj']
         else:
-            super(AddMatchesForm, self).__init__()
+            super(AddMatchesForm, self).__init__(initial={'date': date.today()})
             self.close_after = False
 
         self.requested_close_after = self.close_after

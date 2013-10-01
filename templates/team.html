@@ -108,6 +108,9 @@ This shows a team page. Called from ratings.teamviews.team.
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modteam">
+<div class="close-button">
+    <a href="#" onclick="$('#modteam').hide(); return false;">close</a>
+</div>
 <form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
 <table class="hiddenform bigform">
 {% csrf_token %}

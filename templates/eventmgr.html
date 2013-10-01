@@ -44,7 +44,7 @@ off.</p>
 the number. Third place matches should be named exactly that (not «3rd»).</p>
 
 <p>
-    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field').value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">Add root event</a>.
+    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">Add root event</a>.
 </p>
 
 {% if adm %}
@@ -76,7 +76,7 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 function change_and_toggle_form(html, id, cat)
 {
     $("#parent_name").html(html);
-    $("#parent_id_field").value = id;
+    $("#parent_id_field")[0].value = id;
     $("#id_type")[0].selectedIndex = cat;
     $("#addevent").show();
 }

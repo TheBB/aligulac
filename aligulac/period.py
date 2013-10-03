@@ -227,7 +227,7 @@ Rating.objects.bulk_create([Rating(
     bf_dev_vp    = p['new_devs']['P'],
     bf_dev_vt    = p['new_devs']['T'],
     bf_dev_vz    = p['new_devs']['Z'],
-    decay        = 0,
+    decay        = p['rating'].decay + 1 if p['rating'] and len(p['wins']) == 0 else 0,
 ) for p in players.values() if p['player'].id in insert_ids])
 
 if insert_ids:

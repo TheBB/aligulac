@@ -522,11 +522,13 @@ div.hiddenform {
     border-width: 0.2em;
     border-color: #000000;
     background-color: #ffffff;
-    width: 65em;
+    width: 90%;
     position: fixed;
-    top: 15em;
+    top: 5%;
     left: 50%;
-    margin-left: -32.5em;
+    margin-left: -45%;
+    max-height: 90%;
+    overflow-y: auto;
 }
 
 table.hiddenform {

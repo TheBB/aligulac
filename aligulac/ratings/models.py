@@ -1105,10 +1105,8 @@ class PreMatch(models.Model):
 
     # {{{ is_valid: Checks if this can be turned into a Match.
     def is_valid(self):
-        return (
-            self.pla is not None and self.plb is not None and
-            self.rca is not None and self.rcb is not None
-        )
+        print(self.pla, self.plb, self.rca, self.rcb)
+        return self.pla is not None and self.plb is not None
     # }}}
 # }}}
 

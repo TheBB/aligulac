@@ -187,11 +187,15 @@ class ReviewMatchesForm(forms.Form):
                         self.messages.append(Message(error=error, field=self.fields[field].label))
             return
 
+        print(self.cleaned_data)
+
         prematches = [
             PreMatch.objects.get(id=int(key.split('-')[-1]))
             for key in sorted(post.keys())
             if key[0:6] == 'match-' and post[key] == 'y'
         ]
+
+        print(prematches)
 
         matches = []
         for pm in prematches:
@@ -217,8 +221,8 @@ class ReviewMatchesForm(forms.Form):
                     plb       = pm.plb,
                     sca       = pm.sca,
                     scb       = pm.scb,
-                    rca       = pm.rca,
-                    rcb       = pm.rcb,
+                    rca       = pm.rca or pm.pla.race,
+                    rcb       = pm.rcb or pm.plb.race,
                     date      = self.cleaned_data['date'] or pm.group.date,
                     eventobj  = self.cleaned_data['eventobj'],
                     event     = pm.group.event,

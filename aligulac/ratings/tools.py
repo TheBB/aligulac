@@ -157,10 +157,10 @@ def icdf(c, loc=0.0, scale=1.0):
 
 # {{{ get_latest_period: Returns the latest computed period, or None.
 def get_latest_period():
-    #try:
-    return Period.objects.filter(computed=True).latest('start')
-    #except:
-        #return None
+    try:
+        return Period.objects.filter(computed=True).latest('start')
+    except:
+        return None
 # }}}
 
 # {{{ filter_active: Filters a rating queryset by removing inactive ratings.

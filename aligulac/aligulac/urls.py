@@ -73,6 +73,9 @@ urlpatterns = patterns('',
     url(r'^500/$', 'aligulac.views.h500'),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    # Remove when we get replacement
+    url(r'^api/rating_list/(?P<period>\d+)/$', 'ratings.api_views.rating_list'),
 )
 
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.

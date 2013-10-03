@@ -272,7 +272,7 @@ class AddMatchesForm(forms.Form):
         if request is not None:
             super(AddMatchesForm, self).__init__(request.POST)
             self.close_after = 'commit_close' in request.POST
-            self.eobj = request.POST['eventobj']
+            self.eobj = etn(lambda: request.POST['eventobj'])
         else:
             super(AddMatchesForm, self).__init__(initial={'date': date.today()})
             self.close_after = False
@@ -309,10 +309,11 @@ class AddMatchesForm(forms.Form):
         return self.cleaned_data['source']
 
     def clean(self):
-        try:
-            self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
-        except:
-            raise ValidationError('Could not find this event object.')
+        if self.is_adm:
+            try:
+                self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
+            except:
+                raise ValidationError('Could not find this event object.')
         return self.cleaned_data
     # }}}
 
@@ -325,7 +326,7 @@ class AddMatchesForm(forms.Form):
             for field, errors in self.errors.items():
                 for error in errors:
                     self.messages.append(Message(error=error, field=self.fields[field].label))
-            return
+            return []
 
         if not self.is_adm:
             self.prematchgroup = PreMatchGroup(

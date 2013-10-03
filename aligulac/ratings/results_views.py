@@ -637,7 +637,7 @@ class ResultsModForm(forms.Form):
 # }}}
 
 # {{{ results view
-@cache_page
+@cache_login_protect
 def results(request):
     base = base_ctx('Results', 'By Date', request)
 

@@ -164,41 +164,43 @@ Rating.objects.filter(prev__period=period, prev__player_id__in=delete_ids).updat
 Rating.objects.filter(period=period, player_id__in=delete_ids).delete()
 # }}}
 
-# {{{ Update extant ratings
 cur = connection.cursor()
-cur.execute('BEGIN')
-cur.execute(
-    'CREATE TEMPORARY TABLE temp_rating ( '
-    '    player_id integer PRIMARY KEY, '
-    '    rating double precision,    rating_vp double precision, '
-    '    rating_vt double precision, rating_vz double precision, '
-    '    dev double precision,    dev_vp double precision, '
-    '    dev_vt double precision, dev_vz double precision, '
-    '    comp_rat double precision,    comp_rat_vp double precision, '
-    '    comp_rat_vt double precision, comp_rat_vz double precision, '
-    '    decay integer'
-    ') ON COMMIT DROP'
-)
-cur.execute('INSERT INTO temp_rating VALUES ' + ', '.join(
-    str((
-        p['player'].id,
-        p['new_ratings']['M'], p['new_ratings']['P'], p['new_ratings']['T'], p['new_ratings']['Z'], 
-        p['new_devs']['M'], p['new_devs']['P'], p['new_devs']['T'], p['new_devs']['Z'], 
-        p['perfs']['M'], p['perfs']['P'], p['perfs']['T'], p['perfs']['Z'], 
-        p['rating'].decay + 1 if p['rating'] and len(p['wins']) == 0 else 0
-    )) for p in players.values() if p['player'].id in update_ids)
-)
-cur.execute(
-    'UPDATE rating AS r SET '
-    '    rating=t.rating, rating_vp=t.rating_vp, rating_vt=t.rating_vt, rating_vz=t.rating_vz, '
-    '    dev=t.dev, dev_vp=t.dev_vp, dev_vt=t.dev_vt, dev_vz=t.dev_vz, '
-    '    comp_rat=t.comp_rat, comp_rat_vp=t.comp_rat_vp, '
-    '    comp_rat_vt=t.comp_rat_vt, comp_rat_vz=t.comp_rat_vz, '
-    '    decay=t.decay '
-    'FROM temp_rating AS t WHERE r.player_id=t.player_id AND r.period_id=%i' % period.id
-)
-cur.execute('COMMIT')
-# }}}
+
+# {{{ Update extant ratings
+if update_ids:
+    cur.execute('BEGIN')
+    cur.execute(
+        'CREATE TEMPORARY TABLE temp_rating ( '
+        '    player_id integer PRIMARY KEY, '
+        '    rating double precision,    rating_vp double precision, '
+        '    rating_vt double precision, rating_vz double precision, '
+        '    dev double precision,    dev_vp double precision, '
+        '    dev_vt double precision, dev_vz double precision, '
+        '    comp_rat double precision,    comp_rat_vp double precision, '
+        '    comp_rat_vt double precision, comp_rat_vz double precision, '
+        '    decay integer'
+        ') ON COMMIT DROP'
+    )
+    cur.execute('INSERT INTO temp_rating VALUES ' + ', '.join(
+        str((
+            p['player'].id,
+            p['new_ratings']['M'], p['new_ratings']['P'], p['new_ratings']['T'], p['new_ratings']['Z'], 
+            p['new_devs']['M'], p['new_devs']['P'], p['new_devs']['T'], p['new_devs']['Z'], 
+            p['perfs']['M'], p['perfs']['P'], p['perfs']['T'], p['perfs']['Z'], 
+            p['rating'].decay + 1 if p['rating'] and len(p['wins']) == 0 else 0
+        )) for p in players.values() if p['player'].id in update_ids)
+    )
+    cur.execute(
+        'UPDATE rating AS r SET '
+        '    rating=t.rating, rating_vp=t.rating_vp, rating_vt=t.rating_vt, rating_vz=t.rating_vz, '
+        '    dev=t.dev, dev_vp=t.dev_vp, dev_vt=t.dev_vt, dev_vz=t.dev_vz, '
+        '    comp_rat=t.comp_rat, comp_rat_vp=t.comp_rat_vp, '
+        '    comp_rat_vt=t.comp_rat_vt, comp_rat_vz=t.comp_rat_vz, '
+        '    decay=t.decay '
+        'FROM temp_rating AS t WHERE r.player_id=t.player_id AND r.period_id=%i' % period.id
+    )
+    cur.execute('COMMIT')
+    # }}}
 
 # {{{ Insert new ratings
 Rating.objects.bulk_create([Rating(

@@ -66,7 +66,7 @@ if not 'debug' in sys.argv:
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
     cur.execute('UPDATE event SET latest   = (SELECT MAX(date) FROM match JOIN eventadjacency '
                 'ON match.eventobj_id=eventadjacency.child_id WHERE eventadjacency.parent_id=event.id)')
-    cur.execute('UDPATE player SET current_rating_id = (SELECT rating.id FROM rating '
+    cur.execute('UPDATE player SET current_rating_id = (SELECT rating.id FROM rating '
                 'WHERE rating.period_id=%i AND rating.player_id=player.id)' % latest.id)
 
     os.system(PROJECT_PATH + 'event_sort.py')

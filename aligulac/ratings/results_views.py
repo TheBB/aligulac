@@ -481,7 +481,7 @@ class SearchForm(forms.Form):
             matches = matches.filter(date__gte=self.cleaned_data['after'])
 
         if self.cleaned_data['before'] is not None:
-            matches = matches.filter(date__gte=self.cleaned_data['before'])
+            matches = matches.filter(date__lte=self.cleaned_data['before'])
 
         if self.cleaned_data['unassigned'] and adm:
             matches = matches.filter(eventobj__isnull=True)

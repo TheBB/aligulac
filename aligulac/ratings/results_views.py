@@ -662,7 +662,7 @@ def results(request):
     )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
-    base.update({"title": django_date_filter(day)})
+    base.update({"title": django_date_filter(day, "F jS, Y")})
 
     return render_to_response('results.html', base)
 # }}}

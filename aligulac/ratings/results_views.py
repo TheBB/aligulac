@@ -553,7 +553,7 @@ class SearchForm(forms.Form):
             ))
             return ret
 
-        matches = matches.order_by('-eventobj__latest', 'eventobj__idx', '-date', 'event', 'id')
+        matches = matches.order_by('-eventobj__latest', '-eventobj__idx', '-date', 'event', 'id')
         if 1 <= len(pls) <= 2:
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (
@@ -755,7 +755,7 @@ def events(request, event_id=None):
             matches.prefetch_related('message_set')
                 .select_related('pla', 'plb', 'eventobj')
                 .annotate(Count('eventobj__match'))
-                .order_by('-eventobj__latest', 'eventobj__idx', '-date', '-id')[0:200],
+                .order_by('-eventobj__latest', '-eventobj__idx', '-date', '-id')[0:200],
             eventcount=True,
         ),
         'nplayers':  Player.objects.filter(

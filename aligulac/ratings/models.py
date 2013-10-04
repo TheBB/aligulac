@@ -16,6 +16,8 @@ from django.db.models import (
 
 from aligulac.settings import start_rating
 
+from currency import ExchangeRates
+
 from countries import (
     transformations,
     data,
@@ -1033,7 +1035,7 @@ class Earnings(models.Model):
             if earning.currency == 'USD':
                 earning.earnings = earning.origearnings
             else:
-                exchangerates = curex.ExchangeRates(date)
+                exchangerates = ExchangeRates(date)
                 earning.earnings = round(exchangerates.convert(earning.origearnings, earning.currency))
             earning.save()
     # }}}

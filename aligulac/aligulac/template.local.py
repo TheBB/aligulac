@@ -12,6 +12,9 @@ BACKUP_PATH = '/home/efonn/repos/aligulac/untracked/backup/'
 # Random string, 50 characters
 SECRET_KEY =
 
+# API key to openexchangerates.org
+EXCHANGE_ID =
+
 # Database username and password
 DB_USER =
 DB_PASSWORD =

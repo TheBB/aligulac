@@ -20,7 +20,8 @@ def training(request, team_id):
     team = get_object_or_404(Group, id=team_id)
 
     allowed = [
-        ('Wake', 'mousesports')
+        ('Wake', 'mousesports'),
+        ('mouz', 'mousesports'),
     ]
 
     if not request.user.is_authenticated() or (request.user.username, team.name) not in allowed:

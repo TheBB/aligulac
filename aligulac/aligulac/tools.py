@@ -271,9 +271,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         if user != None and user.is_active:
             login(request, user)
 
-    # Check for admin rights.
+    # Check for admin rights (must belong to match uploader group, but this is the only group that exists)
     if request != None:
-        base['adm'] = request.user.is_authenticated()
+        base['adm'] = request.user.is_authenticated() and request.user.groups.exists()
         base['user'] = request.user.username
     else:
         base['adm'] = False

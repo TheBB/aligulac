@@ -1120,6 +1120,7 @@ class Rating(models.Model):
 
     period = models.ForeignKey(Period, null=False, verbose_name='Period')
     player = models.ForeignKey(Player, null=False, verbose_name='Player')
+    cluster = models.IntegerField(null=True, blank=True, default=None, verbose_name='Cluster')
 
     # Helper fields for fast loading of frequently accessed information
     prev = models.ForeignKey('Rating', related_name='prevrating', verbose_name='Previous rating', null=True)

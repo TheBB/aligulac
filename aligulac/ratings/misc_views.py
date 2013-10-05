@@ -1,40 +1,21 @@
 # {{{ Imports
-from datetime import date
-
-from django import forms
 from django.core.exceptions import PermissionDenied
-from django.db.models import (
-    F,
-    Q,
-    Sum,
-    Count,
-)
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from ratings.models import (
-    Earnings,
     Group,
-    GroupMembership,
-    Match,
-    P,
     Player,
-    Rating,
-    T,
-    Z,
 )
 from ratings.templatetags.ratings_extras import (
     ratscale,
     ratscalediff,
 )
-from ratings.tools import (
-    filter_active,
-    filter_inactive,
-    total_ratings,
-)
 # }}}
 
 # {{{ training view
+# Questions to TheBB
 def training(request, team_id):
     team = get_object_or_404(Group, id=team_id)
 

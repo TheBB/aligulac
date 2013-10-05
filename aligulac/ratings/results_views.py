@@ -172,7 +172,7 @@ class EventModForm(forms.Form):
         update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   'homepage')
         update(self.cleaned_data['tlpd_id'],    'tlpd_id',    'set_tlpd_id',    'TLPD ID')
         update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    'Liquipedia title')
-        update(self.cleaned_data['tl_thread'],  'tl_thread',  'set_th_thread',  'TL thread')
+        update(self.cleaned_data['tl_thread'],  'tl_thread',  'set_tl_thread',  'TL thread')
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
 
         return ret

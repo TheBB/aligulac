@@ -109,7 +109,8 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
     exclude = ('lft', 'rgt', 'idx', 'tlpd_db')
-    readonly_fields = ('parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx')
+    readonly_fields = (
+        'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx', 'close')
     search_fields = ['fullname']
 
 class PreMatchGroupAdmin(admin.ModelAdmin):

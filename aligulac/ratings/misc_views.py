@@ -22,6 +22,7 @@ def training(request, team_id):
     allowed = [
         ('Wake', 'mousesports'),
         ('mouz', 'mousesports'),
+        ('TheBB', 'mousesports'),
     ]
 
     if not request.user.is_authenticated() or (request.user.username, team.name) not in allowed:

@@ -933,7 +933,7 @@ def open_events(request):
 
 # {{{ Misc management view
 def misc(request):
-    base = base_ctx('Submit', 'Open events', request)
+    base = base_ctx('Submit', 'Misc', request)
     if not base['adm']:
         return redirect('/login/')
     login_message(base)

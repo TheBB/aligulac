@@ -155,14 +155,14 @@ class EventModForm(forms.Form):
             nchanged = event.get_matchset().update(offline=(self.cleaned_data['offline']=='offline'))
             ret.append(Message('Changed type for %i matches.' % nchanged, type=Message.SUCCESS))
 
-        events = [event] if not self.cleaned_data['same_level'] else event.event_set.all()
+        events = [event] if not self.cleaned_data['same_level'] else event.parent.get_immediate_children()
+        nchanged = 0
         for e in events:
-            nchanged = 0
             if e.type != self.cleaned_data['type']:
                 e.change_type(self.cleaned_data['type'])
-                nchanged += 1
-            if nchanged > 0:
-                ret.append(Message('Changed type for %i event(s).' % nchanged, type=Message.SUCCESS))
+            nchanged += 1
+        if nchanged > 0:
+            ret.append(Message('Changed type for %i event(s).' % nchanged, type=Message.SUCCESS))
 
         def update(value, attr, setter, label):
             if value != getattr(event, attr):

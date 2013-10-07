@@ -305,8 +305,8 @@ ratings.views.events.
 <div class="close-button">
     <a href="#" onclick="$('#reorder').hide(); return false;">close</a>
 </div>
-<p>Put the <strong>least significant</strong> events first (the ones player first, or with most players).
-Finals should be toward the bottom.</p>
+<p style="margin: 3em;">Put the <strong>least significant</strong> events first (the ones player first, or
+with most players). Finals should be toward the bottom.</p>
 <ul id="sortable">
     {% for e in children %}
     <li class="ui-state-default" id="{{ e.id }}">{{ e.name }}</li>

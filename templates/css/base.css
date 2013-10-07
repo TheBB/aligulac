@@ -522,11 +522,11 @@ div.hiddenform {
     border-width: 0.2em;
     border-color: #000000;
     background-color: #ffffff;
-    width: 90%;
+    width: 70em;
     position: fixed;
     top: 5%;
     left: 50%;
-    margin-left: -45%;
+    margin-left: -35em;
     max-height: 90%;
     overflow-y: auto;
 }

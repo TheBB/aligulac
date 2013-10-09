@@ -242,7 +242,7 @@ def update_matches(sim, lst, request):
         try:
             match = sim.get_match(m)
             num = match.get_num()
-            if match.can_modify():
+            if match.can_modify() and match.:
                 match.modify(
                     get_param_range(request, '%s_1' % m, (0, num), 0),
                     get_param_range(request, '%s_2' % m, (0, num), 0),

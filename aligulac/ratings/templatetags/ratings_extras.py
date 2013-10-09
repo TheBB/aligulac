@@ -107,6 +107,9 @@ def haslogo(value):
 # {{{ Creates match prediction links.
 @register.filter
 def makematchlink(value):
+    if value['pla_id'] is None or value['plb_id'] is None:
+        return None
+
     return (
         '/inference/match/?bo=%i&amp;ps=%i%%2C%i&amp;s1=%i&amp;s2=%i' % (
             2*value['sim']._num-1,

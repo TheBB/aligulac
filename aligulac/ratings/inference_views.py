@@ -127,6 +127,10 @@ class PredictForm(forms.Form):
             if line.strip() == '':
                 continue
 
+            if line.strip() == '-' or line.strip().lower() == 'bye':
+                players.append(None)
+                continue
+
             pls = find_player(query=line, make=False)
             if not pls.exists():
                 self.messages.append(Message("No matches found: '%s'." % line.strip(), type=Message.ERROR))

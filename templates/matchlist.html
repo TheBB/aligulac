@@ -141,6 +141,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
     {% endif %}
 {% endif %}
+{% if m.pla_id and m.plb_id %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
     <td class="lm_date">
         {% if m.date %}{{ m.date|date:"Y-m-d" }}{% endif %}
@@ -230,6 +231,7 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% endif %}
     </td>
 </tr>
+{% endif %}
 {% endfor %}
 
 {% if lm_header == "full" or lm_header == "custom" or lm_header == "fixed"%} </tbody> {% endif %}

@@ -288,11 +288,11 @@ class Event(models.Model):
     # }}}
 
     # {{{ update_dates: Updates the fields earliest and latest
-    # Raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def update_dates(self):
         res = self.get_matchset().aggregate(Max('date'), Min('date'))
         self.latest = res['date__max']
         self.earliest = res['date__min']
+        self.save()
     # }}}
 
     # {{{ change_type(type): Modifies the type of this event, and possibly all ancestors and events
@@ -1029,6 +1029,7 @@ class Earnings(models.Model):
     @staticmethod
     def convert_earnings(event):
         earningobjs = Earnings.objects.filter(event=event)
+        event.update_dates()
         date = event.latest
 
         for earning in earningobjs:

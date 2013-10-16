@@ -242,8 +242,8 @@ def player(request, player_id):
     base.update({
         'player':           player,
         'form':             form,
-        'first':            matches.earliest('date'),
-        'last':             matches.latest('date'),
+        'first':            etn(lambda: matches.earliest('date')),
+        'last':             etn(lambda: matches.latest('date')),
         'totalmatches':     matches.count(),
         'offlinematches':   matches.filter(offline=True).count(),
         'aliases':          player.alias_set.all(),

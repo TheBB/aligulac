@@ -22,36 +22,38 @@ This is the prediction page for four player Swiss groups. It's called from ratin
         <td style="width: 8em; text-align: right;">3rd</td>
         <td style="width: 8em; text-align: right;">4th</td>
     </tr>
-    {% for p in players %}
+    {% for e in table %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ e.player.dbpl.id }}-{{ e.player.dbpl.tag|urlfilter }}/">
+                {{ e.player.dbpl.tag }}
+            </a>
         </td>
         <td style="width: 1em;">
-            {% if p.dbpl.country %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-            {% endif %}
+        {% if e.player.dbpl.country %}
+        <img src="{{ e.player.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ e.player.dbpl.country }}" />
+        {% endif %}
         </td>
         <td style="width: 1em;">
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ e.player.dbpl.race|imgfolder|static }}" alt="{{ e.player.dbpl.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
-            {% if p.tally.2 > 0 or p.tally.3 > 0 %}{{ p.tally.2|addf:p.tally.3|pctg_one }}%{% endif %}
+            {% if e.probs.2 > 0 or e.probs.3 > 0 %}{{ e.probs.2|addf:e.probs.3|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if p.tally.3 > 0 %}{{ p.tally.3|pctg_one }}%{% endif %}
+            {% if e.probs.3 > 0 %}{{ e.probs.3|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if p.tally.2 > 0 %}{{ p.tally.2|pctg_one }}%{% endif %}
+            {% if e.probs.2 > 0 %}{{ e.probs.2|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if p.tally.1 > 0 %}{{ p.tally.1|pctg_one }}%{% endif %}
+            {% if e.probs.1 > 0 %}{{ e.probs.1|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if p.tally.0 > 0 %}{{ p.tally.0|pctg_one }}%{% endif %}
+            {% if e.probs.0 > 0 %}{{ e.probs.0|pctg_one }}%{% endif %}
         </td>
     </tr>
     {% endfor %}

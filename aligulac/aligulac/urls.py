@@ -18,6 +18,7 @@ from ratings.api.resources import (
     PlayerResource,
     RatingResource,
     TeamResource,
+    PredictDualResource,
     PredictMatchResource,
 )
 
@@ -38,6 +39,7 @@ resources = [
     PlayerResource,
     RatingResource,
     TeamResource,
+    PredictDualResource,
     PredictMatchResource,
 ]
 for res in resources:

@@ -9,7 +9,8 @@ from django.db.models import F
 from aligulac.settings import DEBUG
 
 from ratings.inference_views import (
-    MatchPredictionResult
+    DualPredictionResult,
+    MatchPredictionResult,
 )
 from ratings.models import (
     APIKey,
@@ -479,6 +480,7 @@ class PredictResource(Resource):
 
         s = self._build_reverse_url('api_dispatch_detail', kwargs=kwargs)
         s += '?bo=%s' % ','.join([str(2*b-1) for b in bundle_or_obj.obj.bos])
+        s += bundle_or_obj.obj.generate_updates()
         return s
 
     def get_object_list(self, request):
@@ -509,6 +511,19 @@ class PredictResource(Resource):
         return self.create_response(request, bundle)
 # }}}
 
+# {{{ PredictCombinationResource
+class PredictCombinationResource(PredictResource):
+    def dehydrate_matches(self, bundle):
+        for m in bundle.data['matches']:
+            del m['match_id']
+            del m['sim']
+        return bundle.data['matches']
+
+    def dehydrate_meanres(self, bundle):
+        for m in bundle.data['meanres']:
+            del m['match_id']
+# }}}
+
 # {{{ PredictMatchResource
 class PredictMatchResource(PredictResource):
     class Meta:
@@ -535,5 +550,27 @@ class PredictMatchResource(PredictResource):
             bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
             s1=args.get('s1', 0),
             s2=args.get('s2', 0),
+        )
+# }}}
+
+# {{{ PredictDualResource
+class PredictDualResource(PredictCombinationResource):
+    class Meta:
+        allowed_methods = ['get', 'post']
+        resource_name = 'predictdual'
+        authentication = APIKeyAuthentication()
+        object_class = DualPredictionResult
+
+    table = fields.ListField('table', null=False, help_text='Predicted table')
+    matches = fields.ListField('matches', null=False, help_text='Matches')
+    meanres = fields.ListField('meanres', null=False, help_text='Median results')
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return DualPredictionResult(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            args=args,
         )
 # }}}

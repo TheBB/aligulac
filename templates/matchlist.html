@@ -33,11 +33,11 @@ NB! The calling code is responsible for starting and ending the HTML table:
 {% if lm_header == "info" %}
     <tr class="header">
         <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
-        <td class="lm_rta">{% if lm_list.0.pla_rating %}Rating{% endif %}</td>
+        <td class="lm_rta">{% if lm_list.0.pla.rating %}Rating{% endif %}</td>
         <td class="lm_pla">Player A</td>
         <td class="lm_score">Score</td>
         <td class="lm_plb">Player B</td>
-        <td class="lm_rtb">{% if lm_list.0.pla_rating %}Rating{% endif %}</td>
+        <td class="lm_rtb">{% if lm_list.0.pla.rating %}Rating{% endif %}</td>
         <td class="lm_right"></td>
     </tr>
 {% endif %}
@@ -141,64 +141,64 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
     {% endif %}
 {% endif %}
-{% if m.pla_id and m.plb_id %}
+{% if m.pla.id and m.plb.id %}
 <tr class="nonheader {% cycle 'row2' 'row1' %}" {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
     <td class="lm_date">
         {% if m.date %}{{ m.date|date:"Y-m-d" }}{% endif %}
     </td>
     <td class="lm_rta">
-        {% if m.pla_rating %}{{ m.pla_rating|ratscale }}{% endif %}
+        {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
     </td>
     <td class="lm_pla">
-        {% if m.pla_score > m.plb_score and not m.unfixed %}<strong>{% endif %}
-        {% if m.pla_id %}<a href="/players/{{ m.pla_id }}-{{ m.pla_tag|urlfilter }}/">{% endif %}
-        {% if not m.pla_id and lm_adm %}
+        {% if m.pla.score > m.plb.score and not m.unfixed %}<strong>{% endif %}
+        {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
+        {% if not m.pla.id and lm_adm %}
             <input type="text" class="player" name="match-{{ m.match_id }}-pla" 
-                   style="text-align: right;" value="{{ m.pla_tag }}" />
-        {% else %}{{ m.pla_tag }}{% endif %}
-        {% if m.pla_id %}</a>{% endif %}
-        {% if m.pla_country %}
-            <img src="{{ m.pla_country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla_country }}" />
+                   style="text-align: right;" value="{{ m.pla.tag }}" />
+        {% else %}{{ m.pla.tag }}{% endif %}
+        {% if m.pla.id %}</a>{% endif %}
+        {% if m.pla.country %}
+            <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
         {% endif %}
-        {% if m.pla_race %}
-            <img src="{{ m.pla_race|imgfolder|static }}" alt="{{ m.pla_race }}" class="btm" />
+        {% if m.pla.race %}
+            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
         {% endif %}
-        {% if m.pla_score > m.plb_score and not m.unfixed %}</strong>{% endif %}
+        {% if m.pla.score > m.plb.score and not m.unfixed %}</strong>{% endif %}
     </td>
     <td class="lm_score">
         {% if lm_predict %}
             <span id="fix{{ m.identifier }}">
                 <a href="#" onclick="lm_toggle_visibility('{{ m.identifier }}'); return false;">
-                    {{ m.pla_score }}–{{ m.plb_score }}
+                    {{ m.pla.score }}–{{ m.plb.score }}
                 </a>
             </span>
             <span id="inp{{ m.identifier }}" style="display: none;">
                 <input type="text" name="{{ m.identifier }}_1" style="text-align: right; width: 1.5em;"
-                    value="{{ m.pla_score }}" />
+                    value="{{ m.pla.score }}" />
                 <input type="text" name="{{ m.identifier }}_2" style="width: 1.5em;" 
-                    value="{{ m.plb_score }}" />
+                    value="{{ m.plb.score }}" />
             </span>
         {% else %}
-            {{ m.pla_score }}–{{ m.plb_score }}
+            {{ m.pla.score }}–{{ m.plb.score }}
         {% endif %}
     </td>
     <td class="lm_plb">
-        {% if m.plb_score > m.pla_score %}<strong>{% endif %}
-        {% if m.plb_race %}
-            <img src="{{ m.plb_race|imgfolder|static }}" alt="{{ m.plb_race }}" class="btm" />
+        {% if m.plb.score > m.pla.score %}<strong>{% endif %}
+        {% if m.plb.race %}
+            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
         {% endif %}
-        {% if m.plb_country %}
-            <img src="{{ m.plb_country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb_country }}" />
+        {% if m.plb.country %}
+            <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
         {% endif %}
-        {% if m.plb_id %} <a href="/players/{{ m.plb_id }}-{{ m.plb_tag|urlfilter }}/">{% endif %}
-        {% if not m.plb_id and lm_adm %}
-            <input type="text" class="player" name="match-{{ m.match_id }}-plb" value="{{ m.plb_tag }}" />
-        {% else %}{{ m.plb_tag }}{% endif %}
-        {% if m.plb_id %}</a>{% endif %}
-        {% if m.plb_score > m.pla_score %}</strong>{% endif %}
+        {% if m.plb.id %} <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{% endif %}
+        {% if not m.plb.id and lm_adm %}
+            <input type="text" class="player" name="match-{{ m.match_id }}-plb" value="{{ m.plb.tag }}" />
+        {% else %}{{ m.plb.tag }}{% endif %}
+        {% if m.plb.id %}</a>{% endif %}
+        {% if m.plb.score > m.pla.score %}</strong>{% endif %}
     </td>
     <td class="lm_rtb">
-        {% if m.plb_rating %}{{ m.plb_rating|ratscale }}{% endif %}
+        {% if m.plb.rating %}{{ m.plb.rating|ratscale }}{% endif %}
     </td>
     <td class="lm_right">
         {% if lm_adm %}

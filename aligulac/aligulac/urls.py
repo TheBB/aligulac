@@ -9,8 +9,14 @@ from django.conf.urls import (
 
 from aligulac import settings
 from ratings.api.resources import (
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
     PeriodResource,
     PlayerResource,
+    RatingResource,
+    TeamResource,
 )
 
 from django.contrib import admin
@@ -21,8 +27,18 @@ handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
 
 v1_api = Api(api_name='v1')
-v1_api.register(PeriodResource())
-v1_api.register(PlayerResource())
+resources = [
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
+    PeriodResource,
+    PlayerResource,
+    RatingResource,
+    TeamResource,
+]
+for res in resources:
+    v1_api.register(res())
 
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
@@ -54,10 +70,14 @@ urlpatterns = patterns('',
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),
-    #url(r'^staff/$', 'aligulac.views.staff'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
     url(r'^m/', include('miniURL.urls')),
+
+    url(r'^about/faq/$', 'faq.views.faq'),
+    url(r'^about/blog/$', 'blog.views.blog'),
+    url(r'^about/db/$', 'aligulac.views.db'),
+    url(r'^about/api/$', 'aligulac.views.api'),
 
     url(r'^inference/$', 'ratings.inference_views.predict'),
     url(r'^inference/match/$', 'ratings.inference_views.match'),

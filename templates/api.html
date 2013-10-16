@@ -1,0 +1,214 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+{% load formulation %}
+
+{% block title %}API documentation{% endblock %}
+
+{% block content %}
+{% include "messages.html" %}
+
+<div class="hiddenform" style="display: none;" id="apikey">
+<div class="close-button">
+    <a href="#" onclick="$('#apikey').hide(); return false;">close</a>
+</div>
+<form method="post" action="/about/api/">
+<table class="hiddenform bigform">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% field "basic"        form.organization        class="wideinput" %}
+    {% field "basic"        form.contact             class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+
+<h3>API access key</h3>
+
+<p>To use the Aligulac API you first need an API access key. To generate one, please use
+<a href="#" onclick="toggle_form('apikey'); return false;">this form</a>. You will have to provide your name
+(or the name of the organization), and a contact e-mail address.</p>
+
+<p>If the request is successful, you will be provided with a 20-character random string. This string will have
+to be passed with every API request you make as a parameter named <code>apikey</code>. In the rest of this
+document, this parameter will be implied.</p>
+
+<h3>API overview</h3>
+
+<p>The API is for the most part self-documenting. The root URI is <code>/api/v1/</code>. Requests to this URI
+will return a JSON object describing the available resources and their root URIs, e.g.</p>
+
+<code>
+    <pre>
+    {
+        "period": {
+            "list_endpoint": "/api/v1/period/",
+            "schema": "/api/v1/period/schema/"
+        },
+        "player": {
+            "list_endpoint": "/api/v1/player/",
+            "schema": "/api/v1/player/schema/"
+        }
+    }
+    </pre>
+</code>
+
+<p><strong>NOTE:</strong> For making requests in the browser, please append <code>?format=json</code> to the
+URI.</p>
+
+<p>The resources available correspond for the most part to the tables in the database, which are described
+<a href="/about/db/">here</a>. <strong>API access to predictions is currently not available. This will be
+available soon™.</strong></p>
+
+<p>Requests for player objects thus need to go to <code>/api/v1/player/</code>. For a detailed description of
+each resource, go to the schema URI. This will return a JSON object with the following fields:</p>
+
+<ul>
+    <li><strong>allowed_detail_http_methods</strong> and <strong>allowed_list_http_methods</strong>: 
+    list of accepted HTTP methods (should always be <code>get</code> and <code>post</code>).</li>
+    <li><strong>default_format</strong>:
+    default reply format (should always be <code>application/json</code>).</li>
+    <li><strong>default_limit</strong>:
+    default page limit when grabbing many objects at once.</li>
+    <li><strong>fields</strong>:
+    A dictionary describing each field of the given resource, with the following information:
+    <ul>
+        <li><strong>nullable</strong>:
+        <code>true</code> if the field can be <code>null</code>, <code>false</code> otherwise.</li>
+        <li><strong>type</strong>:
+        Field type (e.g. <code>"string"</code>, <code>"integer"</code>, <code>"float"</code>,
+        <code>"datetime"</code>, etc.). For related objects of another type, this field will read
+        <code>"related"</code>.</li>
+        <li><strong>default</strong>:
+        Default value, if any (usually not).</li>
+        <li><strong>help_text</strong>:
+        Additional human-readable information.</li>
+    </ul>
+    The other fields are not of interest.</li>
+    <li><strong>filtering</strong>:
+    A dictionary describing the filters available on each field. For each field, this is either a list of
+    filters, the integer <code>1</code> (all filters available), or the integer <code>2</code> (all filters
+    available, including related objects). With very few exceptions, all kinds of filters are allowed.</li>
+    <li><strong>ordering</strong>:
+    A list of fields that allow sorting. With very few exceptions, this will be all fields.</li>
+</ul>
+
+<h3>Getting all objects</h3>
+
+<p>To obtain all objects of a given resource, just make a request to the base resource URI, e.g.
+<code>/api/v1/period/</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving
+paging information, and <strong>objects</strong>, which is a list of objects. By default, this will return a
+limited number of objects per page (normally 20). To control the page size and offset, give the
+<code>limit</code> and <code>offset</code> arguments, e.g.</p>
+
+<code>/api/v1/period?limit=50&amp;offset=100</code>
+
+<p>will return objects number 100-149. In addition, the <strong>meta</strong> field gives you the URIs for the
+next and previous pages, as well as the total count of objects.<p>
+
+<p>You can get all objects at once by giving <code>limit=0</code>, but this is disallowed on some resources
+and otherwise not encouraged.</p>
+
+<h3>Getting a single object by ID</h3>
+
+<p>If you know the id of the object you are interested in, you can get it directly. For example, to get
+Leenock's player information, go to <code>/api/v1/player/1/</code>, since Leenock's id is 1.</p>
+
+<p>This will return just the object directly, with no metadata and no surrounding list.</p>
+
+<h3>Getting several objects by ID</h3>
+
+<p>If you want to access more than one object, you can request them as a <strong>set</strong> to save both us
+and yourself from extra work. If you are interested in Leenock, Creator and Life (ids 1, 2 and 3), you can
+make a request to <code>/api/v1/player/set/1;2;3/</code>.</p>
+
+<h3>Related objects</h3>
+
+<p>Fields that point to related objects will usually be given by resource URIs in the returned objects. For
+frequently useful information (e.g. players' current rating), the related object(s) will be given as well,
+although they are often stripped-down versions without detailed information.</p>
+
+<h3>Filtering</h3>
+
+<p>You can apply filters to the base URI. They are applied in the following manner:</p>
+
+<code>/api/v1/resourcename/?fieldname__filtername=value</code>
+
+<p>If filtering on related objects is available, this can be done as follows:</p>
+
+<code>/api/v1/resourcename/?relatedobject__fieldname__filtername=value</code>
+
+<p>In principle, these chains can be arbitrarily long. The available filters correspond to those found in
+<a href="https://docs.djangoproject.com/en/1.6/ref/models/querysets/#field-lookups">Django</a>. Here is a
+brief overview:</p>
+
+<ul>
+    <li><strong>exact, iexact</strong>:
+    Exact lookup (can also be done just as <code>fieldname=value</code>.) or case-insensitive matching for
+    strings.</li>
+    <li><strong>contains, icontains</strong>:
+    Case sensitive or insensitive string containment.</li>
+    <li><strong>startswith, istartswith, endswith, iendswith</strong>:
+    Case sensitive or insensitive string prefix or postfix matching.</li>
+    <li><strong>regex, iregex</strong>:
+    Case sensitive or insensitive regular expression matching. The regular expression syntax is defined by
+    Python's <code>re</code> module.</li>
+    <li><strong>in</strong>:
+    The given field value must be an element of the provided comma-separated list.</li>
+    <li><strong>gt, gte, lt, lte</strong>:
+    Numerical orderings &gt;, ≥, &lt; and ≤.</li>
+    <li><strong>range</strong>:
+    The given field value must lie between the given values (separated by a comma). Useful for dates.</li>
+    <li><strong>year, month, day, week_day</strong>:
+    Applies to date fields, matches only on the specified integer value. Months and week days are numbered
+    from 1, and the week is assumed to start on Sunday.</li>
+    <li><strong>isnull</strong>:
+    Takes a boolean, will only match objects where the given field is or is not null.</li>
+</ul>
+
+<h3>Ordering</h3>
+
+<p>To sort by a field, add the parameter <code>order_by=fieldname</code> for ascending order, and
+<code>order_by=-fieldname</code> for descending order.</p>
+
+<h2>Common use cases</h2>
+
+<h3>Get the current top ten rating list</h3>
+
+<p>Current ratings are delivered together with player objects, so this will suffice:</p>
+
+<code>
+    <pre>
+    /api/v1/player/?current_rating__isnull=false
+                   &amp;current_rating__decay__lt=4
+                   &amp;order_by=-current_rating__rating
+                   &amp;limit=10
+    </pre>
+</code>
+
+<p>Null values come before non-null values, so we must filter out the null ratings first. The filter on
+<code>decay</code> is to only select active players. Alternatively, for a cleaner method, just request for
+ratings directly.</p>
+
+<code>
+    <pre>
+    /api/v1/rating/?period__id=95
+                   &amp;decay__lt=4
+                   &amp;order_by=-rating
+                   &amp;limit=10
+    </pre>
+</code>
+
+<p>Note that in this case you have to query for the period you want. There is an alias for <code>rating</code>
+called <code>activerating</code> which automatically filters away inactive ratings, but otherwise works the
+same way. So you could use:</p>
+
+<code>
+    <pre>
+    /api/v1/activerating/?period__id=95
+                         &amp;order_by=-rating
+                         &amp;limit=10
+    </pre>
+</code>
+{% endblock %}

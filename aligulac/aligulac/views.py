@@ -3,6 +3,7 @@ from datetime import datetime
 import shlex
 import os
 
+from django import forms
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.db.models import (
@@ -26,11 +27,13 @@ from aligulac.tools import (
     get_param,
     login_message,
     Message,
+    StrippedCharField,
 )
 
 from blog.models import Post
 
 from ratings.models import (
+    APIKey,
     Event,
     Group,
     HOTS,
@@ -126,6 +129,63 @@ def db(request):
     base.update({"title": "Database status"})
 
     return render_to_response('db.html', base)
+# }}}
+
+# {{{ API documentation and keys
+class APIKeyForm(forms.Form):
+    organization = StrippedCharField(max_length=200, required=True, label='Name/organization')
+    contact = forms.EmailField(max_length=200, required=True, label='Contact')
+
+    # {{{ Constructor
+    def __init__(self, request=None, player=None):
+        if request is not None:
+            super(APIKeyForm, self).__init__(request.POST)
+        else:
+            super(APIKeyForm, self).__init__()
+
+        self.label_suffix = ''
+    # }}}
+
+    # {{{ add_key: Adds key if valid, returns messages
+    def add_key(self):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message('Entered data was invalid.', type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        key = APIKey(
+            organization=self.cleaned_data['organization'],
+            contact=self.cleaned_data['contact'],
+            requests=0
+        )
+
+        key.generate_key()
+        key.save()
+
+        ret.append(Message("Your API key is '%s'. Please keep it safe." % key.key, type=Message.SUCCESS))
+
+        return ret
+    # }}}
+
+def api(request):
+    base = base_ctx('About', 'API', request)
+
+    if request.method == 'POST':
+        form = APIKeyForm(request)
+        base['messages'] += form.add_key()
+    else:
+        form = APIKeyForm()
+
+    base.update({
+        'title': 'API documentation',
+        'form': form,
+    })
+
+    return render_to_response('api.html', base)
 # }}}
 
 # {{{ search view

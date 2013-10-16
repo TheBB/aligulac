@@ -10,19 +10,22 @@ from django.db.models import (
 )
 from django import forms
 
+from tastypie.models import ApiKey as TPApiKey
+
 from ratings.models import (
-    Player,
-    Group,
-    Period,
-    Match,
-    Rating,
-    Event,
     Alias,
+    APIKey,
     Earnings,
-    PreMatchGroup,
-    PreMatch,
-    Story,
+    Event,
+    Group,
+    Match,
     Message,
+    Period,
+    Player,
+    PreMatch,
+    PreMatchGroup,
+    Rating,
+    Story,
 )
 
 from countries import transformations
@@ -105,6 +108,9 @@ class MatchAdmin(admin.ModelAdmin):
         return '%s %i-%i %s' % (str(obj.pla), obj.sca, obj.scb, str(obj.plb))
     get_res.short_description = 'Result'
 
+    def has_add_permission(self, request):
+        return False
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
@@ -113,12 +119,21 @@ class EventAdmin(admin.ModelAdmin):
         'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx', 'close')
     search_fields = ['fullname']
 
+    def has_add_permission(self, request):
+        return False
+
 class PreMatchGroupAdmin(admin.ModelAdmin):
     list_display = ('date', 'event')
+
+    def has_add_permission(self, request):
+        return False
 
 class PreMatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', 'get_event')
     readonly_fields = ('group',)
+
+    def has_add_permission(self, request):
+        return False
 
     def get_res(self, obj):
         s = obj.pla_string if obj.pla is None else str(obj.pla)
@@ -131,9 +146,19 @@ class PreMatchAdmin(admin.ModelAdmin):
         return obj.group.event
     get_event.short_description = 'Event'
 
+class APIKeyAdmin(admin.ModelAdmin):
+    list_display = ('date_opened', 'organization', 'contact', 'requests')
+    readonly_fields = ('date_opened', 'key', 'requests')
+
+    def has_add_permission(self, request):
+        return False
+
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(PreMatchGroup, PreMatchGroupAdmin)
 admin.site.register(PreMatch, PreMatchAdmin)
+admin.site.register(APIKey, APIKeyAdmin)
+
+admin.site.unregister(TPApiKey)

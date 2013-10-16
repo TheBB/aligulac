@@ -15,6 +15,7 @@ from django.shortcuts import (
 from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
+    get_param,
     get_param_range,
     Message,
     NotUniquePlayerMessage,
@@ -325,6 +326,34 @@ def predict(request):
 # }}}
 
 # {{{ Match prediction view
+class MatchPredictionResult:
+    def range(self, i, mn, mx):
+        return min(max(i, mn), mx)
+
+    def __init__(self, dbpl=None, bos=None, s1=None, s2=None):
+        if dbpl is None:
+            return
+
+        sipl = [make_player(p) for p in dbpl]
+        num = bos[0]
+        obj = MatchSim(num)
+        obj.set_players(sipl)
+        obj.modify(self.range(s1, 0, num), self.range(s2, 0, num))
+        obj.compute()
+
+        self.dbpl = dbpl
+        self.bos = bos
+        self.sipl = sipl
+        self.num = num
+        self.obj = obj
+        self.pla, self.plb = dbpl[0], dbpl[1]
+        self.rta = sipl[0].elo_vs_opponent(sipl[1])
+        self.rtb = sipl[1].elo_vs_opponent(sipl[0])
+        self.proba = obj.get_tally()[sipl[0]][1]
+        self.probb = obj.get_tally()[sipl[1]][1]
+        self.sca = s1
+        self.scb = s2
+
 @cache_page
 def match(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -334,39 +363,34 @@ def match(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    match = MatchSim(num)
-    match.set_players(sipl)
-    match.modify(
-        get_param_range(request, 's1', (0, num), 0),
-        get_param_range(request, 's2', (0, num), 0),
+    result = MatchPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        s1=get_param(request, 's1', 0),
+        s2=get_param(request, 's2', 0),
     )
-    match.compute()
     # }}}
 
     # {{{ Postprocessing
     base.update({
         'form': form,
-        'dbpl': dbpl,
-        'rta': sipl[0].elo_vs_opponent(sipl[1]),
-        'rtb': sipl[1].elo_vs_opponent(sipl[0]),
-        'proba': match.get_tally()[sipl[0]][1],
-        'probb': match.get_tally()[sipl[1]][1],
-        'match': match,
+        'dbpl': result.dbpl,
+        'rta': result.rta,
+        'rtb': result.rtb,
+        'proba': result.proba,
+        'probb': result.probb,
+        'match': result.obj,
     })
 
     base.update({
         'max': max(base['proba'], base['probb']),
-        'fav': dbpl[0] if base['proba'] > base['probb'] else dbpl[1],
+        'fav': result.dbpl[0] if base['proba'] > base['probb'] else result.dbpl[1],
     })
 
     resa, resb = [], []
     outcomes = [
         {'sca': outcome[1], 'scb': outcome[2], 'prob': outcome[0]} 
-        for outcome in match.instances_detail()
+        for outcome in result.obj.instances_detail()
     ]
     resa = [oc for oc in outcomes if oc['sca'] > oc['scb']]
     resb = [oc for oc in outcomes if oc['scb'] > oc['sca']]
@@ -378,6 +402,7 @@ def match(request):
     # }}}
 
     # {{{ Scores and other data
+    dbpl = result.dbpl
     thr = date.today() - relativedelta(months=2)
     pla_matches = dbpl[0].get_matchset()
     plb_matches = dbpl[1].get_matchset()

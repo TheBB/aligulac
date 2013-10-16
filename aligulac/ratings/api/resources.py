@@ -1,12 +1,16 @@
 # {{{ Imports
 from tastypie import fields
 from tastypie.authentication import Authentication
-from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from tastypie.resources import Resource, ModelResource, ALL, ALL_WITH_RELATIONS
 
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import F
 
 from aligulac.settings import DEBUG
 
+from ratings.inference_views import (
+    MatchPredictionResult
+)
 from ratings.models import (
     APIKey,
     Earnings,
@@ -460,4 +464,75 @@ class TeamResource(ModelResource):
     )
 
     aliases = fields.ListField(null=True, help_text='Aliases')
+# }}}
+
+# {{{ PredictResource
+class PredictResource(Resource):
+    def get_resource_uri(self, bundle_or_obj):
+        kwargs = {'resource_name': self._meta.resource_name}
+
+        # Fill in kwargs['pk'] here by referencing bundle_or_obj.obj or bundle_or_obj
+        kwargs['pk'] = ','.join([str(p.id) if p else '-1' for p in bundle_or_obj.obj.dbpl])
+
+        if self._meta.api_name is not None:
+            kwargs['api_name'] = self._meta.api_name
+
+        s = self._build_reverse_url('api_dispatch_detail', kwargs=kwargs)
+        s += '?bo=%s' % ','.join([str(2*b-1) for b in bundle_or_obj.obj.bos])
+        return s
+
+    def get_object_list(self, request):
+        pass
+
+    def clean_pk(self, pk):
+        player_ids = [int(a) for a in pk.split(',')]
+        players = Player.objects.in_bulk(player_ids)
+        return [players[id] if id in players else None for id in player_ids]
+
+    def get_detail(self, request, **kwargs):
+        basic_bundle = self.build_bundle(request=request)
+
+        try:
+            obj = self.cached_obj_get(
+                bundle=basic_bundle,
+                request=request,
+                **self.remove_api_resource_names(kwargs)
+            )
+        except ObjectDoesNotExist:
+            return http.HttpNotFound()
+        except MultipleObjectsReturned:
+            return http.HttpMultipleChoices("More than one resource is found at this URI.")
+
+        bundle = self.build_bundle(obj=obj, request=request)
+        bundle = self.full_dehydrate(bundle)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+        return self.create_response(request, bundle)
+# }}}
+
+# {{{ PredictMatchResource
+class PredictMatchResource(PredictResource):
+    class Meta:
+        allowed_methods = ['get', 'post']
+        resource_name = 'predictmatch'
+        authentication = APIKeyAuthentication()
+        object_class = MatchPredictionResult
+
+    pla = fields.ForeignKey(SmallPlayerResource, 'pla', null=False, help_text='Player A', full=True)
+    plb = fields.ForeignKey(SmallPlayerResource, 'plb', null=False, help_text='Player B', full=True)
+    sca = fields.IntegerField('sca', null=False, help_text='Predefined score for player A')
+    scb = fields.IntegerField('scb', null=False, help_text='Predefined score for player B')
+    proba = fields.FloatField('proba', null=False, help_text='Probability of winning for player A')
+    probb = fields.FloatField('probb', null=False, help_text='Probability of winning for player B')
+    rta = fields.FloatField('rta', null=False, help_text='Rating for player A vs. player B')
+    rtb = fields.FloatField('rtb', null=False, help_text='Rating for player B vs. player A')
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return MatchPredictionResult(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            s1=args.get('s1', 0),
+            s2=args.get('s2', 0),
+        )
 # }}}

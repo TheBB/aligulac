@@ -8,6 +8,7 @@ from django.conf.urls import (
 )
 
 from aligulac import settings
+
 from ratings.api.resources import (
     ActiveRatingResource,
     EarningResource,
@@ -17,6 +18,7 @@ from ratings.api.resources import (
     PlayerResource,
     RatingResource,
     TeamResource,
+    PredictMatchResource,
 )
 
 from django.contrib import admin
@@ -36,6 +38,7 @@ resources = [
     PlayerResource,
     RatingResource,
     TeamResource,
+    PredictMatchResource,
 ]
 for res in resources:
     v1_api.register(res())

@@ -338,7 +338,7 @@ class MatchPredictionResult:
         num = bos[0]
         obj = MatchSim(num)
         obj.set_players(sipl)
-        obj.modify(self.range(s1, 0, num), self.range(s2, 0, num))
+        obj.modify(self.range(int(s1), 0, num), self.range(int(s2), 0, num))
         obj.compute()
 
         self.dbpl = dbpl
@@ -353,6 +353,11 @@ class MatchPredictionResult:
         self.probb = obj.get_tally()[sipl[1]][1]
         self.sca = s1
         self.scb = s2
+
+        self.outcomes = [
+            {'sca': outcome[1], 'scb': outcome[2], 'prob': outcome[0]}
+            for outcome in obj.instances_detail()
+        ]
 
 @cache_page
 def match(request):
@@ -387,13 +392,8 @@ def match(request):
         'fav': result.dbpl[0] if base['proba'] > base['probb'] else result.dbpl[1],
     })
 
-    resa, resb = [], []
-    outcomes = [
-        {'sca': outcome[1], 'scb': outcome[2], 'prob': outcome[0]} 
-        for outcome in result.obj.instances_detail()
-    ]
-    resa = [oc for oc in outcomes if oc['sca'] > oc['scb']]
-    resb = [oc for oc in outcomes if oc['scb'] > oc['sca']]
+    resa = [oc for oc in result.outcomes if oc['sca'] > oc['scb']]
+    resb = [oc for oc in result.outcomes if oc['scb'] > oc['sca']]
     if len(resa) < len(resb):
         resa = [None] * (len(resb) - len(resa)) + resa
     else:

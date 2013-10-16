@@ -525,6 +525,7 @@ class PredictMatchResource(PredictResource):
     probb = fields.FloatField('probb', null=False, help_text='Probability of winning for player B')
     rta = fields.FloatField('rta', null=False, help_text='Rating for player A vs. player B')
     rtb = fields.FloatField('rtb', null=False, help_text='Rating for player B vs. player A')
+    outcomes = fields.ListField('outcomes', null=True, help_text='Detailed outcomes')
 
     def obj_get(self, request=None, **kwargs):
         args = request.GET if request.method == 'GET' else request.POST

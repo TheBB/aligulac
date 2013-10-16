@@ -20,6 +20,7 @@ from ratings.api.resources import (
     TeamResource,
     PredictDualResource,
     PredictMatchResource,
+    PredictSEBracketResource,
 )
 
 from django.contrib import admin
@@ -41,6 +42,7 @@ resources = [
     TeamResource,
     PredictDualResource,
     PredictMatchResource,
+    PredictSEBracketResource,
 ]
 for res in resources:
     v1_api.register(res())

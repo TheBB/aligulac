@@ -16,30 +16,32 @@ This is the prediction page for single elimination brackets. It's called from ra
         <td style="width: 10em;">Player</td>
         <td style="width: 1em;"></td>
         <td style="width: 1em;"></td>
-        {% for t in players.0.tally %}
+        {% for t in table.0.probs %}
         <td style="width: 8em; text-align: right;">
             {% if forloop.first %}Win{%else %}Top {{ 2|pow:forloop.counter0 }}{% endif %}
         </td>
         {% endfor %}
     </tr>
-    {% for p in players %}
-    {% if p.dbpl %}
+    {% for e in table %}
+    {% if e.player.dbpl %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ e.player.dbpl.id }}-{{ e.player.dbpl.tag|urlfilter }}/">
+                {{ e.player.dbpl.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-            {% endif %}
+        {% if e.p.dbpl.country != "" %}
+        <img src="{{ e.player.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ e.player.dbpl.country }}" />
+        {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ e.player.dbpl.race|imgfolder|static }}" alt="{{ e.player.dbpl.race }}" class="btm" />
         </td>
-        {% for t in p.tally %}
+        {% for t in e.probs %}
         <td style="text-align: right;">
             {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
         </td>

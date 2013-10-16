@@ -11,6 +11,7 @@ from aligulac.settings import DEBUG
 from ratings.inference_views import (
     DualPredictionResult,
     MatchPredictionResult,
+    SingleEliminationPredictionResult,
 )
 from ratings.models import (
     APIKey,
@@ -569,6 +570,28 @@ class PredictDualResource(PredictCombinationResource):
         args = request.GET if request.method == 'GET' else request.POST
 
         return DualPredictionResult(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            args=args,
+        )
+# }}}
+
+# {{{ PredictSEBracketResource
+class PredictSEBracketResource(PredictCombinationResource):
+    class Meta:
+        allowed_methods = ['get', 'post']
+        resource_name = 'predictsebracket'
+        authentication = APIKeyAuthentication()
+        object_class = SingleEliminationPredictionResult
+
+    table = fields.ListField('table', null=False, help_text='Predicted table')
+    matches = fields.ListField('matches', null=False, help_text='Matches')
+    meanres = fields.ListField('meanres', null=False, help_text='Median results')
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return SingleEliminationPredictionResult(
             dbpl=self.clean_pk(kwargs['pk']),
             bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
             args=args,

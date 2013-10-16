@@ -475,12 +475,12 @@ class DualPredictionResult(CombinationPredictionResult):
 
         players = list(sipl)
         for p in players:
-            p.tally = obj.get_tally()[p]
-        for i in range(0, 4):
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(3, -1, -1):
             players.sort(key=lambda p: p.tally[i], reverse=True)
 
         self.table = [
-            {'player': p, 'probs': p.tally.finishes}
+            {'player': p, 'probs': p.tally}
             for p in players
         ]
 
@@ -523,7 +523,50 @@ def dual(request):
 
 # }}}
 
-# {{{ Single elimination prediction view
+# {{{ Single elimination predictions
+
+# {{{ SingleEliminationPredictionResult
+class SingleEliminationPredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        nrounds = int(log(len(dbpl), 2))
+        num = [bos[0]] * (nrounds - len(bos)) + bos
+        if len(num) > nrounds:
+            num = num[-nrounds:]
+
+        prefixes = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
+        rounds = [
+            ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
+            for rnd in range(1, nrounds+1)
+        ]
+
+        self.dbpl = dbpl
+        self.bos = bos
+        sipl = [make_player(p) for p in dbpl]
+        obj = SEBracket(num)
+        obj.set_players(sipl)
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        players = list(sipl)
+        for p in players:
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(len(players[0].tally)-1, -1, -1):
+            players.sort(key=lambda p: p.tally[i], reverse=True)
+
+        self.table = [
+            {'player': p, 'probs': p.tally}
+            for p in players
+        ]
+
+        self.matches = self.create_matches(obj, rounds)
+        self.meanres = self.create_median_matches(obj, rounds)
+        self.nrounds = nrounds
+# }}}
+
+# {{{ Single tournament prediction view
 @cache_page
 def sebracket(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -533,40 +576,19 @@ def sebracket(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo']
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nrounds = int(log(len(sipl), 2))
-    num = [num[0]] * (nrounds - len(num)) + num
-    if len(num) > nrounds:
-        num = num[-nrounds:]
-
-    bracket = SEBracket(num)
-    bracket.set_players(sipl)
-    matchlist = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
-    update_matches(bracket, matchlist, request)
-
-    bracket.compute()
+    result = SingleEliminationPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     # {{{ Post-processing
-    players = list(sipl)
-    for p in players:
-        p.tally = bracket.get_tally()[p][::-1]
-    for i in range(len(players[0].tally)-1, -1, -1):
-        players.sort(key=lambda p: p.tally[i], reverse=True)
-
-    rounds = [
-        ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
-        for rnd in range(1, nrounds+1)
-    ]
-    
     base.update({
-        'players':  players,
-        'matches':  create_matches(bracket, rounds),
-        'meanres':  create_median_matches(bracket, rounds),
-        'nrounds':  nrounds,
+        'table':    result.table,
+        'matches':  result.matches,
+        'meanres':  result.meanres,
+        'nrounds':  result.nrounds,
         'form':     form,
     })
     # }}}
@@ -576,6 +598,8 @@ def sebracket(request):
     base.update({"title": "Single elimination bracket"})
 
     return render_to_response('pred_sebracket.html', base)
+# }}}
+
 # }}}
 
 # {{{ Round robin group prediction view
@@ -845,20 +869,20 @@ def postable_dual(base, request):
 
 # {{{ postable_sebracket
 def postable_sebracket(base, request, bracket):
-    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+    numlen = max([len(p['player'].dbpl.tag) for p in base['table'] if p['player'].dbpl is not None])
 
     strings = [(''.join(
         ['Win    '] + 
-        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['players']),2)))] +
-        ['Top {i}'.format(i=len(base['players']))]
+        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['table']),2)))] +
+        ['Top {i}'.format(i=len(base['table']))]
     ), '', ''), None]
 
-    for p in base['players']:
-        if p.dbpl is None:
+    for p in base['table']:
+        if p['player'].dbpl is None:
             continue
         strings.append((''.join(
-            ['{name: >{nl}}  '.format(name=p.dbpl.tag, nl=numlen)] +
-            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+            ['{name: >{nl}}  '.format(name=p['player'].dbpl.tag, nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p['probs']]
         ), '', ''))
 
     base['postable_tl'] = (
@@ -892,10 +916,10 @@ def create_postable_bracket(bracket, indent=0):
         result[r].extend([''] * (2**r - 1))
 
         for i, m in enumerate(matches):
-            pla = m['pla_tag']
-            plascore = m['pla_score']
-            plb = m['plb_tag']
-            plbscore = m['plb_score']
+            pla = m['pla']['tag']
+            plascore = m['pla']['score']
+            plb = m['plb']['tag']
+            plbscore = m['plb']['score']
 
             if r != 0:
                 pla = (' ' + pla).rjust(12, '─')
@@ -915,9 +939,9 @@ def create_postable_bracket(bracket, indent=0):
     result.append([''] * (2**(r + 1) - 1))
     final = bracket[-1][1][0]
     result[-1].append(' ' + (
-        final['pla_tag'] 
-        if final['pla_score'] > final['plb_score'] 
-        else final ['plb_tag']
+        final['pla']['tag'] 
+        if final['pla']['score'] > final['plb']['score'] 
+        else final ['plb']['tag']
     ))
 
     postable_result = ''

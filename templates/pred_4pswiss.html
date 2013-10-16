@@ -41,19 +41,19 @@ This is the prediction page for four player Swiss groups. It's called from ratin
             <img src="{{ e.player.dbpl.race|imgfolder|static }}" alt="{{ e.player.dbpl.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
-            {% if e.probs.2 > 0 or e.probs.3 > 0 %}{{ e.probs.2|addf:e.probs.3|pctg_one }}%{% endif %}
+            {% if e.probs.1 > 0 or e.probs.0 > 0 %}{{ e.probs.1|addf:e.probs.0|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if e.probs.3 > 0 %}{{ e.probs.3|pctg_one }}%{% endif %}
-        </td>
-        <td style="text-align: right;">
-            {% if e.probs.2 > 0 %}{{ e.probs.2|pctg_one }}%{% endif %}
+            {% if e.probs.0 > 0 %}{{ e.probs.0|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
             {% if e.probs.1 > 0 %}{{ e.probs.1|pctg_one }}%{% endif %}
         </td>
         <td style="text-align: right;">
-            {% if e.probs.0 > 0 %}{{ e.probs.0|pctg_one }}%{% endif %}
+            {% if e.probs.2 > 0 %}{{ e.probs.2|pctg_one }}%{% endif %}
+        </td>
+        <td style="text-align: right;">
+            {% if e.probs.3 > 0 %}{{ e.probs.3|pctg_one }}%{% endif %}
         </td>
     </tr>
     {% endfor %}

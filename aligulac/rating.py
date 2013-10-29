@@ -84,7 +84,7 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
 
 
 def performance(oppr, opps, oppc, W, L):
-    opp = zip(oppr, opps, oppc, W, L)
+    opp = list(zip(oppr, opps, oppc, W, L))
 
     ret = [0.0, 0.0, 0.0, 0.0]
     meanok = True

@@ -139,7 +139,8 @@ for p in players.values():
     )
 
     perfs = performance(
-        array(p['opp_r']), array(p['opp_d']), array(p['opp_c']), array(p['wins']), array(p['losses'])
+        array(p['opp_r']), array(p['opp_d']), array(p['opp_c']), array(p['wins']), array(p['losses']),
+        p['player'].tag, False
     )
 
     p.update({

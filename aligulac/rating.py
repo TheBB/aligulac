@@ -83,11 +83,14 @@ def fix_ww(myr, mys, oppr, opps, oppc, W, L):
     return (oppr, opps, oppc, W, L)
 
 
-def performance(oppr, opps, oppc, W, L):
+def performance(oppr, opps, oppc, W, L, text='', pr=False):
     opp = list(zip(oppr, opps, oppc, W, L))
 
     ret = [0.0, 0.0, 0.0, 0.0]
     meanok = True
+
+    if pr:
+        print('Now performance for %s' % text)
 
     for cat in range(0,3):
         spopp = [o for o in opp if o[2] == cat]
@@ -134,7 +137,10 @@ def performance(oppr, opps, oppc, W, L):
                     ret -= p[3]*alpha*(alpha+Mv) + p[4]*beta*(beta-Mv)
                 return ret
 
-            perf = maximize_1d(logL, DlogL, D2logL, 0.0)
+            perf, init = nan, 1.0
+            while isnan(perf):
+                perf = maximize_1d(logL, DlogL, D2logL, init)
+                init -= 0.1
             ret[cat+1] = perf
 
     if meanok:

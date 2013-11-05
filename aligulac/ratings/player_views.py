@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from functools import partial
 from math import sqrt
+from urllib.parse import urlencode
 
 from django import forms
 from django.db.models import Sum, Q, Count
@@ -497,13 +498,112 @@ def results(request, player_id):
     # }}}
 
     # {{{ Statistics
-    base['matches'] = display_matches(matches, fix_left=player)
+    matches = display_matches(matches, fix_left=player)
+    base['matches'] = matches
     base.update({
-        'sc_my':  sum([m['pla_score'] for m in base['matches']]),
-        'sc_op':  sum([m['plb_score'] for m in base['matches']]),
-        'msc_my': sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in base['matches']]),
-        'msc_op': sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in base['matches']]),
+        'sc_my':  sum(m['pla_score'] for m in base['matches']),
+        'sc_op':  sum(m['plb_score'] for m in base['matches']),
+        'msc_my': sum(1 for m in base['matches'] if m['pla_score'] > m['plb_score']),
+        'msc_op': sum(1 for m in base['matches'] if m['plb_score'] > m['pla_score']),
     })
+    # }}}
+
+    
+    # {{{ TL Postable
+    
+    tl_template = (
+        "Statistics for :{player_country}: "
+        "[url={url}/players/{pid}/]{player_tag}[/url]'s "
+        "games{date}.\n"
+        "\n"
+        "Games: {sc_percent}% ({sc_my}-{sc_op})\n"
+        "Matches: {msc_percent}% ({msc_my}-{msc_op})\n"
+        "\n"
+        "Filters:\n"
+        "[spoiler][code]"
+        "Opponent Race:    {race}\n"
+        "Opponent Country: {country}\n"
+        "Match Format:     {bestof}\n"
+        "On/offline:       {offline}\n"
+        "Game Version:     {game}\n"
+        "[/code][/spoiler]\n"
+        "Recent Matches:\n"
+        "[spoiler]\n"
+        "{recent}\n"
+        "[/spoiler]\n"
+        "[small]Stats by [url={url}]Aligulac[/url]. "
+        "[url={url}/players/{pid}/results/?{get}]Link[/url].[/small]"
+    )
+
+    match_template = (
+        " :{pla_country}: :{pla_race}: "
+        "[url=http://aligulac.com/players/{pla_id}/]{pla_tag}[/url]"
+        " {pla_score:>2} - {plb_score:<2} "
+        " :{plb_country}: :{plb_race}: "
+        " [url=http://aligulac.com/players/{plb_id}/]{plb_tag}[/url]"
+    )
+
+    has_after = form.cleaned_data['after'] is not None
+    has_before = form.cleaned_data['before'] is not None
+    
+    if not has_after and not has_before:
+        match_date = ""
+    elif not has_after: # and has_before
+        match_date = " before {}".format(form.cleaned_data['before'])
+    elif not has_before: # and has_after
+        match_date = " after {}".format(form.cleaned_data['after'])
+    else:
+        match_date = " between {} and {}".format(form.cleaned_data['after'], 
+                                                form.cleaned_data['before'])
+
+    match_filter = ""
+
+    def lower_country(d): # TL only recognizes lower case country codes :(
+        d["pla_country"] = d["pla_country"].lower()
+        d["plb_country"] = d["plb_country"].lower()
+        return d
+
+    recent = "\n".join(
+        match_template.format(**lower_country(matches[i])) 
+        for i in range(0, min(10, len(matches)))
+    )
+    
+    get_params = dict((k, form.cleaned_data[k]) 
+                      for k in form.cleaned_data if form.cleaned_data[k] is not None)
+
+    tl_params = {
+        "player_tag": player.tag,
+        "player_country": player.country.lower(),
+        "filter": match_filter, 
+        "date": match_date, 
+        "recent": recent, 
+        "pid": player_id,
+        "get": urlencode(get_params),
+        "url": "http://aligulac.com"
+    }
+
+    tl_params.update({
+        "sc_my": base["sc_my"],
+        "sc_op": base["sc_op"],
+        "msc_my": base["msc_my"],
+        "msc_op": base["msc_op"]
+    })
+
+    def calc_percent(s):
+        f, a = float(int(tl_params[s+"_my"])), int(tl_params[s+"_op"])
+        return round(100 * f / (f+a), 2)
+
+    tl_params.update({
+        "sc_percent": calc_percent("sc"),
+        "msc_percent": calc_percent("msc")
+    })
+
+    tl_params.update(get_params)
+
+    base.update({
+        "postable_tl": tl_template.format(**tl_params)
+    })
+    
     # }}}
 
     base.update({"title": player.tag})

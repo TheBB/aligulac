@@ -511,38 +511,6 @@ def results(request, player_id):
     
     # {{{ TL Postable
     
-    tl_template = (
-        "Statistics for :{player_country}: "
-        "[url={url}/players/{pid}/]{player_tag}[/url]'s "
-        "games{date}.\n"
-        "\n"
-        "Games: {sc_percent}% ({sc_my}-{sc_op})\n"
-        "Matches: {msc_percent}% ({msc_my}-{msc_op})\n"
-        "\n"
-        "Filters:\n"
-        "[spoiler][code]"
-        "Opponent Race:    {race}\n"
-        "Opponent Country: {country}\n"
-        "Match Format:     {bestof}\n"
-        "On/offline:       {offline}\n"
-        "Game Version:     {game}\n"
-        "[/code][/spoiler]\n"
-        "Recent Matches:\n"
-        "[spoiler]\n"
-        "{recent}\n"
-        "[/spoiler]\n"
-        "[small]Stats by [url={url}]Aligulac[/url]. "
-        "[url={url}/players/{pid}/results/?{get}]Link[/url].[/small]"
-    )
-
-    match_template = (
-        " :{pla_country}: :{pla_race}: "
-        "[url=http://aligulac.com/players/{pla_id}/]{pla_tag}[/url]"
-        " {pla_score:>2} - {plb_score:<2} "
-        " :{plb_country}: :{plb_race}: "
-        " [url=http://aligulac.com/players/{plb_id}/]{plb_tag}[/url]"
-    )
-
     has_after = form.cleaned_data['after'] is not None
     has_before = form.cleaned_data['before'] is not None
     
@@ -553,30 +521,68 @@ def results(request, player_id):
     elif not has_before: # and has_after
         match_date = " after {}".format(form.cleaned_data['after'])
     else:
-        match_date = " between {} and {}".format(form.cleaned_data['after'], 
+        match_date = " between {} and {}".format(form.cleaned_data['after'],
                                                 form.cleaned_data['before'])
 
     match_filter = ""
 
-    def lower_country(d): # TL only recognizes lower case country codes :(
+    def switcher(race):
+        if race == "S":
+            return "R"
+        elif race == "s":
+            return "r"
+        return race
+
+    def win(match):
+        return match["pla_score"] >= match["plb_score"]
+
+    def format_match(d):
+        # TL only recognizes lower case country codes :(
         d["pla_country"] = d["pla_country"].lower()
         d["plb_country"] = d["plb_country"].lower()
-        return d
 
-    recent = "\n".join(
-        match_template.format(**lower_country(matches[i])) 
-        for i in range(0, min(10, len(matches)))
-    )
+        # and no race switchers
+        d["pla_race"] = switcher(d["pla_race"])
+        d["plb_race"] = switcher(d["plb_race"])
+
+        # Check who won
+        temp = {
+            "plaws": "",
+            "plawe": "",
+            "plbws": "",
+            "plbwe": ""
+        }
+
+        if win(d):
+            temp["plaws"] = "[b]"
+            temp["plawe"] = "[/b]"
+        else:
+            temp["plbws"] = "[b]"
+            temp["plbwe"] = "[/b]"
+
+        d.update(temp)
+
+        return TL_HISTORY_MATCH_TEMPLATE.format(**d)
+
+    recent_matches = matches[:min(10, len(matches))]
+
+    recent = "\n".join(format_match(m) for m in recent_matches)
+
+    recent_form = " ".join("W" if win(m) else "L"
+                           for m in reversed(recent_matches))
     
-    get_params = dict((k, form.cleaned_data[k]) 
-                      for k in form.cleaned_data if form.cleaned_data[k] is not None)
+    # Get the parameters and remove those with None value
+    get_params = dict((k, form.cleaned_data[k])
+                      for k in form.cleaned_data
+                      if form.cleaned_data[k] is not None)
 
     tl_params = {
         "player_tag": player.tag,
         "player_country": player.country.lower(),
-        "filter": match_filter, 
-        "date": match_date, 
-        "recent": recent, 
+        "player_race": switcher(player.race),
+        "filter": match_filter,
+        "date": match_date,
+        "recent": recent,
         "pid": player_id,
         "get": urlencode(get_params),
         "url": "http://aligulac.com"
@@ -586,7 +592,8 @@ def results(request, player_id):
         "sc_my": base["sc_my"],
         "sc_op": base["sc_op"],
         "msc_my": base["msc_my"],
-        "msc_op": base["msc_op"]
+        "msc_op": base["msc_op"],
+        "form": recent_form
     })
 
     def calc_percent(s):
@@ -600,8 +607,16 @@ def results(request, player_id):
 
     tl_params.update(get_params)
 
+    # Final clean up
+
+    if tl_params["bestof"] != "all":
+        tl_params["bestof"] = "Bo{}+".format(tl_params["bestof"])
+
+    if set(tl_params["race"]) == set('ptzr'):
+        tl_params["race"] = "all"
+
     base.update({
-        "postable_tl": tl_template.format(**tl_params)
+        "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params)
     })
     
     # }}}
@@ -671,4 +686,41 @@ def earnings(request, player_id):
     base.update({"title": player.tag})
 
     return render_to_response('player_earnings.html', base)
+# }}}
+
+
+# {{{ Postable templates
+TL_HISTORY_TEMPLATE = (
+    "Results for :{player_country}: :{player_race}: "
+    "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n"
+    "\n"
+    "[b]Games:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n"
+    "[b]Matches:[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n"
+    "\n"
+    "[b][big]Current Form:[/big][/b]\n"
+    "[indent]{form}\n"
+    "[b][big]Recent Matches:[/big][/b]\n"
+    "{recent}\n"
+    "\n\n"
+    "Filters:\n"
+    "[spoiler][code]"
+    "Opponent Race:    {race}\n"
+    "Opponent Country: {country}\n"
+    "Match Format:     {bestof}\n"
+    "On/offline:       {offline}\n"
+    "Game Version:     {game}\n"
+    "[/code][/spoiler]\n"
+    "[small]Stats by [url={url}]Aligulac[/url]. "
+    "[url={url}/players/{pid}/results/?{get}]Link[/url].[/small]"
+)
+
+TL_HISTORY_MATCH_TEMPLATE = (
+    "[indent]"
+    " :{pla_country}: :{pla_race}: "
+    " {plaws}[url=http://aligulac.com/players/{pla_id}/]{pla_tag}[/url]{plawe}"
+    " {pla_score:>2} – {plb_score:<2} "
+    " :{plb_country}: :{plb_race}: "
+    " {plbws}[url=http://aligulac.com/players/{plb_id}/]{plb_tag}[/url]{plbwe}"
+)
+
 # }}}

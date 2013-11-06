@@ -32,4 +32,11 @@ and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches.</p>
 <table class="results">
 {% include "matchlist.html" with lm_list=matches lm_header="partial" %}
 </table>
+
+<h3>Postable History</h3>
+<div id="tl">
+  <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+</div>
+<small>The above is code that can be used in posts on <a href="http://teamliquid.net" target="_blank">TeamLiquid.net</a>.</small>
+
 {% endblock %}

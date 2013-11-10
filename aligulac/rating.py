@@ -19,6 +19,8 @@ from ratings.tools import (
 LOG_CAP = 1e-10
 TOL = 1e-3 / 2
 
+seterr(invalid='ignore')
+
 def maximize(L, DL, D2L, x, disp=False):
     """Main function to perform numerical optimization. L, DL and D2L are the objective function and its
     derivative and Hessian, and x is the initial guess (current rating)."""

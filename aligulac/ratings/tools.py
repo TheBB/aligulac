@@ -52,7 +52,10 @@ def find_player(query=None, lst=None, make=False, soft=False):
     queryset = Player.objects.all()
 
     if not lst:
-        lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
+        try:
+            lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
+        except:
+            return []
 
     tag, country, race = None, None, None
 

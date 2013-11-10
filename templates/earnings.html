@@ -55,7 +55,7 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
-            <a href="?page=1}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
+            <a href="?page=1&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
                 <img src="{{ "first.png"|static }}" alt="first" class="btm" />
             </a>
             {% endif %}

@@ -538,8 +538,15 @@ def results(request, player_id):
 
     def format_match(d):
         # TL only recognizes lower case country codes :(
-        d["pla_country"] = d["pla_country"].lower()
-        d["plb_country"] = d["plb_country"].lower()
+        if d["pla_country"] is not None:
+            d["pla_country_formatted"] = ":{}:".format(d["pla_country"].lower())
+        else:
+            d["pla_country_formatted"] = ""
+
+        if d["plb_country"] is not None:
+            d["plb_country_formatted"] = ":{}:".format(d["plb_country"].lower())
+        else:
+            d["plb_country_formatted"] = ""
 
         # and no race switchers
         d["pla_race"] = switcher(d["pla_race"])
@@ -576,9 +583,13 @@ def results(request, player_id):
                       for k in form.cleaned_data
                       if form.cleaned_data[k] is not None)
 
+    country = ""
+    if player.country is not None:
+        country = ":{}:".format(player.country.lower())
+
     tl_params = {
         "player_tag": player.tag,
-        "player_country": player.country.lower(),
+        "player_country_formatted": country,
         "player_race": switcher(player.race),
         "filter": match_filter,
         "date": match_date,
@@ -691,7 +702,7 @@ def earnings(request, player_id):
 
 # {{{ Postable templates
 TL_HISTORY_TEMPLATE = (
-    "Results for :{player_country}: :{player_race}: "
+    "Results for {player_country_formatted} :{player_race}: "
     "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n"
     "\n"
     "[b]Games:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n"
@@ -716,10 +727,10 @@ TL_HISTORY_TEMPLATE = (
 
 TL_HISTORY_MATCH_TEMPLATE = (
     "[indent]"
-    " :{pla_country}: :{pla_race}: "
+    " {pla_country_formatted} :{pla_race}: "
     " {plaws}[url=http://aligulac.com/players/{pla_id}/]{pla_tag}[/url]{plawe}"
     " {pla_score:>2} – {plb_score:<2} "
-    " :{plb_country}: :{plb_race}: "
+    " {plb_country_formatted} :{plb_race}: "
     " {plbws}[url=http://aligulac.com/players/{plb_id}/]{plb_tag}[/url]{plbwe}"
 )
 

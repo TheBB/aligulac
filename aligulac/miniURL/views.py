@@ -20,15 +20,14 @@ def list(request):
 @csrf_protect
 def new(request):
     h = html.parser.HTMLParser()
-    longurl = h.unescape(request.POST['url'])
+    longurl = h.unescape(request.GET['url'])
 
-    if request.method == 'POST':
-        try:
-            miniURL = MiniURL(longURL=longurl)
-            miniURL.save()
-        except Exception as e:
-            print(str(e))
-            miniURL = MiniURL.objects.get(longURL=longurl)
+    try:
+        miniURL = MiniURL(longURL=longurl)
+        miniURL.save()
+    except Exception as e:
+        print(str(e))
+        miniURL = MiniURL.objects.get(longURL=longurl)
 
     return HttpResponse(miniURL.code)
 

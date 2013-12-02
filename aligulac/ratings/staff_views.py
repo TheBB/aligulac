@@ -153,7 +153,8 @@ class ReviewMatchesForm(forms.Form):
         self.fields['eventobj'] = forms.ChoiceField(
             choices=[
                 (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                    .exclude(downlink__distance__gt=0)
+                    .annotate(num_downlinks=Count('downlink'))
+                    .filter(num_downlinks=1)
                     .order_by('idx')
                     .values('id', 'fullname')
             ],

@@ -11,6 +11,7 @@ from aligulac.settings import DEBUG
 from ratings.inference_views import (
     DualPredictionResult,
     MatchPredictionResult,
+    RoundRobinPredictionResult,
     SingleEliminationPredictionResult,
 )
 from ratings.models import (
@@ -523,6 +524,7 @@ class PredictCombinationResource(PredictResource):
     def dehydrate_meanres(self, bundle):
         for m in bundle.data['meanres']:
             del m['match_id']
+        return bundle.data['meanres']
 # }}}
 
 # {{{ PredictMatchResource
@@ -592,6 +594,29 @@ class PredictSEBracketResource(PredictCombinationResource):
         args = request.GET if request.method == 'GET' else request.POST
 
         return SingleEliminationPredictionResult(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            args=args,
+        )
+# }}}
+
+# {{{ PredictRRGroupResource
+class PredictRRGroupResource(PredictCombinationResource):
+    class Meta:
+        allowed_methods = ['get', 'post']
+        resource_name = 'predictrrgroup'
+        authentication = APIKeyAuthentication()
+        object_class = RoundRobinPredictionResult
+
+    table = fields.ListField('table', null=False, help_text='Predicted table')
+    matches = fields.ListField('matches', null=False, help_text='Matches')
+    meanres = fields.ListField('meanres', null=False, help_text='Median results')
+    mtable = fields.ListField('mtable', null=False, help_text='Median table')
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return RoundRobinPredictionResult(
             dbpl=self.clean_pk(kwargs['pk']),
             bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
             args=args,

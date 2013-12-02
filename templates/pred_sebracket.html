@@ -23,23 +23,23 @@ This is the prediction page for single elimination brackets. It's called from ra
         {% endfor %}
     </tr>
     {% for e in table %}
-    {% if e.player.dbpl %}
+    {% if e.player.id %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ e.player.dbpl.id }}-{{ e.player.dbpl.tag|urlfilter }}/">
-                {{ e.player.dbpl.tag }}
+            <a href="/players/{{ e.player.id }}-{{ e.player.tag|urlfilter }}/">
+                {{ e.player.tag }}
             </a>
         </td>
         <td>
-        {% if e.p.dbpl.country != "" %}
-        <img src="{{ e.player.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ e.player.dbpl.country }}" />
+        {% if e.player.country != "" %}
+        <img src="{{ e.player.country|lower|imgfolder:"flags"|static }}" alt="{{ e.player.country }}" />
         {% endif %}
         </td>
         <td>
-            <img src="{{ e.player.dbpl.race|imgfolder|static }}" alt="{{ e.player.dbpl.race }}" class="btm" />
+            <img src="{{ e.player.race|imgfolder|static }}" alt="{{ e.player.race }}" class="btm" />
         </td>
         {% for t in e.probs %}
         <td style="text-align: right;">

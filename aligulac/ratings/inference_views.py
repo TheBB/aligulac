@@ -441,6 +441,7 @@ class CombinationPredictionResult:
                 ret[-1].update({
                     'eventtext':    rnd,
                     'match_id':     smallhash(rnd) + '-med',
+                    'identifier':   m,
                 })
 
         return ret
@@ -480,7 +481,7 @@ class DualPredictionResult(CombinationPredictionResult):
             players.sort(key=lambda p: p.tally[i], reverse=True)
 
         self.table = [
-            {'player': p, 'probs': p.tally}
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
             for p in players
         ]
 
@@ -557,7 +558,7 @@ class SingleEliminationPredictionResult(CombinationPredictionResult):
             players.sort(key=lambda p: p.tally[i], reverse=True)
 
         self.table = [
-            {'player': p, 'probs': p.tally}
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
             for p in players
         ]
 
@@ -602,6 +603,59 @@ def sebracket(request):
 
 # }}}
 
+# {{{ Round robin predictions
+
+# {{{ RoundRobinPredictionResult
+class RoundRobinPredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        nplayers = len(dbpl)
+        nmatches = (nplayers-1) * nplayers // 2
+        num = bos[0]
+
+        prefixes = [str(i) for i in range(0, nmatches)]
+
+        self.dbpl = dbpl
+        self.bos = bos
+        sipl = [make_player(p) for p in dbpl]
+
+        obj = RRGroup(nplayers, num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
+        obj.set_players(sipl)
+        obj.compute() # Necessary to fill the tiebreak tables.
+        obj.save_tally()
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        players = list(sipl)
+        for p in players:
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(len(players[0].tally)-1, -1, -1):
+            players.sort(key=lambda p: p.tally[i], reverse=True)
+
+        self.table = [
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
+            for p in players
+        ]
+
+        self.matches = self.create_matches(obj, [('Group play', prefixes)])
+        self.meanres = self.create_median_matches(obj, [('Group play', prefixes)])
+
+        obj.compute()
+
+        mplayers = list(sipl)
+        for p in mplayers:
+            p.mtally = obj.get_tally()[p]
+        self.mtable = [{
+            'player': self.player_data(p.dbpl),
+            'exp_match_wins': p.mtally.exp_mscore()[0],
+            'exp_match_losses': p.mtally.exp_mscore()[1],
+            'exp_set_wins': p.mtally.exp_sscore()[0],
+            'exp_set_losses': p.mtally.exp_sscore()[1],
+        } for p in obj.table]
+# }}}
+
 # {{{ Round robin group prediction view
 @cache_page
 def rrgroup(request):
@@ -612,44 +666,21 @@ def rrgroup(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nplayers = len(sipl)
-    nmatches = (nplayers-1) * nplayers // 2
-
-    group = RRGroup(nplayers, num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
-    group.set_players(sipl)
-    group.compute() # Necessary to fill the tiebreak tables.
-    group.save_tally()
-
-    matchlist = [str(i) for i in range(0, nmatches)]
-    update_matches(group, matchlist, request)
-    group.compute()
+    result = RoundRobinPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     #{{{ Post-processing
-    players = list(sipl)
-    for p in players:
-        p.tally = group.get_tally()[p][::-1]
-    for i in range(len(players[0].tally)-1, -1, -1):
-        players.sort(key=lambda p: p.tally[i], reverse=True)
-
-    rounds = [('Matches', matchlist)]
-
     base.update({
-        'players':  players,
-        'matches':  create_matches(group, rounds),
+        'table':    result.table,
+        'mtable':   result.mtable,
+        'matches':  result.matches,
+        'meanres':  result.meanres,
         'form':     form,
     })
-
-    base['meanres'] = create_median_matches(group, rounds, modify=True)
-    group.compute()
-
-    for p in sipl:
-        p.mtally = group.get_tally()[p]
-    base['mplayers'] = group.table
     # }}}
 
     postable_rrgroup(base, request)
@@ -657,6 +688,8 @@ def rrgroup(request):
     base.update({"title": "Round robin group"})
 
     return render_to_response('pred_rrgroup.html', base)
+# }}}
+
 # }}}
 
 # {{{ Proleage prediction view
@@ -839,7 +872,7 @@ def postable_match(base, request):
 
 # {{{ postable_dual
 def postable_dual(base, request):
-    numlen = max([len(p['player'].dbpl.tag) for p in base['table'] if p['player'].dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = (
         [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
@@ -849,7 +882,7 @@ def postable_dual(base, request):
             p2   = 100*p['probs'][2],
             p3   = 100*p['probs'][1],
             p4   = 100*p['probs'][0],
-            name = p['player'].dbpl.tag,
+            name = p['player']['tag'],
             nl   = numlen,
         ), '', '') for p in base['table']]
     )
@@ -869,7 +902,7 @@ def postable_dual(base, request):
 
 # {{{ postable_sebracket
 def postable_sebracket(base, request, bracket):
-    numlen = max([len(p['player'].dbpl.tag) for p in base['table'] if p['player'].dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = [(''.join(
         ['Win    '] + 
@@ -878,10 +911,10 @@ def postable_sebracket(base, request, bracket):
     ), '', ''), None]
 
     for p in base['table']:
-        if p['player'].dbpl is None:
+        if p['player']['id'] is None:
             continue
         strings.append((''.join(
-            ['{name: >{nl}}  '.format(name=p['player'].dbpl.tag, nl=numlen)] +
+            ['{name: >{nl}}  '.format(name=p['player']['tag'], nl=numlen)] +
             [' {p: >7.2f}%'.format(p=100*t) for t in p['probs']]
         ), '', ''))
 
@@ -953,17 +986,17 @@ def create_postable_bracket(bracket, indent=0):
 
 # {{{ postable_rrgroup
 def postable_rrgroup(base, request):
-    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table']])
 
     strings = [(''.join([
-        ('{s: <9}'.format(s=ordinal(i+1)) if i < len(base['players'])-1 else ordinal(i+1))
-        for i in range(0, len(base['players']))
+        ('{s: <9}'.format(s=ordinal(i+1)) if i < len(base['table'])-1 else ordinal(i+1))
+        for i in range(0, len(base['table']))
     ]), '', ''), None]
 
-    for p in base['players']:
+    for p in base['table']:
         strings.append((''.join(
-            ['{name: >{nl}}  '.format(name=p.dbpl.tag if p.dbpl is not None else 'BYE', nl=numlen)] +
-            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+            ['{name: >{nl}}  '.format(name=p['player']['tag'], nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p['probs']]
         ), '', ''))
 
     base['postable_tl'] = (

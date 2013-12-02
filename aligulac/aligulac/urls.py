@@ -21,6 +21,7 @@ from ratings.api.resources import (
     PredictDualResource,
     PredictMatchResource,
     PredictSEBracketResource,
+    PredictRRGroupResource,
 )
 
 from django.contrib import admin
@@ -43,6 +44,7 @@ resources = [
     PredictDualResource,
     PredictMatchResource,
     PredictSEBracketResource,
+    PredictRRGroupResource,
 ]
 for res in resources:
     v1_api.register(res())

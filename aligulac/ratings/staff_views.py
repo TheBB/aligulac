@@ -10,6 +10,7 @@ from django.db.models import (
     F,
     Max,
     Q,
+    Count
 )
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -289,7 +290,8 @@ class AddMatchesForm(forms.Form):
         self.fields['eventobj'] = forms.ChoiceField(
             choices=[
                 (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                    .exclude(downlink__distance__gt=0)
+                    .annotate(num_downlinks=Count('downlink'))
+                    .filter(num_downlinks=1)
                     .order_by('idx')
                     .values('id', 'fullname')
             ],
@@ -835,7 +837,8 @@ def events(request):
     # {{{ Build event list
     events = (
         Event.objects.filter(closed=False)
-            .exclude(uplink__distance__gt=0)
+            .annotate(Max('uplink__distance'))
+            .filter(uplink__distance__max=0)
             .filter(downlink__child__closed=False)
             .annotate(Max('downlink__distance'))
             .order_by('idx')

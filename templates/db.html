@@ -86,8 +86,9 @@ dump. Called from aligulac.views.db.
 <p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
 {% else %}
 <p>You can download a PostgreSQL dump <a href="{{ "aligulac.sql"|static }}">here</a> 
-({{ megabytes|floatformat:1 }} MiB, current as of {{ modified|date:"F jS Y, H:i e" }} 
-(UTC {{ modified|date:"O" }})). It is free to use for non-commercial purposes if you credit this website when
+({{ megabytes|floatformat:1 }} MiB) or <a href="{{ "aligulac.sql.gz"|static }}">here</a> 
+({{ gz_megabytes|floatformat:1 }} MiB gzipped), current as of {{ modified|date:"F jS Y, H:i e" }} 
+(UTC {{ modified|date:"O" }}). It is free to use for non-commercial purposes if you credit this website when
 doing so.</p>
 
 <p>The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump

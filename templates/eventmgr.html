@@ -73,6 +73,18 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
 
 <script type="text/javascript">
 // <![CDATA[  
+
+/*
+  addSlashes to escape javascript.
+
+  Source: http://stackoverflow.com/a/2555643/1428974
+*/
+String.prototype.addSlashes = function() 
+{ 
+   //no need to do (str+'') anymore because 'this' can only be a string
+   return this.replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+} 
+
 function change_and_toggle_form(html, id, cat)
 {
     $("#parent_name").html(html);
@@ -138,7 +150,7 @@ function add_node(id, obj, div)
     mod = document.createElement('a');
     td2.appendChild(mod);
     mod.setAttribute('href', '#');
-    var s = "change_and_toggle_form('" + obj['fullname'] + " (" + obj['type'] + ")'";
+    var s = "change_and_toggle_form('" + obj['fullname'].addSlashes() + " (" + obj['type'] + ")'";
     s = s + ", '" + obj['id'] + "'";
     if (obj['type'] == 'category')
         s = s + ", 0";
@@ -192,7 +204,7 @@ function toggle_sub(id)
             </span>
         </td>
         <td style="text-align: right;">
-            <a href="#" onclick="change_and_toggle_form('{{ node.fullname }} ({{ node.type }})', '{{ node.id }}', '{% if node.type == "category" %}0{% else %}2{% endif %}'); return false;">modify</a>
+            <a href="#" onclick="change_and_toggle_form('{{ node.fullname|jsescape }} ({{ node.type }})', '{{ node.id }}', '{% if node.type == "category" %}0{% else %}2{% endif %}'); return false;">modify</a>
         </td>
     </tr> 
 </table>

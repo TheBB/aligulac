@@ -6,6 +6,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
 
 from datetime import date, datetime
 import sys
+import subprocess
 
 from django.db import connection
 from django.db.models import Q
@@ -24,7 +25,7 @@ else:
         )
     except:
         print('[%s] Nothing to do' % str(datetime.now()), flush=True)
-        os.system('touch ' + PROJECT_PATH + 'update')
+        subprocess.call(['touch', os.path.join(PROJECT_PATH, 'update')])
         sys.exit(0)
 
 latest = Period.objects.filter(start__lte=date.today()).latest('id')
@@ -32,14 +33,15 @@ latest = Period.objects.filter(start__lte=date.today()).latest('id')
 print('[%s] Recomputing periods %i through %i' % (str(datetime.now()), earliest.id, latest.id), flush=True)
 
 for i in range(earliest.id, latest.id+1):
-    os.system(PROJECT_PATH + 'period.py %i' % i)
+    subprocess.call([os.path.join(PROJECT_PATH, 'period.py'), str(i)])
 
 if not 'debug' in sys.argv:
-    os.system(PROJECT_PATH + 'smoothing.py')
-    os.system(PROJECT_PATH + 'domination.py')
-    os.system(PROJECT_PATH + 'teamranks.py ak')
-    os.system(PROJECT_PATH + 'teamranks.py pl')
-    os.system(PROJECT_PATH + 'teamratings.py')
+    subprocess.call([os.path.join(PROJECT_PATH, 'smoothing.py')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'domination.py')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py ak')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py pl')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'teamratings.py')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'reports.py')])
 
     print('[%s] Updating MC numbers' % str(datetime.now()), flush=True)
     Player.objects.exclude(id=36).update(mcnum=None)
@@ -73,4 +75,4 @@ if not 'debug' in sys.argv:
 
 print('[%s] Finished' % str(datetime.now()), flush=True)
 
-os.system('touch ' + PROJECT_PATH + 'update')
+subprocess.call(['touch', os.path.join(PROJECT_PATH, 'update')])

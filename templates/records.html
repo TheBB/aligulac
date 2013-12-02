@@ -13,7 +13,7 @@ This is the basic records page, called from ratings.views.records.
     <p>To avoid rating artifacts, the earliest periods are not counted.</p>
 
     <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
-    {% include "recordlist.html" with high=hightot rt="Rating" %}
+    {% include "recordlist.html" with high=hightot rt="Rating" race="All" %}
 
     <h3>Highest ratings ever achieved by matchup</h3>
     {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" race="P" %}

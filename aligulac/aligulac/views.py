@@ -120,10 +120,14 @@ def db(request):
     })
 
     if base['dump']:
-        stat = os.stat(DUMP_PATH + 'aligulac.sql')
+        stat = os.stat(os.path.join(DUMP_PATH, 'aligulac.sql'))
         base.update({
             'megabytes':  stat.st_size / 1048576,
             'modified':   datetime.fromtimestamp(stat.st_mtime),
+        })
+        stat = os.stat(os.path.join(DUMP_PATH, 'aligulac.sql.gz'))
+        base.update({
+            'gz_megabytes':  stat.st_size / 1048576
         })
 
     base.update({"title": "Database status"})

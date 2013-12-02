@@ -17,6 +17,7 @@ from ratings.models import (
     Match,
     Rating,
     Event,
+    EventAdjacency,
     Alias,
     Earnings,
     PreMatchGroup,
@@ -112,6 +113,34 @@ class EventAdmin(admin.ModelAdmin):
     readonly_fields = (
         'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx', 'close')
     search_fields = ['fullname']
+    actions = ['open_event_action', 'close_event_action']
+
+    
+    def open_event_action(self, request, queryset):
+        count = 0
+        for event in queryset:
+            objects = EventAdjacency.objects.filter(child=event, parent__closed=True).select_related()
+            for rel in objects:
+                rel.parent.closed = False
+                rel.parent.save()
+                count += 1
+        self.message_user(request, "Successfully opened {} event{}.".format(count, "" if count == 1 else "s"))
+
+    open_event_action.short_description = "Open event supertree"
+
+    def close_event_action(self, request, queryset):
+        count = 0
+        for event in queryset:
+            objects = EventAdjacency.objects.filter(parent=event, child__closed=False).select_related()
+            for rel in objects:
+                closed = rel.child.closed
+                rel.child.closed = True
+                rel.child.save()
+                if not closed:
+                    count += 1
+        self.message_user(request, "Successfully closed {} event{}.".format(count, "" if count == 1 else "s"))
+
+    close_event_action.short_description = "Close event subtree"
 
 class PreMatchGroupAdmin(admin.ModelAdmin):
     list_display = ('date', 'event')

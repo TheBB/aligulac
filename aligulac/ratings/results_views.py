@@ -652,7 +652,7 @@ def results(request):
     matches = (
         Match.objects.filter(date=day).order_by('eventobj__latest', 'eventobj__idx', 'event', 'id')
             .prefetch_related('message_set')
-            .select_related('rta','rtb')
+            .select_related('rta', 'rtb', 'pla', 'plb', 'eventobj')
             .annotate(Count('eventobj__match'))
     )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)

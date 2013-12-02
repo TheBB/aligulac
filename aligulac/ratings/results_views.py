@@ -68,15 +68,10 @@ from ratings.tools import (
 # }}}
 
 # {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
-def collect(lst, n=2):
-    ret = []
-    while len(lst) > 0:
-        ret.append(lst[:n])
-        lst = lst[n:]
-
-    ret[-1] = ret[-1] + [None] * (n-len(ret[-1]))
-
-    return ret
+def collect(lst, n=2):    
+    args = [iter(lst)] * n
+    
+    return list(zip(*args))
 # }}}
 
 # {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
@@ -679,7 +674,13 @@ def events(request, event_id=None):
 
     # {{{ Display the main table if event ID is not given
     if event_id is None:
-        root_events = Event.objects.exclude(uplink__distance__gt=0).order_by('name')
+        root_events = (
+            Event.objects
+                .annotate(num_uplinks=Count("uplink"))
+                .filter(num_uplinks=1)
+                .order_by('name')
+                .only('id', 'name', 'big', 'category', 'fullname')
+        )
         base.update({
             'ind_bigs':    collect(root_events.filter(big=True, category=CAT_INDIVIDUAL), 2),
             'ind_smalls':  root_events.filter(big=False, category=CAT_INDIVIDUAL).order_by('name'),

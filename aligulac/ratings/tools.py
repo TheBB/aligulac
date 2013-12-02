@@ -44,6 +44,7 @@ PATCHES = [
     (date(year=2012, month=2,  day=21), '1.4.3'),
     (date(year=2013, month=3,  day=12), 'HotS'),
     (date(year=2013, month=7,  day=11), '2.0.9 BU'),
+    (date(year=2013, month=11,  day=11), '2.0.12 BU')
 ]
 # }}}
 

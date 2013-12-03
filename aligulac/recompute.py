@@ -39,8 +39,8 @@ for i in range(earliest.id, latest.id+1):
 if 'debug' not in sys.argv:
     subprocess.call([os.path.join(PROJECT_PATH, 'smoothing.py')])
     subprocess.call([os.path.join(PROJECT_PATH, 'domination.py')])
-    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py ak')])
-    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py pl')])
+    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py'), 'ak'])
+    subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py'), 'pl'])
     subprocess.call([os.path.join(PROJECT_PATH, 'teamratings.py')])
     subprocess.call([os.path.join(PROJECT_PATH, 'reports.py')])
 

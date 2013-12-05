@@ -36,19 +36,19 @@ document, this parameter will be implied.</p>
 
 <h3>API overview</h3>
 
-<p>The API is for the most part self-documenting. The root URI is <code>/api/v1/</code>. Requests to this URI
+<p>The API is for the most part self-documenting. The root URI is <code>/api/beta/</code>. Requests to this URI
 will return a JSON object describing the available resources and their root URIs, e.g.</p>
 
 <code>
     <pre>
     {
         "period": {
-            "list_endpoint": "/api/v1/period/",
-            "schema": "/api/v1/period/schema/"
+            "list_endpoint": "/api/beta/period/",
+            "schema": "/api/beta/period/schema/"
         },
         "player": {
-            "list_endpoint": "/api/v1/player/",
-            "schema": "/api/v1/player/schema/"
+            "list_endpoint": "/api/beta/player/",
+            "schema": "/api/beta/player/schema/"
         }
     }
     </pre>
@@ -58,11 +58,11 @@ will return a JSON object describing the available resources and their root URIs
 URI.</p>
 
 <p>The resources available correspond for the most part to the tables in the database, which are described
-<a href="/about/db/">here</a>. <strong>API access to predictions is currently not available. This will be
-available soon™.</strong></p>
+<a href="/about/db/">here</a>. In addition to these, we have API access to predictions as well, described
+below.</p>
 
-<p>Requests for player objects thus need to go to <code>/api/v1/player/</code>. For a detailed description of
-each resource, go to the schema URI. This will return a JSON object with the following fields:</p>
+<p>Requests for player objects thus need to go to <code>/api/beta/player/</code>. For a detailed description
+of each resource, go to the schema URI. This will return a JSON object with the following fields:</p>
 
 <ul>
     <li><strong>allowed_detail_http_methods</strong> and <strong>allowed_list_http_methods</strong>: 
@@ -97,12 +97,12 @@ each resource, go to the schema URI. This will return a JSON object with the fol
 <h3>Getting all objects</h3>
 
 <p>To obtain all objects of a given resource, just make a request to the base resource URI, e.g.
-<code>/api/v1/period/</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving
+<code>/api/beta/period/</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving
 paging information, and <strong>objects</strong>, which is a list of objects. By default, this will return a
 limited number of objects per page (normally 20). To control the page size and offset, give the
 <code>limit</code> and <code>offset</code> arguments, e.g.</p>
 
-<code>/api/v1/period?limit=50&amp;offset=100</code>
+<code>/api/beta/period?limit=50&amp;offset=100</code>
 
 <p>will return objects number 100-149. In addition, the <strong>meta</strong> field gives you the URIs for the
 next and previous pages, as well as the total count of objects.<p>
@@ -113,7 +113,7 @@ and otherwise not encouraged.</p>
 <h3>Getting a single object by ID</h3>
 
 <p>If you know the id of the object you are interested in, you can get it directly. For example, to get
-Leenock's player information, go to <code>/api/v1/player/1/</code>, since Leenock's id is 1.</p>
+Leenock's player information, go to <code>/api/beta/player/1/</code>, since Leenock's id is 1.</p>
 
 <p>This will return just the object directly, with no metadata and no surrounding list.</p>
 
@@ -121,7 +121,7 @@ Leenock's player information, go to <code>/api/v1/player/1/</code>, since Leenoc
 
 <p>If you want to access more than one object, you can request them as a <strong>set</strong> to save both us
 and yourself from extra work. If you are interested in Leenock, Creator and Life (ids 1, 2 and 3), you can
-make a request to <code>/api/v1/player/set/1;2;3/</code>.</p>
+make a request to <code>/api/beta/player/set/1;2;3/</code>.</p>
 
 <h3>Related objects</h3>
 
@@ -133,11 +133,11 @@ although they are often stripped-down versions without detailed information.</p>
 
 <p>You can apply filters to the base URI. They are applied in the following manner:</p>
 
-<code>/api/v1/resourcename/?fieldname__filtername=value</code>
+<code>/api/beta/resourcename/?fieldname__filtername=value</code>
 
 <p>If filtering on related objects is available, this can be done as follows:</p>
 
-<code>/api/v1/resourcename/?relatedobject__fieldname__filtername=value</code>
+<code>/api/beta/resourcename/?relatedobject__fieldname__filtername=value</code>
 
 <p>In principle, these chains can be arbitrarily long. The available filters correspond to those found in
 <a href="https://docs.djangoproject.com/en/1.6/ref/models/querysets/#field-lookups">Django</a>. Here is a
@@ -172,6 +172,54 @@ brief overview:</p>
 <p>To sort by a field, add the parameter <code>order_by=fieldname</code> for ascending order, and
 <code>order_by=-fieldname</code> for descending order.</p>
 
+<h2>Prediction requests</h2>
+
+<p>Requests for predictions do not correspond to the database, and work a little differently, but corresponds
+more or less exactly to the way the <a href="/inference/">prediction page</a> works. We currently support five
+different formats:</p>
+
+<ul>
+    <li><strong>Single best-of-N matches</strong> (<code>predictmatch</code>)</li>
+    <li><strong>Dual tournaments</strong> (<code>predictdual</code>), also called GSL-style groups</li>
+    <li><strong>Single-elimination brackets</strong> (<code>predictsebracket</code>)</li>
+    <li><strong>Round-robin groups</strong> (<code>predictrrgroup</code>)</li>
+    <li><strong>Proleague-style team matches</strong> (<code>predictproleague</code>)</li>
+</ul>
+
+<p>The URI for match prediction is then <code>/api/beta/predictmatch/id1,id2/</code>, where <code>id1</code>
+and <code>id2</code> are the ids for the two players. You also have to supply a <code>bo</code> parameter
+denoting the match length, and this has to be a positive odd integer. The following conditions apply.</p>
+
+<ul>
+    <li>For single matches, you must provide exactly two players.</li>
+    <li>For dual tournaments, you must provide exactly four players.</li>
+    <li>For single elimination brackets, you must provide a number of players that is a power of two.</li>
+    <li>For proleague matches, you must provide an even number of players, one full team before the other
+    (there does not have to be an odd number of players per team).<li>
+    <li>For single elimination, and only for this format, you can give different match lengths for different
+    rounds, just make a comma-separated list with the first round first and the final last.</li>
+</ul>
+
+<p>You can give id 0 to denote a BYE, and there is no restriction on duplicate players (which can be useful for
+proleague style to simulate ace matches).</p>
+
+<p>Requests will return a JSON object containing various information, which you can look through by querying
+the schema URI. For the last four formats (excluding the single match), the two most important fields are
+<code>matches</code> and <code>meanres</code>. The former describes the already entered results, and the
+latter describes the median outcome <em>given the former</em>. Each match has a unique identifier which you
+can use to prescribe results and update the predictions. E.g. to set match identifier <code>abc</code> to
+result in 1–3, pass the arguments <code>abc_1=1</code> and <code>abc_2=3</code> with the request.</p>
+
+<p>It may be difficult to predict in advance which matches will have which identifiers. If you're unsure, make
+an empty request with no preset results. The returned object will then give identifiers for as many matches as
+it can. As you fill in results, new matches may become available.</p>
+
+<p>Unlike the <code>matches</code> list, the <code>meanres</code> always contains predictions to the end of
+the tournament. For example, with a 16-player single elimination bracket, the <code>meanres</code> list will
+always contain the full 15 matches, trying to predict who will be in the final. As you enter results, this may
+disagree with the prediction, and the players in the final may change. Thus, <strong>only the
+<code>matches</code> list contains “sure” information</strong>.</p>
+
 <h2>Common use cases</h2>
 
 <h3>Get the current top ten rating list</h3>
@@ -180,10 +228,10 @@ brief overview:</p>
 
 <code>
     <pre>
-    /api/v1/player/?current_rating__isnull=false
-                   &amp;current_rating__decay__lt=4
-                   &amp;order_by=-current_rating__rating
-                   &amp;limit=10
+    /api/beta/player/?current_rating__isnull=false
+                     &amp;current_rating__decay__lt=4
+                     &amp;order_by=-current_rating__rating
+                     &amp;limit=10
     </pre>
 </code>
 
@@ -193,10 +241,10 @@ ratings directly.</p>
 
 <code>
     <pre>
-    /api/v1/rating/?period__id=95
-                   &amp;decay__lt=4
-                   &amp;order_by=-rating
-                   &amp;limit=10
+    /api/beta/rating/?period__id=95
+                     &amp;decay__lt=4
+                     &amp;order_by=-rating
+                     &amp;limit=10
     </pre>
 </code>
 
@@ -206,9 +254,9 @@ same way. So you could use:</p>
 
 <code>
     <pre>
-    /api/v1/activerating/?period__id=95
-                         &amp;order_by=-rating
-                         &amp;limit=10
+    /api/beta/activerating/?period__id=95
+                           &amp;order_by=-rating
+                           &amp;limit=10
     </pre>
 </code>
 {% endblock %}

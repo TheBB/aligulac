@@ -416,23 +416,23 @@ def adjustment(request, player_id, period_id):
             continue
         base['has_treated'] = True
 
-        total_score = m['pla_score'] + m['plb_score']
+        total_score = m['pla']['score'] + m['plb']['score']
 
-        scale = sqrt(1 + m['pla_dev']**2 + m['plb_dev']**2)
-        expected = total_score * cdf(m['pla_rating'] - m['plb_rating'], scale=scale)
+        scale = sqrt(1 + m['pla']['dev']**2 + m['plb']['dev']**2)
+        expected = total_score * cdf(m['pla']['rating'] - m['plb']['rating'], scale=scale)
 
         ngames['M']     += total_score
-        tot_rating['M'] += m['plb_rating'] * total_score
+        tot_rating['M'] += m['plb']['rating'] * total_score
         expwins['M']    += expected
-        nwins['M']      += m['pla_score']
+        nwins['M']      += m['pla']['score']
 
-        vs_races = [m['plb_race']] if m['plb_race'] in 'PTZ' else 'PTZ'
+        vs_races = [m['plb']['race']] if m['plb']['race'] in 'PTZ' else 'PTZ'
         weight = 1/len(vs_races)
         for r in vs_races:
             ngames[r]     += weight * total_score
-            tot_rating[r] += weight * m['plb_rating'] * total_score
+            tot_rating[r] += weight * m['plb']['rating'] * total_score
             expwins[r]    += weight * expected
-            nwins[r]      += weight * m['pla_score']
+            nwins[r]      += weight * m['pla']['score']
 
     for r in 'MPTZ':
         if ngames[r] > 0:
@@ -501,10 +501,10 @@ def results(request, player_id):
     matches = display_matches(matches, fix_left=player)
     base['matches'] = matches
     base.update({
-        'sc_my':  sum(m['pla_score'] for m in base['matches']),
-        'sc_op':  sum(m['plb_score'] for m in base['matches']),
-        'msc_my': sum(1 for m in base['matches'] if m['pla_score'] > m['plb_score']),
-        'msc_op': sum(1 for m in base['matches'] if m['plb_score'] > m['pla_score']),
+        'sc_my':  sum(m['pla']['score'] for m in base['matches']),
+        'sc_op':  sum(m['plb']['score'] for m in base['matches']),
+        'msc_my': sum(1 for m in base['matches'] if m['pla']['score'] > m['plb']['score']),
+        'msc_op': sum(1 for m in base['matches'] if m['plb']['score'] > m['pla']['score']),
     })
     # }}}
 
@@ -534,23 +534,23 @@ def results(request, player_id):
         return race
 
     def win(match):
-        return match["pla_score"] >= match["plb_score"]
+        return match['pla']['score'] >= match['plb']['score']
 
     def format_match(d):
         # TL only recognizes lower case country codes :(
-        if d["pla_country"] is not None:
-            d["pla_country_formatted"] = ":{}:".format(d["pla_country"].lower())
+        if d["pla"]["country"] is not None:
+            d["pla_country_formatted"] = ":{}:".format(d["pla"]["country"].lower())
         else:
             d["pla_country_formatted"] = ""
 
-        if d["plb_country"] is not None:
-            d["plb_country_formatted"] = ":{}:".format(d["plb_country"].lower())
+        if d["plb"]["country"] is not None:
+            d["plb_country_formatted"] = ":{}:".format(d["plb"]["country"].lower())
         else:
             d["plb_country_formatted"] = ""
 
         # and no race switchers
-        d["pla_race"] = switcher(d["pla_race"])
-        d["plb_race"] = switcher(d["plb_race"])
+        d["pla_race"] = switcher(d["pla"]["race"])
+        d["plb_race"] = switcher(d["plb"]["race"])
 
         # Check who won
         temp = {
@@ -568,6 +568,12 @@ def results(request, player_id):
             temp["plbwe"] = "[/b]"
 
         d.update(temp)
+        d["pla_id"] = d["pla"]["id"]
+        d["pla_tag"] = d["pla"]["tag"]
+        d["pla_score"] = d["pla"]["score"]
+        d["plb_id"] = d["plb"]["id"]
+        d["plb_tag"] = d["plb"]["tag"]
+        d["plb_score"] = d["plb"]["score"]
 
         return TL_HISTORY_MATCH_TEMPLATE.format(**d)
 

@@ -13,6 +13,8 @@ from aligulac.tools import (
     get_param_choice,
 )
 
+from aligulac.cache import cache_page
+
 from ratings.models import (
     Player,
     Rating,
@@ -28,6 +30,7 @@ from countries import data
 # }}}
 
 # {{{ history view
+@cache_page
 def history(request):
     base = base_ctx('Records', 'History', request)
 
@@ -69,6 +72,7 @@ def history(request):
 # }}}
 
 # {{{ hof view
+@cache_page
 def hof(request):
     base = base_ctx('Records', 'HoF', request)
     base['high'] = (
@@ -87,6 +91,7 @@ def racefull(value):
 # }}}
 
 # {{{ race view
+@cache_page
 def race(request):
     race = get_param(request, 'race', 'all')
     if race not in 'PTZ':

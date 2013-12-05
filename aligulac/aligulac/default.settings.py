@@ -42,6 +42,30 @@ CACHES = {
     }
 }
 
+CACHE_TIMES = {
+    # Trivially constant pages, one day
+    'aligulac.views.h404': 24*60*60,
+    'aligulac.views.h500': 24*60*60,
+    'ratings.inference_views.predict': 24*60*60,
+
+    # Views that change only after the quad-daily update can have six hours cache times
+    # These typically depend on ratings, but not on specific results
+    'aligulac.views.home': 6*60*60,
+    'aligulac.views.home': 6*60*60,
+    'ratings.inference_views.dual': 6*60*60,
+    'ratings.inference_views.sebracket': 6*60*60,
+    'ratings.inference_views.rrgroup': 6*60*60,
+    'ratings.inference_views.proleague': 6*60*60,
+    'ratings.player_views.adjustment': 6*60*60,
+    'ratings.player_views.historical': 6*60*60,
+    'ratings.ranking_views.periods': 6*60*60,
+    'ratings.ranking_views.period': 6*60*60,
+    'ratings.records_views.history': 6*60*60,
+    'ratings.records_views.hof': 6*60*60,
+    'ratings.records_views.race': 6*60*60,
+    'ratings.report_views.balance': 6*60*60,
+}
+
 # RATINGS
 
 INACTIVE_THRESHOLD = 4

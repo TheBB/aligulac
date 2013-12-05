@@ -8,6 +8,7 @@ from datetime import date, datetime
 import sys
 import subprocess
 
+from django.core.cache import cache
 from django.db import connection
 from django.db.models import Q
 
@@ -35,7 +36,7 @@ print('[%s] Recomputing periods %i through %i' % (str(datetime.now()), earliest.
 for i in range(earliest.id, latest.id+1):
     subprocess.call([os.path.join(PROJECT_PATH, 'period.py'), str(i)])
 
-if not 'debug' in sys.argv:
+if 'debug' not in sys.argv:
     subprocess.call([os.path.join(PROJECT_PATH, 'smoothing.py')])
     subprocess.call([os.path.join(PROJECT_PATH, 'domination.py')])
     subprocess.call([os.path.join(PROJECT_PATH, 'teamranks.py ak')])
@@ -76,3 +77,5 @@ if not 'debug' in sys.argv:
 print('[%s] Finished' % str(datetime.now()), flush=True)
 
 subprocess.call(['touch', os.path.join(PROJECT_PATH, 'update')])
+
+cache.clear()

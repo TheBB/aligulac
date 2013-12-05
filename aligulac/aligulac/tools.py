@@ -242,11 +242,12 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 ('Predict', '/inference/'),
         ]}, {
             'name': 'About',
-            'url': '/faq/',
+            'url': '/about/faq/',
             'submenu': [
-                ('FAQ', '/faq/'),
-                ('Blog', '/blog/'),
-                ('Database', '/db/'),
+                ('FAQ', '/about/faq/'),
+                ('Blog', '/about/blog/'),
+                ('Database', '/about/db/'),
+                ('API', '/about/api/'),
         ]}, {
             'name': 'Submit',
             'url': '/add/',

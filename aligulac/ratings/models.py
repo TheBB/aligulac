@@ -1,6 +1,8 @@
 # {{{ Imports
 import datetime
 from math import sqrt
+import random
+import string
 
 from django.contrib.auth.models import User
 from django.db import (
@@ -98,16 +100,45 @@ class Period(models.Model):
     class Meta:
         db_table = 'period'
 
-    start = models.DateField('Start date', null=False, db_index=True)
-    end = models.DateField('End date', null=False, db_index=True)
+    # {{{ Fields
+    start = models.DateField(
+        'Start date', null=False, db_index=True,
+        help_text='Start date'
+    )
+    end = models.DateField(
+        'End date', null=False, db_index=True,
+        help_text='End date'
+    )
     computed = models.BooleanField('Computed', null=False, default=False, db_index=True)
-    needs_recompute = models.BooleanField('Requires recomputation', null=False, default=False, db_index=True)
-    num_retplayers = models.IntegerField('# returning players', default=0)
-    num_newplayers = models.IntegerField('# new players', default=0)
-    num_games = models.IntegerField('# games', default=0)
-    dom_p = models.FloatField('Protoss OP value', null=True)
-    dom_t = models.FloatField('Terran OP value', null=True)
-    dom_z = models.FloatField('Zerg OP value', null=True)
+    needs_recompute = models.BooleanField(
+        'Requires recomputation', null=False, default=False, db_index=True,
+        help_text='True if this period needs to be recomputed'
+    )
+    num_retplayers = models.IntegerField(
+        '# returning players', default=0,
+        help_text='Number of returning players'
+    )
+    num_newplayers = models.IntegerField(
+        '# new players', default=0,
+        help_text='Number of new players'
+    )
+    num_games = models.IntegerField(
+        '# games', default=0,
+        help_text='Number of games played'
+    )
+    dom_p = models.FloatField(
+        'Protoss OP value', null=True,
+        help_text='Protoss OP value'
+    )
+    dom_t = models.FloatField(
+        'Terran OP value', null=True,
+        help_text='Terran OP value'
+    )
+    dom_z = models.FloatField(
+        'Zerg OP value', null=True,
+        help_text='Zerg OP value'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -126,36 +157,79 @@ class Event(models.Model):
         ordering = ['idx', 'latest', 'fullname']
         db_table = 'event'
 
-    name = models.CharField('Name', max_length=100)
-    parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
+    # {{{ Fields
+    name = models.CharField(
+        'Name', max_length=100,
+        help_text='Event name'
+    )
+    parent = models.ForeignKey(
+        'Event', null=True, blank=True, related_name='parent_event',
+        help_text='Parent event'
+    )
     lft = models.IntegerField('Left', null=True, blank=True, default=None)
     rgt = models.IntegerField('Right', null=True, blank=True, default=None)
-    idx = models.IntegerField('Index', null=False, blank=False, db_index=True)
+    idx = models.IntegerField(
+        'Index', null=False, blank=False, db_index=True,
+        help_text='Canonical sort index'
+    )
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)
-    fullname = models.CharField('Full name', max_length=500, default='')
-    homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
-    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
+    fullname = models.CharField(
+        'Full name', max_length=500, default='',
+        help_text='Full event name'
+    )
+    homepage = models.CharField(
+        'Homepage', blank=True, null=True, max_length=200,
+        help_text='Homepage URI'
+    )
+    lp_name = models.CharField(
+        'Liquipedia title', blank=True, null=True, max_length=200,
+        help_text='Liquipedia title'
+    )
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
-    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
-    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+    tlpd_id = models.IntegerField(
+        'TLPD ID', blank=True, null=True,
+        help_text='TLPD id'
+    )
+    tlpd_db = models.IntegerField(
+        'TLPD Databases', blank=True, null=True,
+        help_text='TLPD databases (bit-flag value, 1=WoL KR, 2=WoL intl, 4=HotS, 8=HotS beta, 16=WoL beta)'
+    )
+    tl_thread = models.IntegerField(
+        'Teamliquid.net thread ID', blank=True, null=True,
+        help_text='TL.net thread id'
+    )
 
-    prizepool = models.NullBooleanField('Has prize pool', blank=True, null=True, db_index=True)
+    prizepool = models.NullBooleanField(
+        'Has prize pool', blank=True, null=True, db_index=True,
+        help_text='Has prizepool? True, false or null (unknown)'
+    )
 
-    earliest = models.DateField('Earliest match', blank=True, null=True, db_index=True)
-    latest = models.DateField('Latest match', blank=True, null=True, db_index=True)
+    earliest = models.DateField(
+        'Earliest match', blank=True, null=True, db_index=True,
+        help_text='Earliest match'
+    )
+    latest = models.DateField(
+        'Latest match', blank=True, null=True, db_index=True,
+        help_text='Latest match'
+    )
 
     category = models.CharField(
-        'Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES, db_index=True)
-    type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES, db_index=True)
+        'Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES, db_index=True,
+        help_text='Category (individual, team or frequent), only for root events'
+    )
+    type = models.CharField(
+        max_length=50, null=False, choices=EVENT_TYPES, db_index=True,
+        help_text='Type (category, event or round)'
+    )
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
+    # }}}
 
     # {{{ open_events: Not used... is this useful?
     @staticmethod
@@ -438,33 +512,79 @@ class Player(models.Model):
         ordering = ['tag']
         db_table = 'player'
 
-    tag = models.CharField('In-game name', max_length=30, null=False, db_index=True)
-    name = models.CharField('Full name', max_length=100, blank=True, null=True)
-    birthday = models.DateField('Birthday', blank=True, null=True)
-    mcnum = models.IntegerField('MC number', blank=True, null=True, default=None)
+    # {{{ Fields
+    tag = models.CharField(
+        'In-game name', max_length=30, null=False, db_index=True,
+        help_text='Player tag'
+    )
+    name = models.CharField(
+        'Full name', max_length=100, blank=True, null=True,
+        help_text='Full name'
+    )
+    birthday = models.DateField(
+        'Birthday', blank=True, null=True,
+        help_text='Birthday'
+    )
+    mcnum = models.IntegerField(
+        'MC number', blank=True, null=True, default=None,
+        help_text='MC number'
+    )
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
-    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
+    tlpd_id = models.IntegerField(
+        'TLPD ID', blank=True, null=True,
+        help_text='TLPD id'
+    )
+    tlpd_db = models.IntegerField(
+        'TLPD Databases', blank=True, null=True,
+        help_text='TLPD databases (bit-flag value, 1=WoL KR, 2=WoL intl, 4=HotS, 8=HotS beta, 16=WoL beta)'
+    )
 
-    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
-    sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
-    sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
+    lp_name = models.CharField(
+        'Liquipedia title', blank=True, null=True, max_length=200,
+        help_text='Liquipedia title'
+    )
+    sc2c_id = models.IntegerField(
+        'SC2Charts.net ID', blank=True, null=True,
+        help_text='SC2Charts.net ID'
+    )
+    sc2e_id = models.IntegerField(
+        'SC2Earnings.com ID', blank=True, null=True,
+        help_text='SC2Earnings.com ID'
+    )
 
     country = models.CharField(
-        'Country', max_length=2, choices=countries, blank=True, null=True, db_index=True)
+        'Country', max_length=2, choices=countries, blank=True, null=True, db_index=True,
+        help_text='Country (ISO 3166-1 alpha-2)'
+    )
 
-    race = models.CharField('Race', max_length=1, choices=RACES, null=False, db_index=True)
+    race = models.CharField(
+        'Race', max_length=1, choices=RACES, null=False, db_index=True,
+        help_text='Race (P, T, Z, R or S)'
+    )
 
-    current_rating = models.ForeignKey('Rating', blank=True, null=True, related_name='current')
+    current_rating = models.ForeignKey(
+        'Rating', blank=True, null=True, related_name='current',
+        help_text='Current rating'
+    )
 
     # Domination fields (for use in the hall of fame)
-    dom_val = models.FloatField('Domination', blank=True, null=True)
-    dom_start = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_start')
-    dom_end   = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_end')
+    dom_val = models.FloatField(
+        'Domination', blank=True, null=True,
+        help_text='Domination score (PP)'
+    )
+    dom_start = models.ForeignKey(
+        Period, blank=True, null=True, related_name='player_dom_start',
+        help_text='Start of domination period'
+    )
+    dom_end = models.ForeignKey(
+        Period, blank=True, null=True, related_name='player_dom_end',
+        help_text='End of domination period'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -646,20 +766,52 @@ class Group(models.Model):
     class Meta:
         db_table = 'group'
 
-    name = models.CharField('Name', max_length=100, null=False, db_index=True)
-    shortname = models.CharField('Short name', max_length=25, null=True, blank=True)
+    # {{{ Fields
+    name = models.CharField(
+        'Name', max_length=100, null=False, db_index=True,
+        help_text='Team name'
+    )
+    shortname = models.CharField(
+        'Short name', max_length=25, null=True, blank=True,
+        help_text='Short team name'
+    )
     members = models.ManyToManyField(Player, through='GroupMembership')
-    scoreak = models.FloatField('AK score', null=True, default=0.0)
-    scorepl = models.FloatField('PL score', null=True, default=0.0)
-    meanrating = models.FloatField('Rating', null=True, default=0.0)
-    founded = models.DateField('Date founded', null=True, blank=True)
-    disbanded = models.DateField('Date disbanded', null=True, blank=True)
-    active = models.BooleanField('Active', null=False, default=True, db_index=True)
-    homepage = models.CharField('Homepage', null=True, blank=True, max_length=200)
-    lp_name = models.CharField('Liquipedia title', null=True, blank=True, max_length=200) 
+    scoreak = models.FloatField(
+        'AK score', null=True, default=0.0,
+        help_text='All-kill score'
+    )
+    scorepl = models.FloatField(
+        'PL score', null=True, default=0.0,
+        help_text='Proleague score'
+    )
+    meanrating = models.FloatField(
+        'Rating', null=True, default=0.0,
+        help_text='Latest mean rating of top five players'
+    )
+    founded = models.DateField(
+        'Date founded', null=True, blank=True,
+        help_text='Date founded'
+    )
+    disbanded = models.DateField(
+        'Date disbanded', null=True, blank=True,
+        help_text='Date disbanded (if inactive)'
+    )
+    active = models.BooleanField(
+        'Active', null=False, default=True, db_index=True,
+        help_text='True if active'
+    )
+    homepage = models.CharField(
+        'Homepage', null=True, blank=True, max_length=200,
+        help_text='Team homepage URI'
+    )
+    lp_name = models.CharField(
+        'Liquipedia title', null=True, blank=True, max_length=200,
+        help_text='Liquipedia title'
+    )
 
     is_team = models.BooleanField('Team', null=False, default=True, db_index=True)
     is_manual = models.BooleanField('Manual entry', null=False, default=True)
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -768,28 +920,74 @@ class Match(models.Model):
         verbose_name_plural = 'matches'
         db_table = 'match'
 
-    period = models.ForeignKey(Period, null=False)
-    date = models.DateField('Date played', null=False)
-    pla = models.ForeignKey(Player, related_name='match_pla', verbose_name='Player A', null=False)
-    plb = models.ForeignKey(Player, related_name='match_plb', verbose_name='Player B', null=False)
-    sca = models.SmallIntegerField('Score for player A', null=False, db_index=True)
-    scb = models.SmallIntegerField('Score for player B', null=False, db_index=True)
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False,
+        help_text='Period in which the match was played'
+    )
+    date = models.DateField(
+        'Date played', null=False,
+        help_text='Date played'
+    )
+    pla = models.ForeignKey(
+        Player, related_name='match_pla', verbose_name='Player A', null=False,
+        help_text='Player A'
+    )
+    plb = models.ForeignKey(
+        Player, related_name='match_plb', verbose_name='Player B', null=False,
+        help_text='Player B'
+    )
+    sca = models.SmallIntegerField(
+        'Score for player A', null=False, db_index=True,
+        help_text='Score for player A'
+    )
+    scb = models.SmallIntegerField(
+        'Score for player B', null=False, db_index=True,
+        help_text='Score for player B'
+    )
 
-    rca = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True)
-    rcb = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True)
+    rca = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True,
+        help_text='Race for player A'
+    )
+    rcb = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True,
+        help_text='Race for player B'
+    )
 
-    treated = models.BooleanField('Computed', default=False, null=False)
-    event = models.CharField('Event text (deprecated)', max_length=200, default='', blank=True)
-    eventobj = models.ForeignKey(Event, null=True, blank=True, verbose_name='Event')
+    treated = models.BooleanField(
+        'Computed', default=False, null=False,
+        help_text='True if the given period has been recomputed since last change'
+    )
+    event = models.CharField(
+        'Event text (deprecated)', max_length=200, default='', blank=True,
+        help_text='Event text (if no event object)'
+    )
+    eventobj = models.ForeignKey(
+        Event, null=True, blank=True, verbose_name='Event',
+        help_text='Event object'
+    )
     submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
 
     game = models.CharField(
-        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True)
-    offline = models.BooleanField('Offline', default=False, null=False, db_index=True)
+        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True,
+        help_text='Game version'
+    )
+    offline = models.BooleanField(
+        'Offline', default=False, null=False, db_index=True,
+        help_text='True if the match was played offline'
+    )
 
     # Helper fields for fast loading of frequently accessed information
-    rta = models.ForeignKey('Rating', related_name='rta', verbose_name='Rating A', null=True)
-    rtb = models.ForeignKey('Rating', related_name='rtb', verbose_name='Rating B', null=True)
+    rta = models.ForeignKey(
+        'Rating', related_name='rta', verbose_name='Rating A', null=True,
+        help_text='Rating for player A at the time the match was played'
+    )
+    rtb = models.ForeignKey(
+        'Rating', related_name='rtb', verbose_name='Rating B', null=True,
+        help_text='Rating for player B at the time the match was played'
+    )
+    # }}}
 
     # {{{ populate_orig: Populates the original data fields, to check later if anything changed.
     def populate_orig(self):
@@ -993,13 +1191,34 @@ class Message(models.Model):
 class Earnings(models.Model):
     class Meta:
         db_table = 'earnings'
+        ordering = ['-earnings']
 
-    event = models.ForeignKey(Event, verbose_name='Event', null=False)
-    player = models.ForeignKey(Player, verbose_name='Player', null=False)
-    earnings = models.IntegerField('Earnings (USD)', null=True, blank=True)
-    origearnings = models.IntegerField('Earnings (original currency)')
-    currency = models.CharField('Original currency', max_length=30)
-    placement = models.IntegerField('Place')
+    # {{{ Fields
+    event = models.ForeignKey(
+        Event, verbose_name='Event', null=False,
+        help_text='Event in which this prize was awarded'
+    )
+    player = models.ForeignKey(
+        Player, verbose_name='Player', null=False,
+        help_text='Player to which this prize was awarded'
+    )
+    earnings = models.IntegerField(
+        'Earnings (USD)', null=True, blank=True,
+        help_text='Prize money converted to USD (historically accurate conversion rate)'
+    )
+    origearnings = models.IntegerField(
+        'Earnings (original currency)',
+        help_text='Prize money in original currency'
+    )
+    currency = models.CharField(
+        'Original currency', max_length=30,
+        help_text='Original currency (ISO 4217)'
+    )
+    placement = models.IntegerField(
+        'Place',
+        help_text='Placement'
+    )
+    # }}}
 
     # {{{ set_earnings(event, payouts, currency): Sets earnings for a given event.
     # Payouts is a list of dicts with keys 'player', 'prize' and 'placement'.
@@ -1119,50 +1338,139 @@ class Rating(models.Model):
         ordering = ['period']
         db_table = 'rating'
 
-    period = models.ForeignKey(Period, null=False, verbose_name='Period')
-    player = models.ForeignKey(Player, null=False, verbose_name='Player')
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False, verbose_name='Period',
+        help_text='This rating applies to the given period'
+    )
+    player = models.ForeignKey(
+        Player, null=False, verbose_name='Player',
+        help_text='This rating applies to the given player'
+    )
 
     # Helper fields for fast loading of frequently accessed information
-    prev = models.ForeignKey('Rating', related_name='prevrating', verbose_name='Previous rating', null=True)
+    prev = models.ForeignKey(
+        'Rating', related_name='prevrating', verbose_name='Previous rating', null=True,
+        help_text='Previous rating for the same player'
+    )
 
     # Standard rating numbers
-    rating = models.FloatField('Rating', null=False)
-    rating_vp = models.FloatField('R-del vP', null=False)
-    rating_vt = models.FloatField('R-del vT', null=False)
-    rating_vz = models.FloatField('R-del vZ', null=False)
+    rating = models.FloatField(
+        'Rating', null=False,
+        help_text='Mean rating'
+    )
+    rating_vp = models.FloatField(
+        'R-del vP', null=False,
+        help_text='Adjustment vP'
+    )
+    rating_vt = models.FloatField(
+        'R-del vT', null=False,
+        help_text='Adjustment vT'
+    )
+    rating_vz = models.FloatField(
+        'R-del vZ', null=False,
+        help_text='Adjustment vZ'
+    )
 
     # Standard rating deviations
-    dev = models.FloatField('RD', null=False)
-    dev_vp = models.FloatField('RD vP', null=False)
-    dev_vt = models.FloatField('RD vT', null=False)
-    dev_vz = models.FloatField('RD vZ', null=False)
+    dev = models.FloatField(
+        'RD', null=False,
+        help_text='Mean rating deviation'
+    )
+    dev_vp = models.FloatField(
+        'RD vP', null=False,
+        help_text='Extra rating deviation vP'
+    )
+    dev_vt = models.FloatField(
+        'RD vT', null=False,
+        help_text='Extra rating deviation vT'
+    )
+    dev_vz = models.FloatField(
+        'RD vZ', null=False,
+        help_text='Extra rating deviation vZ'
+    )
 
     # Computed performance ratings
-    comp_rat = models.FloatField('Perf', null=True, blank=True)
-    comp_rat_vp = models.FloatField('P-del vP', null=True, blank=True)
-    comp_rat_vt = models.FloatField('P-del vT', null=True, blank=True)
-    comp_rat_vz = models.FloatField('P-del vZ', null=True, blank=True)
+    comp_rat = models.FloatField(
+        'Perf', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vp = models.FloatField(
+        'P-del vP', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vt = models.FloatField(
+        'P-del vT', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vz = models.FloatField(
+        'P-del vZ', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
 
     # Backwards filtered rating numbers
-    bf_rating = models.FloatField('BF', default=0, null=False)
-    bf_rating_vp = models.FloatField('BF-del vP', default=0, null=False)
-    bf_rating_vt = models.FloatField('BF-del vT', default=0, null=False)
-    bf_rating_vz = models.FloatField('BF-del vZ', default=0, null=False)
+    bf_rating = models.FloatField(
+        'BF', default=0, null=False,
+        help_text='Mean backwards filtered rating'
+    )
+    bf_rating_vp = models.FloatField(
+        'BF-del vP', default=0, null=False,
+        help_text='Backwards filtered adjustment vP'
+    )
+    bf_rating_vt = models.FloatField(
+        'BF-del vT', default=0, null=False,
+        help_text='Backwards filtered adjustment vT'
+    )
+    bf_rating_vz = models.FloatField(
+        'BF-del vZ', default=0, null=False,
+        help_text='Backwards filtered adjustment vZ'
+    )
 
     # Backwards filtered rating deviations
-    bf_dev = models.FloatField('BFD', null=True, blank=True, default=1)
-    bf_dev_vp = models.FloatField('BFD vP', null=True, blank=True, default=1)
-    bf_dev_vt = models.FloatField('BFD vT', null=True, blank=True, default=1)
-    bf_dev_vz = models.FloatField('BFD vZ', null=True, blank=True, default=1)
+    bf_dev = models.FloatField(
+        'BFD', null=True, blank=True, default=1,
+        help_text='Mean backwards filtered rating deviation'
+    )
+    bf_dev_vp = models.FloatField(
+        'BFD vP', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vP'
+    )
+    bf_dev_vt = models.FloatField(
+        'BFD vT', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vT'
+    )
+    bf_dev_vz = models.FloatField(
+        'BFD vZ', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vZ'
+    )
 
     # Ranks among all players (if player is active)
-    position = models.IntegerField('Rank', null=True)
-    position_vp = models.IntegerField('Rank vP', null=True)
-    position_vt = models.IntegerField('Rank vT', null=True)
-    position_vz = models.IntegerField('Rank vZ', null=True)
+    position = models.IntegerField(
+        'Rank', null=True,
+        help_text='Mean rating rank (if active)'
+    )
+    position_vp = models.IntegerField(
+        'Rank vP', null=True,
+        help_text='vP rating rank (if active)'
+    )
+    position_vt = models.IntegerField(
+        'Rank vT', null=True,
+        help_text='vT rating rank (if active)'
+    )
+    position_vz = models.IntegerField(
+        'Rank vZ', null=True,
+        help_text='vZ rating rank (if active)'
+    )
 
-    decay = models.IntegerField('Decay', default=0, null=False)
-    domination = models.FloatField(null=True, blank=True)
+    decay = models.IntegerField(
+        'Decay', default=0, null=False,
+        help_text='Number of periods since last game'
+    )
+    domination = models.FloatField(
+        null=True, blank=True,
+        help_text='Difference from number 7 on rating list'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -1323,4 +1631,23 @@ class BalanceEntry(models.Model):
     p_gains = models.FloatField('P gains', null=False)
     t_gains = models.FloatField('T gains', null=False)
     z_gains = models.FloatField('Z gains', null=False)
+# }}}
+
+# {{{ API access keys
+class APIKey(models.Model):
+    class Meta:
+        db_table = 'apikey'
+
+    key = models.CharField('Key', max_length=20, null=False, db_index=True, primary_key=True)
+    date_opened = models.DateField('Date opened', null=False, auto_now_add=True)
+    organization = models.CharField('Name/organization', max_length=200, null=False)
+    contact = models.CharField('Contact', max_length=200, null=False)
+    requests = models.IntegerField('Requests', null=False)
+
+    def __str__(self):
+        return self.organization
+
+    def generate_key(self):
+        characters = string.ascii_letters + string.digits
+        self.key = ''.join([random.choice(characters) for _ in range(20)])
 # }}}

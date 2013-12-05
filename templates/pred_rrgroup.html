@@ -17,29 +17,32 @@ This is the prediction page for single elimination brackets. It's called from ra
         <td style="width: 10em;">Player</td>
         <td style="width: 1em;"></td>
         <td style="width: 1em;"></td>
-        {% for t in players.0.tally %}
+        {% for t in table.0.probs %}
         <td style="width: 8em; text-align: right;">
             {{ forloop.counter|ordinal }}
         </td>
         {% endfor %}
     </tr>
-    {% for p in players %}
+    {% for p in table %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">
+                {{ p.player.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% if p.player.country != "" %}
+            <img src="{{ p.player.country|lower|imgfolder:"flags"|static }}" 
+                 alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ p.player.race|imgfolder|static }}" alt="{{ p.player.race }}" class="btm" />
         </td>
-        {% for t in p.tally %}
+        {% for t in p.probs %}
         <td style="text-align: right;">
             {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
         </td>
@@ -62,27 +65,30 @@ This is the prediction page for single elimination brackets. It's called from ra
         <td style="width: 5em; text-align: right;">Sets</td>
         <td style="width: 25.5em;"></td>
     </tr>
-    {% for p in mplayers %}
+    {% for p in mtable %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">
+                {{ p.player.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% if p.player.country != "" %}
+            <img src="{{ p.player.country|lower|imgfolder:"flags"|static }}" 
+                 alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ p.player.race|imgfolder|static }}" alt="{{ p.player.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
-            {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
+            {{ p.exp_match_wins|floatformat:"0" }}–{{ p.exp_match_losses|floatformat:"0" }}
         </td>
         <td style="text-align: right;">
-            {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
+            {{ p.exp_set_wins|floatformat:"0" }}–{{ p.exp_set_losses|floatformat:"0" }}
         </td>
         <td></td>
     </tr>

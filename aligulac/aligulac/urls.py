@@ -1,10 +1,29 @@
 # {{{ Imports
+from tastypie.api import Api
+
 from django.conf.urls import (
     patterns,
     include,
     url,
 )
+
 from aligulac import settings
+
+from ratings.api.resources import (
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
+    PeriodResource,
+    PlayerResource,
+    RatingResource,
+    TeamResource,
+    PredictDualResource,
+    PredictMatchResource,
+    PredictSEBracketResource,
+    PredictRRGroupResource,
+    PredictPLResource,
+)
 
 from django.contrib import admin
 admin.autodiscover()
@@ -12,6 +31,25 @@ admin.autodiscover()
 
 handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
+
+beta_api = Api(api_name='beta')
+resources = [
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
+    PeriodResource,
+    PlayerResource,
+    RatingResource,
+    TeamResource,
+    PredictDualResource,
+    PredictMatchResource,
+    PredictSEBracketResource,
+    PredictRRGroupResource,
+    PredictPLResource
+]
+for res in resources:
+    beta_api.register(res())
 
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
@@ -43,10 +81,14 @@ urlpatterns = patterns('',
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),
-    #url(r'^staff/$', 'aligulac.views.staff'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
     url(r'^m/', include('miniURL.urls')),
+
+    url(r'^about/faq/$', 'faq.views.faq'),
+    url(r'^about/blog/$', 'blog.views.blog'),
+    url(r'^about/db/$', 'aligulac.views.db'),
+    url(r'^about/api/$', 'aligulac.views.api'),
 
     url(r'^inference/$', 'ratings.inference_views.predict'),
     url(r'^inference/match/$', 'ratings.inference_views.match'),
@@ -76,6 +118,9 @@ urlpatterns = patterns('',
 
     # Remove when we get replacement
     url(r'^api/rating_list/(?P<period>\d+)/$', 'ratings.api_views.rating_list'),
+
+    # Tastypie
+    url(r'^api/', include(beta_api.urls)),
 
     # Ask TheBB if questions
     url(r'^misc/training/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.misc_views.training'),

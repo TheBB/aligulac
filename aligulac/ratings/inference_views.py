@@ -15,6 +15,7 @@ from django.shortcuts import (
 from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
+    get_param,
     get_param_range,
     Message,
     NotUniquePlayerMessage,
@@ -204,8 +205,6 @@ class SetupForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ Auxiliary functions for prediction
-
 # {{{ group_by: Works the same as itertools.groupby but makes a list.
 def group_by(lst, key):
     ret = [(key(lst[0]), [lst[0]])]
@@ -215,94 +214,6 @@ def group_by(lst, key):
         else:
             ret[-1][1].append(e)
     return ret
-# }}}
-
-# {{{ player_data: Creates a dict with player data
-def player_data(player, prefix):
-    if player is not None:
-        return {
-            prefix + '_id':       player.id,
-            prefix + '_tag':      player.tag,
-            prefix + '_race':     player.race,
-            prefix + '_country':  player.country,
-        }
-    else:
-        return {
-            prefix + '_id':       None,
-            prefix + '_tag':      'BYE',
-            prefix + '_race':     None,
-            prefix + '_country':  None,
-        }
-# }}}
-
-# {{{ update_matches(sim, lst, request): Updates the matches in sim from the data in request, according to the
-# list lst, which is a list of triples (match name, get param player A, get param player B)
-def update_matches(sim, lst, request):
-    for m in lst:
-        try:
-            match = sim.get_match(m)
-            num = match.get_num()
-            if match.can_modify():
-                match.modify(
-                    get_param_range(request, '%s_1' % m, (0, num), 0),
-                    get_param_range(request, '%s_2' % m, (0, num), 0),
-                )
-        except:
-            pass
-# }}}
-
-# {{{ create_matches: Creates a list of dicts that will work as match objects in the templates, given a sim
-# object and a list of match names
-def create_matches(sim, lst):
-    ret = []
-    for rnd, matches in lst:
-        for m in matches:
-            match = sim.get_match(m)
-            if not match.can_modify():
-                continue
-
-            ret.append({})
-            ret[-1].update(player_data(match.get_player(0).dbpl, 'pla'))
-            ret[-1].update(player_data(match.get_player(1).dbpl, 'plb'))
-            ret[-1].update({
-                'pla_score':    match.get_result()[0],
-                'plb_score':    match.get_result()[1],
-                'unfixed':      not match.is_fixed(),
-                'eventtext':    rnd,
-                'match_id':     smallhash(rnd) + '-ent',
-                'sim':          match,
-                'identifier':   m,
-            })
-
-    return ret
-# }}}
-
-# {{{ create_median_matches: Creates a list of dicts taht will work as match objects in the templates, given a
-# sim object and a list of matc names. Generates MEDIAN RESULTS only.
-def create_median_matches(sim, lst, modify=True):
-    ret = []
-    for rnd, matches in lst:
-        for m in matches:
-            match = sim.get_match(m)
-            match.compute()
-            mean = match.find_lsup()
-            match.broadcast_instance((0, [mean[4], mean[3]], match))
-            if modify:
-                match.modify(mean[1], mean[2])
-
-            ret.append({})
-            ret[-1].update(player_data(match.get_player(0).dbpl, 'pla'))
-            ret[-1].update(player_data(match.get_player(1).dbpl, 'plb'))
-            ret[-1].update({
-                'pla_score':    mean[1],
-                'plb_score':    mean[2],
-                'eventtext':    rnd,
-                'match_id':     smallhash(rnd) + '-med',
-            })
-
-    return ret
-# }}}
-
 # }}}
 
 # {{{ predict view
@@ -324,6 +235,46 @@ def predict(request):
     return redirect(base['form'].generate_url())
 # }}}
 
+# {{{ Match predictions
+
+# {{{ MatchPredictionResult
+class MatchPredictionResult:
+    def range(self, i, mn, mx):
+        return min(max(i, mn), mx)
+
+    def __init__(self, dbpl=None, bos=None, s1=None, s2=None):
+        if dbpl is None:
+            return
+
+        sipl = [make_player(p) for p in dbpl]
+        num = bos[0]
+        obj = MatchSim(num)
+        obj.set_players(sipl)
+        obj.modify(self.range(int(s1), 0, num), self.range(int(s2), 0, num))
+        obj.compute()
+
+        self.dbpl = dbpl
+        self.bos = bos
+        self.sipl = sipl
+        self.num = num
+        self.obj = obj
+        self.pla, self.plb = dbpl[0], dbpl[1]
+        self.rta = sipl[0].elo_vs_opponent(sipl[1])
+        self.rtb = sipl[1].elo_vs_opponent(sipl[0])
+        self.proba = obj.get_tally()[sipl[0]][1]
+        self.probb = obj.get_tally()[sipl[1]][1]
+        self.sca = s1
+        self.scb = s2
+
+        self.outcomes = [
+            {'sca': outcome[1], 'scb': outcome[2], 'prob': outcome[0]}
+            for outcome in obj.instances_detail()
+        ]
+
+    def generate_updates(self):
+        return '&'.join(['s1=%s' % self.sca, 's2=%s' % self.scb])
+# }}}
+
 # {{{ Match prediction view
 @cache_page
 def match(request):
@@ -334,42 +285,32 @@ def match(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    match = MatchSim(num)
-    match.set_players(sipl)
-    match.modify(
-        get_param_range(request, 's1', (0, num), 0),
-        get_param_range(request, 's2', (0, num), 0),
+    result = MatchPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        s1=get_param(request, 's1', 0),
+        s2=get_param(request, 's2', 0),
     )
-    match.compute()
     # }}}
 
     # {{{ Postprocessing
     base.update({
         'form': form,
-        'dbpl': dbpl,
-        'rta': sipl[0].elo_vs_opponent(sipl[1]),
-        'rtb': sipl[1].elo_vs_opponent(sipl[0]),
-        'proba': match.get_tally()[sipl[0]][1],
-        'probb': match.get_tally()[sipl[1]][1],
-        'match': match,
+        'dbpl': result.dbpl,
+        'rta': result.rta,
+        'rtb': result.rtb,
+        'proba': result.proba,
+        'probb': result.probb,
+        'match': result.obj,
     })
 
     base.update({
         'max': max(base['proba'], base['probb']),
-        'fav': dbpl[0] if base['proba'] > base['probb'] else dbpl[1],
+        'fav': result.dbpl[0] if base['proba'] > base['probb'] else result.dbpl[1],
     })
 
-    resa, resb = [], []
-    outcomes = [
-        {'sca': outcome[1], 'scb': outcome[2], 'prob': outcome[0]} 
-        for outcome in match.instances_detail()
-    ]
-    resa = [oc for oc in outcomes if oc['sca'] > oc['scb']]
-    resb = [oc for oc in outcomes if oc['scb'] > oc['sca']]
+    resa = [oc for oc in result.outcomes if oc['sca'] > oc['scb']]
+    resb = [oc for oc in result.outcomes if oc['scb'] > oc['sca']]
     if len(resa) < len(resb):
         resa = [None] * (len(resb) - len(resa)) + resa
     else:
@@ -378,6 +319,7 @@ def match(request):
     # }}}
 
     # {{{ Scores and other data
+    dbpl = result.dbpl
     thr = date.today() - relativedelta(months=2)
     pla_matches = dbpl[0].get_matchset()
     plb_matches = dbpl[1].get_matchset()
@@ -415,6 +357,138 @@ def match(request):
     return render_to_response('pred_match.html', base)
 # }}}
 
+# }}}
+
+# {{{ Superclass for combination format results
+class CombinationPredictionResult:
+    def range(self, i, mn, mx):
+        return min(max(int(i), mn), mx)
+
+    def update_matches(self, obj, prefixes, args):
+        self.updates = []
+        for m in prefixes:
+            try:
+                match = obj.get_match(m)
+                num = match.get_num()
+                if match.can_modify():
+                    match.modify(
+                        self.range(args.get('%s_1' % m, 0), 0, num),
+                        self.range(args.get('%s_2' % m, 0), 0, num),
+                    )
+                    if '%s_1' % m in args and args['%s_1' % m] != '0':
+                        self.updates.append(('%s_1' % m, args['%s_1' % m]))
+                    if '%s_2' % m in args and args['%s_2' % m] != '0':
+                        self.updates.append(('%s_2' % m, args['%s_2' % m]))
+            except:
+                pass
+
+    def player_data(self, player):
+        if player is not None:
+            return {
+                'id':       player.id,
+                'tag':      player.tag,
+                'race':     player.race,
+                'country':  player.country,
+            }
+        else:
+            return {
+                'id':       None,
+                'tag':      'BYE',
+                'race':     None,
+                'country':  None,
+            }
+
+    def create_matches(self, sim, prefixes):
+        ret = []
+        for rnd, matches in prefixes:
+            for m in matches:
+                match = sim.get_match(m)
+                if not match.can_modify():
+                    continue
+
+                ret.append({})
+                ret[-1]['pla'] = self.player_data(match.get_player(0).dbpl)
+                ret[-1]['plb'] = self.player_data(match.get_player(1).dbpl)
+                ret[-1]['pla']['score'] = match.get_result()[0]
+                ret[-1]['plb']['score'] = match.get_result()[1]
+
+                ret[-1].update({
+                    'unfixed':      not match.is_fixed(),
+                    'eventtext':    rnd,
+                    'match_id':     smallhash(rnd) + '-ent',
+                    'sim':          match,
+                    'identifier':   m,
+                })
+
+        return ret
+
+    def create_median_matches(self, sim, prefixes, modify=True):
+        ret = []
+        for rnd, matches in prefixes:
+            for m in matches:
+                match = sim.get_match(m)
+                match.compute()
+                mean = match.find_lsup()
+                match.broadcast_instance((0, [mean[4], mean[3]], match))
+                if modify:
+                    match.modify(mean[1], mean[2])
+
+                ret.append({})
+                ret[-1]['pla'] = self.player_data(match.get_player(0).dbpl)
+                ret[-1]['plb'] = self.player_data(match.get_player(1).dbpl)
+                ret[-1]['pla']['score'] = mean[1]
+                ret[-1]['plb']['score'] = mean[2]
+                ret[-1].update({
+                    'eventtext':    rnd,
+                    'match_id':     smallhash(rnd) + '-med',
+                    'identifier':   m,
+                })
+
+        return ret
+
+    def generate_updates(self):
+        return '&'.join('%s=%s' % up for up in self.updates)
+# }}}
+
+# {{{ Dual tournament predictions
+
+# {{{ DualPredictionResult
+class DualPredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        prefixes = '12wlf'
+        rounds = [
+            ('Intial round',                    '12'),
+            ('Winners\' and losers\' matches',  'wl'),
+            ('Final match',                     'f'),
+        ]
+
+        self.bos = bos
+        self.dbpl = dbpl
+        sipl = [make_player(p) for p in dbpl]
+        num = bos[0]
+        obj = MSLGroup(num)
+        obj.set_players(sipl)
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        players = list(sipl)
+        for p in players:
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(3, -1, -1):
+            players.sort(key=lambda p: p.tally[i], reverse=True)
+
+        self.table = [
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
+            for p in players
+        ]
+
+        self.matches = self.create_matches(obj, rounds)
+        self.meanres = self.create_median_matches(obj, rounds)
+# }}}
+
 # {{{ Dual tournament prediction view
 @cache_page
 def dual(request):
@@ -425,34 +499,18 @@ def dual(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    group = MSLGroup(num)
-    group.set_players(sipl)
-    update_matches(group, '12wlf', request)
-
-    group.compute()
+    result = DualPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     # {{{ Post-processing
-    players = list(sipl)
-    for p in players:
-        p.tally = group.get_tally()[p]
-    for i in range(0, 4):
-        players.sort(key=lambda p: p.tally[i], reverse=True)
-
-    rounds = [
-        ('Intial round',                    '12'),
-        ('Winners\' and losers\' matches',  'wl'),
-        ('Final match',                     'f'),
-    ]
-
     base.update({
-        'players':  players,
-        'matches':  create_matches(group, rounds),
-        'meanres':  create_median_matches(group, rounds),
+        'table':    result.table,
+        'matches':  result.matches,
+        'meanres':  result.meanres,
         'form':     form,
     })
     # }}}
@@ -464,7 +522,52 @@ def dual(request):
     return render_to_response('pred_4pswiss.html', base)
 # }}}
 
-# {{{ Single elimination prediction view
+# }}}
+
+# {{{ Single elimination predictions
+
+# {{{ SingleEliminationPredictionResult
+class SingleEliminationPredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        nrounds = int(log(len(dbpl), 2))
+        num = [bos[0]] * (nrounds - len(bos)) + bos
+        if len(num) > nrounds:
+            num = num[-nrounds:]
+
+        prefixes = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
+        rounds = [
+            ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
+            for rnd in range(1, nrounds+1)
+        ]
+
+        self.dbpl = dbpl
+        self.bos = bos
+        sipl = [make_player(p) for p in dbpl]
+        obj = SEBracket(num)
+        obj.set_players(sipl)
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        players = list(sipl)
+        for p in players:
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(len(players[0].tally)-1, -1, -1):
+            players.sort(key=lambda p: p.tally[i], reverse=True)
+
+        self.table = [
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
+            for p in players
+        ]
+
+        self.matches = self.create_matches(obj, rounds)
+        self.meanres = self.create_median_matches(obj, rounds)
+        self.nrounds = nrounds
+# }}}
+
+# {{{ Single tournament prediction view
 @cache_page
 def sebracket(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -474,40 +577,19 @@ def sebracket(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo']
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nrounds = int(log(len(sipl), 2))
-    num = [num[0]] * (nrounds - len(num)) + num
-    if len(num) > nrounds:
-        num = num[-nrounds:]
-
-    bracket = SEBracket(num)
-    bracket.set_players(sipl)
-    matchlist = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
-    update_matches(bracket, matchlist, request)
-
-    bracket.compute()
+    result = SingleEliminationPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     # {{{ Post-processing
-    players = list(sipl)
-    for p in players:
-        p.tally = bracket.get_tally()[p][::-1]
-    for i in range(len(players[0].tally)-1, -1, -1):
-        players.sort(key=lambda p: p.tally[i], reverse=True)
-
-    rounds = [
-        ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
-        for rnd in range(1, nrounds+1)
-    ]
-    
     base.update({
-        'players':  players,
-        'matches':  create_matches(bracket, rounds),
-        'meanres':  create_median_matches(bracket, rounds),
-        'nrounds':  nrounds,
+        'table':    result.table,
+        'matches':  result.matches,
+        'meanres':  result.meanres,
+        'nrounds':  result.nrounds,
         'form':     form,
     })
     # }}}
@@ -517,6 +599,61 @@ def sebracket(request):
     base.update({"title": "Single elimination bracket"})
 
     return render_to_response('pred_sebracket.html', base)
+# }}}
+
+# }}}
+
+# {{{ Round robin predictions
+
+# {{{ RoundRobinPredictionResult
+class RoundRobinPredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        nplayers = len(dbpl)
+        nmatches = (nplayers-1) * nplayers // 2
+        num = bos[0]
+
+        prefixes = [str(i) for i in range(0, nmatches)]
+
+        self.dbpl = dbpl
+        self.bos = bos
+        sipl = [make_player(p) for p in dbpl]
+
+        obj = RRGroup(nplayers, num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
+        obj.set_players(sipl)
+        obj.compute() # Necessary to fill the tiebreak tables.
+        obj.save_tally()
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        players = list(sipl)
+        for p in players:
+            p.tally = obj.get_tally()[p][::-1]
+        for i in range(len(players[0].tally)-1, -1, -1):
+            players.sort(key=lambda p: p.tally[i], reverse=True)
+
+        self.table = [
+            {'player': self.player_data(p.dbpl), 'probs': p.tally}
+            for p in players
+        ]
+
+        self.matches = self.create_matches(obj, [('Group play', prefixes)])
+        self.meanres = self.create_median_matches(obj, [('Group play', prefixes)])
+
+        obj.compute()
+
+        mplayers = list(sipl)
+        for p in mplayers:
+            p.mtally = obj.get_tally()[p]
+        self.mtable = [{
+            'player': self.player_data(p.dbpl),
+            'exp_match_wins': p.mtally.exp_mscore()[0],
+            'exp_match_losses': p.mtally.exp_mscore()[1],
+            'exp_set_wins': p.mtally.exp_sscore()[0],
+            'exp_set_losses': p.mtally.exp_sscore()[1],
+        } for p in obj.table]
 # }}}
 
 # {{{ Round robin group prediction view
@@ -529,44 +666,21 @@ def rrgroup(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nplayers = len(sipl)
-    nmatches = (nplayers-1) * nplayers // 2
-
-    group = RRGroup(nplayers, num, ['mscore', 'sscore', 'imscore', 'isscore', 'ireplay'], 1)
-    group.set_players(sipl)
-    group.compute() # Necessary to fill the tiebreak tables.
-    group.save_tally()
-
-    matchlist = [str(i) for i in range(0, nmatches)]
-    update_matches(group, matchlist, request)
-    group.compute()
+    result = RoundRobinPredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     #{{{ Post-processing
-    players = list(sipl)
-    for p in players:
-        p.tally = group.get_tally()[p][::-1]
-    for i in range(len(players[0].tally)-1, -1, -1):
-        players.sort(key=lambda p: p.tally[i], reverse=True)
-
-    rounds = [('Matches', matchlist)]
-
     base.update({
-        'players':  players,
-        'matches':  create_matches(group, rounds),
+        'table':    result.table,
+        'mtable':   result.mtable,
+        'matches':  result.matches,
+        'meanres':  result.meanres,
         'form':     form,
     })
-
-    base['meanres'] = create_median_matches(group, rounds, modify=True)
-    group.compute()
-
-    for p in sipl:
-        p.mtally = group.get_tally()[p]
-    base['mplayers'] = group.table
     # }}}
 
     postable_rrgroup(base, request)
@@ -574,6 +688,57 @@ def rrgroup(request):
     base.update({"title": "Round robin group"})
 
     return render_to_response('pred_rrgroup.html', base)
+# }}}
+
+# }}}
+
+# {{{ Proleague predictions
+
+# {{{ ProleaguePredictionResult
+class ProleaguePredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        self.dbpl = dbpl
+        self.bos = bos
+
+        num = bos[0]
+        nplayers = len(dbpl)
+        nmatches = nplayers//2
+
+        sipl = [make_player(p) for p in dbpl]
+
+        obj = TeamPL(num)
+        obj.set_players(sipl)
+
+        prefixes = [str(i) for i in range(0, nmatches)]
+
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        self.matches = self.create_matches(obj, [('Matches', prefixes)])
+
+        self.outcomes = []
+        self.prob_draw = 0
+        for si in range(0, nmatches//2 + 1):
+            if si == nmatches//2 and nmatches % 2 == 0:
+                self.prob_draw = obj.get_tally()[0][si]
+            else:
+                self.outcomes.append({
+                    'loser':  si,
+                    'winner': obj._numw,
+                    'proba':  obj.get_tally()[1][si],
+                    'probb':  obj.get_tally()[0][si],
+                })
+
+        matches = [obj.get_match(m) for m in prefixes]
+        self.s1 = sum([1 if m._result[0] > m._result[1] and m.is_fixed() else 0 for m in matches])
+        self.s2 = sum([1 if m._result[0] < m._result[1] and m.is_fixed() else 0 for m in matches])
+        self.proba = sum(r['proba'] for r in self.outcomes)
+        self.probb = sum(r['probb'] for r in self.outcomes)
+
+        self.meanres = self.create_median_matches(obj, [('Matches', prefixes)])
 # }}}
 
 # {{{ Proleage prediction view
@@ -586,44 +751,23 @@ def proleague(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nplayers = len(sipl)
-
-    sim = TeamPL(num)
-    sim.set_players(sipl)
-
-    matchlist = [str(i) for i in range(0, nplayers//2)]
-    update_matches(sim, matchlist, request)
-    sim.compute()
+    result = ProleaguePredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     # {{{ Post-processing
-    results, prob_draw = [], 0
-    for si in range(0, nplayers//4 + 1):
-        if si == nplayers//4 and nplayers//2 % 2 == 0:
-            prob_draw = sim.get_tally()[0][si]
-        else:
-            results.append({
-                'scl':    si,
-                'scw':    sim._numw,
-                'proba':  sim.get_tally()[1][si],
-                'probb':  sim.get_tally()[0][si],
-            })
-
-    rounds = [('Matches', matchlist)]
-    matches = [sim.get_match(m) for m in matchlist]
     base.update({
-        's1':         sum([1 if m._result[0] > m._result[1] and m.is_fixed() else 0 for m in matches]),
-        's2':         sum([1 if m._result[0] < m._result[1] and m.is_fixed() else 0 for m in matches]),
-        'results':    results,
-        'prob_draw':  prob_draw,
-        'ta':         sum([r['proba'] for r in results]),
-        'tb':         sum([r['probb'] for r in results]),
-        'matches':    create_matches(sim, rounds),
-        'meanres':    create_median_matches(sim, rounds),
+        's1':         result.s1,
+        's2':         result.s2,
+        'outcomes':   result.outcomes,
+        'prob_draw':  result.prob_draw,
+        'proba':      result.proba,
+        'probb':      result.probb,
+        'matches':    result.matches,
+        'meanres':    result.meanres,
         'form':       form,
     })
     # }}}
@@ -633,6 +777,8 @@ def proleague(request):
     base.update({"title": "Proleague team match"})
 
     return render_to_response('pred_proleague.html', base)
+# }}}
+
 # }}}
 
 # {{{ Postables
@@ -756,19 +902,19 @@ def postable_match(base, request):
 
 # {{{ postable_dual
 def postable_dual(base, request):
-    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = (
         [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
         [('{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'.format(
-            top2 = 100*(p.tally[2]+p.tally[3]),
-            p1   = 100*p.tally[3],
-            p2   = 100*p.tally[2],
-            p3   = 100*p.tally[1],
-            p4   = 100*p.tally[0],
-            name = p.dbpl.tag,
+            top2 = 100*(p['probs'][2]+p['probs'][3]),
+            p1   = 100*p['probs'][3],
+            p2   = 100*p['probs'][2],
+            p3   = 100*p['probs'][1],
+            p4   = 100*p['probs'][0],
+            name = p['player']['tag'],
             nl   = numlen,
-        ), '', '') for p in base['players']]
+        ), '', '') for p in base['table']]
     )
 
     base['postable_tl'] = (
@@ -786,20 +932,20 @@ def postable_dual(base, request):
 
 # {{{ postable_sebracket
 def postable_sebracket(base, request, bracket):
-    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = [(''.join(
         ['Win    '] + 
-        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['players']),2)))] +
-        ['Top {i}'.format(i=len(base['players']))]
+        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['table']),2)))] +
+        ['Top {i}'.format(i=len(base['table']))]
     ), '', ''), None]
 
-    for p in base['players']:
-        if p.dbpl is None:
+    for p in base['table']:
+        if p['player']['id'] is None:
             continue
         strings.append((''.join(
-            ['{name: >{nl}}  '.format(name=p.dbpl.tag, nl=numlen)] +
-            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+            ['{name: >{nl}}  '.format(name=p['player']['tag'], nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p['probs']]
         ), '', ''))
 
     base['postable_tl'] = (
@@ -833,10 +979,10 @@ def create_postable_bracket(bracket, indent=0):
         result[r].extend([''] * (2**r - 1))
 
         for i, m in enumerate(matches):
-            pla = m['pla_tag']
-            plascore = m['pla_score']
-            plb = m['plb_tag']
-            plbscore = m['plb_score']
+            pla = m['pla']['tag']
+            plascore = m['pla']['score']
+            plb = m['plb']['tag']
+            plbscore = m['plb']['score']
 
             if r != 0:
                 pla = (' ' + pla).rjust(12, '─')
@@ -856,9 +1002,9 @@ def create_postable_bracket(bracket, indent=0):
     result.append([''] * (2**(r + 1) - 1))
     final = bracket[-1][1][0]
     result[-1].append(' ' + (
-        final['pla_tag'] 
-        if final['pla_score'] > final['plb_score'] 
-        else final ['plb_tag']
+        final['pla']['tag'] 
+        if final['pla']['score'] > final['plb']['score'] 
+        else final ['plb']['tag']
     ))
 
     postable_result = ''
@@ -870,17 +1016,17 @@ def create_postable_bracket(bracket, indent=0):
 
 # {{{ postable_rrgroup
 def postable_rrgroup(base, request):
-    numlen = max([len(p.dbpl.tag) for p in base['players'] if p.dbpl is not None])
+    numlen = max([len(p['player']['tag']) for p in base['table']])
 
     strings = [(''.join([
-        ('{s: <9}'.format(s=ordinal(i+1)) if i < len(base['players'])-1 else ordinal(i+1))
-        for i in range(0, len(base['players']))
+        ('{s: <9}'.format(s=ordinal(i+1)) if i < len(base['table'])-1 else ordinal(i+1))
+        for i in range(0, len(base['table']))
     ]), '', ''), None]
 
-    for p in base['players']:
+    for p in base['table']:
         strings.append((''.join(
-            ['{name: >{nl}}  '.format(name=p.dbpl.tag if p.dbpl is not None else 'BYE', nl=numlen)] +
-            [' {p: >7.2f}%'.format(p=100*t) for t in p.tally]
+            ['{name: >{nl}}  '.format(name=p['player']['tag'], nl=numlen)] +
+            [' {p: >7.2f}%'.format(p=100*t) for t in p['probs']]
         ), '', ''))
 
     base['postable_tl'] = (
@@ -900,26 +1046,26 @@ def postable_rrgroup(base, request):
 def postable_proleague(base, request):
     numlen = len(str((len(base['matches']) + 1) // 2))
     strings = [(
-        'Team {p}'.format(p=base['matches'][0]['pla_tag']),
+        'Team {p}'.format(p=base['matches'][0]['pla']['tag']),
         '{sca: >{nl}}-{scb: <{nl}}'.format(sca=base['s1'], scb=base['s2'], nl=numlen),
-        'Team {p}'.format(p=base['matches'][0]['plb_tag']),
+        'Team {p}'.format(p=base['matches'][0]['plb']['tag']),
     ), None]
 
-    for r in base['results']:
+    for r in base['outcomes']:
         if r['proba'] == 0.0 and r['probb'] == 0.0:
             continue
         L = ('{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(
-            pctg=100*r['proba'], sca=r['scw'], scb=r['scl'], nl=numlen
+            pctg=100*r['proba'], sca=r['winner'], scb=r['loser'], nl=numlen
         ) if r['proba'] > 0.0 else '')
         R = ('{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(
-            pctg=100*r['probb'], sca=r['scl'], scb=r['scw'], nl=numlen
+            pctg=100*r['probb'], sca=r['loser'], scb=r['winner'], nl=numlen
         ) if r['probb'] > 0.0 else '')
         strings.append((L, '', R))
 
     strings += [None, (
-        '{pctg: >6.2f}%'.format(pctg=100*base['ta']),
+        '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
         '{pctg: >6.2f}%'.format(pctg=100*base['prob_draw']) if base['prob_draw'] > 0.0 else '',
-        '{pctg: >6.2f}%'.format(pctg=100*base['tb']),
+        '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
     )]
 
     base['postable_tl'] = (

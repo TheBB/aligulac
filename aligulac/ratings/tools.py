@@ -334,16 +334,20 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             'game':         m.game if isinstance(m, Match) else m.group.game,
             'offline':      m.offline if isinstance(m, Match) else m.group.offline,
             'treated':      isinstance(m, Match) and m.treated,
-            'pla_id':       m.pla_id,
-            'plb_id':       m.plb_id,
-            'pla_tag':      m.pla.tag if m.pla is not None else m.pla_string,
-            'plb_tag':      m.plb.tag if m.plb is not None else m.plb_string,
-            'pla_race':     m.rca,
-            'plb_race':     m.rcb,
-            'pla_country':  m.pla.country if m.pla else None,
-            'plb_country':  m.plb.country if m.plb else None,
-            'pla_score':    m.sca,
-            'plb_score':    m.scb,
+            'pla': {
+                'id': m.pla_id,
+                'tag': m.pla.tag if m.pla is not None else m.pla_string,
+                'race': m.rca,
+                'country': m.pla.country if m.pla else None,
+                'score': m.sca,
+            },
+            'plb': {
+                'id': m.plb_id,
+                'tag': m.plb.tag if m.plb is not None else m.plb_string,
+                'race': m.rcb,
+                'country': m.plb.country if m.plb else None,
+                'score': m.scb,
+            },
         }
 
         if eventcount:
@@ -366,22 +370,22 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
         # {{{ Check ratings if needed
         if ratings and isinstance(m, Match):
-            r.update({
-                'pla_rating':  m.rta.get_totalrating(m.rcb) if m.rta
-                               else start_rating(r['pla_country'], m.period_id),
-                'plb_rating':  m.rtb.get_totalrating(m.rca) if m.rtb
-                               else start_rating(r['plb_country'], m.period_id),
-                'pla_dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
-                'plb_dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
+            r['pla'].update({
+                'rating':  m.rta.get_totalrating(m.rcb) if m.rta
+                           else start_rating(r['pla']['country'], m.period_id),
+                'dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
+            })
+
+            r['plb'].update({
+                'rating':  m.rtb.get_totalrating(m.rca) if m.rtb
+                           else start_rating(r['plb']['country'], m.period_id),
+                'dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
             })
         # }}}
 
         # {{{ Switch roles of pla and plb if needed
-        if fix_left is not None and fix_left.id == r['plb_id']:
-            for k in r.keys():
-                if k[0:3] == 'pla':
-                    l = 'plb' + k[3:]
-                    r[k], r[l] = r[l], r[k]
+        if fix_left is not None and fix_left.id == r['plb']['id']:
+            r['pla'], r['plb'] = r['plb'], r['pla']
         # }}}
 
         ret.append(r)

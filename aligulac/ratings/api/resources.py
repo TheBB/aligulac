@@ -530,6 +530,18 @@ class PredictCombinationResource(PredictResource):
         for m in bundle.data['meanres']:
             del m['match_id']
         return bundle.data['meanres']
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return self.Meta.object_class(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            args=args,
+        )
+
+    matches = fields.ListField('matches', null=False, help_text='Matches')
+    meanres = fields.ListField('meanres', null=False, help_text='Median results')
 # }}}
 
 # {{{ PredictMatchResource
@@ -570,17 +582,6 @@ class PredictDualResource(PredictCombinationResource):
         object_class = DualPredictionResult
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
-    matches = fields.ListField('matches', null=False, help_text='Matches')
-    meanres = fields.ListField('meanres', null=False, help_text='Median results')
-
-    def obj_get(self, request=None, **kwargs):
-        args = request.GET if request.method == 'GET' else request.POST
-
-        return DualPredictionResult(
-            dbpl=self.clean_pk(kwargs['pk']),
-            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
-            args=args,
-        )
 # }}}
 
 # {{{ PredictSEBracketResource
@@ -592,17 +593,6 @@ class PredictSEBracketResource(PredictCombinationResource):
         object_class = SingleEliminationPredictionResult
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
-    matches = fields.ListField('matches', null=False, help_text='Matches')
-    meanres = fields.ListField('meanres', null=False, help_text='Median results')
-
-    def obj_get(self, request=None, **kwargs):
-        args = request.GET if request.method == 'GET' else request.POST
-
-        return SingleEliminationPredictionResult(
-            dbpl=self.clean_pk(kwargs['pk']),
-            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
-            args=args,
-        )
 # }}}
 
 # {{{ PredictRRGroupResource
@@ -614,18 +604,7 @@ class PredictRRGroupResource(PredictCombinationResource):
         object_class = RoundRobinPredictionResult
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
-    matches = fields.ListField('matches', null=False, help_text='Matches')
-    meanres = fields.ListField('meanres', null=False, help_text='Median results')
     mtable = fields.ListField('mtable', null=False, help_text='Median table')
-
-    def obj_get(self, request=None, **kwargs):
-        args = request.GET if request.method == 'GET' else request.POST
-
-        return RoundRobinPredictionResult(
-            dbpl=self.clean_pk(kwargs['pk']),
-            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
-            args=args,
-        )
 # }}}
 
 # {{{ ProleaguePredictionResult
@@ -642,15 +621,4 @@ class PredictPLResource(PredictCombinationResource):
     prob_draw = fields.FloatField('prob_draw', null=False, help_text='Probability for a draw')
     sca = fields.IntegerField('s1', null=False, help_text='Predefined score for Team A')
     scb = fields.IntegerField('s2', null=False, help_text='Predefined score for Team B')
-    matches = fields.ListField('matches', null=False, help_text='Matches')
-    meanres = fields.ListField('meanres', null=False, help_text='Median results')
-
-    def obj_get(self, request=None, **kwargs):
-        args = request.GET if request.method == 'GET' else request.POST
-
-        return ProleaguePredictionResult(
-            dbpl=self.clean_pk(kwargs['pk']),
-            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
-            args=args,
-        )
 # }}}

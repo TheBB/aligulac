@@ -22,6 +22,7 @@ from ratings.api.resources import (
     PredictMatchResource,
     PredictSEBracketResource,
     PredictRRGroupResource,
+    PredictPLResource,
 )
 
 from django.contrib import admin
@@ -31,7 +32,7 @@ admin.autodiscover()
 handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
 
-v1_api = Api(api_name='v1')
+beta_api = Api(api_name='beta')
 resources = [
     ActiveRatingResource,
     EarningResource,
@@ -45,9 +46,10 @@ resources = [
     PredictMatchResource,
     PredictSEBracketResource,
     PredictRRGroupResource,
+    PredictPLResource
 ]
 for res in resources:
-    v1_api.register(res())
+    beta_api.register(res())
 
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
@@ -118,7 +120,7 @@ urlpatterns = patterns('',
     url(r'^api/rating_list/(?P<period>\d+)/$', 'ratings.api_views.rating_list'),
 
     # Tastypie
-    url(r'^api/', include(v1_api.urls)),
+    url(r'^api/', include(beta_api.urls)),
 
     # Ask TheBB if questions
     url(r'^misc/training/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.misc_views.training'),

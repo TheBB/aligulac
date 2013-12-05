@@ -1,4 +1,6 @@
 # {{{ Imports
+from urllib.request import unquote
+
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.resources import Resource, ModelResource, ALL, ALL_WITH_RELATIONS
@@ -13,6 +15,7 @@ from ratings.inference_views import (
     MatchPredictionResult,
     RoundRobinPredictionResult,
     SingleEliminationPredictionResult,
+    ProleaguePredictionResult,
 )
 from ratings.models import (
     APIKey,
@@ -480,9 +483,11 @@ class PredictResource(Resource):
         if self._meta.api_name is not None:
             kwargs['api_name'] = self._meta.api_name
 
-        s = self._build_reverse_url('api_dispatch_detail', kwargs=kwargs)
+        s = unquote(self._build_reverse_url('api_dispatch_detail', kwargs=kwargs))
         s += '?bo=%s' % ','.join([str(2*b-1) for b in bundle_or_obj.obj.bos])
-        s += bundle_or_obj.obj.generate_updates()
+        q = bundle_or_obj.obj.generate_updates()
+        if q:
+            s += '&' + q
         return s
 
     def get_object_list(self, request):
@@ -617,6 +622,33 @@ class PredictRRGroupResource(PredictCombinationResource):
         args = request.GET if request.method == 'GET' else request.POST
 
         return RoundRobinPredictionResult(
+            dbpl=self.clean_pk(kwargs['pk']),
+            bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
+            args=args,
+        )
+# }}}
+
+# {{{ ProleaguePredictionResult
+class PredictPLResource(PredictCombinationResource):
+    class Meta:
+        allowed_methods = ['get', 'post']
+        resource_name = 'predictproleague'
+        authentication = APIKeyAuthentication()
+        object_class = ProleaguePredictionResult
+
+    outcomes = fields.ListField('outcomes', null=False, help_text='Possible outcomes')
+    proba = fields.FloatField('proba', null=False, help_text='Probability for Team A winning')
+    probb = fields.FloatField('probb', null=False, help_text='Probability for Team B winning')
+    prob_draw = fields.FloatField('prob_draw', null=False, help_text='Probability for a draw')
+    sca = fields.IntegerField('s1', null=False, help_text='Predefined score for Team A')
+    scb = fields.IntegerField('s2', null=False, help_text='Predefined score for Team B')
+    matches = fields.ListField('matches', null=False, help_text='Matches')
+    meanres = fields.ListField('meanres', null=False, help_text='Median results')
+
+    def obj_get(self, request=None, **kwargs):
+        args = request.GET if request.method == 'GET' else request.POST
+
+        return ProleaguePredictionResult(
             dbpl=self.clean_pk(kwargs['pk']),
             bos=[(int(b)+1)//2 for b in args['bo'].split(',')],
             args=args,

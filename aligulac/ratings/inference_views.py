@@ -692,6 +692,55 @@ def rrgroup(request):
 
 # }}}
 
+# {{{ Proleague predictions
+
+# {{{ ProleaguePredictionResult
+class ProleaguePredictionResult(CombinationPredictionResult):
+    def __init__(self, dbpl=None, bos=None, args=None):
+        if dbpl is None:
+            return
+
+        self.dbpl = dbpl
+        self.bos = bos
+
+        num = bos[0]
+        nplayers = len(dbpl)
+        nmatches = nplayers//2
+
+        sipl = [make_player(p) for p in dbpl]
+
+        obj = TeamPL(num)
+        obj.set_players(sipl)
+
+        prefixes = [str(i) for i in range(0, nmatches)]
+
+        self.update_matches(obj, prefixes, args)
+        obj.compute()
+
+        self.matches = self.create_matches(obj, [('Matches', prefixes)])
+
+        self.outcomes = []
+        self.prob_draw = 0
+        for si in range(0, nmatches//2 + 1):
+            if si == nmatches//2 and nmatches % 2 == 0:
+                self.prob_draw = obj.get_tally()[0][si]
+            else:
+                self.outcomes.append({
+                    'loser':  si,
+                    'winner': obj._numw,
+                    'proba':  obj.get_tally()[1][si],
+                    'probb':  obj.get_tally()[0][si],
+                })
+
+        matches = [obj.get_match(m) for m in prefixes]
+        self.s1 = sum([1 if m._result[0] > m._result[1] and m.is_fixed() else 0 for m in matches])
+        self.s2 = sum([1 if m._result[0] < m._result[1] and m.is_fixed() else 0 for m in matches])
+        self.proba = sum(r['proba'] for r in self.outcomes)
+        self.probb = sum(r['probb'] for r in self.outcomes)
+
+        self.meanres = self.create_median_matches(obj, [('Matches', prefixes)])
+# }}}
+
 # {{{ Proleage prediction view
 @cache_page
 def proleague(request):
@@ -702,44 +751,23 @@ def proleague(request):
     if not form.is_valid():
         return redirect('/inference/')
 
-    num = form.cleaned_data['bo'][0]
-    dbpl = form.cleaned_data['ps']
-    sipl = [make_player(p) for p in dbpl]
-
-    nplayers = len(sipl)
-
-    sim = TeamPL(num)
-    sim.set_players(sipl)
-
-    matchlist = [str(i) for i in range(0, nplayers//2)]
-    update_matches(sim, matchlist, request)
-    sim.compute()
+    result = ProleaguePredictionResult(
+        dbpl=form.cleaned_data['ps'],
+        bos=form.cleaned_data['bo'],
+        args=request.GET,
+    )
     # }}}
 
     # {{{ Post-processing
-    results, prob_draw = [], 0
-    for si in range(0, nplayers//4 + 1):
-        if si == nplayers//4 and nplayers//2 % 2 == 0:
-            prob_draw = sim.get_tally()[0][si]
-        else:
-            results.append({
-                'scl':    si,
-                'scw':    sim._numw,
-                'proba':  sim.get_tally()[1][si],
-                'probb':  sim.get_tally()[0][si],
-            })
-
-    rounds = [('Matches', matchlist)]
-    matches = [sim.get_match(m) for m in matchlist]
     base.update({
-        's1':         sum([1 if m._result[0] > m._result[1] and m.is_fixed() else 0 for m in matches]),
-        's2':         sum([1 if m._result[0] < m._result[1] and m.is_fixed() else 0 for m in matches]),
-        'results':    results,
-        'prob_draw':  prob_draw,
-        'ta':         sum([r['proba'] for r in results]),
-        'tb':         sum([r['probb'] for r in results]),
-        'matches':    create_matches(sim, rounds),
-        'meanres':    create_median_matches(sim, rounds),
+        's1':         result.s1,
+        's2':         result.s2,
+        'outcomes':   result.outcomes,
+        'prob_draw':  result.prob_draw,
+        'proba':      result.proba,
+        'probb':      result.probb,
+        'matches':    result.matches,
+        'meanres':    result.meanres,
         'form':       form,
     })
     # }}}
@@ -749,6 +777,8 @@ def proleague(request):
     base.update({"title": "Proleague team match"})
 
     return render_to_response('pred_proleague.html', base)
+# }}}
+
 # }}}
 
 # {{{ Postables
@@ -1016,26 +1046,26 @@ def postable_rrgroup(base, request):
 def postable_proleague(base, request):
     numlen = len(str((len(base['matches']) + 1) // 2))
     strings = [(
-        'Team {p}'.format(p=base['matches'][0]['pla_tag']),
+        'Team {p}'.format(p=base['matches'][0]['pla']['tag']),
         '{sca: >{nl}}-{scb: <{nl}}'.format(sca=base['s1'], scb=base['s2'], nl=numlen),
-        'Team {p}'.format(p=base['matches'][0]['plb_tag']),
+        'Team {p}'.format(p=base['matches'][0]['plb']['tag']),
     ), None]
 
-    for r in base['results']:
+    for r in base['outcomes']:
         if r['proba'] == 0.0 and r['probb'] == 0.0:
             continue
         L = ('{pctg: >6.2f}% {sca}-{scb: >{nl}}'.format(
-            pctg=100*r['proba'], sca=r['scw'], scb=r['scl'], nl=numlen
+            pctg=100*r['proba'], sca=r['winner'], scb=r['loser'], nl=numlen
         ) if r['proba'] > 0.0 else '')
         R = ('{sca: >{nl}}-{scb} {pctg: >6.2f}%'.format(
-            pctg=100*r['probb'], sca=r['scl'], scb=r['scw'], nl=numlen
+            pctg=100*r['probb'], sca=r['loser'], scb=r['winner'], nl=numlen
         ) if r['probb'] > 0.0 else '')
         strings.append((L, '', R))
 
     strings += [None, (
-        '{pctg: >6.2f}%'.format(pctg=100*base['ta']),
+        '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
         '{pctg: >6.2f}%'.format(pctg=100*base['prob_draw']) if base['prob_draw'] > 0.0 else '',
-        '{pctg: >6.2f}%'.format(pctg=100*base['tb']),
+        '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
     )]
 
     base['postable_tl'] = (

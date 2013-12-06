@@ -552,12 +552,12 @@ class SearchForm(forms.Form):
         if 1 <= len(pls) <= 2:
             ret['matches'] = display_matches(matches, date=True, fix_left=pls[0], eventcount=True)
             ret['sc_my'], ret['sc_op'] = (
-                sum([m['pla_score'] for m in ret['matches']]),
-                sum([m['plb_score'] for m in ret['matches']]),
+                sum([m['pla']['score'] for m in ret['matches']]),
+                sum([m['plb']['score'] for m in ret['matches']]),
             )
             ret['msc_my'], ret['msc_op'] = (
-                sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in ret['matches']]),
-                sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in ret['matches']]),
+                sum([1 if m['pla']['score'] > m['plb']['score'] else 0 for m in ret['matches']]),
+                sum([1 if m['plb']['score'] > m['pla']['score'] else 0 for m in ret['matches']]),
             )
             ret['left'] = pls[0]
             if len(pls) == 2:

@@ -732,7 +732,7 @@ def events(request, event_id=None):
 
     # {{{ Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__uplink__parent=event)
-    currencies = [r['currency'] for r in total_earnings.values('currency').distinct()]
+    currencies = list({r['currency'] for r in total_earnings.values('currency').distinct()})
     base.update({
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],
         'nousdpp':       len(currencies) > 1 or len(currencies) == 1 and currencies[0] != 'USD',

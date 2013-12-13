@@ -13,7 +13,10 @@ from django.db.models import (
     Count
 )
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import (
+    redirect,
+    render_to_response,
+)
 
 from aligulac.tools import (
     base_ctx,
@@ -189,15 +192,11 @@ class ReviewMatchesForm(forms.Form):
                         self.messages.append(Message(error=error, field=self.fields[field].label))
             return
 
-        print(self.cleaned_data)
-
         prematches = [
             PreMatch.objects.get(id=int(key.split('-')[-1]))
             for key in sorted(post.keys())
             if key[0:6] == 'match-' and post[key] == 'y'
         ]
-
-        print(prematches)
 
         matches = []
         for pm in prematches:

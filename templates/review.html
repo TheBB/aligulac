@@ -63,7 +63,7 @@ ratings.submitviews.review.
             <td colspan="1" style="vertical-align: top;">Notes:</td>
             <td colspan="6">{{ g.notes|markdown }}</td>
         </tr>
-        {% include "matchlist.html" with lm_list=g.prematches lm_adm=1 lm_check=1 %}
+        {% include "matchlist.html" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True %}
     </tbody>
     {% endfor %}
     </table>

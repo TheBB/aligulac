@@ -56,7 +56,6 @@ CACHE_TIMES = {
     'ratings.inference_views.sebracket': 6*60*60,
     'ratings.inference_views.rrgroup': 6*60*60,
     'ratings.inference_views.proleague': 6*60*60,
-    'ratings.player_views.adjustment': 6*60*60,
     'ratings.player_views.historical': 6*60*60,
     'ratings.ranking_views.periods': 6*60*60,
     'ratings.ranking_views.period': 6*60*60,

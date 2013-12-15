@@ -650,7 +650,7 @@ def results(request):
     })
 
     matches = (
-        Match.objects.filter(date=day).order_by('eventobj__latest', 'eventobj__idx', 'event', 'id')
+        Match.objects.filter(date=day).order_by('eventobj__idx', 'eventobj__latest', 'event', 'id')
             .prefetch_related('message_set')
             .select_related('rta', 'rtb', 'pla', 'plb', 'eventobj')
             .annotate(Count('eventobj__match'))

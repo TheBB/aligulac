@@ -991,16 +991,26 @@ class Match(models.Model):
 
     # {{{ populate_orig: Populates the original data fields, to check later if anything changed.
     def populate_orig(self):
-        try:
-            self.orig_pla    = self.pla_id
-            self.orig_plb    = self.plb_id
-            self.orig_rca    = self.rca
-            self.orig_rcb    = self.rcb
-            self.orig_sca    = self.sca
-            self.orig_scb    = self.scb
-            self.orig_date   = self.date
-            self.orig_period = self.period_id
-        except:
+        if self.pk:
+            try:
+                self.orig_pla    = self.pla_id
+                self.orig_plb    = self.plb_id
+                self.orig_rca    = self.rca
+                self.orig_rcb    = self.rcb
+                self.orig_sca    = self.sca
+                self.orig_scb    = self.scb
+                self.orig_date   = self.date
+                self.orig_period = self.period_id
+            except:
+                self.orig_pla    = None
+                self.orig_plb    = None
+                self.orig_rca    = None
+                self.orig_rcb    = None
+                self.orig_sca    = None
+                self.orig_scb    = None
+                self.orig_date   = None
+                self.orig_period = None
+        else:
             self.orig_pla    = None
             self.orig_plb    = None
             self.orig_rca    = None
@@ -1022,6 +1032,7 @@ class Match(models.Model):
 
     # {{{ changed_date: Returns true if the date has been changed.
     def changed_date(self):
+        print(self.orig_date, self.date)
         return self.orig_date != self.date
     # }}}
 
@@ -1064,16 +1075,20 @@ class Match(models.Model):
 
             self.treated = False
 
+        print('calling super.save')
+
         # Save to DB and repopulate original fields.
         super(Match, self).save(force_insert, force_update, *args, **kwargs)
         self.populate_orig()
 
         if update_dates:
             for event in self.eventobj.get_ancestors(id=True):
-                if self.date < event.earliest:
+                print(event.fullname, event.earliest, event.latest)
+                if event.earliest is None or self.date < event.earliest:
                     event.set_earliest(self.date)
-                if self.date > event.latest:
+                if event.latest is None or self.date > event.latest:
                     event.set_latest(self.date)
+                print(event.fullname, event.earliest, event.latest)
     # }}}
 
     # {{{ delete: Has been overloaded to check for effective changes, flagging a period as needing

@@ -1032,7 +1032,6 @@ class Match(models.Model):
 
     # {{{ changed_date: Returns true if the date has been changed.
     def changed_date(self):
-        print(self.orig_date, self.date)
         return self.orig_date != self.date
     # }}}
 
@@ -1075,20 +1074,16 @@ class Match(models.Model):
 
             self.treated = False
 
-        print('calling super.save')
-
         # Save to DB and repopulate original fields.
         super(Match, self).save(force_insert, force_update, *args, **kwargs)
         self.populate_orig()
 
         if update_dates:
             for event in self.eventobj.get_ancestors(id=True):
-                print(event.fullname, event.earliest, event.latest)
                 if event.earliest is None or self.date < event.earliest:
                     event.set_earliest(self.date)
                 if event.latest is None or self.date > event.latest:
                     event.set_latest(self.date)
-                print(event.fullname, event.earliest, event.latest)
     # }}}
 
     # {{{ delete: Has been overloaded to check for effective changes, flagging a period as needing
@@ -1342,7 +1337,6 @@ class PreMatch(models.Model):
 
     # {{{ is_valid: Checks if this can be turned into a Match.
     def is_valid(self):
-        print(self.pla, self.plb, self.rca, self.rcb)
         return self.pla is not None and self.plb is not None
     # }}}
 # }}}

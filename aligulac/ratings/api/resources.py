@@ -203,6 +203,11 @@ class SmallPlayerResource(ModelResource):
             'country',
             'race',
         ]
+        filtering = {
+            'tag':             ALL,
+            'country':         ALL,
+            'race':            ALL
+        }
             
 # }}}
 

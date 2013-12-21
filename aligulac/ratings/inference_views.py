@@ -907,11 +907,11 @@ def postable_dual(base, request):
     strings = (
         [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
         [('{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'.format(
-            top2 = 100*(p['probs'][2]+p['probs'][3]),
-            p1   = 100*p['probs'][3],
-            p2   = 100*p['probs'][2],
-            p3   = 100*p['probs'][1],
-            p4   = 100*p['probs'][0],
+            top2 = 100*(p['probs'][0]+p['probs'][1]),
+            p1   = 100*p['probs'][0],
+            p2   = 100*p['probs'][1],
+            p3   = 100*p['probs'][2],
+            p4   = 100*p['probs'][3],
             name = p['player']['tag'],
             nl   = numlen,
         ), '', '') for p in base['table']]

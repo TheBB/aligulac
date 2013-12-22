@@ -306,8 +306,8 @@ Contains prize pool information. Each row represents a single payout to a single
     id              integer not null                        primary key
     event_id        integer not null                        foreign key to event
     player_id       integer not null                        foreign key to player
-    earnings        integer                                 amount in USD
-    origearnings    integer                                 amount in original currency
+    earnings        integer                                 amount in USD at win-time
+    origearnings    numeric(20,8)                           amount in original currency
     currency        character varying(30) not null          currency code
     placement       integer not null                        place in the event
     </pre>

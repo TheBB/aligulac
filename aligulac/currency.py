@@ -2,7 +2,7 @@ import datetime
 import json
 import urllib
 from aligulac import settings
-
+from decimal import Decimal
 #Class adapted from https://bitbucket.org/alquimista/currency
 
 class ExchangeRates(object):
@@ -19,10 +19,16 @@ class ExchangeRates(object):
         except urllib.error.HTTPerror as err:
             #API limit reached for the month or other error
             return False
-        return json.loads(jsonfile.read().decode())
+
+        data = json.loads(jsonfile.read().decode())
+
+        # ccy use XBT instead
+        data['rates']['XBT'] = data['rates']['BTC']
+
+        return data
 
     def _tobase(self, amount, currency):
-        return amount * float(self.rates[currency])
+        return amount * Decimal(self.rates[currency])
 
     @property
     def rates(self):
@@ -30,4 +36,4 @@ class ExchangeRates(object):
 
     def convert(self, amount, currencyfrom, currencyto='USD'):
         usd = self._tobase(amount, currencyto.upper())
-        return usd / float(self.rates[currencyfrom.upper()])
+        return usd / Decimal(self.rates[currencyfrom.upper()])

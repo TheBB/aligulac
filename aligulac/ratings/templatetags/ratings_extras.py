@@ -136,13 +136,22 @@ def milliseconds(value):
 # {{{ add_separator: Adds separators to a large number.
 @register.filter
 def add_separator(value):
-    string = str(value)
+
+    svalue = str(value)
+
+    if '.' in svalue:
+        string, decimals = tuple(svalue.split('.'))
+    else:
+        string, decimals = svalue, None
     newstring = ''
 
     while True:
         if len(string) <= 3:
             newstring = string + newstring
-            return newstring
+            if decimals is not None and len(decimals.rstrip('0')) != 0:
+                return newstring + '.' + decimals.rstrip('0')
+            else:
+                return newstring
         else:
             newstring = ',' + string[-3:] + newstring
             string = string[:-3]
@@ -176,6 +185,8 @@ def add_sep_and_cur(value, cur):
         return s + " zł"
     elif cur == "ZAR":
         return "R " + s
+    # elif cur in ['XBT', 'BTC']:
+    #     return "\u0243 " + s
     else:
         return s + " " + cur
 # }}}

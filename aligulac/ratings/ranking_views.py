@@ -144,6 +144,8 @@ def period(request, period_id):
     else:
         entries = entries.extra(select={'d':'rating+rating_'+sort}).order_by('-d', 'player__tag')
 
+    entries = entries.prefetch_related('prev')
+
     base.update({
         'race': race,
         'nats': nats,

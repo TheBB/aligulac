@@ -1216,9 +1216,11 @@ class Earnings(models.Model):
         'Earnings (USD)', null=True, blank=True,
         help_text='Prize money converted to USD (historically accurate conversion rate)'
     )
-    origearnings = models.IntegerField(
+    origearnings = models.DecimalField(
         'Earnings (original currency)',
-        help_text='Prize money in original currency'
+        help_text='Prize money in original currency',
+        decimal_places=8, # Bitcoin uses 8 places
+        max_digits=12+8
     )
     currency = models.CharField(
         'Original currency', max_length=30,

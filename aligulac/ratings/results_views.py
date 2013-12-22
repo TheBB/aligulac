@@ -3,6 +3,7 @@ from datetime import (
     datetime,
     date,
 )
+from decimal import Decimal
 import operator
 import shlex
 
@@ -205,7 +206,7 @@ class PrizepoolModForm(forms.Form):
     # {{{ Function for parsing a single line
     def line_to_data(self, line):
         ind = line.find(' ')
-        prize = int(line[:ind])
+        prize = Decimal(line[:ind])
 
         queryset = find_player(query=line[ind+1:])
         if not queryset.exists():

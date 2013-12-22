@@ -203,6 +203,12 @@ class SmallPlayerResource(ModelResource):
             'country',
             'race',
         ]
+        filtering = {
+            'tag':             ALL,
+            'country':         ALL,
+            'race':            ALL
+        }
+            
 # }}}
 
 # {{{ PlayerResource
@@ -313,20 +319,6 @@ class EventResource(ModelResource):
         'ratings.api.resources.EarningResource', attribute = lambda b: b.obj.earnings_set,
         null=True, help_text='Prizes awarded'
     )
-# }}}
-
-# {{{ SmallPlayerResource (for inline)
-class SmallPlayerResource(ModelResource):
-    class Meta:
-        queryset = Player.objects.all()
-        allowed_methods = ['get', 'post']
-        resource_name = 'player'
-        authentication = APIKeyAuthentication()
-        fields = [
-            'tag',
-            'country',
-            'race',
-        ]
 # }}}
 
 # {{{ MatchResource

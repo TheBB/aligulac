@@ -6,6 +6,7 @@ from numpy import (
 )
 from math import sqrt
 from datetime import date
+from decimal import Decimal
 import shlex
 
 from django.db.models import (
@@ -229,6 +230,22 @@ def currency_list(queryset):
     return currency_dict
 # }}}
 
+
+# {{{
+def currency_strip(value):
+    """
+    Pretty prints the value using as few characters as possible
+    """
+    if isinstance(value, str):
+        return value.rstrip('0').rstrip('.')
+        
+    if isinstance(value, Decimal):
+        return currency_strip(str(value))
+
+    if isinstance(value, int):
+        return str(value)
+# }}}
+
 # {{{ filter_flags: Splits an integer representing bitwise or into a list of each flag.
 def filter_flags(flags):
     power = 1
@@ -392,3 +409,4 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     return ret
 # }}}
+

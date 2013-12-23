@@ -59,6 +59,7 @@ from ratings.models import (
     TYPE_ROUND,
 )
 from ratings.tools import (
+    currency_strip,
     count_matchup_games,
     count_mirror_games,
     count_winloss_games,
@@ -79,7 +80,12 @@ def collect(lst, n=2):
 def earnings_code(queryset):
     if not queryset.exists():
         return '[prize] [player]'
-    return '\n'.join(['%i %s %i' % (e.origearnings, e.player.tag, e.player_id) for e in queryset])
+    return '\n'.join([
+        '{} {} {}'.format(currency_strip(e.origearnings), 
+                          e.player.tag, 
+                          e.player_id) 
+        for e in queryset
+    ])
 # }}}
 
 # {{{ EventModForm: Form for modifying an event.

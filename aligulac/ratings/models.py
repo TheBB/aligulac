@@ -16,7 +16,7 @@ from django.db.models import (
     Q,
 )
 
-from aligulac.settings import start_rating
+from aligulac.settings import start_rating, INACTIVE_THRESHOLD
 
 from currency import ExchangeRates
 
@@ -741,7 +741,43 @@ class Player(models.Model):
         qset = qset.prefetch_related('message_set')
 
         return qset.order_by('-date', '-id')
-     # }}}
+    # }}}
+
+    # {{{ get_rank: Calculates the rank for the player with country as filter
+    def get_rank(self, country=''):
+        if '_ranks' not in dir(self):
+            self._ranks = dict()
+        if country in self._ranks:
+            return self._ranks[country]
+
+        q = Rating.objects.filter(period=self.current_rating.period,
+                                  rating__gt=self.current_rating.rating,
+                                  decay__lt=INACTIVE_THRESHOLD)\
+                          .exclude(player=self)
+        
+        if country == "foreigners":
+            q = q.exclude(player__country='KR')
+        elif country != '':
+            q = q.filter(player__country=country)
+
+        c = q.count()
+        self._ranks[country] = c + 1
+        return self._ranks[country]
+
+    @property
+    def world_rank(self):
+        return self.get_rank()
+
+    @property
+    def country_rank(self):
+        if self.country is not None and self.country != '':
+            return self.get_rank(self.country)
+
+    @property
+    def foreigner_rank(self):
+        return self.get_rank('foreigners')
+    # }}}
+
 # }}}
 
 # {{{ Stories

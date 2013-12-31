@@ -474,7 +474,7 @@ class SearchForm(forms.Form):
 
         matches = (
             Match.objects.all().prefetch_related('message_set')
-                .select_related('pla','plb','period')
+                .prefetch_related('pla', 'plb', 'period', 'eventobj')
                 .annotate(Count('eventobj__match'))
         )
 
@@ -761,7 +761,7 @@ def events(request, event_id=None):
         'zvz_games': count_mirror_games(matches, 'Z'),
         'matches':   display_matches(
             matches.prefetch_related('message_set')
-                .select_related('pla', 'plb', 'eventobj')
+                .prefetch_related('pla', 'plb', 'eventobj')
                 .annotate(Count('eventobj__match'))
                 .order_by('-eventobj__latest', '-eventobj__idx', '-date', '-id')[0:200],
             eventcount=True,

@@ -474,7 +474,7 @@ class SearchForm(forms.Form):
 
         matches = (
             Match.objects.all().prefetch_related('message_set')
-                .select_related('pla','plb','period')
+                .prefetch_related('pla', 'plb', 'period', 'eventobj')
                 .annotate(Count('eventobj__match'))
         )
 

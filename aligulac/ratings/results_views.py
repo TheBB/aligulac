@@ -599,7 +599,8 @@ class ResultsModForm(forms.Form):
 
         self.fields['event'].choices = [(0, 'No change')] + [
             (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                .exclude(downlink__distance__gt=0)
+                .annotate(num_downlinks=Count('downlink'))
+                .filter(num_downlinks=1)
                 .order_by('idx')
                 .values('id', 'fullname')
         ]

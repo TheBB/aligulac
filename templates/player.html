@@ -329,6 +329,40 @@ This is the template for the main player page, called from ratings.views.player.
             </div>
         </div>
         {% endif %}
+        {% if player.current_rating and player.current_rating.decay < 4 %}
+        {% with pid=player.current_rating.period.id %}
+        <div class="row infobox">
+          <div class="rowel">
+            Rank
+          </div>
+          <div class="rower">
+            <a href="/periods/{{ pid }}/">
+              #{{ player.world_rank }} World
+            </a>
+          </div>
+        </div>
+        {% if player.country != "KR" %}
+        <div class="row infobox">
+          <div class="rowel"></div>
+          <div class="rower">
+            <a href="/periods/{{ pid }}/?nats=foreigners">
+              #{{ player.foreigner_rank }} Non-Korean
+            </a>
+          </div>
+        </div>
+        {% endif %}
+        {% if player.country %}
+        <div class="row infobox">
+          <div class="rowel"></div>
+          <div class="rower">
+            <a href="/periods/{{ pid }}/?nats={{ player.country }}">
+              #{{ player.country_rank }} {{ countryfull }}
+            </a>
+          </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% endif %}
         {% if player.name %}
         <div class="row infobox">
             <div class="rowel">Full name</div>

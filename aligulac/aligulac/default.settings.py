@@ -63,6 +63,9 @@ CACHE_TIMES = {
     'ratings.records_views.hof': 6*60*60,
     'ratings.records_views.race': 6*60*60,
     'ratings.report_views.balance': 6*60*60,
+    
+    # Set until the queries have been improved
+    'ratings.results_views.results': 10*60
 }
 
 # RATINGS

@@ -1,4 +1,6 @@
 # {{{ Imports
+from datetime import datetime
+
 from django.contrib import admin
 from django.contrib.admin import (
     AllValuesFieldListFilter,
@@ -95,6 +97,20 @@ class MatchForm(forms.ModelForm):
             q = q | Q(id=self.instance.eventobj.id)
         self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('fullname')
 
+    def commit(self, request):
+        super().commit(request)
+        
+        self.cleaned_data['period'].update(needs_recompute=True)
+
+def match_delete_wrapper(f):
+    def wrapper(self, request, objlist):
+        result = f(self, request, objlist)
+        for obj in objlist:
+            obj.period.needs_recompute = True
+            obj.period.save()
+        return result
+    return wrapper
+
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]
@@ -105,12 +121,50 @@ class MatchAdmin(admin.ModelAdmin):
     ]
     form = MatchForm
 
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+
+        if 'delete_selected' in actions:
+            fun, name, desc = actions['delete_selected']
+            actions['delete_selected'] = (match_delete_wrapper(fun), name, desc)
+            
+        return actions
+
     def get_res(self, obj):
         return '%s %i-%i %s' % (str(obj.pla), obj.sca, obj.scb, str(obj.plb))
     get_res.short_description = 'Result'
 
     def has_add_permission(self, request):
         return False
+
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('id', 'start', 'end', 'computed', 'needs_recompute')
+    list_filter = ('computed', 'needs_recompute')
+
+    actions = ['recompute']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.list_display_links = (None, )
+
+    def get_queryset(self, request):
+        return Period.objects.filter(start__lte=datetime.today())
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+
+        return actions
+
+    def has_add_permission(self, request):
+        return False
+
+    def recompute(self, request, queryset):
+        queryset.update(needs_recompute=True)
+    recompute.short_description = "Recompute selected"
+
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
@@ -183,6 +237,7 @@ class APIKeyAdmin(admin.ModelAdmin):
         return False
 
 admin.site.register(Player, PlayerAdmin)
+admin.site.register(Period, PeriodAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)

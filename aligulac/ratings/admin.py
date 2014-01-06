@@ -1,4 +1,6 @@
 # {{{ Imports
+from datetime import datetime
+
 from django.contrib import admin
 from django.contrib.admin import (
     AllValuesFieldListFilter,
@@ -112,6 +114,35 @@ class MatchAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('id', 'start', 'end', 'computed', 'needs_recompute')
+    list_filter = ('computed', 'needs_recompute')
+
+    actions = ['recompute']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.list_display_links = (None, )
+
+    def get_queryset(self, request):
+        return Period.objects.filter(start__lte=datetime.today())
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+
+        return actions
+
+    def has_add_permission(self, request):
+        return False
+
+    def recompute(self, request, queryset):
+        queryset.update(needs_recompute=True)
+    recompute.short_description = "Recompute selected"
+
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
@@ -183,6 +214,7 @@ class APIKeyAdmin(admin.ModelAdmin):
         return False
 
 admin.site.register(Player, PlayerAdmin)
+admin.site.register(Period, PeriodAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)

@@ -102,6 +102,15 @@ class MatchForm(forms.ModelForm):
         
         self.cleaned_data['period'].update(needs_recompute=True)
 
+def match_delete_wrapper(f):
+    def wrapper(self, request, objlist):
+        result = f(self, request, objlist)
+        for obj in objlist:
+            obj.period.needs_recompute = True
+            obj.period.save()
+        return result
+    return wrapper
+
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]
@@ -111,6 +120,15 @@ class MatchAdmin(admin.ModelAdmin):
         ('game', AllValuesFieldListFilter),
     ]
     form = MatchForm
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+
+        if 'delete_selected' in actions:
+            fun, name, desc = actions['delete_selected']
+            actions['delete_selected'] = (match_delete_wrapper(fun), name, desc)
+            
+        return actions
 
     def get_res(self, obj):
         return '%s %i-%i %s' % (str(obj.pla), obj.sca, obj.scb, str(obj.plb))

@@ -97,6 +97,11 @@ class MatchForm(forms.ModelForm):
             q = q | Q(id=self.instance.eventobj.id)
         self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('fullname')
 
+    def commit(self, request):
+        super().commit(request)
+        
+        self.cleaned_data['period'].update(needs_recompute=True)
+
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]

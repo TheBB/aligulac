@@ -10,11 +10,52 @@ import subprocess
 
 from django.core.cache import cache
 from django.db import connection
-from django.db.models import Q
+from django.db.models import F, Q
+from django.db.transaction import commit_on_success
 
 from aligulac.settings import PROJECT_PATH
 
-from ratings.models import Period, Player
+from ratings.models import Match, Period, Player
+
+print('[%s] Checking for Match <-> Period artifacts... ' % (str(datetime.now())), end="")
+
+q = Match.objects.exclude(period__start__lte=F('date'), period__end__gte=F('date'))
+
+if q.count() > 0:
+    print('Found!')
+    print('[%s] Fixing artifacts... ' % str(datetime.now()))
+
+    matches = list(q)
+
+    period_set = set()
+
+    @commit_on_success
+    def fix_artifacts():
+        periods = list(Period.objects.filter(start__lte=datetime.today()))
+    
+        def get_period(date):
+            for period in periods:
+                if period.start <= date and period.end >= date:
+                    return period
+
+        for match in matches:
+            print("    Correcting match: %s" % str(match))
+            period_set.add(match.period_id)
+        
+            target = get_period(match.date)
+            
+            match.period_id = target.id
+            match.save()
+
+            period_set.add(target.id)
+
+    fix_artifacts()
+
+    Period.objects.filter(id__in=period_set).update(needs_recompute=True)
+    print('    Done! (%i matches, %i periods)' % (len(matches), len(period_set)))
+else:
+    print('Done! None found!')
+
 
 if 'all' in sys.argv:
     earliest = Period.objects.earliest('id')

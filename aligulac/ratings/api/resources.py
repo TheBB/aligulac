@@ -404,7 +404,7 @@ class SmallTeamResource(ModelResource):
         allowed_methods = ['get', 'post']
         resource_name = 'team'
         authentication = APIKeyAuthentication()
-        fields = ['name', 'shortname']
+        fields = ['name', 'shortname', 'id']
 # }}}
 
 # {{{ TeamResource

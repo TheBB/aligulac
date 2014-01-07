@@ -33,6 +33,7 @@ handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
 
 beta_api = Api(api_name='beta')
+v1_api = Api(api_name='v1')
 resources = [
     ActiveRatingResource,
     EarningResource,
@@ -46,10 +47,11 @@ resources = [
     PredictMatchResource,
     PredictSEBracketResource,
     PredictRRGroupResource,
-    PredictPLResource
+    PredictPLResource,
 ]
 for res in resources:
     beta_api.register(res())
+    v1_api.register(res())
 
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
@@ -121,6 +123,7 @@ urlpatterns = patterns('',
 
     # Tastypie
     url(r'^api/', include(beta_api.urls)),
+    url(r'^api/', include(v1_api.urls)),
 
     # Ask TheBB if questions
     url(r'^misc/training/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.misc_views.training'),

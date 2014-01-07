@@ -1,5 +1,6 @@
 # {{{ Imports
 import datetime
+from itertools import islice
 from math import sqrt
 import random
 import string
@@ -776,7 +777,118 @@ class Player(models.Model):
     @property
     def foreigner_rank(self):
         return self.get_rank('foreigners')
+
     # }}}
+
+
+    # {{{ rivalries
+    @property
+    def rivals(self):
+        if '_rivals' in dir(self):
+            return self._rivals
+
+        q = Player.objects.raw(PLAYER_RIVAL_QUERY, {"id": self.id})
+
+        rivals = list(islice(q, 5))
+        
+        if len(rivals) == 0:
+            self._rivals = None
+        else:
+            self._rivals = rivals
+
+        return self._rivals
+
+    @property
+    def nemesis(self):
+        if '_nemesis' in dir(self):
+            return self._nemesis
+
+        pm = self._nemesis_victim_helper()
+
+        nemesis = list(islice(reversed([x for x in pm if x.pm < 0]), 5))
+
+        if len(nemesis) > 0:
+            self._nemesis = nemesis
+        else:
+            self._nemesis = None
+        
+        return self._nemesis
+
+    @property
+    def victim(self):
+        if '_victim' in dir(self):
+            return self._victim
+    
+        pm = self._nemesis_victim_helper()
+        
+        victim = list(islice((x for x in pm if x.pm > 0), 5))
+
+        if len(victim) > 0:
+            self._victim = victim
+        else:
+            self._victim = None
+
+        return self._victim
+
+    def _nemesis_victim_helper(self):
+        if '_nv_pm' not in dir(self):
+            q = Player.objects.raw(PLAYER_PM_QUERY, {"id": self.id})
+            self._nv_pm = list(q)
+        return self._nv_pm
+
+    @property
+    def rivals_pretty(self):
+        return ', '.join(str(x) for x in self.rivals)
+
+    # }}}
+
+PLAYER_RIVAL_QUERY = """
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race", Count(T2."plid") AS "matches" 
+FROM player 
+JOIN (
+     SELECT "player"."id" AS "plid", "match"."id" AS "mid" 
+     FROM player JOIN match ON 
+         ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
+     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s 
+     ) T2 
+ON "player"."id" = T2."plid" 
+GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
+ORDER BY "matches" DESC
+LIMIT 5;"""
+
+PLAYER_PM_QUERY = """
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race", 
+       Sum(T2."for") - Sum(T2."against") AS "pm"
+FROM player JOIN (
+     SELECT 
+     	    "player"."id" AS "plid", 
+	    "match"."id" AS "mid", 
+	    (CASE 
+	    	  WHEN "player"."id" = "match"."pla_id" THEN 
+		       "match"."scb"
+		  ELSE
+		       "match"."sca"
+		  END
+            ) AS "for", 
+	    (CASE 
+	    	  WHEN "player"."id" = "match"."pla_id" THEN 
+		       "match"."sca"
+		  ELSE
+		       "match"."scb"
+		  END
+            ) AS "against", 
+	    "match"."sca" AS "sca",
+	    "match"."scb" AS "scb",
+	    "match"."pla_id",
+	    "match"."plb_id"
+     FROM player JOIN match ON 
+     ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
+     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s
+     ) T2 
+     ON "player"."id" = T2."plid" 
+GROUP BY "player"."id" 
+ORDER BY "pm" DESC;
+"""
 
 # }}}
 

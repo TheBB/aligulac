@@ -15,7 +15,7 @@ This is the template for the main player page, called from ratings.views.player.
 
 <script type="text/javascript">
 <!--
-    tables = ['alltime', 'form', 'highs'];
+    tables = ['alltime', 'form', 'highs', 'rivalries'];
 -->
 </script>
 
@@ -23,18 +23,21 @@ This is the template for the main player page, called from ratings.views.player.
 <td style="width: 42em; vertical-align: top;">
 <table style="width: 42em; border-collapse: collapse;">
     <tr>
-        <td class="tabsel" onclick="switch_tab('alltime', tables);" style="width: 33%;" id="alltime-tab">
+        <td class="tabsel" onclick="switch_tab('alltime', tables);" style="width: 25%;" id="alltime-tab">
             all-time
         </td>
-        <td class="tabunsel" onclick="switch_tab('form', tables);" style="width: 33%;" id="form-tab">
+        <td class="tabunsel" onclick="switch_tab('form', tables);" style="width: 25%;" id="form-tab">
             form
         </td>
-        <td class="tabunsel" onclick="switch_tab('highs', tables);" style="width: 33%;" id="highs-tab">
+        <td class="tabunsel" onclick="switch_tab('highs', tables);" style="width: 25%;" id="highs-tab">
             highest
+        </td>
+        <td class="tabunsel" onclick="switch_tab('rivalries', tables);" style="width: 25%;" id="rivalries-tab">
+            rivalries
         </td>
     </tr>
     <tbody id="alltime">
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 20em;">
@@ -117,7 +120,7 @@ This is the template for the main player page, called from ratings.views.player.
     </tr>
     </table> </td> </tr> </tbody>
     <tbody id="form" style="display: none;"> 
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 20em;">
@@ -200,7 +203,7 @@ This is the template for the main player page, called from ratings.views.player.
     </tr>
     </table> </td> </tr> </tbody>
     <tbody id="highs" style="display: none;"> 
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table style="width: 42em;">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
         <td style="width: 3em;">All</td>
         <td style="width: 12em;">
@@ -298,6 +301,71 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     </table> </td> </tr> </tbody>
+    <tbody id="rivalries" style="display: none;">
+      <tr>
+	<td colspan="4" style="border: solid 0.1em;">
+	  <table style="width: 100%;">
+	    {% for rival in player.rivals %}
+	    <tr>
+	      <td>
+		{% ifchanged %}Biggest rival{{ player.rivals|length|plural }}{% endifchanged %}
+	      </td>
+	      <td>
+		{% if rival.country != "" %}
+                <img src="{{ rival.country|lower|imgfolder:"flags"|static }}" />
+		{% endif %}
+		<img src="{{ rival.race|imgfolder|static }}" />
+		<a href="/players/{{ rival.id }}/">{{ rival.tag }}</a>
+		(
+		<a href="{{ player.id|vs_url:rival.id }}">
+		  {{ rival.matches }} match{{ rival.matches|plural:"es" }}
+		</a>
+		)
+	      </td>
+	    </tr>
+	    {% endfor %}
+	    {% for op in player.nemesis %}
+	    <tr>
+	      <td>
+		{% ifchanged %}Nemes{{ player.nemesis|length_is:1|yesno:"i,e" }}s{% endifchanged %}
+	      </td>
+	      <td>
+		{% if op.country != "" %}
+                <img src="{{ op.country|lower|imgfolder:"flags"|static }}" />
+		{% endif %}
+		<img src="{{ op.race|imgfolder|static }}" />
+		<a href="/players/{{ op.id }}/">{{ op.tag }}</a>
+		(
+		<a href="{{ player.id|vs_url:op.id }}">
+		  {{ op.pm }}
+		</a>
+		)
+	      </td>
+	    </tr>
+	    {% endfor %}
+	    {% for op in player.victim %}
+	    <tr>
+	      <td>
+		{% ifchanged %}Target{{ player.victim|plural }}{% endifchanged %}
+	      </td>
+	      <td>
+		{% if op.country != "" %}
+                <img src="{{ op.country|lower|imgfolder:"flags"|static }}" />
+		{% endif %}
+		<img src="{{ op.race|imgfolder|static }}" />
+		<a href="/players/{{ op.id }}/">{{ op.tag }}</a>
+		(
+		<a href="{{ player.id|vs_url:op.id }}">
+		  +{{ op.pm }}
+		</a>
+		)
+	      </td>
+	    </tr>
+	    {% endfor %}
+	  </table>
+	</td>
+      </tr>
+    </tbody>
 </table>
 </td>
 <td style="width: 22em; vertical-align: top;">

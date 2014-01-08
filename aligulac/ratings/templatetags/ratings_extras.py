@@ -71,14 +71,6 @@ def urlify(value):
     return mark_safe(value)
 # }}}
 
-# {{{ plural: Prints s if value is not 1
-@register.filter
-def plural(value, arg="s"):
-    if value != 1:
-        return arg
-    return ""
-# }}}
-
 # {{{ vs_url: Generate a search query for the two players
 @register.filter
 def vs_url(value, arg):

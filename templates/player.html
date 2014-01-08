@@ -308,7 +308,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% for rival in player.rivals %}
             <tr>
               <td>
-                {% ifchanged %}Biggest rival{{ player.rivals|length|plural }}{% endifchanged %}
+                {% ifchanged %}Biggest rival{{ player.rivals|length|pluralize }}{% endifchanged %}
               </td>
               <td>
                 {% if rival.country != "" %}
@@ -318,7 +318,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <a href="/players/{{ rival.id }}/">{{ rival.tag }}</a>
                 (
                 <a href="{{ player.id|vs_url:rival.id }}">
-                  {{ rival.matches }} match{{ rival.matches|plural:"es" }}
+                  {{ rival.matches }} match{{ rival.matches|pluralize:"es" }}
                 </a>
                 )
               </td>
@@ -347,7 +347,7 @@ This is the template for the main player page, called from ratings.views.player.
             <tr>
               <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
                 {% ifchanged %}
-                Victim{{ player.victim|plural }}
+                Victim{{ player.victim|pluralize }}
                 <!-- This should really be Conemesis, but not every one would get it :( -->
                 {% endifchanged %}
               </td>

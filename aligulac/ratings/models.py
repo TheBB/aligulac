@@ -886,7 +886,7 @@ FROM player JOIN (
      WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s
      ) T2 
      ON "player"."id" = T2."plid" 
-GROUP BY "player"."id" 
+GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
 ORDER BY "pm" DESC;
 """
 

@@ -303,67 +303,70 @@ This is the template for the main player page, called from ratings.views.player.
     </table> </td> </tr> </tbody>
     <tbody id="rivalries" style="display: none;">
       <tr>
-	<td colspan="4" style="border: solid 0.1em;">
-	  <table style="width: 100%;">
-	    {% for rival in player.rivals %}
-	    <tr>
-	      <td>
-		{% ifchanged %}Biggest rival{{ player.rivals|length|plural }}{% endifchanged %}
-	      </td>
-	      <td>
-		{% if rival.country != "" %}
+        <td colspan="4" style="border: solid 0.1em;">
+          <table style="width: 100%;">
+            {% for rival in player.rivals %}
+            <tr>
+              <td>
+                {% ifchanged %}Biggest rival{{ player.rivals|length|plural }}{% endifchanged %}
+              </td>
+              <td>
+                {% if rival.country != "" %}
                 <img src="{{ rival.country|lower|imgfolder:"flags"|static }}" />
-		{% endif %}
-		<img src="{{ rival.race|imgfolder|static }}" />
-		<a href="/players/{{ rival.id }}/">{{ rival.tag }}</a>
-		(
-		<a href="{{ player.id|vs_url:rival.id }}">
-		  {{ rival.matches }} match{{ rival.matches|plural:"es" }}
-		</a>
-		)
-	      </td>
-	    </tr>
-	    {% endfor %}
-	    {% for op in player.nemesis %}
-	    <tr>
-	      <td>
-		{% ifchanged %}Nemes{{ player.nemesis|length_is:1|yesno:"i,e" }}s{% endifchanged %}
-	      </td>
-	      <td>
-		{% if op.country != "" %}
+                {% endif %}
+                <img src="{{ rival.race|imgfolder|static }}" class="btm"/>
+                <a href="/players/{{ rival.id }}/">{{ rival.tag }}</a>
+                (
+                <a href="{{ player.id|vs_url:rival.id }}">
+                  {{ rival.matches }} match{{ rival.matches|plural:"es" }}
+                </a>
+                )
+              </td>
+            </tr>
+            {% endfor %}
+            {% for op in player.nemesis %}
+            <tr>
+              <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
+                {% ifchanged %}Nemes{{ player.nemesis|length_is:1|yesno:"i,e" }}s{% endifchanged %}
+              </td>
+              <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
+                {% if op.country != "" %}
                 <img src="{{ op.country|lower|imgfolder:"flags"|static }}" />
-		{% endif %}
-		<img src="{{ op.race|imgfolder|static }}" />
-		<a href="/players/{{ op.id }}/">{{ op.tag }}</a>
-		(
-		<a href="{{ player.id|vs_url:op.id }}">
-		  {{ op.pm }}
-		</a>
-		)
-	      </td>
-	    </tr>
-	    {% endfor %}
-	    {% for op in player.victim %}
-	    <tr>
-	      <td>
-		{% ifchanged %}Target{{ player.victim|plural }}{% endifchanged %}
-	      </td>
-	      <td>
-		{% if op.country != "" %}
+                {% endif %}
+                <img src="{{ op.race|imgfolder|static }}" class="btm"/>
+                <a href="/players/{{ op.id }}/">{{ op.tag }}</a>
+                (
+                <a href="{{ player.id|vs_url:op.id }}">
+                  {{ op.pm }}
+                </a>
+                )
+              </td>
+            </tr>
+            {% endfor %}
+            {% for op in player.victim %}
+            <tr>
+              <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
+                {% ifchanged %}
+                Victim{{ player.victim|plural }}
+                <!-- This should really be Conemesis, but not every one would get it :( -->
+                {% endifchanged %}
+              </td>
+              <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
+                {% if op.country != "" %}
                 <img src="{{ op.country|lower|imgfolder:"flags"|static }}" />
-		{% endif %}
-		<img src="{{ op.race|imgfolder|static }}" />
-		<a href="/players/{{ op.id }}/">{{ op.tag }}</a>
-		(
-		<a href="{{ player.id|vs_url:op.id }}">
-		  +{{ op.pm }}
-		</a>
-		)
-	      </td>
-	    </tr>
-	    {% endfor %}
-	  </table>
-	</td>
+                {% endif %}
+                <img src="{{ op.race|imgfolder|static }}" class="btm" />
+                <a href="/players/{{ op.id }}/">{{ op.tag }}</a>
+                (
+                <a href="{{ player.id|vs_url:op.id }}">
+                  +{{ op.pm }}
+                </a>
+                )
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </td>
       </tr>
     </tbody>
 </table>

@@ -36,19 +36,19 @@ document, this parameter will be implied.</p>
 
 <h3>API overview</h3>
 
-<p>The API is for the most part self-documenting. The root URI is <code>/api/beta/</code>. Requests to this URI
+<p>The API is for the most part self-documenting. The root URI is <code>/api/v1/</code>. Requests to this URI
 will return a JSON object describing the available resources and their root URIs, e.g.</p>
 
 <code>
     <pre>
     {
         "period": {
-            "list_endpoint": "/api/beta/period/",
-            "schema": "/api/beta/period/schema/"
+            "list_endpoint": "/api/v1/period/",
+            "schema": "/api/v1/period/schema/"
         },
         "player": {
-            "list_endpoint": "/api/beta/player/",
-            "schema": "/api/beta/player/schema/"
+            "list_endpoint": "/api/v1/player/",
+            "schema": "/api/v1/player/schema/"
         }
     }
     </pre>
@@ -61,7 +61,7 @@ URI.</p>
 <a href="/about/db/">here</a>. In addition to these, we have API access to predictions as well, described
 below.</p>
 
-<p>Requests for player objects thus need to go to <code>/api/beta/player/</code>. For a detailed description
+<p>Requests for player objects thus need to go to <code>/api/v1/player/</code>. For a detailed description
 of each resource, go to the schema URI. This will return a JSON object with the following fields:</p>
 
 <ul>
@@ -97,12 +97,12 @@ of each resource, go to the schema URI. This will return a JSON object with the 
 <h3>Getting all objects</h3>
 
 <p>To obtain all objects of a given resource, just make a request to the base resource URI, e.g.
-<code>/api/beta/period/</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving
+<code>/api/v1/period/</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving
 paging information, and <strong>objects</strong>, which is a list of objects. By default, this will return a
 limited number of objects per page (normally 20). To control the page size and offset, give the
 <code>limit</code> and <code>offset</code> arguments, e.g.</p>
 
-<code>/api/beta/period?limit=50&amp;offset=100</code>
+<code>/api/v1/period?limit=50&amp;offset=100</code>
 
 <p>will return objects number 100-149. In addition, the <strong>meta</strong> field gives you the URIs for the
 next and previous pages, as well as the total count of objects.<p>
@@ -113,7 +113,7 @@ and otherwise not encouraged.</p>
 <h3>Getting a single object by ID</h3>
 
 <p>If you know the id of the object you are interested in, you can get it directly. For example, to get
-Leenock's player information, go to <code>/api/beta/player/1/</code>, since Leenock's id is 1.</p>
+Leenock's player information, go to <code>/api/v1/player/1/</code>, since Leenock's id is 1.</p>
 
 <p>This will return just the object directly, with no metadata and no surrounding list.</p>
 
@@ -121,7 +121,7 @@ Leenock's player information, go to <code>/api/beta/player/1/</code>, since Leen
 
 <p>If you want to access more than one object, you can request them as a <strong>set</strong> to save both us
 and yourself from extra work. If you are interested in Leenock, Creator and Life (ids 1, 2 and 3), you can
-make a request to <code>/api/beta/player/set/1;2;3/</code>.</p>
+make a request to <code>/api/v1/player/set/1;2;3/</code>.</p>
 
 <h3>Related objects</h3>
 
@@ -133,11 +133,11 @@ although they are often stripped-down versions without detailed information.</p>
 
 <p>You can apply filters to the base URI. They are applied in the following manner:</p>
 
-<code>/api/beta/resourcename/?fieldname__filtername=value</code>
+<code>/api/v1/resourcename/?fieldname__filtername=value</code>
 
 <p>If filtering on related objects is available, this can be done as follows:</p>
 
-<code>/api/beta/resourcename/?relatedobject__fieldname__filtername=value</code>
+<code>/api/v1/resourcename/?relatedobject__fieldname__filtername=value</code>
 
 <p>In principle, these chains can be arbitrarily long. The available filters correspond to those found in
 <a href="https://docs.djangoproject.com/en/1.6/ref/models/querysets/#field-lookups">Django</a>. Here is a
@@ -186,7 +186,7 @@ different formats:</p>
     <li><strong>Proleague-style team matches</strong> (<code>predictproleague</code>)</li>
 </ul>
 
-<p>The URI for match prediction is then <code>/api/beta/predictmatch/id1,id2/</code>, where <code>id1</code>
+<p>The URI for match prediction is then <code>/api/v1/predictmatch/id1,id2/</code>, where <code>id1</code>
 and <code>id2</code> are the ids for the two players. You also have to supply a <code>bo</code> parameter
 denoting the match length, and this has to be a positive odd integer. The following conditions apply.</p>
 
@@ -228,10 +228,10 @@ disagree with the prediction, and the players in the final may change. Thus, <st
 
 <code>
     <pre>
-    /api/beta/player/?current_rating__isnull=false
-                     &amp;current_rating__decay__lt=4
-                     &amp;order_by=-current_rating__rating
-                     &amp;limit=10
+    /api/v1/player/?current_rating__isnull=false
+                   &amp;current_rating__decay__lt=4
+                   &amp;order_by=-current_rating__rating
+                   &amp;limit=10
     </pre>
 </code>
 
@@ -241,10 +241,10 @@ ratings directly.</p>
 
 <code>
     <pre>
-    /api/beta/rating/?period__id=95
-                     &amp;decay__lt=4
-                     &amp;order_by=-rating
-                     &amp;limit=10
+    /api/v1/rating/?period__id=95
+                   &amp;decay__lt=4
+                   &amp;order_by=-rating
+                   &amp;limit=10
     </pre>
 </code>
 
@@ -254,9 +254,9 @@ same way. So you could use:</p>
 
 <code>
     <pre>
-    /api/beta/activerating/?period__id=95
-                           &amp;order_by=-rating
-                           &amp;limit=10
+    /api/v1/activerating/?period__id=95
+                         &amp;order_by=-rating
+                         &amp;limit=10
     </pre>
 </code>
 {% endblock %}

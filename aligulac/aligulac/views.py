@@ -178,12 +178,12 @@ class APIKeyForm(forms.Form):
 def api(request):
     base = base_ctx('About', 'API', request)
 
-    base['messages'].append(Message(
-        'The API is currently in beta. Do not rely on it in production yet! We may disable features without '
-        'prior warning until the release of version 1. When this happens, the root URL will be changed to '
-        '<code>/api/v1/</code> and the beta URL will be removed.',
-        type=Message.WARNING,
-    ))
+    #base['messages'].append(Message(
+        #'The API is currently in beta. Do not rely on it in production yet! We may disable features without '
+        #'prior warning until the release of version 1. When this happens, the root URL will be changed to '
+        #'<code>/api/v1/</code> and the beta URL will be removed.',
+        #type=Message.WARNING,
+    #))
 
     if request.method == 'POST':
         form = APIKeyForm(request)

@@ -71,6 +71,21 @@ def urlify(value):
     return mark_safe(value)
 # }}}
 
+# {{{ plural: Prints s if value is not 1
+@register.filter
+def plural(value, arg="s"):
+    if value != 1:
+        return arg
+    return ""
+# }}}
+
+# {{{ vs_url: Generate a search query for the two players
+@register.filter
+def vs_url(value, arg):
+    return "/results/search/?search=&after=&before=&players={}%0D%0A{}" \
+        "&event=&bestof=all&offline=both&game=all&op=Search".format(value, arg)
+# }}}
+
 # {{{ addf: Adds floating point numbers.
 @register.filter
 def addf(value, arg):

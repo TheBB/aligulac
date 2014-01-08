@@ -91,6 +91,7 @@ class SmallRatingResource(ModelResource):
         resource_name = 'rating'
         authentication = APIKeyAuthentication()
         fields = [
+            'id',
             'rating',
             'rating_vp',
             'rating_vt',
@@ -199,6 +200,7 @@ class SmallPlayerResource(ModelResource):
         resource_name = 'player'
         authentication = APIKeyAuthentication()
         fields = [
+            'id',
             'tag',
             'country',
             'race',
@@ -281,7 +283,7 @@ class SmallEventResource(ModelResource):
         allowed_methods = ['get', 'post']
         resource_name = 'event'
         authentication = APIKeyAuthentication()
-        fields = ['fullname']
+        fields = ['id', 'fullname']
 # }}}
 
 # {{{ EventResource

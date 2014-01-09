@@ -102,6 +102,19 @@ class SmallRatingResource(ModelResource):
             'dev_vz',
             'decay',
         ]
+        filtering = {
+            'period': ALL_WITH_RELATIONS,
+            'player': ALL_WITH_RELATIONS,
+            'prev': ALL_WITH_RELATIONS,
+            'decay': ALL,
+            'domination': ALL,
+            'rating':     ALL, 'rating_vp':     ALL, 'rating_vt':     ALL, 'rating_vz':     ALL,
+            'dev':        ALL, 'dev_vp':        ALL, 'dev_vt':        ALL, 'dev_vz':        ALL,
+            'bf_rating':  ALL, 'bf_rating_vp':  ALL, 'bf_rating_vt':  ALL, 'bf_rating_vz':  ALL,
+            'bf_dev':     ALL, 'bf_dev_vp':     ALL, 'bf_dev_vt':     ALL, 'bf_dev_vz':     ALL,
+            'comp_rat':   ALL, 'comp_rat_vp':   ALL, 'comp_rat_vt':   ALL, 'comp_rat_vz':   ALL,
+            'position':   ALL, 'position_vp':   ALL, 'position_vt':   ALL, 'position_vz':   ALL,
+        }
 
     def dehydrate(self, bundle):
         bundle.data['tot_vp'] = bundle.data['rating'] + bundle.data['rating_vp']
@@ -206,6 +219,7 @@ class SmallPlayerResource(ModelResource):
             'race',
         ]
         filtering = {
+            'id':              ALL,
             'tag':             ALL,
             'country':         ALL,
             'race':            ALL
@@ -284,6 +298,24 @@ class SmallEventResource(ModelResource):
         resource_name = 'event'
         authentication = APIKeyAuthentication()
         fields = ['id', 'fullname']
+        filtering = {
+            key: ALL
+            for key in [
+                'id',
+                'name',
+                'fullname',
+                'parent',
+                'homepage',
+                'lp_name',
+                'tlpd_id',
+                'tlpd_db',
+                'tl_thread',
+                'prizepool',
+                'earliest',
+                'latest',
+                'category',
+                'type',
+        ]}
 # }}}
 
 # {{{ EventResource
@@ -407,6 +439,21 @@ class SmallTeamResource(ModelResource):
         resource_name = 'team'
         authentication = APIKeyAuthentication()
         fields = ['name', 'shortname', 'id']
+        filtering = {
+            key: ALL
+            for key in [
+                'id',
+                'name',
+                'shortname',
+                'scoreak',
+                'scorepl',
+                'meanrating',
+                'founded',
+                'disbanded',
+                'active',
+                'homepage',
+                'lp_name',
+        ]}
 # }}}
 
 # {{{ TeamResource

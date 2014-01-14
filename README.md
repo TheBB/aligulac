@@ -210,7 +210,7 @@ Needs:
     * scipy
     * simplejson
 
-The repository does **not** contain the Django settings file or the database dumps.
+The repository does **not** contain the Django settings file or the database dumps. Templates are provided in [default.settings.py](aligulac/aligulac/default.settings.py) and [template.local.py](aligulac/aligulac/template.local.py)
 
 ## Other
 

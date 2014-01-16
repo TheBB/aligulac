@@ -31,7 +31,7 @@ from ratings.tools import (
 # }}}
 
 def info(string):
-    print("[{}]: {}".format(datetime.now(), string))
+    print("[{}] {}".format(datetime.now(), string))
 
 # {{{ Balance reports
 def balance():

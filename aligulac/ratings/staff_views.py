@@ -746,10 +746,16 @@ class MoveEventForm(forms.Form):
                 ))
         EventAdjacency.objects.bulk_create(links)
 
+        subject.parent = target
+        subject.save()
+
         prevname = subject.fullname
 
         for dl in downlinks:
-            dl.child.update_name()
+            if dl.child_id == subject.id:
+                subject.update_name()  # select_related causes the parent to be overwritten otherwise
+            else:
+                dl.child.update_name()
 
         ret.append(Message(
             "Moved '%s' to '%s'. It's now called '%s'." % (prevname, target.fullname, subject.fullname), 

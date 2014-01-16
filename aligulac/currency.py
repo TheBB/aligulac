@@ -22,8 +22,14 @@ class ExchangeRates(object):
 
         data = json.loads(jsonfile.read().decode())
 
+        print(sorted(data['rates'].keys()))
+
         # ccy use XBT instead
-        data['rates']['XBT'] = data['rates']['BTC']
+        try:
+            data['rates']['XBT'] = data['rates']['BTC']
+        except:
+            # Bitcoin transfer rates not available at this time.
+            pass
 
         return data
 

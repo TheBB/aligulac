@@ -51,11 +51,15 @@ def periods(request):
 
 # {{{ period view
 @cache_page
-def period(request, period_id):
+def period(request, period_id=None):
     base = base_ctx('Ranking', 'Current', request)
 
     # {{{ Get period object
-    period = get_object_or_404(Period, id=period_id, computed=True)
+    if not period_id:
+        period = base['curp']
+    else:
+        period = get_object_or_404(Period, id=period_id, computed=True)
+
     if period.is_preview():
         base['messages'].append(Message(msg_preview % period.end.strftime('%B %d'), type=Message.INFO))
 

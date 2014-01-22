@@ -58,6 +58,7 @@ urlpatterns = patterns('',
 
     url(r'^periods/$', 'ratings.ranking_views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.ranking_views.period'),
+    url(r'^periods/latest/$', 'ratings.ranking_views.period'),
 
     url(r'^earnings/$', 'ratings.ranking_views.earnings'),
 

@@ -184,7 +184,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
     menu = [
-        ('Ranking',    '/periods/%i/' % curp.id),
+        ('Ranking',    '/periods/latest/'),
         ('Teams',      '/teams/'),
         ('Records',    '/records/history'),
         ('Results',    '/results/'),
@@ -202,9 +202,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         'messages':  [],
         'menu':      [{
             'name': 'Ranking',
-            'url': '/periods/%i' % curp.id,
+            'url': '/periods/latest/',
             'submenu': [
-                ('Current',  '/periods/%i/' % curp.id),
+                ('Current',  '/periods/latest/'),
                 ('History',  '/periods/'),
                 ('Earnings', '/earnings/'),
         ]}, {

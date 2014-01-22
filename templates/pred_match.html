@@ -80,6 +80,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             {% if tot_w_a|pctg_add_f:tot_l_a < tot_w_b|pctg_add_f:tot_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% if mu_w_a and mu_w_b %}
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
             {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
@@ -93,6 +94,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% endif %}
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
             {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}<strong>{% endif %}
@@ -106,6 +108,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             {% if frm_w_a|pctg_add_f:frm_l_a < frm_w_b|pctg_add_f:frm_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% if fmu_w_a and fmu_w_b %}
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
             {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}<strong>{% endif %}
@@ -119,6 +122,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
             {% if fmu_w_a|pctg_add_f:fmu_l_a < fmu_w_b|pctg_add_f:fmu_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% endif %}
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
             {% if vs_a > vs_b %}<strong>{% endif %}

@@ -22,7 +22,7 @@ class ExchangeRates(object):
 
         data = json.loads(jsonfile.read().decode())
 
-        print(sorted(data['rates'].keys()))
+        #print(sorted(data['rates'].keys()))
 
         # ccy use XBT instead
         try:

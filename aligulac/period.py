@@ -52,9 +52,11 @@ except:
 print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.id, period.start, period.end),
       flush=True)
 
-if Period.objects.filter(id__lt=period.id).filter(Q(computed=False) | Q(needs_recompute=True)).exists():
-    print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()), flush=True)
-    sys.exit(1)
+# If someone adds an early match while the system is updating, this check causes everything to be aborted
+# Since the master update script will start from the earliest "dirty" period anyway, it's not necessary
+#if Period.objects.filter(id__lt=period.id).filter(Q(computed=False) | Q(needs_recompute=True)).exists():
+    #print('[%s] Earlier period not refreshed. Aborting.' % str(datetime.now()), flush=True)
+    #sys.exit(1)
 
 prev = etn(lambda: Period.objects.get(id=period.id-1))
 # }}}

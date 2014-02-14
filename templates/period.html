@@ -332,6 +332,9 @@ This template shows a rating list for a given period.
         <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
         <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
         <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
+        <option value="r" {% if race == "r" %}selected{% endif %}>Random</option>
+        <option value="s" {% if race == "s" %}selected{% endif %}>Race switchers</option>
+        <option value="rs" {% if race == "rs" %}selected{% endif %}>Random and race switchers</option>
     </select>
     and nationalities:
     <select name="nats">

@@ -275,7 +275,7 @@ def img(value, folder=None):
         img_file += str(folder) + "/"
     img_file  += str(value)
     if not DEBUG:
-        return  'http://img.aligulac.com/' + img_file + '.png')
+        return 'http://img.aligulac.com/' + img_file + '.png'
     else:
         return '/img/' + img_file + '.png'
 # }}}

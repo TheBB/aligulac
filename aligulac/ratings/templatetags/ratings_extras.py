@@ -266,6 +266,20 @@ def js(value):
         return '/js/' + value + '.js'
 # }}}
 
+# {{{ img: Generates a png-image file URL
+@register.filter
+@stringfilter
+def img(value, folder=None):
+    img_file = ""
+    if folder is not None:
+        img_file += str(folder) + "/"
+    img_file  += str(value)
+    if not DEBUG:
+        return  'http://img.aligulac.com/' + img_file + '.png')
+    else:
+        return '/img/' + img_file + '.png'
+# }}}
+
 # {{{ static: Generates URL for static files (must include extension)
 @register.filter
 @stringfilter

@@ -21,11 +21,11 @@
     </td>
     <td class="rl_icon">
         {% if trade.player.country %}
-        <img src="{{ trade.player.country|lower|imgfolder:"flags"|static }}" alt="{{ trade.player.country }}" />
+        <img src="{{ trade.player.country|lower|img:"flags" }}" alt="{{ trade.player.country }}" />
         {% endif %}
     </td>
     <td class="rl_icon">
-        <img src="{{ trade.player.race|imgfolder|static }}" alt="{{ trade.player.race }}" class="btm" />
+        <img src="{{ trade.player.race|img }}" alt="{{ trade.player.race }}" class="btm" />
     </td>
     <td style="text-align: right;">
         {% if trade.left %}

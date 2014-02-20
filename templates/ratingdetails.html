@@ -17,7 +17,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if prevlink %}
             <a href="/players/{{ prevlink.player.id }}-{{prevlink.player.tag|urlfilter}}/period/{{ prevlink.period.id }}/">
-                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
+                <img src="{{ "prev"|img }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -27,7 +27,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if nextlink %}
             <a href="/players/{{ nextlink.player.id }}-{{ nextlink.player.tag|urlfilter }}/period/{{ nextlink.period.id }}/">
-                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
+                <img src="{{ "next"|img }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>

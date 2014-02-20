@@ -134,8 +134,10 @@ urlpatterns = patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../templates/css'}),
+            {'document_root': settings.PROJECT_PATH + '../resources/css'}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../templates/js'}),
+            {'document_root': settings.PROJECT_PATH + '../resources/js'}),
+        url(r'^img/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.PROJECT_PATH + '../resources/img'})
     )
 # }}}

@@ -25,11 +25,11 @@ This is the template for the historical overview page, showing all the ranking l
                 <a href="/periods/{{ period.id }}/">{{ period.end|date:"F jS, Y" }}</a>
             </div>
             <div class="rowe">
-                <img src="{{ period|oprace|imgfolder|static }}" alt="{{ period|oprace }}" />
+                <img src="{{ period|oprace|img }}" alt="{{ period|oprace }}" />
                 <span class="small">({{ period|oppctg }}%)</span>
             </div>
             <div class="rowe">
-                <img src="{{ period|uprace|imgfolder|static }}" alt="{{ period|uprace }}" />
+                <img src="{{ period|uprace|img }}" alt="{{ period|uprace }}" />
                 <span class="small">({{ period|uppctg }}%)</span>
             </div>
             <div class="rowe" style="text-align: right;">{{ period.num_retplayers|add:period.num_newplayers }}</div>

@@ -5,7 +5,7 @@
 {% for m in messages %}
 <tr id="{{m.id}}" class="m{{m.type}}">
     <td class="micon m{{m.type}}icon">
-        <img class="btm" src="{{ m.type|imgfolder|static }}" />
+        <img class="btm" src="{{ m.type|img }}" />
     </td>
     <td class="mtext m{{m.type}}text">
         {% if m.title %}<strong>{{ m.title }}</strong></br>{% endif %}

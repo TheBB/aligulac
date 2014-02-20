@@ -23,11 +23,11 @@ This is the subroutine for printing a record list, used by records.html.
     </div>
     <div class="rowe">
         {% if h.player.country != "" %}
-            <img src="{{ h.player.country|lower|imgfolder:"flags"|static }}" alt="{{ h.player.country }}" />
+            <img src="{{ h.player.country|lower|img:"flags" }}" alt="{{ h.player.country }}" />
         {% endif %}
     </div>
     <div class="rowe">
-        <img src="{{ h.player.race|imgfolder|static }}" class="btm" />
+        <img src="{{ h.player.race|img }}" class="btm" />
     </div>
     <div class="rowe" style="text-align: right;">
         {% if race == "P" %}

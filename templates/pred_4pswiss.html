@@ -34,11 +34,11 @@ This is the prediction page for four player Swiss groups. It's called from ratin
         </td>
         <td style="width: 1em;">
         {% if e.player.country %}
-        <img src="{{ e.player.country|lower|imgfolder:"flags"|static }}" alt="{{ e.country }}" />
+        <img src="{{ e.player.country|lower|img:"flags" }}" alt="{{ e.country }}" />
         {% endif %}
         </td>
         <td style="width: 1em;">
-            <img src="{{ e.player.race|imgfolder|static }}" alt="{{ e.player.race }}" class="btm" />
+            <img src="{{ e.player.race|img }}" alt="{{ e.player.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
             {% if e.probs.1 > 0 or e.probs.0 > 0 %}{{ e.probs.1|addf:e.probs.0|pctg_one }}%{% endif %}

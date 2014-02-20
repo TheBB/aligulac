@@ -35,12 +35,12 @@ This is the prediction page for single elimination brackets. It's called from ra
         </td>
         <td>
             {% if p.player.country != "" %}
-            <img src="{{ p.player.country|lower|imgfolder:"flags"|static }}" 
+            <img src="{{ p.player.country|lower|img:"flags" }}" 
                  alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.player.race|imgfolder|static }}" alt="{{ p.player.race }}" class="btm" />
+            <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm" />
         </td>
         {% for t in p.probs %}
         <td style="text-align: right;">
@@ -77,12 +77,12 @@ This is the prediction page for single elimination brackets. It's called from ra
         </td>
         <td>
             {% if p.player.country != "" %}
-            <img src="{{ p.player.country|lower|imgfolder:"flags"|static }}" 
+            <img src="{{ p.player.country|lower|img:"flags" }}" 
                  alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.player.race|imgfolder|static }}" alt="{{ p.player.race }}" class="btm" />
+            <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
             {{ p.exp_match_wins|floatformat:"0" }}–{{ p.exp_match_losses|floatformat:"0" }}

@@ -31,14 +31,14 @@ This page shows the results by date. Called from ratings.views.results.
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if td != mindate %}
             <a href="/results/?d={{ td|prevmonth|datemax:mindate|date:"Y-m-d" }}">
-                <img src="{{ "first.png"|static }}" title="previous month" alt="previous month" class="btm" />
+                <img src="{{ "first"|img }}" title="previous month" alt="previous month" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if td != mindate %}
             <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                <img src="{{ "prev.png"|static }}" title="previous day" alt="previous day" class="btm" />
+                <img src="{{ "prev"|img }}" title="previous day" alt="previous day" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -48,14 +48,14 @@ This page shows the results by date. Called from ratings.views.results.
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if td != maxdate %}
             <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                <img src="{{ "next.png"|static }}" title="next day" alt="next day" class="btm" />
+                <img src="{{ "next"|img }}" title="next day" alt="next day" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if td != maxdate %}
             <a href="/results/?d={{ td|nextmonth|datemin:maxdate|date:"Y-m-d" }}">
-                <img src="{{ "last.png"|static }}" title="next month" alt="next month" class="btm" />
+                <img src="{{ "last"|img }}" title="next month" alt="next month" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -74,14 +74,14 @@ This page shows the results by date. Called from ratings.views.results.
             <div class="rowe" style="width: 1em; text-align: left;">
                 {% if td != mindate %}
                 <a href="/results/?d={{ td|prevmonth|datemax:mindate|date:"Y-m-d" }}">
-                    <img src="{{ "first.png"|static }}" title="previous month" alt="previous month" class="btm" />
+                    <img src="{{ "first"|img }}" title="previous month" alt="previous month" class="btm" />
                 </a>
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: left;">
                 {% if td != mindate %}
                 <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                    <img src="{{ "prev.png"|static }}" title="previous day" alt="previous day" class="btm" />
+                    <img src="{{ "prev"|img }}" title="previous day" alt="previous day" class="btm" />
                 </a>
                 {% endif %}
             </div>
@@ -91,14 +91,14 @@ This page shows the results by date. Called from ratings.views.results.
             <div class="rowe" style="width: 1em; text-align: right;">
                 {% if td != maxdate %}
                 <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                    <img src="{{ "next.png"|static }}" title="next day" alt="next day" class="btm" />
+                    <img src="{{ "next"|img }}" title="next day" alt="next day" class="btm" />
                 </a>
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: right;">
                 {% if td != maxdate %}
                 <a href="/results/?d={{ td|nextmonth|datemin:maxdate|date:"Y-m-d" }}">
-                    <img src="{{ "last.png"|static }}" title="next month" alt="next month" class="btm" />
+                    <img src="{{ "last"|img }}" title="next month" alt="next month" class="btm" />
                 </a>
                 {% endif %}
             </div>

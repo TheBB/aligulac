@@ -64,9 +64,9 @@ This shows a team page. Called from ratings.teamviews.team.
             <div class="rowel" style="width: 10em;">Players</div>
             <div class="rower" style="width: 20em;">
                 {{ nplayers }}
-                ({{ nprotoss }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
-                {{ nterran }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
-                {{ nzerg }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
+                ({{ nprotoss }} <img src="{{ 'P'|img }}" alt="Protoss" class="btm" />, 
+                {{ nterran }} <img src="{{ 'T'|img }}" alt="Terran" class="btm" />, 
+                {{ nzerg }} <img src="{{ 'Z'|img }}" alt="Zerg" class="btm" />)
             </div>
         </div>
     {% endif %}
@@ -168,11 +168,11 @@ This shows a team page. Called from ratings.teamviews.team.
         </div>
         <div class="rowe">
             {% if tm.player.country != "" %}
-                <img src="{{ tm.player.country|lower|imgfolder:"flags"|static }}" alt="{{ tm.player.country }}" />
+                <img src="{{ tm.player.country|lower|img:"flags" }}" alt="{{ tm.player.country }}" />
             {% endif %}
         </div>
         <div class="rowe">
-            <img src="{{ tm.player.race|imgfolder|static }}" alt="{{tm.player.race}}" class="btm" />
+            <img src="{{ tm.player.race|img }}" alt="{{tm.player.race}}" class="btm" />
         </div>
         <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
         <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>

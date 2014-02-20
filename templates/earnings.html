@@ -57,14 +57,14 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page=1&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
-                <img src="{{ "first.png"|static }}" alt="first" class="btm" />
+                <img src="{{ "first"|img }}" alt="first" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page={{ page|add:"-1" }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
-                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
+                <img src="{{ "prev"|img }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -72,14 +72,14 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ page|add:"1" }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
-                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
+                <img src="{{ "next"|img }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ npages }}&amp;year={{ filters.year }}&amp;country={{ filters.country }}&amp;currency={{ filters.currency }}">
-                <img src="{{ "last.png"|static }}" alt="last" class="btm" />
+                <img src="{{ "last"|img }}" alt="last" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -108,11 +108,11 @@ In {% if filters.year != 'all' %}{{ filters.year }}{% else %}total{% endif %},
             </td>
             <td class="rl_icon">
                 {% if earning.playerobj.country != "" %}
-                    <img src="{{ earning.playerobj.country|lower|imgfolder:"flags"|static }}" alt="{{ earning.playerobj.country }}" />
+                    <img src="{{ earning.playerobj.country|lower|img:"flags" }}" alt="{{ earning.playerobj.country }}" />
                 {% endif %}
             </td>
             <td class="rl_icon">
-                <img src="{{ earning.playerobj.race|imgfolder|static }}" alt="{{ earning.playerobj.race }}" class="btm" />
+                <img src="{{ earning.playerobj.race|img }}" alt="{{ earning.playerobj.race }}" class="btm" />
             </td>
             <td class="rl_name">
                 <a href="/players/{{ earning.playerobj.id }}-{{ earning.playerobj.tag|urlfilter }}/">{{ earning.playerobj.tag }}</a>

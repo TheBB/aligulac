@@ -158,10 +158,10 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% else %}{{ m.pla.tag }}{% endif %}
         {% if m.pla.id %}</a>{% endif %}
         {% if m.pla.country %}
-            <img src="{{ m.pla.country|lower|imgfolder:"flags"|static }}" alt="{{ m.pla.country }}" />
+            <img src="{{ m.pla.country|lower|img:"flags" }}" alt="{{ m.pla.country }}" />
         {% endif %}
         {% if m.pla.race %}
-            <img src="{{ m.pla.race|imgfolder|static }}" alt="{{ m.pla.race }}" class="btm" />
+            <img src="{{ m.pla.race|img }}" alt="{{ m.pla.race }}" class="btm" />
         {% endif %}
         {% if m.pla.score > m.plb.score and not m.unfixed %}</strong>{% endif %}
     </td>
@@ -185,10 +185,10 @@ NB! The calling code is responsible for starting and ending the HTML table:
     <td class="lm_plb">
         {% if m.plb.score > m.pla.score %}<strong>{% endif %}
         {% if m.plb.race %}
-            <img src="{{ m.plb.race|imgfolder|static }}" alt="{{ m.plb.race }}" class="btm" />
+            <img src="{{ m.plb.race|img }}" alt="{{ m.plb.race }}" class="btm" />
         {% endif %}
         {% if m.plb.country %}
-            <img src="{{ m.plb.country|lower|imgfolder:"flags"|static }}" alt="{{ m.plb.country }}" />
+            <img src="{{ m.plb.country|lower|img:"flags" }}" alt="{{ m.plb.country }}" />
         {% endif %}
         {% if m.plb.id %} <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{% endif %}
         {% if not m.plb.id and lm_adm %}
@@ -217,15 +217,15 @@ NB! The calling code is responsible for starting and ending the HTML table:
         {% elif not lm_noright %}
             {% if m.messages %}
             {% for msg in m.messages %}
-                <img src="{{ msg.type|imgfolder|static }}" class="btm" title="{{ msg.text }}" />
+                <img src="{{ msg.type|img }}" class="btm" title="{{ msg.text }}" />
             {% endfor %}
             {% endif %}
 
             {% if not m.treated %}
-                <img src="{{ "no.png"|static }}" alt="unrated" title="unrated" class="btm" />
+                <img src="{{ "no"|img }}" alt="unrated" title="unrated" class="btm" />
             {% endif %}
-            <img src="{{ m.game|imgfolder|static }}" alt="{{ m.game }}" class="btm" title="{{ m.game }}"/>
-            <img src="{{ m.offline|yesno:"offline,online"|imgfolder|static }}" 
+            <img src="{{ m.game|img }}" alt="{{ m.game }}" class="btm" title="{{ m.game }}"/>
+            <img src="{{ m.offline|yesno:"offline,online"|img }}" 
                  alt="{{ m.offline|yesno:"offline,online" }}" class="btm" 
                  title="{{ m.offline|yesno:"offline,online" }}" />
         {% endif %}

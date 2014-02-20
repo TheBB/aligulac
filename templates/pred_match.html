@@ -25,15 +25,15 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
                     {{ dbpl.0.tag }}</a>
             </td>
             <td style="width: 5em;">
-                <img src="{{ dbpl.0.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.0.country }}" />
-                <img src="{{ dbpl.0.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.0.race|racefull }}" class="btm" />
+                <img src="{{ dbpl.0.country|lower|img:"flags" }}" alt="{{ dbpl.0.country }}" />
+                <img src="{{ dbpl.0.race|add:"m"|img }}" alt="{{ dbpl.0.race|racefull }}" class="btm" />
             </td>
             <td style="width: 5em; text-align: center;">
                 {{ match.get_result.0 }}–{{ match.get_result.1 }}
             </td>
             <td style="width: 5em; text-align: right;">
-                <img src="{{ dbpl.1.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.1.race|racefull }}" class="btm" />
-                <img src="{{ dbpl.1.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.1.country }}" />
+                <img src="{{ dbpl.1.race|add:"m"|img }}" alt="{{ dbpl.1.race|racefull }}" class="btm" />
+                <img src="{{ dbpl.1.country|lower|img:"flags" }}" alt="{{ dbpl.1.country }}" />
             </td>
             <td style="width: 26em;">
                 <a href="/players/{{ dbpl.1.id }}-{{ dbpl.1.tag|urlfilter }}/">

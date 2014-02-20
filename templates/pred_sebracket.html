@@ -35,11 +35,11 @@ This is the prediction page for single elimination brackets. It's called from ra
         </td>
         <td>
         {% if e.player.country != "" %}
-        <img src="{{ e.player.country|lower|imgfolder:"flags"|static }}" alt="{{ e.player.country }}" />
+        <img src="{{ e.player.country|lower|img:"flags" }}" alt="{{ e.player.country }}" />
         {% endif %}
         </td>
         <td>
-            <img src="{{ e.player.race|imgfolder|static }}" alt="{{ e.player.race }}" class="btm" />
+            <img src="{{ e.player.race|img }}" alt="{{ e.player.race }}" class="btm" />
         </td>
         {% for t in e.probs %}
         <td style="text-align: right;">

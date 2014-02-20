@@ -276,14 +276,14 @@ This template shows a rating list for a given period.
         <div class="row">
             <div class="rowel">Leading race</div>
             <div class="rower">
-                <img src="{{ period|oprace|imgfolder|static }}" class="btm" alt="{{ period|oprace|racefull }}" /> 
+                <img src="{{ period|oprace|img }}" class="btm" alt="{{ period|oprace|racefull }}" /> 
                 {{ period|oprace|racefull }} ({{ period|oppctg }}%)
             </div>
         </div>
         <div class="row">
             <div class="rowel">Lagging race</div>
             <div class="rower">
-                <img src="{{ period|uprace|imgfolder|static }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
+                <img src="{{ period|uprace|img }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
                 {{ period|uprace|racefull}} ({{ period|uppctg }}%)
             </div>
         </div>

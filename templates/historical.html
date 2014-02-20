@@ -41,10 +41,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.prev %}
                     {% if rating.prev.rating > rating.rating %}
-                    <img src="{{ "downarrow.png"|static }}" 
+                    <img src="{{ "downarrow"|img }}" 
                          alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.prev.rating < rating.rating %}
-                    <img src="{{ "uparrow.png"|static }}" 
+                    <img src="{{ "uparrow"|img }}" 
                          alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -54,10 +54,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.prev %}
                     {% if rating.prev.get_totalrating_vp > rating.get_totalrating_vp %}
-                    <img src="{{ "downarrow.png"|static }}" 
+                    <img src="{{ "downarrow"|img }}" 
                          alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.prev.get_totalrating_vp < rating.get_totalrating_vp %}
-                    <img src="{{ "uparrow.png"|static }}" 
+                    <img src="{{ "uparrow"|img }}" 
                          alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -67,10 +67,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.prev %}
                     {% if rating.prev.get_totalrating_vt > rating.get_totalrating_vt %}
-                    <img src="{{ "downarrow.png"|static }}" 
+                    <img src="{{ "downarrow"|img }}" 
                          alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.prev.get_totalrating_vt < rating.get_totalrating_vt %}
-                    <img src="{{ "uparrow.png"|static }}" 
+                    <img src="{{ "uparrow"|img }}" 
                          alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}
@@ -80,10 +80,10 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe">
                 {% if rating.prev %}
                     {% if rating.prev.get_totalrating_vz > rating.get_totalrating_vz %}
-                    <img src="{{ "downarrow.png"|static }}" 
+                    <img src="{{ "downarrow"|img }}" 
                          alt="down" style="vertical-align: text-bottom;" />
                     {% elif rating.prev.get_totalrating_vz < rating.get_totalrating_vz %}
-                    <img src="{{ "uparrow.png"|static }}" 
+                    <img src="{{ "uparrow"|img }}" 
                          alt="up" style="vertical-align: text-bottom;" />
                     {% endif %}
                 {% endif %}

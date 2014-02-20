@@ -27,17 +27,17 @@ This is the page for miscellaneous administrative functions. Called from ratings
             {% with pl=mergeform.cleaned_data.source %}
                 <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
                 {% if pl.country != "" %}
-                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                    <img src="{{ pl.country|lower|img:"flags" }}" alt="{{ pl.country }}" />
                 {% endif %}
-                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+                <img src="{{ pl.race|img }}" alt="{{ pl.race }}" class="btm" />
             {% endwith %}
             into
             {% with pl=mergeform.cleaned_data.target %}
                 <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
                 {% if pl.country != "" %}
-                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                    <img src="{{ pl.country|lower|img:"flags" }}" alt="{{ pl.country }}" />
                 {% endif %}
-                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+                <img src="{{ pl.race|img }}" alt="{{ pl.race }}" class="btm" />
             {% endwith %}.
         </td>
     </tr>

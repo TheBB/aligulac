@@ -163,7 +163,7 @@ def period(request, period_id=None):
     nitems = entries.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
-    entries = entries[(page-1)*pagesize : page*pagesize]
+    entries = entries[(page-1)*pagesize : page*pagesize] if page > 0 else []
 
     base.update({
         'page':       page,

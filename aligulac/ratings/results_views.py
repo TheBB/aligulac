@@ -42,6 +42,8 @@ from aligulac.tools import (
     StrippedCharField,
 )
 
+from currency import RateNotFoundError
+
 from ratings.models import (
     CAT_FREQUENT,
     CAT_INDIVIDUAL,
@@ -269,8 +271,14 @@ class PrizepoolModForm(forms.Form):
         # }}}
 
         # {{{ Commit
-        Earnings.set_earnings(event, ranked,   self.cleaned_data['currency'], True)
-        Earnings.set_earnings(event, unranked, self.cleaned_data['currency'], False)
+        try:
+            Earnings.set_earnings(event, ranked,
+                                  self.cleaned_data['currency'], True)
+            Earnings.set_earnings(event, unranked,
+                                  self.cleaned_data['currency'], False)
+        except RateNotFoundError as e:
+            ret.append(Message(str(e), type=Message.ERROR))
+            return ret
         # }}}
 
         ret.append(Message('New prizes committed.', type=Message.SUCCESS))

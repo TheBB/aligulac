@@ -197,7 +197,7 @@ def earnings(request):
     # }}}
 
     # {{{ Initial filtering of earnings
-    preranking = Earnings.objects
+    preranking = Earnings.objects.filter(earnings__isnull=False)
 
     # Filtering by year
     year = get_param(request, 'year', 'all')

@@ -158,3 +158,47 @@ function mark_all(val, prefix)
             if (prefix == '' || list[i].name.indexOf(prefix) === 0)
                 list[i].checked = val;
 }
+
+
+/* ======================================================================
+ * Menu
+ * ======================================================================
+ */
+  $(function() {
+      alert(navigator.userAgent);
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    $( ".menu >ul >li> div>a" )
+      .next()
+        .button({
+          text: false,
+          icons: {
+            primary: "ui-icon-triangle-1-s"
+          }
+        })
+        .click(function() {
+        var menu = $( this ).parent().next();
+            if (menu.is(':visible'))
+            {
+		        $( ".menu >ul >li> ul" ).hide();
+            }
+            else
+            {
+		        $( ".menu >ul >li> ul" ).hide();
+                menu.show();
+            }
+          $( document ).one( "click", function() {
+            menu.hide();
+          });
+          return false;
+        })
+        .parent().next()
+          .buttonset()
+            .hide()
+            .menu();
+}
+      else
+      {
+          $(".actionSelector").hide();
+		        $( ".menu >ul >li> ul" ).hide();
+      }
+  });

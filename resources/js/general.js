@@ -158,3 +158,37 @@ function mark_all(val, prefix)
             if (prefix == '' || list[i].name.indexOf(prefix) === 0)
                 list[i].checked = val;
 }
+
+/* ======================================================================
+ * MENU
+ * ======================================================================
+ */
+$(function () {
+    var allMenu = $('.menu > ul > li > ul');
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $('.menu > ul > li > div > a').next().button({
+            text: false,
+            icons: {
+                primary: 'ui-icon-triangle-1-s'
+            }
+        }).click(function () {
+            var menu = $(this).parent().next();
+            if (menu.is(':visible')) {
+                allMenu.hide();
+            }
+            else {
+                allMenu.hide();
+                menu.show();
+            }
+            $(document).one('click', function () {
+                menu.hide();
+            });
+            return false;
+        })
+        .parent().next().buttonset().hide().menu();
+    }
+    else {
+        $('.actionSelector').hide();
+        allMenu.hide();
+    }
+});

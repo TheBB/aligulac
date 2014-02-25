@@ -81,11 +81,9 @@ Changes here will mostly be visible on the entire site.
                                 </div>
                                 <ul>
                                 {% for subname, suburl in main.submenu %}               
-                                    {% if cursubpage == subname and curpage == main.name %}
                                     <li>
                                         <a href="{{ suburl }}" class="menu">{{ subname }}</a>
                                     </li>
-                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             </li>

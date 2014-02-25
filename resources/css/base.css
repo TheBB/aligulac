@@ -345,6 +345,67 @@ table.results td {
     padding: 0.4em;
 }
 
+
+/* =====================================================================
+ * Menu
+ * =====================================================================
+ */
+ 
+ .menu > ul {
+    margin: 0;
+    padding: 0;
+}
+
+    .menu > ul > li a {
+        color: black;
+    }
+
+    .menu > ul > li {
+        display: inline-block;
+        position: relative;
+        padding-bottom: 1px;
+        border-right: 1px dashed gray;
+    }
+
+        .menu > ul > li:last-child {
+            border: none;
+        }
+
+        .menu > ul > li > ul {
+            position: absolute;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            left: 0px;
+        }
+
+            .menu > ul > li > ul > li {
+                padding: 3px;
+            }
+
+        .menu > ul > li > .ui-widget-content {
+            border: none;
+        }
+
+        .menu > ul > li > .ui-menu .ui-menu-item a {
+            background: none;
+            background-color: white;
+            color: black;
+            padding: 0;
+            margin: 0;
+            border-radius: 0;
+        }
+
+        .menu > ul > li:hover > ul {
+            display: block !important;
+        }
+
+td.menu {
+    padding-bottom: 0;
+}
+
+
+
 /* =====================================================================
  * TABLES
  * =====================================================================

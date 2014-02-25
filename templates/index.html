@@ -72,26 +72,25 @@ Changes here will mostly be visible on the entire site.
             <tbody id="menu_container">
             <tr>
                 <td class="menu">
-					<ul>
-						{% for main in menu %}
-							<li>
-								<div>
-									<a href="{{ main.url }}" class="{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
-									<a href="#">.</a>
-								</div>
-								<ul>
-								{% for subname, suburl in main.submenu %}               
-									{% if cursubpage == subname and curpage == main.name %}
-									<li>
-										<a href="{{ suburl }}" class="menu">{{ subname }}</a>
-									</li>
-									{% endif %}
-								{% endfor %}
-								</ul>
-								</div>
-							</li>
-						{% endfor %}
-					</ul>
+                    <ul>
+                        {% for main in menu %}
+                            <li>
+                                <div>
+                                    <a href="{{ main.url }}" class="{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
+                                    <a href="#">.</a>
+                                </div>
+                                <ul>
+                                {% for subname, suburl in main.submenu %}               
+                                    {% if cursubpage == subname and curpage == main.name %}
+                                    <li>
+                                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             </tbody>

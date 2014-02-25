@@ -14,12 +14,13 @@ Changes here will mostly be visible on the entire site.
         <meta name="author" content="Eivind Fonn" />
 
         <title>{% block title %}Aligulac{% endblock %}</title>
+        <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
         <link href="{{ "base"|css }}" rel="stylesheet" type="text/css"/>
         <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src="{{ "general"|js }}"></script>
-        <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "general"|js }}"></script>
+        <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
         {% if charts %}
             <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
             <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
@@ -71,26 +72,25 @@ Changes here will mostly be visible on the entire site.
             <tbody id="menu_container">
             <tr>
                 <td class="menu">
-                {% for main in menu %}
-                <a href="{{ main.url }}" data-sub-menu="{{ main.name }}" class="menu{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
-                {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td class="menu">
-                &nbsp;
-                {% for main in menu %}
-                    <span id="submenu_{{ main.name }}" {% if curpage != main.name %}style="display: none;"{% endif %}>
-                    {% for subname, suburl in main.submenu %}               
-                    {% if cursubpage == subname and curpage == main.name %}
-                        <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
-                    {% else %}
-                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
-                    {% endif %}
-                    {% endfor %}
-                    </span>
-                {% endfor %}
-                &nbsp;
+                    <ul>
+                        {% for main in menu %}
+                            <li>
+                                <div>
+                                    <a href="{{ main.url }}" class="{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
+                                    <a href="#" class="actionSelector">.</a>
+                                </div>
+                                <ul>
+                                {% for subname, suburl in main.submenu %}               
+                                    {% if cursubpage == subname and curpage == main.name %}
+                                    <li>
+                                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             </tbody>

@@ -165,13 +165,7 @@ function mark_all(val, prefix)
  */
 $(function () {
     var allMenu = $('.menu > ul > li > ul');
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        $('.menu > ul > li > div > a').next().button({
-            text: false,
-            icons: {
-                primary: 'ui-icon-triangle-1-s'
-            }
-        }).click(function () {
+    var menuHandler = function(){
             var menu = $(this).parent().next();
             if (menu.is(':visible')) {
                 allMenu.hide();
@@ -183,12 +177,20 @@ $(function () {
             $(document).one('click', function () {
                 menu.hide();
             });
-            return false;
-        })
+            return false;        
+    };
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $('.menu > ul > li > div > a').next().button({
+            text: false,
+            icons: {
+                primary: 'ui-icon-triangle-1-s'
+            }
+        }).click(menuHandler)
         .parent().next().buttonset().hide().menu();
     }
-    else {
+    else {        
+        $('.menu > ul > li > div > a').hover(menuHandler)
+        .parent().next().buttonset().hide().menu();
         $('.actionSelector').hide();
-        allMenu.hide();
     }
 });

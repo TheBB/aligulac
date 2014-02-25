@@ -61,16 +61,6 @@ a:hover {
     text-decoration: none;
 }
 
-a.menu {
-    color: #000000;
-    padding-left: 0.7em;
-    padding-right: 0.7em;
-}
-
-a.menucur {
-    color: #880000;
-}
-
 a#title {
     color: #000000;
 }
@@ -364,23 +354,26 @@ table.results td {
         display: inline-block;
         position: relative;
         padding-bottom: 1px;
-        border-right: 1px dashed gray;
+        padding-left: 0.7em;
+        padding-right: 0.7em;
     }
 
-        .menu > ul > li:last-child {
-            border: none;
-        }
-
         .menu > ul > li > ul {
+            display: none;
             position: absolute;
             list-style: none;
             margin: 0;
             padding: 0;
             left: 0px;
+            background-color: white;
+            white-space: nowrap;
         }
 
             .menu > ul > li > ul > li {
                 padding: 3px;
+            }
+            .menu > ul > li > ul > li > .ui-button {
+                text-align: left;
             }
 
         .menu > ul > li > .ui-widget-content {
@@ -394,6 +387,8 @@ table.results td {
             padding: 0;
             margin: 0;
             border-radius: 0;
+            font-family: 'Donegal One', Times, serif;
+            font-size: 0.8em;
         }
 
         .menu > ul > li:hover > ul {
@@ -404,7 +399,9 @@ td.menu {
     padding-bottom: 0;
 }
 
-
+a.menucur {
+    color: #880000 !important;
+}
 
 /* =====================================================================
  * TABLES

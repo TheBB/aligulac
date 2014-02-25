@@ -180,6 +180,7 @@ $(function () {
             return false;        
     };
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $(".actionSelector").removeAttr("style");
         $('.menu > ul > li > div > a').next().button({
             text: false,
             icons: {
@@ -187,10 +188,10 @@ $(function () {
             }
         }).click(menuHandler)
         .parent().next().buttonset().hide().menu();
+        allMenu.parent().css({ "paddingLeft": "0.1em", "paddingRight": "0.1em" });
     }
     else {        
         $('.menu > ul > li > div > a').hover(menuHandler)
         .parent().next().buttonset().hide().menu();
-        $('.actionSelector').hide();
     }
 });

@@ -1065,7 +1065,7 @@ def postable_proleague(base, request):
     strings += [None, (
         '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
         '{pctg: >6.2f}%'.format(pctg=100*base['prob_draw']) if base['prob_draw'] > 0.0 else '',
-        '{pctg: >6.2f}%'.format(pctg=100*base['proba']),
+        '{pctg: >6.2f}%'.format(pctg=100*base['probb']),
     )]
 
     base['postable_tl'] = (

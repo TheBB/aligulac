@@ -3,6 +3,7 @@ import datetime
 from itertools import islice
 from math import sqrt
 import random
+import re
 import string
 
 from django.contrib.auth.models import User
@@ -1063,10 +1064,37 @@ class Alias(models.Model):
 # }}}
 
 # {{{ Matches
+
+# This can operate on querysets in the current dev branch
+# of Django. Worth noting for the future. So currently it
+# works like this:
+#   q = Match.objects.symmetric_filter(...)
+# But in the future we can have things like:
+#   q = Match.objects.filter(date="2014-03-08")
+#   q = q.symmetric_filter(...)
+#
+# -- Prillan, 2014-03-08
+class MatchManager(models.Manager):
+
+    swap_regex = re.compile(r"^(sc|pl|rc)(a|b)")
+
+    def _repl(self, match):
+        return match.group(1) + ("a" if match.group(2) == "b" else "b")
+    def _swap(self, key):
+        return MatchManager.swap_regex.sub(self._repl, key)
+
+    def symmetric_filter(self, **kwargs):
+        q1 = Q(**kwargs)
+        swapped = dict((self._swap(k), v) for k, v in kwargs.items())
+        q2 = Q(**swapped)
+        return super().filter(q1 | q2)
+
 class Match(models.Model):
     class Meta:
         verbose_name_plural = 'matches'
         db_table = 'match'
+
+    objects = MatchManager()
 
     # {{{ Fields
     period = models.ForeignKey(

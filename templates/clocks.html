@@ -53,8 +53,9 @@ $(document).ready(function() {
   </tr>
   {% if clock.type == "match" %}
   <tr style="display:none;">
-    <td colspan="3">
-      <table class="results">
+    <td></td>
+    <td colspan="2">
+      <table class="clock-results-table results">
         {% include "matchlist.html" with lm_list=clock.extra lm_adm=0 lm_header="partial"%}
       </table>
     </td>

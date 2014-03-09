@@ -297,6 +297,7 @@ $(document).ready(function () {
             minLength: 2,
             select: function (event, ui) {
                 $idPalyersTextArea.addTag(ui.item.key + ' ' + ui.item.id);
+                $("#id_players_tag").focus();
                 return false;
             }
         },

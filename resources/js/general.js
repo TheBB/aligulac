@@ -277,6 +277,10 @@ $(document).ready(function () {
         select: function (event, ui) {
             $('#SearchTextBox').val(ui.item.key);
             return false;
+        },
+        focus: function (event, ui) {
+            $("#SearchTextBox").val(ui.item.key);
+            return false;
         }
     }).data('ui-autocomplete')._renderItem = function (ul, item) {
         return $('"<li></li>')

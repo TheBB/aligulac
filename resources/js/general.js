@@ -275,11 +275,11 @@ $(document).ready(function () {
         },
         minLength: 2,
         select: function (event, ui) {
-            $("#SearchTextBox").val(ui.item.key);
+            $('#SearchTextBox').val(ui.item.key);
             return false;
         }
-    }).data("ui-autocomplete")._renderItem = function (ul, item) {
-        return $("<li></li>")
+    }).data('ui-autocomplete')._renderItem = function (ul, item) {
+        return $('"<li></li>')
             .append(aligulacAutocompleteTemplates(item))
             .appendTo(ul);
     };

@@ -768,7 +768,6 @@ td.tabunsel a:hover {
     cursor: pointer;
 }
 #ui-id-30 .ui-menu-item, #ui-id-31 .ui-menu-item {
-    max-width: 150px;
     background: none;
     background-color: white;
     color: black;
@@ -780,4 +779,7 @@ td.tabunsel a:hover {
 }
 #ui-id-30, #ui-id-31 {
     text-align: left;
+}
+.ui-state-active {
+    background: #ffffff none no-repeat;
 }

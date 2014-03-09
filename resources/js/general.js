@@ -200,56 +200,55 @@ $(function () {
  * AUTOCOMPLETE SEARCH TEXTBOX
  * ======================================================================
  */
+var aligulacAutocompleteTemplates = function (ajaxobject) {
+    if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
+        return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
+    }
+    switch (ajaxobject.objectsType) {
+        case 'player':
+            ajaxobject.key = ajaxobject.tag;
+            return '<a>{aligulac-flag}<img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
+               ajaxobject.country ? '<img src="' + aligulacApiConfig.flagsDirectory + ajaxobject.country.toLowerCase() + '.png" />' : ' ')
+            .replace('{aligulac-race}', aligulacApiConfig.racesDirectory + ajaxobject.race.toUpperCase() + '.png')
+            .replace('{aligulac-name}', ajaxobject.tag);
+        case 'team':
+            ajaxobject.key = ajaxobject.name;
+            return '<a>{aligulac-name}</a>'
+            .replace('{aligulac-name}', ajaxobject.name);
+        case 'event':
+            ajaxobject.key = ajaxobject.fullname;
+            return '<a>{aligulac-name}</a>'
+            .replace('{aligulac-name}', ajaxobject.fullname);
+    }
+    return '<a>' + ajaxobject.value + '</a>';
+};
+var getResults = function (itemToSearch, searchKey, term, label) {
+    var deferred = $.Deferred();
+    $.ajax({
+        type: 'GET',
+        url: aligulacApiConfig.aligulacApiRoot + itemToSearch +
+            '/?' +
+            searchKey + '__icontains=' +
+            term
+            + '&callback=?',
+        dataType: 'json',
+        data:
+        {
+            apikey: aligulacApiConfig.apiKey,
+            limit: 5
+        },
+    }).success(function (ajaxData) {
+        ajaxData.objects.unshift(label);
+        for (var i = 0; i < ajaxData.objects.length; i++) {
+            ajaxData.objects[i].objectsType = itemToSearch;
+        }
+        deferred.resolve({ result: ajaxData.objects });
+    });
+
+    return deferred;
+};
 $(document).ready(function () {
-    var getResults = function (itemToSearch, searchKey, term, label) {
-        var deferred = $.Deferred();
-        $.ajax({
-            type: 'GET',
-            url: aligulacApiConfig.aligulacApiRoot + itemToSearch +
-                '/?' +
-                searchKey + '__icontains=' +
-                term
-                + '&callback=?',
-            dataType: 'json',
-            data:
-            {
-                apikey: aligulacApiConfig.apiKey,
-                limit: 5
-            },
-        }).success(function (ajaxData) {
-            ajaxData.objects.unshift(label);
-            for (var i = 0; i < ajaxData.objects.length; i++) {
-                ajaxData.objects[i].objectsType = itemToSearch;
-            }
-            deferred.resolve({ result: ajaxData.objects });
-        });
-
-        return deferred;
-    };
-
-    var aligulacAutocompleteTemplates = function (ajaxobject) {
-        if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
-            return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
-        }
-        switch (ajaxobject.objectsType) {
-            case 'player':
-                ajaxobject.key = ajaxobject.tag;
-                return '<a><img src="{aligulac-flag}" /><img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
-                    aligulacApiConfig.flagsDirectory + ajaxobject.country.toLowerCase() + '.png')
-                .replace('{aligulac-race}', aligulacApiConfig.racesDirectory + ajaxobject.race.toUpperCase() + '.png')
-                .replace('{aligulac-name}', ajaxobject.tag);
-            case 'team':
-                ajaxobject.key = ajaxobject.name;
-                return '<a>{aligulac-name}</a>'
-                .replace('{aligulac-name}', ajaxobject.name);
-            case 'event':
-                ajaxobject.key = ajaxobject.fullname;
-                return '<a>{aligulac-name}</a>'
-                .replace('{aligulac-name}', ajaxobject.fullname);
-        }
-        return '';
-    };
-
+    
     $('#SearchTextBox').autocomplete({
         source: function (request, response) {
 
@@ -287,4 +286,29 @@ $(document).ready(function () {
             .append(aligulacAutocompleteTemplates(item))
             .appendTo(ul);
     };
+});
+
+/* ======================================================================
+ * AUTOCOMPLETE PREDICTIONS
+ * ======================================================================
+ */
+$(document).ready(function () {
+    var $idPalyersTextArea = $("#id_players");
+    $idPalyersTextArea.tagsInput({
+        autocomplete_opt: {
+            minLength: 2,
+            select: function (event, ui) {
+                $idPalyersTextArea.addTag(ui.item.key + ' ' + ui.item.id);
+                return false;
+            }
+        },
+        autocomplete_url: function (request, response) {
+            $.when(getResults('player', 'tag', request.term, 'Players')).then(function (resplayers) {
+                response(resplayers.result);
+            });
+        },
+        defaultText: 'add a player',
+        delimiter: '\n',
+        formatAutocomplete: aligulacAutocompleteTemplates
+    });
 });

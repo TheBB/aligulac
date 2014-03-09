@@ -151,7 +151,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "JaeDong got second place in an event",
+        "Jaedong got second place in an event",
         None,
         (
             Event.objects

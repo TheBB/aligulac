@@ -1,22 +1,22 @@
 body {
-    text-align: center; 
+    text-align: center;
     /*font-family: Verdana, Geneva, sans-serif;*/
     font-family: 'Donegal One', Times, serif;
     font-size: 0.8em;
 }
 
 table#main {
-    margin-left: auto; 
-    margin-right: auto; 
+    margin-left: auto;
+    margin-right: auto;
     width: 67em;
 }
 
 td#heading {
-    font-family: 'Marcellus SC', Times, serif; 
-    font-size: 4em; 
-    letter-spacing: 1em; 
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 4em;
+    letter-spacing: 1em;
     padding-left: 1em;
-    padding-top: 0.3em; 
+    padding-top: 0.3em;
 }
 
 td#subheading {
@@ -40,9 +40,9 @@ td#content {
 }
 
 td#footer {
-    border-width: 0.2em; 
-    border-style: solid none none none; 
-    font-size: 0.8em; 
+    border-width: 0.2em;
+    border-style: solid none none none;
+    font-size: 0.8em;
     padding-top: 1em;
 }
 
@@ -327,10 +327,6 @@ tr.header a:hover {
     text-decoration: none;
 }
 
-table.results {
-    border-collapse: collapse;
-}
-
 table.results td {
     padding: 0.4em;
 }
@@ -340,7 +336,7 @@ table.results td {
  * Menu
  * =====================================================================
  */
- 
+
  .menu > ul {
     margin: 0;
     padding: 0;
@@ -367,6 +363,7 @@ table.results td {
             left: 0px;
             background-color: white;
             white-space: nowrap;
+            z-index: 2;
         }
 
             .menu > ul > li > ul > li {
@@ -428,7 +425,7 @@ table.dottedint tr td:first-child {
 }
 
 table.results {
-    width: 67em;
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -653,7 +650,7 @@ div.close-button {
 /* PERCENTAGES */
 
 .progress {
-    width: 95%;   
+    width: 95%;
     border: 1px solid black;
     position: relative;
     font-size: 0px;
@@ -692,7 +689,7 @@ td.tabsel {
     background: #555555;
     color: #ffffff;
     font-weight: bold;
-    font-family: 'Marcellus SC', Times, serif; 
+    font-family: 'Marcellus SC', Times, serif;
     padding: 0.3em;
     font-size: 1.1em;
     cursor: pointer;
@@ -704,7 +701,7 @@ td.tabunsel {
     background: #cccccc;
     color: #000000;
     font-weight: bold;
-    font-family: 'Marcellus SC', Times, serif; 
+    font-family: 'Marcellus SC', Times, serif;
     padding: 0.3em;
     font-size: 1.1em;
     cursor: pointer;
@@ -800,3 +797,4 @@ td.tabunsel a:hover {
     /* font-size: larger; */
     /* text-align: center; */
 }
+

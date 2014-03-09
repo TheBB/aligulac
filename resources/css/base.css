@@ -776,10 +776,16 @@ td.tabunsel a:hover {
     border-radius: 0;
     font-family: 'Donegal One', Times, serif;
     font-size: 0.8em;
+    white-space: nowrap;
 }
 #ui-id-30, #ui-id-31 {
     text-align: left;
 }
-.ui-state-focus {
-    background: #ffffff none no-repeat;
+.ui-state-focus {    
+    background: none no-repeat scroll 0 0 #FFFFFF !important;
+    border: 1px solid #555555 !important;
+    margin: 0 !important;
+}
+#ui-id-31 .ui-corner-all {
+        border: 1px solid #fff !important;
 }

@@ -783,6 +783,7 @@ td.tabunsel a {
 }
 #ui-id-30, #ui-id-31 {
     text-align: left;
+    width: auto !important;
 }
 .ui-state-focus {
     background: none no-repeat scroll 0 0 #555555 !important;

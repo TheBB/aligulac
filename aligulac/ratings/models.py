@@ -26,6 +26,7 @@ from countries import (
     transformations,
     data,
 )
+from ratings.model_tools import swap_q_object
 # }}}
 
 # List of countries
@@ -1076,18 +1077,10 @@ class Alias(models.Model):
 # -- Prillan, 2014-03-08
 class MatchManager(models.Manager):
 
-    swap_regex = re.compile(r"^(sc|pl|rc)(a|b)")
-
-    def _repl(self, match):
-        return match.group(1) + ("a" if match.group(2) == "b" else "b")
-    def _swap(self, key):
-        return MatchManager.swap_regex.sub(self._repl, key)
-
-    def symmetric_filter(self, **kwargs):
-        q1 = Q(**kwargs)
-        swapped = dict((self._swap(k), v) for k, v in kwargs.items())
-        q2 = Q(**swapped)
-        return super().filter(q1 | q2)
+    def symmetric_filter(self, *args, **kwargs):
+        q = Q(*args, **kwargs)
+        swapped = swap_q_object(q)
+        return super().filter(q | swapped)
 
 class Match(models.Model):
     class Meta:

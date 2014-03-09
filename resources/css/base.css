@@ -764,3 +764,9 @@ td.tabunsel a:hover {
     display:block;
     padding:3px;
 }
+.ui-menu .ui-menu-item a {
+    cursor: pointer;
+}
+.ui-menu .ui-menu-item {
+    max-width: 150px;
+}

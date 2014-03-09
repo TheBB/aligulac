@@ -12,6 +12,7 @@ from itertools import zip_longest
 from ratings.models import (
     Event,
     Group,
+    GroupMembership,
     Match,
     Player,
 )
@@ -160,6 +161,18 @@ CLOCKS = [
             .order_by("-latest")
         ),
         "event_winner"
+    ),
+    (
+        "SlayerS disbanded",
+        None,
+        lambda: Group.objects.get(id=47).disbanded,
+        "one_time"
+    ),
+    (
+        "HasuObs joined mousesports",
+        None,
+        lambda: GroupMembership.objects.get(player_id=83,group_id=22).start,
+        "one_time"
     )
 ]
 
@@ -198,6 +211,9 @@ def clocks(request):
                 extra.append((e, pearnings))
 
             date = obj.latest
+
+        elif t == "one_time":
+            date = q()
 
         diff = datetime.today().date() - date
         years = diff.days // 365

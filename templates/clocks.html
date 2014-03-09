@@ -24,8 +24,8 @@ var clocks_toggle_more = function(e) {
 
 <table class="clocks">
   {% for clock in clocks %}
-  <tr onclick="clocks_toggle_more(this);" class="clock-more-button">
-    <td style="width: 25px;">→</td>
+  <tr {% if clock.type != "one_time" %}onclick="clocks_toggle_more(this);" style="cursor: pointer;" {% endif %}class="clock-more-button">
+    <td style="width: 25px;">{% if clock.type != "one_time" %}→{% endif %}</td>
     <td{% if clock.alt_desc %} title="{{ clock.alt_desc }}"{% endif %}>{{ clock.desc }}</td>
     <td class="clock">
       {% if clock.years > 0 %}

@@ -231,15 +231,16 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 ('By Event', '/results/events/'),
                 ('Search', '/results/search/'),
         ]}, {
-            'name': 'Reports',
-            'url': '/reports/',
-            'submenu': [
-                ('Balance', '/reports/balance/'),
-        ]}, {
             'name': 'Inference',
             'url': '/inference/',
             'submenu': [
                 ('Predict', '/inference/'),
+        ]}, {
+            'name': 'Misc',
+            'url': '/misc/',
+            'submenu': [
+                ('Balance Report', '/misc/balance/'),
+                ('Days Since...', '/misc/days/'),
         ]}, {
             'name': 'About',
             'url': '/about/faq/',

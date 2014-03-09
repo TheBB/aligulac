@@ -27,7 +27,7 @@ from ratings.tools import (
 # {{{ Balance report view
 @cache_page
 def balance(request):
-    base = base_ctx('Reports', 'Balance', request)
+    base = base_ctx('Misc', 'Balance Report', request)
 
     base.update({
         'charts':   True,

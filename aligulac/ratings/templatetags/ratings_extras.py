@@ -22,6 +22,8 @@ from aligulac.settings import (
 )
 
 from ratings.models import (
+    Player,
+    Event,
     TLPD_DB_WOLKOREAN,
     TLPD_DB_WOLINTERNATIONAL,
     TLPD_DB_HOTS,
@@ -521,5 +523,38 @@ def eventlistend(value, N=None):
         N = getN(list(value))
     return list(value)[-N:]
 # }}}
+
+# }}}
+
+# {{{ Model display filters
+
+@register.filter
+def player(value):
+    if not isinstance(value, Player):
+        return value
+
+    return mark_safe((
+        "<span class='player'>"
+        "<a href='/players/{id}-{safetag}/'>"
+        "<img src='{flag}' /><img src='{race}' />{tag}"
+        "</a>"
+        "</span>"
+        ).format(tag=value.tag,
+                 safetag=urlfilter(value.tag),
+                 id=value.id,
+                 flag=img("flags/" + value.country.lower()),
+                 race=img(value.race)))
+
+@register.filter
+def event(value):
+    if not isinstance(value, Event):
+        return value
+
+    return mark_safe((
+        "<a href='/results/events/{id}-{safename}/'>"
+        "{name}"
+        "</a>").format(id=value.id,
+                       name=value.fullname,
+                       safename=urlfilter(value.fullname)))
 
 # }}}

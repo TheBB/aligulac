@@ -1,17 +1,90 @@
 # {{{ Imports
+from collections import namedtuple
+
 from django.core.exceptions import PermissionDenied
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 
 from ratings.models import (
     Group,
+    Match,
     Player,
 )
+from aligulac.tools import base_ctx
+from ratings.tools import display_matches
 from ratings.templatetags.ratings_extras import (
     ratscale,
     ratscalediff,
 )
+# }}}
+
+# {{{
+# Format (description, queryset, type)
+Clock = namedtuple('Clock', ['desc', 'object', 'type', 'date', 'extra'])
+CLOCKS = [
+    (
+        "MMA and DongRaeGu played a Bo5+",
+        Match.objects.symmetric_filter(pla_id=28, plb_id=4)\
+        .filter(Q(sca__gte=3)|Q(scb__gte=3)).order_by("-date"),
+        "match"
+    ),
+    (
+        "Mvp won a Bo7",
+        Match.objects.symmetric_filter(pla_id=13, sca=4, sca__gte=F("scb"))\
+        .order_by("-date"),
+        "match"
+    ),
+    (
+        "A foreign terran won against a korean protoss (offline)",
+        Match.objects.symmetric_filter(
+            Q(pla__country="KR", rca="P", scb__gt=F("sca"), rcb="T") & ~Q(plb__country="KR")
+        ).filter(offline=True).order_by("-date"),
+        "match"
+    ),
+    (
+        "A foreigner won in ProLeague",
+        Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))\
+        .filter(eventobj__fullname__istartswith="ProLeague")\
+        .order_by("-date"),
+        "match"
+    ),
+    (
+        "A foreginer won in GSL Code S",
+        Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))\
+        .filter(Q(eventobj__fullname__istartswith="GSL", eventobj__fullname__icontains="Code S"))\
+        .order_by("-date"),
+        "match"
+    )
+]
+
+def clocks(request):
+    ctx = base_ctx('Misc', 'Clocks', request)
+
+    ctx["title"] = "Number of days since..."
+    ctx["clocks"] = list()
+    for desc, q, t in CLOCKS:
+        obj = None
+        extra = None
+        date = None
+
+        if t == "match":
+            q = q.prefetch_related("pla", "plb", "eventobj")
+            matches = list(q[:10])
+
+            if len(matches) > 1:
+                extra = display_matches([matches[0]]), display_matches(matches[1:10])
+            else:
+                extra = display_matches([matches[0]]), None
+
+            obj = matches[0]
+            date = obj.date
+
+        c = Clock(desc, obj, t, date.strftime("%Y-%m-%d"), extra)
+
+        ctx["clocks"].append(c)
+
+    return render_to_response("clocks.html", ctx)
 # }}}
 
 # {{{ training view

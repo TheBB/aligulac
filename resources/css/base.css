@@ -756,3 +756,35 @@ td.tabunsel a:hover {
 .ui-sortable-helper {
     background: #eee;
 }
+
+/* Clocks */
+.clock-block {
+    /* border-top: 1px dashed; */
+    display: inline-block;
+    padding-top: 0.5em;
+    padding-bototm: 0.5em;
+}
+.clock-block-results {
+    padding-top: 0.4em;
+}
+/* .clock-desc { */
+/*     display: inline; */
+/*     font-size: large; */
+/* } */
+.clock {
+    display: inline;
+    font-size: large;
+    font-style: italic;
+    padding-left: 2em;
+}
+.clock-number {
+    font-family: Monospace;
+    display: inline;
+    font-size: larger;
+    font-weight: bold;
+}
+.clock-more-button {
+    cursor: pointer;
+    font-size: larger;
+    text-align: center;
+}

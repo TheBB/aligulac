@@ -367,6 +367,7 @@ table.results td {
             left: 0px;
             background-color: white;
             white-space: nowrap;
+            z-index: 2;
         }
 
             .menu > ul > li > ul > li {

@@ -1,3 +1,4 @@
+/// <reference path="config.js" />
 /* ======================================================================
  * GENERAL STUFF
  * ======================================================================
@@ -194,4 +195,92 @@ $(function () {
         $('.menu > ul > li > div > a').hover(menuHandler)
         .parent().next().buttonset().hide().menu();
     }
+});
+/* ======================================================================
+ * AUTOCOMPLETE SEARCH TEXTBOX
+ * ======================================================================
+ */
+$(document).ready(function () {
+    var getResults = function (itemToSearch, searchKey, term, label) {
+        var deferred = $.Deferred();
+        $.ajax({
+            type: 'GET',
+            url: aligulacApiConfig.aligulacApiRoot + itemToSearch +
+                '/?' +
+                searchKey + '__icontains=' +
+                term
+                + '&callback=?',
+            dataType: 'json',
+            data:
+            {
+                apikey: aligulacApiConfig.apiKey,
+                limit: 5
+            },
+        }).success(function (ajaxData) {
+            ajaxData.objects.unshift(label);
+            for (var i = 0; i < ajaxData.objects.length; i++) {
+                ajaxData.objects[i].objectsType = itemToSearch;
+            }
+            deferred.resolve({ result: ajaxData.objects });
+        });
+
+        return deferred;
+    };
+
+    var aligulacAutocompleteTemplates = function (ajaxobject) {
+        if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
+            return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
+        }
+        switch (ajaxobject.objectsType) {
+            case 'player':
+                ajaxobject.key = ajaxobject.tag;
+                return '<a><img src="{aligulac-flag}" /><img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
+                    aligulacApiConfig.flagsDirectory + ajaxobject.country.toLowerCase() + '.png')
+                .replace('{aligulac-race}', aligulacApiConfig.racesDirectory + ajaxobject.race.toUpperCase() + '.png')
+                .replace('{aligulac-name}', ajaxobject.tag);
+            case 'team':
+                ajaxobject.key = ajaxobject.name;
+                return '<a>{aligulac-name}</a>'
+                .replace('{aligulac-name}', ajaxobject.name);
+            case 'event':
+                ajaxobject.key = ajaxobject.fullname;
+                return '<a>{aligulac-name}</a>'
+                .replace('{aligulac-name}', ajaxobject.fullname);
+        }
+        return '';
+    };
+
+    $('#SearchTextBox').autocomplete({
+        source: function (request, response) {
+
+            $.when(getResults('player', 'tag', request.term, 'Players'),
+                getResults('team', 'name', request.term, 'Teams'),
+                getResults('event', 'fullname', request.term, 'Events')).then(function (resplayers, resteams, resevent) {
+                    var playerresult = [];
+                    var teamresult = [];
+                    var eventresult = [];
+                    if (resplayers.result.length > 1) {
+                        playerresult = resplayers.result;
+                    }
+                    if (resteams.result.length > 1) {
+                        teamresult = resteams.result;
+                    }
+                    if (resevent.result.length > 1) {
+                        eventresult = resevent.result;
+                    }
+                    var data = playerresult.concat(teamresult.concat(eventresult));
+                    response(data);
+                });
+
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $("#SearchTextBox").val(ui.item.key);
+            return false;
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+        return $("<li></li>")
+            .append(aligulacAutocompleteTemplates(item))
+            .appendTo(ul);
+    };
 });

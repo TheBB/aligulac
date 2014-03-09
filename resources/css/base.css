@@ -756,3 +756,11 @@ td.tabunsel a:hover {
 .ui-sortable-helper {
     background: #eee;
 }
+/* autocomplete textbox */
+.autocomplete-header
+{
+    color:white;
+    background-color:#555555;
+    display:block;
+    padding:3px;
+}

@@ -19,6 +19,7 @@ Changes here will mostly be visible on the entire site.
         <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "config"|js }}"></script>
         <script type="text/javascript" src="{{ "general"|js }}"></script>
         <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
         {% if charts %}
@@ -98,7 +99,7 @@ Changes here will mostly be visible on the entire site.
             </tbody>
             <tr>
                 <td style="text-align: right;"> <form action="/search/" method="get">
-                    Find player, team or event: <input type="text" name="q" />
+                    Find player, team or event: <input type="text" name="q" id="SearchTextBox" />
                 </form> </td>
             </tr>
             <tr>

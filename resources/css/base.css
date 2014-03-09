@@ -770,25 +770,23 @@ td.tabunsel a {
     cursor: pointer;
 }
 
-#ui-id-30 .ui-menu-item, #ui-id-31 .ui-menu-item {
-    background: none;
-    background-color: white;
-    color: black;
-    padding: 0;
-    margin: 0;
+.ui-menu:not(.ui-buttonset) .ui-menu-item {
+    background: none repeat scroll 0 0 #FFFFFF;
     border-radius: 0;
-    font-family: 'Donegal One', Times, serif;
+    color: #000000;
+    font-family: 'Donegal One',Times,serif;
     font-size: 0.8em;
+    margin: 0;
+    padding: 0;
     white-space: nowrap;
 }
-#ui-id-30, #ui-id-31 {
+.ui-menu:not(.ui-buttonset) {
     text-align: left;
-    width: auto !important;
 }
 .ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-focus, .ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-active {
     margin: 0;
 }
-.ui-menu:not(.ui-buttonset) .ui-menu-item .ui-state-focus  {
+.ui-menu:not(.ui-buttonset) .ui-menu-item .ui-state-focus {
     background: none no-repeat scroll 0 0 #555555;
     border: 0 none;
     border-radius: 0;

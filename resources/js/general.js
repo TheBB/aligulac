@@ -279,6 +279,10 @@ $(document).ready(function () {
         select: function (event, ui) {
             $('#SearchTextBox').val(ui.item.key);
             return false;
+        },
+        open: function () {
+            $('.ui-menu')
+                .width('auto');
         }
     }).data('ui-autocomplete')._renderItem = function (ul, item) {
         return $('<li></li>')
@@ -300,6 +304,10 @@ $(document).ready(function () {
                 $idPalyersTextArea.addTag(ui.item.key + ' ' + ui.item.id);
                 $("#id_players_tag").focus();
                 return false;
+            },
+            open: function () {
+                $('.ui-menu')
+                    .width('auto');
             }
         },
         autocomplete_url: function (request, response) {

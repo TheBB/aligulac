@@ -785,10 +785,13 @@ td.tabunsel a {
     text-align: left;
     width: auto !important;
 }
-.ui-state-focus {
-    background: none no-repeat scroll 0 0 #555555 !important;
-    margin: 0 !important;
-    color: white !important;
+.ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-focus, .ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-active {
+    margin: 0;
+}
+.ui-menu:not(.ui-buttonset) .ui-menu-item .ui-state-focus  {
+    background: none no-repeat scroll 0 0 #555555;
+    border: 0 none;
     border-radius: 0;
-    border: 0px !important;
+    color: #FFFFFF;
+    margin: 0;
 }

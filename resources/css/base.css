@@ -758,33 +758,45 @@ td.tabunsel a:hover {
 }
 
 /* Clocks */
+.clocks {
+    width: 100%;
+}
+.clock-event-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.clock-event-table tr {
+    /* border-bottom: 1px dashed; */
+}
 .clock-block {
     /* border-top: 1px dashed; */
-    display: inline-block;
-    padding-top: 0.5em;
-    padding-bototm: 0.5em;
+    /* display: inline-block; */
+    /* padding-top: 0.5em; */
+    /* padding-bototm: 0.5em; */
 }
 .clock-block-results {
-    padding-top: 0.4em;
+    /* padding-top: 0.4em; */
 }
 /* .clock-desc { */
 /*     display: inline; */
 /*     font-size: large; */
 /* } */
-.clock {
+.clock > div {
     display: inline;
-    font-size: large;
-    font-style: italic;
-    padding-left: 2em;
+    /* font-size: large; */
+    /* font-style: italic; */
+    /* padding-left: 2em; */
 }
 .clock-number {
-    font-family: Monospace;
+    /* font-family: Monospace; */
     display: inline;
-    font-size: larger;
-    font-weight: bold;
+    /* font-size: larger; */
+    /* font-weight: bold; */
 }
 .clock-more-button {
     cursor: pointer;
-    font-size: larger;
-    text-align: center;
+    /* font-size: larger; */
+    /* text-align: center; */
 }

@@ -216,21 +216,23 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
             return '<a>{aligulac-name}</a>'
             .replace('{aligulac-name}', ajaxobject.name);
         case 'event':
-            ajaxobject.key = ajaxobject.fullname;
+            ajaxobject.key = ajaxobject.name;
             return '<a>{aligulac-name}</a>'
-            .replace('{aligulac-name}', ajaxobject.fullname);
+            .replace('{aligulac-name}', ajaxobject.name);
     }
     return '<a>' + ajaxobject.value + '</a>';
 };
 var getResults = function (itemToSearch, searchKey, term, label) {
     var deferred = $.Deferred();
+    var eventString = (itemToSearch.toLowerCase() == 'event' ? '&type__iexact=event' : '');
+    var url = aligulacApiConfig.aligulacApiRoot + itemToSearch +
+        '/?' +
+        searchKey + '__icontains=' +
+        term + eventString
+        + '&callback=?';
     $.ajax({
         type: 'GET',
-        url: aligulacApiConfig.aligulacApiRoot + itemToSearch +
-            '/?' +
-            searchKey + '__icontains=' +
-            term
-            + '&callback=?',
+        url: url,
         dataType: 'json',
         data:
         {

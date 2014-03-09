@@ -216,7 +216,7 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
             return '<a>{aligulac-name}</a>'
             .replace('{aligulac-name}', ajaxobject.name);
         case 'event':
-            ajaxobject.key = ajaxobject.name;
+            ajaxobject.key = ajaxobject.fullname;
             return '<a>{aligulac-name}</a>'
             .replace('{aligulac-name}', ajaxobject.fullname);
     }

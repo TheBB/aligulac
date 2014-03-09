@@ -225,10 +225,11 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
 var getResults = function (itemToSearch, searchKey, term, label) {
     var deferred = $.Deferred();
     var eventString = (itemToSearch.toLowerCase() == 'event' ? '&type__iexact=event' : '');
+    var playersString = (itemToSearch.toLowerCase() == 'player' ? '&order_by=-current_rating__rating' : '');
     var url = aligulacApiConfig.aligulacApiRoot + itemToSearch +
         '/?' +
         searchKey + '__icontains=' +
-        term + eventString
+        term + eventString + playersString
         + '&callback=?';
     $.ajax({
         type: 'GET',

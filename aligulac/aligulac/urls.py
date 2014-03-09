@@ -114,7 +114,9 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'aligulac.views.logout_view'),
     url(r'^changepwd/$', 'aligulac.views.changepwd'),
 
-    url(r'^misc/clocks/$', 'ratings.misc_views.clocks'),
+    url(r'^misc/$', 'ratings.misc_views.home'),
+    url(r'^misc/days/$', 'ratings.misc_views.clocks'),
+    url(r'^misc/balance/$', 'ratings.reports_views.balance'),
 
     url(r'^404/$', 'aligulac.views.h404'),
     url(r'^500/$', 'aligulac.views.h500'),

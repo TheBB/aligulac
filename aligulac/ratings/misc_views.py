@@ -7,12 +7,15 @@ from django.db.models import F, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
 
+from itertools import zip_longest
+
 from ratings.models import (
     Event,
     Group,
     Match,
     Player,
 )
+from aligulac.cache import cache_page
 from aligulac.tools import base_ctx
 from ratings.tools import display_matches
 from ratings.templatetags.ratings_extras import (
@@ -21,9 +24,35 @@ from ratings.templatetags.ratings_extras import (
 )
 # }}}
 
+@cache_page
+def home(request):
+    ctx = base_ctx('Misc', request=request)
+
+    ctx["title"] = "Miscellaneous Pages"
+    ctx["miscpages"] = (
+        { "url": "/misc/balance/",
+          "title": "Balance Report",
+          "desc": "Charts showing balance in StarCraft II over time."
+        },
+        { "url": "/misc/days/",
+          "title": "Number of days since...",
+          "desc": "Page showing the most recent time some things happened."
+        },
+    )
+
+    # http://docs.python.org/3.2/library/itertools.html
+    def grouper(n, iterable, fillvalue=None):
+        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
+        args = [iter(iterable)] * n
+        return zip_longest(*args, fillvalue=fillvalue)
+
+    ctx["miscpages"] = grouper(2, ctx["miscpages"])
+
+    return render_to_response("misc.html", ctx)
+
 # {{{
 # Format (description, hover_description, queryset, type)
-Clock = namedtuple('Clock', ['desc', 'alt_desc', 'object', 'type', 'date', 'extra'])
+Clock = namedtuple('Clock', ['desc', 'alt_desc', 'object', 'type', 'date', 'years', 'days', 'extra'])
 CLOCKS = [
     (
         "MMA and DongRaeGu played a Bo5+",
@@ -47,7 +76,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A korean terran won against a korean protoss in a Bo5+ (offline)",
+        "A Korean terran won against a Korean protoss in a Bo5+ (offline)",
         None,
         Match.objects.symmetric_filter(
             Q(pla__country="KR", rca="P", scb__gt=F("sca"), rcb="T", plb__country="KR")
@@ -55,7 +84,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreign terran won against a korean protoss (offline)",
+        "A foreign terran won against a Korean protoss (offline)",
         None,
         Match.objects.symmetric_filter(
             Q(pla__country="KR", rca="P", scb__gt=F("sca"), rcb="T") & ~Q(plb__country="KR")
@@ -63,15 +92,15 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreigner won in ProLeague",
+        "A foreigner won in Proleague",
         None,
         Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))
-        .filter(eventobj__fullname__istartswith="ProLeague")
+        .filter(eventobj__fullname__istartswith="proleague")
         .order_by("-date"),
         "match"
     ),
     (
-        "A foreginer won in GSL Code S",
+        "A foreginer won in the GSL Code S",
         None,
         Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))
         .filter(eventobj__fullname__istartswith="GSL", eventobj__fullname__icontains="Code S")
@@ -134,8 +163,9 @@ CLOCKS = [
     )
 ]
 
+@cache_page
 def clocks(request):
-    ctx = base_ctx('Misc', 'Clocks', request)
+    ctx = base_ctx('Misc', 'Days Since...', request)
 
     ctx["title"] = "Number of days since..."
     ctx["clocks"] = list()
@@ -169,10 +199,14 @@ def clocks(request):
 
             date = obj.latest
 
-        c = Clock(desc, alt_desc, obj, t, date.strftime("%Y-%m-%d"), extra)
+        diff = datetime.today().date() - date
+        years = diff.days // 365
+        days = diff.days % 365
+        c = Clock(desc, alt_desc, obj, t, date, years, days, extra)
 
         ctx["clocks"].append(c)
-        ctx["clocks"].sort(key=lambda c: -datetime.strptime(c.date, "%Y-%m-%d").timestamp())
+
+    ctx["clocks"].sort(key=lambda c: c.date, reverse=True)
 
     return render_to_response("clocks.html", ctx)
 # }}}

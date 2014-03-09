@@ -327,10 +327,6 @@ tr.header a:hover {
     text-decoration: none;
 }
 
-table.results {
-    border-collapse: collapse;
-}
-
 table.results td {
     padding: 0.4em;
 }
@@ -429,7 +425,7 @@ table.dottedint tr td:first-child {
 }
 
 table.results {
-    width: 67em;
+    width: 100%;
     border-collapse: collapse;
 }
 

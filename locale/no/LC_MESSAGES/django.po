@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 18:07+0100\n"
+"POT-Creation-Date: 2014-03-10 20:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,63 +24,1240 @@ msgstr "Engelsk"
 msgid "Norwegian"
 msgstr "Norsk"
 
-#: aligulac/aligulac/views.py:144
+#. Translators: matches as in search matches, not SC2 matches
+#: aligulac/aligulac/tools.py:83 aligulac/aligulac/tools.py:96
+msgid "Possible matches:"
+msgstr "Mulige treff:"
+
+#. Translators: E.g. "John, Lisa, Darren and Mike"
+#: aligulac/aligulac/tools.py:85 aligulac/aligulac/tools.py:107
+#, python-format
+msgid "%(commalist)s and %(final)s"
+msgstr "%(commalist)s og %(final)s"
+
+#. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
+#: aligulac/aligulac/tools.py:98
+#, python-format
+msgid "%(commalist)s and %(number)s more"
+msgstr "%(commalist)s og %(number)s flere"
+
+#: aligulac/aligulac/tools.py:114
+#, python-format
+msgid "'%s' not unique"
+msgstr "'%s' er ikke unik"
+
+#: aligulac/aligulac/tools.py:126
+msgid "You are not logged in."
+msgstr "Du er ikke logget inn."
+
+#: aligulac/aligulac/tools.py:129
+#, python-format
+msgid "You are logged in as %s"
+msgstr "Du er logget inn som %s"
+
+#: aligulac/aligulac/tools.py:131
+msgid "logout"
+msgstr "logg ut"
+
+#: aligulac/aligulac/tools.py:132
+msgid "change password"
+msgstr "endre passord"
+
+#: aligulac/aligulac/tools.py:145
+msgid "This field is required."
+msgstr "Dette feltet er påkrevd."
+
+#: aligulac/aligulac/tools.py:217 aligulac/aligulac/tools.py:228
+msgid "Ranking"
+msgstr "Rangering"
+
+#: aligulac/aligulac/tools.py:220
+msgid "Current"
+msgstr "Dagens"
+
+#: aligulac/aligulac/tools.py:221 aligulac/aligulac/tools.py:235
+msgid "History"
+msgstr "Historie"
+
+#: aligulac/aligulac/tools.py:222 aligulac/aligulac/tools.py:328
+msgid "Earnings"
+msgstr "Inntekt"
+
+#: aligulac/aligulac/tools.py:225
+msgid "Teams"
+msgstr "Lag"
+
+#: aligulac/aligulac/tools.py:229
+msgid "Transfers"
+msgstr "Lagbytter"
+
+#: aligulac/aligulac/tools.py:232
+msgid "Records"
+msgstr "Rekorder"
+
+#. Translators: Hall of fame
+#: aligulac/aligulac/tools.py:237
+msgid "HoF"
+msgstr "Hall of Fame"
+
+#: aligulac/aligulac/tools.py:238 templates/period.html:342
+msgid "All"
+msgstr "Alle"
+
+#: aligulac/aligulac/tools.py:239
+msgid "Protoss"
+msgstr "Protoss"
+
+#: aligulac/aligulac/tools.py:240
+msgid "Terran"
+msgstr "Terran"
+
+#: aligulac/aligulac/tools.py:241
+msgid "Zerg"
+msgstr "Zerg"
+
+#: aligulac/aligulac/tools.py:244
+msgid "Results"
+msgstr "Resultater"
+
+#: aligulac/aligulac/tools.py:247
+msgid "By Date"
+msgstr "Etter dato"
+
+#: aligulac/aligulac/tools.py:248
+msgid "By Event"
+msgstr "Etter turnering"
+
+#: aligulac/aligulac/tools.py:249
+msgid "Search"
+msgstr "Søkeresultater"
+
+#: aligulac/aligulac/tools.py:252
+msgid "Inference"
+msgstr "Inferens"
+
+#: aligulac/aligulac/tools.py:255
+msgid "Predict"
+msgstr "Spå"
+
+#: aligulac/aligulac/tools.py:258 aligulac/aligulac/tools.py:282
+msgid "Misc"
+msgstr "Div"
+
+#: aligulac/aligulac/tools.py:261
+msgid "Balance Report"
+msgstr "Balanserapport"
+
+#: aligulac/aligulac/tools.py:262
+msgid "Days Since…"
+msgstr "Dager siden…"
+
+#: aligulac/aligulac/tools.py:265
+msgid "About"
+msgstr "Om"
+
+#: aligulac/aligulac/tools.py:268
+msgid "FAQ"
+msgstr "FAQ"
+
+#: aligulac/aligulac/tools.py:269
+msgid "Blog"
+msgstr "Blogg"
+
+#: aligulac/aligulac/tools.py:270
+msgid "Database"
+msgstr "Databasestatus"
+
+#: aligulac/aligulac/tools.py:271
+msgid "API"
+msgstr "API"
+
+#: aligulac/aligulac/tools.py:274 templates/language.html:41
+msgid "Submit"
+msgstr "Send"
+
+#. Translators: Matches as in SC2-matches, not search matches.
+#: aligulac/aligulac/tools.py:278
+msgid "Matches"
+msgstr "Kamper"
+
+#: aligulac/aligulac/tools.py:279
+msgid "Review"
+msgstr "Må gjennomgås"
+
+#: aligulac/aligulac/tools.py:280
+msgid "Events"
+msgstr "Turneringer"
+
+#: aligulac/aligulac/tools.py:281
+msgid "Open events"
+msgstr "Åpne turneringer"
+
+#: aligulac/aligulac/tools.py:323
+msgid "Rating history"
+msgstr "Ratinghistorie"
+
+#: aligulac/aligulac/tools.py:325
+msgid "Match history"
+msgstr "Spillhistorie"
+
+#: aligulac/aligulac/tools.py:331
+msgid "Adjustments"
+msgstr "Justeringer"
+
+#: aligulac/aligulac/views.py:66 aligulac/blog/views.py:18
+msgid "The blog/news section is only in English, sorry."
+msgstr "Bloggen/nyhetsseksjonen er kun på engelsk. Beklager."
+
+#: aligulac/aligulac/views.py:150
 msgid "Database status"
 msgstr "Databasestatus"
 
-#: aligulac/aligulac/views.py:151
+#: aligulac/aligulac/views.py:157
 msgid "Name/organization"
 msgstr "Navn/organisasjon"
 
-#: aligulac/aligulac/views.py:152
+#: aligulac/aligulac/views.py:158
 msgid "Contact"
 msgstr "Kontakt"
 
-#: aligulac/aligulac/views.py:169
+#: aligulac/aligulac/views.py:175
 msgid "Entered data was invalid."
 msgstr "Innsendte data var ugyldig."
 
-#: aligulac/aligulac/views.py:184
+#: aligulac/aligulac/views.py:190
 #, python-format
 msgid "Your API key is '%s'. Please keep it safe."
 msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
 
-#: aligulac/aligulac/views.py:206
+#: aligulac/aligulac/views.py:205
 msgid "API documentation"
 msgstr "API-dokumentasjon"
 
-#: aligulac/aligulac/views.py:252
+#: aligulac/aligulac/views.py:251
 msgid "Search results"
 msgstr "Søkeresultater"
 
-#: aligulac/aligulac/views.py:262
+#: aligulac/aligulac/views.py:261
 msgid "Login"
 msgstr "Logg inn"
 
-#: aligulac/aligulac/views.py:281
+#: aligulac/aligulac/views.py:280
 msgid "The old password didn't match. Your password was not changed."
 msgstr "Det gamle passordet stemte ikke. Passordet ble ikke endret."
 
-#: aligulac/aligulac/views.py:287
+#: aligulac/aligulac/views.py:286
 msgid "The new passwords didn't match. Your password was not changed."
 msgstr "Det nye passordet stemte ikke overens. Passordet ble ikke endret."
 
-#: aligulac/aligulac/views.py:294
+#: aligulac/aligulac/views.py:293
 #, python-format
 msgid "The password for %s was successfully changed."
 msgstr "Passordet for %s ble endret."
 
-#: aligulac/aligulac/views.py:297
+#: aligulac/aligulac/views.py:296
 msgid "Change password"
 msgstr "Endre passord"
 
-#: aligulac/aligulac/views.py:306
+#: aligulac/aligulac/views.py:305
 msgid "404: Not found"
 msgstr "404: Siden fantes ikke"
 
-#: aligulac/aligulac/views.py:312
+#: aligulac/aligulac/views.py:311
 msgid "500: Internal Server Error"
 msgstr "500: Intern tjenerfeil"
+
+#: aligulac/countries/data.py:5
+msgid "Africa"
+msgstr "Afrika"
+
+#: aligulac/countries/data.py:6 aligulac/countries/data.py:516
+msgid "Antarctica"
+msgstr "Antarktis"
+
+#: aligulac/countries/data.py:7
+msgid "Asia"
+msgstr "Asia"
+
+#: aligulac/countries/data.py:8
+msgid "Europe"
+msgstr "Europa"
+
+#: aligulac/countries/data.py:9
+msgid "North America"
+msgstr "Nord-Amerika"
+
+#: aligulac/countries/data.py:10
+msgid "Oceania"
+msgstr "Oseania"
+
+#: aligulac/countries/data.py:11
+msgid "South America"
+msgstr "Sør-Amerika"
+
+#: aligulac/countries/data.py:514
+msgid "Afghanistan"
+msgstr "Afghanistan"
+
+#: aligulac/countries/data.py:515
+msgid "Albania"
+msgstr "Albania"
+
+#: aligulac/countries/data.py:517
+msgid "Algeria"
+msgstr "Algeria"
+
+#: aligulac/countries/data.py:518
+msgid "American Samoa"
+msgstr "Amerikansk Samoa"
+
+#: aligulac/countries/data.py:519
+msgid "Andorra"
+msgstr "Andorra"
+
+#: aligulac/countries/data.py:520
+msgid "Angola"
+msgstr "Angola"
+
+#: aligulac/countries/data.py:521
+msgid "Antigua and Barbuda"
+msgstr "Antigua og Barbuda"
+
+#: aligulac/countries/data.py:522
+msgid "Azerbaijan"
+msgstr "Aserbajdsjan"
+
+#: aligulac/countries/data.py:523
+msgid "Argentina"
+msgstr "Argentina"
+
+#: aligulac/countries/data.py:524
+msgid "Australia"
+msgstr "Australia"
+
+#: aligulac/countries/data.py:525
+msgid "Austria"
+msgstr "Østerrike"
+
+#: aligulac/countries/data.py:526
+msgid "Bahamas"
+msgstr "Bahamas"
+
+#: aligulac/countries/data.py:527
+msgid "Bahrain"
+msgstr "Bahrain"
+
+#: aligulac/countries/data.py:528
+msgid "Bangladesh"
+msgstr "Bangladesh"
+
+#: aligulac/countries/data.py:529
+msgid "Armenia"
+msgstr "Armenia"
+
+#: aligulac/countries/data.py:530
+msgid "Barbados"
+msgstr "Barbados"
+
+#: aligulac/countries/data.py:531
+msgid "Belgium"
+msgstr "Belgia"
+
+#: aligulac/countries/data.py:532
+msgid "Bermuda"
+msgstr "Bermuda"
+
+#: aligulac/countries/data.py:533
+msgid "Bhutan"
+msgstr "Bhutan"
+
+#: aligulac/countries/data.py:534
+msgid "Bolivia"
+msgstr "Bolivia"
+
+#: aligulac/countries/data.py:535
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnia og Herzegovina"
+
+#: aligulac/countries/data.py:536
+msgid "Botswana"
+msgstr "Botswana"
+
+#: aligulac/countries/data.py:537
+msgid "Bouvet Island"
+msgstr "Bouvetøya"
+
+#: aligulac/countries/data.py:538
+msgid "Brazil"
+msgstr "Brasil"
+
+#: aligulac/countries/data.py:539
+msgid "Belize"
+msgstr "Belize"
+
+#: aligulac/countries/data.py:540
+msgid "British Indian Ocean Territory"
+msgstr "Det britiske territoriet i Indiahavet"
+
+#: aligulac/countries/data.py:541
+msgid "Solomon Islands"
+msgstr "Solomonøyene"
+
+#: aligulac/countries/data.py:542
+msgid "British Virgin Islands"
+msgstr "De britiske jomfruøyene"
+
+#: aligulac/countries/data.py:543
+msgid "Brunei"
+msgstr "Brunei"
+
+#: aligulac/countries/data.py:544
+msgid "Bulgaria"
+msgstr "Bulgaria"
+
+#: aligulac/countries/data.py:545
+msgid "Myanmar"
+msgstr "Myanmar"
+
+#: aligulac/countries/data.py:546
+msgid "Burundi"
+msgstr "Burundi"
+
+#: aligulac/countries/data.py:547
+msgid "Belarus"
+msgstr "Hviterussland"
+
+#: aligulac/countries/data.py:548
+msgid "Cambodia"
+msgstr "Kambodsja"
+
+#: aligulac/countries/data.py:549
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#: aligulac/countries/data.py:550
+msgid "Canada"
+msgstr "Canada"
+
+#: aligulac/countries/data.py:551
+msgid "Cape Verde"
+msgstr "Kapp Verde"
+
+#: aligulac/countries/data.py:552
+msgid "Cayman Islands"
+msgstr "Caymanøyene"
+
+#: aligulac/countries/data.py:553
+msgid "Central African Republic"
+msgstr "Den sentralafrikanske republikk"
+
+#: aligulac/countries/data.py:554
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#: aligulac/countries/data.py:555
+msgid "Chad"
+msgstr "Tsjad"
+
+#: aligulac/countries/data.py:556
+msgid "Chile"
+msgstr "Chile"
+
+#: aligulac/countries/data.py:557
+msgid "China"
+msgstr "Kina"
+
+#: aligulac/countries/data.py:558
+msgid "Taiwan"
+msgstr "Taiwan"
+
+#: aligulac/countries/data.py:559
+msgid "Christmas Island"
+msgstr "Juleøya"
+
+#: aligulac/countries/data.py:560
+msgid "Cocos (Keeling) Islands"
+msgstr "Kokosøyene"
+
+#: aligulac/countries/data.py:561
+msgid "Colombia"
+msgstr "Colombia"
+
+#: aligulac/countries/data.py:562
+msgid "Comoros"
+msgstr "Komorene"
+
+#: aligulac/countries/data.py:563
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#: aligulac/countries/data.py:564 aligulac/countries/data.py:565
+msgid "Congo"
+msgstr "Kongo"
+
+#: aligulac/countries/data.py:566
+msgid "Cook Islands"
+msgstr "Cookøyene"
+
+#: aligulac/countries/data.py:567
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#: aligulac/countries/data.py:568
+msgid "Croatia"
+msgstr "Kroatia"
+
+#: aligulac/countries/data.py:569
+msgid "Cuba"
+msgstr "cuba"
+
+#: aligulac/countries/data.py:570
+msgid "Cyprus"
+msgstr "Kypros"
+
+#: aligulac/countries/data.py:571
+msgid "Czech Republic"
+msgstr "Tsjekkia"
+
+#: aligulac/countries/data.py:572
+msgid "Benin"
+msgstr "Benin"
+
+#: aligulac/countries/data.py:573
+msgid "Denmark"
+msgstr "Danmark"
+
+#: aligulac/countries/data.py:574
+msgid "Dominica"
+msgstr "Dominica"
+
+#: aligulac/countries/data.py:575
+msgid "Dominican Republic"
+msgstr "Den dominikanske republikk"
+
+#: aligulac/countries/data.py:576
+msgid "Ecuador"
+msgstr "Ecuador"
+
+#: aligulac/countries/data.py:577
+msgid "El Salvador"
+msgstr "El Salvador"
+
+#: aligulac/countries/data.py:578
+msgid "Equatorial Guinea"
+msgstr "Ekvatorial-Guinea"
+
+#: aligulac/countries/data.py:579
+msgid "Ethiopia"
+msgstr "Etiopia"
+
+#: aligulac/countries/data.py:580
+msgid "Eritrea"
+msgstr "Eritrea"
+
+#: aligulac/countries/data.py:581
+msgid "Estonia"
+msgstr "Estland"
+
+#: aligulac/countries/data.py:582
+msgid "Faroe Islands"
+msgstr "Færøyene"
+
+#: aligulac/countries/data.py:583
+msgid "Falkland Islands (Malvinas)"
+msgstr "Falklandsøyene"
+
+#: aligulac/countries/data.py:584
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "Sør-Georgia og Sør-Sandwichøyene"
+
+#: aligulac/countries/data.py:585
+msgid "Fiji"
+msgstr "Fiji"
+
+#: aligulac/countries/data.py:586
+msgid "Finland"
+msgstr "Finland"
+
+#: aligulac/countries/data.py:587
+msgid "Åland Islands"
+msgstr "Åland"
+
+#: aligulac/countries/data.py:588
+msgid "France"
+msgstr "Frankrike"
+
+#: aligulac/countries/data.py:589
+msgid "French Guiana"
+msgstr "Fransk Guiana"
+
+#: aligulac/countries/data.py:590
+msgid "French Polynesia"
+msgstr "Fransk Polynesia"
+
+#: aligulac/countries/data.py:591
+msgid "French Southern Territories"
+msgstr "De franske sørterritorier"
+
+#: aligulac/countries/data.py:592
+msgid "Djibouti"
+msgstr "Djibouti"
+
+#: aligulac/countries/data.py:593
+msgid "Gabon"
+msgstr "Gabon"
+
+#: aligulac/countries/data.py:594
+msgid "Georgia"
+msgstr "Georgia"
+
+#: aligulac/countries/data.py:595
+msgid "Gambia"
+msgstr "Gambia"
+
+#: aligulac/countries/data.py:596
+msgid "Palestinian Territory"
+msgstr "Palestina"
+
+#: aligulac/countries/data.py:597
+msgid "Germany"
+msgstr "Tyskland"
+
+#: aligulac/countries/data.py:598
+msgid "Ghana"
+msgstr "Ghana"
+
+#: aligulac/countries/data.py:599
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: aligulac/countries/data.py:600
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: aligulac/countries/data.py:601
+msgid "Greece"
+msgstr "Hellas"
+
+#: aligulac/countries/data.py:602
+msgid "Greenland"
+msgstr "Grønland"
+
+#: aligulac/countries/data.py:603
+msgid "Grenada"
+msgstr "Grenada"
+
+#: aligulac/countries/data.py:604
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#: aligulac/countries/data.py:605
+msgid "Guam"
+msgstr "Guam"
+
+#: aligulac/countries/data.py:606
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#: aligulac/countries/data.py:607
+msgid "Guinea"
+msgstr "Guinea"
+
+#: aligulac/countries/data.py:608
+msgid "Guyana"
+msgstr "Guyana"
+
+#: aligulac/countries/data.py:609
+msgid "Haiti"
+msgstr "Haiti"
+
+#: aligulac/countries/data.py:610
+msgid "Heard Island and McDonald Islands"
+msgstr "Heard- og McDonaldøyene"
+
+#: aligulac/countries/data.py:611
+msgid "Vatican City"
+msgstr "Vatikanstaten"
+
+#: aligulac/countries/data.py:612
+msgid "Honduras"
+msgstr "Honduras"
+
+#: aligulac/countries/data.py:613
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: aligulac/countries/data.py:614
+msgid "Hungary"
+msgstr "Ungarn"
+
+#: aligulac/countries/data.py:615
+msgid "Iceland"
+msgstr "Island"
+
+#: aligulac/countries/data.py:616
+msgid "India"
+msgstr "India"
+
+#: aligulac/countries/data.py:617
+msgid "Indonesia"
+msgstr "Indonesia"
+
+#: aligulac/countries/data.py:618
+msgid "Iran"
+msgstr "Iran"
+
+#: aligulac/countries/data.py:619
+msgid "Iraq"
+msgstr "Irak"
+
+#: aligulac/countries/data.py:620
+msgid "Ireland"
+msgstr "Irland"
+
+#: aligulac/countries/data.py:621
+msgid "Israel"
+msgstr "Israel"
+
+#: aligulac/countries/data.py:622
+msgid "Italy"
+msgstr "Italia"
+
+#: aligulac/countries/data.py:623
+msgid "Cote d'Ivoire"
+msgstr "Elfenbenskysten"
+
+#: aligulac/countries/data.py:624
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#: aligulac/countries/data.py:625
+msgid "Japan"
+msgstr "Japan"
+
+#: aligulac/countries/data.py:626
+msgid "Kazakhstan"
+msgstr "Kasakhstan"
+
+#: aligulac/countries/data.py:627
+msgid "Jordan"
+msgstr "Jordan"
+
+#: aligulac/countries/data.py:628
+msgid "Kenya"
+msgstr "Kenya"
+
+#: aligulac/countries/data.py:629
+msgid "North Korea"
+msgstr "Nord-Korea"
+
+#: aligulac/countries/data.py:630 templates/period.html:343
+msgid "South Korea"
+msgstr "Sør-Korea"
+
+#: aligulac/countries/data.py:631
+msgid "Kuwait"
+msgstr "Kuwait"
+
+#: aligulac/countries/data.py:632
+msgid "Kyrgyzstan"
+msgstr "Kirgisistan"
+
+#: aligulac/countries/data.py:633
+msgid "Laos"
+msgstr "Laos"
+
+#: aligulac/countries/data.py:634
+msgid "Lebanon"
+msgstr "Libanon"
+
+#: aligulac/countries/data.py:635
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#: aligulac/countries/data.py:636
+msgid "Latvia"
+msgstr "Latvia"
+
+#: aligulac/countries/data.py:637
+msgid "Liberia"
+msgstr "Liberia"
+
+#: aligulac/countries/data.py:638
+msgid "Libya"
+msgstr "Libya"
+
+#: aligulac/countries/data.py:639
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: aligulac/countries/data.py:640
+msgid "Lithuania"
+msgstr "Litauen"
+
+#: aligulac/countries/data.py:641
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
+#: aligulac/countries/data.py:642
+msgid "Macao"
+msgstr "Macao"
+
+#: aligulac/countries/data.py:643
+msgid "Madagascar"
+msgstr "Madagaskar"
+
+#: aligulac/countries/data.py:644
+msgid "Malawi"
+msgstr "Malawi"
+
+#: aligulac/countries/data.py:645
+msgid "Malaysia"
+msgstr "Malaysia"
+
+#: aligulac/countries/data.py:646
+msgid "Maldives"
+msgstr "Maldivene"
+
+#: aligulac/countries/data.py:647
+msgid "Mali"
+msgstr "Mali"
+
+#: aligulac/countries/data.py:648
+msgid "Malta"
+msgstr "Malta"
+
+#: aligulac/countries/data.py:649
+msgid "Martinique"
+msgstr "Martinique"
+
+#: aligulac/countries/data.py:650
+msgid "Mauritania"
+msgstr "Mauritania"
+
+#: aligulac/countries/data.py:651
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#: aligulac/countries/data.py:652
+msgid "Mexico"
+msgstr "Mexico"
+
+#: aligulac/countries/data.py:653
+msgid "Mongolia"
+msgstr "Mongolia"
+
+#: aligulac/countries/data.py:654
+msgid "Moldova"
+msgstr "Moldova"
+
+#: aligulac/countries/data.py:655
+msgid "Montenegro"
+msgstr "Montenegro"
+
+#: aligulac/countries/data.py:656
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: aligulac/countries/data.py:657
+msgid "Morocco"
+msgstr "Marokko"
+
+#: aligulac/countries/data.py:658
+msgid "Mozambique"
+msgstr "Mozambique"
+
+#: aligulac/countries/data.py:659
+msgid "Oman"
+msgstr "Oman"
+
+#: aligulac/countries/data.py:660
+msgid "Namibia"
+msgstr "Namibia"
+
+#: aligulac/countries/data.py:661
+msgid "Nauru"
+msgstr "Nauru"
+
+#: aligulac/countries/data.py:662
+msgid "Nepal"
+msgstr "Nepal"
+
+#: aligulac/countries/data.py:663
+msgid "Netherlands"
+msgstr "Nederland"
+
+#: aligulac/countries/data.py:664
+msgid "Netherlands Antilles"
+msgstr "De nederlandske antillene"
+
+#: aligulac/countries/data.py:665
+msgid "Aruba"
+msgstr "Aruba"
+
+#: aligulac/countries/data.py:666
+msgid "New Caledonia"
+msgstr "Ny Caledonia"
+
+#: aligulac/countries/data.py:667
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: aligulac/countries/data.py:668
+msgid "New Zealand"
+msgstr "New Zealand"
+
+#: aligulac/countries/data.py:669
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#: aligulac/countries/data.py:670
+msgid "Niger"
+msgstr "Niger"
+
+#: aligulac/countries/data.py:671
+msgid "Nigeria"
+msgstr "Nigeria"
+
+#: aligulac/countries/data.py:672
+msgid "Niue"
+msgstr "Niue"
+
+#: aligulac/countries/data.py:673
+msgid "Norfolk Island"
+msgstr "Norfolkøyene"
+
+#: aligulac/countries/data.py:674
+msgid "Norway"
+msgstr "Norge"
+
+#: aligulac/countries/data.py:675
+msgid "Northern Mariana Islands"
+msgstr "Nord-Marianene"
+
+#: aligulac/countries/data.py:676
+msgid "United States Minor Outlying Islands"
+msgstr "USAs ytre småøyer"
+
+#: aligulac/countries/data.py:677
+msgid "Micronesia"
+msgstr "Mikronesia"
+
+#: aligulac/countries/data.py:678
+msgid "Marshall Islands"
+msgstr "Marshalløyene"
+
+#: aligulac/countries/data.py:679
+msgid "Palau"
+msgstr "Palau"
+
+#: aligulac/countries/data.py:680
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: aligulac/countries/data.py:681
+msgid "Panama"
+msgstr "Panama"
+
+#: aligulac/countries/data.py:682
+msgid "Papua New Guinea"
+msgstr "Papua Ny-Guinea"
+
+#: aligulac/countries/data.py:683
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#: aligulac/countries/data.py:684
+msgid "Peru"
+msgstr "Peru"
+
+#: aligulac/countries/data.py:685
+msgid "Philippines"
+msgstr "Filippinene"
+
+#: aligulac/countries/data.py:686
+msgid "Pitcairn Islands"
+msgstr "Pitcairnøyene"
+
+#: aligulac/countries/data.py:687
+msgid "Poland"
+msgstr "Polen"
+
+#: aligulac/countries/data.py:688
+msgid "Portugal"
+msgstr "Portugal"
+
+#: aligulac/countries/data.py:689
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+#: aligulac/countries/data.py:690
+msgid "Timor-Leste"
+msgstr "Øst-Timor"
+
+#: aligulac/countries/data.py:691
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+#: aligulac/countries/data.py:692
+msgid "Qatar"
+msgstr "Qatar"
+
+#: aligulac/countries/data.py:693
+msgid "Reunion"
+msgstr "Reunion"
+
+#: aligulac/countries/data.py:694
+msgid "Romania"
+msgstr "Romania"
+
+#: aligulac/countries/data.py:695
+msgid "Russia"
+msgstr "Russland"
+
+#: aligulac/countries/data.py:696
+msgid "Rwanda"
+msgstr "Rwanda"
+
+#: aligulac/countries/data.py:697
+msgid "Saint Barthelemy"
+msgstr "Sankt Barthelemy"
+
+#: aligulac/countries/data.py:698
+msgid "Saint Helena"
+msgstr "St. Helena"
+
+#: aligulac/countries/data.py:699
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts og Nevis"
+
+#: aligulac/countries/data.py:700
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#: aligulac/countries/data.py:701
+msgid "Saint Lucia"
+msgstr "Saint Lucia"
+
+#: aligulac/countries/data.py:702
+msgid "Saint Martin"
+msgstr "Saint Martin"
+
+#: aligulac/countries/data.py:703
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint Pierre og Miquelon"
+
+#: aligulac/countries/data.py:704
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint Vincent og Grenadinene"
+
+#: aligulac/countries/data.py:705
+msgid "San Marino"
+msgstr "San Marino"
+
+#: aligulac/countries/data.py:706
+msgid "Sao Tome and Principe"
+msgstr "Sao Tome og Principe"
+
+#: aligulac/countries/data.py:707
+msgid "Saudi Arabia"
+msgstr "Saudi Arabia"
+
+#: aligulac/countries/data.py:708
+msgid "Senegal"
+msgstr "Senegal"
+
+#: aligulac/countries/data.py:709
+msgid "Serbia"
+msgstr "Serbia"
+
+#: aligulac/countries/data.py:710
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#: aligulac/countries/data.py:711
+msgid "Singapore"
+msgstr "Singapore"
+
+#: aligulac/countries/data.py:712
+msgid "Slovakia"
+msgstr "Slovakia"
+
+#: aligulac/countries/data.py:713
+msgid "Vietnam"
+msgstr "Vietnam"
+
+#: aligulac/countries/data.py:714
+msgid "Slovenia"
+msgstr "Slovenia"
+
+#: aligulac/countries/data.py:715
+msgid "Somalia"
+msgstr "Somalia"
+
+#: aligulac/countries/data.py:716
+msgid "South Africa"
+msgstr "Sør-Afrika"
+
+#: aligulac/countries/data.py:717
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#: aligulac/countries/data.py:718
+msgid "Spain"
+msgstr "Spania"
+
+#: aligulac/countries/data.py:719
+msgid "Western Sahara"
+msgstr "Vest-Sahara"
+
+#: aligulac/countries/data.py:720
+msgid "Sudan"
+msgstr "Sudan"
+
+#: aligulac/countries/data.py:721
+msgid "Suriname"
+msgstr "Surinam"
+
+#: aligulac/countries/data.py:722
+msgid "Svalbard & Jan Mayen Islands"
+msgstr "Svalbard og Jan Mayen"
+
+#: aligulac/countries/data.py:723
+msgid "Swaziland"
+msgstr "Swaziland"
+
+#: aligulac/countries/data.py:724
+msgid "Sweden"
+msgstr "Sverige"
+
+#: aligulac/countries/data.py:725
+msgid "Switzerland"
+msgstr "Sveits"
+
+#: aligulac/countries/data.py:726
+msgid "Syria"
+msgstr "Syria"
+
+#: aligulac/countries/data.py:727
+msgid "Thailand"
+msgstr "Thailand"
+
+#: aligulac/countries/data.py:728
+msgid "Togo"
+msgstr "Togo"
+
+#: aligulac/countries/data.py:729
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#: aligulac/countries/data.py:730
+msgid "Tonga"
+msgstr "Tonga"
+
+#: aligulac/countries/data.py:731
+msgid "Trinidad and Tobago"
+msgstr "Trinidad og Tobago"
+
+#: aligulac/countries/data.py:732
+msgid "United Arab Emirates"
+msgstr "Forente arabiske emirater"
+
+#: aligulac/countries/data.py:733
+msgid "Tunisia"
+msgstr "Tunisia"
+
+#: aligulac/countries/data.py:734
+msgid "Turkey"
+msgstr "Tyrkia"
+
+#: aligulac/countries/data.py:735
+msgid "Turkmenistan"
+msgstr "Turkmenistan"
+
+#: aligulac/countries/data.py:736
+msgid "Turks and Caicos Islands"
+msgstr "Turks- og Caicosøyene"
+
+#: aligulac/countries/data.py:737
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: aligulac/countries/data.py:738
+msgid "Uganda"
+msgstr "Uganda"
+
+#: aligulac/countries/data.py:739
+msgid "Ukraine"
+msgstr "Ukraina"
+
+#: aligulac/countries/data.py:740
+msgid "Macedonia"
+msgstr "Makedonia"
+
+#: aligulac/countries/data.py:741
+msgid "Egypt"
+msgstr "Egypt"
+
+#: aligulac/countries/data.py:742
+msgid "United Kingdom"
+msgstr "Storbritannia"
+
+#: aligulac/countries/data.py:743
+msgid "Guernsey"
+msgstr "Guernsey"
+
+#: aligulac/countries/data.py:744
+msgid "Jersey"
+msgstr "Jersey"
+
+#: aligulac/countries/data.py:745
+msgid "Isle of Man"
+msgstr "Man"
+
+#: aligulac/countries/data.py:746
+msgid "Tanzania"
+msgstr "Tanzania"
+
+#: aligulac/countries/data.py:747
+msgid "United States of America"
+msgstr "USA"
+
+#: aligulac/countries/data.py:748
+msgid "United States Virgin Islands"
+msgstr "De amerikanske jomfruøyene"
+
+#: aligulac/countries/data.py:749
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: aligulac/countries/data.py:750
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#: aligulac/countries/data.py:751
+msgid "Uzbekistan"
+msgstr "Usbekistan"
+
+#: aligulac/countries/data.py:752
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#: aligulac/countries/data.py:753
+msgid "Wallis and Futuna"
+msgstr "Wallis og Futuna"
+
+#: aligulac/countries/data.py:754
+msgid "Samoa"
+msgstr "Samoa"
+
+#: aligulac/countries/data.py:755
+msgid "Yemen"
+msgstr "Yemen"
+
+#: aligulac/countries/data.py:756
+msgid "Zambia"
+msgstr "Zambia"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"
@@ -92,11 +1268,11 @@ msgstr "UTVIKLINGSSERVER"
 msgid "Language"
 msgstr "Språk"
 
-#. Translators: I would like to use Aligulac [in a certain language]
+#. Translators: I would like to use Aligulac in [a certain language]
 #: templates/language.html:21
 msgid "I would like to use Aligulac in…"
 msgstr "Jeg vil gjerne bruke Aligulac på…"
 
-#: templates/language.html:39
-msgid "Submit"
-msgstr "Send"
+#: templates/period.html:345
+msgid "Non-Koreans"
+msgstr "Ikke-koreanere"

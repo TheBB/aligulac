@@ -17,7 +17,7 @@ ratings.submitviews.)
     <h2>{% trans "Language" %}</h2>
 
     <p>
-    {% comment %}Translators: I would like to use Aligulac [in a certain language]{% endcomment %}
+    {% comment %}Translators: I would like to use Aligulac in [a certain language]{% endcomment %}
     {% trans "I would like to use Aligulac in…" %}
     </p>
 
@@ -30,8 +30,10 @@ ratings.submitviews.)
                 {% for l in languages %}
                 <input type="radio" name="language" value="{{ l.0 }}" id="{{ l.0 }}" 
                  {% if lang == l.0 %}checked{% endif %} />
-                <img src="{{ l.0|img:"flags" }}" />
-                <label for="{{ l.0 }}">{{ l.1 }}</label><br/>
+                <label for="{{ l.0 }}">
+                    <img src="{{ l.0|img:"flags" }}" />
+                    {{ l.1 }}
+                </label><br/>
                 {% endfor %}
             </div>
         </div>

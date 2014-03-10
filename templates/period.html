@@ -5,6 +5,7 @@ This template shows a rating list for a given period.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% block title %}List {{ period.id }}{% endblock %}
 
@@ -338,9 +339,11 @@ This template shows a rating list for a given period.
     </select>
     and nationalities:
     <select name="nats">
-        <option value="all" {% if nats == "all" %}selected{% endif %}>All</option>
-        <option value="KR">South Korea</option>
-        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
+        <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="KR">{% trans "South Korea" %}</option>
+        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>
+            {% trans "Non-Koreans" %}
+        </option>
         <option disabled>------------</option>
         {% for c in countries %}
         <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>

@@ -61,6 +61,12 @@ from ratings.tools import (
 def home(request):
     base = base_ctx(request=request)
 
+    if request.LANGUAGE_CODE != 'en':
+        base['messages'].append(Message(
+            _('The blog/news section is only in English, sorry.'),
+            type=Message.INFO,
+        ))
+
     entries = filter_active(Rating.objects.filter(period=base['curp']))\
               .order_by('-rating')\
               .select_related('player')[0:10]
@@ -189,13 +195,6 @@ class APIKeyForm(forms.Form):
 def api(request):
     base = base_ctx('About', 'API', request)
 
-    #base['messages'].append(Message(
-        #'The API is currently in beta. Do not rely on it in production yet! We may disable features without '
-        #'prior warning until the release of version 1. When this happens, the root URL will be changed to '
-        #'<code>/api/v1/</code> and the beta URL will be removed.',
-        #type=Message.WARNING,
-    #))
-
     if request.method == 'POST':
         form = APIKeyForm(request)
         base['messages'] += form.add_key()
@@ -249,7 +248,7 @@ def search(request):
         'query':    query,
     })
 
-    base.update({"title": _("Search results")})
+    base.update({'title': _('Search results')})
 
     return render_to_response('search.html', base)
 # }}}

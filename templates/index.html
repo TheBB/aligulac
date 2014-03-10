@@ -65,10 +65,10 @@ Changes here will mostly be visible on the entire site.
                 <td colspan="2" id="subheading">
                     {% if debug %}
                         <span style="color: #ff0000; font-weight: bold;">
-                            {% trans "DEVELOPMENT SERVER" %} ({{ lang }})
+                            {% trans "DEVELOPMENT SERVER" %}
                         </span>
                     {% else %}
-                        StarCraft 2 Progaming Statistics and Predictions
+                    StarCraft 2 Progaming Statistics and Predictions
                     {% endif %}
                 </td>
             </tr>
@@ -79,13 +79,13 @@ Changes here will mostly be visible on the entire site.
                         {% for main in menu %}
                             <li>
                                 <div>
-                                    <a href="{{ main.url }}" class="{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
+                                    <a href="{{ main.url }}" class="{% if curpage == main.id %} menucur{% endif %}">{{ main.name }}</a>
                                     <a href="#" class="actionSelector" style="display: none;">.</a>
                                 </div>
                                 <ul>
-                                {% for subname, suburl in main.submenu %}               
+                                {% for subid, subname, suburl in main.submenu %}               
                                     <li>
-                                        {% if cursubpage == subname and curpage == main.name %}
+                                        {% if cursubpage == subid and curpage == main.id %}
                                         <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
                                         {% else %}
                                         <a href="{{ suburl }}" class="menu">{{ subname }}</a>
@@ -136,6 +136,7 @@ Changes here will mostly be visible on the entire site.
                     {{ curp.end|date:"F jS" }}.</p>
                     {% endif %}
 
+                    {% include "messages.html" %}
                     {% include "blogposts.html" %}
                     {% endblock %}
                 </td>

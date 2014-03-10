@@ -10,6 +10,8 @@ from django.db.models import (
 from django.template.defaultfilters import (
     date as django_date_filter
 )
+from django.utils.translation import ugettext as _
+
 from ratings.models import (
     Earnings,
     P,

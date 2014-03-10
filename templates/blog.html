@@ -9,5 +9,6 @@ This is the blog view, called from blog.views.blog.
 {% block title %}Blog{% endblock %}
 
 {% block content %}
+    {% include "messages.html" %}
     {% include "blogposts.html" %} 
 {% endblock %}

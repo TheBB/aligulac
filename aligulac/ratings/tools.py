@@ -13,6 +13,7 @@ from django.db.models import (
     Sum,
     Q,
 )
+from django.utils.translation import ugettext as _
 
 import ccy
 from countries import data
@@ -215,7 +216,7 @@ def populate_teams(queryset):
 def country_list(queryset):
     countries = queryset.values('country').distinct()
     country_codes = {c['country'] for c in countries if c['country'] is not None}
-    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
+    country_dict = [{'cc': c, 'name': _(data.ccn_to_cn[data.cca2_to_ccn[c]])} for c in country_codes]
     country_dict.sort(key=lambda a: a['name'])
     return country_dict
 # }}}

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+from django.utils.translation import ugettext_lazy as _
 
 import aligulac.local as local
 
@@ -25,6 +26,15 @@ DEBUG_TOOLBAR = local.DEBUG_TOOLBAR
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['.aligulac.com']
+
+LOCALE_PATHS = local.LOCALE_PATHS
+LANGUAGE_CODE = 'en_US'
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('no', _('Norwegian')),
+)
+
 
 
 # CUSTOM
@@ -111,6 +121,7 @@ INSTALLED_APPS.append('south')
 
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

@@ -21,6 +21,7 @@ from aligulac.cache import cache_page
 from aligulac.settings import (
     DUMP_PATH,
     PROJECT_PATH,
+    LANGUAGES,
 )
 from aligulac.tools import (
     base_ctx,
@@ -29,6 +30,7 @@ from aligulac.tools import (
     Message,
     StrippedCharField,
 )
+from django.utils.translation import ugettext as _
 
 from blog.models import Post
 
@@ -73,6 +75,15 @@ def home(request):
     })
 
     return render_to_response('index.html', base)
+# }}}
+
+# {{{ Language change page
+def language(request):
+    base = base_ctx(request=request)
+
+    base['languages'] = LANGUAGES
+
+    return render_to_response('language.html', base)
 # }}}
 
 # {{{ db view
@@ -130,7 +141,7 @@ def db(request):
             'gz_megabytes':  stat.st_size / 1048576
         })
 
-    base.update({"title": "Database status"})
+    base.update({"title": _("Database status")})
 
     return render_to_response('db.html', base)
 # }}}

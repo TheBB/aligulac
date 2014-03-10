@@ -9,6 +9,9 @@ DUMP_PATH = '/home/efonn/repos/aligulac/untracked/'
 # If you never call dump.py this is not necessary
 BACKUP_PATH = '/home/efonn/repos/aligulac/untracked/backup/'
 
+# Path of folder where the locales are stored
+LOCALE_PATHS = ('/home/efonn/repos/aligulac/locale/',)
+
 # Random string, 50 characters
 SECRET_KEY =
 

@@ -200,6 +200,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         'debug':     DEBUG,
         'cur_path':  request.get_full_path(),
         'messages':  [],
+        'lang':      request.LANGUAGE_CODE,
         'menu':      [{
             'name': 'Ranking',
             'url': '/periods/latest/',

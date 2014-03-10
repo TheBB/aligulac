@@ -56,6 +56,9 @@ for res in resources:
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
 
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^language/', 'aligulac.views.language'),
+
     url(r'^periods/$', 'ratings.ranking_views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.ranking_views.period'),
     url(r'^periods/latest/$', 'ratings.ranking_views.period'),

@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+
+{% comment %}
+Login template. Called from any admin-specific page if the user is not logged in. (Mostly in
+ratings.submitviews.)
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Language" %}{% endblock %}
+
+{% block content %}
+
+    {% include "messages.html" %}
+
+    <h2>{% trans "Language" %}</h2>
+
+    <p>
+    {% comment %}Translators: I would like to use Aligulac [in a certain language]{% endcomment %}
+    {% trans "I would like to use Aligulac in…" %}
+    </p>
+
+    <form method="post" action="/i18n/setlang/">
+    <input type="hidden" name="next" value="/" />
+    {% csrf_token %}
+    <div class="table" style="width: 30em;">
+        <div class="row">
+            <div class="rowe" style="width: 30em;">
+                {% for l in languages %}
+                <input type="radio" name="language" value="{{ l.0 }}" id="{{ l.0 }}" 
+                 {% if lang == l.0 %}checked{% endif %} />
+                <img src="{{ l.0|img:"flags" }}" />
+                <label for="{{ l.0 }}">{{ l.1 }}</label><br/>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="rowe" style="width: 30em;"><input type="submit" value="{% trans "Submit" %}" /></div>
+        </div>
+    </div>
+    </form>
+{% endblock %}

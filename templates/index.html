@@ -4,6 +4,7 @@ Changes here will mostly be visible on the entire site.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html>
@@ -58,12 +59,14 @@ Changes here will mostly be visible on the entire site.
     <body>
         <table id="main">
             <tr>
-                <td id="heading"><a href="/" id="title" />ALIGULAC</a></td>
+                <td colspan="2" id="heading"><a href="/" id="title" />ALIGULAC</a></td>
             </tr>
             <tr>
-                <td id="subheading">
+                <td colspan="2" id="subheading">
                     {% if debug %}
-                        <span style="color: #ff0000; font-weight: bold;">DEVELOPMENT SERVER</span>
+                        <span style="color: #ff0000; font-weight: bold;">
+                            {% trans "DEVELOPMENT SERVER" %} ({{ lang }})
+                        </span>
                     {% else %}
                         StarCraft 2 Progaming Statistics and Predictions
                     {% endif %}
@@ -71,7 +74,7 @@ Changes here will mostly be visible on the entire site.
             </tr>
             <tbody id="menu_container">
             <tr>
-                <td class="menu">
+                <td colspan="2" class="menu">
                     <ul>
                         {% for main in menu %}
                             <li>
@@ -97,12 +100,18 @@ Changes here will mostly be visible on the entire site.
             </tr>
             </tbody>
             <tr>
-                <td style="text-align: right;"> <form action="/search/" method="get">
+                <td style="text-align: left;">
+                    {% trans "Language" %}: 
+                    <a href="/language/"><img src="{{ lang|img:"flags" }}" /></a>
+                </td>
+                <td style="text-align: right;">
+                    <form action="/search/" method="get">
                     Find player, team or event: <input type="text" name="q" />
-                </form> </td>
+                    </form>
+                </td>
             </tr>
             <tr>
-                <td id="content">
+                <td colspan="2" id="content">
                     {% if title %}
                     <h2>
                         {{ title }}
@@ -132,7 +141,7 @@ Changes here will mostly be visible on the entire site.
                 </td>
             </tr>
             <tr>
-                <td id="footer">
+                <td colspan="2" id="footer">
                     Find us on
                     <a target="_blank" href="http://twitter.com/Sc2Aligulac">Twitter</a>,
                     <a target="_blank" href="https://github.com/TheBB/aligulac">GitHub</a> and

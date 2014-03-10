@@ -69,9 +69,9 @@ class StoriesInline(admin.TabularInline):
 
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
-            (None,          {'fields': ['tag','race']}),
-            ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
+        (None,          {'fields': ['tag','race']}),
+        ('Optional',    {'fields': ['name','birthday','country']}),
+        ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']

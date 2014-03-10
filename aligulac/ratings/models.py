@@ -17,6 +17,7 @@ from django.db.models import (
     Min,
     Q,
 )
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.settings import start_rating, INACTIVE_THRESHOLD
 
@@ -42,38 +43,51 @@ TLPD_DB_HOTS             = 0b00100
 TLPD_DB_HOTSBETA         = 0b01000
 TLPD_DB_WOLBETA          = 0b10000
 TLPD_DBS = [
-    (TLPD_DB_WOLBETA,          'WoL Beta'),
-    (TLPD_DB_WOLKOREAN,        'WoL Korean'),
-    (TLPD_DB_WOLINTERNATIONAL, 'WoL International'),
-    (TLPD_DB_HOTSBETA,         'HotS Beta'),
-    (TLPD_DB_HOTS,             'HotS'),
+    # Translators: TLPD database
+    (TLPD_DB_WOLBETA,          _('WoL Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLKOREAN,        _('WoL Korean')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLINTERNATIONAL, _('WoL International')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTSBETA,         _('HotS Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTS,             _('HotS')),
 ]
 
 CAT_INDIVIDUAL = 'individual'
 CAT_TEAM       = 'team'
 CAT_FREQUENT   = 'frequent'
 EVENT_CATEGORIES = [
-    (CAT_INDIVIDUAL, 'Individual'),
-    (CAT_TEAM,       'Team'),
-    (CAT_FREQUENT,   'Frequent'),
+    # Translators: Event category
+    (CAT_INDIVIDUAL, _('Individual')),
+    # Translators: Event category
+    (CAT_TEAM,       _('Team')),
+    # Translators: Event category
+    (CAT_FREQUENT,   _('Frequent')),
 ]
 
 TYPE_CATEGORY = 'category'
 TYPE_EVENT    = 'event'
 TYPE_ROUND    = 'round'
 EVENT_TYPES = [
-    (TYPE_CATEGORY, 'Category'),
-    (TYPE_EVENT,    'Event'),
-    (TYPE_ROUND,    'Round'),
+    # Translators: Event type
+    (TYPE_CATEGORY, _('Category')),
+    # Translators: Event type
+    (TYPE_EVENT,    _('Event')),
+    # Translators: Event type
+    (TYPE_ROUND,    _('Round')),
 ]
 
 P, T, Z, R, S = 'PTZRS'
 RACES = [
-    (P, 'Protoss'),
-    (T, 'Terran'),
-    (Z, 'Zerg'),
-    (R, 'Random'),
-    (S, 'Switcher'),
+    (P, _('Protoss')),
+    (T, _('Terran')),
+    (Z, _('Zerg')),
+    # Translators: Random race
+    (R, _('Random')),
+    # Translators: Race switcher
+    (S, _('Switcher')),
 ]
 MRACES = RACES[:-1]
 
@@ -81,9 +95,9 @@ WOL  = 'WoL'
 HOTS = 'HotS'
 LOTV = 'LotV'
 GAMES = [
-    (WOL,  'Wings of Liberty'),
-    (HOTS, 'Heart of the Swarm'),
-    (LOTV, 'Legacy of the Void'),
+    (WOL,  _('Wings of Liberty')),
+    (HOTS, _('Heart of the Swarm')),
+    (LOTV, _('Legacy of the Void')),
 ]
 
 TYPE_INFO    = 'info'
@@ -91,10 +105,14 @@ TYPE_WARNING = 'warning'
 TYPE_ERROR   = 'error'
 TYPE_SUCCESS = 'success'
 MESSAGE_TYPES = [
-    (TYPE_INFO,    'info'),
-    (TYPE_WARNING, 'warning'),
-    (TYPE_ERROR,   'error'),
-    (TYPE_SUCCESS, 'success'),
+    # Translators: Message type
+    (TYPE_INFO,    _('info')),
+    # Translators: Message type
+    (TYPE_WARNING, _('warning')),
+    # Translators: Message type
+    (TYPE_ERROR,   _('error')),
+    # Translators: Message type
+    (TYPE_SUCCESS, _('success')),
 ]
 # }}}
 

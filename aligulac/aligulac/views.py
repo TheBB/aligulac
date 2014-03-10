@@ -141,15 +141,15 @@ def db(request):
             'gz_megabytes':  stat.st_size / 1048576
         })
 
-    base.update({"title": _("Database status")})
+    base.update({'title': _('Database status')})
 
     return render_to_response('db.html', base)
 # }}}
 
 # {{{ API documentation and keys
 class APIKeyForm(forms.Form):
-    organization = StrippedCharField(max_length=200, required=True, label='Name/organization')
-    contact = forms.EmailField(max_length=200, required=True, label='Contact')
+    organization = StrippedCharField(max_length=200, required=True, label=_('Name/organization'))
+    contact = forms.EmailField(max_length=200, required=True, label=_('Contact'))
 
     # {{{ Constructor
     def __init__(self, request=None, player=None):
@@ -166,7 +166,7 @@ class APIKeyForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -181,7 +181,7 @@ class APIKeyForm(forms.Form):
         key.generate_key()
         key.save()
 
-        ret.append(Message("Your API key is '%s'. Please keep it safe." % key.key, type=Message.SUCCESS))
+        ret.append(Message(_("Your API key is '%s'. Please keep it safe.") % key.key, type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -203,7 +203,7 @@ def api(request):
         form = APIKeyForm()
 
     base.update({
-        'title': 'API documentation',
+        'title': _('API documentation'),
         'form': form,
     })
 
@@ -249,7 +249,7 @@ def search(request):
         'query':    query,
     })
 
-    base.update({"title": "Search results"})
+    base.update({"title": _("Search results")})
 
     return render_to_response('search.html', base)
 # }}}
@@ -259,7 +259,7 @@ def login_view(request):
     base = base_ctx(request=request)
     login_message(base)
 
-    base.update({"title": "Login"})
+    base.update({"title": _("Login")})
     return render_to_response('login.html', base)
 
 def logout_view(request):
@@ -278,23 +278,23 @@ def changepwd(request):
 
     if not request.user.check_password(request.POST['old']):
         base['messages'].append(
-            Message("The old password didn't match. Your password was not changed.", type=Message.ERROR)
+            Message(_("The old password didn't match. Your password was not changed."), type=Message.ERROR)
         )
         return render_to_response('changepwd.html', base)
 
     if request.POST['new'] != request.POST['newre']:
         base['messages'].append(
-            Message("The new passwords didn't match. Your password was not changed.", type=Message.ERROR)
+            Message(_("The new passwords didn't match. Your password was not changed."), type=Message.ERROR)
         )
         return render_to_response('changepwd.html', base)
 
     request.user.set_password(request.POST['new'])
     request.user.save()
     base['messages'].append(
-        Message('The password for %s was successfully changed.' % request.user.username, type=Message.SUCCESS)
+        Message(_('The password for %s was successfully changed.') % request.user.username, type=Message.SUCCESS)
     )
 
-    base.update({"title": "Change password"})
+    base.update({"title": _("Change password")})
 
     return render_to_response('changepwd.html', base)
 # }}}
@@ -303,12 +303,12 @@ def changepwd(request):
 @cache_page
 def h404(request):
     base = base_ctx(request=request)
-    base.update({"title": "404: Not found"})
+    base.update({"title": _("404: Not found")})
     return HttpResponseNotFound(render_to_string('404.html', base))
 
 @cache_page
 def h500(request):
     base = base_ctx(request=request)
-    base.update({"title": "500: Internal Server Error"})
+    base.update({"title": _("500: Internal Server Error")})
     return HttpResponseNotFound(render_to_string('500.html', base))
 # }}}

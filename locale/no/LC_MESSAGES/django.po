@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 17:36+0100\n"
+"POT-Creation-Date: 2014-03-10 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,60 @@ msgstr "Norsk"
 #: aligulac/aligulac/views.py:144
 msgid "Database status"
 msgstr "Databasestatus"
+
+#: aligulac/aligulac/views.py:151
+msgid "Name/organization"
+msgstr "Navn/organisasjon"
+
+#: aligulac/aligulac/views.py:152
+msgid "Contact"
+msgstr "Kontakt"
+
+#: aligulac/aligulac/views.py:169
+msgid "Entered data was invalid."
+msgstr "Innsendte data var ugyldig."
+
+#: aligulac/aligulac/views.py:184
+#, python-format
+msgid "Your API key is '%s'. Please keep it safe."
+msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
+
+#: aligulac/aligulac/views.py:206
+msgid "API documentation"
+msgstr "API-dokumentasjon"
+
+#: aligulac/aligulac/views.py:252
+msgid "Search results"
+msgstr "Søkeresultater"
+
+#: aligulac/aligulac/views.py:262
+msgid "Login"
+msgstr "Logg inn"
+
+#: aligulac/aligulac/views.py:281
+msgid "The old password didn't match. Your password was not changed."
+msgstr "Det gamle passordet stemte ikke. Passordet ble ikke endret."
+
+#: aligulac/aligulac/views.py:287
+msgid "The new passwords didn't match. Your password was not changed."
+msgstr "Det nye passordet stemte ikke overens. Passordet ble ikke endret."
+
+#: aligulac/aligulac/views.py:294
+#, python-format
+msgid "The password for %s was successfully changed."
+msgstr "Passordet for %s ble endret."
+
+#: aligulac/aligulac/views.py:297
+msgid "Change password"
+msgstr "Endre passord"
+
+#: aligulac/aligulac/views.py:306
+msgid "404: Not found"
+msgstr "404: Siden fantes ikke"
+
+#: aligulac/aligulac/views.py:312
+msgid "500: Internal Server Error"
+msgstr "500: Intern tjenerfeil"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

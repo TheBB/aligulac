@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 18:07+0100\n"
+"POT-Creation-Date: 2014-03-10 19:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +23,187 @@ msgstr "Engelsk"
 #: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
 msgid "Norwegian"
 msgstr "Norsk"
+
+#. Translators: matches as in search matches, not SC2 matches
+#: aligulac/aligulac/tools.py:83 aligulac/aligulac/tools.py:96
+msgid "Possible matches:"
+msgstr "Mulige treff:"
+
+#. Translators: E.g. "John, Lisa, Darren and Mike"
+#: aligulac/aligulac/tools.py:85 aligulac/aligulac/tools.py:107
+#, python-format
+msgid "%(commalist)s and %(final)s"
+msgstr "%(commalist)s og %(final)s"
+
+#. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
+#: aligulac/aligulac/tools.py:98
+#, python-format
+msgid "%(commalist)s and %(number)s more"
+msgstr "%(commalist)s og %(number)s flere"
+
+#: aligulac/aligulac/tools.py:114
+#, python-format
+msgid "'%s' not unique"
+msgstr "'%s' er ikke unik"
+
+#: aligulac/aligulac/tools.py:126
+msgid "You are not logged in."
+msgstr "Du er ikke logget inn."
+
+#: aligulac/aligulac/tools.py:129
+#, python-format
+msgid "You are logged in as %s"
+msgstr "Du er logget inn som %s"
+
+#: aligulac/aligulac/tools.py:131
+msgid "logout"
+msgstr "logg ut"
+
+#: aligulac/aligulac/tools.py:132
+msgid "change password"
+msgstr "endre passord"
+
+#: aligulac/aligulac/tools.py:145
+msgid "This field is required."
+msgstr "Dette feltet er påkrevd."
+
+#: aligulac/aligulac/tools.py:217 aligulac/aligulac/tools.py:228
+msgid "Ranking"
+msgstr "Rangering"
+
+#: aligulac/aligulac/tools.py:220
+msgid "Current"
+msgstr "Dagens"
+
+#: aligulac/aligulac/tools.py:221 aligulac/aligulac/tools.py:235
+msgid "History"
+msgstr "Historie"
+
+#: aligulac/aligulac/tools.py:222 aligulac/aligulac/tools.py:328
+msgid "Earnings"
+msgstr "Inntekt"
+
+#: aligulac/aligulac/tools.py:225
+msgid "Teams"
+msgstr "Lag"
+
+#: aligulac/aligulac/tools.py:229
+msgid "Transfers"
+msgstr "Lagbytter"
+
+#: aligulac/aligulac/tools.py:232
+msgid "Records"
+msgstr "Rekorder"
+
+#. Translators: Hall of fame
+#: aligulac/aligulac/tools.py:237
+msgid "HoF"
+msgstr "Hall of Fame"
+
+#: aligulac/aligulac/tools.py:238
+msgid "All"
+msgstr "Alle"
+
+#: aligulac/aligulac/tools.py:239
+msgid "Protoss"
+msgstr "Protoss"
+
+#: aligulac/aligulac/tools.py:240
+msgid "Terran"
+msgstr "Terran"
+
+#: aligulac/aligulac/tools.py:241
+msgid "Zerg"
+msgstr "Zerg"
+
+#: aligulac/aligulac/tools.py:244
+msgid "Results"
+msgstr "Resultater"
+
+#: aligulac/aligulac/tools.py:247
+msgid "By Date"
+msgstr "Etter dato"
+
+#: aligulac/aligulac/tools.py:248
+msgid "By Event"
+msgstr "Etter turnering"
+
+#: aligulac/aligulac/tools.py:249
+msgid "Search"
+msgstr "Søkeresultater"
+
+#: aligulac/aligulac/tools.py:252
+msgid "Inference"
+msgstr "Inferens"
+
+#: aligulac/aligulac/tools.py:255
+msgid "Predict"
+msgstr "Spå"
+
+#: aligulac/aligulac/tools.py:258 aligulac/aligulac/tools.py:282
+msgid "Misc"
+msgstr "Div"
+
+#: aligulac/aligulac/tools.py:261
+msgid "Balance Report"
+msgstr "Balanserapport"
+
+#: aligulac/aligulac/tools.py:262
+msgid "Days Since…"
+msgstr "Dager siden…"
+
+#: aligulac/aligulac/tools.py:265
+msgid "About"
+msgstr "Om"
+
+#: aligulac/aligulac/tools.py:268
+msgid "FAQ"
+msgstr "FAQ"
+
+#: aligulac/aligulac/tools.py:269
+msgid "Blog"
+msgstr "Blogg"
+
+#: aligulac/aligulac/tools.py:270
+msgid "Database"
+msgstr "Databasestatus"
+
+#: aligulac/aligulac/tools.py:271
+msgid "API"
+msgstr "API"
+
+#: aligulac/aligulac/tools.py:274 templates/language.html:39
+msgid "Submit"
+msgstr "Send"
+
+#. Translators: Matches as in SC2-matches, not search matches.
+#: aligulac/aligulac/tools.py:278
+msgid "Matches"
+msgstr "Kamper"
+
+#: aligulac/aligulac/tools.py:279
+msgid "Review"
+msgstr "Må gjennomgås"
+
+#: aligulac/aligulac/tools.py:280
+msgid "Events"
+msgstr "Turneringer"
+
+#: aligulac/aligulac/tools.py:281
+msgid "Open events"
+msgstr "Åpne turneringer"
+
+#: aligulac/aligulac/tools.py:323
+msgid "Rating history"
+msgstr "Ratinghistorie"
+
+#: aligulac/aligulac/tools.py:325
+msgid "Match history"
+msgstr "Spillhistorie"
+
+#: aligulac/aligulac/tools.py:331
+msgid "Adjustments"
+msgstr "Justeringer"
 
 #: aligulac/aligulac/views.py:144
 msgid "Database status"
@@ -92,11 +272,7 @@ msgstr "UTVIKLINGSSERVER"
 msgid "Language"
 msgstr "Språk"
 
-#. Translators: I would like to use Aligulac [in a certain language]
+#. Translators: I would like to use Aligulac in [a certain language]
 #: templates/language.html:21
 msgid "I would like to use Aligulac in…"
 msgstr "Jeg vil gjerne bruke Aligulac på…"
-
-#: templates/language.html:39
-msgid "Submit"
-msgstr "Send"

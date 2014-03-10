@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 20:21+0100\n"
+"POT-Creation-Date: 2014-03-10 20:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: aligulac/currency.py:99
+#, python-format
+msgid "Exchange rate not found for currency %(code)s on %(date)s"
+msgstr "Valutakurs for %(code)s ble ikke funnet på %(date)s"
 
 #: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
 msgid "English"
@@ -49,6 +54,10 @@ msgstr "'%s' er ikke unik"
 #: aligulac/aligulac/tools.py:126
 msgid "You are not logged in."
 msgstr "Du er ikke logget inn."
+
+#: aligulac/aligulac/tools.py:126
+msgid "login"
+msgstr "logg inn"
 
 #: aligulac/aligulac/tools.py:129
 #, python-format
@@ -1258,6 +1267,14 @@ msgstr "Yemen"
 #: aligulac/countries/data.py:756
 msgid "Zambia"
 msgstr "Zambia"
+
+#: aligulac/faq/views.py:18
+msgid "The FAQ section is only in English, sorry."
+msgstr "FAQ-seksjonen er kun på engelsk. Beklager."
+
+#: aligulac/faq/views.py:23
+msgid "Frequently asked questions"
+msgstr "Ofte stilte spørsmål"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

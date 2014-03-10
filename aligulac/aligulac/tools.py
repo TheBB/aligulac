@@ -123,7 +123,7 @@ def generate_messages(obj):
 # {{{ login_message: Generates a message notifying about login status.
 def login_message(base, extra=''):
     if not base['adm']:
-        text = ' '.join([_('You are not logged in.'), extra, '(<a href="/login/">login</a>)'])
+        text = ' '.join([_('You are not logged in.'), extra, '(<a href="/login/">%s</a>)' % _('login')])
     else:
         text = ' '.join([
             _('You are logged in as %s') % base['user'],

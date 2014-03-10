@@ -101,7 +101,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreginer won in the GSL Code S",
+        "A foreigner won in the GSL Code S",
         None,
         Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))
         .filter(eventobj__fullname__istartswith="GSL", eventobj__fullname__icontains="Code S")
@@ -136,7 +136,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A foreginer won a premier event",
+        "A foreigner won a premier event",
         "At least on game played offline with 1st place prize money >= $10,000",
         (
             Event.objects

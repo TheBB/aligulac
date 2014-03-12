@@ -4,8 +4,10 @@
 This template is used for HTTP 404 errors.
 {% endcomment %}
 
+{% load i18n %}
+
 {% block title %}404{% endblock %}
 
 {% block content %}
-    <p>The page you were looking for was nowhere to be found. Sorry!</p>
+<p>{% blocktrans %}The page you were looking for was nowhere to be found. Sorry!{% endblocktrans %}</p>
 {% endblock %}

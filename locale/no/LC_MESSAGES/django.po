@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-12 19:28+0100\n"
+"POT-Creation-Date: 2014-03-12 20:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,7 +198,7 @@ msgstr "Send"
 
 #. Translators: Matches as in SC2-matches, not search matches.
 #: aligulac/aligulac/tools.py:278 aligulac/ratings/player_views.py:672
-#: aligulac/ratings/staff_views.py:286
+#: aligulac/ratings/staff_views.py:286 templates/add.html:75
 msgid "Matches"
 msgstr "Kamper"
 
@@ -239,6 +239,7 @@ msgid "Name/organization"
 msgstr "Navn/organisasjon"
 
 #: aligulac/aligulac/views.py:158 aligulac/ratings/staff_views.py:284
+#: templates/add.html:68
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1431,6 +1432,7 @@ msgstr "Kategori"
 #: aligulac/ratings/models.py:77 aligulac/ratings/results_views.py:471
 #: aligulac/ratings/results_views.py:624 aligulac/ratings/staff_views.py:166
 #: aligulac/ratings/staff_views.py:279 aligulac/ratings/staff_views.py:311
+#: templates/add.html:44
 msgid "Event"
 msgstr "Turnering"
 
@@ -1656,7 +1658,7 @@ msgstr "On/offline"
 
 #: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:101
 #: aligulac/ratings/results_views.py:490 aligulac/ratings/results_views.py:632
-#: aligulac/ratings/staff_views.py:281
+#: aligulac/ratings/staff_views.py:281 templates/add.html:58
 msgid "Game version"
 msgstr "Spillversjon"
 
@@ -1801,7 +1803,7 @@ msgstr "Ingen endring"
 
 #. Translators: Type as in event type
 #: aligulac/ratings/results_views.py:110 aligulac/ratings/results_views.py:370
-#: aligulac/ratings/staff_views.py:543
+#: aligulac/ratings/staff_views.py:543 templates/add.html:61
 msgid "Type"
 msgstr "Type"
 
@@ -2005,11 +2007,11 @@ msgid_plural "Successfully rejected %i matches."
 msgstr[0] "Underkjente og slettet %i kamp."
 msgstr[1] "Underkjente og slettet %i kamper."
 
-#: aligulac/ratings/staff_views.py:283
+#: aligulac/ratings/staff_views.py:283 templates/add.html:65
 msgid "Source"
 msgstr "Kilde"
 
-#: aligulac/ratings/staff_views.py:285
+#: aligulac/ratings/staff_views.py:285 templates/add.html:71
 msgid "Notes"
 msgstr "Notater"
 
@@ -2256,7 +2258,7 @@ msgstr "Vennligst bekreft turneringsflytning."
 msgid "Reopened '%s'."
 msgstr "Gjenåpnet '%s'."
 
-#: aligulac/ratings/staff_views.py:823
+#: aligulac/ratings/staff_views.py:823 templates/add.html:12
 msgid "Submit results"
 msgstr "Lagre resultater"
 
@@ -2307,6 +2309,140 @@ msgstr "Rasebytter"
 #: aligulac/ratings/templatetags/ratings_extras.py:344
 msgid "N/A"
 msgstr "N/A"
+
+#: templates/404.html:12
+msgid "The page you were looking for was nowhere to be found. Sorry!"
+msgstr "Vi fant ikke siden du så etter. Beklager!"
+
+#: templates/500.html:12
+msgid "An unspeakable awful indescribable horror has occured."
+msgstr "En unevnelig forferdelig ubeskrivelig skrekkelig ting har skjedd."
+
+#: templates/500.html:14
+msgid ""
+"Try to send me an e-mail at evfonn(at)gmail(dot)com where you describe what "
+"you were trying to do when this happened."
+msgstr ""
+"Send en e-post til evfonn(at)gmail(dot)com hvor du beskriver hva du forsøkte "
+"å gjøre."
+
+#: templates/add.html:19
+msgid "The following entries were successfully submitted"
+msgstr "Disse kampene ble lagt til"
+
+#: templates/add.html:20
+msgid "They are pending review before being visible."
+msgstr "De må godtas før de blir synlige."
+
+#: templates/add.html:34
+msgid "Show:"
+msgstr "Vis:"
+
+#: templates/add.html:35
+msgid "guide"
+msgstr "guide"
+
+#: templates/add.html:36
+msgid "match syntax"
+msgstr "kampsyntaks"
+
+#: templates/add.html:37
+msgid "examples"
+msgstr "eksempler"
+
+#: templates/add.html:38
+msgid "common problems"
+msgstr "vanlige problemer"
+
+#: templates/add.html:45
+msgid ""
+"Anything that can be used to identify the tournament the games were played "
+"in.  Please provide as much information as possible. (Rounds, day number, "
+"week number, etc.)"
+msgstr ""
+"Alt som kan brukes til å identifisere turneringen hvor partiene ble spilt. "
+"Vennligst gi så mye informasjon som mulig (runde, dag, uke, etc.)"
+
+#: templates/add.html:49
+msgid "Event object"
+msgstr "Turneringsobjekt"
+
+#: templates/add.html:50
+msgid "The event the games were played in."
+msgstr "Turneringen hvor partiene ble spilt"
+
+#: templates/add.html:52
+#, python-format
+msgid ""
+"If you can't find the correct event object, you have to %(a)smake it</a>. If "
+"these are the final games associated with an event object, please close it "
+"afterwards."
+msgstr ""
+"Hvis du ikke finner den riktige turneringen, må du %(a)slage den</a>. Hvis "
+"disse er de siste partiene i denne turneringen, vennligst lukk den etterpå."
+
+#: templates/add.html:55
+msgid "Date played"
+msgstr "Dato spilt"
+
+#: templates/add.html:56
+msgid ""
+"The date the games were played (as accurate as possible). This will be used "
+"to check for possible duplicates."
+msgstr ""
+"Datoen da partiene ble spilt, så nøyaktig som mulig. Dette vil bli brukt for "
+"å søke etter mulige duplikater."
+
+#: templates/add.html:59
+msgid "Indicate which version of SC2 the games were played on."
+msgstr "Hvilken versjon av SC2 disse partiene ble spilt på."
+
+#: templates/add.html:62
+msgid ""
+"Use <strong>offline</strong> for games that were played at a live "
+"tournament, otherwise use <strong>online</strong>."
+msgstr ""
+"Bruk <strong>offline</strong> for partier som ble spilt ansikt-til-ansikt i "
+"en \"fysisk\" turnering, ellers bruk <strong>online</strong>."
+
+#: templates/add.html:66
+msgid ""
+"An URL to a credible source where the results can be double checked (for "
+"example: official tournament brackets, Liquipedia page or Team Liquid live "
+"report thread)."
+msgstr ""
+"Adresse til en troverdig kilde hvor resultatene kan dobbelsjekkes (for "
+"eksempel: offisielle turneringssider, Liquipedia eller Team Liquid live "
+"report-tråder)."
+
+#: templates/add.html:69
+msgid ""
+"(Optional) A way to contact you if we have questions about your submission. "
+"E-mail, Team Liquid username, Reddit username etc. are fine."
+msgstr ""
+"(Valgfritt) En måte å kontakte deg dersom vi har spørsmål. E-post, Team "
+"Liquid-brukernavn, Reddit-brukernavn osv. er OK."
+
+#: templates/add.html:72
+msgid ""
+"(Optional) Any extra information you have that may or may not be of use."
+msgstr "(Valgfritt) Ekstra informasjon som kan bli nyttig."
+
+#: templates/add.html:76
+#, python-format
+msgid ""
+"A list of the results you want to add. Please see %(a)smatch syntax</a> for "
+"more information."
+msgstr ""
+"En liste over resultatene du vil legge til. Se %(a)skampsyntaks</a> for "
+"mer informasjon."
+
+#: templates/add.html:80
+#, python-format
+msgid ""
+"Please check out %(tag)scommon problems</a> if you are unsure about a player."
+msgstr ""
+"Vennligst se %(tag)svanlige problemer</a> hvis du er usikker på en spiller."
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

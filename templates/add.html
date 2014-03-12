@@ -7,18 +7,21 @@ ratings.submitviews.add_matches.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}Submit results{% endblock %}
+{% block title %}{% trans "Submit results" %}{% endblock %}
 
 {% block content %}
     {% include "messages.html" %}
 
     {% if matches %}
-    <p>The following entries were successfully submitted{% if adm %}:{% else %}. They are pending review
-    before being visible.{% endif %}</p>
-        <table class="results">
-        {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_header="full" %}
-        </table>
+    <p>
+    {% trans "The following entries were successfully submitted" %}{% if adm %}:{% else %}.
+    {% trans "They are pending review before being visible." %}{% endif %}
+    </p>
+    <table class="results">
+    {% include "matchlist.html" with lm_list=matches lm_adm=adm lm_header="full" %}
+    </table>
     {% endif %}
 
     <script type="text/javascript">
@@ -27,67 +30,73 @@ ratings.submitviews.add_matches.
     //-->
     </script>
 
-    <p>Show: <a href="#" onclick="switch_to('guide',togs); return false;">guide</a>,
-             <a href="#" onclick="switch_to('syntax',togs); return false;">match syntax</a>,
-             <a href="#" onclick="switch_to('examples',togs); return false;">examples</a>,
-             <a href="#" onclick="switch_to('problems',togs); return false;">common problems</a></p></div>
+    <p>
+    {% trans "Show:" %}
+    <a href="#" onclick="switch_to('guide',togs); return false;">{% trans "guide" %}</a>,
+    <a href="#" onclick="switch_to('syntax',togs); return false;">{% trans "match syntax" %}</a>,
+    <a href="#" onclick="switch_to('examples',togs); return false;">{% trans "examples" %}</a>,
+    <a href="#" onclick="switch_to('problems',togs); return false;">{% trans "common problems" %}</a>
+    </p>
 
     <div id="guide" style="display: block;">
         <ul>
             {% if not adm %}
-            <li><strong>Event:</strong> Anything that can be used to identify the tournament the games were
-            played in. Please provide as much information as possible. (Rounds, day number, week number,
-            etc.)</li>
+            <li><strong>{% trans "Event" %}:</strong>
+            {% blocktrans %}Anything that can be used to identify the tournament the games were played in.  Please provide as much information as possible. (Rounds, day number, week number, etc.){% endblocktrans %}
+            </li>
             {% endif %}
             {% if adm %}
-            <li><strong>Event object:</strong> The event the games were played in. 
-                <span style="color: #ff0000;">If you can't find the correct event object, you have to <a
-                    href="/add/events/">make it</a>. If these are the final games associated with an event
-                    object, please close it afterwards.</span></li>
+            <li><strong>{% trans "Event object" %}:</strong>
+            {% trans "The event the games were played in." %}
+            <span style="color: #ff0000;">
+            {% blocktrans with a="<a href=\"/add/events/\">" %}If you can't find the correct event object, you have to {{a}}make it</a>. If these are the final games associated with an event object, please close it afterwards.{% endblocktrans %}
+            </span></li>
             {% endif %}
-            <li><strong>Date played:</strong> The date the games were played (as accurate as possible). This
-            will be used to check for possible duplicates.</li>
-            <li><strong>Game:</strong> Indicate which version of SC2 the games were played on.</li>
-            <li><strong>Type:</strong> Use <strong>offline</strong> for games that were played at a live
-            tournament, otherwise use <strong>online</strong>.</li>
+            <li><strong>{% trans "Date played" %}:</strong>
+            {% blocktrans %}The date the games were played (as accurate as possible). This will be used to check for possible duplicates.{% endblocktrans %}
+            </li>
+            <li><strong>{% trans "Game version" %}:</strong>
+            {% blocktrans %}Indicate which version of SC2 the games were played on.{% endblocktrans %}
+            </li>
+            <li><strong>{% trans "Type" %}:</strong>
+            {% blocktrans %}Use <strong>offline</strong> for games that were played at a live tournament, otherwise use <strong>online</strong>.{% endblocktrans %}
+            </li>
             {% if not adm %}
-            <li><strong>Source:</strong> An URL to a credible source where the results can be double checked
-            (for example: official tournament brackets, Liquipedia page or Team Liquid live report
-            thread).</li>
-            <li><strong>Contact:</strong> (Optional) A way to contact you if we have questions about your
-            submission. E-mail, Team Liquid username, Reddit username etc. are fine.</li>
-            <li><strong>Notes:</strong> (Optional) Any extra information you have that may or may not be of
-            use.</li>
+            <li><strong>{% trans "Source" %}:</strong>
+            {% blocktrans %}An URL to a credible source where the results can be double checked (for example: official tournament brackets, Liquipedia page or Team Liquid live report thread).{% endblocktrans %}
+            </li>
+            <li><strong>{% trans "Contact" %}:</strong>
+            {% blocktrans %}(Optional) A way to contact you if we have questions about your submission. E-mail, Team Liquid username, Reddit username etc. are fine.{% endblocktrans %}
+            </li>
+            <li><strong>{% trans "Notes" %}:</strong>
+            {% blocktrans %}(Optional) Any extra information you have that may or may not be of use.{% endblocktrans %}
+            </li>
             {% endif %}
-            <li><strong>Matches:</strong> A list of the results you want to add. Please see 
-            <a href="#" onclick="switch_to('syntax',togs); return false;">match syntax</a> for more
-            information.</li>
+            <li><strong>{% trans "Matches" %}:</strong>
+            {% blocktrans with a="<a href=\"#\" onclick=\"switch_to('syntax',togs); return false;\">" %}A list of the results you want to add. Please see {{a}}match syntax</a> for more information.{% endblocktrans %}
+            </li>
         </ul>
 
-        <p>Please check out <a href="#" onclick="switch_to('problems',togs); return false;">common
-            problems</a> if you are unsure about a player.</p>
+        <p>{% blocktrans with tag="<a href=\"#\" onclick=\"switch_to('problems',togs); return false;\">" %}Please check out {{tag}}common problems</a> if you are unsure about a player.{% endblocktrans %}</p>
     </div>
 
     <div id="syntax" style="display: none;">
-        <p>Each line corresponds to a match, and should be entered using this format:</p>
+        <p>{% trans "Each line corresponds to a match, and should be entered using this format:" %}</p>
 
-        <pre><code>    &lt;Player A&gt;-&lt;Player B&gt; &lt;Score A&gt;-&lt;Score B&gt;</code></pre>
+        {% trans "Player" as plr %}
+        {% trans "Score" as scr %}
+        <pre><code>    &lt;{{plr}} A&gt;-&lt;{{plr}} B&gt; &lt;{{scr}} A&gt;-&lt;{{scr}} B&gt;</code></pre>
 
         {% if adm %}
-        <p>The player information must uniquely identify the player, and should be space-separated list of any
-        of the following:</p>
+        <p>{% blocktrans %}The player information must uniquely identify the player, and should be space-separated list of any of the following:{% endblocktrans %}</p>
         {% else %}
-        <p>The player information does not have to uniquely identify the player, and should be a
-        space-separated list of any of the following:</p>
+        <p>{% blocktrans %}The player information does not have to uniquely identify the player, and should be a space-separated list of any of the following:{% endblocktrans %}</p>
         {% endif %}
 
         <ul>
-            <li>Player tag, e.g. &quot;DongRaeGu&quot;.</li>
-            <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; (Random) or
-            &quot;S&quot; (Race Switcher).</li>
-            <li>A two- or three-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1
-                alpha-2</a> country code. e.g. &quot;KR&quot; or &quot;KOR&quot;, or the common English name
-            of a country (the latter will only work if the country name does not contain spaces.</li> 
+            <li>{% blocktrans %}Player tag, e.g. "DongRaeGu".{% endblocktrans %}</li>
+            <li>{% blocktrans %}Race, i.e. "P", "T", "Z", "R" (Random) or "S" (Race Switcher).{% endblocktrans %}</li>
+            <li>{% blocktrans with a="<a href=\"http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">" %}A two- or three-letter {{a}}ISO 3166-1 alpha-2 country code</a>, e.g. "KR" or "KOR", or the common English name of a country (the latter will only work if the country name does not contain spaces.{% endblocktrans %}</li> 
             <li>Team name, e.g. &quot;MVP&quot;.</li>
             <li>Player or team aliases, e.g. &quot;DRG&quot;. The most common ones should be recognized.</li>
             <li>A player ID number, which you can get from the URL of the 

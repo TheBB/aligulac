@@ -13,6 +13,7 @@ from dateutil.relativedelta import relativedelta
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.settings import (
     PRF_NA,
@@ -107,7 +108,13 @@ def pow(value, arg):
 # {{{ racefull: Converts a single-character race to human readable format.
 @register.filter
 def racefull(value):
-    return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
+    return ([
+        _('Protoss'),
+        _('Terran'),
+        _('Zerg'),
+        _('Random'),
+        _('Race switcher')][['P','T','Z','R','S'].index(value)]
+    )
 # }}}
 
 # {{{ haslogo: Checks whether a team given by ID has a logo file.
@@ -334,7 +341,7 @@ def ratscaleplus(value):
     elif value <= PRF_INF:
         return '+\u221E'
     elif value <= PRF_NA:
-        return 'N/A'
+        return _('N/A')
     else:
         return ratscale(value)
 # }}}

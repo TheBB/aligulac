@@ -13,7 +13,7 @@ from django.db.models import (
     Sum,
     Q,
 )
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 import ccy
 from countries import data
@@ -129,11 +129,11 @@ def find_player(query=None, lst=None, make=False, soft=False):
     if not queryset.exists() and make:
         # {{{ Raise exceptions if missing crucial data
         if tag == None:
-            msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing player tag)") % ' '.join(lst)
             raise Exception(msg)
 
         if race == None:
-            msg = "Player '%s' was not found and cound not be made (missing race)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing race)") % ' '.join(lst)
             raise Exception(msg)
         # }}}
 

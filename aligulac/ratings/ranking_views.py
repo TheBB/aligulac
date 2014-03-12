@@ -39,7 +39,7 @@ from aligulac.tools import (
 from aligulac.settings import INACTIVE_THRESHOLD
 # }}}
 
-msg_preview = 'This is a <em>preview</em> of the next rating list. It will not be finalized until %s.'
+msg_preview = _('This is a <em>preview</em> of the next rating list. It will not be finalized until %s.')
 
 # {{{ periods view
 @cache_page
@@ -47,7 +47,7 @@ def periods(request):
     base = base_ctx('Ranking', 'History', request)
     base['periods'] = Period.objects.filter(computed=True).order_by('-id')
     
-    base.update({"title": "Historical overview"})
+    base.update({"title": _("Historical overview")})
     return render_to_response('periods.html', base)
 # }}}
 
@@ -182,7 +182,8 @@ def period(request, period_id=None):
     })
         
     fmt_date = django_date_filter(period.end, "F jS, Y")
-    base.update({"title": "List {}: {}".format(period.id, fmt_date)})
+    # Translators: List (number): (date)
+    base.update({"title": _("List {num}: {date}").format(num=period.id, date=fmt_date)})
 
     return render_to_response('period.html', base)
 # }}}
@@ -264,7 +265,7 @@ def earnings(request):
     base['ranking'] = ranking
     # }}}
 
-    base.update({"title": "Earnings ranking"})
+    base.update({"title": _("Earnings ranking")})
 
     return render_to_response('earnings.html', base)
 # }}}

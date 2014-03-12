@@ -17,6 +17,8 @@ from django.shortcuts import (
     redirect,
     render_to_response,
 )
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
 
 from aligulac.tools import (
     base_ctx,
@@ -104,9 +106,9 @@ def fill_players(pm):
     if pm.pla is None:
         players, override = review_find_player(pm.pla_string)
         if players.count() > 1:
-            messages.append("Not unique player: '%s'." % pm.pla_string)
+            messages.append(_("Ambiguous player: '%s'.") % pm.pla_string)
         elif players.count() == 0:
-            messages.append("Could not find player: '%s'." % pm.pla_string)
+            messages.append(_("Could not find player: '%s'.") % pm.pla_string)
         else:
             pm.pla = players.first()
             pm.rca = override if override is not None else pm.pla.race
@@ -114,9 +116,9 @@ def fill_players(pm):
     if pm.plb is None:
         players, override = review_find_player(pm.plb_string)
         if players.count() > 1:
-            messages.append("Not unique player: '%s'." % pm.plb_string)
+            messages.append(_("Ambiguous player: '%s'.") % pm.plb_string)
         elif players.count() == 0:
-            messages.append("Could not find player: '%s'." % pm.plb_string)
+            messages.append(_("Could not find player: '%s'.") % pm.plb_string)
         else:
             pm.plb = players.first()
             pm.rcb = override if override is not None else pm.plb.race
@@ -137,10 +139,10 @@ def fill_aux_event(qset):
 
 # {{{ ReviewMatchesForm: Form for reviewing matches.
 class ReviewMatchesForm(forms.Form):
-    date = forms.DateField(required=False, label='Date', initial=None)
-    approve = forms.BooleanField(required=False, label='Approve', initial=False)
-    reject = forms.BooleanField(required=False, label='Reject', initial=False)
-    dup_flag = forms.BooleanField(required=False, label='Ignore duplicates', initial=False)
+    date = forms.DateField(required=False, label=_('Date'), initial=None)
+    approve = forms.BooleanField(required=False, label=_('Approve'), initial=False)
+    reject = forms.BooleanField(required=False, label=_('Reject'), initial=False)
+    dup_flag = forms.BooleanField(required=False, label=_('Ignore duplicates'), initial=False)
 
     # {{{ Constructor
     def __init__(self, request=None, submitter=None):
@@ -161,19 +163,19 @@ class ReviewMatchesForm(forms.Form):
                     .order_by('idx')
                     .values('id', 'fullname')
             ],
-            required=False, label='Event',
+            required=False, label=_('Event'),
         )
     # }}}
     
     # {{{ Custom validation
     def clean(self):
         if self.cleaned_data['approve'] == self.cleaned_data['reject']:
-            raise ValidationError('You must either approve or reject.')
+            raise ValidationError(_('You must either approve or reject.'))
 
         try:
             self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
         except:
-            raise ValidationError('Could not find this event object.')
+            raise ValidationError(_('Could not find this event object.'))
 
         return self.cleaned_data
     # }}}
@@ -183,7 +185,7 @@ class ReviewMatchesForm(forms.Form):
         self.messages = []
 
         if not self.is_valid():
-            self.messages.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            self.messages.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     if field == '__all__':
@@ -234,7 +236,8 @@ class ReviewMatchesForm(forms.Form):
 
                 if check_duplicates(m, self.cleaned_data['dup_flag']):
                     self.messages.append(Message(
-                        "Could not make match %s vs %s: possible duplicate found." % (m.pla.tag, m.plb.tag),
+                        _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.") 
+                            % {'pla': m.pla.tag, 'plb': m.plb.tag},
                         type=Message.ERROR,
                     ))
                     continue
@@ -253,24 +256,34 @@ class ReviewMatchesForm(forms.Form):
                 pm.save()
 
         if self.cleaned_data['approve'] and len(matches) > 0:
-            self.messages.append(
-                Message('Successfully approved %i matches.' % len(matches), type=Message.SUCCESS))
+            self.messages.append(Message(
+                ungettext_lazy(
+                    'Successfully approved %i match.',
+                    'Successfully approved %i matches.',
+                    len(matches)) % len(matches),
+                type=Message.SUCCESS
+            ))
         elif self.cleaned_data['reject'] and len(prematches) > 0:
-            self.messages.append(
-                Message('Successfully rejected %i matces.' % len(prematches), type=Message.SUCCESS))
+            self.messages.append(Message(
+                ungettext_lazy(
+                    'Successfully rejected %i match.',
+                    'Successfully rejected %i matches.',
+                    len(prematches)) % len(prematches),
+                type=Message.SUCCESS
+            ))
     # }}}
 # }}}
 
 # {{{ AddMatchesForm: Form for adding matches (duh).
 class AddMatchesForm(forms.Form):
-    eventtext = StrippedCharField(max_length=200, required=False, label='Event')
-    date      = forms.DateField(required=True, label='Date')
-    game      = forms.ChoiceField(choices=GAMES, label='Game version', initial=HOTS)
-    offline   = forms.BooleanField(required=False, label='Offline', initial=False)
-    source    = StrippedCharField(max_length=1000, required=False, label='Source')
-    contact   = StrippedCharField(max_length=1000, required=False, label='Contact')
-    notes     = forms.CharField(max_length=10000, required=False, label='Notes', initial='')
-    matches   = forms.CharField(max_length=10000, required=True, label='Matches', initial='')
+    eventtext = StrippedCharField(max_length=200, required=False, label=_('Event'))
+    date      = forms.DateField(required=True, label=_('Date'))
+    game      = forms.ChoiceField(choices=GAMES, label=_('Game version'), initial=HOTS)
+    offline   = forms.BooleanField(required=False, label=_('Offline'), initial=False)
+    source    = StrippedCharField(max_length=1000, required=False, label=_('Source'))
+    contact   = StrippedCharField(max_length=1000, required=False, label=_('Contact'))
+    notes     = forms.CharField(max_length=10000, required=False, label=_('Notes'), initial='')
+    matches   = forms.CharField(max_length=10000, required=True, label=_('Matches'), initial='')
 
     # {{{ Constructor
     def __init__(self, is_adm, request=None):
@@ -295,7 +308,7 @@ class AddMatchesForm(forms.Form):
                     .order_by('idx')
                     .values('id', 'fullname')
             ],
-            required=False, label='Event',
+            required=False, label=_('Event'),
         )
     # }}}
 
@@ -304,14 +317,14 @@ class AddMatchesForm(forms.Form):
         if self.is_adm:
             return self.cleaned_data['eventtext']
         if self.cleaned_data['eventtext'] in [None, '']:
-            raise ValidationError('This field is required.')
+            raise ValidationError(_('This field is required.'))
         return self.cleaned_data['eventtext']
 
     def clean_source(self):
         if self.is_adm:
             return self.cleaned_data['source']
         if self.cleaned_data['source'] in [None, '']:
-            raise ValidationError('This field is required.')
+            raise ValidationError(_('This field is required.'))
         return self.cleaned_data['source']
 
     def clean(self):
@@ -319,7 +332,7 @@ class AddMatchesForm(forms.Form):
             try:
                 self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
             except:
-                raise ValidationError('Could not find this event object.')
+                raise ValidationError(_('Could not find this event object.'))
         return self.cleaned_data
     # }}}
 
@@ -328,7 +341,7 @@ class AddMatchesForm(forms.Form):
         self.messages = []
 
         if not self.is_valid():
-            self.messages.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            self.messages.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     self.messages.append(Message(error=error, field=self.fields[field].label))
@@ -363,8 +376,10 @@ class AddMatchesForm(forms.Form):
                 make_flag = '!MAKE' in end
                 dup_flag = '!DUP' in end
             except Exception as e:
-                self.messages.append(
-                    Message("Could not parse '%s' (%s)." % (line, str(e)), type=Message.ERROR))
+                self.messages.append(Message(
+                    _("Could not parse '%(line)s' (%(error)s).") % {'line': line, 'error': str(e)},
+                    type=Message.ERROR
+                ))
                 self.close_after = False
                 error_lines.append(line)
                 continue
@@ -383,8 +398,10 @@ class AddMatchesForm(forms.Form):
                     error_lines.append(line)
                     continue
             except Exception as e:
-                self.messages.append(
-                    Message("Error creating match '%s' (%s)." % (line, str(e)), type=Message.ERROR))
+                self.messages.append(Message(
+                    _("Error creating match '%(line)s' (%(error)s).") % {'line': line, 'error': str(e)},
+                    type=Message.ERROR
+                ))
                 self.close_after = False
                 error_lines.append(line)
                 continue
@@ -396,16 +413,21 @@ class AddMatchesForm(forms.Form):
         for m in matches:
             m.save()
         if len(matches) > 0:
-            self.messages.append(
-                Message('Successfully added %i matches.' % len(matches), type=Message.SUCCESS))
+            self.messages.append(Message(
+                ungettext_lazy(
+                    'Successfully added %i match.',
+                    'Successfully added %i matches.',
+                    len(matches)) % len(matches),
+                type=Message.SUCCESS
+            ))
 
         if self.close_after:
             self.cleaned_data['eventobj'].close()
             self.messages.append(
-                Message("Closed '%s'." % self.cleaned_data['eventobj'].fullname, type=Message.SUCCESS))
+                Message(_("Closed '%s'.") % self.cleaned_data['eventobj'].fullname, type=Message.SUCCESS))
         elif self.requested_close_after:
             self.messages.append(
-                Message("Did not close '%s'." % self.cleaned_data['eventobj'].fullname, type=Message.INFO))
+                Message(_("Did not close '%s'.") % self.cleaned_data['eventobj'].fullname, type=Message.INFO))
 
         self.data = self.data.copy()
         self.data['matches'] = '\n'.join(error_lines)
@@ -421,11 +443,11 @@ class AddMatchesForm(forms.Form):
             if self.is_adm:
                 if players.count() == 0:
                     self.messages.append(
-                        Message("Could not find player: '%s'." % ' '.join(query), type=Message.ERROR))
+                        Message(_("Could not find player: '%s'.") % ' '.join(query), type=Message.ERROR))
                     self.close_after = False
                 elif players.count() > 1:
                     self.messages.append(
-                        Message("Not unique player: '%s'." % ' '.join(query), type=Message.ERROR))
+                        Message(_("Ambiguous player: '%s'.") % ' '.join(query), type=Message.ERROR))
                     self.close_after = False
             return None
 
@@ -470,7 +492,8 @@ class AddMatchesForm(forms.Form):
             )
             if check_duplicates(match, dup_flag):
                 self.messages.append(Message(
-                    "Could not make match %s vs %s: possible duplicate found." % (pla.tag, plb.tag),
+                    _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.") 
+                        % {'pla': pla.tag, 'plb': plb.tag},
                     type=Message.ERROR,
                 ))
                 self.close_after = False
@@ -483,43 +506,43 @@ class AddMatchesForm(forms.Form):
 
 # {{{ AddEventsForm: Form for adding events.
 class AddEventsForm(forms.Form):
-    parent_id = forms.IntegerField(required=True, label='Parent ID')
+    parent_id = forms.IntegerField(required=True, label=_('Parent ID'))
     predef_names = forms.ChoiceField([
-        ('other', 'Other'),
-        ('Group Stage, Playoffs', 'Group stage and playoffs'),
-        ('Group A,Group B,Group C,Group D', 'Groups A through D'),
-        ('Group A,Group B,Group C,Group D,Group E,Group F,Group G,Group H', 'Groups A through H'),
-        ('Ro64,Ro32,Ro16,Ro8,Ro4,Final', 'Ro64→Final'),
-        ('Ro32,Ro16,Ro8,Ro4,Final', 'Ro32→Final'),
-        ('Ro16,Ro8,Ro4,Final', 'Ro16→Final'),
-        ('Ro8,Ro4,Final', 'Ro8→Final'),
-        ('Ro4,Final', 'Ro4→Final'),
-        ('Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro64→Final + 3rd place'),
-        ('Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro32→Final + 3rd place'),
-        ('Ro16,Ro8,Ro4,Third place match,Final', 'Ro16→Final + 3rd place'),
-        ('Ro8,Ro4,Third place match,Final', 'Ro8→Final + 3rd place'),
-        ('Ro4,Third place match,Final', 'Ro4→Final + 3rd place'),
-        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Final', 'Ro64→Final + early rounds'),
-        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Final', 'Ro32→Final + early rounds'),
-        ('Early rounds,Ro16,Ro8,Ro4,Final', 'Ro16→Final + early rounds'),
-        ('Early rounds,Ro8,Ro4,Final', 'Ro8→Final + early rounds'),
-        ('Early rounds,Ro4,Final', 'Ro4→Final + early rounds'),
+        ('other', _('Other')),
+        ('Group Stage, Playoffs', _('Group stage and playoffs')),
+        ('Group A,Group B,Group C,Group D', _('Groups A through D')),
+        ('Group A,Group B,Group C,Group D,Group E,Group F,Group G,Group H', _('Groups A through H')),
+        ('Ro64,Ro32,Ro16,Ro8,Ro4,Final', _('Ro64→Final')),
+        ('Ro32,Ro16,Ro8,Ro4,Final', _('Ro32→Final')),
+        ('Ro16,Ro8,Ro4,Final', _('Ro16→Final')),
+        ('Ro8,Ro4,Final', _('Ro8→Final')),
+        ('Ro4,Final', _('Ro4→Final')),
+        ('Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', _('Ro64→Final + 3rd place')),
+        ('Ro32,Ro16,Ro8,Ro4,Third place match,Final', _('Ro32→Final + 3rd place')),
+        ('Ro16,Ro8,Ro4,Third place match,Final', _('Ro16→Final + 3rd place')),
+        ('Ro8,Ro4,Third place match,Final', _('Ro8→Final + 3rd place')),
+        ('Ro4,Third place match,Final', _('Ro4→Final + 3rd place')),
+        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Final', _('Ro64→Final + early rounds')),
+        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Final', _('Ro32→Final + early rounds')),
+        ('Early rounds,Ro16,Ro8,Ro4,Final', _('Ro16→Final + early rounds')),
+        ('Early rounds,Ro8,Ro4,Final', _('Ro8→Final + early rounds')),
+        ('Early rounds,Ro4,Final', _('Ro4→Final + early rounds')),
         ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 
-            'Ro64→Final + 3rd place and early rounds'),
-        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 'Ro32→Final + 3rd place and early rounds'),
-        ('Early rounds,Ro16,Ro8,Ro4,Third place match,Final', 'Ro16→Final + 3rd place and early rounds'),
-        ('Early rounds,Ro8,Ro4,Third place match,Final', 'Ro8→Final + 3rd place and early rounds'),
-        ('Early rounds,Ro4,Third place match,Final', 'Ro4→Final + 3rd place and early rounds'),
-        ('WB,LB,Final', 'WB, LB, Final'),
-        ('Round 1,Round 2', 'LB: Round 1->Round 2'),
-        ('Round 1,Round 2,Round 3,Round 4', 'LB: Round 1->Round 4'),
-        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6', 'LB: Round 1->Round 6'),
-        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6,Round 7,Round 8', 'LB: Round 1->Round 8'),
-    ], required=True, label='Predefined names')
-    custom_names = StrippedCharField(max_length=400, required=False, label='Custom names')
-    type = forms.ChoiceField(choices=EVENT_TYPES, required=True, label='Type')
-    big = forms.BooleanField(required=False, label='Big', initial=False)
-    noprint = forms.BooleanField(required=False, label='No print', initial=False)
+            _('Ro64→Final + 3rd place and early rounds')),
+        ('Early rounds,Ro32,Ro16,Ro8,Ro4,Third place match,Final', _('Ro32→Final + 3rd place and early rounds')),
+        ('Early rounds,Ro16,Ro8,Ro4,Third place match,Final', _('Ro16→Final + 3rd place and early rounds')),
+        ('Early rounds,Ro8,Ro4,Third place match,Final', _('Ro8→Final + 3rd place and early rounds')),
+        ('Early rounds,Ro4,Third place match,Final', _('Ro4→Final + 3rd place and early rounds')),
+        ('WB,LB,Final', _('WB, LB, Final')),
+        ('Round 1,Round 2', _('LB: Round 1->Round 2')),
+        ('Round 1,Round 2,Round 3,Round 4', _('LB: Round 1->Round 4')),
+        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6', _('LB: Round 1->Round 6')),
+        ('Round 1,Round 2,Round 3,Round 4,Round 5,Round 6,Round 7,Round 8', _('LB: Round 1->Round 8')),
+    ], required=True, label=_('Predefined names'))
+    custom_names = StrippedCharField(max_length=400, required=False, label=_('Custom names'))
+    type = forms.ChoiceField(choices=EVENT_TYPES, required=True, label=_('Type'))
+    big = forms.BooleanField(required=False, label=_('Big'), initial=False)
+    noprint = forms.BooleanField(required=False, label=_('No print'), initial=False)
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -527,7 +550,7 @@ class AddEventsForm(forms.Form):
             super(AddEventsForm, self).__init__()
         else:
             super(AddEventsForm, self).__init__(request.POST)
-            if 'op' in request.POST and request.POST['op'] == 'Commit new sub-events':
+            if 'commit' in request.POST:
                 self.action = 'add'
             else:
                 self.action = 'close'
@@ -542,16 +565,16 @@ class AddEventsForm(forms.Form):
                 return Event.objects.get(id=int(self.cleaned_data['parent_id']))
             return None
         except:
-            raise ValidationError('Could not find event ID %s.' % self.cleaned_data['parent_id'])
+            raise ValidationError(_('Could not find event ID %s.') % self.cleaned_data['parent_id'])
 
     def clean(self):
         if self.action != 'add':
             if self.cleaned_data['parent_id'] is None:
-                raise ValidationError('Must specify an event to close.')
+                raise ValidationError(_('Must specify an event to close.'))
             return self.cleaned_data
 
         if self.cleaned_data['predef_names'] == 'other' and self.cleaned_data['custom_names'] in ['', None]:
-            raise ValidationError('No event names specified.')
+            raise ValidationError(_('No event names specified.'))
 
         names = (
             self.cleaned_data['predef_names']
@@ -568,7 +591,7 @@ class AddEventsForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     if field == '__all__':
@@ -590,13 +613,16 @@ class AddEventsForm(forms.Form):
                     big=self.cleaned_data['big'],
                     noprint=self.cleaned_data['noprint'],
                 )
-            ret.append(
-                Message('Successfully created %i new events.' % len(self.cleaned_data['names']),
+            ret.append(Message(
+                ungettext_lazy(
+                    'Successfully created %i new event.',
+                    'Successfully created %i new events.',
+                    len(self.cleaned_data['names'])) % len(self.cleaned_data['names']),
                 type=Message.SUCCESS)
             )
         elif self.action == 'close':
             self.cleaned_data['parent_id'].close()
-            ret.append(Message('Successfully closed event.', type=Message.SUCCESS))
+            ret.append(Message(_('Successfully closed event.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -604,9 +630,9 @@ class AddEventsForm(forms.Form):
 
 # {{{ MergePlayersForm: Form for merging players.
 class MergePlayersForm(forms.Form):
-    source = forms.IntegerField(required=True, label='Source ID')
-    target = forms.IntegerField(required=True, label='Target ID')
-    confirm = forms.BooleanField(required=False, label='Confirm', initial=False)
+    source = forms.IntegerField(required=True, label=_('Source ID'))
+    target = forms.IntegerField(required=True, label=_('Target ID'))
+    confirm = forms.BooleanField(required=False, label=_('Confirm'), initial=False)
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -622,13 +648,13 @@ class MergePlayersForm(forms.Form):
         try:
             return Player.objects.get(id=int(self.cleaned_data['source']))
         except:
-            raise ValidationError('No player with ID %i.' % self.cleaned_data['source'])
+            raise ValidationError(_('No player with ID %i.') % self.cleaned_data['source'])
 
     def clean_target(self):
         try:
             return Player.objects.get(id=int(self.cleaned_data['target']))
         except:
-            raise ValidationError('No player with ID %i.' % self.cleaned_data['target'])
+            raise ValidationError(_('No player with ID %i.') % self.cleaned_data['target'])
     # }}}
 
     # {{{ Do stuff
@@ -636,14 +662,14 @@ class MergePlayersForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
         if not self.cleaned_data['confirm']:
-            ret.append(Message('Please confirm player merge.', type=Message.WARNING))
+            ret.append(Message(_('Please confirm player merge.'), type=Message.WARNING))
             return ret
 
         source, target = self.cleaned_data['source'], self.cleaned_data['target']
@@ -665,8 +691,9 @@ class MergePlayersForm(forms.Form):
         Earnings.objects.filter(player=source).update(player=target)
 
         ret.append(Message(
-            '%s was successfully merged into %s.' % (source.tag, target.tag),
-            title='The merging is complete', type=Message.SUCCESS
+            _('%(source)s was successfully merged into %(target)s.') % (source.tag, target.tag),
+            # Translate: Merging of two players, this is a reference to the archon from SC:BW.
+            title=_('The merging is complete'), type=Message.SUCCESS
         ))
 
         source.delete()
@@ -677,9 +704,9 @@ class MergePlayersForm(forms.Form):
 
 # {{{ MoveEventForm: Form for merging players.
 class MoveEventForm(forms.Form):
-    subject = forms.IntegerField(required=True, label='Event ID to move')
-    target = forms.IntegerField(required=True, label='New parent ID')
-    confirm = forms.BooleanField(required=False, label='Confirm', initial=False)
+    subject = forms.IntegerField(required=True, label=_('Event ID to move'))
+    target = forms.IntegerField(required=True, label=_('New parent ID'))
+    confirm = forms.BooleanField(required=False, label=_('Confirm'), initial=False)
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -695,20 +722,20 @@ class MoveEventForm(forms.Form):
         try:
             return Event.objects.get(id=int(self.cleaned_data['subject']))
         except:
-            raise ValidationError('No event with ID %i.' % self.cleaned_data['subject'])
+            raise ValidationError(_('No event with ID %i.') % self.cleaned_data['subject'])
 
     def clean_target(self):
         try:
             return Event.objects.get(id=int(self.cleaned_data['target']))
         except:
-            raise ValidationError('No event with ID %i.' % self.cleaned_data['target'])
+            raise ValidationError(_('No event with ID %i.') % self.cleaned_data['target'])
 
     def clean(self):
         if EventAdjacency.objects.filter(
             parent=self.cleaned_data['subject'],
             child=self.cleaned_data['target'],
         ).exists():
-            raise ValidationError("Can't move an event to one of its descendants.")
+            raise ValidationError(_("Can't move an event to one of its descendants."))
         return self.cleaned_data
     # }}}
 
@@ -717,7 +744,7 @@ class MoveEventForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     if field == '__all__':
@@ -727,7 +754,7 @@ class MoveEventForm(forms.Form):
             return ret
 
         if not self.cleaned_data['confirm']:
-            ret.append(Message('Please confirm event move.', type=Message.WARNING))
+            ret.append(Message(_('Please confirm event move.'), type=Message.WARNING))
             return ret
 
         subject, target = self.cleaned_data['subject'], self.cleaned_data['target']
@@ -758,8 +785,11 @@ class MoveEventForm(forms.Form):
                 dl.child.update_name()
 
         ret.append(Message(
-            "Moved '%s' to '%s'. It's now called '%s'." % (prevname, target.fullname, subject.fullname), 
-            type=Message.SUCCESS
+            "Moved '%(source)s' to '%(target)s'. It's now called '%(name)s'." % {
+                'source': prevname,
+                'target': target.fullname,
+                'name': subject.fullname,
+            }, type=Message.SUCCESS
         ))
 
         return ret
@@ -781,7 +811,7 @@ def add_matches(request):
             get_event = Event.objects.get(id=request.GET['eventid'])
             if get_event.closed:
                 get_event.open()
-                base['messages'].append(Message("Reopened '%s'." % get_event.fullname, type=Message.SUCCESS))
+                base['messages'].append(Message(_("Reopened '%s'.") % get_event.fullname, type=Message.SUCCESS))
             form['eventobj'].field.choices.append((get_event.id, get_event.fullname))
             form['eventobj'].field.choices.sort(key=lambda e: e[1])
             base['event_override'] = get_event.id
@@ -790,7 +820,7 @@ def add_matches(request):
 
     base['form'] = form
 
-    base.update({"title": "Submit results"})
+    base.update({"title": _("Submit results")})
 
     return render_to_response('add.html', base)
 # }}}
@@ -820,7 +850,7 @@ def review_matches(request):
     for g in base['groups']:
         g.prematches = display_matches(g.prematch_set.all(), messages=False)
 
-    base.update({"title": "Review results"})
+    base.update({"title": _("Review results")})
 
     return render_to_response('review.html', base)
 # }}}
@@ -854,7 +884,7 @@ def events(request):
     base['nodes'] = events
     # }}}
 
-    base.update({"title": "Manage events"})
+    base.update({"title": _("Manage events")})
 
     return render_to_response('eventmgr.html', base)
 # }}}
@@ -891,12 +921,23 @@ def open_events(request):
         ids = [int(i) for i in request.POST.getlist('open_games_ids')]
         for id in ids:
             Event.objects.get(id=id).close()
-        base['messages'].append(Message('Successfully closed %i events.' % len(ids), type=Message.SUCCESS))
+        base['messages'].append(Message(
+            ungettext_lazy(
+                'Successfully closed %i event.',
+                'Successfully closed %i events.',
+                len(ids)) % len(ids),
+            type=Message.SUCCESS
+        ))
     elif base['adm'] and 'pp_events' in request.POST:
         ids = [int(i) for i in request.POST.getlist('pp_events_ids')]
         nevents = Event.objects.filter(id__in=ids).update(prizepool=False)
         base['messages'].append(Message(
-            'Successfully marked %i events as having no prize pool.' % nevents, type=Message.SUCCESS))
+            ungettext_lazy(
+                'Successfully marked %i event as having no prize pool.',
+                'Successfully marked %i events as having no prize pool.',
+                nevents) % nevents,
+            type=Message.SUCCESS
+        ))
     # }}}
 
     # {{{ Open events with games
@@ -935,7 +976,7 @@ def open_events(request):
     fill_aux_event(base['open_nogames'])
     fill_aux_event(base['pp_events'])
 
-    base.update({"title": "Open events"})
+    base.update({"title": _("Open events")})
 
     return render_to_response('events_open.html', base)
 # }}}

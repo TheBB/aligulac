@@ -29,6 +29,8 @@ from django.template.defaultfilters import (
     date as django_date_filter
 )
 from django.views.decorators.csrf import csrf_protect
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -94,19 +96,27 @@ def earnings_code(queryset):
 class EventModForm(forms.Form):
     name       = StrippedCharField(max_length=100, required=True, label='Name')
     date       = forms.DateField(required=False, label='Date')
-    game       = forms.ChoiceField(choices=[('nochange','No change')]+GAMES, required=True, label='Game')
-    offline    = forms.ChoiceField(
-        choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
-        required=True, label='On/offline'
+    game       = forms.ChoiceField(
+        choices=[('nochange',_('No change'))]+GAMES, required=True,
+        label=_('Game version')
     )
-    type       = forms.ChoiceField(choices=[('nochange','No change')]+EVENT_TYPES, required=True, label='Type')
-    same_level = forms.BooleanField(required=False, label='Apply to all events on the same level')
-    homepage   = StrippedCharField(max_length=200, required=False, label='Homepage')
-    tlpd_id    = forms.IntegerField(required=False, label='TLPD ID')
+    offline    = forms.ChoiceField(
+        choices=[('nochange',_('No change')), ('online',_('Online')), ('offline',_('Offline'))],
+        required=True, label=_('On/offline')
+    )
+    type       = forms.ChoiceField(
+        choices=[('nochange',_('No change'))]+EVENT_TYPES,
+        # Translators: Type as in event type
+        required=True, label=_('Type')
+    )
+    # Translators: Apply (changes) to…
+    same_level = forms.BooleanField(required=False, label=_('Apply to all events on the same level'))
+    homepage   = StrippedCharField(max_length=200, required=False, label=_('Homepage'))
+    tlpd_id    = forms.IntegerField(required=False, label=_('TLPD ID'))
     tlpd_db    = forms.MultipleChoiceField(
-        required=False, choices=TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
-    tl_thread  = forms.IntegerField(required=False, label='TL thread')
-    lp_name    = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
+        required=False, choices=TLPD_DBS, label=_('TLPD DB'), widget=forms.CheckboxSelectMultiple)
+    tl_thread  = forms.IntegerField(required=False, label=_('TL thread'))
+    lp_name    = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -135,7 +145,7 @@ class EventModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -145,19 +155,34 @@ class EventModForm(forms.Form):
             event.update_name(self.cleaned_data['name'])
             for e in event.get_children(id=False):
                 e.update_name()
-            ret.append(Message('Changed event name.', type=Message.SUCCESS))
+            ret.append(Message(_('Changed event name.'), type=Message.SUCCESS))
 
         if self.cleaned_data['date'] is not None:
             nchanged = event.get_matchset().update(date=self.cleaned_data['date'])
-            ret.append(Message('Changed date for %i matches.' % nchanged, type=Message.SUCCESS))
+            ret.append(Message(
+                ungettext_lazy('Changed date for %i match.', 'Changed date for %i matches.', nchanged)
+                % nchanged, type=Message.SUCCESS
+            ))
 
         if self.cleaned_data['game'] != 'nochange':
             nchanged = event.get_matchset().update(game=self.cleaned_data['game'])
-            ret.append(Message('Changed game for %i matches.' % nchanged, type=Message.SUCCESS))
+            ret.append(Message(
+                ungettext_lazy(
+                    'Changed game version for %i match.',
+                    'Changed game version for %i matches.',
+                    nchanged) % nchanged,
+                type=Message.SUCCESS
+            ))
 
         if self.cleaned_data['offline'] != 'nochange':
             nchanged = event.get_matchset().update(offline=(self.cleaned_data['offline']=='offline'))
-            ret.append(Message('Changed type for %i matches.' % nchanged, type=Message.SUCCESS))
+            ret.append(Message(
+                ungettext_lazy(
+                    'Changed on/offline for %i match.',
+                    'Changed on/offline for %i matches.',
+                    nchanged) % nchanged,
+                type=Message.SUCCESS
+            ))
 
         events = [event] if not self.cleaned_data['same_level'] else event.parent.get_immediate_children()
         nchanged = 0
@@ -166,18 +191,21 @@ class EventModForm(forms.Form):
                 e.change_type(self.cleaned_data['type'])
             nchanged += 1
         if nchanged > 0:
-            ret.append(Message('Changed type for %i event(s).' % nchanged, type=Message.SUCCESS))
+            ret.append(Message(
+                ungettext_lazy('Changed type for %i event.', 'Changed type for %i events.', nchanged) 
+                % nchanged, type=Message.SUCCESS
+            ))
 
         def update(value, attr, setter, label):
             if value != getattr(event, attr):
                 getattr(event, setter)(value)
-                ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
+                ret.append(Message(_('Changed %s.') % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   'homepage')
-        update(self.cleaned_data['tlpd_id'],    'tlpd_id',    'set_tlpd_id',    'TLPD ID')
-        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    'Liquipedia title')
-        update(self.cleaned_data['tl_thread'],  'tl_thread',  'set_tl_thread',  'TL thread')
-        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
+        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   _('homepage'))
+        update(self.cleaned_data['tlpd_id'],    'tlpd_id',    'set_tlpd_id',    _('TLPD ID'))
+        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    _('Liquipedia title'))
+        update(self.cleaned_data['tl_thread'],  'tl_thread',  'set_tl_thread',  _('TL thread'))
+        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
         return ret
     # }}}
@@ -187,9 +215,9 @@ class EventModForm(forms.Form):
 class PrizepoolModForm(forms.Form):
     sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
     currencies  = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
-    currency    = forms.ChoiceField(choices=currencies, required=True, label='Currency')
-    ranked      = forms.CharField(required=False, max_length=10000, label='Ranked')
-    unranked    = forms.CharField(required=False, max_length=10000, label='Unranked')
+    currency    = forms.ChoiceField(choices=currencies, required=True, label=_('Currency'))
+    ranked      = forms.CharField(required=False, max_length=10000, label=_('Ranked'))
+    unranked    = forms.CharField(required=False, max_length=10000, label=_('Unranked'))
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -218,9 +246,9 @@ class PrizepoolModForm(forms.Form):
 
         queryset = find_player(query=line[ind+1:])
         if not queryset.exists():
-            raise Exception("No such player: '%s'." % line[ind+1:])
+            raise Exception(_("No such player: '%s'.") % line[ind+1:])
         elif queryset.count() > 1:
-            raise Exception("Unamiguous player: '%s'." % line[ind+1:])
+            raise Exception(_("Ambiguous player: '%s'.") % line[ind+1:])
         else:
             return prize, queryset.first()
     # }}}
@@ -230,7 +258,7 @@ class PrizepoolModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -260,7 +288,7 @@ class PrizepoolModForm(forms.Form):
                 ok = False
 
         if not ok:
-            ret.append(Message('Errors occured, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Errors occured, no changes made.'), type=Message.ERROR))
             return ret
         # }}}
 
@@ -281,7 +309,8 @@ class PrizepoolModForm(forms.Form):
             return ret
         # }}}
 
-        ret.append(Message('New prizes committed.', type=Message.SUCCESS))
+        # Translators: New prizepools added to the database.
+        ret.append(Message(_('New prizes committed.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -289,9 +318,9 @@ class PrizepoolModForm(forms.Form):
 
 # {{{ StoryModForm: Form for adding stories.
 class StoryModForm(forms.Form):
-    player = forms.ChoiceField(required=True, label='Player')
-    date   = forms.DateField(required=True, label='Date')
-    text   = StrippedCharField(max_length=200, required=True, label='Text')
+    player = forms.ChoiceField(required=True, label=_('Player'))
+    date   = forms.DateField(required=True, label=_('Date'))
+    text   = StrippedCharField(max_length=200, required=True, label=_('Text'))
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -314,7 +343,7 @@ class StoryModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -328,7 +357,8 @@ class StoryModForm(forms.Form):
         )
         story.save()
 
-        ret.append(Message('Added a story.', type=Message.SUCCESS))
+        # Translators: Stories are the dots on a player's rating chart
+        ret.append(Message(_('Added a story.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -336,10 +366,10 @@ class StoryModForm(forms.Form):
 
 # {{{ AddForm: Form for adding subevents.
 class AddForm(forms.Form):
-    name    = StrippedCharField(max_length=100, required=True, label='Name')
-    type    = forms.ChoiceField(choices=EVENT_TYPES, required=True, label='Type')
-    noprint = forms.BooleanField(required=False, label='No Print')
-    closed  = forms.BooleanField(required=False, label='Closed')
+    name    = StrippedCharField(max_length=100, required=True, label=_('Name'))
+    type    = forms.ChoiceField(choices=EVENT_TYPES, required=True, label=_('Type'))
+    noprint = forms.BooleanField(required=False, label=_('No Print'))
+    closed  = forms.BooleanField(required=False, label=_('Closed'))
 
     # {{{ Constructor
     def __init__(self, request=None, event=None):
@@ -360,7 +390,7 @@ class AddForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -373,7 +403,7 @@ class AddForm(forms.Form):
             self.cleaned_data['closed'],
         )
 
-        ret.append(Message('Added a subevent.', type=Message.SUCCESS))
+        ret.append(Message(_('Added a subevent.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -397,7 +427,7 @@ class ReorderForm(forms.Form):
             ids = [int(s) for s in self.cleaned_data['order'].split(',') if s.strip() != '']
             events = Event.objects.in_bulk(ids)
         except:
-            raise ValidationError('Unable to get these events.')
+            raise ValidationError(_('Unable to get these events.'))
 
         return [events[i] for i in ids]
     # }}}
@@ -407,28 +437,29 @@ class ReorderForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
         if len(self.cleaned_data['order']) != event.get_immediate_children().count():
-            return [Message('Order invalid, try again?', type=Message.ERROR)]
+            # Translate: Order as in an ordering, e.g. 2, 7, 5…
+            return [Message(_('Order invalid, try again?'), type=Message.ERROR)]
 
         for e in self.cleaned_data['order']:
             if e.parent != event:
-                return [Message('Non-child event found. This should never happen.', type=Message.ERROR)]
+                return [Message(_('Non-child event found. This should never happen.'), type=Message.ERROR)]
 
         min_idx = min([e.idx for idx in self.cleaned_data['order']])
         for idx, e in enumerate(self.cleaned_data['order']):
             e.set_idx(min_idx + idx)
 
-        return [Message(
+        return [Message(_(
+            # Translators: Children as in sub-events.
             'Successfully reordered %i children. Any inconsistencies will be fixed next update '
-            '(no more than six hours away).' % len(self.cleaned_data['order']),
-            type=Message.SUCCESS
-        )]
+            '(no more than six hours away).'
+        ) % len(self.cleaned_data['order']), type=Message.SUCCESS)]
     # }}}
 # }}}
 
@@ -436,27 +467,27 @@ class ReorderForm(forms.Form):
 class SearchForm(forms.Form):
     after      = forms.DateField(required=False, label='After', initial=None)
     before     = forms.DateField(required=False, label='Before', initial=None)
-    players    = forms.CharField(max_length=10000, required=False, label='Involving players', initial='')
-    event      = StrippedCharField(max_length=200, required=False, label='Event', initial='')
+    players    = forms.CharField(max_length=10000, required=False, label=_('Involving players'), initial='')
+    event      = StrippedCharField(max_length=200, required=False, label=_('Event'), initial='')
     unassigned = forms.BooleanField(required=False, label='Only show unassigned matches')
     bestof     = forms.ChoiceField(
         choices=[
-            ('all','All'),
-            ('3','Best of 3+'),
-            ('5','Best of 5+'),
+            ('all',_('All')),
+            ('3',_('Best of 3+')),
+            ('5',_('Best of 5+')),
         ],
-        required=False, label='Match format', initial='all'
+        required=False, label=_('Match format'), initial='all'
     )
     offline = forms.ChoiceField(
         choices=[
-            ('both','Both'),
-            ('offline','Offline'),
-            ('online','Online'),
+            ('both',_('Both')),
+            ('offline',_('Offline')),
+            ('online',_('Online')),
         ],
-        required=False, label='On/offline', initial='both',
+        required=False, label=_('On/offline'), initial='both',
     )
     game = forms.ChoiceField(
-        choices=[('all','All')]+GAMES, required=False, label='Game version', initial='all')
+        choices=[('all',_('All'))]+GAMES, required=False, label=_('Game version'), initial='all')
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -473,7 +504,7 @@ class SearchForm(forms.Form):
         # {{{ Check validity (lol)
         if not self.is_valid():
             msgs = []
-            msgs.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            msgs.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     msgs.append(Message(error=error, field=self.fields[field].label))
@@ -530,7 +561,10 @@ class SearchForm(forms.Form):
 
             pls = find_player(query=line, make=False)
             if not pls.exists():
-                ret['messages'].append(Message("No matches found: '%s'." % line.strip(), type=Message.ERROR))
+                ret['messages'].append(Message(
+                    # Translators: Matches here as in search matches.
+                    _("No matches found: '%s'.") % line.strip(), type=Message.ERROR
+                ))
                 ok = False
             else:
                 if pls.count() > 1:
@@ -558,7 +592,7 @@ class SearchForm(forms.Form):
         ret['count'] = matches.count()
         if ret['count'] > 1000:
             ret['messages'].append(Message(
-                'Too many results (%i). Please add restrictions.' % ret['count'],
+                _('Too many results (%i). Please add restrictions.') % ret['count'],
                 type=Message.ERROR
             ))
             return ret
@@ -587,15 +621,15 @@ class SearchForm(forms.Form):
 
 # {{{ ResultsModForm: Form for modifying search results.
 class ResultsModForm(forms.Form):
-    event   = forms.ChoiceField(required=True, label='Event')
-    date    = forms.DateField(required=False, label='Date', initial=None)
+    event   = forms.ChoiceField(required=True, label=_('Event'))
+    date    = forms.DateField(required=False, label=_('Date'), initial=None)
     offline = forms.ChoiceField(
-        choices=[('nochange','No change'), ('online','Online'), ('offline','Offline')],
-        required=True, label='On/offline', initial='nochange'
+        choices=[('nochange',_('No change')), ('online',_('Online')), ('offline',_('Offline'))],
+        required=True, label=_('On/offline'), initial='nochange'
     )
     game = forms.ChoiceField(
-        choices=[('nochange','No change')]+GAMES,
-        required=True, label='Game version', initial='nochange'
+        choices=[('nochange',_('No change'))]+GAMES,
+        required=True, label=_('Game version'), initial='nochange'
     )
 
     # {{{ Constructor
@@ -605,7 +639,7 @@ class ResultsModForm(forms.Form):
         else:
             super(ResultsModForm, self).__init__()
 
-        self.fields['event'].choices = [(0, 'No change')] + [
+        self.fields['event'].choices = [(0, _('No change'))] + [
             (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
                 .annotate(num_downlinks=Count('downlink'))
                 .filter(num_downlinks=1)
@@ -619,7 +653,7 @@ class ResultsModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -643,7 +677,10 @@ class ResultsModForm(forms.Form):
         if self.cleaned_data['game'] != 'nochange':
             matches.update(game=self.cleaned_data['game'])
 
-        return [Message('Updated %i matches.' % matches.count(), type=Message.SUCCESS)]
+        return [Message(
+            ungettext_lazy('Updated %i match.', 'Updated %i matches.', matches.count()) % matches.count(), 
+            type=Message.SUCCESS
+        )]
     # }}}
 # }}}
 
@@ -817,7 +854,7 @@ def search(request):
     base['searchform'] = searchform
     # }}}
 
-    base.update({"title": "Search results"})
+    base.update({"title": _("Search results")})
 
     return render_to_response('results_search.html', base, context_instance=RequestContext(request))
 # }}}

@@ -179,7 +179,8 @@ class ResultsFilterForm(forms.Form):
         required=False, label=_('Opponent race'), initial='ptzr'
     )
     country = forms.ChoiceField(
-        choices=[('all',_('All')),('foreigners',_('Non-Koreans'))]+data.countries,
+        choices=[('all',_('All')),('foreigners',_('Non-Koreans'))] + 
+                sorted(data.countries, key=lambda a: a[1]),
         required=False, label=_('Country'), initial='all'
     )
     bestof = forms.ChoiceField(
@@ -590,6 +591,8 @@ def results(request, player_id):
                       for k in form.cleaned_data
                       if form.cleaned_data[k] is not None)
 
+    print(get_params)
+
     country = ""
     if player.country is not None:
         country = ":{}:".format(player.country.lower())
@@ -625,13 +628,65 @@ def results(request, player_id):
 
     tl_params.update(get_params)
 
-    # Final clean up
+    # Final clean up and translation
 
     if tl_params["bestof"] != "all":
-        tl_params["bestof"] = "Bo{}+".format(tl_params["bestof"])
+        tl_params["bestof"] = _('best of') + ' {}'.format(tl_params["bestof"])
+    else:
+        tl_params['bestof'] = _('all')
 
     if set(tl_params["race"]) == set('ptzr'):
-        tl_params["race"] = "all"
+        tl_params["race"] = _('all')
+    else:
+        tl_params['race'] = {
+            'p': _('Protoss'),
+            't': _('Terran'),
+            'z': _('Zerg'),
+            'ptr': _('No Zerg'),
+            'pzr': _('No Terran'),
+            'tzr': _('No Protoss'),
+        }[tl_params['race']]
+
+    if tl_params['country'] in ['all', 'foreigners']:
+        tl_params['country'] = {
+            'all': _('all'),
+            'foreigners': _('foreigners'),
+        }[tl_params['country']]
+    else:
+        tl_params['country'] = transformations.ccn_to_cn(transformations.cca2_to_ccn(tl_params['country']))
+
+    tl_params['offline'] = {
+        'offline': _('offline'),
+        'online': _('online'),
+        'both': _('both'),
+    }[tl_params['offline']]
+
+    if tl_params['game'] == 'all':
+        tl_params['game'] = _('all')
+    else:
+        tl_params['game'] = dict(GAMES)[tl_params['game']]
+
+    tl_params.update({
+        'resfor': _('Results for'),
+        'games': _('Games'),
+        'matches': _('Matches'),
+        'curform': _('Current form'),
+        'recentmatches': _('Recent matches'),
+        'filters': _('Filters'),
+        # Translators: These have to line up on the right!
+        'opprace': _('Opponent Race:    '),
+        # Translators: These have to line up on the right!
+        'oppcountry': _('Opponent Country: '),
+        # Translators: These have to line up on the right!
+        'matchformat': _('Match Format:     '),
+        # Translators: These have to line up on the right!
+        'onoff': _('On/offline:       '),
+        # Translators: These have to line up on the right!
+        'version': _('Game Version:     '),
+        'statslink': _('Stats by [url={url}]Aligulac[/url]'),
+        # Translators: Link in the sense of a HTTP hyperlink.
+        'link': _('Link'),
+    })
 
     base.update({
         "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params)
@@ -709,33 +764,27 @@ def earnings(request, player_id):
 
 # {{{ Postable templates
 TL_HISTORY_TEMPLATE = (
-    _("Results for") + " {player_country_formatted} :{player_race}:") + " " +
+    "{resfor} {player_country_formatted} :{player_race}: " +
     "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n" +
     "\n" +
-    "[b]" + _("Games") + ":[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n" +
-    "[b]" + _("Matches") + ":[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n" +
+    "[b]{games}:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n" +
+    "[b]{matches}:[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n" +
     "\n" +
-    "[b][big]" + _("Current Form") + ":[/big][/b]\n" +
+    "[b][big]{curform}:[/big][/b]\n" +
     "[indent]{form}\n" +
-    "[b][big]" + _("Recent Matches") + ":[/big][/b]\n" +
+    "[b][big]{recentmatches}:[/big][/b]\n" +
     "{recent}\n" +
     "\n\n" +
-    _("Filters") + ":\n" +
+    "{filters}:\n" +
     "[spoiler][code]" +
-    # Translators: These have to line up on the right!
-    _("Opponent Race:    ") + "{race}\n" +
-    # Translators: These have to line up on the right!
-    _("Opponent Country: ") + "{country}\n" +
-    # Translators: These have to line up on the right!
-    _("Match Format:     ") + "{bestof}\n" +
-    # Translators: These have to line up on the right!
-    _("On/offline:       ") + "{offline}\n" +
-    # Translators: These have to line up on the right!
-    _("Game Version:     ") + "{game}\n" +
+    "{opprace}{race}\n" +
+    "{oppcountry}{country}\n" +
+    "{matchformat}{bestof}\n" +
+    "{onoff}{offline}\n" +
+    "{version}{game}\n" +
     "[/code][/spoiler]\n" +
-    "[small]" + _("Stats by [url={url}]Aligulac[/url]") + ". " +
-    # Translators: Link in the sense of a HTTP hyperlink.
-    "[url={url}/players/{pid}/results/?{get}]" + _("Link") + "[/url].[/small]"
+    "[small]{statslink}. " +
+    "[url={url}/players/{pid}/results/?{get}]{link}[/url].[/small]"
 )
 
 TL_HISTORY_MATCH_TEMPLATE = (

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 22:52+0100\n"
+"POT-Creation-Date: 2014-03-12 19:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,7 +72,8 @@ msgstr "logg ut"
 msgid "change password"
 msgstr "endre passord"
 
-#: aligulac/aligulac/tools.py:145
+#: aligulac/aligulac/tools.py:145 aligulac/ratings/staff_views.py:320
+#: aligulac/ratings/staff_views.py:327
 msgid "This field is required."
 msgstr "Dette feltet er påkrevd."
 
@@ -85,6 +86,7 @@ msgid "Current"
 msgstr "Dagens"
 
 #: aligulac/aligulac/tools.py:221 aligulac/aligulac/tools.py:235
+#: aligulac/ratings/records_views.py:71
 msgid "History"
 msgstr "Historie"
 
@@ -92,7 +94,7 @@ msgstr "Historie"
 msgid "Earnings"
 msgstr "Inntekt"
 
-#: aligulac/aligulac/tools.py:225
+#: aligulac/aligulac/tools.py:225 aligulac/ratings/team_views.py:128
 msgid "Teams"
 msgstr "Lag"
 
@@ -100,7 +102,7 @@ msgstr "Lag"
 msgid "Transfers"
 msgstr "Lagbytter"
 
-#: aligulac/aligulac/tools.py:232
+#: aligulac/aligulac/tools.py:232 aligulac/ratings/records_views.py:125
 msgid "Records"
 msgstr "Rekorder"
 
@@ -110,23 +112,27 @@ msgid "HoF"
 msgstr "Hall of Fame"
 
 #: aligulac/aligulac/tools.py:238 aligulac/ratings/player_views.py:171
-#: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:187
+#: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:188
+#: aligulac/ratings/results_views.py:475 aligulac/ratings/results_views.py:490
 #: templates/period.html:342
 msgid "All"
 msgstr "Alle"
 
 #: aligulac/aligulac/tools.py:239 aligulac/ratings/models.py:84
-#: aligulac/ratings/player_views.py:172
+#: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
+#: aligulac/ratings/templatetags/ratings_extras.py:112
 msgid "Protoss"
 msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:240 aligulac/ratings/models.py:85
-#: aligulac/ratings/player_views.py:173
+#: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
+#: aligulac/ratings/templatetags/ratings_extras.py:113
 msgid "Terran"
 msgstr "Terran"
 
 #: aligulac/aligulac/tools.py:241 aligulac/ratings/models.py:86
-#: aligulac/ratings/player_views.py:174
+#: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:644
+#: aligulac/ratings/templatetags/ratings_extras.py:114
 msgid "Zerg"
 msgstr "Zerg"
 
@@ -191,7 +197,8 @@ msgid "Submit"
 msgstr "Send"
 
 #. Translators: Matches as in SC2-matches, not search matches.
-#: aligulac/aligulac/tools.py:278 aligulac/ratings/player_views.py:716
+#: aligulac/aligulac/tools.py:278 aligulac/ratings/player_views.py:672
+#: aligulac/ratings/staff_views.py:286
 msgid "Matches"
 msgstr "Kamper"
 
@@ -203,7 +210,7 @@ msgstr "Må gjennomgås"
 msgid "Events"
 msgstr "Turneringer"
 
-#: aligulac/aligulac/tools.py:281
+#: aligulac/aligulac/tools.py:281 aligulac/ratings/staff_views.py:979
 msgid "Open events"
 msgstr "Åpne turneringer"
 
@@ -231,7 +238,7 @@ msgstr "Databasestatus"
 msgid "Name/organization"
 msgstr "Navn/organisasjon"
 
-#: aligulac/aligulac/views.py:158
+#: aligulac/aligulac/views.py:158 aligulac/ratings/staff_views.py:284
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -248,7 +255,7 @@ msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
 msgid "API documentation"
 msgstr "API-dokumentasjon"
 
-#: aligulac/aligulac/views.py:251
+#: aligulac/aligulac/views.py:251 aligulac/ratings/results_views.py:857
 msgid "Search results"
 msgstr "Søkeresultater"
 
@@ -523,7 +530,7 @@ msgstr "Kroatia"
 
 #: aligulac/countries/data.py:569
 msgid "Cuba"
-msgstr "cuba"
+msgstr "Cuba"
 
 #: aligulac/countries/data.py:570
 msgid "Cyprus"
@@ -1421,7 +1428,9 @@ msgid "Category"
 msgstr "Kategori"
 
 #. Translators: Event type
-#: aligulac/ratings/models.py:77
+#: aligulac/ratings/models.py:77 aligulac/ratings/results_views.py:471
+#: aligulac/ratings/results_views.py:624 aligulac/ratings/staff_views.py:166
+#: aligulac/ratings/staff_views.py:279 aligulac/ratings/staff_views.py:311
 msgid "Event"
 msgstr "Turnering"
 
@@ -1432,6 +1441,7 @@ msgstr "Runde"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:88
+#: aligulac/ratings/templatetags/ratings_extras.py:115
 msgid "Random"
 msgstr "Tilfeldig"
 
@@ -1499,11 +1509,12 @@ msgstr "Nick"
 msgid "Race"
 msgstr "Rase"
 
-#: aligulac/ratings/player_views.py:95
+#: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:369
+#: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
 msgid "Name"
 msgstr "Navn"
 
-#: aligulac/ratings/player_views.py:96
+#: aligulac/ratings/player_views.py:96 aligulac/ratings/team_views.py:48
 msgid "AKAs"
 msgstr "Alias"
 
@@ -1512,14 +1523,17 @@ msgid "Birthday"
 msgstr "Fødselsdag"
 
 #: aligulac/ratings/player_views.py:99 aligulac/ratings/player_views.py:152
+#: aligulac/ratings/results_views.py:115 aligulac/ratings/results_views.py:205
 msgid "TLPD ID"
-msgstr "TLPD IDk"
+msgstr "TLPD ID"
 
-#: aligulac/ratings/player_views.py:101
+#: aligulac/ratings/player_views.py:101 aligulac/ratings/results_views.py:117
 msgid "TLPD DB"
 msgstr "TLPD database"
 
 #: aligulac/ratings/player_views.py:102 aligulac/ratings/player_views.py:153
+#: aligulac/ratings/results_views.py:119 aligulac/ratings/results_views.py:206
+#: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
 msgid "Liquipedia title"
 msgstr "Liquipedia-tittel"
 
@@ -1531,16 +1545,23 @@ msgstr "SC2Charts.net ID"
 msgid "SC2Earnings.com ID"
 msgstr "SC2Earnings.com ID"
 
-#: aligulac/ratings/player_views.py:106 aligulac/ratings/player_views.py:183
+#: aligulac/ratings/player_views.py:106 aligulac/ratings/player_views.py:184
 msgid "Country"
 msgstr "Land"
 
-#: aligulac/ratings/player_views.py:135
+#: aligulac/ratings/player_views.py:135 aligulac/ratings/results_views.py:148
+#: aligulac/ratings/results_views.py:261 aligulac/ratings/results_views.py:346
+#: aligulac/ratings/results_views.py:393 aligulac/ratings/results_views.py:440
+#: aligulac/ratings/results_views.py:507 aligulac/ratings/results_views.py:656
+#: aligulac/ratings/staff_views.py:188 aligulac/ratings/staff_views.py:344
+#: aligulac/ratings/staff_views.py:594 aligulac/ratings/staff_views.py:665
+#: aligulac/ratings/staff_views.py:747 aligulac/ratings/team_views.py:74
 msgid "Entered data was invalid, no changes made."
 msgstr "Innsendte data var ugyldig."
 
 #. Translators: Changed something (a noun).
-#: aligulac/ratings/player_views.py:145
+#: aligulac/ratings/player_views.py:145 aligulac/ratings/results_views.py:202
+#: aligulac/ratings/team_views.py:83
 #, python-format
 msgid "Changed %s."
 msgstr "Endret %s."
@@ -1557,7 +1578,7 @@ msgstr "rase"
 msgid "country"
 msgstr "land"
 
-#: aligulac/ratings/player_views.py:150
+#: aligulac/ratings/player_views.py:150 aligulac/ratings/team_views.py:85
 msgid "name"
 msgstr "navn"
 
@@ -1565,11 +1586,11 @@ msgstr "navn"
 msgid "birthday"
 msgstr "fødselsdag"
 
-#: aligulac/ratings/player_views.py:156
+#: aligulac/ratings/player_views.py:156 aligulac/ratings/results_views.py:208
 msgid "TLPD DBs"
 msgstr "TLPD database"
 
-#: aligulac/ratings/player_views.py:159
+#: aligulac/ratings/player_views.py:159 aligulac/ratings/team_views.py:91
 msgid "Changed aliases."
 msgstr "Endret aliaser."
 
@@ -1581,15 +1602,15 @@ msgstr "Etter"
 msgid "Before"
 msgstr "Før"
 
-#: aligulac/ratings/player_views.py:175
+#: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:647
 msgid "No Protoss"
 msgstr "Ingen protoss"
 
-#: aligulac/ratings/player_views.py:176
+#: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:646
 msgid "No Terran"
 msgstr "Ingen terran"
 
-#: aligulac/ratings/player_views.py:177
+#: aligulac/ratings/player_views.py:177 aligulac/ratings/player_views.py:645
 msgid "No Zerg"
 msgstr "Ingen zerg"
 
@@ -1601,109 +1622,691 @@ msgstr "Motstanderrase"
 msgid "Non-Koreans"
 msgstr "Ikke-koreanere"
 
-#: aligulac/ratings/player_views.py:188
+#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:476
 msgid "Best of 3+"
 msgstr "Best av 3+"
 
-#: aligulac/ratings/player_views.py:189
+#: aligulac/ratings/player_views.py:190 aligulac/ratings/results_views.py:477
 msgid "Best of 5+"
 msgstr "Best av 5+"
 
-#: aligulac/ratings/player_views.py:191
+#: aligulac/ratings/player_views.py:192 aligulac/ratings/results_views.py:479
 msgid "Match format"
 msgstr "Kampformat"
 
-#: aligulac/ratings/player_views.py:195
+#: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:483
 msgid "Both"
 msgstr "Begge"
 
-#: aligulac/ratings/player_views.py:196
+#: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:104
+#: aligulac/ratings/results_views.py:484 aligulac/ratings/results_views.py:627
+#: aligulac/ratings/staff_views.py:282
 msgid "Offline"
 msgstr "Offline"
 
-#: aligulac/ratings/player_views.py:197
+#: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:104
+#: aligulac/ratings/results_views.py:485 aligulac/ratings/results_views.py:627
 msgid "Online"
 msgstr "Online"
 
-#: aligulac/ratings/player_views.py:199
+#: aligulac/ratings/player_views.py:200 aligulac/ratings/results_views.py:105
+#: aligulac/ratings/results_views.py:487 aligulac/ratings/results_views.py:628
 msgid "On/offline"
 msgstr "On/offline"
 
-#: aligulac/ratings/player_views.py:202
+#: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:101
+#: aligulac/ratings/results_views.py:490 aligulac/ratings/results_views.py:632
+#: aligulac/ratings/staff_views.py:281
 msgid "Game version"
 msgstr "Spillversjon"
 
-#: aligulac/ratings/player_views.py:303
+#: aligulac/ratings/player_views.py:304
 #, python-format
 msgid "%s has no rating yet."
 msgstr "%s har ingen rating enda."
 
-#: aligulac/ratings/player_views.py:521
+#: aligulac/ratings/player_views.py:522
 msgid " before {}"
 msgstr " før {}"
 
-#: aligulac/ratings/player_views.py:523
+#: aligulac/ratings/player_views.py:524
 msgid " after {}"
 msgstr " etter {}"
 
-#: aligulac/ratings/player_views.py:525
+#: aligulac/ratings/player_views.py:526
 msgid " between {} and {}"
 msgstr " mellom {} og {}"
 
-#: aligulac/ratings/player_views.py:712
+#: aligulac/ratings/player_views.py:634
+msgid "best of"
+msgstr "best av"
+
+#: aligulac/ratings/player_views.py:636 aligulac/ratings/player_views.py:639
+#: aligulac/ratings/player_views.py:652 aligulac/ratings/player_views.py:665
+msgid "all"
+msgstr "alle"
+
+#: aligulac/ratings/player_views.py:653
+msgid "foreigners"
+msgstr "ikke-koreanere"
+
+#: aligulac/ratings/player_views.py:659
+msgid "offline"
+msgstr "offline"
+
+#: aligulac/ratings/player_views.py:660
+msgid "online"
+msgstr "online"
+
+#: aligulac/ratings/player_views.py:661
+msgid "both"
+msgstr "begge"
+
+#: aligulac/ratings/player_views.py:670
 msgid "Results for"
 msgstr "Resultater for"
 
-#: aligulac/ratings/player_views.py:715
+#: aligulac/ratings/player_views.py:671
 msgid "Games"
 msgstr "Partier"
 
-#: aligulac/ratings/player_views.py:718
-msgid "Current Form"
+#: aligulac/ratings/player_views.py:673
+msgid "Current form"
 msgstr "Dagens form"
 
-#: aligulac/ratings/player_views.py:720
-msgid "Recent Matches"
+#: aligulac/ratings/player_views.py:674
+msgid "Recent matches"
 msgstr "Siste kamper"
 
-#: aligulac/ratings/player_views.py:723
+#: aligulac/ratings/player_views.py:675
 msgid "Filters"
 msgstr "Filtere"
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:726
+#: aligulac/ratings/player_views.py:677
 msgid "Opponent Race:    "
-msgstr "Mostanderrase:    "
+msgstr "Motstanderrase:   "
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:728
+#: aligulac/ratings/player_views.py:679
 msgid "Opponent Country: "
-msgstr "Mostanders land:  "
+msgstr "Motstanders land: "
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:730
+#: aligulac/ratings/player_views.py:681
 msgid "Match Format:     "
 msgstr "Kampformat:       "
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:732
+#: aligulac/ratings/player_views.py:683
 msgid "On/offline:       "
 msgstr "On/offline:       "
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:734
+#: aligulac/ratings/player_views.py:685
 msgid "Game Version:     "
 msgstr "Spillversjon:     "
 
-#: aligulac/ratings/player_views.py:736
+#: aligulac/ratings/player_views.py:686
 #, python-brace-format
 msgid "Stats by [url={url}]Aligulac[/url]"
 msgstr "Data fra [url={url}]Aligulac[/url]"
 
 #. Translators: Link in the sense of a HTTP hyperlink.
-#: aligulac/ratings/player_views.py:738
+#: aligulac/ratings/player_views.py:688
 msgid "Link"
 msgstr "Lenke"
+
+#: aligulac/ratings/ranking_views.py:42
+#, python-format
+msgid ""
+"This is a <em>preview</em> of the next rating list. It will not be finalized "
+"until %s."
+msgstr ""
+"Dette er en <em>forsmak</em> på den neste ratinglisten. Den er ikke endelig "
+"før %s."
+
+#: aligulac/ratings/ranking_views.py:50
+msgid "Historical overview"
+msgstr "Historisk oversikt"
+
+#. Translators: List (number): (date)
+#: aligulac/ratings/ranking_views.py:186
+#, python-brace-format
+msgid "List {num}: {date}"
+msgstr "Liste {num}: {date}"
+
+#: aligulac/ratings/ranking_views.py:268
+msgid "Earnings ranking"
+msgstr "Inntektsrangering"
+
+#: aligulac/ratings/records_views.py:86
+msgid "Hall of Fame"
+msgstr "Hall of Fame"
+
+#. Translators: Records for (race)
+#: aligulac/ratings/records_views.py:123
+msgid "Records for"
+msgstr "Rekorder for"
+
+#: aligulac/ratings/reports_views.py:39
+msgid "Balance report"
+msgstr "Balanserapport"
+
+#: aligulac/ratings/results_views.py:100 aligulac/ratings/results_views.py:104
+#: aligulac/ratings/results_views.py:108 aligulac/ratings/results_views.py:627
+#: aligulac/ratings/results_views.py:631 aligulac/ratings/results_views.py:642
+msgid "No change"
+msgstr "Ingen endring"
+
+#. Translators: Type as in event type
+#: aligulac/ratings/results_views.py:110 aligulac/ratings/results_views.py:370
+#: aligulac/ratings/staff_views.py:543
+msgid "Type"
+msgstr "Type"
+
+#. Translators: Apply (changes) to…
+#: aligulac/ratings/results_views.py:113
+msgid "Apply to all events on the same level"
+msgstr "Gjør samme endringer på alle turneringer på samme nivå"
+
+#: aligulac/ratings/results_views.py:114 aligulac/ratings/team_views.py:50
+msgid "Homepage"
+msgstr "Hjemmeside"
+
+#: aligulac/ratings/results_views.py:118 aligulac/ratings/results_views.py:207
+msgid "TL thread"
+msgstr "TL-tråd"
+
+#: aligulac/ratings/results_views.py:158
+msgid "Changed event name."
+msgstr "Endret turneringsnavn."
+
+#: aligulac/ratings/results_views.py:163
+#, python-format
+msgid "Changed date for %i match."
+msgid_plural "Changed date for %i matches."
+msgstr[0] "Endret dato for %i kamp."
+msgstr[1] "Endret dato for %i kamper."
+
+#: aligulac/ratings/results_views.py:171
+#, python-format
+msgid "Changed game version for %i match."
+msgid_plural "Changed game version for %i matches."
+msgstr[0] "Endret spillversjon for %i kamp."
+msgstr[1] "Endret spillversjon for %i kamper."
+
+#: aligulac/ratings/results_views.py:181
+#, python-format
+msgid "Changed on/offline for %i match."
+msgid_plural "Changed on/offline for %i matches."
+msgstr[0] "Endret on/offline for %i kamp."
+msgstr[1] "Endret on/offline for %i kamper."
+
+#: aligulac/ratings/results_views.py:195
+#, python-format
+msgid "Changed type for %i event."
+msgid_plural "Changed type for %i events."
+msgstr[0] "Endret type for %i turnering."
+msgstr[1] "Endret type for %i turneringer."
+
+#: aligulac/ratings/results_views.py:204 aligulac/ratings/team_views.py:88
+msgid "homepage"
+msgstr "hjemmeside"
+
+#: aligulac/ratings/results_views.py:218
+msgid "Currency"
+msgstr "Valuta"
+
+#: aligulac/ratings/results_views.py:219
+msgid "Ranked"
+msgstr "Rangert"
+
+#: aligulac/ratings/results_views.py:220
+msgid "Unranked"
+msgstr "Urangert"
+
+#: aligulac/ratings/results_views.py:249
+#, python-format
+msgid "No such player: '%s'."
+msgstr "Ingen slik spiller funnet: '%s'."
+
+#: aligulac/ratings/results_views.py:251 aligulac/ratings/staff_views.py:109
+#: aligulac/ratings/staff_views.py:119 aligulac/ratings/staff_views.py:450
+#, python-format
+msgid "Ambiguous player: '%s'."
+msgstr "Tvetydig spiller: '%s'."
+
+#: aligulac/ratings/results_views.py:291
+msgid "Errors occured, no changes made."
+msgstr "Det skjedde en eller flere feil, ingen endringer ble gjort."
+
+#. Translators: New prizepools added to the database.
+#: aligulac/ratings/results_views.py:313
+msgid "New prizes committed."
+msgstr "Nye premier ble lagret."
+
+#: aligulac/ratings/results_views.py:321
+msgid "Player"
+msgstr "Spiller"
+
+#: aligulac/ratings/results_views.py:322 aligulac/ratings/results_views.py:625
+#: aligulac/ratings/staff_views.py:142 aligulac/ratings/staff_views.py:280
+msgid "Date"
+msgstr "Dato"
+
+#: aligulac/ratings/results_views.py:323
+msgid "Text"
+msgstr "Tekst"
+
+#. Translators: Stories are the dots on a player's rating chart
+#: aligulac/ratings/results_views.py:361
+msgid "Added a story."
+msgstr "Lagret en ny hendelse."
+
+#: aligulac/ratings/results_views.py:371
+msgid "No Print"
+msgstr "Gjemt"
+
+#: aligulac/ratings/results_views.py:372
+msgid "Closed"
+msgstr "Lukket"
+
+#: aligulac/ratings/results_views.py:406
+msgid "Added a subevent."
+msgstr "Lagret en ny underturnering."
+
+#: aligulac/ratings/results_views.py:430
+msgid "Unable to get these events."
+msgstr "Kunne ikke finne disse turneringene."
+
+#: aligulac/ratings/results_views.py:448
+msgid "Order invalid, try again?"
+msgstr "Rekkefølgen var ugyldig. Prøv igjen?"
+
+#: aligulac/ratings/results_views.py:452
+msgid "Non-child event found. This should never happen."
+msgstr "Ikke-underturnering ble funnet. Dette skal aldri forekomme."
+
+#. Translators: Children as in sub-events.
+#: aligulac/ratings/results_views.py:460
+#, python-format
+msgid ""
+"Successfully reordered %i children. Any inconsistencies will be fixed next "
+"update (no more than six hours away)."
+msgstr ""
+"Endret rekkefølgen på %i underturneringer. Alle ukonsistenser vil bli fikset "
+"ved neste oppdatering (ikke mer enn seks timer til)."
+
+#: aligulac/ratings/results_views.py:470
+msgid "Involving players"
+msgstr "Involverte spillere"
+
+#. Translators: Matches here as in search matches.
+#: aligulac/ratings/results_views.py:566
+#, python-format
+msgid "No matches found: '%s'."
+msgstr "Ingen treff ble funnet: '%s'."
+
+#: aligulac/ratings/results_views.py:595
+#, python-format
+msgid "Too many results (%i). Please add restrictions."
+msgstr "For mange resultater (%i). Vennligst legg til flere restriksjoner."
+
+#: aligulac/ratings/results_views.py:681
+#, python-format
+msgid "Updated %i match."
+msgid_plural "Updated %i matches."
+msgstr[0] "Oppdaterte %i kamp."
+msgstr[1] "Oppdaterte %i kamper."
+
+#: aligulac/ratings/staff_views.py:111 aligulac/ratings/staff_views.py:121
+#: aligulac/ratings/staff_views.py:446
+#, python-format
+msgid "Could not find player: '%s'."
+msgstr "Ingen slik spiller funnet: '%s'."
+
+#: aligulac/ratings/staff_views.py:143
+msgid "Approve"
+msgstr "Godkjenn"
+
+#: aligulac/ratings/staff_views.py:144
+msgid "Reject"
+msgstr "Underkjenn (slett)"
+
+#: aligulac/ratings/staff_views.py:145
+msgid "Ignore duplicates"
+msgstr "Ignorér duplikater"
+
+#: aligulac/ratings/staff_views.py:173
+msgid "You must either approve or reject."
+msgstr "Du må enten godkjenne eller underkjenne (slette)."
+
+#: aligulac/ratings/staff_views.py:178 aligulac/ratings/staff_views.py:335
+msgid "Could not find this event object."
+msgstr "Fant ikke denne turneringen."
+
+#: aligulac/ratings/staff_views.py:239 aligulac/ratings/staff_views.py:495
+#, python-format
+msgid "Could not make match %(pla)s vs %(plb)s: possible duplicate found."
+msgstr "Kunne ikke lagre kampen %(pla)s mot %(plb)s: mulig duplikat funnet."
+
+#: aligulac/ratings/staff_views.py:261
+#, python-format
+msgid "Successfully approved %i match."
+msgid_plural "Successfully approved %i matches."
+msgstr[0] "Godkjente %i kamp."
+msgstr[1] "Godkjente %i kamper."
+
+#: aligulac/ratings/staff_views.py:269
+#, python-format
+msgid "Successfully rejected %i match."
+msgid_plural "Successfully rejected %i matches."
+msgstr[0] "Underkjente og slettet %i kamp."
+msgstr[1] "Underkjente og slettet %i kamper."
+
+#: aligulac/ratings/staff_views.py:283
+msgid "Source"
+msgstr "Kilde"
+
+#: aligulac/ratings/staff_views.py:285
+msgid "Notes"
+msgstr "Notater"
+
+#: aligulac/ratings/staff_views.py:380
+#, python-format
+msgid "Could not parse '%(line)s' (%(error)s)."
+msgstr "Kunne ikke parse '%(line)s' (%(error)s)."
+
+#: aligulac/ratings/staff_views.py:402
+#, python-format
+msgid "Error creating match '%(line)s' (%(error)s)."
+msgstr "En feil skjedde under lagring av kampen '%(line)s' (%(error)s)."
+
+#: aligulac/ratings/staff_views.py:418
+#, python-format
+msgid "Successfully added %i match."
+msgid_plural "Successfully added %i matches."
+msgstr[0] "La til %i kamp."
+msgstr[1] "La til %i kamper."
+
+#: aligulac/ratings/staff_views.py:427
+#, python-format
+msgid "Closed '%s'."
+msgstr "Lukket '%s'."
+
+#: aligulac/ratings/staff_views.py:430
+#, python-format
+msgid "Did not close '%s'."
+msgstr "Lukket ikke '%s'."
+
+#: aligulac/ratings/staff_views.py:509
+msgid "Parent ID"
+msgstr "Foreldre-ID"
+
+#: aligulac/ratings/staff_views.py:511
+msgid "Other"
+msgstr "Andre"
+
+#: aligulac/ratings/staff_views.py:512
+msgid "Group stage and playoffs"
+msgstr "Gruppespill og sluttspill"
+
+#: aligulac/ratings/staff_views.py:513
+msgid "Groups A through D"
+msgstr "Grupper A til D"
+
+#: aligulac/ratings/staff_views.py:514
+msgid "Groups A through H"
+msgstr "Grupper A til H"
+
+#: aligulac/ratings/staff_views.py:515
+msgid "Ro64→Final"
+msgstr "32-delsfinale til finale"
+
+#: aligulac/ratings/staff_views.py:516
+msgid "Ro32→Final"
+msgstr "16-delsfinale til finale"
+
+#: aligulac/ratings/staff_views.py:517
+msgid "Ro16→Final"
+msgstr "Åttendelsfinale til finale"
+
+#: aligulac/ratings/staff_views.py:518
+msgid "Ro8→Final"
+msgstr "Kvartfinale til finale"
+
+#: aligulac/ratings/staff_views.py:519
+msgid "Ro4→Final"
+msgstr "Semifinale og finale"
+
+#: aligulac/ratings/staff_views.py:520
+msgid "Ro64→Final + 3rd place"
+msgstr "32-delsfinale til finale + bronsefinale"
+
+#: aligulac/ratings/staff_views.py:521
+msgid "Ro32→Final + 3rd place"
+msgstr "16-delsfinale til finale + bronsefinale"
+
+#: aligulac/ratings/staff_views.py:522
+msgid "Ro16→Final + 3rd place"
+msgstr "8-delsfinale til finale + bronsefinale"
+
+#: aligulac/ratings/staff_views.py:523
+msgid "Ro8→Final + 3rd place"
+msgstr "Kvartfinale til finale + bronsefinale"
+
+#: aligulac/ratings/staff_views.py:524
+msgid "Ro4→Final + 3rd place"
+msgstr "Semifinale til finale + bronsefinale"
+
+#: aligulac/ratings/staff_views.py:525
+msgid "Ro64→Final + early rounds"
+msgstr "32-delsfinale til finale + tidligere runder"
+
+#: aligulac/ratings/staff_views.py:526
+msgid "Ro32→Final + early rounds"
+msgstr "16-delsfinale til finale + tidligere runder"
+
+#: aligulac/ratings/staff_views.py:527
+msgid "Ro16→Final + early rounds"
+msgstr "Åttendelsfinale til finale + tidligere runder"
+
+#: aligulac/ratings/staff_views.py:528
+msgid "Ro8→Final + early rounds"
+msgstr "Kvartfinale til finale + tidligere runder"
+
+#: aligulac/ratings/staff_views.py:529
+msgid "Ro4→Final + early rounds"
+msgstr "Semifinale til finale + tidligere runder"
+
+#: aligulac/ratings/staff_views.py:531
+msgid "Ro64→Final + 3rd place and early rounds"
+msgstr "32-delsfinale til finale + bronsefinale og tidligere runder"
+
+#: aligulac/ratings/staff_views.py:532
+msgid "Ro32→Final + 3rd place and early rounds"
+msgstr "16-delsfinale til finale + bronsefinale og tidligere runder"
+
+#: aligulac/ratings/staff_views.py:533
+msgid "Ro16→Final + 3rd place and early rounds"
+msgstr "Åttendelsfinale til finale + bronsefinale og tidligere runder"
+
+#: aligulac/ratings/staff_views.py:534
+msgid "Ro8→Final + 3rd place and early rounds"
+msgstr "Kvartfinale til finale + bronsefinale og tidligere runder"
+
+#: aligulac/ratings/staff_views.py:535
+msgid "Ro4→Final + 3rd place and early rounds"
+msgstr "Semifinale til finale + bronsefinale og tidligere runder"
+
+#: aligulac/ratings/staff_views.py:536
+msgid "WB, LB, Final"
+msgstr "Vinner-sluttspill, taper-sluttspill og finale"
+
+#: aligulac/ratings/staff_views.py:537
+msgid "LB: Round 1->Round 2"
+msgstr "Taper-sluttspill: runde 1 til 2"
+
+#: aligulac/ratings/staff_views.py:538
+msgid "LB: Round 1->Round 4"
+msgstr "Taper-sluttspill: runde 1 til 4"
+
+#: aligulac/ratings/staff_views.py:539
+msgid "LB: Round 1->Round 6"
+msgstr "Taper-sluttspill: runde 1 til 6"
+
+#: aligulac/ratings/staff_views.py:540
+msgid "LB: Round 1->Round 8"
+msgstr "Taper-sluttspill: runde 1 til 8"
+
+#: aligulac/ratings/staff_views.py:541
+msgid "Predefined names"
+msgstr "Forhåndsdefinerte navn"
+
+#: aligulac/ratings/staff_views.py:542
+msgid "Custom names"
+msgstr "Egendefinerte navn"
+
+#: aligulac/ratings/staff_views.py:544
+msgid "Big"
+msgstr "Stor"
+
+#: aligulac/ratings/staff_views.py:545
+msgid "No print"
+msgstr "Gjemt"
+
+#: aligulac/ratings/staff_views.py:568
+#, python-format
+msgid "Could not find event ID %s."
+msgstr "Fant ikke turnerings-ID %s."
+
+#: aligulac/ratings/staff_views.py:573
+msgid "Must specify an event to close."
+msgstr "Du må definere en turnering å lukke."
+
+#: aligulac/ratings/staff_views.py:577
+msgid "No event names specified."
+msgstr "Ingen turneringsnavn var gitt."
+
+#: aligulac/ratings/staff_views.py:618
+#, python-format
+msgid "Successfully created %i new event."
+msgid_plural "Successfully created %i new events."
+msgstr[0] "Lagde %i ny turnering."
+msgstr[1] "Lagde %i ny turneringer."
+
+#: aligulac/ratings/staff_views.py:625
+msgid "Successfully closed event."
+msgstr "Lukket turneringen."
+
+#: aligulac/ratings/staff_views.py:633
+msgid "Source ID"
+msgstr "Kilde-ID"
+
+#: aligulac/ratings/staff_views.py:634
+msgid "Target ID"
+msgstr "Mål-ID"
+
+#: aligulac/ratings/staff_views.py:635 aligulac/ratings/staff_views.py:709
+msgid "Confirm"
+msgstr "Bekreft"
+
+#: aligulac/ratings/staff_views.py:651 aligulac/ratings/staff_views.py:657
+#, python-format
+msgid "No player with ID %i."
+msgstr "Ingen spiller med ID %i."
+
+#: aligulac/ratings/staff_views.py:672
+msgid "Please confirm player merge."
+msgstr "Vennligst bekreft spillersammenslutning."
+
+#: aligulac/ratings/staff_views.py:694
+#, python-format
+msgid "%(source)s was successfully merged into %(target)s."
+msgstr "%(source)s ble sammensluttet med %(target)s."
+
+#: aligulac/ratings/staff_views.py:696
+msgid "The merging is complete"
+msgstr "Sammenslutningen er fullstendig."
+
+#: aligulac/ratings/staff_views.py:707
+msgid "Event ID to move"
+msgstr "Turnerings-ID å flytte"
+
+#: aligulac/ratings/staff_views.py:708
+msgid "New parent ID"
+msgstr "Ny foreldre-ID"
+
+#: aligulac/ratings/staff_views.py:725 aligulac/ratings/staff_views.py:731
+#, python-format
+msgid "No event with ID %i."
+msgstr "Ingen turnering med ID %i."
+
+#: aligulac/ratings/staff_views.py:738
+msgid "Can't move an event to one of its descendants."
+msgstr "Kan ikke flytte en turnering til en av etterkommerne."
+
+#: aligulac/ratings/staff_views.py:757
+msgid "Please confirm event move."
+msgstr "Vennligst bekreft turneringsflytning."
+
+#: aligulac/ratings/staff_views.py:814
+#, python-format
+msgid "Reopened '%s'."
+msgstr "Gjenåpnet '%s'."
+
+#: aligulac/ratings/staff_views.py:823
+msgid "Submit results"
+msgstr "Lagre resultater"
+
+#: aligulac/ratings/staff_views.py:853
+msgid "Review results"
+msgstr "Gjennomgå resultater"
+
+#: aligulac/ratings/staff_views.py:887
+msgid "Manage events"
+msgstr "Behandle turneringer"
+
+#: aligulac/ratings/staff_views.py:926
+#, python-format
+msgid "Successfully closed %i event."
+msgid_plural "Successfully closed %i events."
+msgstr[0] "Lukket %i turnering."
+msgstr[1] "Lukket %i turneringer."
+
+#: aligulac/ratings/staff_views.py:936
+#, python-format
+msgid "Successfully marked %i event as having no prize pool."
+msgid_plural "Successfully marked %i events as having no prize pool."
+msgstr[0] "Markerte %i turnering som uten premier."
+msgstr[1] "Markerte %i turneringer som uten premier."
+
+#: aligulac/ratings/team_views.py:87
+msgid "short name"
+msgstr "kort navn"
+
+#: aligulac/ratings/team_views.py:248
+msgid "Recent player transfers"
+msgstr "Nylige spillerbytter"
+
+#: aligulac/ratings/tools.py:132
+#, python-format
+msgid "Player '%s' was not found and cound not be made (missing player tag)"
+msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende nick)"
+
+#: aligulac/ratings/tools.py:136
+#, python-format
+msgid "Player '%s' was not found and cound not be made (missing race)"
+msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende rase)"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:116
+msgid "Race switcher"
+msgstr "Rasebytter"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:344
+msgid "N/A"
+msgstr "N/A"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

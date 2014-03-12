@@ -63,8 +63,8 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
     {% field "select" form.type class="wideinput" %}
     {% field "checkbox" form.big class="wideinput" %}
     {% field "checkbox" form.noprint class="wideinput" %}
-    {% use "submit" text="Commit new sub-events" %}
-    {% use "submit" text="Close event" %}
+    {% use "submit" name="commit" text="Commit new sub-events" %}
+    {% use "submit" name="close" text="Close event" %}
 {% endform %}
 </table>
 </form>

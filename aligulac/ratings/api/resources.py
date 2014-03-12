@@ -342,7 +342,9 @@ class EventResource(ModelResource):
                 'latest',
                 'category',
                 'type',
+                'idx',
         ]}
+        ordering = ['earliest', 'latest', 'idx']
 
     parent = fields.ForeignKey('self', 'parent', null=True)
     children = fields.ToManyField(

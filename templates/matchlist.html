@@ -64,6 +64,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
         </td>
         <td colspan="2" style="text-align: right;"> 
             {% if m.eventcount %}[{{ m.eventcount }}]{% endif %}
+            {% if m.add_links %}
+                <a href="/add/?eventid={{ m.match.eventobj_id }}"
+                   title="Add more matches">
+                   add
+                </a>
+            {% endif %}
 
             <a id="lma-{{ m.match_id }}" href="#" 
                 onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">

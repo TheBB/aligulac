@@ -341,7 +341,7 @@ def add_counts(queryset):
 # - fix_left: Set to a player object if you want that player to be always listed on the left.
 # - ratings: True to display ratings, false if not.
 # - messages: True to display messages, false if not.
-def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False):
+def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False, add_links=False):
     ret = []
     for idx, m in enumerate(matches):
         # {{{ Basic stuff
@@ -372,6 +372,9 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
         if isinstance(m, Match):
             r['eventtext'] = m.eventobj.fullname if m.eventobj is not None else m.event
+
+        # If event is not closed and add_links=True, show add link
+        r['add_links'] = add_links and not m.eventobj.closed
         # }}}
 
         # {{{ Add dates and messages if needed

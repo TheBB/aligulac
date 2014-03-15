@@ -154,30 +154,10 @@ Changes here will mostly be visible on the entire site.
 
                     <span id="genshort">
                     <input type="submit" value="Generate short URL for this page" 
-                           onclick="gen_short();" />
+                           onclick="gen_short('{{ cur_path|jsescape }}');" />
                     </span>
                     <span id="dispshort" style="display: none;">
                     </span>
-                    <script type="text/javascript">
-                        function gen_short()
-                        {
-                            var http = new XMLHttpRequest();
-                            http.open("GET", "/m/new/?url=" + encodeURIComponent("{{ cur_path }}", false));
-
-                            http.onreadystatechange = function() {
-                                if (http.readyState == 4 & http.status == 200)
-                                {
-                                    togvis('genshort', 'none');
-                                    document.getElementById('dispshort').innerHTML = 
-                                        "<a href=\"/m/" + http.responseText + "/\">/m/" + 
-                                        http.responseText + "</a>";
-                                    togvis('dispshort', 'inline');
-                                }
-                            }
-
-                            http.send(null);
-                        }
-                    </script>
                 </td>
             </tr>
         </table>

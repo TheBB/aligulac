@@ -1,0 +1,42 @@
+fs = require 'fs'
+
+{spawn} = require 'child_process'
+
+deploy_dir = 'deploy/'
+build_dir = 'build/'
+src_dir = 'src/'
+
+js_file_regex = ///.*\.js$///
+get_files = (dir, callback) ->
+    console.log "Getting files in " + dir
+    fs.readdir dir, (err, files) ->
+        callback (dir + file for file in files when file.match(js_file_regex)?)
+
+build = (callback) ->
+    coffee = spawn 'coffee', ['-b', '-c', '-o', build_dir, src_dir]
+    coffee.stderr.on 'data', (data) ->
+        process.stderr.write data.toString()
+    coffee.on 'exit', (code) ->
+        get_files src_dir, (files) ->
+            copy = spawn 'cp', files.concat [build_dir]
+            copy.on 'exit', (code) ->
+                if callback?
+                    callback()
+
+deploy = () ->
+    build ->
+        if not fs.existsSync deploy_dir
+            fs.mkdirSync deploy_dir
+        get_files build_dir, (files) ->
+            uglify = spawn 'uglifyjs', ['-m', '-c', '-o', deploy_dir + 'general.min.js'].concat files
+            uglify.stderr.on 'data', (data) ->
+                process.stderr.write data.toString()
+
+task 'build', 'build all coffee files', (options) ->
+    build()
+
+task 'deploy', 'build and combine all coffee files', (options) ->
+    deploy()
+
+task 'clean', 'remove all compiled files', (options) ->
+    rm = spawn 'rm', ['-r', deploy_dir, build_dir]

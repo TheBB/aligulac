@@ -5,16 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-12 20:10+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2014-03-19 15:01+0100\n"
+"PO-Revision-Date: 2014-03-19 15:01+0100\n"
+"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
+"Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
+"Language: no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: aligulac/currency.py:99
 #, python-format
@@ -457,7 +459,7 @@ msgstr "Kambodsja"
 msgid "Cameroon"
 msgstr "Kamerun"
 
-#: aligulac/countries/data.py:550
+#: aligulac/countries/data.py:550 templates/add.html:158
 msgid "Canada"
 msgstr "Canada"
 
@@ -605,7 +607,7 @@ msgstr "Finland"
 msgid "Åland Islands"
 msgstr "Åland"
 
-#: aligulac/countries/data.py:588
+#: aligulac/countries/data.py:588 templates/add.html:159
 msgid "France"
 msgstr "Frankrike"
 
@@ -641,7 +643,7 @@ msgstr "Gambia"
 msgid "Palestinian Territory"
 msgstr "Palestina"
 
-#: aligulac/countries/data.py:597
+#: aligulac/countries/data.py:597 templates/add.html:160
 msgid "Germany"
 msgstr "Tyskland"
 
@@ -773,7 +775,8 @@ msgstr "Kenya"
 msgid "North Korea"
 msgstr "Nord-Korea"
 
-#: aligulac/countries/data.py:630 templates/period.html:343
+#: aligulac/countries/data.py:630 templates/add.html:161
+#: templates/period.html:343
 msgid "South Korea"
 msgstr "Sør-Korea"
 
@@ -1001,7 +1004,7 @@ msgstr "Filippinene"
 msgid "Pitcairn Islands"
 msgstr "Pitcairnøyene"
 
-#: aligulac/countries/data.py:687
+#: aligulac/countries/data.py:687 templates/add.html:162
 msgid "Poland"
 msgstr "Polen"
 
@@ -1033,7 +1036,7 @@ msgstr "Reunion"
 msgid "Romania"
 msgstr "Romania"
 
-#: aligulac/countries/data.py:695
+#: aligulac/countries/data.py:695 templates/add.html:163
 msgid "Russia"
 msgstr "Russland"
 
@@ -1149,7 +1152,7 @@ msgstr "Svalbard og Jan Mayen"
 msgid "Swaziland"
 msgstr "Swaziland"
 
-#: aligulac/countries/data.py:724
+#: aligulac/countries/data.py:724 templates/add.html:164
 msgid "Sweden"
 msgstr "Sverige"
 
@@ -1209,7 +1212,7 @@ msgstr "Tuvalu"
 msgid "Uganda"
 msgstr "Uganda"
 
-#: aligulac/countries/data.py:739
+#: aligulac/countries/data.py:739 templates/add.html:165
 msgid "Ukraine"
 msgstr "Ukraina"
 
@@ -1888,7 +1891,7 @@ msgstr "Det skjedde en eller flere feil, ingen endringer ble gjort."
 msgid "New prizes committed."
 msgstr "Nye premier ble lagret."
 
-#: aligulac/ratings/results_views.py:321
+#: aligulac/ratings/results_views.py:321 templates/add.html:86
 msgid "Player"
 msgstr "Spiller"
 
@@ -2434,8 +2437,8 @@ msgid ""
 "A list of the results you want to add. Please see %(a)smatch syntax</a> for "
 "more information."
 msgstr ""
-"En liste over resultatene du vil legge til. Se %(a)skampsyntaks</a> for "
-"mer informasjon."
+"En liste over resultatene du vil legge til. Se %(a)skampsyntaks</a> for mer "
+"informasjon."
 
 #: templates/add.html:80
 #, python-format
@@ -2443,6 +2446,232 @@ msgid ""
 "Please check out %(tag)scommon problems</a> if you are unsure about a player."
 msgstr ""
 "Vennligst se %(tag)svanlige problemer</a> hvis du er usikker på en spiller."
+
+#: templates/add.html:84
+msgid ""
+"Each line corresponds to a match, and should be entered using this format:"
+msgstr "Hver linje angir en kamp, og må beskrives i dette formatet:"
+
+#: templates/add.html:87
+msgid "Score"
+msgstr "Poeng"
+
+#: templates/add.html:91
+msgid ""
+"The player information must uniquely identify the player, and should be "
+"space-separated list of any of the following:"
+msgstr ""
+"Spillerinformasjonen er en liste av følgende, separert med mellomrom, og må "
+"identifisere spilleren unikt:"
+
+#: templates/add.html:93
+msgid ""
+"The player information does not have to uniquely identify the player, and "
+"should be a space-separated list of any of the following:"
+msgstr ""
+"Spillerinformasjonen er en liste av følgende, separert med mellomrom, og "
+"trenger ikke å identifisere spilleren unikt:"
+
+#: templates/add.html:97
+msgid "Player tag, e.g. \"DongRaeGu\"."
+msgstr "Nick, f.eks. \"DongRaeGu\"."
+
+#: templates/add.html:98
+msgid ""
+"Race, i.e. \"P\", \"T\", \"Z\", \"R\" (Random) or \"S\" (Race Switcher)."
+msgstr ""
+"Rase, dvs. \"P\", \"T\", \"Z\", \"R\" (tilfeldig) eller \"S\" (rasebytter)."
+
+#: templates/add.html:99
+#, python-format
+msgid ""
+"A two- or three-letter %(a)sISO 3166-1 alpha-2 country code</a>, e.g. \"KR\" "
+"or \"KOR\", or the common English name of a country (the latter will only "
+"work if the country name does not contain spaces."
+msgstr ""
+"En to- eller trebokstavers %(a)sISO 3166-1 alpha-2 statskode</a>, f.eks. \"KR"
+"\" eller \"KOR\", eller det vanlige engelske navnet for et land (dersom "
+"dette ikke inneholder mellomrom)."
+
+#: templates/add.html:100
+msgid "Team name, e.g. \"MVP\"."
+msgstr "Lagnavn, f.eks. \"MVP\"."
+
+#: templates/add.html:101
+msgid ""
+"Player or team aliases, e.g. \"DRG\". The most common ones should be "
+"recognized by the system"
+msgstr ""
+"Aliaser for spiller eller lag, f.eks. \"DRG\". De mest vanlige aliasene blir "
+"gjenkjent av systemet."
+
+#: templates/add.html:102
+#, python-format
+msgid ""
+"A player ID number, which you can get from the URL of the %(a)splayer page</"
+"a>, e.g. \"4\"."
+msgstr ""
+"Spillerens ID-nummer, som du kan finne fra addressen til %(a)sspillersiden</"
+"a>, f.eks. \"4\"."
+
+#: templates/add.html:105
+#, python-format
+msgid ""
+"If you are adding a match by a race switcher you need to tell the system "
+"which race the player was playing in that match. Do this by adding a "
+"%(clause)s clause at the <strong>end</strong> of the player information. For "
+"example, if MorroW plays Protoss, you can do this:"
+msgstr ""
+"Hvis du legger til en kamp med en rasebytter må du fortelle systemet hvilken "
+"rase spilleren spilte i den kampen. Du kan gjøre dette ved å legge til en "
+"%(clause)s-klausul på <strong>slutten</strong> av spillerinformasjonen. For "
+"eksempel, om MorroW spiller protoss, kan du gjøre dette:"
+
+#: templates/add.html:109
+msgid ""
+"Please also provide race information about random players whenever this is "
+"known, though it's not required."
+msgstr ""
+"Vennligst også oppgi raseinformasjon for spillere som spiller tifeldig "
+"dersom dette er kjent, selv om det ikke er påkrevd."
+
+#: templates/add.html:111
+msgid ""
+"Everything is based on case-insensitive search. There is no recognizable "
+"difference between \"Mvp\" (the player) and \"MVP\" (the team)."
+msgstr ""
+"Alt er basert på søk som ignorerer forskjellen på store og små bokstaver. "
+"Det er dermed ingen forskjell på \"Mvp\" (spilleren) og \"MVP\" (laget)."
+
+#: templates/add.html:114
+msgid ""
+"When submitted, the system will try to add as many of the matches as it can. "
+"Some entries might produce warnings, in which case you will be notified "
+"about what to do. This happens when:"
+msgstr ""
+"Etter innsending vil systemet prøve å lagre så mange kamper som det kan. "
+"Dersom noe uventet skulle skje vil du bli varslet. Dette skjer som regen når:"
+
+#: templates/add.html:117
+msgid ""
+"a player is not uniquely identified. In this case, add more information. Use "
+"the ID number if necessary."
+msgstr ""
+"en spiller ikke kan bli unikt identifisert. Legg til mer informasjon. Som en "
+"siste utvei kan du bruke ID-nummeret."
+
+#: templates/add.html:118
+msgid ""
+"a player can't be found. In this case, add the switch \"<strong>!MAKE</"
+"strong>\" to the end of the respective line(s). This will make a player "
+"entry if needed. In this case, you <strong>must</strong> provide a player "
+"tag and race.  Please also provide a country code if possible, and make sure "
+"the player tag is spelled correctly (including capitalisation)."
+msgstr ""
+"spilleren ikke ble funnet. Du kan legge til bryteren \"<strong>!MAKE</strong>"
+"\" på slutten av de respektive linjene. Systemet vil da opprette en ny "
+"spiller dersom det trengs. Da <strong>må</strong> du oppgi både nick og "
+"rase. Vennligst også oppgi landkode om mulig, og forsikre deg om at nicket "
+"er stavet riktig (også med tanke på store og små bokstaver)."
+
+#: templates/add.html:119
+msgid ""
+"a duplicate entry was found. If you are certain that the two players in "
+"question played more than one match within a single day with the same result "
+"(this can happen, but it's rare), add the switch \"<strong>!DUP</strong>\" "
+"to the end of the respective line(s). This will force the match to be "
+"entered."
+msgstr ""
+"en duplikat ble funnet. Hvis du er sikker på at de to spillerne spilte mer "
+"enn én kamp innen én dag med det samme resultatet (det skjer av og til), "
+"legg til bryteren \"<strong>!DUP</strong>\" på slutten av de respektive "
+"linjene. Dette vil tvinge systemet til å lagre kampen."
+
+#: templates/add.html:122
+msgid ""
+"When submitted, the system will try to find as many players as it can. If a "
+"player can't be found, or if the information provided applies to more than "
+"one player, that's fine. We will fix it when reviewing the submission."
+msgstr ""
+"Etter innsending vil systemet prøve å finne så mange spillere som det kan. "
+"Om en spiller ikke kan bli funnet, eller om informasjonen ikke identifiserer "
+"spilleren unikt, er det OK. Vi vil fikse det når vi gjennomgår resultatene."
+
+#: templates/add.html:124
+msgid ""
+"The system will also try to avoid duplicates. If your match appears to be a "
+"duplicate of another match in the database (same players, score and close in "
+"time), you will get a warning. To avoid this, add the switch \"<strong>!DUP</"
+"strong>\" to the end of the match description. This will force the match to "
+"be entered."
+msgstr ""
+"Systemet vil også prøve å unngå duplikater. Dersom kampen du lagrer er lik "
+"en annen (samme spillere og resultat samt nær i tid) vil du bli varslet. For "
+"å unngå dette, legg til bryteren \"<strong>!DUP</strong>\" på slutten av de "
+"respektive linjene. Dette vil tvinge systemet til å lagre kampen."
+
+#: templates/add.html:127
+#, python-format
+msgid ""
+"Most players are uniquely identifiable through their nickname alone. For a "
+"list of the most common exceptions, please look at %(a)scommon problems</a>."
+msgstr ""
+"De fleste spillerne er unikt identifiserbare kun ved å bruke nicket. For en "
+"liste over de mest vanlige unntakene, se under %(a)svanlige problemer</a>."
+
+#: templates/add.html:131
+msgid "Here are some real-world examples. From the GSL:"
+msgstr "Her er noen eksempler. Fra GSL:"
+
+#: templates/add.html:139
+msgid ""
+"Some players have to be identified by race and/or country, such as Creator:"
+msgstr ""
+"Noen spillere må identifiseres med rase og/eller land, slik som Creator:"
+
+#: templates/add.html:143
+msgid ""
+"Some players have aliases to help entering their names, such as BBoongBBoong:"
+msgstr ""
+"Noen spillere har aliaser som er kortere enn det egentlige nicket, slik som "
+"BBoongBBoong:"
+
+#: templates/add.html:147
+msgid "Some players are more easily identified by team, such as Mvp and HerO:"
+msgstr ""
+"Noen spillere er det enklere å identifisere via lag, slik som Mvp og HerO:"
+
+#: templates/add.html:154
+msgid ""
+"Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer and Clarity "
+"KiLLeR should be identified by team."
+msgstr ""
+"Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer og Clarity "
+"KiLLeR bør identifiseres med lag."
+
+#: templates/add.html:155
+msgid ""
+"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need "
+"to be identified by race and/or country."
+msgstr ""
+"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, og Top bør "
+"identifiseres med rase og/eller land."
+
+#: templates/add.html:157
+msgid "Common country codes"
+msgstr "Vanlige landkoder"
+
+#: templates/add.html:166
+msgid "USA"
+msgstr "USA"
+
+#: templates/add.html:172
+msgid "Commit"
+msgstr "Lagre"
+
+#: templates/add.html:173
+msgid "Commit and close event"
+msgstr "Lagre og lukk turnering"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

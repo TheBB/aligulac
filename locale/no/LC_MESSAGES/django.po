@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-19 15:01+0100\n"
-"PO-Revision-Date: 2014-03-19 15:01+0100\n"
+"POT-Creation-Date: 2014-03-19 16:27+0100\n"
+"PO-Revision-Date: 2014-03-19 16:27+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -254,7 +254,7 @@ msgstr "Innsendte data var ugyldig."
 msgid "Your API key is '%s'. Please keep it safe."
 msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
 
-#: aligulac/aligulac/views.py:205
+#: aligulac/aligulac/views.py:205 templates/api.html:6
 msgid "API documentation"
 msgstr "API-dokumentasjon"
 
@@ -2672,6 +2672,538 @@ msgstr "Lagre"
 #: templates/add.html:173
 msgid "Commit and close event"
 msgstr "Lagre og lukk turnering"
+
+#: templates/api.html:27
+msgid "API access key"
+msgstr "API-tilgangskode"
+
+#: templates/api.html:29
+#, python-format
+msgid ""
+"To use the Aligulac API you first need an API access key. To generate one, "
+"please use %(a)sthis form</a>. You will have to provide your name (or the "
+"name of the organization), and a contact e-mail address."
+msgstr ""
+"For å bruke Aligulac-APIet trenger du en tilgangskode. For å generere en "
+"kode, bruk %(a)sdette skjemaet</a>. Du må oppgi navn (personlig eller en "
+"organisasjon) og en e-postadresse for kontakt."
+
+#: templates/api.html:31
+msgid ""
+"If the request is successful, you will be provided with a 20-character "
+"random string. This string will have to be passed with every API request you "
+"make as a parameter named <code>apikey</code>. In the rest of this document, "
+"this parameter will be implied."
+msgstr ""
+"Om forespørselen lykkes vil du bli tildelt en tilfeldig streng på 20 tegn. "
+"Denne strengen må sendes med hver API-forespørsel som en parameter kalt "
+"<code>apikey</code>."
+
+#: templates/api.html:33
+msgid "API overview"
+msgstr "Oversikt over APIet"
+
+#: templates/api.html:35
+#, python-format
+msgid ""
+"The API is for the most part self-documenting. The root URI is <code>"
+"%(uri)s</code>. Requests to this URI will return a JSON object describing "
+"the available resources and their root URIs, e.g."
+msgstr ""
+"APIet er for det meste selvdokumenterende. Rot-URIen er <code>%(uri)s</"
+"code>. Forespørsler til denne adressen returnerer et JSON-objekt som "
+"beskriver de tilgjengelige ressursene og deres rot-adresser, for eksempel"
+
+#: templates/api.html:52
+#, python-format
+msgid ""
+"<strong>NOTE:</strong> For making requests in the browser, please append "
+"%(json)s to the URI."
+msgstr ""
+"<strong>NB:</strong> Om du vil sende forespørsler i nettleseren, må du legge "
+"til %(json)s til adressen."
+
+#: templates/api.html:54
+#, python-format
+msgid ""
+"The resources available correspond for the most part to the tables in the "
+"database, which are described %(a)shere</a>. In addition to these, we have "
+"API access to predictions as well, described below."
+msgstr ""
+"De tilgjengelige ressursene korresponderer for det meste med tabeller i "
+"databasen, som er beskrevet %(a)shere</a>. I tillegg til disse har vi også "
+"API-tilgang til spådommer, som vi kommer tilbake til senere."
+
+#: templates/api.html:56
+#, python-format
+msgid ""
+"Requests for player objects thus need to go to %(uri)s. For a detailed "
+"description of each resource, go to the schema URI. This will return a JSON "
+"object with the following fields:"
+msgstr ""
+"Forespørsler for spillerobjekter må altså sendes til %(uri)s. For en "
+"detaljert oversikt over en ressurs, gå til skjema-adressen. Denne returnerer "
+"et JSON-objekt med følgende felter:"
+
+#: templates/api.html:59
+msgid "and"
+msgstr "og"
+
+#: templates/api.html:60
+#, python-format
+msgid "list of accepted HTTP methods (should always be %(get)s and %(post)s)."
+msgstr ""
+"liste over tillatte HTTP-metoder (skal alltid være %(get)s og %(post)s)."
+
+#: templates/api.html:62
+#, python-format
+msgid "default reply format (should always be %(json)s)."
+msgstr "standard svarformat (skal alltid være %(json)s)."
+
+#: templates/api.html:64
+msgid "default page limit when grabbing many objects at once."
+msgstr ""
+"standard grense på sidestørrelsen når det hentes flere objekter på en gang."
+
+#: templates/api.html:66
+msgid ""
+"A dictionary describing each field of the given resource, with the following "
+"information:"
+msgstr ""
+"En mapping som beskriver hvert felt i den gitte ressursen, med følgende "
+"informasjon:"
+
+#: templates/api.html:69
+#, python-format
+msgid " %(true)s if the field can be %(null)s, %(false)s otherwise."
+msgstr "%(true)s om feltet kan være %(null)s, %(false)s ellers."
+
+#: templates/api.html:72
+#, python-format
+msgid ""
+"Field type (e.g. %(c)s%(string)s%(d)s, %(c)s%(integer)s%(d)s, %(c)s%(float)s"
+"%(d)s, %(c)s%(datetime)s%(d)s, etc.). For related objects of another type, "
+"this field will read %(c)s%(related)s%(d)s."
+msgstr ""
+"Felttype (f.els. %(c)s%(string)s%(d)s, %(c)s%(integer)s%(d)s, %(c)s%(float)s"
+"%(d)s, %(c)s%(datetime)s%(d)s, etc.). For relaterte objekter av en annen "
+"type vil dette være %(c)s%(related)s%(d)s."
+
+#: templates/api.html:74
+msgid "Default value, if any (usually not)."
+msgstr "Standardverdi, om tilgjengelig (vanligvis ikke)."
+
+#: templates/api.html:76
+msgid "Additional human-readable information."
+msgstr "Ytterligere menneskelesbar informasjon."
+
+#: templates/api.html:78
+msgid "The other fields are not of interest."
+msgstr "De andre feltene er ikke av interesse."
+
+#: templates/api.html:80
+#, python-format
+msgid ""
+"A dictionary describing the filters available on each field. For each field, "
+"this is either a list of filters, the integer %(one)s (all filters "
+"available), or the integer %(two)s (all filters available, including related "
+"objects). With very few exceptions, all kinds of filters are allowed."
+msgstr ""
+"En mapping som beskriver filtrene tilgjengelig på hvert felt. For hvert felt "
+"er dette enten en liste av filter, heltallet %(one)s (alle filtre), eller "
+"heltallet %(two)s (alle filtre, inkludert relaterte objelter). Med veldig få "
+"unntakk er alle filtre tillatt."
+
+#: templates/api.html:82
+msgid ""
+"A list of fields that allow sorting. With very few exceptions, this will be "
+"all fields."
+msgstr ""
+"En liste over felter som tillater sortering. Med veldig få unntakk er dette "
+"alle felter."
+
+#: templates/api.html:85
+msgid "Getting all objects"
+msgstr "Å hente alle objekter"
+
+#: templates/api.html:87
+#, python-format
+msgid ""
+"To obtain all objects of a given resource, just make a request to the base "
+"resource URI, e.g.  <code>%(uri)s</code>. This will return a JSON object "
+"with two fields: <strong>meta</strong>, giving paging information, and "
+"<strong>objects</strong>, which is a list of objects. By default, this will "
+"return a limited number of objects per page (normally 20). To control the "
+"page size and offset, give the <code>limit</code> and <code>offset</code> "
+"arguments, e.g."
+msgstr ""
+"For å hente alle objektene av en gitt ressurs, send en forespørsel til rot-"
+"adressen for ressursen, f.eks. <code>%(uri)s</code>. Dette returnerer et "
+"JSON-objekt med to felter: <strong>meta</strong>, som gir metainformasjon om "
+"siden, og <strong>objects</strong>, som er en liste av objekter. Vanligvis "
+"returneres kun et begrenset antall objekter per side (20). For å endre "
+"sidestørrelsen og startindeksen, send parametrene <code>limit</code> og "
+"<code>offset</code>, f.eks."
+
+#: templates/api.html:91
+msgid ""
+"will return objects number 100-149. In addition, the <strong>meta</strong> "
+"field gives you the URIs for the next and previous pages, as well as the "
+"total count of objects."
+msgstr ""
+"som returnerer objektene 100-149. I tillegg gir <strong>meta</strong>-feltet "
+"deg adressene for forrige og neste side, såvel som det totale antall "
+"objekter."
+
+#: templates/api.html:93
+msgid ""
+"You can get all objects at once by giving <code>limit=0</code>, but this is "
+"disallowed on some resources and otherwise not encouraged."
+msgstr ""
+"Du kan hente alle objektene i én forespørsel ved å bruke <code>limit=0</"
+"code>, men dette er ikke tillatt overalt og er uansett ikke å anbefale."
+
+#: templates/api.html:95
+msgid "Getting a single object by ID"
+msgstr "Å hente et enkelt objekt"
+
+#: templates/api.html:97
+#, python-format
+msgid ""
+"If you know the id of the object you are interested in, you can get it "
+"directly. For example, to get Leenock's player information, go to <code>"
+"%(uri)s</code>, since Leenock's id is %(id)s."
+msgstr ""
+"Hvis du kjenner ID-nummeret til objektet du er interesert i, kan du hente "
+"det direkte. For eksempel, for å finne Leenocks spillerinformasjon, gå til "
+"<code>%(uri)s</code>, siden Leenocks ID er %(id)s."
+
+#: templates/api.html:99
+msgid ""
+"This will return just the object directly, with no metadata and no "
+"surrounding list."
+msgstr "Dette returnerer kun objektet, uten metadata eller omsluttende liste."
+
+#: templates/api.html:101
+msgid "Getting several objects by ID"
+msgstr "Å hente flere objekter"
+
+#: templates/api.html:103
+#, python-format
+msgid ""
+"If you want to access more than one object, you can request them as a "
+"<strong>set</strong> to save both us and yourself from extra work. If you "
+"are interested in Leenock, Creator and Life (ids %(commalist)s and "
+"%(final)s), you can make a request to <code>%(uri)s</code>."
+msgstr ""
+"Hvis du vil hente mer enn ett objekt kan du hente dem som et <strong>set</"
+"strong>, for å spare både oss og deg selv ekstra arbeid. Hvis du er "
+"interessert i Leenock, Creator og Life (IDer %(commalist)s og %(final)s), "
+"kan du sende en forespørsel til <code>%(uri)s</code>."
+
+#: templates/api.html:105
+msgid "Related objects"
+msgstr "Relaterte objekter"
+
+#: templates/api.html:107
+msgid ""
+"Fields that point to related objects will usually be given by resource URIs "
+"in the returned objects. For frequently useful information (e.g. players' "
+"current rating), the related object(s) will be given as well, although they "
+"are often stripped-down versions without detailed information."
+msgstr ""
+"Felter som peker til relaterte objekter vil vanligvis oppgis som "
+"ressursadresser i de returnerte objektene. For svært valig informasjon (for "
+"eksempel spilleres rating) vil de relaterte objektene returneres direkte, "
+"selv om de ofte er kun i forkortede versjoner."
+
+#: templates/api.html:109
+msgid "Filtering"
+msgstr "Filtrering"
+
+#: templates/api.html:111
+msgid ""
+"You can apply filters to the base URI. They are applied in the following "
+"manner:"
+msgstr "Du kan filtrere objekter. Filtre brukes slik:"
+
+#: templates/api.html:115
+msgid ""
+"If filtering on related objects is available, this can be done as follows:"
+msgstr "Om filtrering på relaterte objekter er tilgjengelig, gjøres det slik:"
+
+#: templates/api.html:119
+#, python-format
+msgid ""
+"In principle, these chains can be arbitrarily long. The available filters "
+"correspond to those found in <a href=\"%(uri)s\">Django</a>. Here is a brief "
+"overview:"
+msgstr ""
+"I prinsippet kan disse kjedene være vilkårlig lange. Filtrene korresponderer "
+"til de som finnes i <a href=\"%(uri)s\">Django</a>. Her er en kort oversikt:"
+
+#: templates/api.html:123
+msgid ""
+"Exact lookup (can also be done just as <code>fieldname=value</code>) or case-"
+"insensitive matching for strings."
+msgstr ""
+"Eksakt søk (kan også gjøres med <code>feltnavn=verdi</code>) respektivt søk "
+"som ignorerer store og små bokstaver."
+
+#: templates/api.html:125
+msgid "Case sensitive or insensitive string containment."
+msgstr "Søker etter understrenger."
+
+#: templates/api.html:127
+msgid "Case sensitive or insensitive string prefix or postfix matching."
+msgstr "Søker etter prefiks- eller postfiks-strenger."
+
+#: templates/api.html:129
+msgid ""
+"Case sensitive or insensitive regular expression matching. The regular "
+"expression syntax is defined by Python's <code>re</code> module."
+msgstr ""
+"Søk med regulære uttrykk. Syntaksen er definert av Pythons <code>re</code>-"
+"modul."
+
+#: templates/api.html:131
+msgid ""
+"The given field value must be an element of the provided comma-separated "
+"list."
+msgstr ""
+"Verdien av feltet må være et element i den gitte kommaseparerte listen."
+
+#: templates/api.html:133
+msgid "Numerical orderings &gt;, ≥, &lt; and ≤."
+msgstr "Numeriske ordener &gt;, ≥, &lt; og ≤."
+
+#: templates/api.html:135
+msgid ""
+"The given field value must lie between the given values (separated by a "
+"comma). Useful for dates."
+msgstr ""
+"Verdien av feltet må ligge mellom de gitte verdiene (kommaseparerte). Nyttig "
+"for datoer."
+
+#: templates/api.html:137
+msgid ""
+"Applies to date fields, matches only on the specified integer value. Months "
+"and week days are numbered from 1, and the week is assumed to start on "
+"Sunday."
+msgstr ""
+"Fungerer på datofelter, og søker kun etter den spesifiserte heltallsverdien. "
+"Måneder og ukedager er nummerert fra 1, og uken starter på søndag."
+
+#: templates/api.html:139
+msgid ""
+"Takes a boolean, will only match objects where the given field is or is not "
+"null."
+msgstr ""
+"Aksepterer en sannhetsverdi, og søker etter objekter hvor feltet er (eller "
+"ikke er) null."
+
+#: templates/api.html:142
+msgid "Ordering"
+msgstr "Sortering"
+
+#: templates/api.html:144
+msgid ""
+"To sort by a field, add the parameter <code>order_by=fieldname</code> for "
+"ascending order, and <code>order_by=-fieldname</code> for descending order."
+msgstr ""
+"For å sortere etter et felt, legg til parameteren <code>order_by=fieldname</"
+"code> for økende orden, og <code>order_by=-fieldname</code> for synkende "
+"orden."
+
+#: templates/api.html:146
+msgid "Prediction requests"
+msgstr "Spådomsforespørsler"
+
+#: templates/api.html:148
+#, python-format
+msgid ""
+"Requests for predictions do not correspond to the database, and work a "
+"little differently, but corresponds more or less exactly to the way the <a "
+"href=\"%(uri)s\">prediction page</a> works. We currently support five "
+"different formats:"
+msgstr ""
+"Forespørsler for spådommer korresponderer ikke til databasen og fungerer "
+"litt anderledes, men er stort sett likt slik <a href=\"%(uri)s"
+"\">spådomssiden</a> er satt opp. Vi støtter for tiden fem forskjellige "
+"formater:"
+
+#: templates/api.html:151
+msgid "Single best-of-N matches"
+msgstr "Enkelte best-av-N kamper"
+
+#: templates/api.html:152
+msgid "Dual tournaments"
+msgstr "Dualturneringer"
+
+#: templates/api.html:153
+msgid "also called GSL-style groups"
+msgstr "også kjent som GSL-grupper"
+
+#: templates/api.html:154
+msgid "Single-elimination brackets"
+msgstr "Utslagsturneringer"
+
+#: templates/api.html:155
+msgid "Round-robin groups"
+msgstr "Gruppespill"
+
+#: templates/api.html:156
+msgid "Proleague-style team matches"
+msgstr "lagkamp à la Proleague"
+
+#: templates/api.html:159
+#, python-format
+msgid ""
+"The URI for match prediction is then <code>%(uri)s</code>, where <code>"
+"%(a)s</code> and <code>%(b)s</code> are the ids for the two players. You "
+"also have to supply a <code>%(bo)s</code> parameter denoting the match "
+"length, and this has to be a positive odd integer. The following conditions "
+"apply."
+msgstr ""
+"Adressen for enkelte kamper er da <code>%(uri)s</code>, hvor <code>%(a)s</"
+"code> og <code>%(b)s</code> er spiller-IDene. Du må også oppgi en <code>"
+"%(bo)s</code>-parameter for å spesifisere kamplengden, og denne må være et "
+"positivt odde heltall. Noen betingelser må oppfylles:"
+
+#: templates/api.html:162
+msgid "For single matches, you must provide exactly two players."
+msgstr "For enkeltkamper må du oppgi kun to spillere."
+
+#: templates/api.html:163
+msgid "For dual tournaments, you must provide exactly four players."
+msgstr "For dualturneringer må du oppgi kun fire spillere."
+
+#: templates/api.html:164
+msgid ""
+"For single elimination brackets, you must provide a number of players that "
+"is a power of two."
+msgstr ""
+"For utslagsturneringer må du oppgi et antall spillere som er en toerpotens."
+
+#: templates/api.html:165
+msgid ""
+"For proleague matches, you must provide an even number of players, one full "
+"team before the other (there does not have to be an odd number of players "
+"per team)."
+msgstr ""
+"For proleague-kamper må du oppgi et partall antall spillere, hele det første "
+"laget før det andre. (Det trenger ikke være et odde antall spillere på hvert "
+"lag.)"
+
+#: templates/api.html:166
+msgid ""
+"For single elimination, and only for this format, you can give different "
+"match lengths for different rounds, just make a comma-separated list with "
+"the first round first and the final last."
+msgstr ""
+"For utslagsturneringer, og kun for dette formatet, kan du gi forskjellige "
+"kamplengder for hver runde. Bare oppgi en kommaseparert liste med den første "
+"runden først og finalen til slutt."
+
+#: templates/api.html:169
+msgid ""
+"You can give id 0 to denote a BYE, and there is no restriction on duplicate "
+"players (which can be useful for proleague style to simulate ace matches)."
+msgstr ""
+"Du kan gi ID 0 for å legge til en \"null-spiller\" som alltid taper (for "
+"eksempel om noen plasser ikke er fylte). Det er ingen restriksjon på "
+"dupliserte spillere i samme turnering, som kan være nyttig for å simulere "
+"den siste kampen i lagkamper."
+
+#: templates/api.html:171
+msgid ""
+"Requests will return a JSON object containing various information, which you "
+"can look through by querying the schema URI. For the last four formats "
+"(excluding the single match), the two most important fields are "
+"<code>matches</code> and <code>meanres</code>. The former describes the "
+"already entered results, and the latter describes the median outcome "
+"<em>given the former</em>. Each match has a unique identifier which you can "
+"use to prescribe results and update the predictions. E.g. to set match "
+"identifier <code>abc</code> to result in 1–3, pass the arguments "
+"<code>abc_1=1</code> and <code>abc_2=3</code> with the request."
+msgstr ""
+"Forespørsler returnerer et JSON-objekt som inneholder en del informasjon du "
+"kan se gjennom ved å sende en forespørsel til skjema-adressen. For de fire "
+"siste formatene (unntatt enkeltkamper) er de to viktigste feltene "
+"<code>matches</code> og <code>meanres</code>. Førstnevnte beskriver de "
+"allerede oppgitte resultatene, og sistnevnte beskriver median-resultatet "
+"<em>gitt førstnevnte</em>. Hver kamp har en unik ID som du kan bruke til å "
+"oppgi resultater og oppdatere spådommen. For å sette kamp <code>abc</code> "
+"til 1–3, send parametrene <code>abc_1=1</code> og <code>abc_2=3</code>."
+
+#: templates/api.html:173
+msgid ""
+"It may be difficult to predict in advance which matches will have which "
+"identifiers. If you're unsure, make an empty request with no preset results. "
+"The returned object will then give identifiers for as many matches as it "
+"can. As you fill in results, new matches may become available."
+msgstr ""
+"Det kan være vanskelig å forutse hvilke kamper som får hvilke IDer. Hvis du "
+"er usikker kan du sende en tom forespørsel uten resultater. Det returnerte "
+"objektet vil da inneholde kamp-IDer for så mange kamper som mulig. "
+"Etterhvert som du fyller inn nye resultater vil nye kamper bli tilgjengelige."
+
+#: templates/api.html:175
+msgid ""
+"Unlike the <code>matches</code> list, the <code>meanres</code> always "
+"contains predictions to the end of the tournament. For example, with a 16-"
+"player single elimination bracket, the <code>meanres</code> list will always "
+"contain the full 15 matches, trying to predict who will be in the final. As "
+"you enter results, this may disagree with the prediction, and the players in "
+"the final may change. Thus, <strong>only the <code>matches</code> list "
+"contains “sure” information</strong>."
+msgstr ""
+"Til motsetning fra <code>matches</code>-listen vil <code>meanres</code> "
+"alltid inneholde spådommer til slutten av turneringen. For eksempel, med en "
+"16-spillers utslagsturnering vil <code>meanres</code> alltid inneholde alle "
+"de 15 kampene, og dermed forsøke å forutsi hvem som vil spille i finalen. "
+"Etterhvert som du legger til resultater, vil denne spådommen endres. Det vil "
+"si at <strong>kun <code>matches</code>-listen inneholder “sikker” "
+"informasjon</strong>."
+
+#: templates/api.html:177
+msgid "Common use cases"
+msgstr "Vanlige brukstilfeller"
+
+#: templates/api.html:179
+msgid "Get the current top ten rating list"
+msgstr "Å hente topp ti-listen."
+
+#: templates/api.html:181
+msgid ""
+"Current ratings are delivered together with player objects, so this will "
+"suffice:"
+msgstr ""
+"Dagens ratingtall leveres sammen med spillerobjekter, så dette vil holde:"
+
+#: templates/api.html:192
+msgid ""
+"Null values come before non-null values, so we must filter out the null "
+"ratings first. The filter on <code>decay</code> is to only select active "
+"players. Alternatively, for a cleaner method, just request for ratings "
+"directly."
+msgstr ""
+"Null-verdier kommer før ikkenull-verdier, så vi må filtrere ut nullratingene "
+"først. Filteret på <code>decay</code> henter kun aktive spillere. "
+"Alternativt, for en renere tilnærming, kan vi sende en forespørsel direkte "
+"til ratingobjekter."
+
+#: templates/api.html:203
+msgid ""
+"Note that in this case you have to query for the period you want. There is "
+"an alias for <code>rating</code> called <code>activerating</code> which "
+"automatically filters away inactive ratings, but otherwise works the same "
+"way. So you could use:"
+msgstr ""
+"Merk at i dette tilfelle må du spesifisere perioden du er interessert i. Det "
+"fins et alias for <code>rating</code> kalt <code>activerating</code> som "
+"automatisk filtrerer vekk inaktive ratinger, men som ellers fungerer på "
+"samme måte, så du kan bruke:"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

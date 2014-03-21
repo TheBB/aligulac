@@ -1012,6 +1012,59 @@ class Group(models.Model):
     def get_aliases(self):
         return [a.name for a in self.alias_set.all()]
     # }}}
+
+    # {{{ get_rank: Calculates the rank for the team given a metric
+    def get_rank(self, rank_type):
+        if rank_type not in {"scoreak", "scorepl", "meanrating"}:
+            raise Exception()
+        if '_ranks' not in dir(self):
+            self._ranks = dict()
+        if rank_type in self._ranks:
+            return self._ranks[rank_type]
+
+        if getattr(self, rank_type) is None or \
+           getattr(self, rank_type) in {-10, 0} or \
+           not self.active or \
+           self.disbanded is not None:
+            self._ranks[rank_type] = None
+            return None
+
+        filters = {
+            rank_type+"__isnull": False,
+            rank_type+"__gt": getattr(self, rank_type),
+            "active": True,
+            "is_team": True
+        }
+        q = Group.objects.filter(**filters)\
+                         .exclude(id=self.id)\
+
+        c = q.count()
+        self._ranks[rank_type] = c + 1
+        return self._ranks[rank_type]
+
+    @property
+    def ak_rank(self):
+        return self.get_rank("scoreak")
+
+    @property
+    def pl_rank(self):
+        return self.get_rank("scorepl")
+
+    @property
+    def rating_rank(self):
+        return self.get_rank('meanrating')
+
+    # Shortcut for use in templates
+    @property
+    def ranks(self):
+        return (
+            ("All-Kill", self.ak_rank, "ak"),
+            ("Proleague", self.pl_rank, "pl"),
+            ("Rating", self.rating_rank, "rt")
+        )
+
+    # }}}
+
 # }}}
 
 # {{{ GroupMemberships

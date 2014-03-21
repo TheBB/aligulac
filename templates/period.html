@@ -259,34 +259,39 @@ This template shows a rating list for a given period.
     {% endif %}
     </table> </td> </tr> </tbody>
     <tbody id="gainers" style="display: none;">
-    <tr> <td colspan="4" style="border: solid 0.1em;"> <table class="dottedint" style="width: 100%; padding: 0.5em;">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 100%"> <tr> <td  style="width: 50%;"> 
+    <table>
+    {% for r in gainers %}
     <tr>
-      <td style="text-align: center;">
-        Ups
+      <td class="shrink">
+        {% ifchanged %}Winners <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
-      <td><img src="{{ "uparrow"|img }}" /></td>
-      <td style="text-align: center;">
-        Downs
+      <td class="shrink">
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">+{{ r.diff|ratscalediff }}</a>
       </td>
-      <td><img src="{{ "downarrow"|img }}" /></td>
-    </tr>
-    {% for rwin, rlose in gainers %}
-    <tr>
-      <td>
-        {{ rwin.player }}
-      </td>
-      <td>
-        +{{ rwin.diff|ratscalediff }}
-      </td>
-      <td>
-        {{ rlose.player }}
-      </td>
-      <td>
-        {{ rlose.diff|ratscalediff }}
+      <td class="expand">
+        {{ r.player|player }}
       </td>
     </tr>
     {% endfor %}
-    </table> </td> </tr>
+    </table>
+    </td>
+    <td style="width: 50%;">
+    <table>
+    {% for r in losers %}
+    <tr>
+      <td class="shrink">
+        {% ifchanged %}Losers <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
+      </td>
+      <td class="shrink">
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">{{ r.diff|ratscalediff }}</a>
+      </td>
+      <td class="expand">
+        {{ r.player|player }}
+      </td>
+    </tr>
+    {% endfor %}
+    </table> </td></tr> </table></td> </tr>
 </table>
 </td>
 <td style="width: 22em; vertical-align: top;">

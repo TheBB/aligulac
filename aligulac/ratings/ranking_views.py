@@ -119,8 +119,10 @@ def period(request, period_id=None):
         .select_related('prev', 'player')\
         .extra(select={'diff': 'rating.rating - T3.rating'})\
         .order_by('diff')
+
     base.update({
-        'gainers': list(zip(gainers[:5], losers[:5]))
+        'gainers': gainers[:5],
+        'losers': losers[:5]
     })
     # }}}
 

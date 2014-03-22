@@ -4,6 +4,7 @@ from django.shortcuts import (
     render_to_response,
 )
 from django.db.models import (
+    F,
     Q,
     Sum,
 )
@@ -102,6 +103,26 @@ def period(request, period_id=None):
         'speczvp':  qsetz.extra(select={'d':  'rating_vp/dev_vp*(rating+1.5)'}).latest('d'),
         'speczvt':  qsetz.extra(select={'d':  'rating_vt/dev_vt*(rating+1.5)'}).latest('d'),
         'speczvz':  qsetz.extra(select={'d':  'rating_vz/dev_vz*(rating+1.5)'}).latest('d'),
+    })
+    # }}}
+
+    # {{{ Highest gainer and biggest losers
+
+    # TODO: Fix these queries, highly dependent on the way django does things.
+    gainers = filter_active(Rating.objects.filter(period=period))\
+        .filter(prev__isnull=False)\
+        .select_related('prev', 'player')\
+        .extra(select={'diff': 'rating.rating - T3.rating'})\
+        .order_by('-diff')
+    losers = filter_active(Rating.objects.filter(period=period))\
+        .filter(prev__isnull=False)\
+        .select_related('prev', 'player')\
+        .extra(select={'diff': 'rating.rating - T3.rating'})\
+        .order_by('diff')
+
+    base.update({
+        'gainers': gainers[:5],
+        'losers': losers[:5]
     })
     # }}}
 

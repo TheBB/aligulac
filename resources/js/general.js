@@ -141,3 +141,135 @@ $(function() {
     return $('.menu > ul > li > div > a').hover(menuHandler).parent().next().buttonset().hide().menu();
   }
 });
+/* ======================================================================
+ * AUTOCOMPLETE SEARCH TEXTBOX
+ * ======================================================================
+ */
+var aligulacAutocompleteTemplates = function (ajaxobject) {
+    if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
+        return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
+    }
+    switch (ajaxobject.type) {
+        case 'player':
+            ajaxobject.key = ajaxobject.tag + ' ' + ajaxobject.id;
+            return '<a>{aligulac-flag}<img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
+               ajaxobject.country ? '<img src="' + flagsDir + ajaxobject.country.toLowerCase() + '.png" />' : ' ')
+            .replace('{aligulac-race}', racesDir + ajaxobject.race.toUpperCase() + '.png')
+            .replace('{aligulac-name}', ajaxobject.tag);
+        case 'team':
+            ajaxobject.key = ajaxobject.name;
+            return '<a>{aligulac-name}</a>'
+            .replace('{aligulac-name}', ajaxobject.name);
+        case 'event':
+            ajaxobject.key = ajaxobject.fullname;
+            return '<a>{aligulac-name}</a>'
+            .replace('{aligulac-name}', ajaxobject.fullname);
+    }
+    return '<a>' + ajaxobject.value + '</a>';
+};
+var getResults = function (term, restrict_to) {
+
+    if (!restrict_to)
+        restrict_to = ['players', 'teams', 'events'];
+    if (typeof(restrict_to) == 'string')
+        restrict_to = [restrict_to];
+    var deferred = $.Deferred()
+    var url = '/search/json/';
+    $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        data: { q: term, search_for: restrict_to.join(',') }
+    }).success(function (ajaxData) {
+        deferred.resolve(ajaxData);
+    });
+
+    return deferred;
+};
+
+$(document).ready(function () {
+
+    $('#SearchTextBox').autocomplete({
+        source: function (request, response) {
+
+            $.when(getResults(request.term)).then(function (result) {
+
+                    var playerresult = [];
+                    var teamresult = [];
+                    var eventresult = [];
+                    if (result.players != undefined && result.players.length > 0) {
+                        playerresult = [{ label: 'Players' }].concat(result.players);
+                        for (var i = 1; i < playerresult.length; i++)
+                            playerresult[i].type = 'player';
+                    }
+                    if (result.teams != undefined && result.teams.length > 0) {
+                        teamresult = [{ label: 'Teams' }].concat(result.teams);
+                        for (var i = 1; i < teamresult.length; i++)
+                            teamresult[i].type = 'team';
+                    }
+                    if (result.events != undefined && result.events.length > 0) {
+                        eventresult = [{ label: 'Events' }].concat(result.events);
+                        for (var i = 1; i < eventresult.length; i++)
+                            eventresult[i].type = 'event';
+                    }
+                    var data = playerresult.concat(teamresult.concat(eventresult));
+                    response(data);
+                });
+
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $('#SearchTextBox').val(ui.item.key);
+            return false;
+        },
+        open: function () {
+            $('.ui-menu')
+                .width('auto');
+        }
+    }).data('ui-autocomplete')._renderItem = function (ul, item) {
+        return $('<li></li>')
+            .append(aligulacAutocompleteTemplates(item))
+            .appendTo(ul);
+    };
+});
+
+/* ======================================================================
+ * AUTOCOMPLETE PREDICTIONS
+ * ======================================================================
+ */
+$(document).ready(function () {
+    var $idPalyersTextArea = $("#id_players");
+    $idPalyersTextArea.tagsInput({
+        autocomplete_opt: {
+            minLength: 2,
+            select: function (event, ui) {
+                $idPalyersTextArea.addTag(ui.item.key);
+                $("#id_players_tag").focus();
+                return false;
+            },
+            open: function () {
+                $('.ui-menu')
+                    .width('auto');
+            }
+        },
+        autocomplete_url: function (request, response) {
+            $.when(getResults(request.term, 'players')).then(function (result) {
+                if (result.players != undefined) {
+                    for (var i = 0; i < result.players.length; i++) {
+                        result.players[i].type = 'player';
+                    }
+                }
+                response(result.players);
+            });
+        },
+        defaultText: 'add a player',
+        delimiter: '\n',
+        formatAutocomplete: aligulacAutocompleteTemplates
+    })
+    // Hacking the enter key down to submit the form when the
+    // current input is empty
+    $("#id_players_addTag").keydown(function (event) {
+        if (event.which == 13 && $("#id_players_tag").val() == "")
+            $(this).closest("form").submit();
+    });
+});

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-23 00:21+0100\n"
-"PO-Revision-Date: 2014-03-23 00:29+0100\n"
+"POT-Creation-Date: 2014-03-23 00:43+0100\n"
+"PO-Revision-Date: 2014-03-23 00:44+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -2036,7 +2036,7 @@ msgid "Individual"
 msgstr "Individuell"
 
 #. Translators: Event category
-#: aligulac/ratings/models.py:65 templates/earnings.html:106
+#: aligulac/ratings/models.py:65 templates/earnings.html:107
 msgid "Team"
 msgstr "Lag"
 
@@ -2135,7 +2135,7 @@ msgstr "Rase"
 
 #: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:369
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
-#: templates/earnings.html:105
+#: templates/earnings.html:106
 msgid "Name"
 msgstr "Navn"
 
@@ -2916,7 +2916,7 @@ msgstr "Nylige spillerbytter"
 
 #: aligulac/ratings/tools.py:55
 msgid "Euro"
-msgstr "euro"
+msgstr "Euro"
 
 #: aligulac/ratings/tools.py:56
 msgid "British Pound"
@@ -3035,7 +3035,7 @@ msgid "Trinidad and Tobago Dollar"
 msgstr "Trinidadisk dollar"
 
 #: aligulac/ratings/tools.py:85
-msgid "BermudIan Dollar"
+msgid "Bermudian Dollar"
 msgstr "Bermudisk dollar"
 
 #: aligulac/ratings/tools.py:86
@@ -3067,8 +3067,8 @@ msgid "Croatian kuna"
 msgstr "Kroatisk kuna"
 
 #: aligulac/ratings/tools.py:93
-msgid "Tenge"
-msgstr "Kasakstansk tenge"
+msgid "Kazakhstani Tenge"
+msgstr "Kasakhstansk tenge"
 
 #: aligulac/ratings/tools.py:94
 msgid "Israeli Shekel"
@@ -4180,12 +4180,17 @@ msgstr "Filtrér etter land:"
 msgid "Filter by currency:"
 msgstr "Filtrér etter valuta:"
 
-#: templates/earnings.html:79
+#. Translators: The verb "to filter".
+#: templates/earnings.html:57
+msgid "Filter"
+msgstr "Filtrér"
+
+#: templates/earnings.html:80
 #, python-format
 msgid "Page %(page)s/%(npages)s"
 msgstr "Side %(page)s/%(npages)s"
 
-#: templates/earnings.html:107
+#: templates/earnings.html:108
 msgid "Total earnings"
 msgstr "Total inntekt"
 
@@ -4202,6 +4207,9 @@ msgstr "Språk"
 #: templates/language.html:21
 msgid "I would like to use Aligulac in…"
 msgstr "Jeg vil gjerne bruke Aligulac på…"
+
+#~ msgid "Tenge"
+#~ msgstr "Kasakstansk tenge"
 
 #, fuzzy
 #~ msgid "race switcher"

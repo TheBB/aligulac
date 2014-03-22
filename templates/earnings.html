@@ -53,7 +53,8 @@ This is the template for the earnings of a player. It's called from ratings.view
         <option value="{{ currency.code }}" {% if filters.currency == currency.code %}selected{% endif %}>{{ currency.code }} - {{ currency.name }}</option>
         {% endfor %}
     </select>
-    <input type="submit" value="Filter" />
+    {% comment %}Translators: The verb "to filter".{% endcomment %}
+    <input type="submit" value="{% trans "Filter" %}" />
 </form>
 </p>
 {% if not empty %}

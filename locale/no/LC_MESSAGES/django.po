@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-22 23:35+0100\n"
-"PO-Revision-Date: 2014-03-22 23:30+0100\n"
+"POT-Creation-Date: 2014-03-23 00:21+0100\n"
+"PO-Revision-Date: 2014-03-23 00:29+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -117,7 +117,8 @@ msgstr "Hall of Fame"
 #: aligulac/aligulac/tools.py:238 aligulac/ratings/player_views.py:171
 #: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:188
 #: aligulac/ratings/results_views.py:475 aligulac/ratings/results_views.py:490
-#: templates/period.html:342
+#: templates/earnings.html:34 templates/earnings.html.py:43
+#: templates/earnings.html:51 templates/period.html:342
 msgid "All"
 msgstr "Alle"
 
@@ -2035,7 +2036,7 @@ msgid "Individual"
 msgstr "Individuell"
 
 #. Translators: Event category
-#: aligulac/ratings/models.py:65
+#: aligulac/ratings/models.py:65 templates/earnings.html:106
 msgid "Team"
 msgstr "Lag"
 
@@ -2134,6 +2135,7 @@ msgstr "Rase"
 
 #: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:369
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
+#: templates/earnings.html:105
 msgid "Name"
 msgstr "Navn"
 
@@ -2237,7 +2239,8 @@ msgstr "Ingen zerg"
 msgid "Opponent race"
 msgstr "Motstanderrase"
 
-#: aligulac/ratings/player_views.py:182 templates/period.html:345
+#: aligulac/ratings/player_views.py:182 templates/earnings.html:44
+#: templates/period.html:345
 msgid "Non-Koreans"
 msgstr "Ikke-koreanere"
 
@@ -2911,12 +2914,196 @@ msgstr "kort navn"
 msgid "Recent player transfers"
 msgstr "Nylige spillerbytter"
 
-#: aligulac/ratings/tools.py:132
+#: aligulac/ratings/tools.py:55
+msgid "Euro"
+msgstr "euro"
+
+#: aligulac/ratings/tools.py:56
+msgid "British Pound"
+msgstr "Britisk pund"
+
+#: aligulac/ratings/tools.py:57
+msgid "Australian Dollar"
+msgstr "Australsk dollar"
+
+#: aligulac/ratings/tools.py:58
+msgid "New-Zealand Dollar"
+msgstr "New Zealandsk dollar"
+
+#: aligulac/ratings/tools.py:59
+msgid "US Dollar"
+msgstr "Amerikansk dollar"
+
+#: aligulac/ratings/tools.py:60
+msgid "Canadian Dollar"
+msgstr "Canadisk dollar"
+
+#: aligulac/ratings/tools.py:61
+msgid "Swiss Franc"
+msgstr "Sveitserfranc"
+
+#: aligulac/ratings/tools.py:62
+msgid "Norwegian Krona"
+msgstr "Norsk krone"
+
+#: aligulac/ratings/tools.py:63
+msgid "Swedish Krona"
+msgstr "Svensk krone"
+
+#: aligulac/ratings/tools.py:64
+msgid "Danish Krona"
+msgstr "Dansk krone"
+
+#: aligulac/ratings/tools.py:65
+msgid "Japanese Yen"
+msgstr "Japansk yen"
+
+#: aligulac/ratings/tools.py:66
+msgid "Chinese Renminbi"
+msgstr "Kinesisk renminbi"
+
+#: aligulac/ratings/tools.py:67
+msgid "South Korean won"
+msgstr "Sørkoreansk won"
+
+#: aligulac/ratings/tools.py:68
+msgid "Singapore Dollar"
+msgstr "Singaporsk dolar"
+
+#: aligulac/ratings/tools.py:69
+msgid "Indonesian Rupiah"
+msgstr "Indonesisk rupiah"
+
+#: aligulac/ratings/tools.py:70
+msgid "Thai Baht"
+msgstr "Thailandsk baht"
+
+#: aligulac/ratings/tools.py:71
+msgid "Taiwan Dollar"
+msgstr "Taiwansk dollar"
+
+#: aligulac/ratings/tools.py:72
+msgid "Hong Kong Dollar"
+msgstr "Hong Kong dollar"
+
+#: aligulac/ratings/tools.py:73
+msgid "Philippines Peso"
+msgstr "Filippinsk peso"
+
+#: aligulac/ratings/tools.py:74
+msgid "Indian Rupee"
+msgstr "Indisk rupi"
+
+#: aligulac/ratings/tools.py:75
+msgid "Malaysian Ringgit"
+msgstr "Malaysisk ringgit"
+
+#: aligulac/ratings/tools.py:76
+msgid "Vietnamese Dong"
+msgstr "Vietnamesisk dong"
+
+#: aligulac/ratings/tools.py:77
+msgid "Brazilian Real"
+msgstr "Brasiliansk real"
+
+#: aligulac/ratings/tools.py:78
+msgid "Peruvian Nuevo Sol"
+msgstr "Peruviansk nuevo sol"
+
+#: aligulac/ratings/tools.py:79
+msgid "Argentine Peso"
+msgstr "Argentinsk peso"
+
+#: aligulac/ratings/tools.py:80
+msgid "Mexican Peso"
+msgstr "Meksikansk peso"
+
+#: aligulac/ratings/tools.py:81
+msgid "Chilean Peso"
+msgstr "Chilensk peso"
+
+#: aligulac/ratings/tools.py:82
+msgid "Colombian Peso"
+msgstr "Colombiansk peso"
+
+#: aligulac/ratings/tools.py:83
+msgid "Jamaican Dollar"
+msgstr "Jamaicansk dollar"
+
+#: aligulac/ratings/tools.py:84
+msgid "Trinidad and Tobago Dollar"
+msgstr "Trinidadisk dollar"
+
+#: aligulac/ratings/tools.py:85
+msgid "BermudIan Dollar"
+msgstr "Bermudisk dollar"
+
+#: aligulac/ratings/tools.py:86
+msgid "Czech Koruna"
+msgstr "Tsjekkisk koruna"
+
+#: aligulac/ratings/tools.py:87
+msgid "Polish Zloty"
+msgstr "Polsk zloty"
+
+#: aligulac/ratings/tools.py:88
+msgid "Turkish Lira"
+msgstr "Tyrkisk lire"
+
+#: aligulac/ratings/tools.py:89
+msgid "Hungarian Forint"
+msgstr "Ungarsk forint"
+
+#: aligulac/ratings/tools.py:90
+msgid "Romanian Leu"
+msgstr "Romens leu"
+
+#: aligulac/ratings/tools.py:91
+msgid "Russian Ruble"
+msgstr "Russisk rubel"
+
+#: aligulac/ratings/tools.py:92
+msgid "Croatian kuna"
+msgstr "Kroatisk kuna"
+
+#: aligulac/ratings/tools.py:93
+msgid "Tenge"
+msgstr "Kasakstansk tenge"
+
+#: aligulac/ratings/tools.py:94
+msgid "Israeli Shekel"
+msgstr "Israelsk shekel"
+
+#: aligulac/ratings/tools.py:95
+msgid "United Arab Emirates Dirham"
+msgstr "Emiratarabisk dirham"
+
+#: aligulac/ratings/tools.py:96
+msgid "Qatari Riyal"
+msgstr "Qatarsk riyal"
+
+#: aligulac/ratings/tools.py:97
+msgid "Saudi Riyal"
+msgstr "Saudiarabisk riyal"
+
+#: aligulac/ratings/tools.py:98
+msgid "Egyptian Pound"
+msgstr "Egyptisk pund"
+
+#: aligulac/ratings/tools.py:99
+msgid "South African Rand"
+msgstr "Sørafrikansk rand"
+
+#: aligulac/ratings/tools.py:100
+msgid "Bitcoin"
+msgstr "Bitcoin"
+
+#: aligulac/ratings/tools.py:183
 #, python-format
 msgid "Player '%s' was not found and cound not be made (missing player tag)"
 msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende nick)"
 
-#: aligulac/ratings/tools.py:136
+#: aligulac/ratings/tools.py:187
 #, python-format
 msgid "Player '%s' was not found and cound not be made (missing race)"
 msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende rase)"
@@ -3956,6 +4143,51 @@ msgid ""
 msgstr ""
 "Dumpet inneholder 11 tabeller. Noen kolonner er fremmednøkler til tabeller "
 "som er fjernet. Disse handler hovedsakelig om brukerkontoer."
+
+#: templates/earnings.html:19
+#, python-format
+msgid "In %(year)s, %(origpp)s (%(totalpp)s) was awarded in prize money."
+msgstr "I %(year)s ble %(origpp)s (%(totalpp)s) gitt ut i premier."
+
+#: templates/earnings.html:21
+#, python-format
+msgid "In total, %(origpp)s (%(totalpp)s) was awarded in prize money."
+msgstr "Totalt har %(origpp)s (%(totalpp)s) blitt gitt ut i premier."
+
+#: templates/earnings.html:23
+#, python-format
+msgid "In %(year)s, %(totalpp)s was awarded in prize money."
+msgstr "I %(year)s ble %(totalpp)s gitt ut i premier."
+
+#: templates/earnings.html:25
+#, python-format
+msgid "In total, %(totalpp)s was awarded in prize money."
+msgstr "Totalt har %(totalpp)s blitt gitt ut i premier."
+
+#: templates/earnings.html:28
+msgid "The filters came up empty. :("
+msgstr "Ingen premieutdelinger ble funnet. :("
+
+#: templates/earnings.html:32
+msgid "Filter by year:"
+msgstr "Filtrér etter år:"
+
+#: templates/earnings.html:41
+msgid "Filter by country:"
+msgstr "Filtrér etter land:"
+
+#: templates/earnings.html:49
+msgid "Filter by currency:"
+msgstr "Filtrér etter valuta:"
+
+#: templates/earnings.html:79
+#, python-format
+msgid "Page %(page)s/%(npages)s"
+msgstr "Side %(page)s/%(npages)s"
+
+#: templates/earnings.html:107
+msgid "Total earnings"
+msgstr "Total inntekt"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

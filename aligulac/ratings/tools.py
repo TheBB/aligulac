@@ -50,6 +50,57 @@ PATCHES = [
 ]
 # }}}
 
+# {{{ Currency names 
+CURRENCIES = {
+    'EUR': _('Euro'),
+    'GBP': _('British Pound'),
+    'AUD': _('Australian Dollar'),
+    'NZD': _('New-Zealand Dollar'),
+    'USD': _('US Dollar'),
+    'CAD': _('Canadian Dollar'),
+    'CHF': _('Swiss Franc'),
+    'NOK': _('Norwegian Krona'),
+    'SEK': _('Swedish Krona'),
+    'DKK': _('Danish Krona'),
+    'JPY': _('Japanese Yen'),
+    'CNY': _('Chinese Renminbi'),
+    'KRW': _('South Korean won'),
+    'SGD': _('Singapore Dollar'),
+    'IDR': _('Indonesian Rupiah'),
+    'THB': _('Thai Baht'),
+    'TWD': _('Taiwan Dollar'),
+    'HKD': _('Hong Kong Dollar'),
+    'PHP': _('Philippines Peso'),
+    'INR': _('Indian Rupee'),
+    'MYR': _('Malaysian Ringgit'),
+    'VND': _('Vietnamese Dong'),
+    'BRL': _('Brazilian Real'),
+    'PEN': _('Peruvian Nuevo Sol'),
+    'ARS': _('Argentine Peso'),
+    'MXN': _('Mexican Peso'),
+    'CLP': _('Chilean Peso'),
+    'COP': _('Colombian Peso'),
+    'JMD': _('Jamaican Dollar'),
+    'TTD': _('Trinidad and Tobago Dollar'),
+    'BMD': _('Bermudian Dollar'),
+    'CZK': _('Czech Koruna'),
+    'PLN': _('Polish Zloty'),
+    'TRY': _('Turkish Lira'),
+    'HUF': _('Hungarian Forint'),
+    'RON': _('Romanian Leu'),
+    'RUB': _('Russian Ruble'),
+    'HRK': _('Croatian kuna'),
+    'KZT': _('Kazakhstani Tenge'),
+    'ILS': _('Israeli Shekel'),
+    'AED': _('United Arab Emirates Dirham'),
+    'QAR': _('Qatari Riyal'),
+    'SAR': _('Saudi Riyal'),
+    'EGP': _('Egyptian Pound'),
+    'ZAR': _('South African Rand'),
+    'XBT': _('Bitcoin'),
+}
+# }}}
+
 # {{{ find_player: Magic!
 def find_player(query=None, lst=None, make=False, soft=False):
     queryset = Player.objects.all()
@@ -225,7 +276,7 @@ def country_list(queryset):
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
     currency_dict = [
-        {'name': ccy.currency(c['currency']).name, 'code': ccy.currency(c['currency']).code} 
+        {'name': CURRENCIES[ccy.currency(c['currency']).code], 'code': ccy.currency(c['currency']).code} 
         for c in currencies
     ]
     return currency_dict

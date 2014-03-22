@@ -5,8 +5,9 @@ Number of days since.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Days since...{% endblock %}
+{% block title %}{% trans "Days since…" %}{% endblock %}
 
 {% block content %}
 
@@ -30,10 +31,10 @@ var clocks_toggle_more = function(e) {
     <td class="clock">
       {% if clock.years > 0 %}
       <div class="clock-number">{{ clock.years }}</div>
-      year{{ clock.years|pluralize }}
+      {% blocktrans count clock.years as nyears %}year{% plural %}years{% endblocktrans %}
       {% endif %}
       <div class="clock-number">{{ clock.days }}</div>
-      day{{ clock.days|pluralize }}
+      {% blocktrans count clock.days as ndays %}day{% plural %}days{% endblocktrans %}
     </td>
   </tr>
   {% if clock.type == "match" %}
@@ -51,7 +52,8 @@ var clocks_toggle_more = function(e) {
     <td></td>
     <td colspan="2">
       <table class="clock-event-table">
-        <thead><tr class="header"><th>Date</th><th>Event</th><th></th><th></th></tr></thead>
+        <thead><tr class="header">
+            <th>{% trans "Date" %}</th><th>{% trans "Event" %}</th><th></th><th></th></tr></thead>
         <tbody>
         {% for e, earn in clock.extra %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
@@ -75,13 +77,9 @@ var clocks_toggle_more = function(e) {
 {% endfor %}
 </table>
 
-<p>
-  <small>
-    <b>Major</b> is defined by being a tournament where the first place prize money exceeds $2,000. <br/>
-    <b>Premier</b> is defined by being an offline tournament where the first place prize money exceeds $10,000 <br/>
-    These differ from the definitions used by <a href="http://liquipedia.net">Liquipedia</a>. The reason for this being
-    that it's hard use their definition when doing a database lookup
-    as their definitions aren't well-defined.
-  </small>
-</p>
+<p> <small>
+{% blocktrans %}<b>Major</b> is defined by being a tournament where the first place prize money exceeds $2,000.{% endblocktrans %} <br/>
+{% blocktrans %}<b>Premier</b> is defined by being an offline tournament where the first place prize money exceeds $10,000{% endblocktrans %} <br/>
+{% blocktrans with a="<a href=\"http://liquipedia.net/\">" %}These differ from the definitions used by {{a}}Liquipedia</a>. The reason for this being that it's hard use their definition when doing a database lookup as their definitions aren't well-defined.{% endblocktrans %}
+</small> </p>
 {% endblock %}

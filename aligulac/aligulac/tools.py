@@ -1,5 +1,7 @@
 # {{{ Imports
+import json
 import random
+import shlex
 import string
 from datetime import (
     date, 
@@ -12,6 +14,8 @@ from django.contrib.auth import (
     login,
 )
 from django.core.context_processors import csrf
+from django.db.models import Q, F
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
@@ -19,12 +23,31 @@ from aligulac.settings import DEBUG
 
 from ratings.models import (
     Earnings,
+    Event,
+    Group,
     Player,
     Rating,
+    TYPE_CATEGORY,
+    TYPE_EVENT,
+    TYPE_ROUND
 )
-from ratings.tools import get_latest_period
+from ratings.tools import get_latest_period, find_player
 from ratings.templatetags.ratings_extras import urlfilter
 # }}}
+
+# {{{ JsonResponse
+# Works similarily to HttpResponse but returns JSON instead.
+class JsonResponse(HttpResponse):
+
+    def __init__(self, content, *args, **kwargs):
+        scontent = json.dumps(content)
+
+        if "content_type" not in kwargs:
+            kwargs["content_type"] = "application/json"
+
+        super().__init__(scontent, *args, **kwargs)
+# }}}
+
 
 # {{{ Message
 # This class encodes error/success/warning messages sent to the templates.
@@ -337,4 +360,42 @@ def etn(f):
 # {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
 # AS IT FUCKING SHOULD BE.
 ntz = lambda k: k if k is not None else 0
+# }}}
+
+
+# {{{ search: Helper function for performing searches
+def search(query, search_for=['players', 'teams', 'events']):
+    # {{{ Split query
+    terms = [s.strip() for s in shlex.split(query) if s.strip() != '']
+    if len(terms) == 0:
+        return None
+    # }}}
+
+    # {{{ Search for players, teams and events
+    if 'players' in search_for:
+        players = find_player(lst=terms, make=False, soft=True)
+    else:
+        players = None
+
+    if 'teams' in search_for:
+        teams = Group.objects.filter(is_team=True)
+    else:
+        teams = None
+
+    if 'events' in search_for:
+        events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('idx')
+    else:
+        events = None
+
+    for term in terms:
+        if 'teams' in search_for:
+            teams = teams.filter(Q(name__icontains=term) | Q(alias__name__icontains=term))
+        if 'events' in search_for:
+            events = events.filter(Q(fullname__icontains=term))
+
+    if 'teams' in search_for:
+        teams = teams.distinct()
+    # }}}
+
+    return players, teams, events
 # }}}

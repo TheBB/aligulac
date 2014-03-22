@@ -92,25 +92,25 @@ div.rowh a {
     color: #ffffff;
 }
 
-div.rowh a:hover {
-    color: #bbbbbb;
-}
+    div.rowh a:hover {
+        color: #bbbbbb;
+    }
 
 div.rowh2 a {
     color: #ffffff;
 }
 
-div.rowh2 a:hover {
-    color: #bbbbbb;
-}
+    div.rowh2 a:hover {
+        color: #bbbbbb;
+    }
 
 div.rowevent a {
     color: #000000;
 }
 
-div.rowevent a:hover {
-    color: #555555;
-}
+    div.rowevent a:hover {
+        color: #555555;
+    }
 
 div.table div.rowh {
     display: table-row;
@@ -193,15 +193,15 @@ div.ibox {
     margin-bottom: 1.5em;
 }
 
-div.ibox div.iboxh {
-    width: auto;
-    background: #555555;
-    color: #ffffff;
-    font-weight: bold;
-    font-family: 'Marcellus SC';
-    text-align: center;
-    padding: 0.15em;
-}
+    div.ibox div.iboxh {
+        width: auto;
+        background: #555555;
+        color: #ffffff;
+        font-weight: bold;
+        font-family: 'Marcellus SC';
+        text-align: center;
+        padding: 0.15em;
+    }
 
 div.iboxh a:link {
     color: #aaaaaa;
@@ -221,26 +221,26 @@ div.ibox div.iboxtable {
     font-size: 0.85em;
 }
 
-div.ibox div.iboxtable div.row {
-    display: table-row;
-    background: #eeeeee;
-}
+    div.ibox div.iboxtable div.row {
+        display: table-row;
+        background: #eeeeee;
+    }
 
-div.ibox div.iboxtable div.rowel {
-    display: table-cell;
-    text-align: right;
-    padding: 0.2em;
-    padding-right: 1em;
-    border-style: none dotted none none;
-    border-width: 0.1em;
-}
+    div.ibox div.iboxtable div.rowel {
+        display: table-cell;
+        text-align: right;
+        padding: 0.2em;
+        padding-right: 1em;
+        border-style: none dotted none none;
+        border-width: 0.1em;
+    }
 
-div.ibox div.iboxtable div.rower {
-    display: table-cell;
-    text-align: left;
-    padding: 0.2em;
-    padding-left: 1em;
-}
+    div.ibox div.iboxtable div.rower {
+        display: table-cell;
+        text-align: left;
+        padding: 0.2em;
+        padding-left: 1em;
+    }
 
 div.eventh {
     font-family: 'Marcellus SC', Times, serif;
@@ -291,9 +291,10 @@ div.faqpost {
     text-align: justify;
 }
 
-div.faqpost img {
-    float: right;
-}
+    div.faqpost img {
+        float: right;
+    }
+
 table.results tr.nonheader {
     font-family: Verdana, Geneva, sans-serif;
 }
@@ -318,25 +319,24 @@ table.results a {
     color: #000088;
 }
 
-table.results a:hover {
-    text-decoration: none;
-    color: #5555ff;
-}
+    table.results a:hover {
+        text-decoration: none;
+        color: #5555ff;
+    }
 
 tr.header a {
     color: #ffffff;
     text-decoration: none;
 }
 
-tr.header a:hover {
-    color: #bbbbbb;
-    text-decoration: none;
-}
+    tr.header a:hover {
+        color: #bbbbbb;
+        text-decoration: none;
+    }
 
 table.results td {
     padding: 0.4em;
 }
-
 
 td.shrink {
     white-space: nowrap;
@@ -350,7 +350,7 @@ td.expand {
  * =====================================================================
  */
 
- .menu > ul {
+.menu > ul {
     margin: 0;
     padding: 0;
 }
@@ -382,9 +382,10 @@ td.expand {
             .menu > ul > li > ul > li {
                 padding: 3px;
             }
-            .menu > ul > li > ul > li > .ui-button {
-                text-align: left;
-            }
+
+                .menu > ul > li > ul > li > .ui-button {
+                    text-align: left;
+                }
 
         .menu > ul > li > .ui-widget-content {
             border: none;
@@ -422,20 +423,20 @@ table.dottedint {
     border-collapse: collapse;
 }
 
-table.dottedint tr td {
-    border-top: dotted 0.1em;
-    border-left: dotted 0.1em;
-    text-align: center;
-    padding: 0.2em;
-}
+    table.dottedint tr td {
+        border-top: dotted 0.1em;
+        border-left: dotted 0.1em;
+        text-align: center;
+        padding: 0.2em;
+    }
 
-table.dottedint tr:first-child td {
-    border-top: none;
-}
+    table.dottedint tr:first-child td {
+        border-top: none;
+    }
 
-table.dottedint tr td:first-child {
-    border-left: none;
-}
+    table.dottedint tr td:first-child {
+        border-left: none;
+    }
 
 table.results {
     width: 100%;
@@ -730,10 +731,10 @@ td.tabunsel a {
     text-decoration: none;
 }
 
-td.tabunsel a:hover {
-    color: #555555;
-    text-decoration: none;
-}
+    td.tabunsel a:hover {
+        color: #555555;
+        text-decoration: none;
+    }
 
 /* SORTABLE LISTS */
 
@@ -743,18 +744,18 @@ td.tabunsel a:hover {
     padding: 0;
 }
 
-#sortable li {
-    margin: 0 3px 3px 3px;
-    padding: 0.4em;
-    padding-left: 1.5em;
-    font-size: 1em;
-    height: 18px;
-}
+    #sortable li {
+        margin: 0 3px 3px 3px;
+        padding: 0.4em;
+        padding-left: 1.5em;
+        font-size: 1em;
+        height: 18px;
+    }
 
-#sortable li span {
-    position: absolute;
-    margin-left: -1.3em;
-}
+        #sortable li span {
+            position: absolute;
+            margin-left: -1.3em;
+        }
 
 .ui-state-default {
     background: #fff;
@@ -804,3 +805,40 @@ td.tabunsel a:hover {
     font-size: larger;
 }
 
+/* autocomplete textbox */
+.autocomplete-header {
+    display: block;
+    padding: 3px;
+    background: #555555;
+    color: #ffffff;
+    font-weight: bold;
+    font-family: 'Marcellus SC';
+}
+
+.ui-menu .ui-menu-item a {
+    cursor: pointer;
+}
+
+.ui-menu:not(.ui-buttonset) .ui-menu-item {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 0;
+    color: #000000;
+    font-family: 'Donegal One',Times,serif;
+    font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+.ui-menu:not(.ui-buttonset) {
+    text-align: left;
+}
+.ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-focus, .ui-menu:not(.ui-buttonset) .ui-menu-item a.ui-state-active {
+    margin: 0;
+}
+.ui-menu:not(.ui-buttonset) .ui-menu-item .ui-state-focus {
+    background: none no-repeat scroll 0 0 silver;
+    border: 0 none;
+    border-radius: 0;
+    color: black;
+    margin: 0;
+}

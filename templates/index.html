@@ -20,7 +20,6 @@ Changes here will mostly be visible on the entire site.
         <link href="{{ "jquery.tagsInput"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
-        <script type="text/javascript" src="{{ "config"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery.tagsInput"|js }}"></script>
         <script type="text/javascript" src="{{ "general"|js }}"></script>
         <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
@@ -44,15 +43,10 @@ Changes here will mostly be visible on the entire site.
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
         </script>
+        <!-- Helper variables for using javascript to reference images -->
         <script type="text/javascript">
-        <!--
-        $(document).ready(function() {
-            $(".menu > .menu").mouseenter(function(){
-                $(".menu span").each(function() {$(this).hide();});
-                $("#submenu_" + $(this).attr("data-sub-menu")).show();
-            });
-        });
-        //-->
+          var flagsDir = '{{ "flags/"|imgdir }}';
+          var racesDir = '{{ "/"|imgdir }}';
         </script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Donegal+One&subset=latin,latin-ext' rel='stylesheet' type='text/css'>

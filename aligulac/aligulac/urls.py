@@ -86,6 +86,7 @@ urlpatterns = patterns('',
     url(r'^blog/$', 'blog.views.blog'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
+    url(r'^search/json/$', 'aligulac.views.auto_complete_search'),
     url(r'^m/', include('miniURL.urls')),
 
     url(r'^about/faq/$', 'faq.views.faq'),

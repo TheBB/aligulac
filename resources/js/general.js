@@ -1,4 +1,3 @@
-/// <reference path="config.js" />
 /* ======================================================================
  * GENERAL STUFF
  * ======================================================================
@@ -204,12 +203,12 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
     if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
         return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
     }
-    switch (ajaxobject.objectsType) {
+    switch (ajaxobject.type) {
         case 'player':
-            ajaxobject.key = ajaxobject.tag;
+            ajaxobject.key = ajaxobject.tag + ' ' + ajaxobject.id;
             return '<a>{aligulac-flag}<img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
-               ajaxobject.country ? '<img src="' + aligulacApiConfig.flagsDirectory + ajaxobject.country.toLowerCase() + '.png" />' : ' ')
-            .replace('{aligulac-race}', aligulacApiConfig.racesDirectory + ajaxobject.race.toUpperCase() + '.png')
+               ajaxobject.country ? '<img src="' + flagsDir + ajaxobject.country.toLowerCase() + '.png" />' : ' ')
+            .replace('{aligulac-race}', racesDir + ajaxobject.race.toUpperCase() + '.png')
             .replace('{aligulac-name}', ajaxobject.tag);
         case 'team':
             ajaxobject.key = ajaxobject.name;
@@ -222,53 +221,50 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
     }
     return '<a>' + ajaxobject.value + '</a>';
 };
-var getResults = function (itemToSearch, searchKey, term, label) {
-    var deferred = $.Deferred();
-    var eventString = (itemToSearch.toLowerCase() == 'event' ? '&type__iexact=event' : '');
-    var playersString = (itemToSearch.toLowerCase() == 'player' ? '&order_by=-current_rating__rating' : '');
-    var url = aligulacApiConfig.aligulacApiRoot + itemToSearch +
-        '/?' +
-        searchKey + '__icontains=' +
-        term + eventString + playersString
-        + '&callback=?';
+var getResults = function (term, restrict_to) {
+
+    if (!restrict_to)
+        restrict_to = ['players', 'teams', 'events'];
+    if (typeof(restrict_to) == 'string')
+        restrict_to = [restrict_to];
+    var deferred = $.Deferred()
+    var url = '/search/json/';
     $.ajax({
         type: 'GET',
         url: url,
         dataType: 'json',
-        data:
-        {
-            apikey: aligulacApiConfig.apiKey,
-            limit: 5
-        },
+        data: { q: term, search_for: restrict_to.join(',') }
     }).success(function (ajaxData) {
-        ajaxData.objects.unshift(label);
-        for (var i = 0; i < ajaxData.objects.length; i++) {
-            ajaxData.objects[i].objectsType = itemToSearch;
-        }
-        deferred.resolve({ result: ajaxData.objects });
+        deferred.resolve(ajaxData);
     });
 
     return deferred;
 };
+
 $(document).ready(function () {
-    
+
     $('#SearchTextBox').autocomplete({
         source: function (request, response) {
 
-            $.when(getResults('player', 'tag', request.term, 'Players'),
-                getResults('team', 'name', request.term, 'Teams'),
-                getResults('event', 'fullname', request.term, 'Events')).then(function (resplayers, resteams, resevent) {
+            $.when(getResults(request.term)).then(function (result) {
+
                     var playerresult = [];
                     var teamresult = [];
                     var eventresult = [];
-                    if (resplayers.result.length > 1) {
-                        playerresult = resplayers.result;
+                    if (result.players != undefined && result.players.length > 0) {
+                        playerresult = [{ label: 'Players' }].concat(result.players);
+                        for (var i = 1; i < playerresult.length; i++)
+                            playerresult[i].type = 'player';
                     }
-                    if (resteams.result.length > 1) {
-                        teamresult = resteams.result;
+                    if (result.teams != undefined && result.teams.length > 0) {
+                        teamresult = [{ label: 'Teams' }].concat(result.teams);
+                        for (var i = 1; i < teamresult.length; i++)
+                            teamresult[i].type = 'team';
                     }
-                    if (resevent.result.length > 1) {
-                        eventresult = resevent.result;
+                    if (result.events != undefined && result.events.length > 0) {
+                        eventresult = [{ label: 'Events' }].concat(result.events);
+                        for (var i = 1; i < eventresult.length; i++)
+                            eventresult[i].type = 'event';
                     }
                     var data = playerresult.concat(teamresult.concat(eventresult));
                     response(data);
@@ -301,7 +297,7 @@ $(document).ready(function () {
         autocomplete_opt: {
             minLength: 2,
             select: function (event, ui) {
-                $idPalyersTextArea.addTag(ui.item.key + ' ' + ui.item.id);
+                $idPalyersTextArea.addTag(ui.item.key);
                 $("#id_players_tag").focus();
                 return false;
             },
@@ -311,12 +307,23 @@ $(document).ready(function () {
             }
         },
         autocomplete_url: function (request, response) {
-            $.when(getResults('player', 'tag', request.term, 'Players')).then(function (resplayers) {
-                response(resplayers.result);
+            $.when(getResults(request.term, 'players')).then(function (result) {
+                if (result.players != undefined) {
+                    for (var i = 0; i < result.players.length; i++) {
+                        result.players[i].type = 'player';
+                    }
+                }
+                response(result.players);
             });
         },
         defaultText: 'add a player',
         delimiter: '\n',
         formatAutocomplete: aligulacAutocompleteTemplates
+    })
+    // Hacking the enter key down to submit the form when the
+    // current input is empty
+    $("#id_players_addTag").keydown(function (event) {
+        if (event.which == 13 && $("#id_players_tag").val() == "")
+            $(this).closest("form").submit();
     });
 });

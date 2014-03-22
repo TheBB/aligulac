@@ -760,11 +760,12 @@ td.tabunsel a {
 }
 /* autocomplete textbox */
 .autocomplete-header {
-    color: white;
-    background-color: #555555;
     display: block;
     padding: 3px;
+    background: #555555;
+    color: #ffffff;
     font-weight: bold;
+    font-family: 'Marcellus SC';
 }
 
 .ui-menu .ui-menu-item a {

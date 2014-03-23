@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-23 19:55+0100\n"
-"PO-Revision-Date: 2014-03-23 19:56+0100\n"
+"POT-Creation-Date: 2014-03-23 22:40+0100\n"
+"PO-Revision-Date: 2014-03-23 22:42+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -84,7 +84,7 @@ msgstr "Dette feltet er påkrevd."
 msgid "Ranking"
 msgstr "Rangering"
 
-#: aligulac/aligulac/tools.py:220
+#: aligulac/aligulac/tools.py:220 templates/player.html:743
 msgid "Current"
 msgstr "Dagens"
 
@@ -94,6 +94,7 @@ msgid "History"
 msgstr "Historie"
 
 #: aligulac/aligulac/tools.py:222 aligulac/aligulac/tools.py:328
+#: templates/player_earnings.html:30
 msgid "Earnings"
 msgstr "Inntekt"
 
@@ -120,28 +121,35 @@ msgstr "Hall of Fame"
 #: aligulac/ratings/results_views.py:475 aligulac/ratings/results_views.py:490
 #: templates/earnings.html:34 templates/earnings.html.py:43
 #: templates/earnings.html:51 templates/history.html:26
-#: templates/history.html.py:36 templates/period.html:342
+#: templates/history.html.py:36 templates/period.html:40
+#: templates/period.html.py:46 templates/period.html:126
+#: templates/period.html.py:329 templates/period.html:342
+#: templates/player.html:46 templates/player.html.py:129
+#: templates/player.html:212
 msgid "All"
 msgstr "Alle"
 
 #: aligulac/aligulac/tools.py:239 aligulac/ratings/models.py:84
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
 #: aligulac/ratings/templatetags/ratings_extras.py:118
-#: templates/history.html:27
+#: templates/history.html:27 templates/period.html:41
+#: templates/period.html.py:127 templates/period.html:330
 msgid "Protoss"
 msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:240 aligulac/ratings/models.py:85
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
 #: aligulac/ratings/templatetags/ratings_extras.py:119
-#: templates/history.html:28
+#: templates/history.html:28 templates/period.html:42
+#: templates/period.html.py:128 templates/period.html:331
 msgid "Terran"
 msgstr "Terran"
 
 #: aligulac/aligulac/tools.py:241 aligulac/ratings/models.py:86
 #: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:644
 #: aligulac/ratings/templatetags/ratings_extras.py:120
-#: templates/history.html:29
+#: templates/history.html:29 templates/period.html:43
+#: templates/period.html.py:129 templates/period.html:332
 msgid "Zerg"
 msgstr "Zerg"
 
@@ -201,7 +209,7 @@ msgstr "Databasestatus"
 msgid "API"
 msgstr "API"
 
-#: aligulac/aligulac/tools.py:274 templates/forms.html:128
+#: aligulac/aligulac/tools.py:274 templates/forms.html:130
 #: templates/language.html:41
 msgid "Submit"
 msgstr "Send"
@@ -268,7 +276,7 @@ msgstr "virkelig navn"
 msgid "birthday"
 msgstr "fødselsdag"
 
-#: aligulac/aligulac/views.py:68
+#: aligulac/aligulac/views.py:68 templates/player.html:496
 msgid "MC number"
 msgstr "MC-tall"
 
@@ -2051,6 +2059,7 @@ msgstr "Individuell"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:65 templates/earnings.html:107
+#: templates/player.html:466 templates/player.html.py:740
 msgid "Team"
 msgstr "Lag"
 
@@ -2080,6 +2089,7 @@ msgstr "Runde"
 #. Translators: Random race
 #: aligulac/ratings/models.py:88
 #: aligulac/ratings/templatetags/ratings_extras.py:121
+#: templates/period.html:336
 msgid "Random"
 msgstr "Tilfeldig"
 
@@ -2143,7 +2153,7 @@ msgstr ""
 msgid "Tag"
 msgstr "Nick"
 
-#: aligulac/ratings/player_views.py:94
+#: aligulac/ratings/player_views.py:94 templates/player.html:394
 msgid "Race"
 msgstr "Rase"
 
@@ -2157,7 +2167,7 @@ msgstr "Navn"
 msgid "AKAs"
 msgstr "Alias"
 
-#: aligulac/ratings/player_views.py:97
+#: aligulac/ratings/player_views.py:97 templates/player.html:460
 msgid "Birthday"
 msgstr "Fødselsdag"
 
@@ -2185,6 +2195,7 @@ msgid "SC2Earnings.com ID"
 msgstr "SC2Earnings.com ID"
 
 #: aligulac/ratings/player_views.py:106 aligulac/ratings/player_views.py:184
+#: templates/player.html:402
 msgid "Country"
 msgstr "Land"
 
@@ -2238,17 +2249,17 @@ msgid "Before"
 msgstr "Før"
 
 #: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:647
-#: templates/history.html:30
+#: templates/history.html:30 templates/period.html:333
 msgid "No Protoss"
 msgstr "Ingen protoss"
 
 #: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:646
-#: templates/history.html:31
+#: templates/history.html:31 templates/period.html:334
 msgid "No Terran"
 msgstr "Ingen terran"
 
 #: aligulac/ratings/player_views.py:177 aligulac/ratings/player_views.py:645
-#: templates/history.html:32
+#: templates/history.html:32 templates/period.html:335
 msgid "No Zerg"
 msgstr "Ingen zerg"
 
@@ -2308,6 +2319,14 @@ msgstr "Spillversjon"
 msgid "%s has no rating yet."
 msgstr "%s har ingen rating enda."
 
+#: aligulac/ratings/player_views.py:328
+msgid "joins"
+msgstr "skriver under hos"
+
+#: aligulac/ratings/player_views.py:334
+msgid "leaves"
+msgstr "forlater"
+
 #: aligulac/ratings/player_views.py:522
 msgid " before {}"
 msgstr " før {}"
@@ -2350,7 +2369,8 @@ msgid "Results for"
 msgstr "Resultater for"
 
 #: aligulac/ratings/player_views.py:671 templates/eventres.html:251
-#: templates/historical.html:29
+#: templates/historical.html:29 templates/period.html:292
+#: templates/periods.html:22 templates/player.html:601
 msgid "Games"
 msgstr "Partier"
 
@@ -2410,7 +2430,7 @@ msgstr ""
 "Dette er en <em>forsmak</em> på den neste ratinglisten. Den er ikke endelig "
 "før %s."
 
-#: aligulac/ratings/ranking_views.py:50
+#: aligulac/ratings/ranking_views.py:50 templates/periods.html:10
 msgid "Historical overview"
 msgstr "Historisk oversikt"
 
@@ -2541,7 +2561,7 @@ msgstr "Spiller"
 #: aligulac/ratings/results_views.py:322 aligulac/ratings/results_views.py:625
 #: aligulac/ratings/staff_views.py:142 aligulac/ratings/staff_views.py:280
 #: templates/clocks.html:56 templates/eventres.html:206
-#: templates/matchlist.html:38
+#: templates/matchlist.html:38 templates/player_results.html:19
 msgid "Date"
 msgstr "Dato"
 
@@ -4228,6 +4248,7 @@ msgstr "Filtrér etter valuta:"
 
 #. Translators: The verb "to filter".
 #: templates/earnings.html:57 templates/history.html:42
+#: templates/period.html:352 templates/player_results.html:20
 msgid "Filter"
 msgstr "Filtrér"
 
@@ -4236,7 +4257,7 @@ msgstr "Filtrér"
 msgid "Page %(page)s/%(npages)s"
 msgstr "Side %(page)s/%(npages)s"
 
-#: templates/earnings.html:108
+#: templates/earnings.html:108 templates/player.html:486
 msgid "Total earnings"
 msgstr "Total inntekt"
 
@@ -4335,7 +4356,7 @@ msgstr "Legg til rotturnering"
 
 #: templates/eventmgr.html:44 templates/eventres.html:335
 #: templates/eventres.html.py:372 templates/eventres.html:392
-#: templates/eventres.html.py:416
+#: templates/eventres.html.py:416 templates/player.html:532
 msgid "close"
 msgstr "lukk"
 
@@ -4356,7 +4377,7 @@ msgstr "endre"
 msgid "path"
 msgstr "sti"
 
-#: templates/eventres.html:33
+#: templates/eventres.html:33 templates/period.html:33
 msgid "matchups"
 msgstr "oppgjør"
 
@@ -4381,19 +4402,23 @@ msgid "Root"
 msgstr "Rot"
 
 #: templates/eventres.html:103 templates/eventres.html.py:259
+#: templates/period.html:194 templates/period.html.py:296
 msgid "PvT"
 msgstr "PvT"
 
 #: templates/eventres.html:119 templates/eventres.html.py:265
+#: templates/period.html:210 templates/period.html.py:302
 msgid "PvZ"
 msgstr "PvZ"
 
 #: templates/eventres.html:135 templates/eventres.html.py:271
+#: templates/period.html:226 templates/period.html.py:308
 msgid "TvZ"
 msgstr "TvZ"
 
 #. Translators: Mirror matchups
 #: templates/eventres.html:151 templates/eventres.html.py:277
+#: templates/period.html:241 templates/period.html.py:314
 msgid "Mirrors"
 msgstr "Speil"
 
@@ -4401,7 +4426,7 @@ msgstr "Speil"
 msgid "Details"
 msgstr "Detaljer"
 
-#: templates/eventres.html:175
+#: templates/eventres.html:175 templates/player.html:388
 msgid "edit"
 msgstr "endre"
 
@@ -4434,7 +4459,7 @@ msgstr "adm"
 msgid "add"
 msgstr "nye"
 
-#: templates/eventres.html:204
+#: templates/eventres.html:204 templates/player_earnings.html:32
 msgid "Dates"
 msgstr "Datoer"
 
@@ -4452,19 +4477,19 @@ msgstr "On/offline"
 msgid "Prize pool"
 msgstr "Premier"
 
-#: templates/eventres.html:279
+#: templates/eventres.html:279 templates/period.html:316
 msgid "PvP"
 msgstr "PvP"
 
-#: templates/eventres.html:280
+#: templates/eventres.html:280 templates/period.html:316
 msgid "TvT"
 msgstr "TvT"
 
-#: templates/eventres.html:281
+#: templates/eventres.html:281 templates/period.html:316
 msgid "ZvZ"
 msgstr "ZvZ"
 
-#: templates/eventres.html:287
+#: templates/eventres.html:287 templates/player.html:502
 msgid "External"
 msgstr "Ekstern"
 
@@ -4479,8 +4504,10 @@ msgstr "TLPD"
 msgid "TL"
 msgstr "TL"
 
+#. Translators: LP = Liquipedia
 #: templates/eventres.html:313 templates/events_open.html:41
 #: templates/events_open.html.py:87 templates/events_open.html:135
+#: templates/player.html:519
 msgid "LP"
 msgstr "LP"
 
@@ -4648,6 +4675,21 @@ msgstr "Mindre turneringer:"
 msgid "Go"
 msgstr "Gå til"
 
+#: templates/forms.html:100
+msgctxt "between x and y inclusive"
+msgid "between"
+msgstr "mellom"
+
+#: templates/forms.html:103
+msgctxt "between x and y inclusive"
+msgid "and"
+msgstr "og"
+
+#: templates/forms.html:106
+msgctxt "between x and y inclusive"
+msgid "inclusive"
+msgstr "inklusive"
+
 #: templates/historical.html:10
 #, python-format
 msgid "%(pl)s rating history"
@@ -4658,7 +4700,7 @@ msgid "List"
 msgstr "Liste"
 
 #: templates/historical.html:20 templates/matchlist.html:39
-#: templates/matchlist.html.py:43
+#: templates/matchlist.html.py:43 templates/player.html:596
 msgid "Rating"
 msgstr "Rating"
 
@@ -4682,11 +4724,11 @@ msgstr "Antall spillere:"
 msgid "Races:"
 msgstr "Raser:"
 
-#: templates/history.html:34
+#: templates/history.html:34 templates/period.html:340
 msgid "Nationalities:"
 msgstr "Nasjonaliteter:"
 
-#: templates/history.html:61
+#: templates/history.html:61 templates/player.html:572
 msgid "Click and drag to zoom"
 msgstr "Klikk og dra for å zoome"
 
@@ -4733,7 +4775,7 @@ msgstr ""
 "For å unngå irregulære ratinger i begynnelsen teller dette kun etter 25 "
 "perioder (periode 25 begynte den niende februar 2011)."
 
-#: templates/hof.html:30
+#: templates/hof.html:30 templates/period.html:266
 msgid "Start"
 msgstr "Start"
 
@@ -4917,6 +4959,324 @@ msgstr "enda ikke beregnet"
 msgid "offline,online"
 msgstr "offline,online"
 
+#: templates/period.html:10 templates/period.html.py:263
+#, python-format
+msgid "List %(n)s"
+msgstr "Liste %(n)s"
+
+#: templates/period.html:27
+msgid "best"
+msgstr "beste"
+
+#: templates/period.html:30
+msgid "most specialized"
+msgstr "mest spesialiserte"
+
+#: templates/period.html:65 templates/period.html.py:132
+#: templates/player.html:66 templates/player.html.py:149
+#: templates/player.html:237
+msgid "vP"
+msgstr "vP"
+
+#: templates/period.html:84 templates/period.html.py:151
+#: templates/player.html:86 templates/player.html.py:169
+#: templates/player.html:262
+msgid "vT"
+msgstr "vT"
+
+#: templates/period.html:103 templates/period.html.py:170
+#: templates/player.html:106 templates/player.html.py:189
+#: templates/player.html:287
+msgid "vZ"
+msgstr "vZ"
+
+#: templates/period.html:270
+msgid "End"
+msgstr "Slutt"
+
+#: templates/period.html:274
+msgid "Active players"
+msgstr "Aktive spillere"
+
+#: templates/period.html:278
+msgid "Leading race"
+msgstr "Ledende rase"
+
+#: templates/period.html:285
+msgid "Lagging race"
+msgstr "Dårligste rase"
+
+#: templates/period.html:327
+msgid "Show races:"
+msgstr "Vis raser:"
+
+#: templates/period.html:337
+msgid "Race switchers"
+msgstr "Rasebyttere"
+
+#: templates/period.html:338
+msgid "Random and race switchers"
+msgstr "Tilfeldige og rasebyttere"
+
+#: templates/periodpagenav.html:20 templates/periodpagenav.html.py:41
+#: templates/periodpagenav.html:70
+msgid "previous"
+msgstr "forrige"
+
+#: templates/periodpagenav.html:27
+msgid "previous period"
+msgstr "forrige periode"
+
+#: templates/periodpagenav.html:34
+msgid "first"
+msgstr "første"
+
+#: templates/periodpagenav.html:49
+msgid "next"
+msgstr "neste"
+
+#: templates/periodpagenav.html:56
+msgid "last"
+msgstr "siste"
+
+#: templates/periodpagenav.html:63
+msgid "next period"
+msgstr "neste periode"
+
+#: templates/periods.html:15
+msgid "List date"
+msgstr "Listedato"
+
+#. Translators: Overpowered
+#: templates/periods.html:17
+msgid "OP"
+msgstr "OP"
+
+#. Translators: Underpowered
+#: templates/periods.html:19
+msgid "UP"
+msgstr "UP"
+
+#: templates/periods.html:20
+msgid "Active"
+msgstr "Aktive"
+
+#: templates/periods.html:21
+msgid "New"
+msgstr "Ny"
+
+#. Translators: All-time winrates
+#: templates/player.html:29
+msgid "all-time"
+msgstr "karriere"
+
+#. Translators: Recent winrates
+#: templates/player.html:33
+msgid "form"
+msgstr "form"
+
+#. Translators: Highest ratings
+#: templates/player.html:37
+msgid "highest"
+msgstr "høyeste"
+
+#: templates/player.html:40
+msgid "rivalries"
+msgstr "rivaler"
+
+#: templates/player.html:224 templates/player.html.py:249
+#: templates/player.html:274 templates/player.html.py:299
+msgctxt "on date"
+msgid "on"
+msgstr "på"
+
+#: templates/player.html:319
+msgid "Biggest rival"
+msgid_plural "Biggest rivals"
+msgstr[0] "Største rival"
+msgstr[1] "Største rivaler"
+
+#: templates/player.html:329
+#, python-format
+msgid "%(cnt)s match"
+msgid_plural "%(cnt)s matches"
+msgstr[0] "%(cnt)s kamp"
+msgstr[1] "%(cnt)s kamper"
+
+#: templates/player.html:338
+msgid "Nemesis"
+msgid_plural "Nemeses"
+msgstr[0] "Erkefiende"
+msgstr[1] "Erkefiender"
+
+#: templates/player.html:358
+msgid "Victim"
+msgid_plural "Victims"
+msgstr[0] "Offer"
+msgstr[1] "Ofre"
+
+#: templates/player.html:389
+msgid "Admin interface"
+msgstr "Administratorgrensesnitt"
+
+#: templates/player.html:389
+msgctxt "admin interface"
+msgid "admin"
+msgstr "admin"
+
+#: templates/player.html:414
+msgid "Rank"
+msgstr "Rang"
+
+#. Translators: World rank.
+#: templates/player.html:418
+#, python-format
+msgid "#%(rank)s World"
+msgstr "#%(rank)s i verden"
+
+#. Translators: Rank among non-Koreans.
+#: templates/player.html:428
+#, python-format
+msgid "#%(rank)s Non-Korean"
+msgstr "#%(rank)s blant ikke-koreanere"
+
+#. Translators: Rank in a country.
+#: templates/player.html:439
+#, python-format
+msgid "#%(rank)s %(countryfull)s"
+msgstr "#%(rank)s i %(countryfull)s"
+
+#: templates/player.html:448
+msgid "Full name"
+msgstr "Fullt navn"
+
+#: templates/player.html:454
+msgid "AKA"
+msgstr "Alias"
+
+#: templates/player.html:474
+msgid "First match"
+msgstr "Første kamp"
+
+#: templates/player.html:480
+msgid "Last match"
+msgstr "Siste kamp"
+
+#: templates/player.html:491
+msgid "Matches played"
+msgstr "Kamper spilt"
+
+#. Translators: SC2C = sc2charts.net
+#: templates/player.html:506
+msgid "SC2C"
+msgstr "SC2C"
+
+#. Translators: SC2E = sc2earnings.com
+#: templates/player.html:515
+msgid "SC2E"
+msgstr "SC2E"
+
+#: templates/player.html:569
+#, python-format
+msgid "Rating history for %(tag)s"
+msgstr "Ratinghistorie for %(tag)s"
+
+#: templates/player.html:629
+msgid "Number of games"
+msgstr "Antall partier"
+
+#: templates/player.html:641
+msgid "vs. Protoss"
+msgstr "mot protoss"
+
+#: templates/player.html:653
+msgid "vs. Terran"
+msgstr "mot terran"
+
+#: templates/player.html:665
+msgid "vs. Zerg"
+msgstr "mot zerg"
+
+#. Translators: General rating
+#: templates/player.html:678
+msgid "General"
+msgstr "Generell"
+
+#. Translators: Stories are the dots on a player's rating chart.
+#: templates/player.html:691
+msgid "Stories"
+msgstr "Fortellinger"
+
+#: templates/player.html:708
+msgid "Team switches"
+msgstr "Lagbytter"
+
+#: templates/player.html:730
+msgid "Most recent results"
+msgstr "Nylige resultater"
+
+#: templates/player.html:737
+msgid "Team history"
+msgstr "Laghistorie"
+
+#: templates/player.html:741
+msgid "Joined"
+msgstr "Skrev under på"
+
+#: templates/player.html:742
+msgid "Left"
+msgstr "Forlot"
+
+#. Translators: Earnings for [someone]
+#: templates/player_earnings.html:12
+#, python-format
+msgid "%(tag)s earnings"
+msgstr "Inntekt for %(tag)s"
+
+#: templates/player_earnings.html:15
+#, python-format
+msgid "In total, %(tag)s has earned $%(money)s."
+msgstr "Totalt har %(tag)s tjent %(money)s dollar."
+
+#: templates/player_earnings.html:17
+msgid "Broken down by currency, that is…"
+msgstr "Per valuta er det…"
+
+#: templates/player_earnings.html:27
+msgid "Placement"
+msgstr "Plassering"
+
+#: templates/player_earnings.html:29
+msgid "Tournament"
+msgstr "Turnering"
+
+#: templates/player_results.html:11
+#, python-format
+msgid "%(tag)s match history"
+msgstr "Spillhistorie for %(tag)s"
+
+#: templates/player_results.html:16
+msgid "Filter by"
+msgstr "Filtrér etter"
+
+#: templates/player_results.html:34
+#, python-format
+msgid ""
+"In these games, %(tag)s is %(sc_my)s–%(sc_op)s (%(pctg)s%%) in games and "
+"%(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches."
+msgstr ""
+"I disse partiene er %(tag)s %(sc_my)s–%(sc_op)s (%(pctg)s%%) i partier og "
+"%(msc_my)s–%(msc_op)s (%(mpctg)s%%) i kamper."
+
+#: templates/player_results.html:42
+msgid "Postable History"
+msgstr "Historie for foruminnlegg"
+
+#: templates/player_results.html:46
+#, python-format
+msgid "The above is code that can be used in posts on %(a)sTeamLiquid.net</a>."
+msgstr "Denne koden kan brukes i innlegg på %(a)sTeamLiquid.net</a>."
+
 #: templates/miniURL/list.html:9
 msgid "Short URLs list"
 msgstr "Liste over korte adresser"
@@ -4947,10 +5307,6 @@ msgstr "Adresseforkorter"
 
 #~ msgid "Tenge"
 #~ msgstr "Kasakstansk tenge"
-
-#, fuzzy
-#~ msgid "race switcher"
-#~ msgstr "Rasebytter"
 
 #, fuzzy
 #~ msgid "Days since..."

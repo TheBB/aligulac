@@ -325,13 +325,13 @@ def player(request, player_id):
                 teampoints.append({
                     'date':    mem.start,
                     'rating':  interp_rating(mem.start, ratings),
-                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': 'joins'}],
+                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': _('joins')}],
                 })
             if mem.end and earliest.period.end < mem.end < latest.period.end:
                 teampoints.append({
                     'date':    mem.end,
                     'rating':  interp_rating(mem.end, ratings),
-                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': 'leaves'}],
+                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': _('leaves')}],
                 })
         teampoints.sort(key=lambda p: p['date'])
 

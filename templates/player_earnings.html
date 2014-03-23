@@ -6,27 +6,30 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% load ratings_extras %}
 {% load humanize %}
+{% load i18n %}
 
-{% block title %}{{ player.tag }} earnings{% endblock %}
+{% comment %}Translators: Earnings for [someone]{% endcomment %}
+{% block title %}{% blocktrans with tag=player.tag %}{{tag}} earnings{% endblocktrans %}{% endblock %}
 
 {% block content %}
-<p>In total, {{ player.tag }} has earned ${{ totalearnings|add_separator }}.</p>
-{% if by_currency %}<p>Broken down by currency, that's 
+<p>{% blocktrans with tag=player.tag money=totalearnings|add_separator %}In total, {{tag}} has earned ${{money}}.{% endblocktrans %}</p>
+
+{% if by_currency %}<p>{% trans "Broken down by currency, that is…" %}</p>
+<ul>
 {% for currency, earnings in by_currency.items %}
-    {{ earnings|add_sep_and_cur:currency }}{% if forloop.revcounter == 2 %} and  
-    {% elif forloop.last %}.
-    {% else %}, {% endif %} 
+<li>{{ earnings|add_sep_and_cur:currency }}</li>
 {% endfor %}
-</p>
+</ul>
 {% endif %}
+
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 6em; text-align: right;">Placement</td>
+        <td style="width: 6em; text-align: right;">{% trans "Placement" %}</td>
         <td style="width: 0.1em;"></td>
-        <td>Tournament</td>
-        <td style="width: 13em; text-align: right;">Earnings</td>
+        <td>{% trans "Tournament" %}</td>
+        <td style="width: 13em; text-align: right;">{% trans "Earnings" %}</td>
         <td style="width: 2em;"></td>
-        <td style="width: 19em;">Dates</td>
+        <td style="width: 19em;">{% trans "Dates" %}</td>
     </tr>
     {% for earning in earnings %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">

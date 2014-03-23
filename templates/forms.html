@@ -97,11 +97,13 @@
 <tr>
     <td class="form_left">{{ label }}</td>
     <td class="form_right">
-        between <input type="text" class="date" name="{{ after.html_name }}" 
-                       id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
-        and     <input type="text" class="date" name="{{ before.html_name }}" 
-                       id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
-        inclusive
+        {% trans "between" context "between x and y inclusive" %}
+        <input type="text" class="date" name="{{ after.html_name }}" 
+               id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
+        {% trans "and" context "between x and y inclusive" %}
+        <input type="text" class="date" name="{{ before.html_name }}" 
+               id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
+        {% trans "inclusive" context "between x and y inclusive" %}
         <script type="text/javascript">
         // <![CDATA[  
             var opts = {                            

@@ -364,7 +364,7 @@ ntz = lambda k: k if k is not None else 0
 
 
 # {{{ search: Helper function for performing searches
-def search(query, search_for=['players', 'teams', 'events']):
+def search(query, search_for=['players', 'teams', 'events'], strict=False):
     # {{{ Split query
     terms = [s.strip() for s in shlex.split(query) if s.strip() != '']
     if len(terms) == 0:
@@ -373,7 +373,7 @@ def search(query, search_for=['players', 'teams', 'events']):
 
     # {{{ Search for players, teams and events
     if 'players' in search_for:
-        players = find_player(lst=terms, make=False, soft=True)
+        players = find_player(lst=terms, make=False, soft=True, strict=strict)
     else:
         players = None
 

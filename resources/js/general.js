@@ -283,7 +283,9 @@ $(document).ready(function () {
         },
         minLength: 2,
         select: function (event, ui) {
-            $('#SearchTextBox').val(ui.item.key);
+            $('#SearchTextBox').val(ui.item.key)
+                .closest('form')
+                .submit();
             return false;
         },
         open: function () {

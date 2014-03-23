@@ -74,6 +74,12 @@ def urlify(value):
     return mark_safe(value)
 # }}}
 
+# {{{ player_url: Generate a player URL.
+@register.filter
+def player_url(value):
+    return "/players/" + str(value.id) + "-" + urlfilter(value.tag) + "/"
+# }}}
+
 # {{{ vs_url: Generate a search query for the two players
 @register.filter
 def vs_url(value, arg):
@@ -238,11 +244,11 @@ def get_tlpd_list(value):
     value = int(value) if value is not None else 0
 
     dbs = [
-        (TLPD_DB_WOLBETA,           'sc2-beta',           'TLPD:WoL:B'),
-        (TLPD_DB_WOLKOREAN,         'sc2-korean',         'TLPD:WoL:KR'),
-        (TLPD_DB_WOLINTERNATIONAL,  'sc2-international',  'TLPD:WoL:IN'),
-        (TLPD_DB_HOTSBETA,          'hots-beta',          'TLPD:HotS:B'),
-        (TLPD_DB_HOTS,              'hots',               'TLPD:HotS'),
+        (TLPD_DB_WOLBETA,           'sc2-beta',           _('TLPD:WoL:B')),
+        (TLPD_DB_WOLKOREAN,         'sc2-korean',         _('TLPD:WoL:KR')),
+        (TLPD_DB_WOLINTERNATIONAL,  'sc2-international',  _('TLPD:WoL:IN')),
+        (TLPD_DB_HOTSBETA,          'hots-beta',          _('TLPD:HotS:B')),
+        (TLPD_DB_HOTS,              'hots',               _('TLPD:HotS')),
     ]
 
     ret = []

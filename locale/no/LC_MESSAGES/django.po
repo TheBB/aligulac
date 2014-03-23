@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-23 00:43+0100\n"
-"PO-Revision-Date: 2014-03-23 00:44+0100\n"
+"POT-Creation-Date: 2014-03-23 12:42+0100\n"
+"PO-Revision-Date: 2014-03-23 12:42+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -80,6 +80,7 @@ msgid "This field is required."
 msgstr "Dette feltet er påkrevd."
 
 #: aligulac/aligulac/tools.py:217 aligulac/aligulac/tools.py:228
+#: templates/history.html:85
 msgid "Ranking"
 msgstr "Rangering"
 
@@ -88,7 +89,7 @@ msgid "Current"
 msgstr "Dagens"
 
 #: aligulac/aligulac/tools.py:221 aligulac/aligulac/tools.py:235
-#: aligulac/ratings/records_views.py:71
+#: aligulac/ratings/records_views.py:71 templates/history.html:10
 msgid "History"
 msgstr "Historie"
 
@@ -118,25 +119,29 @@ msgstr "Hall of Fame"
 #: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:188
 #: aligulac/ratings/results_views.py:475 aligulac/ratings/results_views.py:490
 #: templates/earnings.html:34 templates/earnings.html.py:43
-#: templates/earnings.html:51 templates/period.html:342
+#: templates/earnings.html:51 templates/history.html:26
+#: templates/history.html.py:36 templates/period.html:342
 msgid "All"
 msgstr "Alle"
 
 #: aligulac/aligulac/tools.py:239 aligulac/ratings/models.py:84
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
-#: aligulac/ratings/templatetags/ratings_extras.py:112
+#: aligulac/ratings/templatetags/ratings_extras.py:118
+#: templates/history.html:27
 msgid "Protoss"
 msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:240 aligulac/ratings/models.py:85
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
-#: aligulac/ratings/templatetags/ratings_extras.py:113
+#: aligulac/ratings/templatetags/ratings_extras.py:119
+#: templates/history.html:28
 msgid "Terran"
 msgstr "Terran"
 
 #: aligulac/aligulac/tools.py:241 aligulac/ratings/models.py:86
 #: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:644
-#: aligulac/ratings/templatetags/ratings_extras.py:114
+#: aligulac/ratings/templatetags/ratings_extras.py:120
+#: templates/history.html:29
 msgid "Zerg"
 msgstr "Zerg"
 
@@ -180,7 +185,7 @@ msgstr "Dager siden…"
 msgid "About"
 msgstr "Om"
 
-#: aligulac/aligulac/tools.py:268
+#: aligulac/aligulac/tools.py:268 templates/faq.html:10
 msgid "FAQ"
 msgstr "FAQ"
 
@@ -196,13 +201,15 @@ msgstr "Databasestatus"
 msgid "API"
 msgstr "API"
 
-#: aligulac/aligulac/tools.py:274 templates/language.html:41
+#: aligulac/aligulac/tools.py:274 templates/forms.html:128
+#: templates/language.html:41
 msgid "Submit"
 msgstr "Send"
 
 #. Translators: Matches as in SC2-matches, not search matches.
 #: aligulac/aligulac/tools.py:278 aligulac/ratings/player_views.py:672
 #: aligulac/ratings/staff_views.py:286 templates/add.html:75
+#: templates/eventres.html:255 templates/historical.html:28
 msgid "Matches"
 msgstr "Kamper"
 
@@ -210,13 +217,19 @@ msgstr "Kamper"
 msgid "Review"
 msgstr "Må gjennomgås"
 
-#: aligulac/aligulac/tools.py:280
+#: aligulac/aligulac/tools.py:280 templates/events.html:10
+#: templates/events.html.py:13
 msgid "Events"
 msgstr "Turneringer"
 
 #: aligulac/aligulac/tools.py:281 aligulac/ratings/staff_views.py:979
+#: templates/events_open.html:6
 msgid "Open events"
 msgstr "Åpne turneringer"
+
+#: aligulac/aligulac/tools.py:320
+msgid "Summary"
+msgstr "Oversikt"
 
 #: aligulac/aligulac/tools.py:323
 msgid "Rating history"
@@ -877,7 +890,7 @@ msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
 msgid "API documentation"
 msgstr "API-dokumentasjon"
 
-#: aligulac/aligulac/views.py:530 aligulac/ratings/results_views.py:857
+#: aligulac/aligulac/views.py:530 aligulac/ratings/results_views.py:862
 msgid "Search results"
 msgstr "Søkeresultater"
 
@@ -2065,7 +2078,7 @@ msgstr "Runde"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:88
-#: aligulac/ratings/templatetags/ratings_extras.py:115
+#: aligulac/ratings/templatetags/ratings_extras.py:121
 msgid "Random"
 msgstr "Tilfeldig"
 
@@ -2224,14 +2237,17 @@ msgid "Before"
 msgstr "Før"
 
 #: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:647
+#: templates/history.html:30
 msgid "No Protoss"
 msgstr "Ingen protoss"
 
 #: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:646
+#: templates/history.html:31
 msgid "No Terran"
 msgstr "Ingen terran"
 
 #: aligulac/ratings/player_views.py:177 aligulac/ratings/player_views.py:645
+#: templates/history.html:32
 msgid "No Zerg"
 msgstr "Ingen zerg"
 
@@ -2240,7 +2256,7 @@ msgid "Opponent race"
 msgstr "Motstanderrase"
 
 #: aligulac/ratings/player_views.py:182 templates/earnings.html:44
-#: templates/period.html:345
+#: templates/history.html:37 templates/period.html:345
 msgid "Non-Koreans"
 msgstr "Ikke-koreanere"
 
@@ -2257,18 +2273,20 @@ msgid "Match format"
 msgstr "Kampformat"
 
 #: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:483
+#: aligulac/ratings/results_views.py:820
 msgid "Both"
 msgstr "Begge"
 
 #: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:104
 #: aligulac/ratings/results_views.py:484 aligulac/ratings/results_views.py:627
-#: aligulac/ratings/staff_views.py:282 templates/db.html:50
+#: aligulac/ratings/results_views.py:822 aligulac/ratings/staff_views.py:282
+#: templates/db.html:50
 msgid "Offline"
 msgstr "Offline"
 
 #: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:104
 #: aligulac/ratings/results_views.py:485 aligulac/ratings/results_views.py:627
-#: templates/db.html:43
+#: aligulac/ratings/results_views.py:822 templates/db.html:43
 msgid "Online"
 msgstr "Online"
 
@@ -2280,6 +2298,7 @@ msgstr "On/offline"
 #: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:101
 #: aligulac/ratings/results_views.py:490 aligulac/ratings/results_views.py:632
 #: aligulac/ratings/staff_views.py:281 templates/add.html:58
+#: templates/eventres.html:224
 msgid "Game version"
 msgstr "Spillversjon"
 
@@ -2329,7 +2348,8 @@ msgstr "begge"
 msgid "Results for"
 msgstr "Resultater for"
 
-#: aligulac/ratings/player_views.py:671
+#: aligulac/ratings/player_views.py:671 templates/eventres.html:251
+#: templates/historical.html:29
 msgid "Games"
 msgstr "Partier"
 
@@ -2423,8 +2443,10 @@ msgid "No change"
 msgstr "Ingen endring"
 
 #. Translators: Type as in event type
+#. Translators: Event type.
 #: aligulac/ratings/results_views.py:110 aligulac/ratings/results_views.py:370
 #: aligulac/ratings/staff_views.py:543 templates/add.html:61
+#: templates/eventres.html:242
 msgid "Type"
 msgstr "Type"
 
@@ -2434,6 +2456,8 @@ msgid "Apply to all events on the same level"
 msgstr "Gjør samme endringer på alle turneringer på samme nivå"
 
 #: aligulac/ratings/results_views.py:114 aligulac/ratings/team_views.py:50
+#: templates/eventres.html:290 templates/events_open.html:35
+#: templates/events_open.html.py:79 templates/events_open.html:127
 msgid "Homepage"
 msgstr "Hjemmeside"
 
@@ -2515,7 +2539,7 @@ msgstr "Spiller"
 
 #: aligulac/ratings/results_views.py:322 aligulac/ratings/results_views.py:625
 #: aligulac/ratings/staff_views.py:142 aligulac/ratings/staff_views.py:280
-#: templates/clocks.html:56
+#: templates/clocks.html:56 templates/eventres.html:206
 msgid "Date"
 msgstr "Dato"
 
@@ -2888,7 +2912,7 @@ msgstr "Lagre resultater"
 msgid "Review results"
 msgstr "Gjennomgå resultater"
 
-#: aligulac/ratings/staff_views.py:887
+#: aligulac/ratings/staff_views.py:887 templates/eventmgr.html:11
 msgid "Manage events"
 msgstr "Behandle turneringer"
 
@@ -3108,11 +3132,31 @@ msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende nick)"
 msgid "Player '%s' was not found and cound not be made (missing race)"
 msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende rase)"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:116
+#: aligulac/ratings/templatetags/ratings_extras.py:122
 msgid "Race switcher"
 msgstr "Rasebytter"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:344
+#: aligulac/ratings/templatetags/ratings_extras.py:247
+msgid "TLPD:WoL:B"
+msgstr "TLPD:WoL:B"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:248
+msgid "TLPD:WoL:KR"
+msgstr "TLPD:WoL:KR"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:249
+msgid "TLPD:WoL:IN"
+msgstr "TLPD:WoL:IN"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:250
+msgid "TLPD:HotS:B"
+msgstr "TLPD:HotS:B"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:251
+msgid "TLPD:HotS"
+msgstr "TLPD:HotS"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:350
 msgid "N/A"
 msgstr "N/A"
 
@@ -4098,9 +4142,9 @@ msgstr "Kamper med turneringsinfo"
 msgid "Uncatalogued matches"
 msgstr "Ikke-katalogiserte kamper"
 
-#: templates/db.html:65
+#: templates/db.html:65 templates/eventres.html:247
 msgid "Players"
-msgstr "spillere"
+msgstr "Spillere"
 
 #: templates/db.html:67
 #, python-format
@@ -4181,7 +4225,7 @@ msgid "Filter by currency:"
 msgstr "Filtrér etter valuta:"
 
 #. Translators: The verb "to filter".
-#: templates/earnings.html:57
+#: templates/earnings.html:57 templates/history.html:42
 msgid "Filter"
 msgstr "Filtrér"
 
@@ -4193,6 +4237,455 @@ msgstr "Side %(page)s/%(npages)s"
 #: templates/earnings.html:108
 msgid "Total earnings"
 msgstr "Total inntekt"
+
+#: templates/eventmgr.html:17
+msgid ""
+"The events are organized in a tree, loosely hierarchical with "
+"organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so "
+"on. There are no hard rules."
+msgstr ""
+"Turneringene er organisert i et tre, med en hierarkisk struktur som er mer "
+"eller mindre på formen arrangør→sesong→turnering→nivå (kvalifisering/gruppe/"
+"sluttspill)→runde og så videre."
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:20
+msgid ""
+"The name displayed everywhere on the site is the concatenation of the event "
+"name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code "
+"S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S Ro32 Group A». "
+"With this in mind, try to name the events so that the full name flows as "
+"well as possible."
+msgstr ""
+"Navnet som vises rundt omkring på siden er sammensatt av turneringsnavnet "
+"til <strong>alle forfedrene</strong>. Med andre ord vil GSL→2013 Season "
+"1→Code S→Ro32→Group A bli vist som «GSL 2013 Season 1 Code S Ro32 Group A». "
+"Ta dette til hensyn når du setter opp trestrukturen sånn at det fulle navnet "
+"flyter så godt som mulig."
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:23
+msgid ""
+"Do not repeat information. If you have an event called «Qualifiers», the "
+"subevents should not be called «Korean Qualifiers». Just «Korea» is fine."
+msgstr ""
+"Ikke gjenta informasjon. Hvis du har en turnering som heter «Qualifiers», "
+"bør underturneringene ikke kalles «Korean Qualifiers». Det holder med kun "
+"«Korea»."
+
+#: templates/eventmgr.html:25
+msgid ""
+"Matches can only be assigned to leaf events (i.e. events with no subevents)."
+msgstr ""
+"Kamper kan kun tilknyttes bladnoder (dvs. turneringer med ingen "
+"underturneringer)."
+
+#: templates/eventmgr.html:27
+msgid ""
+"Close an event after all the matches has been assigned. This will remove it "
+"from the list below and all drop-down boxes on the site, to help "
+"readability. If you want to reopen an event, this can be done in the admin "
+"interface or on the event page."
+msgstr ""
+"Lukk en turnering etter at alle kampene har blitt lagret. Dette fjerner "
+"turneringen fra listen under, samt alle nedtrekkslister rundt om på siden. "
+"Hvis du vil gjenåpne en turnering kan dette gjøres fra admin-grensesnittet "
+"eller fra turneringssiden."
+
+#. Translators: The event names and noprint have to be in English.
+#: templates/eventmgr.html:30
+msgid ""
+"You can improve readability by making an event «invisible» (open the admin "
+"interface and check the «noprint» option). This will hide the name. This is "
+"useful for events called e.g. «Group Stage» to turn «Code S Group Stage "
+"Group A» into «Code S Group A», which flows better. This is often used for "
+"group stages and playoffs."
+msgstr ""
+"Du kan av og til gjøre ting lettere å lese ved å la en turnering være "
+"«usynlig» (sett «noprint» til sant). Dette vil gjemme navnet, for eksempel "
+"kan du gjemme «Group Stage» i «Code S Group Stage Group A» slik at det leses "
+"«Code S Group A» istedet, som flyter mye bedre. Dette gjøres som oftest med "
+"turneringsnavn som «Group Stage» og «Playoffs»."
+
+#: templates/eventmgr.html:32
+msgid ""
+"Events with many games should also be marked «big». This will cause the list "
+"of games to be cut off. If you forget, no big deal, it's done automatically."
+msgstr ""
+"Turneringer med mange kamper bør også markeres som store. Dette vil "
+"forhindre at kamplistene blir for store. Det gjør ingenting om du glemmer "
+"det, siden dette gjøres automatisk."
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:35
+msgid ""
+"<strong>Naming conventions:</strong> Ro («round of») with capital R and "
+"small o, followed immediately by the number. Third place matches should be "
+"named exactly that (not «3rd»)."
+msgstr ""
+"<strong>Navnekonvensjoner:</strong> Ro («round of») med stor R og liten o, "
+"umiddelbart påfulgt av et tall (uten mellomrom). Bronsefinaler bør kalles "
+"«Third place matches», ikke «3rd»."
+
+#: templates/eventmgr.html:38
+msgid "Add root event"
+msgstr "Legg til rotturnering"
+
+#: templates/eventmgr.html:44 templates/eventres.html:335
+#: templates/eventres.html.py:372 templates/eventres.html:392
+#: templates/eventres.html.py:416
+msgid "close"
+msgstr "lukk"
+
+#: templates/eventmgr.html:57
+msgid "Commit new sub-events"
+msgstr "Lagre nye underturneringer"
+
+#: templates/eventmgr.html:58
+msgid "Close event"
+msgstr "Lukk turnering"
+
+#: templates/eventmgr.html:200
+msgid "modify"
+msgstr "endre"
+
+#. Translators: Path in the tree sense.
+#: templates/eventres.html:30
+msgid "path"
+msgstr "sti"
+
+#: templates/eventres.html:33
+msgid "matchups"
+msgstr "oppgjør"
+
+#. Translators: Level in the tree sense.
+#: templates/eventres.html:41
+msgid "Same level:"
+msgstr "Samme nivå:"
+
+#. Translators: Level in the tree sense.
+#: templates/eventres.html:64
+msgid "Next level:"
+msgstr "Neste nivå:"
+
+#. Translators: Path in the tree sense.
+#: templates/eventres.html:88
+msgid "Full path:"
+msgstr "Full sti:"
+
+#. Translators: root in the tree sense.
+#: templates/eventres.html:92
+msgid "Root"
+msgstr "Rot"
+
+#: templates/eventres.html:103 templates/eventres.html.py:259
+msgid "PvT"
+msgstr "PvT"
+
+#: templates/eventres.html:119 templates/eventres.html.py:265
+msgid "PvZ"
+msgstr "PvZ"
+
+#: templates/eventres.html:135 templates/eventres.html.py:271
+msgid "TvZ"
+msgstr "TvZ"
+
+#. Translators: Mirror matchups
+#: templates/eventres.html:151 templates/eventres.html.py:277
+msgid "Mirrors"
+msgstr "Speil"
+
+#: templates/eventres.html:173
+msgid "Details"
+msgstr "Detaljer"
+
+#: templates/eventres.html:175
+msgid "edit"
+msgstr "endre"
+
+#. Translators: Short for "add SUBevent".
+#: templates/eventres.html:178
+msgid "sub"
+msgstr "und"
+
+#. Translators: Short for "add PrizePool".
+#: templates/eventres.html:182
+msgid "pp"
+msgstr "prm"
+
+#. Translators: Short for "STories".
+#: templates/eventres.html:187
+msgid "st"
+msgstr "frt"
+
+#. Translators: Short for "reORDer".
+#: templates/eventres.html:191
+msgid "ord"
+msgstr "ord"
+
+#. Translators: Short for "ADMin".
+#: templates/eventres.html:195
+msgid "adm"
+msgstr "adm"
+
+#: templates/eventres.html:197
+msgid "add"
+msgstr "nye"
+
+#: templates/eventres.html:204
+msgid "Dates"
+msgstr "Datoer"
+
+#. Translators: Date to date.
+#: templates/eventres.html:216
+#, python-format
+msgid "%(fst)s to %(snd)s"
+msgstr "%(fst)s til %(snd)s"
+
+#: templates/eventres.html:229
+msgid "On-/Offline"
+msgstr "On/offline"
+
+#: templates/eventres.html:234
+msgid "Prize pool"
+msgstr "Premier"
+
+#: templates/eventres.html:279
+msgid "PvP"
+msgstr "PvP"
+
+#: templates/eventres.html:280
+msgid "TvT"
+msgstr "TvT"
+
+#: templates/eventres.html:281
+msgid "ZvZ"
+msgstr "ZvZ"
+
+#: templates/eventres.html:287
+msgid "External"
+msgstr "Ekstern"
+
+#: templates/eventres.html:294 templates/eventres.html.py:297
+#: templates/eventres.html:300 templates/eventres.html.py:303
+#: templates/eventres.html:306
+msgid "TLPD"
+msgstr "TLPD"
+
+#: templates/eventres.html:310 templates/events_open.html:38
+#: templates/events_open.html.py:83 templates/events_open.html:131
+msgid "TL"
+msgstr "TL"
+
+#: templates/eventres.html:313 templates/events_open.html:41
+#: templates/events_open.html.py:87 templates/events_open.html:135
+msgid "LP"
+msgstr "LP"
+
+#: templates/eventres.html:324
+msgid "This event is still <strong>open</strong>. Games may be added."
+msgstr ""
+"Denne turneringen er enda <strong>åpen</strong>. Kamper kan fremdeles bli "
+"lagt til."
+
+#: templates/eventres.html:328
+msgid ""
+"This event is <strong>big</strong>, so the list of games has been cut-off. "
+"Go to an event on the next level to see a complete list."
+msgstr ""
+"Denne turneringen er <strong>stor</strong>. Det kan være flere kamper enn de "
+"som vises her."
+
+#: templates/eventres.html:337
+msgid ""
+"Put the <strong>least significant</strong> events first (the ones played "
+"first, or with most players). Finals should be toward the bottom."
+msgstr ""
+"De <strong>minst viktige</strong> rundene først (de som spiltes først, eller "
+"de med flest spillere). Finaler bør være mot slutten."
+
+#: templates/eventres.html:395
+msgid "This event already has stories for the following players:"
+msgstr "Denne turneringen har allerede fortellinger for disse spillerne:"
+
+#: templates/eventres.html:437
+msgid ""
+"<strong>Warning:</strong> Changes to date, game and offline will modify all "
+"matches associated with all events in this tree. Changing type will "
+"potentially change all children and ancestor events! Make sure you know what "
+"you are doing!"
+msgstr ""
+"<strong>Advarsel:</strong> Endringer på dato, spillversjon og on/offline vil "
+"endre alle kamper i denne turneringen og alle underturneringer. Endringer på "
+"type vil potensielt endre alle etterkommere og forfedre! Vær sikker på at du "
+"vet hva du gjør!"
+
+#: templates/eventres.html:466
+msgid "This event has no registered games... yet."
+msgstr "Denne turneringen har ingen kamper… enda."
+
+#: templates/eventres.html:469
+#, python-format
+msgid ""
+"Notice something missing? We're always looking for people to help <a href="
+"\"%(uri)s\">populate our database</a>!"
+msgstr ""
+"Ser du noe som mangler? Vi er alltid på jakt etter folk som kan hjelpe oss å "
+"<a href=\"%(uri)s\">legge til resultater i databasen</a>!"
+
+#: templates/events.html:15
+msgid ""
+"The events are organized in a hierarchical fashion. Thus, all GSL "
+"tournaments are filed under GSL, all Code S under their respective seasons, "
+"all groups under their respective Code S event, and so on."
+msgstr ""
+"Turneringene er organisert i et hierarisk tre. Alle GSL-turneringene er "
+"kategorisert under GSL, alle Code S under de forskjellige sesongene, og alle "
+"gruppene under de respektive Code S-turneringene, og så videre."
+
+#: templates/events.html:17
+msgid "Individual leagues and events"
+msgstr "Individuelle ligaer og turneringer"
+
+#: templates/events.html:21
+msgid "Team leagues"
+msgstr "Lagligaer"
+
+#: templates/events.html:25
+msgid "Frequently recurring cups"
+msgstr "Hyppige konkurranser"
+
+#: templates/events_open.html:12
+msgid ""
+"These events have games, which means that they are currently active and have "
+"not yet finished.  If the event has finished, please make sure that all "
+"matches have been added before closing the event."
+msgstr ""
+"Disse turneringene har tilknyttede kamper. De er altså aktive og er ikke "
+"avsluttet. Hvis turneringen er over, se etter at alle kampene har blitt lagt "
+"til før du lukker den."
+
+#: templates/events_open.html:18
+msgid "Open events with games"
+msgstr "Åpne turneringer med kamper"
+
+#: templates/events_open.html:19
+msgid "Last added game"
+msgstr "Siste kamp"
+
+#: templates/events_open.html:20 templates/events_open.html.py:67
+#: templates/events_open.html:115
+msgid "External links"
+msgstr "Eksterne lenker"
+
+#: templates/events_open.html:56
+msgid "Close events"
+msgstr "Lukk turneringer"
+
+#: templates/events_open.html:62
+msgid ""
+"These events have no games yet, which means that they are either future "
+"events or finished events that are not yet in the database.  In the latter "
+"case, feel free to use the external links provided to add the matches to the "
+"database and close the event when you are done."
+msgstr ""
+"Disse turneringene har ingen kamper. De er altså fremtidige eller avsluttede "
+"turneringer som ikke er lagt til enda. Hvis det siste, gå gjennom de "
+"eksterne lenkene for å legge til kampene til databasen og lukk så "
+"turneringen etter du er ferdig."
+
+#: templates/events_open.html:66
+msgid "Open events without games"
+msgstr "Åpne turneringer uten kamper"
+
+#: templates/events_open.html:101
+msgid "Missing prize pool information"
+msgstr "Manglende premieinformasjon"
+
+#: templates/events_open.html:102
+msgid ""
+"These events are closed and have no information on their prize pools yet."
+msgstr "Disse turneringene er lukket og har ingen info om premier."
+
+#: templates/events_open.html:105
+msgid ""
+"If you know the prize pool, visit the event page and add the prize pool "
+"information there."
+msgstr ""
+"Hvis du kjenner til premieutdelingene, gå til turneringssiden og legg de til."
+
+#: templates/events_open.html:106
+msgid ""
+"If you know the event has no prize pool, you can mark the event as having no "
+"prize pool. Don't just assume that an event has no prize pool just because "
+"it is a qualifier, however. Some do!"
+msgstr ""
+"Hvis du vet at turneringen ikke hadde premier, kan du markere dette. Ikke "
+"anta at en turnering ikke har premier kun fordi den er en kvalifisering!"
+
+#: templates/events_open.html:107
+msgid ""
+"If you are not sure whether the event has a prize pool or do not have the "
+"exact sums, do nothing"
+msgstr "Hvis du ikke vet, ikke gjør noe."
+
+#: templates/events_open.html:114
+msgid "Events with no prize pool information"
+msgstr "Turneringer uten premieinformajon"
+
+#: templates/events_open.html:151
+msgid "Marked events have no prize pool"
+msgstr "Markerte turneringer har ingen premier"
+
+#: templates/eventtable.html:41
+msgid "Smaller events:"
+msgstr "Mindre turneringer:"
+
+#. Translators: Go as in go to a page.
+#: templates/eventtable.html:48
+msgid "Go"
+msgstr "Gå til"
+
+#: templates/historical.html:10
+#, python-format
+msgid "%(pl)s rating history"
+msgstr "Ratinghistorie for %(pl)s"
+
+#: templates/historical.html:19
+msgid "List"
+msgstr "Liste"
+
+#: templates/historical.html:20
+msgid "Rating"
+msgstr "Rating"
+
+#: templates/historical.html:22
+msgid "Rating vP"
+msgstr "Rating vP"
+
+#: templates/historical.html:24
+msgid "Rating vT"
+msgstr "Rating vT"
+
+#: templates/historical.html:26
+msgid "Rating vZ"
+msgstr "Rating vZ"
+
+#: templates/history.html:16
+msgid "Number of players:"
+msgstr "Antall spillere:"
+
+#: templates/history.html:24
+msgid "Races:"
+msgstr "Raser:"
+
+#: templates/history.html:34
+msgid "Nationalities:"
+msgstr "Nasjonaliteter:"
+
+#: templates/history.html:61
+msgid "Click and drag to zoom"
+msgstr "Klikk og dra for å zoome"
 
 #: templates/index.html:68
 msgid "DEVELOPMENT SERVER"

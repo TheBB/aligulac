@@ -797,8 +797,7 @@ def events(request, event_id=None):
 
     # {{{ Other easy statistics
     base.update({
-        'game':      etn(lambda: dict(Match.GAMES)[matches.values('game').distinct()[0]['game']]),
-        'offline':   etn(lambda: matches.values('offline').distinct()[0]['offline']),
+        'game':      etn(lambda: dict(GAMES)[matches.values('game').distinct()[0]['game']]),
         'nmatches':  matches.count(),
         'ngames':    sum(count_winloss_games(matches)),
         'pvp_games': count_mirror_games(matches, 'P'),
@@ -815,6 +814,12 @@ def events(request, event_id=None):
             Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))
         ).count(),
     })
+
+    offlines = list(matches.values('offline').distinct())
+    if len(offlines) > 1:
+        base['offline'] = _('Both')
+    else:
+        base['offline'] = _('Offline') if offlines[0]['offline'] else _('Online')
 
     base['pvt_wins'], base['pvt_loss'] = count_matchup_games(matches, 'P', 'T')
     base['pvz_wins'], base['pvz_loss'] = count_matchup_games(matches, 'P', 'Z')

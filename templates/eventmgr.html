@@ -6,51 +6,42 @@ This is the template for the event manager admin page. It's called from ratings.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}Manage events{% endblock %}
+{% block title %}{% trans "Manage events" %}{% endblock %}
 
 {% block content %}
 
 {% include "messages.html" %}
 
-<p>The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage
-(qualifiers/groups/playoffs)→round and so on. There are no hard rules.</p>
+<p>{% blocktrans %}The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so on. There are no hard rules.{% endblocktrans %}</p>
 
-<p>The name displayed everywhere on the site is the concatenation of the event name and <strong>all its
-parents</strong>. Thus GSL→2013 Season 1→Code S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S
-Ro32 Group A». With this in mind, try to name the events so that the full name flows as well as
-possible.</p>
+{% comment %}Translators: The event names have to be in English.{% endcomment %}
+<p>{% blocktrans %}The name displayed everywhere on the site is the concatenation of the event name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S Ro32 Group A». With this in mind, try to name the events so that the full name flows as well as possible.{% endblocktrans %}</p>
 
-<p>Do not repeat information. If you have an event called «Qualifiers», the subevents should not be called
-«Korean Qualifiers». Just «Korea» is fine.</p>
+{% comment %}Translators: The event names have to be in English.{% endcomment %}
+<p>{% blocktrans %}Do not repeat information. If you have an event called «Qualifiers», the subevents should not be called «Korean Qualifiers». Just «Korea» is fine.{% endblocktrans %}</p>
 
-<p>Matches can only be assigned to leaf events (i.e. events with no subevents).</p>
+<p>{% blocktrans %}Matches can only be assigned to leaf events (i.e. events with no subevents).{% endblocktrans %}</p>
 
-<p>Close an event after all the matches has been assigned. This will remove it from the list below and all
-drop-down boxes on the site, to help readability. If you want to reopen an event, this can only be done in
-the admin interface.</p>
+<p>{% blocktrans %}Close an event after all the matches has been assigned. This will remove it from the list below and all drop-down boxes on the site, to help readability. If you want to reopen an event, this can be done in the admin interface or on the event page.{% endblocktrans %}</p>
 
-<p>You can improve readability by making an event «invisible» (open the admin interface and check the
-«noprint» option). This will hide the name. This is useful for events called e.g. «Group Stage» to turn
-«Code S Group Stage Group A» into «Code S Group A», which flows better.</p>
+{% comment %}Translators: The event names and noprint have to be in English.{% endcomment %}
+<p>{% blocktrans %}You can improve readability by making an event «invisible» (open the admin interface and check the «noprint» option). This will hide the name. This is useful for events called e.g. «Group Stage» to turn «Code S Group Stage Group A» into «Code S Group A», which flows better. This is often used for group stages and playoffs.{% endblocktrans %}</p>
 
-<p>Events with many games should also be marked «big». This will cause the list of games to be cut
-off.</p>
+<p>{% blocktrans %}Events with many games should also be marked «big». This will cause the list of games to be cut off. If you forget, no big deal, it's done automatically.{% endblocktrans %}</p>
 
-<p>If you experience problems or inconsistencies, the first thing you should do is to open the 
-<a href="/add/misc/">misc</a> page and restore the NSM and event names.</p>
-
-<p><strong>Naming conventions:</strong> Ro («round of») with capital R and small o, followed immediately by
-the number. Third place matches should be named exactly that (not «3rd»).</p>
+{% comment %}Translators: The event names have to be in English.{% endcomment %}
+<p>{% blocktrans %}<strong>Naming conventions:</strong> Ro («round of») with capital R and small o, followed immediately by the number. Third place matches should be named exactly that (not «3rd»).{% endblocktrans %}</p>
 
 <p>
-    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">Add root event</a>.
+    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">{% trans "Add root event" %}</a>.
 </p>
 
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="addevent">
 <div class="close-button">
-    <a href="#" onclick="$('#addevent').hide(); return false;">close</a>
+    <a href="#" onclick="$('#addevent').hide(); return false;">{% trans "close" %}</a>
 </div>
 <form method="post" action="/add/events/">
 <table class="hiddenform bigform">
@@ -63,8 +54,10 @@ the number. Third place matches should be named exactly that (not «3rd»).</p>
     {% field "select" form.type class="wideinput" %}
     {% field "checkbox" form.big class="wideinput" %}
     {% field "checkbox" form.noprint class="wideinput" %}
-    {% use "submit" name="commit" text="Commit new sub-events" %}
-    {% use "submit" name="close" text="Close event" %}
+    {% trans "Commit new sub-events" as commitnew %}
+    {% trans "Close event" as close %}
+    {% use "submit" name="commit" text=commitnew %}
+    {% use "submit" name="close" text=close %}
 {% endform %}
 </table>
 </form>
@@ -204,7 +197,7 @@ function toggle_sub(id)
             </span>
         </td>
         <td style="text-align: right;">
-            <a href="#" onclick="change_and_toggle_form('{{ node.fullname|jsescape }} ({{ node.type }})', '{{ node.id }}', '{% if node.type == "category" %}0{% else %}2{% endif %}'); return false;">modify</a>
+            <a href="#" onclick="change_and_toggle_form('{{ node.fullname|jsescape }} ({{ node.type }})', '{{ node.id }}', '{% if node.type == "category" %}0{% else %}2{% endif %}'); return false;">{% trans "modify" %}</a>
         </td>
     </tr> 
 </table>

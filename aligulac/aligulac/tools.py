@@ -317,7 +317,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             earnings = context.has_earnings()
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
-            add_subnav('Summary', base_url)
+            add_subnav(_('Summary'), base_url)
 
             if rating is not None:
                 add_subnav(_('Rating history'), base_url + 'historical/')

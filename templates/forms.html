@@ -1,4 +1,5 @@
 {% load ratings_extras %}
+{% load i18n %}
 
 {% block basic %}
 <tr>
@@ -124,13 +125,14 @@
 {% endblock %}
 
 {% block submit %}
+{% trans "Submit" as submit %}
 <tr>
     <td class="form_left"></td>
     <td class="form_right">
         <input type="submit"
                name="{{ name|default:"op" }}"
                {% if onclick %}onclick="{{ onclick }}"{% endif %}
-               value="{{ text|default:"Submit" }}" />
+               value="{{ text|default:submit }}" />
     </td>
 </tr>
 {% endblock %}

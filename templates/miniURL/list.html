@@ -4,16 +4,20 @@
 The list of all registered shortened URLs called from miniURL.views.list.
 {% endcomment %}
 
-{% block title %}Short URLs list{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Short URLs list" %}{% endblock %}
 
 {% block content %}
-        <ul>
-        {% for mini in minis %}
-            <li> {{ mini.longURL }} via <a href="/m/{{ mini.code }}/">/m/{{ mini.code }}</a>
-            {% if mini.submitter %}created by {{ mini.submitter }}{% endif %} (accessed {{ mini.nb_access }}
-            time{{ mini.nb_access|pluralize }})</li>
-            {% empty %}
-            <li>There is currently none.</li>
-        {% endfor %}
-        </ul>
+    <ul>
+    {% for mini in minis %}
+    <li> 
+    {{ mini.longURL }} {% trans "via" %} <a href="/m/{{ mini.code }}/">/m/{{ mini.code }}</a>
+    {% if mini.submitter %}{% blocktrans with sub=mini.submitter %}created by {{sub}}{% endblocktrans %}{% endif %}
+    {% blocktrans count mini.nb_access as ntimes  %}(accessed {{ ntimes }} time){% plural %}(accessed {{ ntimes }} times){% endblocktrans %}
+    </li>
+    {% empty %}
+    <li>{% trans "No short URLs." %}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}

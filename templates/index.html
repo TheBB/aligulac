@@ -68,7 +68,7 @@ Changes here will mostly be visible on the entire site.
                             {% trans "DEVELOPMENT SERVER" %}
                         </span>
                     {% else %}
-                    StarCraft 2 Progaming Statistics and Predictions
+                        {% trans "StarCraft 2 Progaming Statistics and Predictions" %}
                     {% endif %}
                 </td>
             </tr>
@@ -106,7 +106,7 @@ Changes here will mostly be visible on the entire site.
                 </td>
                 <td style="text-align: right;">
                     <form action="/search/" method="get">
-                    Find player, team or event: <input type="text" name="q" />
+                        {% trans "Find player, team or event:" %} <input type="text" name="q" />
                     </form>
                 </td>
             </tr>
@@ -127,13 +127,12 @@ Changes here will mostly be visible on the entire site.
                     </h2>
                     {% endif %}
                     {% block content %}
-                    <h2>Current top 10</h2>
+                    <h2>{% trans "Current top 10" %}</h2>
 
                     {% include "ratinglist.html" with localcount=1 rl_pos_arrow=1 displayteams=1 %}
 
                     {% if curp.is_preview %}
-                    <p>The above list is a preview of the next rating list, which will be finalized on 
-                    {{ curp.end|date:"F jS" }}.</p>
+                    <p>{% blocktrans with dt=curp.end|date:"F jS" %}The above list is a preview of the next rating list, which will be finalized on {{ dt }}.{% endblocktrans %}</p>
                     {% endif %}
 
                     {% include "messages.html" %}
@@ -143,27 +142,26 @@ Changes here will mostly be visible on the entire site.
             </tr>
             <tr>
                 <td colspan="2" id="footer">
-                    Find us on
-                    <a target="_blank" href="http://twitter.com/Sc2Aligulac">Twitter</a>,
-                    <a target="_blank" href="https://github.com/TheBB/aligulac">GitHub</a> and
-                    #aligulac on quakenet.<br/><br/>
-                    
-                    Powered by 
-                    <a target="_blank" href="http://www.djangoproject.com/">Django 1.6</a>, 
-                    <a target="_blank" href="http://python.org">Python 3.2</a>, 
-                    <a target="_blank" href="http://httpd.apache.org">Apache 2</a> and
-                    <a target="_blank" href="http://debian.org">Debian GNU/Linux 6</a>.<br/><br/>
+                    {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
+                    {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
+                    {% blocktrans %}Find us on {{a1}}Twitter</a>, {{a2}}GitHub</a> and #aligulac on quakenet.{% endblocktrans %}
+                    {% endwith %}{% endwith %}<br/><br/>
 
-                    Icons by Mark James. 
-                    Race icons by
-                    <a target="_blank" href="http://wiki.teamliquid.net/starcraft2/Main_Page">Liquipedia</a>.
-                    Date widget by
-                    <a target="_blank" href="http://www.frequency-decoder.com/">Frequency Decoder</a>.
-                    Charts by
-                    <a target="_blank" href="http://highcharts.com/">Highcharts</a>.<br/><br/>
+                    {% with a1="<a target=\"_blank\" href=\"http://www.djangoproject.com/\">" %}
+                    {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
+                    {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
+                    {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
+                    {% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}{% endwith %}{% endwith %}<br/><br/>
+
+                    {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
+                    {% with a2="<a target=\"_blank\" href=\"http://www.frequency-decoder.com/\">" %}
+                    {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
+                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Date widget by {{a2}}Frequency Decoder</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}{% endwith %}<br/><br/>
 
                     <span id="genshort">
-                    <input type="submit" value="Generate short URL for this page" 
+                    <input type="submit" value="{% trans "Generate short URL for this page" %}" 
                            onclick="gen_short();" />
                     </span>
                     <span id="dispshort" style="display: none;">

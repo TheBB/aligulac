@@ -14,9 +14,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
 <table class="results">
     {% include "matchlist.html" with .... %}
 </table>
+
+In general, if you're trying to figure out how this works, may God have mercy on your soul.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% if lm_predict %}
     <script type="text/javascript">
@@ -32,12 +35,12 @@ NB! The calling code is responsible for starting and ending the HTML table:
 
 {% if lm_header == "info" %}
     <tr class="header">
-        <td class="lm_date">{% if lm_list.0.date %}Date{% endif %}</td>
-        <td class="lm_rta">{% if lm_list.0.pla.rating %}Rating{% endif %}</td>
-        <td class="lm_pla">Player A</td>
-        <td class="lm_score">Score</td>
-        <td class="lm_plb">Player B</td>
-        <td class="lm_rtb">{% if lm_list.0.pla.rating %}Rating{% endif %}</td>
+        <td class="lm_date">{% if lm_list.0.date %}{% trans "Date" %}{% endif %}</td>
+        <td class="lm_rta">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</td>
+        <td class="lm_pla">{% trans "Player A" %}</td>
+        <td class="lm_score">{% trans "Score" %}</td>
+        <td class="lm_plb">{% trans "Player B" %}</td>
+        <td class="lm_rtb">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</td>
         <td class="lm_right"></td>
     </tr>
 {% endif %}
@@ -59,20 +62,22 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% elif m.match.group.event %}
                 {{ m.match.group.event }}
             {% else %}
-                Unknown event(s)
+                {% trans "Unknown event(s)" %}
             {% endif %}
         </td>
         <td colspan="2" style="text-align: right;"> 
             {% if m.eventcount %}[{{ m.eventcount }}]{% endif %}
 
             <a id="lma-{{ m.match_id }}" href="#" 
-                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
-                {% if lm_autohide %}show{% else %}hide{% endif %}
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','{% trans "hide" %}','{% trans "show" %}');return false;">
+                {% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">unchk</a>
+            {% comment %}Translators: Check{% endcomment %}
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">{% trans "chk" %}</a>
+            {% comment %}Translators: Uncheck{% endcomment %}
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_fullpath|smallhash}}-'); return false;">{% trans "unchk" %}</a>
             {% endif %}
         </td>
     </tr>
@@ -92,18 +97,18 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% elif m.match.group.event %}
                 {{ m.match.group.event }}
             {% else %}
-                Unknown event(s)
+                {% trans "Unknown event(s)" %}
             {% endif %}
         </td>
         <td colspan="2" style="text-align: right;"> 
             <a id="lma-{{ m.match_id }}" href="#" 
-                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
-                {% if lm_autohide %}show{% else %}hide{% endif %}
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','{% trans "hide" %}','{% trans "show" %}');return false;">
+                {% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}
             </a>
     
             {% if lm_adm and lm_check %}
-            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">unchk</a>
+            <a href="#" onclick="mark_all(true, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">{% trans "chk" %}</a>
+            <a href="#" onclick="mark_all(false, 'match-{{m.match.event_partpath|smallhash}}-'); return false;">{% trans "unchk" %}</a>
             {% endif %}
         </td>
     </tr>
@@ -118,8 +123,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
         </td>
         <td colspan="2" style="text-align: right;">
             <a id="lma-{{ m.match_id }}" href="#"
-                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
-                {% if lm_autohide %}show{% else %}hide{% endif %}
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','{% trans "hide" %}','{% trans "show" %}');return false;">
+                {% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}
             </a>
         </td>
     </tr>
@@ -133,8 +138,8 @@ NB! The calling code is responsible for starting and ending the HTML table:
         </td>
         <td colspan="2" style="text-align: right;">
             <a id="lma-{{ m.match_id }}" href="#"
-                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','hide','show');return false;">
-                {% if lm_autohide %}show{% else %}hide{% endif %}
+                onclick="togvis_tbody('lm-{{m.match_id}}');togHTML('lma-{{m.match_id}}','{% trans "hide" %}','{% trans "show" %}');return false;">
+                {% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}
             </a>
         </td>
     </tr>
@@ -222,12 +227,14 @@ NB! The calling code is responsible for starting and ending the HTML table:
             {% endif %}
 
             {% if not m.treated %}
-                <img src="{{ "no"|img }}" alt="unrated" title="unrated" class="btm" />
+                <img src="{{ "no"|img }}" alt="unrated" title="{% trans "unrated" %}" class="btm" />
             {% endif %}
-            <img src="{{ m.game|img }}" alt="{{ m.game }}" class="btm" title="{{ m.game }}"/>
+            <img src="{{ m.game|img }}" alt="{{ m.game }}" class="btm" title="{% trans m.game %}"/>
+            {% comment %}Translators: No spaces{% endcomment %}
+            {% trans "offline,online" as offon %}
             <img src="{{ m.offline|yesno:"offline,online"|img }}" 
                  alt="{{ m.offline|yesno:"offline,online" }}" class="btm" 
-                 title="{{ m.offline|yesno:"offline,online" }}" />
+                 title="{{ m.offline|yesno:offon }}" />
         {% endif %}
     </td>
 </tr>

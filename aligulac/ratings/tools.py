@@ -50,7 +50,7 @@ PATCHES = [
 # }}}
 
 # {{{ find_player: Magic!
-def find_player(query=None, lst=None, make=False, soft=False):
+def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     queryset = Player.objects.all()
 
     if not lst:
@@ -75,51 +75,57 @@ def find_player(query=None, lst=None, make=False, soft=False):
             continue
 
         # Otherwise, always search by player tag, team and aliases
+        filter_type = "iexact"
         if soft:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__icontains=s) | Q(alias__name__icontains=s)
-            )
-        else:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__iexact=s) | Q(alias__name__iexact=s)
-            )
+            filter_type = "icontains"
 
-        # ...and perhaps country codes
-        found_country = False
-        if len(s) == 2 and s.upper() in data.cca2_to_ccn:
-            country = s.upper()
-            found_country = True
-            q |= Q(country=s.upper())
+        # Helper function that formats the filter to use `filter_type`
+        def format_filter(**kwargs):
+            ret = dict()
+            for k in kwargs:
+                if k.endswith("MATCHES"):
+                    ret[k.replace("MATCHES", filter_type)] = kwargs[k]
+                else:
+                    ret[k] = kwargs[k]
+            return ret
 
-        if len(s) == 3 and s.upper() in data.cca3_to_ccn:
-            country = ccn_to_cca2(cca3_to_ccn(s.upper()))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+        tag_filter = format_filter(tag__MATCHES=s)
+        alias_filter = format_filter(alias__name__MATCHES=s)
 
-        renorm = s[0].upper() + s[1:].lower()
-        if renorm in data.cn_to_ccn:
-            country = ccn_to_cca2(cn_to_ccn(renorm))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+        q = Q(**tag_filter) | Q(**alias_filter)
+        if not strict or len(lst) > 1:
+            group_name_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__name__MATCHES=s,
+                groupmembership__group__is_team=True)
 
-        if not found_country:
-            tag = s
+            group_alias_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__alias__name__MATCHES=s,
+                groupmembership__group__is_team=True)
+
+            q |= Q(**group_name_filter) | Q(**group_alias_filter)
+
+            # ...and perhaps country codes
+            found_country = False
+            if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+                country = s.upper()
+                found_country = True
+                q |= Q(country=s.upper())
+
+            if len(s) == 3 and s.upper() in data.cca3_to_ccn:
+                country = ccn_to_cca2(cca3_to_ccn(s.upper()))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+
+            renorm = s[0].upper() + s[1:].lower()
+            if renorm in data.cn_to_ccn:
+                country = ccn_to_cca2(cn_to_ccn(renorm))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+
+            if not found_country:
+                tag = s
 
         queryset = queryset.filter(q)
     # }}}

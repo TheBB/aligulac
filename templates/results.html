@@ -5,25 +5,27 @@ This page shows the results by date. Called from ratings.views.results.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Results {{ td|date:"Y-m-d" }}{% endblock %}
+{% block title %}{% blocktrans with date=td|date:"Y-m-d" %}Results for {{ date }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
-        <form method="get">
-        Skip to date: <input type="text" id="d" name="d" value="{{ td|date:"Y-m-d" }}" maxlength="10" style="width: 6.5em;" />
-        <input type="submit" value="Go" />
-        
-        <script type="text/javascript">
-            // <![CDATA[  
-            var opts = {                            
-                formElements:{"d":"Y-ds-m-ds-d"},
-                statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-            };           
-            datePickerController.createDatePicker(opts);
-            // ]]>
-        </script> 
-        </form> 
+<form method="get">
+{% trans "Go to date:" %}
+<input type="text" id="d" name="d" value="{{ td|date:"Y-m-d" }}" maxlength="10" style="width: 6.5em;" />
+<input type="submit" value="{% trans "Go" %}" />
+
+<script type="text/javascript">
+    // <![CDATA[  
+    var opts = {                            
+        formElements:{"d":"Y-ds-m-ds-d"},
+        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
+    };           
+    datePickerController.createDatePicker(opts);
+    // ]]>
+</script> 
+</form> 
 
 <div class="table" style="width: 67em;">
     <div class="row">
@@ -31,31 +33,31 @@ This page shows the results by date. Called from ratings.views.results.
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if td != mindate %}
             <a href="/results/?d={{ td|prevmonth|datemax:mindate|date:"Y-m-d" }}">
-                <img src="{{ "first"|img }}" title="previous month" alt="previous month" class="btm" />
+                <img src="{{ "first"|img }}" title="{% trans "previous month" %}" alt="{% trans "previous month" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if td != mindate %}
             <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                <img src="{{ "prev"|img }}" title="previous day" alt="previous day" class="btm" />
+                <img src="{{ "prev"|img }}" title="{% trans "previous day" %}" alt="{% trans "previous day" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 8em; text-align: center;">
-            <a href="/results/">today (or latest)</a>
+            <a href="/results/">{% trans "today (or latest)" %}</a>
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if td != maxdate %}
             <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                <img src="{{ "next"|img }}" title="next day" alt="next day" class="btm" />
+                <img src="{{ "next"|img }}" title="{% trans "next day" %}" alt="{% trans "next day" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if td != maxdate %}
             <a href="/results/?d={{ td|nextmonth|datemin:maxdate|date:"Y-m-d" }}">
-                <img src="{{ "last"|img }}" title="next month" alt="next month" class="btm" />
+                <img src="{{ "last"|img }}" title="{% trans "next month" %}" alt="{% trans "next month" %}" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -74,31 +76,31 @@ This page shows the results by date. Called from ratings.views.results.
             <div class="rowe" style="width: 1em; text-align: left;">
                 {% if td != mindate %}
                 <a href="/results/?d={{ td|prevmonth|datemax:mindate|date:"Y-m-d" }}">
-                    <img src="{{ "first"|img }}" title="previous month" alt="previous month" class="btm" />
+                    <img src="{{ "first"|img }}" title="{% trans "previous month" %}" alt="{% trans "previous month" %}" class="btm" />
                 </a>
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: left;">
                 {% if td != mindate %}
                 <a href="/results/?d={{ td|yesterday|date:"Y-m-d" }}">
-                    <img src="{{ "prev"|img }}" title="previous day" alt="previous day" class="btm" />
+                    <img src="{{ "prev"|img }}" title="{% trans "previous day" %}" alt="{% trans "previous day" %}" class="btm" />
                 </a>
                 {% endif %}
             </div>
             <div class="rowe" style="width: 8em; text-align: center;">
-                <a href="/results/">today (or latest)</a>
+                <a href="/results/">{% trans "today (or latest)" %}</a>
             </div>
             <div class="rowe" style="width: 1em; text-align: right;">
                 {% if td != maxdate %}
                 <a href="/results/?d={{ td|tomorrow|date:"Y-m-d" }}">
-                    <img src="{{ "next"|img }}" title="next day" alt="next day" class="btm" />
+                    <img src="{{ "next"|img }}" title="{% trans "next day" %}" alt="{% trans "next day" %}" class="btm" />
                 </a>
                 {% endif %}
             </div>
             <div class="rowe" style="width: 1em; text-align: right;">
                 {% if td != maxdate %}
                 <a href="/results/?d={{ td|nextmonth|datemin:maxdate|date:"Y-m-d" }}">
-                    <img src="{{ "last"|img }}" title="next month" alt="next month" class="btm" />
+                    <img src="{{ "last"|img }}" title="{% trans "next month" %}" alt="{% trans "next month" %}" class="btm" />
                 </a>
                 {% endif %}
             </div>
@@ -106,8 +108,8 @@ This page shows the results by date. Called from ratings.views.results.
         </div>
     </div>
 {% else %}
-    <p>No registered results on this date.</p>
+    <p>{% blocktrans %}No registered results on this date.{% endblocktrans %}</p>
 {% endif %}
 
-<p>Notice something missing? We're always looking for people to help <a href="/add/">populate our database</a>!</p>
+<p>{% blocktrans with a="<a href=\"/add/\">" %}Notice something missing? We're always looking for people to help {{a}}populate our database</a>!{% endblocktrans %}</p>
 {% endblock %}

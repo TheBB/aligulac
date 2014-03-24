@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-23 22:40+0100\n"
-"PO-Revision-Date: 2014-03-23 22:42+0100\n"
+"POT-Creation-Date: 2014-03-24 18:47+0100\n"
+"PO-Revision-Date: 2014-03-24 18:49+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -99,7 +99,7 @@ msgid "Earnings"
 msgstr "Inntekt"
 
 #: aligulac/aligulac/tools.py:225 aligulac/ratings/team_views.py:128
-#: templates/db.html:72
+#: templates/db.html:72 templates/search.html:19 templates/teams.html:10
 msgid "Teams"
 msgstr "Lag"
 
@@ -125,7 +125,7 @@ msgstr "Hall of Fame"
 #: templates/period.html.py:46 templates/period.html:126
 #: templates/period.html.py:329 templates/period.html:342
 #: templates/player.html:46 templates/player.html.py:129
-#: templates/player.html:212
+#: templates/player.html:212 templates/records.html:23
 msgid "All"
 msgstr "Alle"
 
@@ -134,6 +134,7 @@ msgstr "Alle"
 #: aligulac/ratings/templatetags/ratings_extras.py:118
 #: templates/history.html:27 templates/period.html:41
 #: templates/period.html.py:127 templates/period.html:330
+#: templates/reports_balance.html:169
 msgid "Protoss"
 msgstr "Protoss"
 
@@ -142,6 +143,7 @@ msgstr "Protoss"
 #: aligulac/ratings/templatetags/ratings_extras.py:119
 #: templates/history.html:28 templates/period.html:42
 #: templates/period.html.py:128 templates/period.html:331
+#: templates/reports_balance.html:177
 msgid "Terran"
 msgstr "Terran"
 
@@ -150,6 +152,7 @@ msgstr "Terran"
 #: aligulac/ratings/templatetags/ratings_extras.py:120
 #: templates/history.html:29 templates/period.html:43
 #: templates/period.html.py:129 templates/period.html:332
+#: templates/reports_balance.html:185
 msgid "Zerg"
 msgstr "Zerg"
 
@@ -165,9 +168,10 @@ msgstr "Etter dato"
 msgid "By Event"
 msgstr "Etter turnering"
 
-#: aligulac/aligulac/tools.py:249
+#: aligulac/aligulac/tools.py:249 templates/results_search.html:11
+#: templates/results_search.html.py:31 templates/search.html:11
 msgid "Search"
-msgstr "Søkeresultater"
+msgstr "Søk"
 
 #: aligulac/aligulac/tools.py:252
 msgid "Inference"
@@ -226,7 +230,7 @@ msgid "Review"
 msgstr "Må gjennomgås"
 
 #: aligulac/aligulac/tools.py:280 templates/events.html:10
-#: templates/events.html.py:13
+#: templates/events.html.py:13 templates/search.html:41
 msgid "Events"
 msgstr "Turneringer"
 
@@ -2060,6 +2064,7 @@ msgstr "Individuell"
 #. Translators: Event category
 #: aligulac/ratings/models.py:65 templates/earnings.html:107
 #: templates/player.html:466 templates/player.html.py:740
+#: templates/ratinglist.html:25
 msgid "Team"
 msgstr "Lag"
 
@@ -2160,6 +2165,8 @@ msgstr "Rase"
 #: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:369
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
 #: templates/earnings.html:106 templates/hof.html:25
+#: templates/ratinglist.html:24 templates/recordlist.html:11
+#: templates/team.html:160 templates/teams.html:17
 msgid "Name"
 msgstr "Navn"
 
@@ -2453,7 +2460,8 @@ msgstr "Hall of Fame"
 msgid "Records for"
 msgstr "Rekorder for"
 
-#: aligulac/ratings/reports_views.py:39
+#: aligulac/ratings/reports_views.py:39 templates/reports_balance.html:10
+#: templates/reports_balance.html.py:32
 msgid "Balance report"
 msgstr "Balanserapport"
 
@@ -2479,6 +2487,7 @@ msgstr "Gjør samme endringer på alle turneringer på samme nivå"
 #: aligulac/ratings/results_views.py:114 aligulac/ratings/team_views.py:50
 #: templates/eventres.html:290 templates/events_open.html:35
 #: templates/events_open.html.py:79 templates/events_open.html:127
+#: templates/team.html:97
 msgid "Homepage"
 msgstr "Hjemmeside"
 
@@ -2555,6 +2564,7 @@ msgid "New prizes committed."
 msgstr "Nye premier ble lagret."
 
 #: aligulac/ratings/results_views.py:321 templates/add.html:86
+#: templates/player_transfers.html:11
 msgid "Player"
 msgstr "Spiller"
 
@@ -2562,6 +2572,7 @@ msgstr "Spiller"
 #: aligulac/ratings/staff_views.py:142 aligulac/ratings/staff_views.py:280
 #: templates/clocks.html:56 templates/eventres.html:206
 #: templates/matchlist.html:38 templates/player_results.html:19
+#: templates/player_transfers.html:18 templates/results_search.html:21
 msgid "Date"
 msgstr "Dato"
 
@@ -2930,7 +2941,7 @@ msgstr "Gjenåpnet '%s'."
 msgid "Submit results"
 msgstr "Lagre resultater"
 
-#: aligulac/ratings/staff_views.py:853
+#: aligulac/ratings/staff_views.py:853 templates/review.html:12
 msgid "Review results"
 msgstr "Gjennomgå resultater"
 
@@ -2956,7 +2967,7 @@ msgstr[1] "Markerte %i turneringer som uten premier."
 msgid "short name"
 msgstr "kort navn"
 
-#: aligulac/ratings/team_views.py:248
+#: aligulac/ratings/team_views.py:248 templates/player_transfers.html:6
 msgid "Recent player transfers"
 msgstr "Nylige spillerbytter"
 
@@ -3534,7 +3545,7 @@ msgstr "Vanlige landkoder"
 msgid "USA"
 msgstr "USA"
 
-#: templates/add.html:172
+#: templates/add.html:172 templates/review.html:84
 msgid "Commit"
 msgstr "Lagre"
 
@@ -4148,6 +4159,8 @@ msgstr "logg"
 
 #: templates/db.html:25 templates/db.html.py:31 templates/db.html.py:38
 #: templates/db.html:45 templates/db.html.py:52
+#: templates/reports_balance.html:82 templates/reports_balance.html.py:90
+#: templates/reports_balance.html:98
 msgid "games"
 msgstr "partier"
 
@@ -4164,7 +4177,8 @@ msgstr "Kamper med turneringsinfo"
 msgid "Uncatalogued matches"
 msgstr "Ikke-katalogiserte kamper"
 
-#: templates/db.html:65 templates/eventres.html:247
+#: templates/db.html:65 templates/eventres.html:247 templates/search.html:27
+#: templates/team.html:65 templates/teams.html:27
 msgid "Players"
 msgstr "Spillere"
 
@@ -4258,6 +4272,7 @@ msgid "Page %(page)s/%(npages)s"
 msgstr "Side %(page)s/%(npages)s"
 
 #: templates/earnings.html:108 templates/player.html:486
+#: templates/team.html:82
 msgid "Total earnings"
 msgstr "Total inntekt"
 
@@ -4357,6 +4372,7 @@ msgstr "Legg til rotturnering"
 #: templates/eventmgr.html:44 templates/eventres.html:335
 #: templates/eventres.html.py:372 templates/eventres.html:392
 #: templates/eventres.html.py:416 templates/player.html:532
+#: templates/team.html:113
 msgid "close"
 msgstr "lukk"
 
@@ -4403,16 +4419,19 @@ msgstr "Rot"
 
 #: templates/eventres.html:103 templates/eventres.html.py:259
 #: templates/period.html:194 templates/period.html.py:296
+#: templates/reports_balance.html:79 templates/reports_balance.html.py:82
 msgid "PvT"
 msgstr "PvT"
 
 #: templates/eventres.html:119 templates/eventres.html.py:265
 #: templates/period.html:210 templates/period.html.py:302
+#: templates/reports_balance.html:87 templates/reports_balance.html.py:90
 msgid "PvZ"
 msgstr "PvZ"
 
 #: templates/eventres.html:135 templates/eventres.html.py:271
 #: templates/period.html:226 templates/period.html.py:308
+#: templates/reports_balance.html:95 templates/reports_balance.html.py:98
 msgid "TvZ"
 msgstr "TvZ"
 
@@ -4427,6 +4446,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 #: templates/eventres.html:175 templates/player.html:388
+#: templates/team.html:32
 msgid "edit"
 msgstr "endre"
 
@@ -4490,6 +4510,7 @@ msgid "ZvZ"
 msgstr "ZvZ"
 
 #: templates/eventres.html:287 templates/player.html:502
+#: templates/team.html:94
 msgid "External"
 msgstr "Ekstern"
 
@@ -4507,7 +4528,7 @@ msgstr "TL"
 #. Translators: LP = Liquipedia
 #: templates/eventres.html:313 templates/events_open.html:41
 #: templates/events_open.html.py:87 templates/events_open.html:135
-#: templates/player.html:519
+#: templates/player.html:519 templates/team.html:100
 msgid "LP"
 msgstr "LP"
 
@@ -4671,7 +4692,7 @@ msgid "Smaller events:"
 msgstr "Mindre turneringer:"
 
 #. Translators: Go as in go to a page.
-#: templates/eventtable.html:48
+#: templates/eventtable.html:48 templates/results.html:17
 msgid "Go"
 msgstr "Gå til"
 
@@ -4695,24 +4716,26 @@ msgstr "inklusive"
 msgid "%(pl)s rating history"
 msgstr "Ratinghistorie for %(pl)s"
 
-#: templates/historical.html:19
+#: templates/historical.html:19 templates/recordlist.html:16
 msgid "List"
 msgstr "Liste"
 
 #: templates/historical.html:20 templates/matchlist.html:39
 #: templates/matchlist.html.py:43 templates/player.html:596
+#: templates/ratinglist.html:29 templates/ratinglist.html.py:31
+#: templates/records.html:22
 msgid "Rating"
 msgstr "Rating"
 
-#: templates/historical.html:22
+#: templates/historical.html:22 templates/records.html:50
 msgid "Rating vP"
 msgstr "Rating vP"
 
-#: templates/historical.html:24
+#: templates/historical.html:24 templates/records.html:51
 msgid "Rating vT"
 msgstr "Rating vT"
 
-#: templates/historical.html:26
+#: templates/historical.html:26 templates/records.html:52
 msgid "Rating vZ"
 msgstr "Rating vZ"
 
@@ -4729,6 +4752,7 @@ msgid "Nationalities:"
 msgstr "Nasjonaliteter:"
 
 #: templates/history.html:61 templates/player.html:572
+#: templates/reports_balance.html:35 templates/reports_balance.html.py:127
 msgid "Click and drag to zoom"
 msgstr "Klikk og dra for å zoome"
 
@@ -4930,6 +4954,7 @@ msgstr "Ukjent(e) turnering(er)"
 #: templates/matchlist.html:106 templates/matchlist.html.py:107
 #: templates/matchlist.html:127 templates/matchlist.html.py:128
 #: templates/matchlist.html:142 templates/matchlist.html.py:143
+#: templates/review.html:35
 msgid "hide"
 msgstr "gjem"
 
@@ -4937,16 +4962,19 @@ msgstr "gjem"
 #: templates/matchlist.html:106 templates/matchlist.html.py:107
 #: templates/matchlist.html:127 templates/matchlist.html.py:128
 #: templates/matchlist.html:142 templates/matchlist.html.py:143
+#: templates/review.html:35
 msgid "show"
 msgstr "vis"
 
 #. Translators: Check
 #: templates/matchlist.html:79 templates/matchlist.html.py:111
+#: templates/review.html:36
 msgid "chk"
 msgstr "mrk"
 
 #. Translators: Uncheck
 #: templates/matchlist.html:81 templates/matchlist.html.py:112
+#: templates/review.html:37
 msgid "unchk"
 msgstr "umrk"
 
@@ -4974,19 +5002,22 @@ msgstr "mest spesialiserte"
 
 #: templates/period.html:65 templates/period.html.py:132
 #: templates/player.html:66 templates/player.html.py:149
-#: templates/player.html:237
+#: templates/player.html:237 templates/ratingdetails.html:63
+#: templates/ratinglist.html:37 templates/ratinglist.html.py:39
 msgid "vP"
 msgstr "vP"
 
 #: templates/period.html:84 templates/period.html.py:151
 #: templates/player.html:86 templates/player.html.py:169
-#: templates/player.html:262
+#: templates/player.html:262 templates/ratingdetails.html:88
+#: templates/ratinglist.html:45 templates/ratinglist.html.py:47
 msgid "vT"
 msgstr "vT"
 
 #: templates/period.html:103 templates/period.html.py:170
 #: templates/player.html:106 templates/player.html.py:189
-#: templates/player.html:287
+#: templates/player.html:287 templates/ratingdetails.html:113
+#: templates/ratinglist.html:53 templates/ratinglist.html.py:55
 msgid "vZ"
 msgstr "vZ"
 
@@ -5150,7 +5181,7 @@ msgstr "#%(rank)s i %(countryfull)s"
 msgid "Full name"
 msgstr "Fullt navn"
 
-#: templates/player.html:454
+#: templates/player.html:454 templates/team.html:39
 msgid "AKA"
 msgstr "Alias"
 
@@ -5219,11 +5250,14 @@ msgstr "Nylige resultater"
 msgid "Team history"
 msgstr "Laghistorie"
 
-#: templates/player.html:741
+#: templates/player.html:741 templates/player_transfers.html:17
+#: templates/team.html:163
 msgid "Joined"
 msgstr "Skrev under på"
 
-#: templates/player.html:742
+#. Translators: As in "to leave", not "not right".
+#: templates/player.html:742 templates/player_transfers.html:15
+#: templates/team.html:164
 msgid "Left"
 msgstr "Forlot"
 
@@ -5276,6 +5310,506 @@ msgstr "Historie for foruminnlegg"
 #, python-format
 msgid "The above is code that can be used in posts on %(a)sTeamLiquid.net</a>."
 msgstr "Denne koden kan brukes i innlegg på %(a)sTeamLiquid.net</a>."
+
+#. Translators: Rating adjustments for [tag] on list number [listn].
+#: templates/ratingdetails.html:11
+#, python-format
+msgid "%(tag)s list %(listn)s"
+msgstr "%(tag)s liste %(listn)s"
+
+#: templates/ratingdetails.html:27
+#, python-format
+msgid "List %(listnumber)s"
+msgstr "Liste %(listnumber)s"
+
+#: templates/ratingdetails.html:45
+#, python-format
+msgid ""
+"This period started on %(start)s and will end on %(end)s. The numbers given "
+"below are projected adjustments and can change before then."
+msgstr ""
+"Denne perioden startet på %(start)s og vil slutte på %(end)s. Tallene "
+"oppgitt under er prognoser og kan endres."
+
+#: templates/ratingdetails.html:47
+#, python-format
+msgid "This period started on %(start)s and ended on %(end)s."
+msgstr "Denne perioden startet på %(start)s og sluttet på %(end)s."
+
+#: templates/ratingdetails.html:54
+msgid "Old rtg."
+msgstr "Gammel rating"
+
+#: templates/ratingdetails.html:55
+msgid "Opposition"
+msgstr "Motstand"
+
+#: templates/ratingdetails.html:56
+msgid "Expected score"
+msgstr "Forventet resultat"
+
+#: templates/ratingdetails.html:57
+msgid "Actual score"
+msgstr "Faktisk resultat"
+
+#: templates/ratingdetails.html:58
+msgid "Performance"
+msgstr "Ytelse"
+
+#: templates/ratingdetails.html:59
+msgid "New rtg."
+msgstr "Ny rating"
+
+#: templates/ratingdetails.html:60
+msgid "Adjustment"
+msgstr "Justering"
+
+#: templates/ratingdetails.html:169
+msgid "Exact game details:"
+msgstr "Resultater:"
+
+#: templates/ratingdetails.html:176
+#, python-format
+msgid ""
+"<strong>Note:</strong> Some games have not been included in the rating "
+"calculations because they were just recently submitted or modified. They "
+"will be included in the next update. This happens every six hours. The time "
+"of the last update can be found %(a)shere</a>."
+msgstr ""
+"<strong>NB:</strong> Noen partier er ikke tatt hensyn til fordi de lagt til "
+"eller endret nylig. Ved neste oppdatering vil de bli inkludert. Dette skjer "
+"hver sjette time, og tidspunktet for den siste oppdateringen kan du finne "
+"%(a)sher</a>."
+
+#: templates/ratingdetails.html:180
+#, python-format
+msgid "%(plr)s played no games in this period."
+msgstr "%(plr)s spilte ingen partier i denne perioden."
+
+#: templates/ratinglist.html:20 templates/recordlist.html:10
+#: templates/teams.html:16
+msgid "#"
+msgstr "#"
+
+#: templates/ratinglist.html:156
+msgid "No entries found."
+msgstr "Ingen treff ble funnet."
+
+#: templates/records.html:14
+msgid "To avoid rating artifacts, the earliest periods are not counted."
+msgstr "For å unngå irregulære ratinger teller ikke de tidligste periodene."
+
+#: templates/records.html:17
+#, python-format
+msgid "Highest ratings ever achieved by %(rc)s."
+msgstr "Høyeste ratingpoeng for %(rc)s."
+
+#: templates/records.html:19
+msgid "Highest ratings ever achieved"
+msgstr "Høyeste ratingpoeng"
+
+#: templates/records.html:26
+msgid "Highest ratings ever achieved by matchup"
+msgstr "Høyeste ratingpoeng per oppgjør"
+
+#: templates/records.html:29
+msgid "Rating PvP"
+msgstr "Rating PvP"
+
+#: templates/records.html:30
+msgid "Rating PvT"
+msgstr "Rating PvT"
+
+#: templates/records.html:31
+msgid "Rating PvZ"
+msgstr "Rating PvZ"
+
+#: templates/records.html:36
+msgid "Rating TvP"
+msgstr "Rating TvP"
+
+#: templates/records.html:37
+msgid "Rating TvT"
+msgstr "Rating TvT"
+
+#: templates/records.html:38
+msgid "Rating TvZ"
+msgstr "Rating TvZ"
+
+#: templates/records.html:43
+msgid "Rating ZvP"
+msgstr "Rating ZvP"
+
+#: templates/records.html:44
+msgid "Rating ZvT"
+msgstr "Rating ZvT"
+
+#: templates/records.html:45
+msgid "Rating ZvZ"
+msgstr "Rating ZvZ"
+
+#: templates/reports_balance.html:14
+msgid ""
+"The following chart show the historical month-by-month winrates for each non-"
+"mirror matchup in the database."
+msgstr ""
+"Denne grafen viser historiske seiersrater per måned for alle ikke-"
+"speiloppgjør."
+
+#: templates/reports_balance.html:16
+msgid ""
+"Note that this yields information about <em>metagame</em> balance near the "
+"<em>top of the skill ladder</em>, and is not to be confused with (although "
+"likely correlated to) actual game balance throughout the whole player "
+"population."
+msgstr ""
+"Merk at dette kun gir informasjon om <em>metaspill</em>-balansen og bør ikke "
+"forvirres med faktisk balanse, selv om de sannsynligvis er korrelerte."
+
+#: templates/reports_balance.html:18
+msgid ""
+"The winrate is shown with respect to the race listed first, so if the "
+"Protoss vs. Terran graph shoots up, that means Protoss is doing well and "
+"Terran poorly."
+msgstr ""
+"Seiersraten er vist med hensyn på den første rasen, så hvis protoss mot "
+"terran-grafen går oppover så betyr det at protoss gjør det bedre og terran "
+"gjør det verre."
+
+#: templates/reports_balance.html:59
+#, python-format
+msgid "Winrate [%%]"
+msgstr "Seiersrate [%%]"
+
+#: templates/reports_balance.html:108
+#, python-format
+msgid ""
+"The performance difference chart shows the <em>approximate</em> difference "
+"between <em>actual performance</em> as evidenced by results and "
+"<em>predicted performance</em> by rating. For example, if, averaged over a "
+"whole month, all Terrans had mean rating difference -100 (which is to say, "
+"their mean rating was equal to 100 less than that of their opponents), but "
+"they performed as if they had a mean rating difference of +100 (about 54.5%% "
+"winrate), then that amounts to a performance difference of <strong>+200</"
+"strong>, which is to be interpreted as that Terran players overall performed "
+"200 points better than expected."
+msgstr ""
+"Ytelsesforskjell-grafen viser den <em>tilnærmede</em> forskjellen mellom "
+"<em>faktisk ytelse</em> (fra resultater) og <em>forventet ytelse</em> "
+"(basert på rating). For eksempel, anta at over en hel måned hadde terran en "
+"gjennomsnittelig ratingdifferanse på –100, som betyr at terranspillere var "
+"rangert 100 poeng under deres motstandere i snitt, og at de hadde en ytelse "
+"som om de hadde en ratingdifferanse på +100 (som tilsvarer ca. 54.5%% "
+"seiersrate). Da vil terran ha en ytelsesforskjell på <strong>+200</strong>, "
+"som kan tolkes som at de ytet gjennomsnittelig rundt 200 poeng høyere enn "
+"forventet."
+
+#: templates/reports_balance.html:110
+msgid ""
+"This chart can avoid some of the problems with the above, which can "
+"potentially be influenced by incredibly hot streaks from one or two "
+"singularly great players. However, as ratings catch up to the performances "
+"of the players, this chart will tend toward equilibrium, even if balance "
+"never changes."
+msgstr ""
+"Denne grafen unngår noen problemer med den forrige, som kan potensielt "
+"påvirkes av utrolige resultater fra kun en eller to spillere. På den andre "
+"siden, ettersom ratingpoeng “tar igjen” spilleres resultater vil denne "
+"grafen dendere mot likevekt selv om balansen aldri endres."
+
+#: templates/reports_balance.html:124
+msgid "Performance difference"
+msgstr "Ytelsesdifferanse"
+
+#: templates/reports_balance.html:151
+msgid "Performance difference [points]"
+msgstr "Ytelsesdifferanse [poeng]"
+
+#: templates/reports_balance.html:172 templates/reports_balance.html.py:180
+#: templates/reports_balance.html:188
+msgid "Difference"
+msgstr "Differanse"
+
+#: templates/results.html:10
+#, python-format
+msgid "Results for %(date)s"
+msgstr "Resultater på %(date)s"
+
+#: templates/results.html:15
+msgid "Go to date:"
+msgstr "Gå til dato:"
+
+#: templates/results.html:36 templates/results.html.py:79
+msgid "previous month"
+msgstr "forrige måned"
+
+#: templates/results.html:43 templates/results.html.py:86
+msgid "previous day"
+msgstr "forrige dag"
+
+#: templates/results.html:48 templates/results.html.py:91
+msgid "today (or latest)"
+msgstr "i dag (eller siste)"
+
+#: templates/results.html:53 templates/results.html.py:96
+msgid "next day"
+msgstr "neste dag"
+
+#: templates/results.html:60 templates/results.html.py:103
+msgid "next month"
+msgstr "neste måned"
+
+#: templates/results.html:111
+msgid "No registered results on this date."
+msgstr "Ingen registrerte resultater på denne datoen."
+
+#: templates/results.html:114
+#, python-format
+msgid ""
+"Notice something missing? We're always looking for people to help "
+"%(a)spopulate our database</a>!"
+msgstr ""
+"Ser du noe som mangler? Vi er alltid på jakt etter folk som kan hjelpe oss å "
+"%(a)slegge til resultater i databasen</a>!"
+
+#: templates/results_search.html:38
+msgid ""
+"Enter players. The player information does not have to uniquely identify the "
+"player, and should be a space-separated list of any of the following:"
+msgstr ""
+"Skriv inn spillere. Spillerinformasjonen trenger ikke å identifisere "
+"spilleren unikt. Skriv inn følgende i vilkårlig rekkefølge, separert med "
+"mellomrom:"
+
+#: templates/results_search.html:41
+msgid "Player tag, e.g. \"DongRaeGu\""
+msgstr "Nick, f.eks. \"DongRaeGu\""
+
+#: templates/results_search.html:42
+msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\""
+msgstr ""
+"Rase, dvs. \"P\", \"T\", \"Z\", \"R\" (tilfeldig) eller \"S\" (rasebytter)"
+
+#: templates/results_search.html:43
+#, python-format
+msgid ""
+"A two- or three-letter <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> country "
+"code. e.g. \"KR\", or the common English name of a country"
+msgstr ""
+"En to- eller trebokstavers <a href=\"%(uri)s\">ISO 3166-1 alpha-2 statskode</"
+"a>, f.eks. \"KR\" eller \"KOR\", eller det vanlige engelske navnet for et "
+"land (dersom dette ikke inneholder mellomrom)"
+
+#: templates/results_search.html:44
+msgid "Team name, e.g. \"MVP\""
+msgstr "Lagnavn, f.eks. \"MVP\""
+
+#: templates/results_search.html:45
+msgid ""
+"Player or team aliases (we add these to the database when we feel like "
+"they're needed), e.g. \"DRG\""
+msgstr ""
+"Spiller- eller lagaliaser (vi legger disse til når vi føler behov for dem), "
+"f.eks. \"DRG\""
+
+#: templates/results_search.html:46
+msgid ""
+"A player ID number, which you can get from the URL of the player page, e.g. "
+"\"4\""
+msgstr ""
+"Spillerens ID-nummer, som du kan finne fra addressen til spillersiden f.eks. "
+"\"4\""
+
+#: templates/results_search.html:49
+msgid "Note that everything is case insensitive."
+msgstr "Merk at alt er uavhengig av store og små bokstaver."
+
+#: templates/results_search.html:52
+#, python-format
+msgid "Found %(cnt)s match."
+msgid_plural "Found %(cnt)s matches."
+msgstr[0] "Fant %(cnt)s kamp."
+msgstr[1] "Fant %(cnt)s kamper."
+
+#: templates/results_search.html:56
+#, python-format
+msgid ""
+"In these games, <a href=\"%(luri)s\">%(ltag)s</a> is %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) in games and %(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches."
+msgstr ""
+"I disse partiene er <a href=\"%(luri)s\">%(ltag)s</a> %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) i partier og %(msc_my)s–%(msc_op)s (%(mpctg)s%%) i kamper."
+
+#: templates/results_search.html:59
+#, python-format
+msgid ""
+"In these games, <a href=\"%(luri)s\">%(ltag)s</a> is %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) in games and %(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches "
+"against <a href=\"%(ruri)s\">%(rtag)s</a>."
+msgstr ""
+"I disse partiene er <a href=\"%(luri)s\">%(ltag)s</a> %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) i partier og %(msc_my)s–%(msc_op)s (%(mpctg)s%%) i kamper mot "
+"<a href=\"%(ruri)s\">%(rtag)s</a>."
+
+#: templates/results_search.html:70 templates/results_search.html.py:80
+msgid "Check all"
+msgstr "Merk alle"
+
+#: templates/results_search.html:71 templates/results_search.html.py:81
+msgid "Uncheck all"
+msgstr "Avmerk alle"
+
+#: templates/results_search.html:84
+msgid "The following modifications will be made to all checked matches:"
+msgstr "Disse endringene vil bli gjort på alle de merkede kampene:"
+
+#: templates/results_search.html:93
+msgid "Modify"
+msgstr "Endre"
+
+#: templates/review.html:19
+msgid "The following matches were successfully approved:"
+msgstr "Disse kampene ble godkjent:"
+
+#: templates/review.html:42
+msgid "Date:"
+msgstr "Dato:"
+
+#. Translators: Game version
+#: templates/review.html:47
+msgid "Game:"
+msgstr "Spillversjon:"
+
+#: templates/review.html:51
+msgid "Type:"
+msgstr "Type:"
+
+#: templates/review.html:55
+msgid "Source:"
+msgstr "Kilde:"
+
+#: templates/review.html:59
+msgid "Contact:"
+msgstr "Kontakt:"
+
+#: templates/review.html:63
+msgid "Notes:"
+msgstr "Notater:"
+
+#: templates/review.html:71
+msgid "There are no results awaiting review."
+msgstr "Det er ingen innsendte resultater som må gjennomgås."
+
+#: templates/review.html:75
+msgid "To all checked submissions, do the following:"
+msgstr "For alle merkede innlegg, gjør dette:"
+
+#: templates/search.html:16
+#, python-format
+msgid "No such player, team or event '%(query)s' found."
+msgstr "Vi fant ingen spiller, lag eller turnering som traff '%(query)s'."
+
+#: templates/team.html:20
+#, python-format
+msgid "%(teamname)s was founded on %(founded)s and disbanded on %(disbanded)s."
+msgstr "%(teamname)s ble grunnlagt på %(founded)s og nedlagt på %(disbanded)s."
+
+#: templates/team.html:22
+#, python-format
+msgid "%(teamname)s was founded on %(founded)s."
+msgstr "%(teamname)s ble grunnlagt på %(founded)s."
+
+#: templates/team.html:24
+#, python-format
+msgid "%(teamname)s was disbanded on %(disbanded)s."
+msgstr "%(teamname)s ble nedlagt på %(disbanded)s."
+
+#: templates/team.html:33
+msgid "admin"
+msgstr "admin"
+
+#: templates/team.html:47
+msgid "Short name"
+msgstr "Kort navn"
+
+#: templates/team.html:53
+msgid "Founded"
+msgstr "Grunnlagt"
+
+#: templates/team.html:59
+msgid "Disbanded"
+msgstr "Nedlagt"
+
+#: templates/team.html:76 templates/teams.html:24
+msgid "Top 5 rating"
+msgstr "Ratingsnitt topp fem"
+
+#: templates/team.html:88
+msgid "Offline matches"
+msgstr "Offlinekamper"
+
+#: templates/team.html:133
+msgid "Active roster"
+msgstr "Aktive spillere"
+
+#: templates/team.html:134
+#, python-format
+msgid ""
+"%(teamname)s has %(cnt)s player who has played a ranked game within the last "
+"two months."
+msgid_plural ""
+"%(teamname)s has %(cnt)s players who have played a ranked game within the "
+"last two months."
+msgstr[0] ""
+"%(teamname)s har %(cnt)s spiller som har spilt ett rangert parti innen de "
+"siste to månedene."
+msgstr[1] ""
+"%(teamname)s har %(cnt)s spillere som har spilt ett rangert parti innen de "
+"siste to månedene."
+
+#: templates/team.html:139
+msgid "Inactive roster"
+msgstr "Uaktive spillere"
+
+#: templates/team.html:140
+#, python-format
+msgid ""
+"%(teamname)s has %(cnt)s player who has been temporarily removed from the "
+"ranking due to inactivity."
+msgid_plural ""
+"%(teamname)s has %(cnt)s players who have been temporarily removed from the "
+"ranking due to inactivity."
+msgstr[0] ""
+"%(teamname)s har %(cnt)s spiller som har blitt midlertidig fjernet fra "
+"ratinglisten på grunn av inaktivitet."
+msgstr[1] ""
+"%(teamname)s har %(cnt)s spillere som har blitt midlertidig fjernet fra "
+"ratinglisten på grunn av inaktivitet."
+
+#: templates/team.html:145
+msgid "Non-playing members"
+msgstr "Ikke-spillende medlemmer"
+
+#: templates/team.html:146
+#, python-format
+msgid "Assigned to %(teamname)s in a non-playing capacity:"
+msgstr "Disse er tilknyttet %(teamname)s i en ikke-spillende kapasitet:"
+
+#: templates/team.html:156
+msgid "Past members"
+msgstr "Tidligere spillere"
+
+#: templates/teams.html:19
+msgid "All-kill score"
+msgstr "All-kill rating"
+
+#: templates/teams.html:21
+msgid "Proleague score"
+msgstr "Proleage-rating"
+
+#: templates/teams.html:57
+msgid "Disbanded teams"
+msgstr "Nedlagte lag"
 
 #: templates/miniURL/list.html:9
 msgid "Short URLs list"

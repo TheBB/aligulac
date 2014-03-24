@@ -135,7 +135,7 @@ def teams(request):
 def team(request, team_id):
     # {{{ Get team object and base context, generate messages and make changes if needed
     team = get_object_or_404(Group, id=team_id)
-    base = base_ctx('Ranking', None, request)
+    base = base_ctx('Teams', None, request)
 
     if request.method == 'POST' and base['adm']:
         form = TeamModForm(request)

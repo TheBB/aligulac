@@ -3,16 +3,17 @@ This is the subroutine for printing a record list, used by records.html.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-        <div class="rowe" style="width: 18em;">Name</div>
+        <div class="rowe" style="width: 2.5em; text-align: right;">{% trans "#" %}</div>
+        <div class="rowe" style="width: 18em;">{% trans "Name" %}</div>
         <div class="rowe" style="width: 1em;"></div>
         <div class="rowe" style="width: 1em;"></div>
         <div class="rowe" style="width: 8.5em; text-align: right;">{{ rt }}</div>
         <div class="rowe" style="width: 2em;"></div>
-        <div class="rowe" style="width: 20em;">List</div>
+        <div class="rowe" style="width: 20em;">{% trans "List" %}</div>
         <div class="rowe" style="width: 14em; text-align: right;"></div>
     </div>
 {% for h in high %}

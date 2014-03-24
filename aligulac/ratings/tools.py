@@ -380,7 +380,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             r['eventtext'] = m.eventobj.fullname if m.eventobj is not None else m.event
 
         # If event is not closed and add_links=True, show add link
-        r['add_links'] = add_links and not m.eventobj.closed
+        r['add_links'] = add_links and m.eventobj is not None and not m.eventobj.closed
         # }}}
 
         # {{{ Add dates and messages if needed

@@ -17,14 +17,65 @@ Changes here will mostly be visible on the entire site.
         <title>{% block title %}Aligulac{% endblock %}</title>
         <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
         <link href="{{ "base"|css }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "jquery.ui.datepicker-"|add:lang|js }}"></script>
         <script type="text/javascript" src="{{ "general"|js }}"></script>
-        <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
         {% if charts %}
             <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
             <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+            <script type="text/javascript">
+            <!--
+            Highcharts.setOptions({
+                lang: {
+                    downloadPNG: '{% trans "Download PNG image" %}',
+                    downloadJPEG: '{% trans "Download JPEG image" %}',
+                    downloadPDF: '{% trans "Download PDF document" %}',
+                    downloadSVG: '{% trans "Download SVG vector image" %}',
+                    loading: '{% trans "Loading..." %}',
+                    printChart: '{% trans "Print chart" %}',
+                    resetZoom: '{% trans "Reset zoom" %}',
+                    months: [
+                        '{% trans "January" context "Big first letter" %}',
+                        '{% trans "February" context "Big first letter" %}',
+                        '{% trans "March" context "Big first letter" %}',
+                        '{% trans "April" context "Big first letter" %}',
+                        '{% trans "May" context "Big first letter" %}',
+                        '{% trans "June" context "Big first letter" %}',
+                        '{% trans "July" context "Big first letter" %}',
+                        '{% trans "August" context "Big first letter" %}',
+                        '{% trans "September" context "Big first letter" %}',
+                        '{% trans "October" context "Big first letter" %}',
+                        '{% trans "November" context "Big first letter" %}',
+                        '{% trans "December" context "Big first letter" %}',
+                    ],
+                    shortMonths: [
+                        '{% trans "Jan" context "Big first letter" %}',
+                        '{% trans "Feb" context "Big first letter" %}',
+                        '{% trans "Mar" context "Big first letter" %}',
+                        '{% trans "Apr" context "Big first letter" %}',
+                        '{% trans "May" context "Big first letter" %}',
+                        '{% trans "Jun" context "Big first letter" %}',
+                        '{% trans "Jul" context "Big first letter" %}',
+                        '{% trans "Aug" context "Big first letter" %}',
+                        '{% trans "Sep" context "Big first letter" %}',
+                        '{% trans "Oct" context "Big first letter" %}',
+                        '{% trans "Nov" context "Big first letter" %}',
+                        '{% trans "Dec" context "Big first letter" %}',
+                    ],
+                    weekdays: [
+                        '{% trans "Sunday" context "Big first letter" %}',
+                        '{% trans "Monday" context "Big first letter" %}',
+                        '{% trans "Tuesday" context "Big first letter" %}',
+                        '{% trans "Wednesday" context "Big first letter" %}',
+                        '{% trans "Thursday" context "Big first letter" %}',
+                        '{% trans "Friday" context "Big first letter" %}',
+                        '{% trans "Saturday" context "Big first letter" %}'
+                    ]
+                }
+            });
+            //-->
+            </script>
         {% endif %}
         {% if curpage == "Predict" %}
             <script type="text/javascript" src="{{ "lp-bracket-parser"|js }}" ></script>
@@ -155,10 +206,9 @@ Changes here will mostly be visible on the entire site.
                     {% endwith %}{% endwith %}{% endwith %}{% endwith %}<br/><br/>
 
                     {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
-                    {% with a2="<a target=\"_blank\" href=\"http://www.frequency-decoder.com/\">" %}
                     {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
-                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Date widget by {{a2}}Frequency Decoder</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
-                    {% endwith %}{% endwith %}{% endwith %}<br/><br/>
+                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}<br/><br/>
 
                     <span id="genshort">
                     <input type="submit" value="{% trans "Generate short URL for this page" %}" 

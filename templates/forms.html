@@ -82,11 +82,7 @@
                value="{{ field.value|makedate|date:"Y-m-d"|default:"" }}" />
         <script type="text/javascript">
         // <![CDATA[  
-            var opts = {                            
-                formElements: {"{{ field.auto_id }}" :"Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };           
-            datePickerController.createDatePicker(opts);
+            $("#{{field.auto_id}}").datepicker();
         // ]]>
         </script>
     </td>
@@ -106,16 +102,8 @@
         {% trans "inclusive" context "between x and y inclusive" %}
         <script type="text/javascript">
         // <![CDATA[  
-            var opts = {                            
-                formElements: {"before": "Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts);
-            var opts2 = {                            
-                formElements: {"after": "Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts2);
+            $("#after").datepicker();
+            $("#before").datepicker();
         // ]]>
         </script>
     </td>

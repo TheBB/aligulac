@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-24 19:49+0100\n"
-"PO-Revision-Date: 2014-03-24 19:44+0100\n"
+"POT-Creation-Date: 2014-03-24 21:03+0100\n"
+"PO-Revision-Date: 2014-03-24 21:03+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: aligulac/currency.py:99
 #, python-format
 msgid "Exchange rate not found for currency %(code)s on %(date)s"
-msgstr "Valutakurs for %(code)s ble ikke funnet på %(date)s"
+msgstr "Valutakurs for %(code)s ble ikke funnet på %(date)sc"
 
 #: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
 msgid "English"
@@ -213,7 +213,7 @@ msgstr "Databasestatus"
 msgid "API"
 msgstr "API"
 
-#: aligulac/aligulac/tools.py:274 templates/forms.html:130
+#: aligulac/aligulac/tools.py:274 templates/forms.html:118
 #: templates/language.html:41
 msgid "Submit"
 msgstr "Send"
@@ -2647,6 +2647,7 @@ msgstr[1] "Oppdaterte %i kamper."
 #: templates/player.html.py:251 templates/player.html:276
 #: templates/player.html.py:301 templates/player.html:461
 #: templates/player.html.py:475 templates/player.html:481
+#: templates/player.html.py:701 templates/player.html:718
 #: templates/player.html.py:750 templates/player.html:751
 #: templates/ratingdetails.html:43 templates/recordlist.html:46
 #: templates/results.html:11 templates/review.html:43 templates/team.html:20
@@ -4898,17 +4899,17 @@ msgstr "Mindre turneringer:"
 msgid "Go"
 msgstr "Gå til"
 
-#: templates/forms.html:100
+#: templates/forms.html:96
 msgctxt "between x and y inclusive"
 msgid "between"
 msgstr "mellom"
 
-#: templates/forms.html:103
+#: templates/forms.html:99
 msgctxt "between x and y inclusive"
 msgid "and"
 msgstr "og"
 
-#: templates/forms.html:106
+#: templates/forms.html:102
 msgctxt "between x and y inclusive"
 msgid "inclusive"
 msgstr "inklusive"
@@ -5014,32 +5015,210 @@ msgstr "Lengde"
 msgid "weeks"
 msgstr "uker"
 
+#: templates/index.html:31
+msgid "Download PNG image"
+msgstr "Last ned PNG-bilde"
+
+#: templates/index.html:32
+msgid "Download JPEG image"
+msgstr "Last ned JPEG-bilde"
+
+#: templates/index.html:33
+msgid "Download PDF document"
+msgstr "Last ned PDF-dokument"
+
+#: templates/index.html:34
+msgid "Download SVG vector image"
+msgstr "Last ned SVG-vektorgrafikk"
+
+#: templates/index.html:35
+msgid "Loading..."
+msgstr "Laster..."
+
+#: templates/index.html:36
+msgid "Print chart"
+msgstr "Skriv ut"
+
+#: templates/index.html:37
+msgid "Reset zoom"
+msgstr "Gjenopprett zoom"
+
+#: templates/index.html:39
+msgctxt "Big first letter"
+msgid "January"
+msgstr "Januar"
+
+#: templates/index.html:40
+msgctxt "Big first letter"
+msgid "February"
+msgstr "Februar"
+
+#: templates/index.html:41
+msgctxt "Big first letter"
+msgid "March"
+msgstr "Mars"
+
+#: templates/index.html:42
+msgctxt "Big first letter"
+msgid "April"
+msgstr "April"
+
+#: templates/index.html:43 templates/index.html.py:57
+msgctxt "Big first letter"
+msgid "May"
+msgstr "Mai"
+
+#: templates/index.html:44
+msgctxt "Big first letter"
+msgid "June"
+msgstr "Juni"
+
+#: templates/index.html:45
+msgctxt "Big first letter"
+msgid "July"
+msgstr "Juli"
+
+#: templates/index.html:46
+msgctxt "Big first letter"
+msgid "August"
+msgstr "August"
+
+#: templates/index.html:47
+msgctxt "Big first letter"
+msgid "September"
+msgstr "September"
+
+#: templates/index.html:48
+msgctxt "Big first letter"
+msgid "October"
+msgstr "Oktober"
+
+#: templates/index.html:49
+msgctxt "Big first letter"
+msgid "November"
+msgstr "November"
+
+#: templates/index.html:50
+msgctxt "Big first letter"
+msgid "December"
+msgstr "Desember"
+
+#: templates/index.html:53
+msgctxt "Big first letter"
+msgid "Jan"
+msgstr "Jan"
+
+#: templates/index.html:54
+msgctxt "Big first letter"
+msgid "Feb"
+msgstr "Feb"
+
+#: templates/index.html:55
+msgctxt "Big first letter"
+msgid "Mar"
+msgstr "Mar"
+
+#: templates/index.html:56
+msgctxt "Big first letter"
+msgid "Apr"
+msgstr "Apr"
+
+#: templates/index.html:58
+msgctxt "Big first letter"
+msgid "Jun"
+msgstr "Jun"
+
+#: templates/index.html:59
+msgctxt "Big first letter"
+msgid "Jul"
+msgstr "Jul"
+
+#: templates/index.html:60
+msgctxt "Big first letter"
+msgid "Aug"
+msgstr "Aug"
+
+#: templates/index.html:61
+msgctxt "Big first letter"
+msgid "Sep"
+msgstr "Sep"
+
+#: templates/index.html:62
+msgctxt "Big first letter"
+msgid "Oct"
+msgstr "Ckt"
+
+#: templates/index.html:63
+msgctxt "Big first letter"
+msgid "Nov"
+msgstr "Nov"
+
+#: templates/index.html:64
+msgctxt "Big first letter"
+msgid "Dec"
+msgstr "Des"
+
+#: templates/index.html:67
+msgctxt "Big first letter"
+msgid "Sunday"
+msgstr "Søndag"
+
 #: templates/index.html:68
+msgctxt "Big first letter"
+msgid "Monday"
+msgstr "Mandag"
+
+#: templates/index.html:69
+msgctxt "Big first letter"
+msgid "Tuesday"
+msgstr "Tirsdag"
+
+#: templates/index.html:70
+msgctxt "Big first letter"
+msgid "Wednesday"
+msgstr "Onsdag"
+
+#: templates/index.html:71
+msgctxt "Big first letter"
+msgid "Thursday"
+msgstr "Torsdag"
+
+#: templates/index.html:72
+msgctxt "Big first letter"
+msgid "Friday"
+msgstr "Fredag"
+
+#: templates/index.html:73
+msgctxt "Big first letter"
+msgid "Saturday"
+msgstr "Lørdag"
+
+#: templates/index.html:119
 msgid "DEVELOPMENT SERVER"
 msgstr "UTVIKLINGSSERVER"
 
-#: templates/index.html:71
+#: templates/index.html:122
 msgid "StarCraft 2 Progaming Statistics and Predictions"
 msgstr "StarCraft 2 e-sportstatistikk og prognoser"
 
-#: templates/index.html:104 templates/language.html:11
+#: templates/index.html:155 templates/language.html:11
 #: templates/language.html.py:17
 msgid "Language"
 msgstr "Språk"
 
-#: templates/index.html:109
+#: templates/index.html:160
 msgid "Find player, team or event:"
 msgstr "Finn spiller, lag eller turnering:"
 
-#: templates/index.html:130
+#: templates/index.html:181
 msgid "Current top 10"
 msgstr "Dagens topp ti"
 
-#: templates/index.html:135
+#: templates/index.html:186
 msgid "F jS"
 msgstr "j. F"
 
-#: templates/index.html:135
+#: templates/index.html:186
 #, python-format
 msgid ""
 "The above list is a preview of the next rating list, which will be finalized "
@@ -5048,14 +5227,14 @@ msgstr ""
 "Dette er en forsmak på den neste ratinglisten. Den er ikke endelig før "
 "%(dt)s."
 
-#: templates/index.html:147
+#: templates/index.html:198
 #, python-format
 msgid ""
 "Find us on %(a1)sTwitter</a>, %(a2)sGitHub</a> and #aligulac on quakenet."
 msgstr ""
 "Finn oss på %(a1)sTwitter</a>, %(a2)sGitHub</a> og #aligulac på quakenet."
 
-#: templates/index.html:154
+#: templates/index.html:205
 #, python-format
 msgid ""
 "Powered by %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> "
@@ -5064,16 +5243,16 @@ msgstr ""
 "Kjører på %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> og "
 "%(a4)sDebian GNU/Linux 6</a>."
 
-#: templates/index.html:160
+#: templates/index.html:210
 #, python-format
 msgid ""
-"Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Date widget by "
-"%(a2)sFrequency Decoder</a>. Charts by %(a3)sHighcharts</a>."
+"Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Charts by "
+"%(a3)sHighcharts</a>."
 msgstr ""
-"Ikoner av Mark James. Raseikoner av %(a1)sLiquipedia</a>. Datodings av "
-"%(a2)sFrequency Decoder</a>. Grafer av %(a3)sHighcharts</a>."
+"Ikoner av Mark James. Raseikoner av %(a1)sLiquipedia</a>. Grafer av "
+"%(a3)sHighcharts</a>."
 
-#: templates/index.html:164
+#: templates/index.html:214
 msgid "Generate short URL for this page"
 msgstr "Lag kort addresse for denne siden"
 
@@ -5751,31 +5930,31 @@ msgstr "Resultater på %(date)s"
 msgid "Go to date:"
 msgstr "Gå til dato:"
 
-#: templates/results.html:37 templates/results.html.py:80
+#: templates/results.html:33 templates/results.html.py:76
 msgid "previous month"
 msgstr "forrige måned"
 
-#: templates/results.html:44 templates/results.html.py:87
+#: templates/results.html:40 templates/results.html.py:83
 msgid "previous day"
 msgstr "forrige dag"
 
-#: templates/results.html:49 templates/results.html.py:92
+#: templates/results.html:45 templates/results.html.py:88
 msgid "today (or latest)"
 msgstr "i dag (eller siste)"
 
-#: templates/results.html:54 templates/results.html.py:97
+#: templates/results.html:50 templates/results.html.py:93
 msgid "next day"
 msgstr "neste dag"
 
-#: templates/results.html:61 templates/results.html.py:104
+#: templates/results.html:57 templates/results.html.py:100
 msgid "next month"
 msgstr "neste måned"
 
-#: templates/results.html:112
+#: templates/results.html:108
 msgid "No registered results on this date."
 msgstr "Ingen registrerte resultater på denne datoen."
 
-#: templates/results.html:115
+#: templates/results.html:111
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help "

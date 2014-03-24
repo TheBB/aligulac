@@ -18,13 +18,9 @@ This page shows the results by date. Called from ratings.views.results.
 <input type="submit" value="{% trans "Go" %}" />
 
 <script type="text/javascript">
-    // <![CDATA[  
-    var opts = {                            
-        formElements:{"d":"Y-ds-m-ds-d"},
-        statusFormat:"l-cc-sp-d-sp-F-sp-Y", 
-    };           
-    datePickerController.createDatePicker(opts);
-    // ]]>
+// <![CDATA[  
+    $("#d").datepicker();
+// ]]>
 </script> 
 </form> 
 

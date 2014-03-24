@@ -698,7 +698,7 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for s in stories %}{% if not s.skip %} {
-                          name: '{{s.text}}<br/>{{s.date}}{% if s.event %}: {{s.event.fullname}}{% endif %}',
+                          name: '{{s.text}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname}}{% endif %}',
                           url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter}}/',
                           x: {{ s.date|milliseconds }},
                           y: {{ s.rating|ratscale }}
@@ -715,7 +715,7 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for t in teampoints %} {
-                          name: '{% for d in t.data %}{{d.date}}: {{player.tag}} {{d.jol}} {{d.team.name}}<br/>{% endfor %}',
+                          name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag}} {{d.jol}} {{d.team.name}}<br/>{% endfor %}',
                           x: {{ t.date|milliseconds }},
                           y: {{ t.rating|ratscale }}
                       },{% endfor %}]

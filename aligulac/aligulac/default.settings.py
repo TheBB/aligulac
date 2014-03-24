@@ -138,6 +138,28 @@ DATABASES = {
     }
 }
 
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': local.ERROR_LOG_FILE
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': True
+        }
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 

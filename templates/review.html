@@ -40,7 +40,7 @@ ratings.submitviews.review.
 <tbody id="lm-{{g.id}}" style="display: none;">
     <tr class="nonheader row1">
         <td colspan="1" style="vertical-align: top;">{% trans "Date:" %}</td>
-        <td colspan="6">{{ g.date|date:"F jS, Y" }}</td>
+        <td colspan="6">{{ g.date|cdate:_('F jS, Y') }}</td>
     </tr>
     <tr class="nonheader row1">
         {% comment %}Translators: Game version{% endcomment %}

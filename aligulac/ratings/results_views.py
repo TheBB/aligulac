@@ -25,9 +25,6 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.template import RequestContext
-from django.template.defaultfilters import (
-    date as django_date_filter
-)
 from django.views.decorators.csrf import csrf_protect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
@@ -71,6 +68,7 @@ from ratings.tools import (
     filter_flags,
     find_player,
 )
+from ratings.templatetags.ratings_extras import cdate
 # }}}
 
 # {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
@@ -709,7 +707,7 @@ def results(request):
     )
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
 
-    base.update({"title": django_date_filter(day, "F jS, Y")})
+    base.update({"title": cdate(day, _("F jS, Y"))})
 
     return render_to_response('results.html', base)
 # }}}

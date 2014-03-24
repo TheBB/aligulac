@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-24 18:47+0100\n"
-"PO-Revision-Date: 2014-03-24 18:49+0100\n"
+"POT-Creation-Date: 2014-03-24 19:49+0100\n"
+"PO-Revision-Date: 2014-03-24 19:44+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -118,7 +118,7 @@ msgstr "Hall of Fame"
 
 #: aligulac/aligulac/tools.py:238 aligulac/ratings/player_views.py:171
 #: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:188
-#: aligulac/ratings/results_views.py:475 aligulac/ratings/results_views.py:490
+#: aligulac/ratings/results_views.py:473 aligulac/ratings/results_views.py:488
 #: templates/earnings.html:34 templates/earnings.html.py:43
 #: templates/earnings.html:51 templates/history.html:26
 #: templates/history.html.py:36 templates/period.html:40
@@ -131,7 +131,7 @@ msgstr "Alle"
 
 #: aligulac/aligulac/tools.py:239 aligulac/ratings/models.py:84
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
-#: aligulac/ratings/templatetags/ratings_extras.py:118
+#: aligulac/ratings/templatetags/ratings_extras.py:117
 #: templates/history.html:27 templates/period.html:41
 #: templates/period.html.py:127 templates/period.html:330
 #: templates/reports_balance.html:169
@@ -140,7 +140,7 @@ msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:240 aligulac/ratings/models.py:85
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
-#: aligulac/ratings/templatetags/ratings_extras.py:119
+#: aligulac/ratings/templatetags/ratings_extras.py:118
 #: templates/history.html:28 templates/period.html:42
 #: templates/period.html.py:128 templates/period.html:331
 #: templates/reports_balance.html:177
@@ -149,7 +149,7 @@ msgstr "Terran"
 
 #: aligulac/aligulac/tools.py:241 aligulac/ratings/models.py:86
 #: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:644
-#: aligulac/ratings/templatetags/ratings_extras.py:120
+#: aligulac/ratings/templatetags/ratings_extras.py:119
 #: templates/history.html:29 templates/period.html:43
 #: templates/period.html.py:129 templates/period.html:332
 #: templates/reports_balance.html:185
@@ -902,7 +902,7 @@ msgstr "Din API-nøkkel er '%s'. Vennligst hold den hemmelig."
 msgid "API documentation"
 msgstr "API-dokumentasjon"
 
-#: aligulac/aligulac/views.py:530 aligulac/ratings/results_views.py:862
+#: aligulac/aligulac/views.py:530 aligulac/ratings/results_views.py:860
 msgid "Search results"
 msgstr "Søkeresultater"
 
@@ -2079,8 +2079,8 @@ msgid "Category"
 msgstr "Kategori"
 
 #. Translators: Event type
-#: aligulac/ratings/models.py:77 aligulac/ratings/results_views.py:471
-#: aligulac/ratings/results_views.py:624 aligulac/ratings/staff_views.py:166
+#: aligulac/ratings/models.py:77 aligulac/ratings/results_views.py:469
+#: aligulac/ratings/results_views.py:622 aligulac/ratings/staff_views.py:166
 #: aligulac/ratings/staff_views.py:279 aligulac/ratings/staff_views.py:311
 #: templates/add.html:44 templates/clocks.html:56
 msgid "Event"
@@ -2093,7 +2093,7 @@ msgstr "Runde"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:88
-#: aligulac/ratings/templatetags/ratings_extras.py:121
+#: aligulac/ratings/templatetags/ratings_extras.py:120
 #: templates/period.html:336
 msgid "Random"
 msgstr "Tilfeldig"
@@ -2162,7 +2162,7 @@ msgstr "Nick"
 msgid "Race"
 msgstr "Rase"
 
-#: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:369
+#: aligulac/ratings/player_views.py:95 aligulac/ratings/results_views.py:367
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
 #: templates/earnings.html:106 templates/hof.html:25
 #: templates/ratinglist.html:24 templates/recordlist.html:11
@@ -2179,16 +2179,16 @@ msgid "Birthday"
 msgstr "Fødselsdag"
 
 #: aligulac/ratings/player_views.py:99 aligulac/ratings/player_views.py:152
-#: aligulac/ratings/results_views.py:115 aligulac/ratings/results_views.py:205
+#: aligulac/ratings/results_views.py:113 aligulac/ratings/results_views.py:203
 msgid "TLPD ID"
 msgstr "TLPD ID"
 
-#: aligulac/ratings/player_views.py:101 aligulac/ratings/results_views.py:117
+#: aligulac/ratings/player_views.py:101 aligulac/ratings/results_views.py:115
 msgid "TLPD DB"
 msgstr "TLPD database"
 
 #: aligulac/ratings/player_views.py:102 aligulac/ratings/player_views.py:153
-#: aligulac/ratings/results_views.py:119 aligulac/ratings/results_views.py:206
+#: aligulac/ratings/results_views.py:117 aligulac/ratings/results_views.py:204
 #: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
 msgid "Liquipedia title"
 msgstr "Liquipedia-tittel"
@@ -2206,10 +2206,10 @@ msgstr "SC2Earnings.com ID"
 msgid "Country"
 msgstr "Land"
 
-#: aligulac/ratings/player_views.py:135 aligulac/ratings/results_views.py:148
-#: aligulac/ratings/results_views.py:261 aligulac/ratings/results_views.py:346
-#: aligulac/ratings/results_views.py:393 aligulac/ratings/results_views.py:440
-#: aligulac/ratings/results_views.py:507 aligulac/ratings/results_views.py:656
+#: aligulac/ratings/player_views.py:135 aligulac/ratings/results_views.py:146
+#: aligulac/ratings/results_views.py:259 aligulac/ratings/results_views.py:344
+#: aligulac/ratings/results_views.py:391 aligulac/ratings/results_views.py:438
+#: aligulac/ratings/results_views.py:505 aligulac/ratings/results_views.py:654
 #: aligulac/ratings/staff_views.py:188 aligulac/ratings/staff_views.py:344
 #: aligulac/ratings/staff_views.py:594 aligulac/ratings/staff_views.py:665
 #: aligulac/ratings/staff_views.py:747 aligulac/ratings/team_views.py:74
@@ -2217,7 +2217,7 @@ msgid "Entered data was invalid, no changes made."
 msgstr "Innsendte data var ugyldig."
 
 #. Translators: Changed something (a noun).
-#: aligulac/ratings/player_views.py:145 aligulac/ratings/results_views.py:202
+#: aligulac/ratings/player_views.py:145 aligulac/ratings/results_views.py:200
 #: aligulac/ratings/team_views.py:83
 #, python-format
 msgid "Changed %s."
@@ -2239,7 +2239,7 @@ msgstr "land"
 msgid "name"
 msgstr "navn"
 
-#: aligulac/ratings/player_views.py:156 aligulac/ratings/results_views.py:208
+#: aligulac/ratings/player_views.py:156 aligulac/ratings/results_views.py:206
 msgid "TLPD DBs"
 msgstr "TLPD database"
 
@@ -2279,43 +2279,43 @@ msgstr "Motstanderrase"
 msgid "Non-Koreans"
 msgstr "Ikke-koreanere"
 
-#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:476
+#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:474
 msgid "Best of 3+"
 msgstr "Best av 3+"
 
-#: aligulac/ratings/player_views.py:190 aligulac/ratings/results_views.py:477
+#: aligulac/ratings/player_views.py:190 aligulac/ratings/results_views.py:475
 msgid "Best of 5+"
 msgstr "Best av 5+"
 
-#: aligulac/ratings/player_views.py:192 aligulac/ratings/results_views.py:479
+#: aligulac/ratings/player_views.py:192 aligulac/ratings/results_views.py:477
 msgid "Match format"
 msgstr "Kampformat"
 
-#: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:483
-#: aligulac/ratings/results_views.py:820
+#: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:481
+#: aligulac/ratings/results_views.py:818
 msgid "Both"
 msgstr "Begge"
 
-#: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:104
-#: aligulac/ratings/results_views.py:484 aligulac/ratings/results_views.py:627
-#: aligulac/ratings/results_views.py:822 aligulac/ratings/staff_views.py:282
+#: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:102
+#: aligulac/ratings/results_views.py:482 aligulac/ratings/results_views.py:625
+#: aligulac/ratings/results_views.py:820 aligulac/ratings/staff_views.py:282
 #: templates/db.html:50
 msgid "Offline"
 msgstr "Offline"
 
-#: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:104
-#: aligulac/ratings/results_views.py:485 aligulac/ratings/results_views.py:627
-#: aligulac/ratings/results_views.py:822 templates/db.html:43
+#: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:102
+#: aligulac/ratings/results_views.py:483 aligulac/ratings/results_views.py:625
+#: aligulac/ratings/results_views.py:820 templates/db.html:43
 msgid "Online"
 msgstr "Online"
 
-#: aligulac/ratings/player_views.py:200 aligulac/ratings/results_views.py:105
-#: aligulac/ratings/results_views.py:487 aligulac/ratings/results_views.py:628
+#: aligulac/ratings/player_views.py:200 aligulac/ratings/results_views.py:103
+#: aligulac/ratings/results_views.py:485 aligulac/ratings/results_views.py:626
 msgid "On/offline"
 msgstr "On/offline"
 
-#: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:101
-#: aligulac/ratings/results_views.py:490 aligulac/ratings/results_views.py:632
+#: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:99
+#: aligulac/ratings/results_views.py:488 aligulac/ratings/results_views.py:630
 #: aligulac/ratings/staff_views.py:281 templates/add.html:58
 #: templates/eventres.html:224
 msgid "Game version"
@@ -2465,110 +2465,110 @@ msgstr "Rekorder for"
 msgid "Balance report"
 msgstr "Balanserapport"
 
-#: aligulac/ratings/results_views.py:100 aligulac/ratings/results_views.py:104
-#: aligulac/ratings/results_views.py:108 aligulac/ratings/results_views.py:627
-#: aligulac/ratings/results_views.py:631 aligulac/ratings/results_views.py:642
+#: aligulac/ratings/results_views.py:98 aligulac/ratings/results_views.py:102
+#: aligulac/ratings/results_views.py:106 aligulac/ratings/results_views.py:625
+#: aligulac/ratings/results_views.py:629 aligulac/ratings/results_views.py:640
 msgid "No change"
 msgstr "Ingen endring"
 
 #. Translators: Type as in event type
 #. Translators: Event type.
-#: aligulac/ratings/results_views.py:110 aligulac/ratings/results_views.py:370
+#: aligulac/ratings/results_views.py:108 aligulac/ratings/results_views.py:368
 #: aligulac/ratings/staff_views.py:543 templates/add.html:61
 #: templates/eventres.html:242
 msgid "Type"
 msgstr "Type"
 
 #. Translators: Apply (changes) to…
-#: aligulac/ratings/results_views.py:113
+#: aligulac/ratings/results_views.py:111
 msgid "Apply to all events on the same level"
 msgstr "Gjør samme endringer på alle turneringer på samme nivå"
 
-#: aligulac/ratings/results_views.py:114 aligulac/ratings/team_views.py:50
+#: aligulac/ratings/results_views.py:112 aligulac/ratings/team_views.py:50
 #: templates/eventres.html:290 templates/events_open.html:35
 #: templates/events_open.html.py:79 templates/events_open.html:127
 #: templates/team.html:97
 msgid "Homepage"
 msgstr "Hjemmeside"
 
-#: aligulac/ratings/results_views.py:118 aligulac/ratings/results_views.py:207
+#: aligulac/ratings/results_views.py:116 aligulac/ratings/results_views.py:205
 msgid "TL thread"
 msgstr "TL-tråd"
 
-#: aligulac/ratings/results_views.py:158
+#: aligulac/ratings/results_views.py:156
 msgid "Changed event name."
 msgstr "Endret turneringsnavn."
 
-#: aligulac/ratings/results_views.py:163
+#: aligulac/ratings/results_views.py:161
 #, python-format
 msgid "Changed date for %i match."
 msgid_plural "Changed date for %i matches."
 msgstr[0] "Endret dato for %i kamp."
 msgstr[1] "Endret dato for %i kamper."
 
-#: aligulac/ratings/results_views.py:171
+#: aligulac/ratings/results_views.py:169
 #, python-format
 msgid "Changed game version for %i match."
 msgid_plural "Changed game version for %i matches."
 msgstr[0] "Endret spillversjon for %i kamp."
 msgstr[1] "Endret spillversjon for %i kamper."
 
-#: aligulac/ratings/results_views.py:181
+#: aligulac/ratings/results_views.py:179
 #, python-format
 msgid "Changed on/offline for %i match."
 msgid_plural "Changed on/offline for %i matches."
 msgstr[0] "Endret on/offline for %i kamp."
 msgstr[1] "Endret on/offline for %i kamper."
 
-#: aligulac/ratings/results_views.py:195
+#: aligulac/ratings/results_views.py:193
 #, python-format
 msgid "Changed type for %i event."
 msgid_plural "Changed type for %i events."
 msgstr[0] "Endret type for %i turnering."
 msgstr[1] "Endret type for %i turneringer."
 
-#: aligulac/ratings/results_views.py:204 aligulac/ratings/team_views.py:88
+#: aligulac/ratings/results_views.py:202 aligulac/ratings/team_views.py:88
 msgid "homepage"
 msgstr "hjemmeside"
 
-#: aligulac/ratings/results_views.py:218
+#: aligulac/ratings/results_views.py:216
 msgid "Currency"
 msgstr "Valuta"
 
-#: aligulac/ratings/results_views.py:219
+#: aligulac/ratings/results_views.py:217
 msgid "Ranked"
 msgstr "Rangert"
 
-#: aligulac/ratings/results_views.py:220
+#: aligulac/ratings/results_views.py:218
 msgid "Unranked"
 msgstr "Urangert"
 
-#: aligulac/ratings/results_views.py:249
+#: aligulac/ratings/results_views.py:247
 #, python-format
 msgid "No such player: '%s'."
 msgstr "Ingen slik spiller funnet: '%s'."
 
-#: aligulac/ratings/results_views.py:251 aligulac/ratings/staff_views.py:109
+#: aligulac/ratings/results_views.py:249 aligulac/ratings/staff_views.py:109
 #: aligulac/ratings/staff_views.py:119 aligulac/ratings/staff_views.py:450
 #, python-format
 msgid "Ambiguous player: '%s'."
 msgstr "Tvetydig spiller: '%s'."
 
-#: aligulac/ratings/results_views.py:291
+#: aligulac/ratings/results_views.py:289
 msgid "Errors occured, no changes made."
 msgstr "Det skjedde en eller flere feil, ingen endringer ble gjort."
 
 #. Translators: New prizepools added to the database.
-#: aligulac/ratings/results_views.py:313
+#: aligulac/ratings/results_views.py:311
 msgid "New prizes committed."
 msgstr "Nye premier ble lagret."
 
-#: aligulac/ratings/results_views.py:321 templates/add.html:86
+#: aligulac/ratings/results_views.py:319 templates/add.html:86
 #: templates/player_transfers.html:11
 msgid "Player"
 msgstr "Spiller"
 
-#: aligulac/ratings/results_views.py:322 aligulac/ratings/results_views.py:625
+#: aligulac/ratings/results_views.py:320 aligulac/ratings/results_views.py:623
 #: aligulac/ratings/staff_views.py:142 aligulac/ratings/staff_views.py:280
 #: templates/clocks.html:56 templates/eventres.html:206
 #: templates/matchlist.html:38 templates/player_results.html:19
@@ -2576,41 +2576,41 @@ msgstr "Spiller"
 msgid "Date"
 msgstr "Dato"
 
-#: aligulac/ratings/results_views.py:323
+#: aligulac/ratings/results_views.py:321
 msgid "Text"
 msgstr "Tekst"
 
 #. Translators: Stories are the dots on a player's rating chart
-#: aligulac/ratings/results_views.py:361
+#: aligulac/ratings/results_views.py:359
 msgid "Added a story."
 msgstr "Lagret en ny hendelse."
 
-#: aligulac/ratings/results_views.py:371
+#: aligulac/ratings/results_views.py:369
 msgid "No Print"
 msgstr "Gjemt"
 
-#: aligulac/ratings/results_views.py:372
+#: aligulac/ratings/results_views.py:370
 msgid "Closed"
 msgstr "Lukket"
 
-#: aligulac/ratings/results_views.py:406
+#: aligulac/ratings/results_views.py:404
 msgid "Added a subevent."
 msgstr "Lagret en ny underturnering."
 
-#: aligulac/ratings/results_views.py:430
+#: aligulac/ratings/results_views.py:428
 msgid "Unable to get these events."
 msgstr "Kunne ikke finne disse turneringene."
 
-#: aligulac/ratings/results_views.py:448
+#: aligulac/ratings/results_views.py:446
 msgid "Order invalid, try again?"
 msgstr "Rekkefølgen var ugyldig. Prøv igjen?"
 
-#: aligulac/ratings/results_views.py:452
+#: aligulac/ratings/results_views.py:450
 msgid "Non-child event found. This should never happen."
 msgstr "Ikke-underturnering ble funnet. Dette skal aldri forekomme."
 
 #. Translators: Children as in sub-events.
-#: aligulac/ratings/results_views.py:460
+#: aligulac/ratings/results_views.py:458
 #, python-format
 msgid ""
 "Successfully reordered %i children. Any inconsistencies will be fixed next "
@@ -2619,27 +2619,41 @@ msgstr ""
 "Endret rekkefølgen på %i underturneringer. Alle ukonsistenser vil bli fikset "
 "ved neste oppdatering (ikke mer enn seks timer til)."
 
-#: aligulac/ratings/results_views.py:470
+#: aligulac/ratings/results_views.py:468
 msgid "Involving players"
 msgstr "Involverte spillere"
 
 #. Translators: Matches here as in search matches.
-#: aligulac/ratings/results_views.py:566
+#: aligulac/ratings/results_views.py:564
 #, python-format
 msgid "No matches found: '%s'."
 msgstr "Ingen treff ble funnet: '%s'."
 
-#: aligulac/ratings/results_views.py:595
+#: aligulac/ratings/results_views.py:593
 #, python-format
 msgid "Too many results (%i). Please add restrictions."
 msgstr "For mange resultater (%i). Vennligst legg til flere restriksjoner."
 
-#: aligulac/ratings/results_views.py:681
+#: aligulac/ratings/results_views.py:679
 #, python-format
 msgid "Updated %i match."
 msgid_plural "Updated %i matches."
 msgstr[0] "Oppdaterte %i kamp."
 msgstr[1] "Oppdaterte %i kamper."
+
+#: aligulac/ratings/results_views.py:710 templates/hof.html:54
+#: templates/period.html:267 templates/period.html.py:271
+#: templates/periods.html:28 templates/player.html:226
+#: templates/player.html.py:251 templates/player.html:276
+#: templates/player.html.py:301 templates/player.html:461
+#: templates/player.html.py:475 templates/player.html:481
+#: templates/player.html.py:750 templates/player.html:751
+#: templates/ratingdetails.html:43 templates/recordlist.html:46
+#: templates/results.html:11 templates/review.html:43 templates/team.html:20
+#: templates/team.html.py:22 templates/team.html:24 templates/team.html.py:54
+#: templates/team.html:60 templates/team.html.py:179 templates/team.html:180
+msgid "F jS, Y"
+msgstr "j. F Y"
 
 #: aligulac/ratings/staff_views.py:111 aligulac/ratings/staff_views.py:121
 #: aligulac/ratings/staff_views.py:446
@@ -3165,33 +3179,213 @@ msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende nick)"
 msgid "Player '%s' was not found and cound not be made (missing race)"
 msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende rase)"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:122
+#: aligulac/ratings/templatetags/ratings_extras.py:121
 msgid "Race switcher"
 msgstr "Rasebytter"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:247
+#: aligulac/ratings/templatetags/ratings_extras.py:246
 msgid "TLPD:WoL:B"
 msgstr "TLPD:WoL:B"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:248
+#: aligulac/ratings/templatetags/ratings_extras.py:247
 msgid "TLPD:WoL:KR"
 msgstr "TLPD:WoL:KR"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:249
+#: aligulac/ratings/templatetags/ratings_extras.py:248
 msgid "TLPD:WoL:IN"
 msgstr "TLPD:WoL:IN"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:250
+#: aligulac/ratings/templatetags/ratings_extras.py:249
 msgid "TLPD:HotS:B"
 msgstr "TLPD:HotS:B"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:251
+#: aligulac/ratings/templatetags/ratings_extras.py:250
 msgid "TLPD:HotS"
 msgstr "TLPD:HotS"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:350
+#: aligulac/ratings/templatetags/ratings_extras.py:349
 msgid "N/A"
 msgstr "N/A"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:490
+msgid "January"
+msgstr "januar"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:491
+msgid "February"
+msgstr "februar"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:492
+msgid "March"
+msgstr "mars"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:493
+msgid "April"
+msgstr "april"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:494
+msgid "May"
+msgstr "mai"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:495
+msgid "June"
+msgstr "juni"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:496
+msgid "July"
+msgstr "juli"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:497
+msgid "August"
+msgstr "august"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:498
+msgid "September"
+msgstr "september"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:499
+msgid "October"
+msgstr "oktober"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:500
+msgid "November"
+msgstr "november"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:501
+msgid "December"
+msgstr "desember"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:502
+msgid "Jan."
+msgstr "jan."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:503
+msgid "Feb."
+msgstr "feb."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:504
+msgid "Aug."
+msgstr "aug."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:505
+msgid "Sept."
+msgstr "sept."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:506
+msgid "Oct."
+msgstr "okt."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:507
+msgid "Nov."
+msgstr "nov."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:508
+msgid "Dec."
+msgstr "des."
+
+#: aligulac/ratings/templatetags/ratings_extras.py:509
+msgid "jan"
+msgstr "jan"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:510
+msgid "feb"
+msgstr "feb"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:511
+msgid "mar"
+msgstr "mar"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:512
+msgid "apr"
+msgstr "apr"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:513
+msgid "may"
+msgstr "mai"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:514
+msgid "jun"
+msgstr "jun"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:515
+msgid "jul"
+msgstr "jul"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:516
+msgid "aug"
+msgstr "aug"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:517
+msgid "sep"
+msgstr "sep"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:518
+msgid "oct"
+msgstr "okt"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:519
+msgid "nov"
+msgstr "nov"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:520
+msgid "dec"
+msgstr "des"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:521
+msgid "Monday"
+msgstr "mandag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:522
+msgid "Tuesday"
+msgstr "tirsdag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:523
+msgid "Wednesday"
+msgstr "onsdag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:524
+msgid "Thursday"
+msgstr "torsdag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:525
+msgid "Friday"
+msgstr "fredag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:526
+msgid "Saturday"
+msgstr "lørdag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:527
+msgid "Sunday"
+msgstr "søndag"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:528
+msgid "mon"
+msgstr "man"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:529
+msgid "tue"
+msgstr "tir"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:530
+msgid "wed"
+msgstr "ons"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:531
+msgid "thu"
+msgstr "tor"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:532
+msgid "fri"
+msgstr "fre"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:533
+msgid "sat"
+msgstr "lør"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:534
+msgid "sun"
+msgstr "søn"
 
 #: templates/404.html:12
 msgid "The page you were looking for was nowhere to be found. Sorry!"
@@ -4122,6 +4316,10 @@ msgid_plural "days"
 msgstr[0] "dag"
 msgstr[1] "dager"
 
+#: templates/clocks.html:60 templates/matchlist.html:153
+msgid "Y-m-d"
+msgstr "d.m.Y"
+
 #: templates/clocks.html:81
 msgid ""
 "<b>Major</b> is defined by being a tournament where the first place prize "
@@ -4152,6 +4350,10 @@ msgstr ""
 #: templates/db.html:16
 msgid "Last ratings update"
 msgstr "Siste ratingoppdatering"
+
+#: templates/db.html:18 templates/db.html.py:93
+msgid "F jS, Y, H:i e"
+msgstr "j. F Y, H:i e"
 
 #: templates/db.html:19
 msgid "log"
@@ -4692,7 +4894,7 @@ msgid "Smaller events:"
 msgstr "Mindre turneringer:"
 
 #. Translators: Go as in go to a page.
-#: templates/eventtable.html:48 templates/results.html:17
+#: templates/eventtable.html:48 templates/results.html:18
 msgid "Go"
 msgstr "Gå til"
 
@@ -4832,6 +5034,10 @@ msgstr "Finn spiller, lag eller turnering:"
 #: templates/index.html:130
 msgid "Current top 10"
 msgstr "Dagens topp ti"
+
+#: templates/index.html:135
+msgid "F jS"
+msgstr "j. F"
 
 #: templates/index.html:135
 #, python-format
@@ -5253,7 +5459,7 @@ msgstr "Laghistorie"
 #: templates/player.html:741 templates/player_transfers.html:17
 #: templates/team.html:163
 msgid "Joined"
-msgstr "Skrev under på"
+msgstr "Skrev under"
 
 #. Translators: As in "to leave", not "not right".
 #: templates/player.html:742 templates/player_transfers.html:15
@@ -5481,6 +5687,12 @@ msgstr ""
 msgid "Winrate [%%]"
 msgstr "Seiersrate [%%]"
 
+#: templates/reports_balance.html:82 templates/reports_balance.html.py:90
+#: templates/reports_balance.html:98 templates/reports_balance.html.py:172
+#: templates/reports_balance.html:180 templates/reports_balance.html.py:188
+msgid "F Y"
+msgstr "F Y"
+
 #: templates/reports_balance.html:108
 #, python-format
 msgid ""
@@ -5530,40 +5742,40 @@ msgstr "Ytelsesdifferanse [poeng]"
 msgid "Difference"
 msgstr "Differanse"
 
-#: templates/results.html:10
+#: templates/results.html:11
 #, python-format
 msgid "Results for %(date)s"
 msgstr "Resultater på %(date)s"
 
-#: templates/results.html:15
+#: templates/results.html:16
 msgid "Go to date:"
 msgstr "Gå til dato:"
 
-#: templates/results.html:36 templates/results.html.py:79
+#: templates/results.html:37 templates/results.html.py:80
 msgid "previous month"
 msgstr "forrige måned"
 
-#: templates/results.html:43 templates/results.html.py:86
+#: templates/results.html:44 templates/results.html.py:87
 msgid "previous day"
 msgstr "forrige dag"
 
-#: templates/results.html:48 templates/results.html.py:91
+#: templates/results.html:49 templates/results.html.py:92
 msgid "today (or latest)"
 msgstr "i dag (eller siste)"
 
-#: templates/results.html:53 templates/results.html.py:96
+#: templates/results.html:54 templates/results.html.py:97
 msgid "next day"
 msgstr "neste dag"
 
-#: templates/results.html:60 templates/results.html.py:103
+#: templates/results.html:61 templates/results.html.py:104
 msgid "next month"
 msgstr "neste måned"
 
-#: templates/results.html:111
+#: templates/results.html:112
 msgid "No registered results on this date."
 msgstr "Ingen registrerte resultater på denne datoen."
 
-#: templates/results.html:114
+#: templates/results.html:115
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help "
@@ -5838,6 +6050,9 @@ msgstr "Ingen korte adresser."
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
 msgstr "Adresseforkorter"
+
+#~ msgid "LONG_DATE_FORMAT"
+#~ msgstr "F jS, Y"
 
 #~ msgid "Tenge"
 #~ msgstr "Kasakstansk tenge"

@@ -132,7 +132,7 @@ Changes here will mostly be visible on the entire site.
                     {% include "ratinglist.html" with localcount=1 rl_pos_arrow=1 displayteams=1 %}
 
                     {% if curp.is_preview %}
-                    <p>{% blocktrans with dt=curp.end|date:"F jS" %}The above list is a preview of the next rating list, which will be finalized on {{ dt }}.{% endblocktrans %}</p>
+                    <p>{% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{ dt }}.{% endblocktrans %}</p>
                     {% endif %}
 
                     {% include "messages.html" %}

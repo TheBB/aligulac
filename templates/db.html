@@ -15,7 +15,7 @@ dump. Called from aligulac.views.db.
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
         <div class="rowel" style="width: 33.5em;">{% trans "Last ratings update" %}</div>
         <div class="rower" style="width: 33.5em;">
-            {{ updated|date:"Y-m-d, H:i e" }} (UTC {{ updated|date:"O" }})
+            {{ updated|cdate:_('F jS, Y, H:i e') }} (UTC {{ updated|date:"O" }})
             (<a href="{{ "update.txt"|static }}">{% trans "log" %}</a>)
         </div>
     </div>
@@ -90,7 +90,7 @@ dump. Called from aligulac.views.db.
 <p>
 {% with dump="aligulac.sql"|static dumpmb=megabytes|floatformat:1 %}
 {% with gzdump="aligulac.sql.gz"|static gzdumpmb=gz_megabytes|floatformat:1 %}
-{% with datetime=modified|date:"Y-m-d, H:i e" tz=modified|date:"O" %}
+{% with datetime=modified|cdate:_('F jS, Y, H:i e') tz=modified|date:"O" %}
 {% blocktrans %}You can download a PostgreSQL dump <a href="{{dump}}">here</a> ({{dumpmb}} MiB) or <a href="{{gzdump}}">here</a> ({{gzdumpmb}} MiB gzipped), current as of {{datetime}} (UTC {{tz}}). It is free to use for non-commercial purposes if you credit this website when doing so.{% endblocktrans %}
 {% endwith %} {% endwith %} {% endwith %}
 </p> 

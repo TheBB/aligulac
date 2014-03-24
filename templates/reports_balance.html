@@ -79,7 +79,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "PvT" %}',
                 color: '#00aaaa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "PvT" %}: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} {% trans "games" %}',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvT" %}: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.pvt_wins|pctg_add_f:r.pvt_losses}} 
                 },{% endfor %}]
@@ -87,7 +87,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "PvZ" %}',
                 color: '#aaaa00',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "PvZ" %}: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} {% trans "games" %}',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvZ" %}: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.pvz_wins|pctg_add_f:r.pvz_losses}} 
                 },{% endfor %}]
@@ -95,7 +95,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "TvZ" %}',
                 color: '#aa00aa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "TvZ" %}: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} {% trans "games" %}',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "TvZ" %}: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.tvz_wins|pctg_add_f:r.tvz_losses}} 
                 },{% endfor %}]
@@ -169,7 +169,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "Protoss" %}',
                 color: '#00aa00',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "Difference" %}: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.p_gains|ratscalediff}} 
                 },{% endfor %}]
@@ -177,7 +177,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "Terran" %}',
                 color: '#0000aa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "Difference" %}: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.t_gains|ratscalediff}} 
                 },{% endfor %}]
@@ -185,7 +185,7 @@ This is the template for the main player page, called from ratings.views.player.
                 name: '{% trans "Zerg" %}',
                 color: '#aa0000',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>{% trans "Difference" %}: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.z_gains|ratscalediff}} 
                 },{% endfor %}]

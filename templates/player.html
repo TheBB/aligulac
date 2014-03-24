@@ -223,7 +223,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% if highs %}
             {% trans "on" context "on date" %}
             <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
-                {{ highs.0.period.end|date:"F jS, Y" }} </a>
+                {{ highs.0.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td style="width: 6em;">
@@ -248,7 +248,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% if highs %}
             {% trans "on" context "on date" %}
             <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
-                {{ highs.1.period.end|date:"F jS, Y" }} </a>
+                {{ highs.1.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td>
@@ -273,7 +273,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% if highs %}
             {% trans "on" context "on date" %}
             <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
-                {{ highs.2.period.end|date:"F jS, Y" }} </a>
+                {{ highs.2.period.end|cdate:_('F jS, Y') }} </a>
             {% endif %}
         </td>
         <td>
@@ -298,7 +298,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% if highs %}
             {% trans "on" context "on date" %}
             <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
-                {{ highs.3.period.end|date:"F jS, Y" }}</a>
+                {{ highs.3.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td>
@@ -458,7 +458,7 @@ This is the template for the main player page, called from ratings.views.player.
         {% if player.birthday %}
         <div class="row infobox">
             <div class="rowel">{% trans "Birthday" %}</div>
-            <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
+            <div class="rower">{{ player.birthday|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if team %}
@@ -472,13 +472,13 @@ This is the template for the main player page, called from ratings.views.player.
         {% if first %}
         <div class="row">
             <div class="rowel">{% trans "First match" %}</div>
-            <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
+            <div class="rower">{{ first.date|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if last %}
         <div class="row">
             <div class="rowel">{% trans "Last match" %}</div>
-            <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
+            <div class="rower">{{ last.date|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if earnings %}
@@ -747,8 +747,8 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="rowe">
             <a href="/teams/{{ tm.group.id }}-{{ tm.group.name|urlfilter }}/">{{ tm.group.name }}</a>
         </div>
-        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
-        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.start|cdate:_('F jS, Y') }}</div>
+        <div class="rowe">{{ tm.end|cdate:_('F jS, Y') }}</div>
         <div class="rowe" style="text-align: right;">
             {% if tm.current %}
                 <img src="{{ "yes"|img }}" alt="yes" class="btm" />

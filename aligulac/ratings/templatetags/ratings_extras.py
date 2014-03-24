@@ -11,9 +11,13 @@ from datetime import (
 from dateutil.relativedelta import relativedelta
 
 from django import template
-from django.template.defaultfilters import stringfilter
+from django.template.defaultfilters import (
+    stringfilter,
+    date as djangodate,
+)
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 
 from aligulac.settings import (
     PRF_NA,
@@ -55,11 +59,6 @@ def jsescape(value):
 @register.filter
 @stringfilter
 def urlify(value):
-    #urlfinder  = re.compile(r'^(http://\S+)')
-    #urlfinder2 = re.compile(r'\s(http://\S+)')
-    #value = urlfinder.sub(r'<a href="\1">\1</a>', value)
-    #return mark_safe(urlfinder.sub(r' <a href="\1">\1</a>', value))
-
     pat1 = re.compile(
         r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)",
         re.IGNORECASE | re.DOTALL
@@ -482,6 +481,59 @@ def datemin(value, arg):
         return value
     else:
         return arg
+# }}}
+
+# {{{ cdate: Custom translate-friendly date formatting.
+@register.filter
+def cdate(value, arg):
+    temp = (djangodate(value, arg)
+        .replace('January',    ugettext('January'))
+        .replace('February',   ugettext('February'))
+        .replace('March',      ugettext('March'))
+        .replace('April',      ugettext('April'))
+        .replace('May',        ugettext('May'))
+        .replace('June',       ugettext('June'))
+        .replace('July',       ugettext('July'))
+        .replace('August',     ugettext('August'))
+        .replace('September',  ugettext('September'))
+        .replace('October',    ugettext('October'))
+        .replace('November',   ugettext('November'))
+        .replace('December',   ugettext('December'))
+        .replace('Jan.',       ugettext('Jan.'))
+        .replace('Feb.',       ugettext('Feb.'))
+        .replace('Aug.',       ugettext('Aug.'))
+        .replace('Sept.',      ugettext('Sept.'))
+        .replace('Oct.',       ugettext('Oct.'))
+        .replace('Nov.',       ugettext('Nov.'))
+        .replace('Dec.',       ugettext('Dec.'))
+        .replace('jan',        ugettext('jan'))
+        .replace('feb',        ugettext('feb'))
+        .replace('mar',        ugettext('mar'))
+        .replace('apr',        ugettext('apr'))
+        .replace('may',        ugettext('may'))
+        .replace('jun',        ugettext('jun'))
+        .replace('jul',        ugettext('jul'))
+        .replace('aug',        ugettext('aug'))
+        .replace('sep',        ugettext('sep'))
+        .replace('oct',        ugettext('oct'))
+        .replace('nov',        ugettext('nov'))
+        .replace('dec',        ugettext('dec'))
+        .replace('Monday',     ugettext('Monday'))
+        .replace('Tuesday',    ugettext('Tuesday'))
+        .replace('Wednesday',  ugettext('Wednesday'))
+        .replace('Thursday',   ugettext('Thursday'))
+        .replace('Friday',     ugettext('Friday'))
+        .replace('Saturday',   ugettext('Saturday'))
+        .replace('Sunday',     ugettext('Sunday'))
+        .replace('mon',        ugettext('mon'))
+        .replace('tue',        ugettext('tue'))
+        .replace('wed',        ugettext('wed'))
+        .replace('thu',        ugettext('thu'))
+        .replace('fri',        ugettext('fri'))
+        .replace('sat',        ugettext('sat'))
+        .replace('sun',        ugettext('sun'))
+    )
+    return temp
 # }}}
 
 # }}}

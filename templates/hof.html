@@ -51,7 +51,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
     </div>
     <div class="rowe"></div>
     <div class="rowe">
-        <a href="/periods/{{ h.dom_start.id }}/">{{ h.dom_start.start|date:"F jS, Y" }}</a>
+        <a href="/periods/{{ h.dom_start.id }}/">{{ h.dom_start.start|cdate:_('F jS, Y') }}</a>
     </div>
     <div class="rowe">
         {{ h.dom_end.id|sub:h.dom_start.id|add:h.dom_end.id|sub:h.dom_start.id }} {% trans "weeks" %}

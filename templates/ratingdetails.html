@@ -40,7 +40,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
 
 {% if matches %}
 {% if has_treated %}
-{% with start=period.start|date:"F jS, Y" end=period.end|date:"F jS, Y" %}
+{% with start=period.start|cdate:_('F jS, Y') end=period.end|cdate:_('F jS, Y') %}
 {% if period.is_preview %}
 <p>{% blocktrans %}This period started on {{ start }} and will end on {{ end }}. The numbers given below are projected adjustments and can change before then.{% endblocktrans %}</p>
 {% else %}

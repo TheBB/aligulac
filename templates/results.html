@@ -6,8 +6,9 @@ This page shows the results by date. Called from ratings.views.results.
 
 {% load ratings_extras %}
 {% load i18n %}
+{% load l10n %}
 
-{% block title %}{% blocktrans with date=td|date:"Y-m-d" %}Results for {{ date }}{% endblocktrans %}{% endblock %}
+{% block title %}{% blocktrans with date=td|cdate:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 

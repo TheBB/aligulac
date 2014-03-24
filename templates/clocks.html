@@ -57,7 +57,7 @@ var clocks_toggle_more = function(e) {
         <tbody>
         {% for e, earn in clock.extra %}
         <tr class="nonheader {% cycle 'row2' 'row1' %}">
-          <td>{{ e.latest|date:"Y-m-d" }}</td>
+          <td>{{ e.latest|date:_('Y-m-d') }}</td>
           <td>{{ e|event }}</td>
           <td>{{ earn.0.player|player }}</td>
           <td>{{ earn.0.earnings|add_sep_and_cur:"USD" }}</td>

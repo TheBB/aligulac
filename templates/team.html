@@ -17,11 +17,11 @@ This shows a team page. Called from ratings.teamviews.team.
 <table style="width: 67em;"><tr>
 <td style="width: 42em; vertical-align: top;">
 {% if team.founded and team.disbanded %}
-<p>{% blocktrans with teamname=team.name founded=team.founded|date:"F jS, Y" disbanded=team.disbanded|date:"F jS, Y" %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}</p>
+<p>{% blocktrans with teamname=team.name founded=team.founded|cdate:_('F jS, Y') disbanded=team.disbanded|cdate:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}</p>
 {% elif team.founded %}
-<p>{% blocktrans with teamname=team.name founded=team.founded|date:"F jS, Y" %}{{ teamname }} was founded on {{ founded }}.{% endblocktrans %}</p>
+<p>{% blocktrans with teamname=team.name founded=team.founded|cdate:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }}.{% endblocktrans %}</p>
 {% elif team.disbanded %}
-<p>{% blocktrans with teamname=team.name disbanded=team.disbanded|date:"F jS, Y" %}{{ teamname }} was disbanded on {{ disbanded }}.{% endblocktrans %}</p>
+<p>{% blocktrans with teamname=team.name disbanded=team.disbanded|cdate:_('F jS, Y') %}{{ teamname }} was disbanded on {{ disbanded }}.{% endblocktrans %}</p>
 {% endif %}
 </td>
 
@@ -51,13 +51,13 @@ This shows a team page. Called from ratings.teamviews.team.
     {% if team.founded %}
         <div class="row">
             <div class="rowel" style="width: 10em;">{% trans "Founded" %}</div>
-            <div class="rower" style="width: 20em;">{{ team.founded|date:"F jS, Y" }}</div>
+            <div class="rower" style="width: 20em;">{{ team.founded|cdate:_('F jS, Y') }}</div>
         </div>
     {% endif %}
     {% if team.disbanded %}
         <div class="row">
             <div class="rowel" style="width: 10em;">{% trans "Disbanded" %}</div>
-            <div class="rower" style="width: 20em;">{{ team.disbanded|date:"F jS, Y" }}</div>
+            <div class="rower" style="width: 20em;">{{ team.disbanded|cdate:_('F jS, Y') }}</div>
         </div>
     {% endif %}
     {% if nplayers %}
@@ -176,8 +176,8 @@ This shows a team page. Called from ratings.teamviews.team.
         <div class="rowe">
             <img src="{{ tm.player.race|img }}" alt="{{tm.player.race}}" class="btm" />
         </div>
-        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
-        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.start|cdate:_('F jS, Y') }}</div>
+        <div class="rowe">{{ tm.end|cdate:_('F jS, Y') }}</div>
     </div>
     {% endfor %}
 </div>

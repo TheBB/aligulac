@@ -264,11 +264,11 @@ This template shows a rating list for a given period.
     <div class="iboxtable">
         <div class="row">
             <div class="rowel" style="width: 11em;">{% trans "Start" %}</div>
-            <div class="rower" style="width: 17em;">{{ period.start|date:"F jS, Y" }}</div>
+            <div class="rower" style="width: 17em;">{{ period.start|cdate:_('F jS, Y') }}</div>
         </div>
         <div class="row">
             <div class="rowel">{% trans "End" %}</div>
-            <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
+            <div class="rower">{{ period.end|cdate:_('F jS, Y') }}</div>
         </div>
         <div class="row">
             <div class="rowel">{% trans "Active players" %}</div>

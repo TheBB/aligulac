@@ -25,7 +25,7 @@ This is the template for the historical overview page, showing all the ranking l
         {% for period in periods %}
         <div class="row {% cycle 'row2' 'row1' %}">
             <div class="rowe">
-                <a href="/periods/{{ period.id }}/">{{ period.end|date:"F jS, Y" }}</a>
+                <a href="/periods/{{ period.id }}/">{{ period.end|cdate:_('F jS, Y') }}</a>
             </div>
             <div class="rowe">
                 <img src="{{ period|oprace|img }}" alt="{{ period|oprace }}" />

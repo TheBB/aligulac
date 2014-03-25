@@ -385,7 +385,7 @@ This is the template for the main player page, called from ratings.views.player.
     {{ player.tag }}
     {% if adm %}
         (<a href="#" onclick="toggle_form('modplayer'); hide_charts(); return false;"
-            title="Edit info">{% trans "edit" %}</a>,
+            title="{% trans "Edit info" %}">{% trans "edit" %}</a>,
         <a href="/admin/ratings/player/{{ player.id }}/" title="{% trans "Admin interface" %}">{% trans "admin" context "admin interface" %}</a>)
     {% endif %}
     </div>
@@ -497,14 +497,10 @@ This is the template for the main player page, called from ratings.views.player.
             <div class="rower">{{ player.mcnum }}</div>
         </div>
         {% endif %}
-        {% if player.tlpd_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+        {% if player.tlpd_id or player.lp_name or player.sc2e_id %}
         <div class="row infobox">
             <div class="rowel">{% trans "External" %}</div>
             <div class="rower">
-                {% if player.sc2c_id %}
-                {% comment %}Translators: SC2C = sc2charts.net{% endcomment %}
-                <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" target="_blank">{% trans "SC2C" %}</a>
-                {% endif %}
                 {% if player.tlpd_id %}
                     {% for tl, human in player.tlpd_db|get_tlpd_list %}
                     <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}" target="_blank">{{ human }}</a>
@@ -535,18 +531,17 @@ This is the template for the main player page, called from ratings.views.player.
 <table class="hiddenform bigform">
 {% csrf_token %}
 {% form "forms.html" %}
-    {% field "basic"        form.tag        class="wideinput" %}
-    {% field "select"       form.race       class="wideinput" %}
-    {% field "select"       form.country    class="wideinput" %}
-    {% field "basic"        form.name       class="wideinput" %}
-    {% field "basic"        form.akas       class="wideinput" %}
-    {% field "date"         form.birthday   class="wideinput" %}
-    {% field "basic"        form.sc2c_id    class="wideinput" %}
-    {% field "basic"        form.sc2e_id    class="wideinput" %}
-    {% field "basic"        form.lp_name    class="wideinput" %}
-    {% field "basic"        form.tlpd_id    class="wideinput" %}
-    {% field "selectmulti"  form.tlpd_db    class="wideinput" %}
-    {% use "submit" %}
+    {% field "basic"        modform.tag        class="wideinput" %}
+    {% field "select"       modform.race       class="wideinput" %}
+    {% field "select"       modform.country    class="wideinput" %}
+    {% field "basic"        modform.name       class="wideinput" %}
+    {% field "basic"        modform.akas       class="wideinput" %}
+    {% field "date"         modform.birthday   class="wideinput" %}
+    {% field "basic"        modform.sc2e_id    class="wideinput" %}
+    {% field "basic"        modform.lp_name    class="wideinput" %}
+    {% field "basic"        modform.tlpd_id    class="wideinput" %}
+    {% field "selectmulti"  modform.tlpd_db    class="wideinput" %}
+    {% use "submit" name="modplayer" %}
 {% endform %}
 </table>
 </form>
@@ -698,7 +693,7 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for s in stories %}{% if not s.skip %} {
-                          name: '{{s.text}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname}}{% endif %}',
+                          name: '{{s|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|safe}}{% endif %}',
                           url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter}}/',
                           x: {{ s.date|milliseconds }},
                           y: {{ s.rating|ratscale }}

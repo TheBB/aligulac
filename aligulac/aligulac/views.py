@@ -73,7 +73,6 @@ DBTABLES = [{
             ('lp_name', 'integer', 
                 _('title of Liquipedia page <br/>'
                   'the part after http://wiki.teamliquid.net/starcraft2/')),
-            ('sc2c_id', 'character varying(200)', _('external sc2charts.net ID')),
             ('sc2e_id', 'integer', _('external sc2earnings.com ID')),
             ('country', 'character varying(2)', _('ISO-3166-1 alpha-2 country code')),
             ('race', 'character varying(1) not null', 
@@ -307,8 +306,8 @@ DBTABLES = [{
             ('id', 'integer not null', _('primary key')),
             # Translator: These are literals so must be in English: info (translation), etc.
             ('type', 'character varying(10) not null', _('info, warning, sucess or error')),
-            ('title', 'character varying(100)', _('a title')),
-            ('text', 'text not null', _('the message text')),
+            ('message', 'character varying(1000) not null', _('text describing this message')),
+            ('params', 'character varying(1000) not null', _('parameters for string interpolation')),
             # Translators: player is a table name and must be in English
             ('player_id', 'integer', _('foreign key to player')),
             # Translators: event is a table name and must be in English
@@ -324,7 +323,8 @@ DBTABLES = [{
         'cols': [
             ('id', 'integer not null', _('primary key')),
             ('player_id', 'integer not null', _('foreign key to player')),
-            ('text', 'character varying(200) not null', _('text describing this story')),
+            ('message', 'character varying(1000) not null', _('text describing this story')),
+            ('params', 'character varying(1000) not null', _('parameters for string interpolation')),
             ('date', 'date not null', _('when it happened')),
             # Translators: event is a table name and must be in English
             ('event_id', 'integer', _('foreign key to event (if applicable)')),

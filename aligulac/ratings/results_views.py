@@ -53,6 +53,7 @@ from ratings.models import (
     GAMES,
     Match,
     Player,
+    STORIES,
     Story,
     TLPD_DBS,
     TYPE_CATEGORY,
@@ -208,6 +209,84 @@ class EventModForm(forms.Form):
         return ret
     # }}}
 # }}} 
+
+class StoriesForm(forms.Form):
+    story_id = forms.IntegerField(required=True)
+    player = forms.ChoiceField(required=True, label=_('Player'))
+    date = forms.DateField(required=True, label=_('Date'))
+    text = forms.ChoiceField(choices=STORIES, required=True, label=_('Story text'))
+    params = forms.CharField(max_length=1000, required=True, label=_('Parameters'), initial='')
+
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(StoriesForm, self).__init__(request.POST)
+            if 'storynew' in request.POST:
+                self.action = 'new'
+            elif 'storyupd' in request.POST:
+                self.action = 'upd'
+            elif 'storydel' in request.POST:
+                self.action = 'del'
+        else:
+            super(StoriesForm, self).__init__()
+
+        matches = event.get_immediate_matchset()
+        players = Player.objects.filter(Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb')))
+        self.fields['player'].choices = [(str(p.id), str(p)) for p in players]
+
+        self.label_suffix = ''
+        self.event = event
+
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        if self.action in ['upd', 'del']:
+            try:
+                print('id:', self.cleaned_data['story_id'])
+                story = Story.objects.get(id=self.cleaned_data['story_id'])
+            except:
+                ret.append(Message(_('Story could not be found.'), type=Message.ERROR))
+                return ret
+
+            if self.action == 'upd':
+                story.date = self.cleaned_data['date']
+                story.message = self.cleaned_data['text']
+                story.params = self.cleaned_data['params']
+
+                print(story.params)
+
+                if story.verify():
+                    story.save()
+                    ret.append(Message(_('Story was successfully changed.'), type=Message.SUCCESS))
+                else:
+                    ret.append(Message(_('Parameter verification failed.'), type=Message.ERROR))
+
+            elif self.action == 'del':
+                story.delete()
+                ret.append(Message(_('Story was successfully deleted.'), type=Message.SUCCESS))
+
+        elif self.action == 'new':
+            story = Story(
+                player=Player.objects.get(id=self.cleaned_data['player']),
+                event=event,
+                text='',
+                date=self.cleaned_data['date'],
+                message=self.cleaned_data['text'],
+                params=self.cleaned_data['params']
+            )
+            if story.verify():
+                story.save()
+                ret.append(Message(_('Story was successfully created.'), type=Message.SUCCESS))
+            else:
+                ret.append(Message(_('Parameter verification failed.'), type=Message.ERROR))
+
+        return ret
 
 # {{{ PrizepoolModForm: Form for changing prizepools.
 class PrizepoolModForm(forms.Form):
@@ -777,7 +856,7 @@ def events(request, event_id=None):
         if event.type == TYPE_EVENT:
             check_form('ppform', PrizepoolModForm, 'modpp')
         if not event.has_children() and event.get_immediate_matchset().exists():
-            check_form('stform', StoryModForm, 'modstories')
+            check_form('stform', StoriesForm, 'modstory')
     # }}}
 
     # {{{ Prizepool information for the public

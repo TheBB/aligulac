@@ -57,21 +57,32 @@ class AliasesInline(admin.TabularInline):
 
 class MessagesInline(admin.StackedInline):
     model = Message
-    fields = ['type', 'title', 'text']
-    extra = 1
+    fields = ['type', 'message', 'params']
+    extra = 0
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(MessagesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
-class StoriesInline(admin.TabularInline):
+class StoriesInline(admin.StackedInline):
+    extra = 0
     model = Story
-    fields = ['date', 'text']
+    fields = ['date', 'message', 'params']
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(StoriesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,          {'fields': ['tag','race']}),
         ('Optional',    {'fields': ['name','birthday','country']}),
-        ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
+        ('External',    {'fields': ['tlpd_id','lp_name','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']
@@ -164,7 +175,6 @@ class PeriodAdmin(admin.ModelAdmin):
     def recompute(self, request, queryset):
         queryset.update(needs_recompute=True)
     recompute.short_description = "Recompute selected"
-
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)

@@ -391,19 +391,48 @@ ratings.views.events.
 <div class="close-button">
     <a href="#" onclick="$('#modstories').hide(); return false;">{% trans "close" %}</a>
 </div>
-    {% if stform.existing_stories %}
-    <p style="margin: 3em;">{% trans "This event already has stories for the following players:" %}
-    {% for p in stform.existing_stories %}{{ p }}{% if not forloop.last %},{% endif %}{% endfor %}.</p>
-    {% endif %}
 <form method="post" action="/results/events/{{ event.id }}/">
 <table class="hiddenform bigform">
+<tr>
+    <td class="form_left"><label for="extantstories">{% trans "Extant stories" %}</label></td>
+    <td class="form_right">
+        <select class="wideinput" id="extantstories" onchange="changed_story();">
+            <option value="{% trans "New" %}" selected>{% trans "New" %}
+            {% for story in event.story_set.all %}
+            <option value="{{ story.id }}">{{ story }}</option>
+            {% endfor %}
+        </select>
+    </td>
+</tr>
+<script type="text/javascript">
+<!--
+story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
+function changed_story()
+{
+    var sel = document.getElementById('extantstories');
+    var data = story_data[sel.selectedIndex];
+    document.getElementById('story_id').setAttribute('value', data['idx']);
+    document.getElementById('id_player').value = data['player'];
+    document.getElementById('id_date').setAttribute('value', data['dt']);
+    document.getElementById('id_text').selectedIndex = data['text'];
+    document.getElementById('id_params').value = data['params'];
+    document.getElementById('storynewbtn').disabled = (sel.selectedIndex > 0);
+    document.getElementById('storyupdbtn').disabled = (sel.selectedIndex == 0);
+    document.getElementById('storydelbtn').disabled = (sel.selectedIndex == 0);
+}
+-->
+</script>
 {% csrf_token %}
 {% form "forms.html" %}
-    {% use "hidden" name="modstories" value="modstories" %}
-    {% field "select"       stform.player     class="wideinput" %}
-    {% field "date"         stform.date       class="wideinput" %}
-    {% field "basic"        stform.text       class="wideinput" %}
-    {% use "submit" %}
+    {% use "hidden" name="modstory" value="yes" %}
+    {% use "hidden" name="story_id" value="" id="story_id" %}
+    {% field "date"         stform.date      class="wideinput" %}
+    {% field "select"       stform.player    class="wideinput" %}
+    {% field "select"       stform.text      class="wideinput" %}
+    {% field "textarea"     stform.params    class="wideinput" %}
+    {% use "submit" text=_('New')    name="storynew" id="storynewbtn" %}
+    {% use "submit" text=_('Update') name="storyupd" id="storyupdbtn" disabled=True %}
+    {% use "submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True %}
 {% endform %}
 </table>
 </form>

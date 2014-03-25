@@ -34,6 +34,8 @@ from ratings.models import (
     Player,
     RACES,
     Rating,
+    STORIES,
+    Story,
     T,
     TLPD_DBS,
     Z,
@@ -100,7 +102,6 @@ class PlayerModForm(forms.Form):
     tlpd_db  = forms.MultipleChoiceField(
         required=False, choices=TLPD_DBS, label=_('TLPD DB'), widget=forms.CheckboxSelectMultiple)
     lp_name  = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
-    sc2c_id  = forms.IntegerField(required=False, label=_('SC2Charts.net ID'))
     sc2e_id  = forms.IntegerField(required=False, label=_('SC2Earnings.com ID'))
 
     country = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
@@ -117,7 +118,6 @@ class PlayerModForm(forms.Form):
                 'name':      player.name,
                 'akas':      ', '.join(player.get_aliases()),
                 'birthday':  player.birthday,
-                'sc2c_id':   player.sc2c_id,
                 'sc2e_id':   player.sc2e_id,
                 'lp_name':   player.lp_name,
                 'tlpd_id':   player.tlpd_id,
@@ -151,7 +151,6 @@ class PlayerModForm(forms.Form):
         update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  _('birthday'))
         update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   _('TLPD ID'))
         update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   _('Liquipedia title'))
-        update(self.cleaned_data['sc2c_id'],   'sc2c_id',   'set_sc2c_id',   _('SC2Charts.net ID'))
         update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   _('SC2Earnings.com ID'))
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
@@ -230,11 +229,11 @@ def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Summary', request, context=player)
 
-    if request.method == 'POST' and base['adm']:
-        form = PlayerModForm(request)
-        base['messages'] += form.update_player(player)
+    if request.method == 'POST' and 'modplayer' in request.POST and base['adm']:
+        modform = PlayerModForm(request)
+        base['messages'] += modform.update_player(player)
     else:
-        form = PlayerModForm(player=player)
+        modform = PlayerModForm(player=player)
 
     base['messages'] += generate_messages(player)
     # }}}
@@ -245,7 +244,7 @@ def player(request, player_id):
 
     base.update({
         'player':           player,
-        'form':             form,
+        'modform':          modform,
         'first':            etn(lambda: matches.earliest('date')),
         'last':             etn(lambda: matches.latest('date')),
         'totalmatches':     matches.count(),

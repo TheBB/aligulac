@@ -117,7 +117,7 @@ class NotUniquePlayerMessage(Message):
 
 # {{{ generate_messages: Generates a list of message objects for an object that supports them.
 def generate_messages(obj):
-    return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]
+    return [Message(m.get_message(), m.get_title(), m.type) for m in obj.message_set.all()]
 # }}}
 
 # {{{ login_message: Generates a message notifying about login status.

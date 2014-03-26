@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-26 18:25+0100\n"
-"PO-Revision-Date: 2014-03-26 18:25+0100\n"
+"PO-Revision-Date: 2014-03-26 23:03+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: aligulac/currency.py:99
 #, python-format
 msgid "Exchange rate not found for currency %(code)s on %(date)s"
-msgstr "Valutakurs for %(code)s ble ikke funnet på %(date)sc"
+msgstr "Valutakurs for %(code)s ble ikke funnet på %(date)s"
 
 #: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
 msgid "English"

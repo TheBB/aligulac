@@ -1242,9 +1242,9 @@ class Group(models.Model):
     @property
     def ranks(self):
         return (
-            ("All-Kill", self.ak_rank, "ak"),
-            ("Proleague", self.pl_rank, "pl"),
-            ("Rating", self.rating_rank, "rt")
+            (_("All-Kill"), self.ak_rank, "ak"),
+            (_("Proleague"), self.pl_rank, "pl"),
+            (_("Rating"), self.rating_rank, "rt")
         )
 
     # }}}

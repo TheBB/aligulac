@@ -81,11 +81,12 @@ This shows a team page. Called from ratings.teamviews.team.
     {% if rank %}
     <div class="row infobox">
       <div class="rowel">
-        {% ifchanged %}Rank{% endifchanged %}
+        {% ifchanged %}{% trans "Rank" %}{% endifchanged %}
       </div>
       <div class="rower">
         <a href="/teams?sort={{ sort_val }}">
-          #{{ rank }} {{ name }}
+            {% comment %}Translators: #[rank] among [name]{% endcomment %}
+          {% blocktrans %}#{{ rank }} {{ name }}{% endblocktrans %}
         </a>
       </div>
     </div>

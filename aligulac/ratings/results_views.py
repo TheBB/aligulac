@@ -542,11 +542,12 @@ class ReorderForm(forms.Form):
 
 # {{{ SearchForm: Form for searching.
 class SearchForm(forms.Form):
-    after      = forms.DateField(required=False, label='After', initial=None)
-    before     = forms.DateField(required=False, label='Before', initial=None)
+    after      = forms.DateField(required=False, label=_('After'), initial=None)
+    before     = forms.DateField(required=False, label=_('Before'), initial=None)
     players    = forms.CharField(max_length=10000, required=False, label=_('Involving players'), initial='')
     event      = StrippedCharField(max_length=200, required=False, label=_('Event'), initial='')
-    unassigned = forms.BooleanField(required=False, label='Only show unassigned matches')
+    # Translators: Unassigned as in not assigned to an event.
+    unassigned = forms.BooleanField(required=False, label=_('Only show unassigned matches'))
     bestof     = forms.ChoiceField(
         choices=[
             ('all',_('All')),

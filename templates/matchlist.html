@@ -68,10 +68,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
         <td colspan="2" style="text-align: right;"> 
             {% if m.eventcount %}[{{ m.eventcount }}]{% endif %}
             {% if m.add_links %}
-                <a href="/add/?eventid={{ m.match.eventobj_id }}"
-                   title="Add more matches">
-                   add
-                </a>
+                <a href="/add/?eventid={{ m.match.eventobj_id }}" title="Add more matches">{% trans "add" %}</a>
             {% endif %}
 
             <a id="lma-{{ m.match_id }}" href="#" 

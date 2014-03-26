@@ -470,4 +470,3 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     return ret
 # }}}
-

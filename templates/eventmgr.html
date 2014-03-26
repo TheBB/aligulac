@@ -128,18 +128,18 @@ function add_node(id, obj, div)
     small.appendChild(document.createTextNode('('));
     a1 = document.createElement('a');
     a1.setAttribute('href', '/admin/ratings/event/' + obj['id'] + '/');
-    a1.innerHTML = 'adm';
+    a1.innerHTML = '{% trans "adm" %}';
     small.appendChild(a1);
     small.appendChild(document.createTextNode(', '));
     a1 = document.createElement('a');
     a1.setAttribute('href', '/results/events/' + obj['id'] + '/');
-    a1.innerHTML = 'edit';
+    a1.innerHTML = '{% trans "edit" %}';
     small.appendChild(a1);
     if (obj['type'] == 'round') {
         small.appendChild(document.createTextNode(', '));
         a1 = document.createElement('a');
         a1.setAttribute('href', '/add/?eventid=' + obj['id']);
-        a1.innerHTML = 'add';
+        a1.innerHTML = '{% trans "add" %}';
         small.appendChild(a1);
     }
     small.appendChild(document.createTextNode(', ' + obj['type'] + ')'));
@@ -158,7 +158,7 @@ function add_node(id, obj, div)
         s = s + ", 2";
     s = s + "); return false;";
     mod.setAttribute('onclick', s);
-    mod.innerHTML = 'modify';
+    mod.innerHTML = '{% trans "modify" %}';
 
     div.appendChild(tbl);
 
@@ -198,9 +198,10 @@ function toggle_sub(id)
         {% endif %}
             {{ node.name }}
             <span class="small">
-            (<a href="/admin/ratings/event/{{ node.id }}/">adm</a>, 
-            <a href="/results/events/{{ node.id }}-{{ node.fullname|urlfilter }}/">edit</a>, {% if node.type == 'round' %}<a href="/add/?eventid={{ node.id }}">add</a>, {% endif %}
-            {{ node.type }})
+            (<a href="/admin/ratings/event/{{ node.id }}/">{% trans "adm" %}</a>, 
+             <a href="/results/events/{{ node.id }}-{{ node.fullname|urlfilter }}/">{% trans "edit" %}</a>, 
+             {% if node.type == 'round' %}<a href="/add/?eventid={{ node.id }}">{% trans "add" %}</a>, {% endif %}
+             {{ node.type }})
             </span>
         </td>
         <td style="text-align: right;">

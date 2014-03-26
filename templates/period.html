@@ -266,7 +266,7 @@ This template shows a rating list for a given period.
     {% for r in gainers %}
     <tr>
       <td class="shrink">
-        {% ifchanged %}Winners <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
+        {% ifchanged %}{% trans "Winners" %} <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
         <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">+{{ r.diff|ratscalediff }}</a>
@@ -283,7 +283,7 @@ This template shows a rating list for a given period.
     {% for r in losers %}
     <tr>
       <td class="shrink">
-        {% ifchanged %}Losers <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
+        {% ifchanged %}{% trans "Losers" %} <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
         <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">{{ r.diff|ratscalediff }}</a>
@@ -310,7 +310,9 @@ This template shows a rating list for a given period.
         </div>
         <div class="row">
             <div class="rowel">{% trans "Active players" %}</div>
-            <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
+            <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} 
+                ({% blocktrans count period.num_newplayers as cnt %}{{cnt}} new{% plural %}{{cnt}} new{% endblocktrans %})
+            </div>
         </div>
         <div class="row">
             <div class="rowel">{% trans "Leading race" %}</div>

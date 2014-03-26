@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-26 17:20+0100\n"
-"PO-Revision-Date: 2014-03-26 17:17+0100\n"
+"POT-Creation-Date: 2014-03-26 17:32+0100\n"
+"PO-Revision-Date: 2014-03-26 17:32+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -1932,7 +1932,7 @@ msgstr "Zambia"
 msgid "The FAQ section is only in English, sorry."
 msgstr "FAQ-seksjonen er kun på engelsk. Beklager."
 
-#: aligulac/faq/views.py:23
+#: aligulac/faq/views.py:23 templates/language.html:52
 msgid "Frequently asked questions"
 msgstr "Ofte stilte spørsmål"
 
@@ -5930,6 +5930,32 @@ msgstr "Lag kort addresse for denne siden"
 #: templates/language.html:21
 msgid "I would like to use Aligulac in…"
 msgstr "Jeg vil gjerne bruke Aligulac på…"
+
+#: templates/language.html:46
+#, python-format
+msgid ""
+"You could always %(a)shelp us</a> translate Aligulac into your language."
+msgstr "Du kan hjelpe med å %(a)soversette</a> Aligulac til ditt morsmål."
+
+#: templates/language.html:48
+msgid "For reasons of convenience, the following will not be translated:"
+msgstr "Av bekvemhetsgrunner vil følgende ikke bli oversatt:"
+
+#: templates/language.html:51
+msgid "News"
+msgstr "Nyheter"
+
+#: templates/language.html:53
+msgid "Event names"
+msgstr "Turneringsnavn"
+
+#: templates/language.html:54
+msgid "Team names"
+msgstr "Lagnavn"
+
+#: templates/language.html:55
+msgid "Player nicknames"
+msgstr "Spillernick"
 
 #: templates/login.html:16
 #, python-format

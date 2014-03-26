@@ -43,4 +43,16 @@ ratings.submitviews.)
     </div>
     </form>
 
+    <p>{% blocktrans with a="<a href=\"mailto:evfonn(at)gmail(dot)com\">" %}You could always {{a}}help us</a> translate Aligulac into your language.{% endblocktrans %}</p>
+
+    <p>{% blocktrans %}For reasons of convenience, the following will not be translated:{% endblocktrans %}<p>
+
+    <ul>
+        <li>{% trans "News" %}</li>
+        <li>{% trans "Frequently asked questions" %}</li>
+        <li>{% trans "Event names" %}</li>
+        <li>{% trans "Team names" %}</li>
+        <li>{% trans "Player nicknames" %}</li>
+    </ul>
+
 {% endblock %}

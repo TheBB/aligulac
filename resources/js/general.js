@@ -206,10 +206,20 @@ var aligulacAutocompleteTemplates = function (ajaxobject) {
     switch (ajaxobject.type) {
         case 'player':
             ajaxobject.key = ajaxobject.tag + ' ' + ajaxobject.id;
-            return '<a>{aligulac-flag}<img src="{aligulac-race}" />{aligulac-name}</a>'.replace('{aligulac-flag}',
+            var team = '';
+            if (ajaxobject.teams && ajaxobject.teams.length > 0) {
+                team = ajaxobject.teams[0];
+                if (team[1] == '')
+                    team = team[0];
+                else
+                    team = team[0];  // + ' (' + team[1] + ')';
+                team = '<span class="right">' + team + '</span>';
+            }
+            return '<a>{aligulac-flag}<img class="btm" src="{aligulac-race}" />{aligulac-name}{aligulac-team}</a>'.replace('{aligulac-flag}',
                ajaxobject.country ? '<img src="' + flagsDir + ajaxobject.country.toLowerCase() + '.png" />' : ' ')
             .replace('{aligulac-race}', racesDir + ajaxobject.race.toUpperCase() + '.png')
-            .replace('{aligulac-name}', ajaxobject.tag);
+            .replace('{aligulac-name}', ajaxobject.tag)
+            .replace('{aligulac-team}', team);
         case 'team':
             ajaxobject.key = ajaxobject.name;
             return '<a>{aligulac-name}</a>'
@@ -273,7 +283,9 @@ $(document).ready(function () {
         },
         minLength: 2,
         select: function (event, ui) {
-            $('#SearchTextBox').val(ui.item.key);
+            $('#SearchTextBox').val(ui.item.key)
+                .closest('form')
+                .submit();
             return false;
         },
         open: function () {

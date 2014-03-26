@@ -530,7 +530,7 @@ def auto_complete_search(request):
     search_for = get_param(request, 'search_for', 'players,teams,events')
     search_for = search_for.split(',')
 
-    results = tools_search(query, search_for)
+    results = tools_search(query, search_for, strict=True)
 
     data = {}
     if results is None:
@@ -541,11 +541,19 @@ def auto_complete_search(request):
     if players is not None:
         players = players.extra(select=EXTRA_NULL_SELECT)\
                          .order_by("-null_curr", "-current_rating__rating")
+
         data['players'] = [{
             "id": p.id,
             "tag": p.tag,
             "race": p.race,
-            "country": p.country
+            "country": p.country,
+            "aliases": [a.name for a in p.alias_set.all()],
+            "teams": [
+                (t.group.name, t.group.shortname)
+                for t in p.groupmembership_set.filter(
+                        current=True,
+                        group__is_team=True
+                )]
         } for p in players[:5]]
 
     if teams is not None:

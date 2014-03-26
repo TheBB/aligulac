@@ -18,6 +18,15 @@ Changes here will mostly be visible on the entire site.
         <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
         <link href="{{ "base"|css }}" rel="stylesheet" type="text/css"/>
         <link href="{{ "jquery.tagsInput"|css }}" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript">
+        <!--
+        var autocomplete_strings = {
+            'Players': '{% trans "Players" %}',
+            'Teams': '{% trans "Teams" %}',
+            'Events': '{% trans "Events" %}',
+        };
+        -->
+        </script>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery.ui.datepicker-"|add:lang|js }}"></script>

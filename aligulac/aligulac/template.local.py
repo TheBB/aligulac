@@ -39,3 +39,6 @@ DEBUG = True
 
 # Include debug toolbar in debug mode?
 DEBUG_TOOLBAR = True
+
+# Log file for errors
+ERROR_LOG_FILE = '/home/efonn/repos/aligulac/untracked/error.log'

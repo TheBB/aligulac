@@ -525,7 +525,6 @@ EXTRA_NULL_SELECT = {
 }
 @cache_page
 def auto_complete_search(request):
-
     query = get_param(request, 'q', '')
     search_for = get_param(request, 'search_for', 'players,teams,events')
     search_for = search_for.split(',')

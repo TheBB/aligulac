@@ -128,13 +128,20 @@ function add_node(id, obj, div)
     small.appendChild(document.createTextNode('('));
     a1 = document.createElement('a');
     a1.setAttribute('href', '/admin/ratings/event/' + obj['id'] + '/');
-    a1.innerHTML = 'a';
+    a1.innerHTML = 'adm';
     small.appendChild(a1);
     small.appendChild(document.createTextNode(', '));
     a1 = document.createElement('a');
     a1.setAttribute('href', '/results/events/' + obj['id'] + '/');
-    a1.innerHTML = 'e';
+    a1.innerHTML = 'edit';
     small.appendChild(a1);
+    if (obj['type'] == 'round') {
+        small.appendChild(document.createTextNode(', '));
+        a1 = document.createElement('a');
+        a1.setAttribute('href', '/add/?eventid=' + obj['id']);
+        a1.innerHTML = 'add';
+        small.appendChild(a1);
+    }
     small.appendChild(document.createTextNode(', ' + obj['type'] + ')'));
 
     var td2 = document.createElement('td');
@@ -191,8 +198,8 @@ function toggle_sub(id)
         {% endif %}
             {{ node.name }}
             <span class="small">
-            (<a href="/admin/ratings/event/{{ node.id }}/">a</a>, 
-            <a href="/results/events/{{ node.id }}-{{ node.fullname|urlfilter }}/">e</a>,
+            (<a href="/admin/ratings/event/{{ node.id }}/">adm</a>, 
+            <a href="/results/events/{{ node.id }}-{{ node.fullname|urlfilter }}/">edit</a>, {% if node.type == 'round' %}<a href="/add/?eventid={{ node.id }}">add</a>, {% endif %}
             {{ node.type }})
             </span>
         </td>

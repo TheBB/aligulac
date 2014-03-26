@@ -15,7 +15,7 @@ This template shows a rating list for a given period.
 
 <script type="text/javascript">
 <!--
-    tables = ['best', 'spec', 'matchup'];
+    tables = ['best', 'spec', 'matchup', 'gainers'];
 -->
 </script>
 
@@ -23,18 +23,22 @@ This template shows a rating list for a given period.
 <td style="width: 45em; vertical-align: top;">
 <table style="width: 42em; border-collapse: collapse;">
     <tr>
-        <td class="tabsel" onclick="switch_tab('best', tables);" style="width: 33%;" id="best-tab">
+        <td class="tabsel" onclick="switch_tab('best', tables);" style="width: 25%;" id="best-tab">
             {% trans "best" %}
         </td>
-        <td class="tabunsel" onclick="switch_tab('spec', tables);" style="width: 33%;" id="spec-tab">
+        <td class="tabunsel" onclick="switch_tab('spec', tables);" style="width: 25%;" id="spec-tab">
             {% trans "most specialized" %}
         </td>
-        <td class="tabunsel" onclick="switch_tab('matchup', tables);" style="width: 33%;" id="matchup-tab">
+        <td class="tabunsel" onclick="switch_tab('matchup', tables);" style="width: 25%;" id="matchup-tab">
             {% trans "matchups" %}
+        </td>
+        <td class="tabunsel" onclick="switch_tab('gainers', tables);" style="width: 25%;" id="gainers-tab">
+            {% comment %}Translators: Rating changes during a period.{% endcomment %}
+            {% trans "Up/Down" %}
         </td>
     </tr>
     <tbody id="best">
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table class="dottedint">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
         <td style="width: 10em; text-align: center;">{% trans "All" %}</td>
@@ -120,7 +124,7 @@ This template shows a rating list for a given period.
     </tr>
     </table> </td> </tr> </tbody>
     <tbody id="spec" style="display: none;"> 
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table class="dottedint">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
         <td style="width: 10em; text-align: center;">{% trans "All" %}</td>
@@ -187,7 +191,7 @@ This template shows a rating list for a given period.
     </tr>
     </table> </td> </tr> </tbody>
     <tbody id="matchup" style="display: none;"> 
-    <tr> <td colspan="3" style="border: solid 0.1em;"> <table>
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table>
     {% if pvt_wins or pvt_loss %}
     {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
     <tr style="height: 2.5em;">
@@ -256,6 +260,40 @@ This template shows a rating list for a given period.
     </tr>
     {% endif %}
     </table> </td> </tr> </tbody>
+    <tbody id="gainers" style="display: none;">
+    <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 100%"> <tr> <td  style="width: 50%;"> 
+    <table>
+    {% for r in gainers %}
+    <tr>
+      <td class="shrink">
+        {% ifchanged %}Winners <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
+      </td>
+      <td class="shrink">
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">+{{ r.diff|ratscalediff }}</a>
+      </td>
+      <td class="expand">
+        {{ r.player|player }}
+      </td>
+    </tr>
+    {% endfor %}
+    </table>
+    </td>
+    <td style="width: 50%;">
+    <table>
+    {% for r in losers %}
+    <tr>
+      <td class="shrink">
+        {% ifchanged %}Losers <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
+      </td>
+      <td class="shrink">
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">{{ r.diff|ratscalediff }}</a>
+      </td>
+      <td class="expand">
+        {{ r.player|player }}
+      </td>
+    </tr>
+    {% endfor %}
+    </table> </td></tr> </table></td> </tr>
 </table>
 </td>
 <td style="width: 22em; vertical-align: top;">

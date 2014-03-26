@@ -77,6 +77,20 @@ This shows a team page. Called from ratings.teamviews.team.
             <div class="rower" style="width: 20em;">{{ team.meanrating|ratscale }}</div>
         </div>
     {% endif %}
+    {% for name, rank, sort_val in team.ranks %}
+    {% if rank %}
+    <div class="row infobox">
+      <div class="rowel">
+        {% ifchanged %}Rank{% endifchanged %}
+      </div>
+      <div class="rower">
+        <a href="/teams?sort={{ sort_val }}">
+          #{{ rank }} {{ name }}
+        </a>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
     {% if earnings %}
         <div class="row">
             <div class="rowel" style="width: 10em;">{% trans "Total earnings" %}</div>

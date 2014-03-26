@@ -302,15 +302,19 @@ def static(value):
 register.filter('static', static)
 # }}}
 
-# {{{ imgfolder: Generates URL for images (PNG only), where the alternative argument gives folder.
-# Does not pass through static.
+# {{{ imgdir: Gets the url of the image directory
+# For example {{ '/'|imgdir }} gives the root dir containing images and
+#             {{ '/flags/'|imgdir }} gives the dir containing flags.
 @register.filter
 @stringfilter
-def imgfolder(value, arg=''):
-    if arg != '':
-        return str(arg) + '/' + str(value) + '.png'
+def imgdir(value):
+    value = str(value)
+    if not value.startswith('/'):
+        value = '/' + value
+    if not DEBUG:
+        return 'http://img.aligulac.com' + value
     else:
-        return str(value) + '.png'
+        return '/img' + value
 # }}}
 
 # {{{ urlfilter: Generates URL-safe strings for player, team and event names, etc.

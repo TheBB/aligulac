@@ -1,6 +1,5 @@
 # {{{ Imports
 from datetime import datetime
-import shlex
 import os
 
 from django import forms
@@ -16,6 +15,7 @@ from django.shortcuts import (
     render_to_response,
 )
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.cache import cache_page
 from aligulac.settings import (
@@ -27,10 +27,11 @@ from aligulac.tools import (
     base_ctx,
     get_param,
     login_message,
+    JsonResponse,
     Message,
     StrippedCharField,
+    search as tools_search,
 )
-from django.utils.translation import ugettext_lazy as _
 
 from blog.models import Post
 
@@ -43,15 +44,12 @@ from ratings.models import (
     Match,
     Player,
     Rating,
-    TYPE_CATEGORY,
-    TYPE_EVENT,
     WOL,
 )
 from ratings.templatetags.ratings_extras import urlfilter
 from ratings.tools import (
     count_winloss_games,
     filter_active,
-    find_player,
     populate_teams,
 )
 # }}}
@@ -493,23 +491,12 @@ def api(request):
 def search(request):
     base = base_ctx(request=request)
 
-    # {{{ Split query
     query = get_param(request, 'q', '')
-    terms = [s.strip() for s in shlex.split(query) if s.strip() != '']
-    if len(terms) == 0:
+    results = tools_search(query)
+    if results is None:
         return redirect('/')
-    # }}}
 
-    # {{{ Search for players, teams and events
-    players = find_player(lst=terms, make=False, soft=True)
-
-    teams = Group.objects.filter(is_team=True)
-    events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('idx')
-    for term in terms:
-        teams = teams.filter(Q(name__icontains=term) | Q(alias__name__icontains=term))
-        events = events.filter(Q(fullname__icontains=term))
-    teams = teams.distinct()
-    # }}}
+    players, teams, events = results
 
     # {{{ Redirect if only one hit
     if   players.count() == 1 and teams.count() == 0 and events.count() == 0:
@@ -530,6 +517,54 @@ def search(request):
     base.update({'title': _('Search results')})
 
     return render_to_response('search.html', base)
+# }}}
+
+# {{{ auto-complete search view
+EXTRA_NULL_SELECT = {
+    'null_curr': 'CASE WHEN player.current_rating_id IS NULL THEN 0 ELSE 1 END'
+}
+@cache_page
+def auto_complete_search(request):
+
+    query = get_param(request, 'q', '')
+    search_for = get_param(request, 'search_for', 'players,teams,events')
+    search_for = search_for.split(',')
+
+    results = tools_search(query, search_for)
+
+    data = {}
+    if results is None:
+        return JsonResponse(data)
+
+    players, teams, events = results
+
+    if players is not None:
+        players = players.extra(select=EXTRA_NULL_SELECT)\
+                         .order_by("-null_curr", "-current_rating__rating")
+        data['players'] = [{
+            "id": p.id,
+            "tag": p.tag,
+            "race": p.race,
+            "country": p.country
+        } for p in players[:5]]
+
+    if teams is not None:
+        teams = teams.order_by('name')
+
+        data['teams'] = [{
+            "id": t.id,
+            "name": t.name
+            } for t in teams[:5]]
+
+    if events is not None:
+        events = events.order_by("fullname")
+
+        data['events'] = [{
+            "id": e.id,
+            "fullname": e.fullname
+            } for e in events[:5]]
+
+    return JsonResponse(data)
 # }}}
 
 # {{{ Login, logout and change password

@@ -784,7 +784,11 @@ def results(request):
             .prefetch_related('message_set', 'rta', 'rtb', 'pla', 'plb', 'eventobj')
             .annotate(Count('eventobj__match'))
     )
-    base['matches'] = display_matches(matches, date=False, ratings=True, messages=True, eventcount=True)
+
+    add_links = request.user.is_authenticated() and request.user.is_staff
+
+    base['matches'] = display_matches(matches, date=False, ratings=True, messages=True,
+                                      eventcount=True, add_links=add_links)
 
     base.update({"title": cdate(day, _("F jS, Y"))})
 
@@ -873,6 +877,9 @@ def events(request, event_id=None):
     # }}}
 
     # {{{ Other easy statistics
+
+    add_links = request.user.is_authenticated() and request.user.is_staff
+
     base.update({
         'game':      etn(lambda: dict(GAMES)[matches.values('game').distinct()[0]['game']]),
         'nmatches':  matches.count(),
@@ -886,6 +893,7 @@ def events(request, event_id=None):
                 .annotate(Count('eventobj__match'))
                 .order_by('-eventobj__latest', '-eventobj__idx', '-date', '-id')[0:200],
             eventcount=True,
+            add_links=add_links
         ),
         'nplayers':  Player.objects.filter(
             Q(id__in=matches.values('pla')) | Q(id__in=matches.values('plb'))

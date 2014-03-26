@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-25 22:03+0100\n"
-"PO-Revision-Date: 2014-03-25 22:03+0100\n"
+"POT-Creation-Date: 2014-03-26 17:20+0100\n"
+"PO-Revision-Date: 2014-03-26 17:17+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -177,7 +177,8 @@ msgstr "Søk"
 msgid "Inference"
 msgstr "Inferens"
 
-#: aligulac/aligulac/tools.py:255
+#: aligulac/aligulac/tools.py:255 aligulac/ratings/inference_views.py:229
+#: templates/predict.html:11
 msgid "Predict"
 msgstr "Prognoser"
 
@@ -219,9 +220,11 @@ msgid "Submit"
 msgstr "Send"
 
 #. Translators: Matches as in SC2-matches, not search matches.
-#: aligulac/aligulac/tools.py:278 aligulac/ratings/player_views.py:671
-#: aligulac/ratings/staff_views.py:286 templates/add.html:75
-#: templates/eventres.html:255 templates/historical.html:28
+#: aligulac/aligulac/tools.py:278 aligulac/ratings/inference_views.py:725
+#: aligulac/ratings/inference_views.py:746
+#: aligulac/ratings/player_views.py:671 aligulac/ratings/staff_views.py:286
+#: templates/add.html:75 templates/eventres.html:255
+#: templates/historical.html:28 templates/pred_rrgroup.html:67
 msgid "Matches"
 msgstr "Kamper"
 
@@ -247,7 +250,7 @@ msgstr "Oversikt"
 msgid "Rating history"
 msgstr "Ratinghistorie"
 
-#: aligulac/aligulac/tools.py:325
+#: aligulac/aligulac/tools.py:325 templates/pred_match.html:146
 msgid "Match history"
 msgstr "Spillhistorie"
 
@@ -1937,6 +1940,196 @@ msgstr "Ofte stilte spørsmål"
 msgid "List of short URLs"
 msgstr "Liste over korte addresser"
 
+#: aligulac/ratings/inference_views.py:56
+msgid "Best-of-N match"
+msgstr "Best-av-N kamp"
+
+#: aligulac/ratings/inference_views.py:58
+msgid "Expected exactly two players."
+msgstr "Forventet nøyaktig to spillere."
+
+#: aligulac/ratings/inference_views.py:60
+#: aligulac/ratings/inference_views.py:67
+#: aligulac/ratings/inference_views.py:81
+#: aligulac/ratings/inference_views.py:89
+msgid "Expected exactly one 'best of'."
+msgstr "Forventet nøyaktig én 'best av'."
+
+#: aligulac/ratings/inference_views.py:63
+#: aligulac/ratings/inference_views.py:525
+msgid "Dual tournament"
+msgstr "Dualturnering"
+
+#: aligulac/ratings/inference_views.py:65
+msgid "Expected exactly four players."
+msgstr "Forventet nøyaktig fire spillere."
+
+#: aligulac/ratings/inference_views.py:70
+#: aligulac/ratings/inference_views.py:604 templates/pred_sebracket.html:10
+msgid "Single elimination bracket"
+msgstr "Utslagsturnering"
+
+#: aligulac/ratings/inference_views.py:72
+msgid "Expected number of players to be a power of two (2,4,8,…)."
+msgstr "Forventet en toerpotens antall spillere (2,4,8,…)."
+
+#: aligulac/ratings/inference_views.py:74
+msgid "Expected at least one 'best of'."
+msgstr "Forventet minst én 'best av'."
+
+#: aligulac/ratings/inference_views.py:77
+#: aligulac/ratings/inference_views.py:693 templates/pred_rrgroup.html:11
+msgid "Round robin group"
+msgstr "Gruppespill"
+
+#: aligulac/ratings/inference_views.py:79
+msgid "Expected at least three players."
+msgstr "Forventet minst tre spillere."
+
+#: aligulac/ratings/inference_views.py:85
+#: aligulac/ratings/inference_views.py:782
+msgid "Proleague team match"
+msgstr "Lagkamp à la Proleague"
+
+#: aligulac/ratings/inference_views.py:87
+msgid "Expected an even number of players."
+msgstr "Forventet et jevnt antall spillere."
+
+#: aligulac/ratings/inference_views.py:98
+msgid "Format"
+msgstr "Format"
+
+#: aligulac/ratings/inference_views.py:101
+msgid "Best of"
+msgstr "Best av"
+
+#: aligulac/ratings/inference_views.py:102 templates/db.html:65
+#: templates/eventres.html:247 templates/search.html:27 templates/team.html:65
+#: templates/teams.html:27
+msgid "Players"
+msgstr "Spillere"
+
+#: aligulac/ratings/inference_views.py:123
+msgid "Must be a comma-separated list of positive odd integers (1,3,5,…)."
+msgstr "Må være en kommeseparert liste av positive odde heltall (1,3,5,…)."
+
+#. Translators: Matches as in search matches
+#. Translators: Matches here as in search matches.
+#: aligulac/ratings/inference_views.py:142
+#: aligulac/ratings/results_views.py:643
+#, python-format
+msgid "No matches found: '%s'."
+msgstr "Ingen treff ble funnet: '%s'."
+
+#: aligulac/ratings/inference_views.py:154
+msgid "One or more errors found in player list."
+msgstr "En eller flere feil ble funnet i spillerlisten."
+
+#: aligulac/ratings/inference_views.py:360 templates/pred_match.html:10
+#, python-format
+msgid "%(pla)s vs. %(plb)s"
+msgstr "%(pla)s mot %(plb)s"
+
+#: aligulac/ratings/inference_views.py:468
+msgid "Intial round"
+msgstr "Første runde"
+
+#: aligulac/ratings/inference_views.py:469
+msgid "Winners' and losers' matches"
+msgstr "Vinner- og taperkamper"
+
+#: aligulac/ratings/inference_views.py:470
+msgid "Final match"
+msgstr "Finale"
+
+#: aligulac/ratings/inference_views.py:547
+#, python-format
+msgid "Round %i"
+msgstr "Runde %i"
+
+#: aligulac/ratings/inference_views.py:647
+#: aligulac/ratings/inference_views.py:648
+msgid "Group play"
+msgstr "Gruppespill"
+
+#: aligulac/ratings/inference_views.py:901
+#: aligulac/ratings/inference_views.py:913 templates/pred_4pswiss.html:63
+#: templates/pred_proleague.html:56 templates/pred_rrgroup.html:57
+#: templates/pred_sebracket.html:56
+msgid "Median outcome"
+msgstr "Medianresultat"
+
+#: aligulac/ratings/inference_views.py:904
+#: aligulac/ratings/inference_views.py:916
+#: aligulac/ratings/inference_views.py:947
+#: aligulac/ratings/inference_views.py:957
+#: aligulac/ratings/inference_views.py:990
+#: aligulac/ratings/inference_views.py:1000
+#: aligulac/ratings/inference_views.py:1010
+#: aligulac/ratings/inference_views.py:1081
+#: aligulac/ratings/inference_views.py:1091
+#: aligulac/ratings/inference_views.py:1129
+#: aligulac/ratings/inference_views.py:1139 templates/results_search.html:93
+msgid "Modify"
+msgstr "Endre"
+
+#: aligulac/ratings/inference_views.py:905
+#: aligulac/ratings/inference_views.py:917
+#: aligulac/ratings/inference_views.py:948
+#: aligulac/ratings/inference_views.py:958
+#: aligulac/ratings/inference_views.py:991
+#: aligulac/ratings/inference_views.py:1001
+#: aligulac/ratings/inference_views.py:1011
+#: aligulac/ratings/inference_views.py:1082
+#: aligulac/ratings/inference_views.py:1092
+#: aligulac/ratings/inference_views.py:1130
+#: aligulac/ratings/inference_views.py:1140
+msgid "Estimated by"
+msgstr "Estimert av"
+
+#. Translators: Make sure that there are exactly nine characters between the end of each word!
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:20
+msgid "Top 2"
+msgstr "Topp 2"
+
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:21
+msgid "1st"
+msgstr "1."
+
+#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:22
+msgid "2nd"
+msgstr "2."
+
+#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:23
+msgid "3rd"
+msgstr "3."
+
+#: aligulac/ratings/inference_views.py:930 templates/pred_4pswiss.html:24
+msgid "4th"
+msgstr "4."
+
+#. Translators: Win a tournament
+#: aligulac/ratings/inference_views.py:969 templates/pred_sebracket.html:22
+msgid "Win"
+msgstr "Seier"
+
+#. Translators: Top 2, 4 etc. (in tournament)
+#: aligulac/ratings/inference_views.py:971
+#, python-brace-format
+msgid "Top {i}"
+msgstr "Topp {i}"
+
+#: aligulac/ratings/inference_views.py:986
+msgid "Median Outcome Bracket"
+msgstr "Medianresultat"
+
+#. Translators: Team [player], e.g. "Team Jaedong"
+#: aligulac/ratings/inference_views.py:1102
+#: aligulac/ratings/inference_views.py:1104
+#, python-brace-format
+msgid "Team {p}"
+msgstr "Lag {p}"
+
 #: aligulac/ratings/misc_views.py:33
 msgid "Miscellaneous Pages"
 msgstr "Diverse sider"
@@ -2821,6 +3014,7 @@ msgstr "Resultater for"
 #: aligulac/ratings/player_views.py:670 templates/eventres.html:251
 #: templates/historical.html:29 templates/period.html:292
 #: templates/periods.html:22 templates/player.html:596
+#: templates/pred_rrgroup.html:68
 msgid "Games"
 msgstr "Partier"
 
@@ -2976,6 +3170,8 @@ msgstr "hjemmeside"
 
 #: aligulac/ratings/results_views.py:215 aligulac/ratings/results_views.py:398
 #: templates/add.html:86 templates/player_transfers.html:11
+#: templates/pred_4pswiss.html:17 templates/pred_rrgroup.html:18
+#: templates/pred_rrgroup.html.py:64 templates/pred_sebracket.html:17
 msgid "Player"
 msgstr "Spiller"
 
@@ -3094,12 +3290,6 @@ msgstr ""
 #: aligulac/ratings/results_views.py:547
 msgid "Involving players"
 msgstr "Involverte spillere"
-
-#. Translators: Matches here as in search matches.
-#: aligulac/ratings/results_views.py:643
-#, python-format
-msgid "No matches found: '%s'."
-msgstr "Ingen treff ble funnet: '%s'."
 
 #: aligulac/ratings/results_views.py:672
 #, python-format
@@ -4019,7 +4209,7 @@ msgstr ""
 "Spillerinformasjonen er en liste av følgende, separert med mellomrom, og "
 "trenger ikke å identifisere spilleren unikt:"
 
-#: templates/add.html:97
+#: templates/add.html:97 templates/predict.html:40
 msgid "Player tag, e.g. \"DongRaeGu\"."
 msgstr "Nick, f.eks. \"DongRaeGu\"."
 
@@ -4040,7 +4230,7 @@ msgstr ""
 "\" eller \"KOR\", eller det vanlige engelske navnet for et land (dersom "
 "dette ikke inneholder mellomrom)."
 
-#: templates/add.html:100
+#: templates/add.html:100 templates/predict.html:43
 msgid "Team name, e.g. \"MVP\"."
 msgstr "Lagnavn, f.eks. \"MVP\"."
 
@@ -4852,11 +5042,6 @@ msgstr "Kamper med turneringsinfo"
 msgid "Uncatalogued matches"
 msgstr "Ikke-katalogiserte kamper"
 
-#: templates/db.html:65 templates/eventres.html:247 templates/search.html:27
-#: templates/team.html:65 templates/teams.html:27
-msgid "Players"
-msgstr "Spillere"
-
 #: templates/db.html:67
 #, python-format
 msgid "%(nplayers)s, of which %(nkoreans)s Koreans"
@@ -5238,7 +5423,7 @@ msgstr "Eksisterende fortellinger"
 msgid "New"
 msgstr "Ny"
 
-#: templates/eventres.html:434
+#: templates/eventres.html:434 templates/pred_match.html:170
 msgid "Update"
 msgstr "Oppdater"
 
@@ -6176,6 +6361,248 @@ msgstr "Historie for foruminnlegg"
 msgid "The above is code that can be used in posts on %(a)sTeamLiquid.net</a>."
 msgstr "Denne koden kan brukes i innlegg på %(a)sTeamLiquid.net</a>."
 
+#: templates/pred_4pswiss.html:16 templates/pred_rrgroup.html:17
+#: templates/pred_rrgroup.html.py:63 templates/pred_sebracket.html:16
+#: templates/ratinglist.html:20 templates/recordlist.html:10
+#: templates/teams.html:16
+msgid "#"
+msgstr "#"
+
+#: templates/pred_4pswiss.html:65 templates/pred_proleague.html:58
+#: templates/pred_rrgroup.html:59 templates/pred_sebracket.html:58
+msgid ""
+"This is the median outcome <em>assuming the already entered results</em>."
+msgstr ""
+"Dette er medianresultatet <em>antatt de allerede oppgitte resultatene</em>."
+
+#: templates/pred_4pswiss.html:71 templates/pred_rrgroup.html:105
+msgid "Update group progress"
+msgstr "Oppdater gruppe"
+
+#: templates/pred_4pswiss.html:73 templates/pred_proleague.html:66
+#: templates/pred_rrgroup.html:107 templates/pred_sebracket.html:66
+msgid ""
+"To modify a result, click on the score in the table below. To view detailed "
+"predictions for a match, click the arrow."
+msgstr ""
+"For å modifisere et resultat, klikk på resultatet i tabellen under. For å se "
+"detaljerte prognoser for en kamp, klikk på pilen."
+
+#: templates/pred_4pswiss.html:82 templates/pred_proleague.html:75
+#: templates/pred_rrgroup.html:116 templates/pred_sebracket.html:75
+msgid "Update results"
+msgstr "Oppdater resultater"
+
+#: templates/pred_4pswiss.html:89 templates/pred_proleague.html:82
+#: templates/pred_rrgroup.html:123 templates/pred_sebracket.html:82
+msgid "Clear results"
+msgstr "Nullstill resultater"
+
+#. Translators: Something that can be posted on a forum.
+#: templates/pred_4pswiss.html:93 templates/pred_match.html:182
+#: templates/pred_proleague.html:86 templates/pred_rrgroup.html:127
+#: templates/pred_sebracket.html:87
+msgid "Postable"
+msgstr "Foruminnlegg"
+
+#: templates/pred_4pswiss.html:108 templates/pred_match.html:191
+#: templates/pred_proleague.html:101 templates/pred_rrgroup.html:142
+msgid "Formats:"
+msgstr "Formater:"
+
+#: templates/pred_4pswiss.html:109 templates/pred_match.html:192
+#: templates/pred_proleague.html:102 templates/pred_rrgroup.html:143
+msgid "Team Liquid"
+msgstr "Team Liquid"
+
+#: templates/pred_4pswiss.html:110 templates/pred_match.html:193
+#: templates/pred_proleague.html:103 templates/pred_rrgroup.html:144
+msgid "Reddit"
+msgstr "Reddit"
+
+#: templates/pred_match.html:15
+msgid "Verdict:"
+msgstr "Prognose:"
+
+#: templates/pred_match.html:16
+msgid "Even chances."
+msgstr "Like sjanser."
+
+#: templates/pred_match.html:17
+#, python-format
+msgid "Slight advantage for %(pl)s."
+msgstr "Liten fordel for %(pl)s."
+
+#: templates/pred_match.html:18
+#, python-format
+msgid "Advantage for %(pl)s."
+msgstr "Fordel for %(pl)s."
+
+#: templates/pred_match.html:19
+#, python-format
+msgid "Large advantage for %(pl)s."
+msgstr "Stor fordel for %(pl)s."
+
+#: templates/pred_match.html:20
+#, python-format
+msgid "Overwhelming advantage for %(pl)s."
+msgstr "Overhvelmende fordel for %(pl)s."
+
+#: templates/pred_match.html:79
+msgid "Historical score"
+msgstr "Historiske resultater"
+
+#. Translators: Opposing race here meaning the race relevant to the match being predicted.
+#: templates/pred_match.html:94
+msgid "Score vs. opposing race"
+msgstr "Resultater mot rase"
+
+#. Translators: Form as in the current form of a player.
+#: templates/pred_match.html:109
+msgid "Form"
+msgstr "Form"
+
+#: templates/pred_match.html:123
+msgid "Form vs. opposing race"
+msgstr "Form mot rase"
+
+#: templates/pred_match.html:137
+msgid "Score vs. each other"
+msgstr "Resultater mot hverandre"
+
+#: templates/pred_match.html:149 templates/pred_proleague.html:64
+msgid "Update match progress"
+msgstr "Oppdater kamp"
+
+#: templates/pred_match.html:156 templates/pred_match.html.py:162
+#, python-format
+msgid "Score for %(pl)s"
+msgstr "Resultat for %(pl)s"
+
+#. Translators: player names, so e.g. Team Jaedong vs. Team Mvp
+#: templates/pred_proleague.html:11
+#, python-format
+msgid "Team %(pla)s vs. Team %(plb)s"
+msgstr "Team %(pla)s mot Team %(plb)s"
+
+#. Translators: Team [player], e.g. "Team Jaedong"
+#: templates/pred_proleague.html:19 templates/pred_proleague.html.py:25
+#, python-format
+msgid "Team %(p)s"
+msgstr "Team %(p)s"
+
+#: templates/pred_sebracket.html:23
+#, python-format
+msgid "Top %(num)s"
+msgstr "Topp %(num)s"
+
+#: templates/pred_sebracket.html:64
+msgid "Update bracket progress"
+msgstr "Oppdater turnering"
+
+#: templates/pred_sebracket.html:105
+msgid "Team Liquid (all)"
+msgstr "Team Liquid (alle)"
+
+#: templates/pred_sebracket.html:106
+msgid "Reddit (table)"
+msgstr "Reddit (tabell)"
+
+#: templates/pred_sebracket.html:107
+msgid "Reddit (median bracket)"
+msgstr "Reddit (medianresultat)"
+
+#: templates/predict.html:27
+msgid "Show me the future!"
+msgstr "Vis meg fremtiden!"
+
+#: templates/predict.html:28
+msgid "Parse Liquipedia Bracket!"
+msgstr "Parse Liquipedia-sluttspill!"
+
+#: templates/predict.html:37
+msgid ""
+"Enter one player per line. The player information must uniquely identify the "
+"player, and should be space-separated list of any of the following:"
+msgstr ""
+"Skriv inn en spiller per linje. Spillerinformasjonen må identifisere "
+"spilleren unikt, og er en mellomromsseparert liste av følgende:"
+
+#: templates/predict.html:41
+msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\"."
+msgstr ""
+"Rase, dvs. \"P\", \"T\", \"Z\", \"R\" (tilfeldig) eller \"S\" (rasebytter)."
+
+#: templates/predict.html:42
+#, python-format
+msgid ""
+"A two- or three-letter %(a)sISO 3166-1 alpha-2</a> country code. e.g. \"KR"
+"\", or the common English name of a country."
+msgstr ""
+"En to- eller trebokstavers %(a)sISO 3166-1 alpha-2 statskode</a>, f.eks. \"KR"
+"\" eller \"KOR\", eller det vanlige engelske navnet for et land (dersom "
+"dette ikke inneholder mellomrom)."
+
+#: templates/predict.html:44
+msgid ""
+"Player or team aliases (we add these to the database when we feel like "
+"they're needed), e.g. \"DRG\"."
+msgstr ""
+"Spiller- eller lagaliaser (vi legger disse til når vi føler behov for dem), "
+"f.eks. \"DRG\"."
+
+#: templates/predict.html:45
+msgid ""
+"A player ID number, which you can get from the URL of the player page, e.g. "
+"\"4\"."
+msgstr ""
+"Spillerens ID-nummer, som du kan finne fra addressen til spillersiden f.eks. "
+"\"4\"."
+
+#: templates/predict.html:48 templates/results_search.html:49
+msgid "Note that everything is case insensitive."
+msgstr "Merk at alt er uavhengig av store og små bokstaver."
+
+#: templates/predict.html:50
+msgid "For <b>single elimination brackets</b> the following is possible:"
+msgstr "For <b>utslagsturneringer</b> er følgende mulig:"
+
+#: templates/predict.html:53
+msgid ""
+"Use a different match format for each round. For example, \"5,5,7\" means "
+"best-of-5 for the first two rounds, and best-of-7 for the final. You can "
+"still enter a single number to apply to all rounds."
+msgstr ""
+"Bruk et forskjellig kampformat for hver runde. For eksempel, \"5,5,7\" betyr "
+"best av fem i de første to rundene og best av sju i finalen. Du kan også "
+"skrive inn bare ett tall som da gjelder for alle rundene."
+
+#: templates/predict.html:54
+msgid "To indicate a BYE, enter \"bye\" or a single hyphen."
+msgstr ""
+"For spillere som ikke møter (walkover), skriv \"bye\" eller en enkel "
+"bindestrek."
+
+#: templates/predict.html:55
+msgid ""
+"You can copy bracket code from Liquipedia and attempt to parse it. Mediawiki "
+"syntax is fairly stretchy, so we make no guarantees, however. Note: you have "
+"to copy the bracket <em>code</em>."
+msgstr ""
+"Du kan kopiere sluttspillkode fra Liquipedia og forsøke å parse den. "
+"Mediawiki-syntaks er ganske fleksibel så vi kan ikke garantere at det "
+"fungerer. Merk at du må kopiere sluttspill-<em>koden</em>."
+
+#: templates/predict.html:58
+msgid ""
+"For <b>proleague matches</b> enter first all the player of one team, and "
+"then all the players of the other team. There must be an equal number of "
+"each, but it doesn't have to be odd."
+msgstr ""
+"For <b>proleague-kamper</b>, skriv inn først alle spillerne på det ene laget "
+"og så spillerne på det andre. Det må være et likt antall spillere, men det "
+"trenger ikke være et odde antall."
+
 #. Translators: Rating adjustments for [tag] on list number [listn].
 #: templates/ratingdetails.html:11
 #, python-format
@@ -6250,11 +6677,6 @@ msgstr ""
 #, python-format
 msgid "%(plr)s played no games in this period."
 msgstr "%(plr)s spilte ingen partier i denne perioden."
-
-#: templates/ratinglist.html:20 templates/recordlist.html:10
-#: templates/teams.html:16
-msgid "#"
-msgstr "#"
 
 #: templates/ratinglist.html:156
 msgid "No entries found."
@@ -6491,10 +6913,6 @@ msgstr ""
 "Spillerens ID-nummer, som du kan finne fra addressen til spillersiden f.eks. "
 "\"4\""
 
-#: templates/results_search.html:49
-msgid "Note that everything is case insensitive."
-msgstr "Merk at alt er uavhengig av store og små bokstaver."
-
 #: templates/results_search.html:52
 #, python-format
 msgid "Found %(cnt)s match."
@@ -6533,10 +6951,6 @@ msgstr "Avmerk alle"
 #: templates/results_search.html:84
 msgid "The following modifications will be made to all checked matches:"
 msgstr "Disse endringene vil bli gjort på alle de merkede kampene:"
-
-#: templates/results_search.html:93
-msgid "Modify"
-msgstr "Endre"
 
 #: templates/review.html:19
 msgid "The following matches were successfully approved:"
@@ -6709,6 +7123,15 @@ msgstr "Ingen korte adresser."
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
 msgstr "Adresseforkorter"
+
+#~ msgid "Period"
+#~ msgstr "Periode"
+
+#~ msgid "Periods"
+#~ msgstr "Perioder"
+
+#~ msgid "Top 2      1st      2nd      3rd      4th"
+#~ msgstr "Topp 2      1.       2.       3.       4."
 
 #~ msgid "external sc2charts.net ID"
 #~ msgstr "ekstern SC2Charts.net ID"

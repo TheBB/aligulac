@@ -56,6 +56,9 @@ for res in resources:
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
 
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^language/', 'aligulac.views.language'),
+
     url(r'^periods/$', 'ratings.ranking_views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.ranking_views.period'),
     url(r'^periods/latest/$', 'ratings.ranking_views.period'),
@@ -124,15 +127,9 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 
-    # Remove when we get replacement
-    url(r'^api/rating_list/(?P<period>\d+)/$', 'ratings.api_views.rating_list'),
-
     # Tastypie
     url(r'^api/', include(beta_api.urls)),
     url(r'^api/', include(v1_api.urls)),
-
-    # Ask TheBB if questions
-    url(r'^misc/training/(?P<team_id>\d+)(-[^ /]*)?/$', 'ratings.misc_views.training'),
 )
 
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.

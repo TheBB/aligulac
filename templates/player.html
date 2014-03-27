@@ -6,6 +6,7 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
 {% block title %}{{ player.tag }}{% endblock %}
 
@@ -24,22 +25,25 @@ This is the template for the main player page, called from ratings.views.player.
 <table style="width: 42em; border-collapse: collapse;">
     <tr>
         <td class="tabsel" onclick="switch_tab('alltime', tables);" style="width: 25%;" id="alltime-tab">
-            all-time
+            {% comment %}Translators: All-time winrates{% endcomment %}
+            {% trans "all-time" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('form', tables);" style="width: 25%;" id="form-tab">
-            form
+            {% comment %}Translators: Recent winrates{% endcomment %}
+            {% trans "form" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('highs', tables);" style="width: 25%;" id="highs-tab">
-            highest
+            {% comment %}Translators: Highest ratings{% endcomment %}
+            {% trans "highest" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('rivalries', tables);" style="width: 25%;" id="rivalries-tab">
-            rivalries
+            {% trans "rivalries" %}
         </td>
     </tr>
     <tbody id="alltime">
     <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
-        <td style="width: 3em;">All</td>
+        <td style="width: 3em;">{% trans "All" %}</td>
         <td style="width: 20em;">
             <div class="progress">
                 <span class="percent">
@@ -59,7 +63,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>{% trans "vP" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -79,7 +83,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>{% trans "vT" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -99,7 +103,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>{% trans "vZ" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -122,7 +126,7 @@ This is the template for the main player page, called from ratings.views.player.
     <tbody id="form" style="display: none;"> 
     <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
-        <td style="width: 3em;">All</td>
+        <td style="width: 3em;">{% trans "All" %}</td>
         <td style="width: 20em;">
             <div class="progress">
                 <span class="percent">
@@ -142,7 +146,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>{% trans "vP" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -162,7 +166,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>{% trans "vT" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -182,7 +186,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>{% trans "vZ" %}</td>
         <td>
             <div class="progress">
                 <span class="percent">
@@ -205,7 +209,7 @@ This is the template for the main player page, called from ratings.views.player.
     <tbody id="highs" style="display: none;"> 
     <tr> <td colspan="4" style="border: solid 0.1em;"> <table style="width: 42em;">
     <tr style="height: 2.5em;">
-        <td style="width: 3em;">All</td>
+        <td style="width: 3em;">{% trans "All" %}</td>
         <td style="width: 12em;">
             {% if highs %}
             {{ highs.0.rating|ratscale }} 
@@ -217,8 +221,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td style="width: 20em; text-decoration: none;">
             {% if highs %}
-            on <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
-                {{ highs.0.period.end|date:"F jS, Y" }} </a>
+            {% trans "on" context "on date" %}
+            <a href="/periods/{{ highs.0.period.id }}/" style="text-decoration: none;">
+                {{ highs.0.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td style="width: 6em;">
@@ -229,7 +234,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vP</td>
+        <td>{% trans "vP" %}</td>
         <td>
             {% if highs %}
             {{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
@@ -241,8 +246,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             {% if highs %}
-            on <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
-                {{ highs.1.period.end|date:"F jS, Y" }} </a>
+            {% trans "on" context "on date" %}
+            <a href="/periods/{{ highs.1.period.id }}/" style="text-decoration: none;">
+                {{ highs.1.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td>
@@ -253,7 +259,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vT</td>
+        <td>{% trans "vT" %}</td>
         <td>
             {% if highs %}
             {{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
@@ -265,8 +271,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             {% if highs %}
-            on <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
-                {{ highs.2.period.end|date:"F jS, Y" }} </a>
+            {% trans "on" context "on date" %}
+            <a href="/periods/{{ highs.2.period.id }}/" style="text-decoration: none;">
+                {{ highs.2.period.end|cdate:_('F jS, Y') }} </a>
             {% endif %}
         </td>
         <td>
@@ -277,7 +284,7 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
     </tr>
     <tr style="height: 2.5em;">
-        <td>{% if player.race in "PTZ" %}{{ player.race }}{% endif %}vZ</td>
+        <td>{% trans "vZ" %}</td>
         <td>
             {% if highs %}
             {{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
@@ -289,8 +296,9 @@ This is the template for the main player page, called from ratings.views.player.
         </td>
         <td>
             {% if highs %}
-            on <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
-                {{ highs.3.period.end|date:"F jS, Y" }} </a>
+            {% trans "on" context "on date" %}
+            <a href="/periods/{{ highs.3.period.id }}/" style="text-decoration: none;">
+                {{ highs.3.period.end|cdate:_('F jS, Y') }}</a>
             {% endif %}
         </td>
         <td>
@@ -308,7 +316,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% for rival in player.rivals %}
             <tr>
               <td>
-                {% ifchanged %}Biggest rival{{ player.rivals|length|pluralize }}{% endifchanged %}
+                  {% ifchanged %}{% blocktrans count player.rivals|length as cnt %}Biggest rival{% plural %}Biggest rivals{% endblocktrans %}{% endifchanged %}
               </td>
               <td>
                 {% if rival.country != "" %}
@@ -318,7 +326,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <a href="/players/{{ rival.id }}/">{{ rival.tag }}</a>
                 (
                 <a href="{{ player.id|vs_url:rival.id }}">
-                  {{ rival.matches }} match{{ rival.matches|pluralize:"es" }}
+                    {% blocktrans count rival.matches as cnt %}{{ cnt }} match{% plural %}{{ cnt }} matches{% endblocktrans %}
                 </a>
                 )
               </td>
@@ -327,7 +335,7 @@ This is the template for the main player page, called from ratings.views.player.
             {% for op in player.nemesis %}
             <tr>
               <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
-                {% ifchanged %}Nemes{{ player.nemesis|length_is:1|yesno:"i,e" }}s{% endifchanged %}
+                  {% ifchanged %}{% blocktrans count player.nemesis|length as cnt %}Nemesis{% plural %}Nemeses{% endblocktrans %}{% endifchanged %}
               </td>
               <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
                 {% if op.country != "" %}
@@ -347,7 +355,7 @@ This is the template for the main player page, called from ratings.views.player.
             <tr>
               <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
                 {% ifchanged %}
-                Victim{{ player.victim|pluralize }}
+                  {% ifchanged %}{% blocktrans count player.victim|length as cnt %}Victim{% plural %}Victims{% endblocktrans %}{% endifchanged %}
                 <!-- This should really be Conemesis, but not every one would get it :( -->
                 {% endifchanged %}
               </td>
@@ -377,13 +385,13 @@ This is the template for the main player page, called from ratings.views.player.
     {{ player.tag }}
     {% if adm %}
         (<a href="#" onclick="toggle_form('modplayer'); hide_charts(); return false;"
-          title="Edit info">edit</a>,
-        <a href="/admin/ratings/player/{{ player.id }}/" title="Admin interface">admin</a>)
+            title="{% trans "Edit info" %}">{% trans "edit" %}</a>,
+        <a href="/admin/ratings/player/{{ player.id }}/" title="{% trans "Admin interface" %}">{% trans "admin" context "admin interface" %}</a>)
     {% endif %}
     </div>
     <div class="iboxtable">
         <div class="row">
-            <div class="rowel" style="width: 11em;">Race</div>
+            <div class="rowel" style="width: 11em;">{% trans "Race" %}</div>
             <div class="rower" style="width: 17em;">
                 <img src="{{ player.race|img }}" class="btm" />
                 {{ player.race|racefull }}
@@ -391,7 +399,7 @@ This is the template for the main player page, called from ratings.views.player.
         </div>
         {% if player.country %}
         <div class="row infobox">
-            <div class="rowel">Country</div>
+            <div class="rowel">{% trans "Country" %}</div>
             <div class="rower">
                 {% if player.country != "" %}
                 <img src="{{ player.country|lower|img:"flags" }}" class="btm" />
@@ -403,12 +411,11 @@ This is the template for the main player page, called from ratings.views.player.
         {% if player.current_rating and player.current_rating.decay < 4 %}
         {% with pid=player.current_rating.period.id %}
         <div class="row infobox">
-          <div class="rowel">
-            Rank
-          </div>
+          <div class="rowel">{% trans "Rank" %}</div>
           <div class="rower">
             <a href="/periods/{{ pid }}/">
-              #{{ player.world_rank }} World
+                {% comment %}Translators: World rank.{% endcomment %}
+                {% blocktrans with rank=player.world_rank %}#{{rank}} World{% endblocktrans %}
             </a>
           </div>
         </div>
@@ -417,7 +424,8 @@ This is the template for the main player page, called from ratings.views.player.
           <div class="rowel"></div>
           <div class="rower">
             <a href="/periods/{{ pid }}/?nats=foreigners">
-              #{{ player.foreigner_rank }} Non-Korean
+                {% comment %}Translators: Rank among non-Koreans.{% endcomment %}
+                {% blocktrans with rank=player.foreigner_rank %}#{{rank}} Non-Korean{% endblocktrans %}
             </a>
           </div>
         </div>
@@ -427,7 +435,8 @@ This is the template for the main player page, called from ratings.views.player.
           <div class="rowel"></div>
           <div class="rower">
             <a href="/periods/{{ pid }}/?nats={{ player.country }}">
-              #{{ player.country_rank }} {{ countryfull }}
+                {% comment %}Translators: Rank in a country.{% endcomment %}
+                {% blocktrans with rank=player.country_rank %}#{{rank}} {{ countryfull }}{% endblocktrans %}
             </a>
           </div>
         </div>
@@ -436,25 +445,25 @@ This is the template for the main player page, called from ratings.views.player.
         {% endif %}
         {% if player.name %}
         <div class="row infobox">
-            <div class="rowel">Full name</div>
+            <div class="rowel">{% trans "Full name" %}</div>
             <div class="rower">{{ player.name }}</div>
         </div>
         {% endif %}
         {% if aliases %}
         <div class="row infobox">
-            <div class="rowel">AKA</div>
+            <div class="rowel">{% trans "AKA" %}</div>
             <div class="rower">{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</div>
         </div>
         {% endif %}
         {% if player.birthday %}
         <div class="row infobox">
-            <div class="rowel">Birthday</div>
-            <div class="rower">{{ player.birthday|date:"F jS, Y" }}</div>
+            <div class="rowel">{% trans "Birthday" %}</div>
+            <div class="rower">{{ player.birthday|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if team %}
         <div class="row">
-            <div class="rowel">Team</div>
+            <div class="rowel">{% trans "Team" %}</div>
             <div class="rower">
                 <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>
             </div>
@@ -462,52 +471,48 @@ This is the template for the main player page, called from ratings.views.player.
         {% endif %}
         {% if first %}
         <div class="row">
-            <div class="rowel">First match</div>
-            <div class="rower">{{ first.date|date:"F jS, Y" }}</div>
+            <div class="rowel">{% trans "First match" %}</div>
+            <div class="rower">{{ first.date|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if last %}
         <div class="row">
-            <div class="rowel">Last match</div>
-            <div class="rower">{{ last.date|date:"F jS, Y" }}</div>
+            <div class="rowel">{% trans "Last match" %}</div>
+            <div class="rower">{{ last.date|cdate:_('F jS, Y') }}</div>
         </div>
         {% endif %}
         {% if earnings %}
         <div class="row">
-            <div class="rowel">Total earnings</div>
+            <div class="rowel">{% trans "Total earnings" %}</div>
             <div class="rower">${{ earnings|add_separator }}</div>
         </div>
         {% endif %}
         <div class="row">
-            <div class="rowel">Matches played</div>
+            <div class="rowel">{% trans "Matches played" %}</div>
             <div class="rower">{{ totalmatches }} ({{ offlinematches|pctg:totalmatches }}% offline)</div>
         </div>
         {% if player.mcnum or player.mcnum == 0 %}
         <div class="row">
-            <div class="rowel">MC number</div>
+            <div class="rowel">{% trans "MC number" %}</div>
             <div class="rower">{{ player.mcnum }}</div>
         </div>
         {% endif %}
-        {% if player.tlpd_id or player.lp_name or player.sc2c_id or player.sc2e_id %}
+        {% if player.tlpd_id or player.lp_name or player.sc2e_id %}
         <div class="row infobox">
-            <div class="rowel">External</div>
+            <div class="rowel">{% trans "External" %}</div>
             <div class="rower">
-                {% if player.sc2c_id %}
-                <a href="http://www.sc2charts.net/en/edb/players/{{ player.sc2c_id }}" 
-                   target="_blank">SC2C</a>
-                {% endif %}
                 {% if player.tlpd_id %}
                     {% for tl, human in player.tlpd_db|get_tlpd_list %}
-                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}"
-                       target="_blank">{{ human }}</a>
+                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}" target="_blank">{{ human }}</a>
                     {% endfor %}
                 {% endif %}
                 {% if player.sc2e_id %}
-                <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">SC2E</a>
+                {% comment %}Translators: SC2E = sc2earnings.com{% endcomment %}
+                <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">{% trans "SC2E" %}</a>
                 {% endif %}
                 {% if player.lp_name %}
-                <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" 
-                   target="_blank">LP</a>
+                {% comment %}Translators: LP = Liquipedia{% endcomment %}
+                <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -520,24 +525,23 @@ This is the template for the main player page, called from ratings.views.player.
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modplayer">
 <div class="close-button">
-    <a href="#" onclick="$('#modplayer').hide(); return false;">close</a>
+    <a href="#" onclick="$('#modplayer').hide(); return false;">{% trans "close" %}</a>
 </div>
 <form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
 <table class="hiddenform bigform">
 {% csrf_token %}
 {% form "forms.html" %}
-    {% field "basic"        form.tag        class="wideinput" %}
-    {% field "select"       form.race       class="wideinput" %}
-    {% field "select"       form.country    class="wideinput" %}
-    {% field "basic"        form.name       class="wideinput" %}
-    {% field "basic"        form.akas       class="wideinput" %}
-    {% field "date"         form.birthday   class="wideinput" %}
-    {% field "basic"        form.sc2c_id    class="wideinput" %}
-    {% field "basic"        form.sc2e_id    class="wideinput" %}
-    {% field "basic"        form.lp_name    class="wideinput" %}
-    {% field "basic"        form.tlpd_id    class="wideinput" %}
-    {% field "selectmulti"  form.tlpd_db    class="wideinput" %}
-    {% use "submit" %}
+    {% field "basic"        modform.tag        class="wideinput" %}
+    {% field "select"       modform.race       class="wideinput" %}
+    {% field "select"       modform.country    class="wideinput" %}
+    {% field "basic"        modform.name       class="wideinput" %}
+    {% field "basic"        modform.akas       class="wideinput" %}
+    {% field "date"         modform.birthday   class="wideinput" %}
+    {% field "basic"        modform.sc2e_id    class="wideinput" %}
+    {% field "basic"        modform.lp_name    class="wideinput" %}
+    {% field "basic"        modform.tlpd_id    class="wideinput" %}
+    {% field "selectmulti"  modform.tlpd_db    class="wideinput" %}
+    {% use "submit" name="modplayer" %}
 {% endform %}
 </table>
 </form>
@@ -557,10 +561,10 @@ This is the template for the main player page, called from ratings.views.player.
                 enabled: false
             },
             title: {
-                text: 'Rating history for {{ player.tag }}'
+                text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
             },
             subtitle: {
-                text: 'Click and drag to zoom'
+                text: '{% trans "Click and drag to zoom" %}'
             },
             xAxis: {
                 type: 'datetime',
@@ -584,12 +588,12 @@ This is the template for the main player page, called from ratings.views.player.
             },
             yAxis: [{
                 title: {
-                    text: 'Rating'
+                    text: '{% trans "Rating" %}'
                 }
             }, {
                 opposite: true,
                 title: {
-                    text: 'Games'
+                    text: '{% trans "Games" %}'
                 }
             }],
             tooltip: {
@@ -617,7 +621,7 @@ This is the template for the main player page, called from ratings.views.player.
                 }
             },
             series: [{
-                name: 'Games',
+                name: '{% trans "Number of games" %}',
                 color: 'rgba(140,140,140,0.4)',
                 lineWidth: 5,
                 borderWidth: 0,
@@ -629,7 +633,7 @@ This is the template for the main player page, called from ratings.views.player.
                           y: {{ r.ngames }}
                       },{% endfor %}]
             }, {
-                name: 'vs. Protoss',
+                name: '{% trans "vs. Protoss" %}',
                 color: '#00dd00',
                 lineWidth: 1,
                 dashStyle: 'Dash',
@@ -641,7 +645,7 @@ This is the template for the main player page, called from ratings.views.player.
                           y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
                       },{% endfor %}]
             }, {
-                name: 'vs. Terran',
+                name: '{% trans "vs. Terran" %}',
                 color: '#0000dd',
                 lineWidth: 1,
                 dashStyle: 'Dash',
@@ -653,7 +657,7 @@ This is the template for the main player page, called from ratings.views.player.
                           y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
                       },{% endfor %}]
             }, {
-                name: 'vs. Zerg',
+                name: '{% trans "vs. Zerg" %}',
                 color: '#dd0000',
                 lineWidth: 1,
                 dashStyle: 'Dash',
@@ -665,7 +669,8 @@ This is the template for the main player page, called from ratings.views.player.
                           y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
                       },{% endfor %}]
             }, {
-                name: 'General',
+                {% comment %}Translators: General rating{% endcomment %}
+                name: '{% trans "General" %}',
                 color: '#000000',
                 lineWidth: 3,
                 enableMouseTracking: false,
@@ -677,7 +682,8 @@ This is the template for the main player page, called from ratings.views.player.
                       },{% endfor %}]
             }, {% if stories %}
                 {
-                name: 'Stories',
+                {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
+                name: '{% trans "Stories" %}',
                 type: 'scatter',
                 color: '#ffaa00',
                 yAxis: 0,
@@ -687,14 +693,14 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for s in stories %}{% if not s.skip %} {
-                          name: '{{s.text}}<br/>{{s.date}}{% if s.event %}: {{s.event.fullname}}{% endif %}',
+                          name: '{{s|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|safe}}{% endif %}',
                           url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter}}/',
                           x: {{ s.date|milliseconds }},
                           y: {{ s.rating|ratscale }}
                       },{% endif %}{% endfor %}]
             }, {% endif %}{% if teampoints %}
                 {
-                name: 'Team switches',
+                name: '{% trans "Team switches" %}',
                 type: 'scatter',
                 color: '#FF0000',
                 yAxis: 0,
@@ -704,7 +710,7 @@ This is the template for the main player page, called from ratings.views.player.
                     radius: 5
                 },
                 data: [{% for t in teampoints %} {
-                          name: '{% for d in t.data %}{{d.date}}: {{player.tag}} {{d.jol}} {{d.team.name}}<br/>{% endfor %}',
+                          name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag}} {{d.jol}} {{d.team.name}}<br/>{% endfor %}',
                           x: {{ t.date|milliseconds }},
                           y: {{ t.rating|ratscale }}
                       },{% endfor %}]
@@ -716,28 +722,28 @@ This is the template for the main player page, called from ratings.views.player.
 {% endif %}
 
 {% if matches %}
-<h3>Most recent results</h3>
+<h3>{% trans "Most recent results" %}</h3>
 <table class="results">
 {% include "matchlist.html" with lm_list=matches lm_header="info" %}
 </table>
 {% endif %}
 
 {% if teammems %}
-<h3>Team history</h3>
+<h3>{% trans "Team history" %}</h3>
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 30em;">Team</div>
-        <div class="rowe" style="width: 30em;">Joined</div>
-        <div class="rowe" style="width: 30em;">Left</div>
-        <div class="rowe" style="width: 7em; text-align: right;">Current</div>
+        <div class="rowe" style="width: 30em;">{% trans "Team" %}</div>
+        <div class="rowe" style="width: 30em;">{% trans "Joined" %}</div>
+        <div class="rowe" style="width: 30em;">{% trans "Left" %}</div>
+        <div class="rowe" style="width: 7em; text-align: right;">{% trans "Current" %}</div>
     </div>
     {% for tm in teammems %}
     <div class="row {% cycle 'row2' 'row1' %}">
         <div class="rowe">
             <a href="/teams/{{ tm.group.id }}-{{ tm.group.name|urlfilter }}/">{{ tm.group.name }}</a>
         </div>
-        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
-        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.start|cdate:_('F jS, Y') }}</div>
+        <div class="rowe">{{ tm.end|cdate:_('F jS, Y') }}</div>
         <div class="rowe" style="text-align: right;">
             {% if tm.current %}
                 <img src="{{ "yes"|img }}" alt="yes" class="btm" />

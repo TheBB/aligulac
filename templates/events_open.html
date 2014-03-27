@@ -1,23 +1,23 @@
 {% extends "index.html" %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Manage events{% endblock %}
+{% block title %}{% trans "Open events" %}{% endblock %}
 
 {% block content %}
 
 {% include "messages.html" %}
 
-<p>These events have games, which means that they are currently active and have not yet finished.  If the
-event has finished, please make sure that all matches have been added before closing the event.</p>
+<p>{% blocktrans %}These events have games, which means that they are currently active and have not yet finished.  If the event has finished, please make sure that all matches have been added before closing the event.{% endblocktrans %}</p> 
 
 <form method="post" action="/add/open_events/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 35em;">Open events with games</td>
-        <td style="width: 15em;">Last added game</td>
-        <td style="width: 16em;">External links</td>
+        <td style="width: 35em;">{% trans "Open events with games" %}</td>
+        <td style="width: 15em;">{% trans "Last added game" %}</td>
+        <td style="width: 16em;">{% trans "External links" %}</td>
         <td class="rl_icon"></td>
     </tr>
     {% for event in open_games %}
@@ -32,15 +32,13 @@ event has finished, please make sure that all matches have been added before clo
             </td>
             <td>
                 {% if event.up_homepage %}
-                    <a href="{{ event.up_homepage }}" target="_blank">Homepage</a>
+                    <a href="{{ event.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
                 {% endif %}
                 {% if event.up_tl_thread %}
-                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.up_tl_thread }}" 
-                       target="_blank">TL</a>
+                    <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if event.up_lp_name %}
-                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.up_lp_name }}" 
-                       target="_blank">LP</a>
+                    <a href="http://wiki.teamliquid.net/starcraft2/{{ event.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
                 {% if event.up_tlpd_id %}
                     {% for tl, human in event.up_tlpd_db|get_tlpd_list %}
@@ -55,20 +53,18 @@ event has finished, please make sure that all matches have been added before clo
         </tr>
     {% endfor %}
     <tr class="nonheader">
-        <td colspan="4" style="text-align: right;"><input type="Submit" name="open_games" value="Close events" /></td>
+        <td colspan="4" style="text-align: right;"><input type="Submit" name="open_games" value="{% trans "Close events" %}" /></td>
     </tr>
 </table>
 </form>
 <br>
 
-<p>These events have no games yet, which means that they are either future events or finished events that are
-not yet in the database.  In the latter case, feel free to use the external links provided to add the matches
-to the database and close the event when you are done.</p>
+<p>{% blocktrans %}These events have no games yet, which means that they are either future events or finished events that are not yet in the database.  In the latter case, feel free to use the external links provided to add the matches to the database and close the event when you are done.{% endblocktrans %}</p>
 
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 50m;">Open events without games</td>
-        <td style="width: 16m;">External links</td>
+        <td style="width: 50m;">{% trans "Open events without games" %}</td>
+        <td style="width: 16m;">{% trans "External links" %}</td>
         <td class="rl_icon"></td>
     </tr>
     {% for event in open_nogames %}
@@ -80,15 +76,15 @@ to the database and close the event when you are done.</p>
             </td>
             <td>
                 {% if event.up_homepage %}
-                    <a href="{{ event.up_homepage }}" target="_blank">Homepage</a>
+                <a href="{{ event.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
                 {% endif %}
                 {% if event.up_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.up_tl_thread }}" 
-                       target="_blank">TL</a>
+                        target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if event.up_lp_name %}
                     <a href="http://wiki.teamliquid.net/starcraft2/{{ event.up_lp_name }}" 
-                       target="_blank">LP</a>
+                        target="_blank">{% trans "LP" %}</a>
                 {% endif %}
                 {% if event.up_tlpd_id %}
                     {% for tl, human in event.up_tlpd_db|get_tlpd_list %}
@@ -102,22 +98,21 @@ to the database and close the event when you are done.</p>
     {% endfor %} 
 </table>
 
-<h2>Missing prize pool information</h2>
-<p>These events are closed and have no information on their prize pools yet.</p>
+<h2>{% trans "Missing prize pool information" %}</h2>
+<p>{% trans "These events are closed and have no information on their prize pools yet." %}</p>
 
 <ul>
-<li>If you know the prize pool, visit the event page and add the prize pool information there.</li> 
-<li>If you know the event has no prize pool, you can mark the event as having no prize pool. Don't just assume
-that an event has no prize pool just because it is a qualifier, however. Some do!</li>  
-<li>If you are not sure whether the event has a prize pool or do not have the exact sums, do nothing.</li>
+<li>{% blocktrans %}If you know the prize pool, visit the event page and add the prize pool information there.{% endblocktrans %}</li>
+<li>{% blocktrans %}If you know the event has no prize pool, you can mark the event as having no prize pool. Don't just assume that an event has no prize pool just because it is a qualifier, however. Some do!{% endblocktrans %}</li>
+<li>{% blocktrans %}If you are not sure whether the event has a prize pool or do not have the exact sums, do nothing{% endblocktrans %}</li>
 </ul>
 
 <form method="post" action="/add/open_events/">
 {% csrf_token %}
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 50m;">Events with no prize pool information</td>
-        <td style="width: 16m;">External links</td>
+        <td style="width: 50m;">{% trans "Events with no prize pool information" %}</td>
+        <td style="width: 16m;">{% trans "External links" %}</td>
         <td class="rl_icon"></td>
     </tr>
     {% for event in pp_events %}
@@ -129,15 +124,15 @@ that an event has no prize pool just because it is a qualifier, however. Some do
             </td>
             <td>
                 {% if event.up_homepage %}
-                    <a href="{{ event.up_homepage }}" target="_blank">Homepage</a>
+                <a href="{{ event.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
                 {% endif %}
                 {% if event.up_tl_thread %}
                     <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.up_tl_thread }}" 
-                       target="_blank">TL</a>
+                        target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if event.up_lp_name %}
                     <a href="http://wiki.teamliquid.net/starcraft2/{{ event.up_lp_name }}" 
-                       target="_blank">LP</a>
+                        target="_blank">{% trans "LP" %}</a>
                 {% endif %}
                 {% if event.up_tlpd_id %}
                     {% for tl, human in event.up_tlpd_db|get_tlpd_list %}
@@ -153,7 +148,7 @@ that an event has no prize pool just because it is a qualifier, however. Some do
     {% endfor %} 
     <tr class="nonheader">
         <td colspan="3" style="text-align: right;">
-            <input type="Submit" name="pp_events" value="Marked events have no prize pool" />
+            <input type="Submit" name="pp_events" value="{% trans "Marked events have no prize pool" %}" />
         </td>
     </tr>
 </table>

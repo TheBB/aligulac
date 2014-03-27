@@ -21,7 +21,7 @@ function hideLPButton() {
 }
 
 function format_change(el) {
-    if (el.item(el.selectedIndex).text == "Single elimination bracket")
+    if (el.selectedIndex == 2)
         showLPButton();
     else
         hideLPButton();

@@ -4,11 +4,12 @@
 This template is used for HTTP 404 errors.
 {% endcomment %}
 
+{% load i18n %}
+
 {% block title %}500{% endblock %}
 
 {% block content %}
-    <p>An unspeakable awful indescribable horror has occured.</p>
+<p>{% blocktrans %}An unspeakable awful indescribable horror has occured.{% endblocktrans %}</p>
 
-    <p>Try to send me an e-mail at evfonn(at)gmail(dot)com where you describe what you were trying to do when this
-    happened.</p>
+<p>{% blocktrans with email="evfonn(at)gmail(dot)com" %}Try to send me an e-mail at {{email}} where you describe what you were trying to do when this happened.{% endblocktrans %}</p>
 {% endblock %}

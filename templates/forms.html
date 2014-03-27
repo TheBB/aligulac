@@ -1,4 +1,5 @@
 {% load ratings_extras %}
+{% load i18n %}
 
 {% block basic %}
 <tr>
@@ -81,11 +82,7 @@
                value="{{ field.value|makedate|date:"Y-m-d"|default:"" }}" />
         <script type="text/javascript">
         // <![CDATA[  
-            var opts = {                            
-                formElements: {"{{ field.auto_id }}" :"Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };           
-            datePickerController.createDatePicker(opts);
+            $("#{{field.auto_id}}").datepicker();
         // ]]>
         </script>
     </td>
@@ -96,23 +93,17 @@
 <tr>
     <td class="form_left">{{ label }}</td>
     <td class="form_right">
-        between <input type="text" class="date" name="{{ after.html_name }}" 
-                       id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
-        and     <input type="text" class="date" name="{{ before.html_name }}" 
-                       id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
-        inclusive
+        {% trans "between" context "between x and y inclusive" %}
+        <input type="text" class="date" name="{{ after.html_name }}" 
+               id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
+        {% trans "and" context "between x and y inclusive" %}
+        <input type="text" class="date" name="{{ before.html_name }}" 
+               id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
+        {% trans "inclusive" context "between x and y inclusive" %}
         <script type="text/javascript">
         // <![CDATA[  
-            var opts = {                            
-                formElements: {"before": "Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts);
-            var opts2 = {                            
-                formElements: {"after": "Y-ds-m-ds-d"},
-                statusFormat: "l-cc-sp-d-sp-F-sp-Y", 
-            };
-            datePickerController.createDatePicker(opts2);
+            $("#after").datepicker();
+            $("#before").datepicker();
         // ]]>
         </script>
     </td>
@@ -124,13 +115,16 @@
 {% endblock %}
 
 {% block submit %}
+{% trans "Submit" as submit %}
 <tr>
     <td class="form_left"></td>
     <td class="form_right">
         <input type="submit"
                name="{{ name|default:"op" }}"
                {% if onclick %}onclick="{{ onclick }}"{% endif %}
-               value="{{ text|default:"Submit" }}" />
+               {% if id %}id="{{ id }}"{% endif %}
+               {% if disabled %}disabled{% endif %}
+               value="{{ text|default:submit }}" />
     </td>
 </tr>
 {% endblock %}

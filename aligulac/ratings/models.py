@@ -17,6 +17,10 @@ from django.db.models import (
     Min,
     Q,
 )
+from django.utils.translation import (
+    ugettext_lazy as _,
+    pgettext_lazy
+)
 
 from aligulac.settings import start_rating, INACTIVE_THRESHOLD
 
@@ -42,48 +46,70 @@ TLPD_DB_HOTS             = 0b00100
 TLPD_DB_HOTSBETA         = 0b01000
 TLPD_DB_WOLBETA          = 0b10000
 TLPD_DBS = [
-    (TLPD_DB_WOLBETA,          'WoL Beta'),
-    (TLPD_DB_WOLKOREAN,        'WoL Korean'),
-    (TLPD_DB_WOLINTERNATIONAL, 'WoL International'),
-    (TLPD_DB_HOTSBETA,         'HotS Beta'),
-    (TLPD_DB_HOTS,             'HotS'),
+    # Translators: TLPD database
+    (TLPD_DB_WOLBETA,          _('WoL Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLKOREAN,        _('WoL Korean')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLINTERNATIONAL, _('WoL International')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTSBETA,         _('HotS Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTS,             _('HotS')),
 ]
 
 CAT_INDIVIDUAL = 'individual'
 CAT_TEAM       = 'team'
 CAT_FREQUENT   = 'frequent'
 EVENT_CATEGORIES = [
-    (CAT_INDIVIDUAL, 'Individual'),
-    (CAT_TEAM,       'Team'),
-    (CAT_FREQUENT,   'Frequent'),
+    # Translators: Event category
+    (CAT_INDIVIDUAL, _('Individual')),
+    # Translators: Event category
+    (CAT_TEAM,       _('Team')),
+    # Translators: Event category
+    (CAT_FREQUENT,   _('Frequent')),
 ]
 
 TYPE_CATEGORY = 'category'
 TYPE_EVENT    = 'event'
 TYPE_ROUND    = 'round'
 EVENT_TYPES = [
-    (TYPE_CATEGORY, 'Category'),
-    (TYPE_EVENT,    'Event'),
-    (TYPE_ROUND,    'Round'),
+    # Translators: Event type
+    (TYPE_CATEGORY, _('Category')),
+    # Translators: Event type
+    (TYPE_EVENT,    _('Event')),
+    # Translators: Event type
+    (TYPE_ROUND,    _('Round')),
 ]
 
 P, T, Z, R, S = 'PTZRS'
 RACES = [
-    (P, 'Protoss'),
-    (T, 'Terran'),
-    (Z, 'Zerg'),
-    (R, 'Random'),
-    (S, 'Switcher'),
+    (P, _('Protoss')),
+    (T, _('Terran')),
+    (Z, _('Zerg')),
+    # Translators: Random race
+    (R, _('Random')),
+    # Translators: Race switcher
+    (S, _('Switcher')),
 ]
+SRACES = dict([
+    (P, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Protoss')),
+    (T, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Terran')),
+    (Z, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Zerg')),
+    # Translators: Random race
+    (R, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Random')),
+    # Translators: Race switcher
+    (S, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Switcher')),
+])
 MRACES = RACES[:-1]
 
 WOL  = 'WoL'
 HOTS = 'HotS'
 LOTV = 'LotV'
 GAMES = [
-    (WOL,  'Wings of Liberty'),
-    (HOTS, 'Heart of the Swarm'),
-    (LOTV, 'Legacy of the Void'),
+    (WOL,  _('Wings of Liberty')),
+    (HOTS, _('Heart of the Swarm')),
+    (LOTV, _('Legacy of the Void')),
 ]
 
 TYPE_INFO    = 'info'
@@ -91,11 +117,148 @@ TYPE_WARNING = 'warning'
 TYPE_ERROR   = 'error'
 TYPE_SUCCESS = 'success'
 MESSAGE_TYPES = [
-    (TYPE_INFO,    'info'),
-    (TYPE_WARNING, 'warning'),
-    (TYPE_ERROR,   'error'),
-    (TYPE_SUCCESS, 'success'),
+    # Translators: Message type
+    (TYPE_INFO,    _('info')),
+    # Translators: Message type
+    (TYPE_WARNING, _('warning')),
+    # Translators: Message type
+    (TYPE_ERROR,   _('error')),
+    # Translators: Message type
+    (TYPE_SUCCESS, _('success')),
 ]
+
+MESSAGES_SRC = [
+    (_('Possible confusion'),
+        'You might be looking for %(player)s.', _('You might be looking for %(player)s.')),
+    (_('Possible confusion'),
+        'You might be looking for %(players)s or %(player)s.',
+        _('You might be looking for %(players)s or %(player)s.')),
+    (_('Walkover'), '%(player)s recieved a walkover.', _('%(player)s recieved a walkover.')),
+    (_('Walkover'),
+        '%(player)s recieved a walkover against %(opponent)s.',
+        _('%(player)s recieved a walkover against %(opponent)s.')),
+    (_('Forfeit'), '%(player)s forfeited.', _('%(player)s forfeited.')),
+    (_('Disqualification'), '%(player)s was disqualified.', _('%(player)s was disqualified.')),
+    (_('Forfeit'),
+        '%(player)s forfeited and was replaced by %(otherplayer)s.',
+        _('%(player)s forfeited and was replaced by %(otherplayer)s.')),
+    (_('Forfeits'), '%(players)s and %(player)s forfeited.', _('%(players)s and %(player)s forfeited.')),
+    (_('Forfeit'),
+        '%(player)s forfeited against %(opponent)s.', _('%(player)s forfeited against %(opponent)s.')),
+    (_('Forfeit'), '%(player)s forfeited after game %(num)s.', _('%(player)s forfeited after game %(num)s.')),
+    (_('Forfeit'), '%(player)s forfeited game %(num)s.', _('%(player)s forfeited game %(num)s.')),
+    (_('Forfeit'),
+        '%(player)s forfeited the remaining games.', _('%(player)s forfeited the remaining games.')),
+    (_('Forfeit'),
+        '%(player)s forfeited the remaining matches.', _('%(player)s forfeited the remaining matches.')),
+    (_('Forfeits'),
+        '%(players)s and %(player)s forfeited the remaining matches.',
+        _('%(players)s and %(player)s forfeited the remaining matches.')),
+    (_('Walkover'),
+        'In addition, %(player)s received a walkover against %(opponent)s.',
+        _('In addition, %(player)s received a walkover against %(opponent)s.')),
+    (_('Forfeit'),
+        'In addition, %(player)s forfeited against %(opponent)s.',
+        _('In addition, %(player)s forfeited against %(opponent)s.')),
+    (_('Unrated match'),
+        'In addition, %(player)s and %(opponent)s played an unrated match.',
+        _('In addition, %(player)s and %(opponent)s played an unrated match.')),
+    (_('2v2'),
+        'In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and %(playerd)s.',
+        _('In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and %(playerd)s.')),
+    (_('Race switch'),
+        '%(player)s played %(race)s in game %(num)s.', _('%(player)s played %(race)s in game %(num)s.')),
+    (_('Race switch'), '%(player)s played %(race)s.', _('%(player)s played %(race)s.')),
+    (_('Race switch'),
+        '%(player)s switched to %(race)s after game %(num)s.',
+        _('%(player)s switched to %(race)s after game %(num)s.')),
+    (_('Smurf'),
+        '%(player)s was smurfing for %(otherplayer)s.', _('%(player)s was smurfing for %(otherplayer)s.')),
+    (_('Smurf'), 
+        '%(player)s was smurfing as %(otherplayer)s.', _('%(player)s was smurfing as %(otherplayer)s.')),
+    (_('Smurf'),
+        '%(player)s was smurfing as %(otherplayer)s and was disqualified due to residency rules.',
+        _('%(player)s was smurfing as %(otherplayer)s and was disqualified due to residency rules.')),
+    (_('Forfeit'), '%(player)s was unable to attend.', _('%(player)s was unable to attend.')),
+    (_('Race switch'),
+        'This match was split due to race-changing.', _('This match was split due to race-changing.')),
+    (_('Irregular match'),
+        'Coming from the winner\'s bracket, %(player)s started the match with a %(na)s-%(nb)s lead.',
+        _('Coming from the winner\'s bracket, %(player)s started the match with a %(na)s-%(nb)s lead.')),
+    (_('Irregular match'),
+        '%(player)s started the match with a %(na)s–%(nb)s lead from a previous match.',
+        _('%(player)s started the match with a %(na)s–%(nb)s lead from a previous match.')),
+    (_('Irregular match'),
+        '%(player)s started the match with a %(na)s–%(nb)s lead.',
+        _('%(player)s started the match with a %(na)s–%(nb)s lead.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponent)s to qualify for %(event)s.',
+        _('%(player)s defeated %(opponent)s to qualify for %(event)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s.',
+        _('%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.',
+        _('%(player)s defeated %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.',
+        _('%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.')),
+    (_('Forfeit and qualification'),
+        '%(player)s forfeited and was replaced by %(otherplayer)s who won a qualifier against %(opponent)s.',
+        _('%(player)s forfeited and was replaced by %(otherplayer)s who won a qualifier against %(opponent)s.')),
+    (_('Qualification'),
+        'Qualification match to replace %(player)s.', _('Qualification match to replace %(player)s.')),
+    (_('Tiebreakers'),
+        '%(players)s and %(player)s played tiebreakers for the %(num)s spots.',
+        _('%(players)s and %(player)s played tiebreakers for the %(num)s spots.')),
+    (_('Long game'),
+        'Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds.',
+        _('Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds.')),
+    (_('Possible confusion'),
+        '%(player)s won %(num)s-X, assumed to be %(num)s-0.',
+        _('%(player)s won %(num)s-X, assumed to be %(num)s-0.')),
+    (_('Tiebreakers'), 'Tiebreaker game.', _('Tiebreaker game.')),
+    (_('Seed'), '%(player)s was seeded.', _('%(player)s was seededs.')),
+    (_('Seeds'), '%(players)s and %(player)s were seeded.', _('%(players)s and %(player)s were seeded.')),
+    (_('Draw'),
+        'Game %(num)s was a draw and had to be replayed.', 
+        _('Game %(num)s was a draw and had to be replayed.')),
+]
+MESSAGES = list(map(lambda m: (m[1], m[2]), MESSAGES_SRC))
+MESSAGES_DICT = dict(MESSAGES)
+MESSAGES_TITLE_DICT = dict(map(lambda m: (m[1], m[0]), MESSAGES_SRC))
+MESSAGES_IDX = list(map(lambda m: m[1], MESSAGES))
+
+STORIES = [
+    ('%(player)s wins %(event)s', _('%(player)s wins %(event)s')),
+    ('%(player)s defeats %(opponent)s and wins %(event)s', 
+        _('%(player)s defeats %(opponent)s and wins %(event)s')),
+    ('%(player)s wins %(event)s as a royal roader', _('%(player)s wins %(event)s as a royal roader')),
+    ('%(player)s defeats %(opponent)s and wins %(event)s as a royal roader',
+        _('%(player)s defeats %(opponent)s and wins %(event)s as a royal roader')),
+    ('%(player)s all-kills %(team)s', _('%(player)s all-kills %(team)s')),
+    ('%(player)s all-kills %(team)s and wins %(event)s',
+        _('%(player)s all-kills %(team)s and wins %(event)s')),
+    ('%(player)s finishes second in %(event)s', _('%(player)s finishes second in %(event)s')),
+    ('%(player)s finishes third in %(event)s', _('%(player)s finishes third in %(event)s')),
+    ('%(player)s finishes fourth in %(event)s', _('%(player)s finishes fourth in %(event)s')),
+    ('%(player)s finishes top 4 in %(event)s', _('%(player)s finishes top 4 in %(event)s')),
+    ('%(player)s finishes top 8 in %(event)s', _('%(player)s finishes top 8 in %(event)s')),
+    ('%(player)s switches to %(race)s', _('%(player)s switches to %(race)s')),
+    ('%(player)s switches back to %(race)s', _('%(player)s switches back to %(race)s')),
+    ('%(player)s switches from %(racea)s to %(raceb)s', _('%(player)s switches from %(racea)s to %(raceb)s')),
+    ('%(player)s switches from %(racea)s back to %(raceb)s',
+        _('%(player)s switches from %(racea)s back to %(raceb)s')),
+    ('%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s',
+        _('%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s')),
+    ('%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s',
+        _('%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s')),
+    ('%(player)s fails to qualify for %(event)s', _('%(player)s fails to qualify for %(event)s')),
+    ('%(player)s fails to qualify for %(event)s after %(num)s appearances',
+        _('%(player)s fails to qualify for %(event)s after %(num)s appearances')),
+]
+STORIES_DICT = dict(STORIES)
+STORIES_IDX = list(map(lambda m: m[0], STORIES))
 # }}}
 
 # {{{ Periods
@@ -550,10 +713,6 @@ class Player(models.Model):
         'Liquipedia title', blank=True, null=True, max_length=200,
         help_text='Liquipedia title'
     )
-    sc2c_id = models.IntegerField(
-        'SC2Charts.net ID', blank=True, null=True,
-        help_text='SC2Charts.net ID'
-    )
     sc2e_id = models.IntegerField(
         'SC2Earnings.com ID', blank=True, null=True,
         help_text='SC2Earnings.com ID'
@@ -616,10 +775,6 @@ class Player(models.Model):
     
     def set_birthday(self, birthday):
         self.birthday = None if birthday == '' else birthday
-        self.save()
-
-    def set_sc2c_id(self, sc2c_id):
-        self.sc2c_id = None if sc2c_id == '' else sc2c_id
         self.save()
 
     def set_tlpd_id(self, tlpd_id):
@@ -899,16 +1054,45 @@ class Story(models.Model):
     class Meta:
         db_table = 'story'
         verbose_name_plural = 'stories'
+        ordering = ['date']
 
     player = models.ForeignKey(Player, null=False)
-    text = models.CharField('Text', max_length=200, null=False)
     date = models.DateField('Date', null=False)
-    event = models.ForeignKey(Event, null=True)
+    event = models.ForeignKey(Event, null=True, blank=True)
 
-    # {{{ String representation
+    message = models.CharField(
+        'Message', max_length=1000, null=False, blank=False, choices=STORIES, default='')
+    params = models.CharField('Parameters', max_length=1000, null=False, blank=False, default='')
+
     def __str__(self):
-        return '%s - %s on %s' % (self.player.tag, self.text, str(self.date))
-    # }}}
+        try:
+            params = self.get_param_dict()
+            return STORIES_DICT[self.message] % self.get_param_dict()
+        except:
+            return _('Error')
+
+    def get_text_index(self):
+        return STORIES_IDX.index(self.message)
+
+    def get_esc_params(self):
+        return r"\n".join(self.params.replace("'", r"\'").splitlines())
+
+    def get_param_dict(self):
+        params = {}
+        for p in self.params.splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params:
+                params[key] = SRACES[params[key]]
+        return params
+
+    def verify(self):
+        try:
+            _ = self.message % self.get_param_dict()
+            return True
+        except:
+            return False
 # }}}
 
 # {{{ Groups
@@ -1058,9 +1242,9 @@ class Group(models.Model):
     @property
     def ranks(self):
         return (
-            ("All-Kill", self.ak_rank, "ak"),
-            ("Proleague", self.pl_rank, "pl"),
-            ("Rating", self.rating_rank, "rt")
+            (_("All-Kill"), self.ak_rank, "ak"),
+            (_("Proleague"), self.pl_rank, "pl"),
+            (_("Rating"), self.rating_rank, "rt")
         )
 
     # }}}
@@ -1410,13 +1594,50 @@ class Message(models.Model):
 
     type = models.CharField('Type', max_length=10, choices=MESSAGE_TYPES)
 
-    title = models.CharField('Title', max_length=100, null=True)
-    text = models.TextField('Text')
+    message = models.CharField(
+        'Message', max_length=1000, null=False, blank=False, choices=MESSAGES, default='')
+    params = models.CharField('Parameters', max_length=1000, null=False, blank=False, default='')
 
     player = models.ForeignKey(Player, null=True)
     event = models.ForeignKey(Event, null=True)
     group = models.ForeignKey(Group, null=True)
     match = models.ForeignKey(Match, null=True)
+
+    def __str__(self):
+        try:
+            params = self.get_param_dict()
+            return MESSAGES_DICT[self.message] % self.get_param_dict()
+        except:
+            return _('Error')
+
+    def get_message(self):
+        return str(self)
+
+    def get_title(self):
+        return MESSAGES_TITLE_DICT[self.message]
+
+    def get_text_index(self):
+        return MESSAGES_IDX.index(self.message)
+
+    def get_esc_params(self):
+        return r"\n".join(self.params.replace("'", r"\'").splitlines())
+
+    def get_param_dict(self):
+        params = {}
+        for p in self.params.splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params:
+                params[key] = SRACES[params[key]]
+        return params
+
+    def verify(self):
+        try:
+            _ = self.message % self.get_param_dict()
+            return True
+        except:
+            return False
 # }}}
 
 # {{{ Earnings

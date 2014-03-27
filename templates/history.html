@@ -5,13 +5,15 @@ This is the Hall of Fame template. It's called from ratings.views.records.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}History{% endblock %}
+{% block title %}{% trans "History" %}{% endblock %}
 
 {% block content %}
 
 <form method="get" action="/records/history/">
-    <p>Show the:
+    <p>
+    {% trans "Number of players:" %}
     <select name="nplayers">
         <option value=5 {% if nplayers == 5 %}selected{% endif %}>5</option>
         <option value=10 {% if nplayers == 10 %}selected{% endif %}>10</option>
@@ -19,25 +21,25 @@ This is the Hall of Fame template. It's called from ratings.views.records.
         <option value=50 {% if nplayers == 50 %}selected{% endif %}>50</option>
         <option value=100 {% if nplayers == 100 %}selected{% endif %}>100</option>
     </select>
-    best players by races:
+    {% trans "Races:" %}
     <select name="race">
-        <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>All</option>
-        <option value="p" {% if race == "p" %}selected{% endif %}>Protoss</option>
-        <option value="t" {% if race == "t" %}selected{% endif %}>Terran</option>
-        <option value="z" {% if race == "z" %}selected{% endif %}>Zerg</option>
-        <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
-        <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
-        <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
+        <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
+        <option value="t" {% if race == "t" %}selected{% endif %}>{% trans "Terran" %}</option>
+        <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
+        <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
+        <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
+        <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
     </select>
-    and nationalities:
+    {% trans "Nationalities:" %}
     <select name="nats">
-        <option value="all" {% if nats == "all" %}selected{% endif %}>All</option>
-        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
+        <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>{% trans "Non-Koreans" %}</option>
         {% for c in countries %}
         <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
         {% endfor %}
     </select>
-    <input type="submit" value="Filter" />
+    <input type="submit" value="{% trans "Filter" %}" />
     </p>
 </form>
 
@@ -56,7 +58,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
                 text: ''
             },
             subtitle: {
-                text: 'Click and drag to zoom'
+                text: '{% trans "Click and drag to zoom" %}'
             },
             xAxis: {
                 type: 'datetime',
@@ -80,7 +82,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
             },
             yAxis: {
                 title: {
-                    text: 'Ranking' 
+                    text: '{% trans "Ranking" %}' 
                 },
                 min: 800,
                 max: 2100

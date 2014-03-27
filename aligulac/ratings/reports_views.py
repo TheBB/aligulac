@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from django.db import connection
 from django.db.models import Sum
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -35,7 +36,7 @@ def balance(request):
         'entries':  BalanceEntry.objects.all().order_by('date'),
     })
 
-    base.update({"title": "Balance report"})
+    base.update({"title": _("Balance report")})
 
     return render_to_response('reports_balance.html', base)
 # }}}

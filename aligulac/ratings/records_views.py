@@ -6,6 +6,7 @@ from django.db.models import (
 )
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.tools import (
     base_ctx,
@@ -18,6 +19,7 @@ from aligulac.cache import cache_page
 from ratings.models import (
     Player,
     Rating,
+    RACES,
 )
 from ratings.tools import (
     PATCHES,
@@ -66,7 +68,7 @@ def history(request):
         'patches': PATCHES,
     })
 
-    base.update({"title": "History"})
+    base.update({"title": _("History")})
 
     return render_to_response('history.html', base)
 # }}}
@@ -81,13 +83,13 @@ def hof(request):
         ).order_by('-dom_val')
     )
 
-    base.update({"title": "Hall of Fame"})
+    base.update({"title": _("Hall of Fame")})
     return render_to_response('hof.html', base)
 # }}}
 
 # {{{ filter stolen from templatetags/ratings_extras.py
 def racefull(value):
-    return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
+    return dict(RACES)[value]
 # }}}
 
 # {{{ race view
@@ -117,9 +119,10 @@ def race(request):
     if race != 'all':
         high = high.filter(player__race=race)
         
-        base.update({"title": "Records for {}".format(racefull(race))})
+        # Translators: Records for (race)
+        base.update({"title": _("Records for") + " {}".format(racefull(race))})
     else:
-        base.update({"title": "Records"})
+        base.update({"title": _("Records")})
 
     base.update({
         'hightot': sift(high.order_by('-rating')[:200]),

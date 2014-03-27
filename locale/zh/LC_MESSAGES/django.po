@@ -1,0 +1,6776 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Aligulac\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-27 10:44+0100\n"
+"PO-Revision-Date: 2014-03-27 11:03+0100\n"
+"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: aligulac/currency.py:99
+#, python-format
+msgid "Exchange rate not found for currency %(code)s on %(date)s"
+msgstr ""
+
+#: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
+msgid "English"
+msgstr "英语"
+
+#: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
+msgid "Norwegian"
+msgstr "挪威语"
+
+#: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
+msgid "Chinese (simplified)"
+msgstr "中文(简化字)"
+
+#. Translators: matches as in search matches, not SC2 matches
+#: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119
+msgid "Possible matches:"
+msgstr ""
+
+#. Translators: E.g. "John, Lisa, Darren and Mike"
+#: aligulac/aligulac/tools.py:108 aligulac/aligulac/tools.py:130
+#, python-format
+msgid "%(commalist)s and %(final)s"
+msgstr ""
+
+#. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
+#: aligulac/aligulac/tools.py:121
+#, python-format
+msgid "%(commalist)s and %(number)s more"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:137
+#, python-format
+msgid "'%s' not unique"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:149
+msgid "You are not logged in."
+msgstr "您未登录."
+
+#: aligulac/aligulac/tools.py:149
+msgid "login"
+msgstr "登录"
+
+#: aligulac/aligulac/tools.py:152
+#, python-format
+msgid "You are logged in as %s"
+msgstr "您已以%s的身份登录"
+
+#: aligulac/aligulac/tools.py:154
+msgid "logout"
+msgstr "退出登录"
+
+#: aligulac/aligulac/tools.py:155
+msgid "change password"
+msgstr "更改密码"
+
+#: aligulac/aligulac/tools.py:168 aligulac/ratings/staff_views.py:320
+#: aligulac/ratings/staff_views.py:327
+msgid "This field is required."
+msgstr "此处为必填项"
+
+#: aligulac/aligulac/tools.py:240 aligulac/aligulac/tools.py:251
+#: templates/history.html:85
+msgid "Ranking"
+msgstr "排名"
+
+#: aligulac/aligulac/tools.py:243 templates/player.html:738
+msgid "Current"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:244 aligulac/aligulac/tools.py:258
+#: aligulac/ratings/records_views.py:71 templates/history.html:10
+msgid "History"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:245 aligulac/aligulac/tools.py:351
+#: templates/player_earnings.html:30
+msgid "Earnings"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:248 aligulac/ratings/team_views.py:128
+#: templates/db.html:72 templates/index.html:25 templates/search.html:19
+#: templates/teams.html:10
+msgid "Teams"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:252
+msgid "Transfers"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:255 aligulac/ratings/records_views.py:125
+msgid "Records"
+msgstr ""
+
+#. Translators: Hall of fame
+#: aligulac/aligulac/tools.py:260
+msgid "HoF"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:261 aligulac/ratings/player_views.py:170
+#: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:187
+#: aligulac/ratings/results_views.py:553 aligulac/ratings/results_views.py:568
+#: templates/earnings.html:34 templates/earnings.html.py:43
+#: templates/earnings.html:51 templates/history.html:26
+#: templates/history.html.py:36 templates/period.html:44
+#: templates/period.html.py:50 templates/period.html:130
+#: templates/period.html.py:369 templates/period.html:382
+#: templates/player.html:46 templates/player.html.py:129
+#: templates/player.html:212 templates/records.html:23
+msgid "All"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:262 aligulac/ratings/models.py:87
+#: aligulac/ratings/player_views.py:171 aligulac/ratings/player_views.py:641
+#: aligulac/ratings/templatetags/ratings_extras.py:117
+#: templates/history.html:27 templates/period.html:45
+#: templates/period.html.py:131 templates/period.html:370
+#: templates/reports_balance.html:169
+msgid "Protoss"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:263 aligulac/ratings/models.py:88
+#: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
+#: aligulac/ratings/templatetags/ratings_extras.py:118
+#: templates/history.html:28 templates/period.html:46
+#: templates/period.html.py:132 templates/period.html:371
+#: templates/reports_balance.html:177
+msgid "Terran"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:264 aligulac/ratings/models.py:89
+#: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
+#: aligulac/ratings/templatetags/ratings_extras.py:119
+#: templates/history.html:29 templates/period.html:47
+#: templates/period.html.py:133 templates/period.html:372
+#: templates/reports_balance.html:185
+msgid "Zerg"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:267 templates/db.html:23
+msgid "Results"
+msgstr "结果"
+
+#: aligulac/aligulac/tools.py:270
+msgid "By Date"
+msgstr "根据日期"
+
+#: aligulac/aligulac/tools.py:271
+msgid "By Event"
+msgstr "根据赛事"
+
+#: aligulac/aligulac/tools.py:272 templates/results_search.html:11
+#: templates/results_search.html.py:31 templates/search.html:11
+msgid "Search"
+msgstr "搜索"
+
+#: aligulac/aligulac/tools.py:275
+msgid "Inference"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:278 aligulac/ratings/inference_views.py:229
+#: templates/predict.html:11
+msgid "Predict"
+msgstr "预测"
+
+#: aligulac/aligulac/tools.py:281 aligulac/aligulac/tools.py:305
+msgid "Misc"
+msgstr "杂项"
+
+#: aligulac/aligulac/tools.py:284 aligulac/ratings/misc_views.py:36
+msgid "Balance Report"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:285
+msgid "Days Since…"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:288
+msgid "About"
+msgstr "关于"
+
+#: aligulac/aligulac/tools.py:291 templates/faq.html:10
+msgid "FAQ"
+msgstr "常见问题与解答"
+
+#: aligulac/aligulac/tools.py:292 templates/blog.html:10
+msgid "Blog"
+msgstr "日志"
+
+#: aligulac/aligulac/tools.py:293
+msgid "Database"
+msgstr "数据库"
+
+#: aligulac/aligulac/tools.py:294
+msgid "API"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:297 templates/forms.html:118
+#: templates/language.html:41
+msgid "Submit"
+msgstr "提交"
+
+#. Translators: Matches as in SC2-matches, not search matches.
+#: aligulac/aligulac/tools.py:301 aligulac/ratings/inference_views.py:725
+#: aligulac/ratings/inference_views.py:746
+#: aligulac/ratings/player_views.py:671 aligulac/ratings/staff_views.py:286
+#: templates/add.html:75 templates/eventres.html:255
+#: templates/historical.html:28 templates/pred_rrgroup.html:67
+msgid "Matches"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:302
+msgid "Review"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:303 templates/events.html:10
+#: templates/events.html.py:13 templates/index.html:26
+#: templates/search.html:41
+msgid "Events"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:304 aligulac/ratings/staff_views.py:979
+#: templates/events_open.html:6
+msgid "Open events"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:343
+msgid "Summary"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:346
+msgid "Rating history"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:348 templates/pred_match.html:146
+msgid "Match history"
+msgstr ""
+
+#: aligulac/aligulac/tools.py:354
+msgid "Adjustments"
+msgstr ""
+
+#: aligulac/aligulac/views.py:60
+msgid "Contains player information."
+msgstr ""
+
+#: aligulac/aligulac/views.py:62 aligulac/aligulac/views.py:92
+#: aligulac/aligulac/views.py:132 aligulac/aligulac/views.py:171
+#: aligulac/aligulac/views.py:182 aligulac/aligulac/views.py:223
+#: aligulac/aligulac/views.py:240 aligulac/aligulac/views.py:261
+#: aligulac/aligulac/views.py:279 aligulac/aligulac/views.py:293
+#: aligulac/aligulac/views.py:304 aligulac/aligulac/views.py:322
+msgid "primary key"
+msgstr ""
+
+#: aligulac/aligulac/views.py:63
+msgid "in-game name of the player"
+msgstr "玩家游戏名"
+
+#: aligulac/aligulac/views.py:64
+msgid "real name"
+msgstr "玩家真实姓名"
+
+#: aligulac/aligulac/views.py:65 aligulac/ratings/player_views.py:151
+msgid "birthday"
+msgstr "生日"
+
+#: aligulac/aligulac/views.py:66 templates/player.html:496
+msgid "MC number"
+msgstr ""
+
+#: aligulac/aligulac/views.py:67 aligulac/aligulac/views.py:147
+msgid "external TLPD ID"
+msgstr ""
+
+#: aligulac/aligulac/views.py:69
+msgid ""
+"bit-flag value denoting which TLPD databases this player is in: <br/>1 = KR "
+"WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta"
+msgstr ""
+
+#: aligulac/aligulac/views.py:72 aligulac/aligulac/views.py:145
+#: aligulac/aligulac/views.py:250
+msgid ""
+"title of Liquipedia page <br/>the part after http://wiki.teamliquid.net/"
+"starcraft2/"
+msgstr ""
+
+#: aligulac/aligulac/views.py:74
+msgid "external sc2earnings.com ID"
+msgstr ""
+
+#: aligulac/aligulac/views.py:75
+msgid "ISO-3166-1 alpha-2 country code"
+msgstr ""
+
+#: aligulac/aligulac/views.py:77
+msgid "P, T or Z for normal races, R for random and S for race switcher"
+msgstr ""
+
+#: aligulac/aligulac/views.py:79
+#, python-format
+msgid "their PP score <br/>see <a href=\"%s\">Hall of Fame</a> for explanation"
+msgstr ""
+
+#: aligulac/aligulac/views.py:81
+msgid "foreign key to period <br/> start of PP-period"
+msgstr ""
+
+#: aligulac/aligulac/views.py:82
+msgid "foreign key to period <br/> first period after end of PP-period"
+msgstr ""
+
+#. Translators: rating is a table name and must be in English
+#: aligulac/aligulac/views.py:85
+msgid ""
+"foreign key to rating <br/>should link to the latest published rating of the "
+"player"
+msgstr ""
+
+#: aligulac/aligulac/views.py:90
+msgid "Contains game information."
+msgstr ""
+
+#. Translators: period is a table name and must be in English
+#: aligulac/aligulac/views.py:95
+msgid "foreign key to period <br/> the period this match was played in"
+msgstr ""
+
+#: aligulac/aligulac/views.py:96
+msgid "when the match was played <br/> often approximate"
+msgstr ""
+
+#: aligulac/aligulac/views.py:97
+msgid "foreign key to player <br/> player A"
+msgstr ""
+
+#: aligulac/aligulac/views.py:98
+msgid "foreign key to player <br/> player B"
+msgstr ""
+
+#: aligulac/aligulac/views.py:99
+msgid "score for player A"
+msgstr "玩家A分数"
+
+#: aligulac/aligulac/views.py:100
+msgid "score for player B"
+msgstr "玩家B分数"
+
+#: aligulac/aligulac/views.py:102
+msgid ""
+"race for player A <br/>not necessarily same as pla.race, S is not allowed"
+msgstr ""
+
+#: aligulac/aligulac/views.py:105
+msgid ""
+"race for player B <br/>not necessarily same as plb.race, S is not allowed"
+msgstr ""
+
+#: aligulac/aligulac/views.py:107
+msgid "true if the match has been rated"
+msgstr ""
+
+#: aligulac/aligulac/views.py:109
+msgid ""
+"tournament, round, group etc. <br/>superceded by eventobj_id if latter is "
+"not null"
+msgstr ""
+
+#. Translators: event is a table name and must be in English
+#: aligulac/aligulac/views.py:112
+msgid "foreign key to event <br/> supercedes event field"
+msgstr ""
+
+#: aligulac/aligulac/views.py:113
+msgid "foreign key to a table removed from the dump"
+msgstr ""
+
+#: aligulac/aligulac/views.py:114
+msgid "game version used <br/> WoL, HotS, LotV"
+msgstr ""
+
+#: aligulac/aligulac/views.py:115
+msgid "whether this match was played offline"
+msgstr ""
+
+#. Translators: rating is a table name and must be in English
+#: aligulac/aligulac/views.py:118
+msgid "foreign key to rating <br/>rating of player A at the time of the match"
+msgstr ""
+
+#. Translators: rating is a table name and must be in English
+#: aligulac/aligulac/views.py:122
+msgid "foreign key to rating <br/>rating of player B at the time of the match"
+msgstr ""
+
+#: aligulac/aligulac/views.py:128
+msgid ""
+"Contains event information. Events are organized in a tree as defined by the "
+"<strong>eventadjacency</strong> table. “Event” in this case means anything "
+"from organizer, season, tournament, round (including qualifiers), group, "
+"days and weeks, etc."
+msgstr ""
+
+#: aligulac/aligulac/views.py:133
+msgid "name of this node"
+msgstr ""
+
+#: aligulac/aligulac/views.py:134
+msgid "parent node"
+msgstr ""
+
+#: aligulac/aligulac/views.py:135 aligulac/aligulac/views.py:136
+msgid "deprecated"
+msgstr ""
+
+#: aligulac/aligulac/views.py:137
+msgid "whether the event is finished or not"
+msgstr ""
+
+#: aligulac/aligulac/views.py:138
+msgid "whether the event is considered large (many games)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:140
+msgid "whether this event should be skipped in the fullname of descendants"
+msgstr ""
+
+#: aligulac/aligulac/views.py:142
+msgid "full name of this event (including names of ancestors)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:143
+msgid "URL of the event website"
+msgstr ""
+
+#: aligulac/aligulac/views.py:149
+msgid ""
+"bit-flag value denoting which TLPD databases this event is in: <br/>1 = KR "
+"WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta"
+msgstr ""
+
+#: aligulac/aligulac/views.py:151
+msgid "TL.net forum thread ID"
+msgstr ""
+
+#: aligulac/aligulac/views.py:152
+msgid "whether this event has an associated prizepool (NULL if unknown)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:153
+msgid "date of earliest match"
+msgstr ""
+
+#: aligulac/aligulac/views.py:154
+msgid "date of latest match"
+msgstr ""
+
+#. Translators: These are literals so must be in English, i.e. team (translation)…
+#: aligulac/aligulac/views.py:157
+msgid "team, individual or frequent <br/> only set for root nodes"
+msgstr ""
+
+#. Translators: These are literals so must be in English, i.e. category (translation)…
+#: aligulac/aligulac/views.py:160
+msgid ""
+"category, event (i.e. tournament) or round <br/>you can assume that "
+"ancestors of events are always categories and that descendants of events are "
+"always rounds"
+msgstr ""
+
+#: aligulac/aligulac/views.py:163
+msgid "sorting index"
+msgstr ""
+
+#: aligulac/aligulac/views.py:168
+msgid ""
+"Contains the tree information for events. There is a row here for every "
+"ancestor-descendant relationship. This table contains the transitive "
+"closure, so links of any distance are listed."
+msgstr ""
+
+#. Translators: event is a table name and must be in English
+#: aligulac/aligulac/views.py:173 aligulac/aligulac/views.py:175
+#: aligulac/aligulac/views.py:281 aligulac/aligulac/views.py:312
+msgid "foreign key to event"
+msgstr ""
+
+#: aligulac/aligulac/views.py:176
+msgid "how many edges between the nodes"
+msgstr ""
+
+#: aligulac/aligulac/views.py:180
+msgid "Contains rating information."
+msgstr ""
+
+#. Translators: period is a table name and must be in English
+#: aligulac/aligulac/views.py:184
+msgid "foreign key to period"
+msgstr ""
+
+#. Translators: player is a table name and must be in English
+#: aligulac/aligulac/views.py:186 aligulac/aligulac/views.py:263
+#: aligulac/aligulac/views.py:283 aligulac/aligulac/views.py:296
+#: aligulac/aligulac/views.py:310 aligulac/aligulac/views.py:323
+msgid "foreign key to player"
+msgstr ""
+
+#: aligulac/aligulac/views.py:187
+msgid "current rating"
+msgstr ""
+
+#: aligulac/aligulac/views.py:188
+msgid "current rating delta vP"
+msgstr ""
+
+#: aligulac/aligulac/views.py:189
+msgid "current rating delta vT"
+msgstr ""
+
+#: aligulac/aligulac/views.py:190
+msgid "current rating delta vZ"
+msgstr ""
+
+#. Translators: RD = Rating Deviation
+#: aligulac/aligulac/views.py:192
+msgid "current RD"
+msgstr ""
+
+#: aligulac/aligulac/views.py:193
+msgid "current RD vP"
+msgstr ""
+
+#: aligulac/aligulac/views.py:194
+msgid "current RD vT"
+msgstr ""
+
+#: aligulac/aligulac/views.py:195
+msgid "current RD vZ"
+msgstr ""
+
+#: aligulac/aligulac/views.py:196
+msgid "performance rating in this period"
+msgstr ""
+
+#: aligulac/aligulac/views.py:197
+msgid "performance rating vP in this period"
+msgstr ""
+
+#: aligulac/aligulac/views.py:198
+msgid "performance rating vT in this period"
+msgstr ""
+
+#: aligulac/aligulac/views.py:199
+msgid "performance rating vZ in this period"
+msgstr ""
+
+#: aligulac/aligulac/views.py:200
+msgid "smoothed rating"
+msgstr ""
+
+#: aligulac/aligulac/views.py:201
+msgid "smoothed rating vP"
+msgstr ""
+
+#: aligulac/aligulac/views.py:202
+msgid "smoothed rating vT"
+msgstr ""
+
+#: aligulac/aligulac/views.py:203
+msgid "smoothed rating vZ"
+msgstr ""
+
+#: aligulac/aligulac/views.py:204
+msgid "smoothed RD"
+msgstr ""
+
+#: aligulac/aligulac/views.py:205
+msgid "smoothed RD vP"
+msgstr ""
+
+#: aligulac/aligulac/views.py:206
+msgid "smoothed RD vZ"
+msgstr ""
+
+#: aligulac/aligulac/views.py:207
+msgid "smoothed RD vT"
+msgstr ""
+
+#: aligulac/aligulac/views.py:208
+msgid "rank"
+msgstr ""
+
+#: aligulac/aligulac/views.py:209
+msgid "rank vP"
+msgstr ""
+
+#: aligulac/aligulac/views.py:210
+msgid "rank vT"
+msgstr ""
+
+#: aligulac/aligulac/views.py:211
+msgid "rank vZ"
+msgstr ""
+
+#: aligulac/aligulac/views.py:212
+msgid "number of periods since last game"
+msgstr ""
+
+#: aligulac/aligulac/views.py:214
+#, python-format
+msgid "rating gap to number 7 <br/>used in the <a href=\"%s\">Hall of Fame</a>"
+msgstr ""
+
+#. Translators: rating is a table name and must be in English
+#: aligulac/aligulac/views.py:217
+msgid "foreign key to rating; previous rating for this player"
+msgstr ""
+
+#: aligulac/aligulac/views.py:221
+msgid ""
+"A period represent a discrete time interval used for rating computation "
+"purposes."
+msgstr ""
+
+#: aligulac/aligulac/views.py:224
+msgid "starting date (inclusive)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:225
+msgid "ending date (inclusive)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:226
+msgid "whether this period has been rated"
+msgstr ""
+
+#: aligulac/aligulac/views.py:228
+msgid "whether this period needs re-rating (something has changed)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:229
+msgid "number of returning players"
+msgstr ""
+
+#: aligulac/aligulac/views.py:230
+msgid "number of new players"
+msgstr ""
+
+#: aligulac/aligulac/views.py:231
+msgid "number of games played"
+msgstr ""
+
+#: aligulac/aligulac/views.py:232
+msgid "OP-score for Protoss"
+msgstr ""
+
+#: aligulac/aligulac/views.py:233
+msgid "OP-score for Terran"
+msgstr ""
+
+#: aligulac/aligulac/views.py:234
+msgid "OP-score for Zerg"
+msgstr ""
+
+#: aligulac/aligulac/views.py:238
+msgid "Contains group information (for now, this means teams)."
+msgstr ""
+
+#: aligulac/aligulac/views.py:241
+msgid "name of group"
+msgstr ""
+
+#: aligulac/aligulac/views.py:242
+msgid "short name of group"
+msgstr ""
+
+#: aligulac/aligulac/views.py:243
+msgid "all-kill score (if team)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:244
+msgid "proleague score (if team)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:245
+msgid "date founded"
+msgstr ""
+
+#: aligulac/aligulac/views.py:246
+msgid "date disbanded"
+msgstr ""
+
+#: aligulac/aligulac/views.py:247
+msgid "whether the group is active"
+msgstr ""
+
+#: aligulac/aligulac/views.py:248
+msgid "URL of team website"
+msgstr ""
+
+#: aligulac/aligulac/views.py:252
+msgid "whether this group is a proper team"
+msgstr ""
+
+#: aligulac/aligulac/views.py:254
+msgid ""
+"whether this group has manually added members or not <br/>currently has no "
+"effect, there are no automatic groups"
+msgstr ""
+
+#: aligulac/aligulac/views.py:259
+msgid "Links teams and players together in a many-to-many relationship."
+msgstr ""
+
+#. Translators: group is a table name and must be in English
+#: aligulac/aligulac/views.py:265 aligulac/aligulac/views.py:298
+#: aligulac/aligulac/views.py:314
+msgid "foreign key to group"
+msgstr ""
+
+#: aligulac/aligulac/views.py:266
+msgid "start date of membership"
+msgstr ""
+
+#: aligulac/aligulac/views.py:267
+msgid "end date of membership"
+msgstr ""
+
+#: aligulac/aligulac/views.py:269
+msgid ""
+"whether the membership is in effect <br/>many end dates are unknown, so this "
+"is needed"
+msgstr ""
+
+#: aligulac/aligulac/views.py:272
+msgid ""
+"whether the player is a playing member <br/>false for coaches, among others"
+msgstr ""
+
+#: aligulac/aligulac/views.py:277
+msgid ""
+"Contains prize pool information. Each row represents a single payout to a "
+"single player."
+msgstr ""
+
+#: aligulac/aligulac/views.py:284
+msgid "amount in USD at the time of the win"
+msgstr ""
+
+#: aligulac/aligulac/views.py:285
+msgid "amount in original currency"
+msgstr ""
+
+#: aligulac/aligulac/views.py:286
+msgid "currency code"
+msgstr ""
+
+#: aligulac/aligulac/views.py:287
+msgid "place in the event"
+msgstr ""
+
+#: aligulac/aligulac/views.py:291
+msgid ""
+"Contains aliases for teams and players (common nicknames and shortened "
+"names.)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:294
+msgid "the alias"
+msgstr ""
+
+#: aligulac/aligulac/views.py:302
+msgid ""
+"Contains messages associated with some objects, containing perhaps relevant "
+"information."
+msgstr ""
+
+#: aligulac/aligulac/views.py:306
+msgid "info, warning, sucess or error"
+msgstr ""
+
+#: aligulac/aligulac/views.py:307
+msgid "text describing this message"
+msgstr ""
+
+#: aligulac/aligulac/views.py:308 aligulac/aligulac/views.py:325
+msgid "parameters for string interpolation"
+msgstr ""
+
+#. Translators: match is a table name and must be in English
+#: aligulac/aligulac/views.py:316
+msgid "foreign key to match"
+msgstr ""
+
+#: aligulac/aligulac/views.py:320
+msgid "Contains stories (dots plotted in some players' rating charts.)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:324
+msgid "text describing this story"
+msgstr ""
+
+#: aligulac/aligulac/views.py:326
+msgid "when it happened"
+msgstr ""
+
+#. Translators: event is a table name and must be in English
+#: aligulac/aligulac/views.py:328
+msgid "foreign key to event (if applicable)"
+msgstr ""
+
+#: aligulac/aligulac/views.py:341 aligulac/blog/views.py:18
+msgid "The blog/news section is only in English, sorry."
+msgstr ""
+
+#: aligulac/aligulac/views.py:427 templates/db.html:11
+msgid "Database status"
+msgstr ""
+
+#: aligulac/aligulac/views.py:434
+msgid "Name/organization"
+msgstr "姓名/机构"
+
+#: aligulac/aligulac/views.py:435 aligulac/ratings/staff_views.py:284
+#: templates/add.html:68
+msgid "Contact"
+msgstr "联系方式"
+
+#: aligulac/aligulac/views.py:452
+msgid "Entered data was invalid."
+msgstr "您输入的数据无效."
+
+#: aligulac/aligulac/views.py:467
+#, python-format
+msgid "Your API key is '%s'. Please keep it safe."
+msgstr ""
+
+#: aligulac/aligulac/views.py:482 templates/api.html:7
+msgid "API documentation"
+msgstr ""
+
+#: aligulac/aligulac/views.py:517 aligulac/ratings/results_views.py:948
+msgid "Search results"
+msgstr ""
+
+#: aligulac/aligulac/views.py:582 templates/login.html:10
+#: templates/login.html.py:31
+msgid "Login"
+msgstr "登录"
+
+#: aligulac/aligulac/views.py:601
+msgid "The old password didn't match. Your password was not changed."
+msgstr "您输入的旧密码有误. 密码尚未修改成功."
+
+#: aligulac/aligulac/views.py:607
+msgid "The new passwords didn't match. Your password was not changed."
+msgstr "您输入的两次密码不同。密码尚未修改成功."
+
+#: aligulac/aligulac/views.py:614
+#, python-format
+msgid "The password for %s was successfully changed."
+msgstr "您为 %s 设置的密码已经成功更改."
+
+#: aligulac/aligulac/views.py:617 templates/changepwd.html:9
+msgid "Change password"
+msgstr "修改密码"
+
+#: aligulac/aligulac/views.py:626
+msgid "404: Not found"
+msgstr "404: 未找到该页"
+
+#: aligulac/aligulac/views.py:632
+msgid "500: Internal Server Error"
+msgstr ""
+
+#: aligulac/countries/data.py:5
+msgid "Africa"
+msgstr "非洲"
+
+#: aligulac/countries/data.py:6 aligulac/countries/data.py:516
+msgid "Antarctica"
+msgstr "南极洲"
+
+#: aligulac/countries/data.py:7
+msgid "Asia"
+msgstr "亚洲"
+
+#: aligulac/countries/data.py:8
+msgid "Europe"
+msgstr "欧洲"
+
+#: aligulac/countries/data.py:9
+msgid "North America"
+msgstr "北美洲"
+
+#: aligulac/countries/data.py:10
+msgid "Oceania"
+msgstr "大洋洲"
+
+#: aligulac/countries/data.py:11
+msgid "South America"
+msgstr "南美洲"
+
+#: aligulac/countries/data.py:514
+msgid "Afghanistan"
+msgstr "阿富汗"
+
+#: aligulac/countries/data.py:515
+msgid "Albania"
+msgstr ""
+
+#: aligulac/countries/data.py:517
+msgid "Algeria"
+msgstr ""
+
+#: aligulac/countries/data.py:518
+msgid "American Samoa"
+msgstr ""
+
+#: aligulac/countries/data.py:519
+msgid "Andorra"
+msgstr "安道尔"
+
+#: aligulac/countries/data.py:520
+msgid "Angola"
+msgstr ""
+
+#: aligulac/countries/data.py:521
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: aligulac/countries/data.py:522
+msgid "Azerbaijan"
+msgstr "阿塞拜疆"
+
+#: aligulac/countries/data.py:523
+msgid "Argentina"
+msgstr "阿根廷"
+
+#: aligulac/countries/data.py:524
+msgid "Australia"
+msgstr "澳大利亚"
+
+#: aligulac/countries/data.py:525
+msgid "Austria"
+msgstr "奥地利"
+
+#: aligulac/countries/data.py:526
+msgid "Bahamas"
+msgstr ""
+
+#: aligulac/countries/data.py:527
+msgid "Bahrain"
+msgstr ""
+
+#: aligulac/countries/data.py:528
+msgid "Bangladesh"
+msgstr "孟加拉国"
+
+#: aligulac/countries/data.py:529
+msgid "Armenia"
+msgstr ""
+
+#: aligulac/countries/data.py:530
+msgid "Barbados"
+msgstr ""
+
+#: aligulac/countries/data.py:531
+msgid "Belgium"
+msgstr "比利时"
+
+#: aligulac/countries/data.py:532
+msgid "Bermuda"
+msgstr ""
+
+#: aligulac/countries/data.py:533
+msgid "Bhutan"
+msgstr "不丹"
+
+#: aligulac/countries/data.py:534
+msgid "Bolivia"
+msgstr "玻利维亚"
+
+#: aligulac/countries/data.py:535
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: aligulac/countries/data.py:536
+msgid "Botswana"
+msgstr "博兹瓦纳"
+
+#: aligulac/countries/data.py:537
+msgid "Bouvet Island"
+msgstr ""
+
+#: aligulac/countries/data.py:538
+msgid "Brazil"
+msgstr "巴西"
+
+#: aligulac/countries/data.py:539
+msgid "Belize"
+msgstr ""
+
+#: aligulac/countries/data.py:540
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: aligulac/countries/data.py:541
+msgid "Solomon Islands"
+msgstr "所罗门群岛"
+
+#: aligulac/countries/data.py:542
+msgid "British Virgin Islands"
+msgstr "英属维京群岛"
+
+#: aligulac/countries/data.py:543
+msgid "Brunei"
+msgstr ""
+
+#: aligulac/countries/data.py:544
+msgid "Bulgaria"
+msgstr "保加利亚"
+
+#: aligulac/countries/data.py:545
+msgid "Myanmar"
+msgstr ""
+
+#: aligulac/countries/data.py:546
+msgid "Burundi"
+msgstr ""
+
+#: aligulac/countries/data.py:547
+msgid "Belarus"
+msgstr "白俄罗斯"
+
+#: aligulac/countries/data.py:548
+msgid "Cambodia"
+msgstr "柬埔寨"
+
+#: aligulac/countries/data.py:549
+msgid "Cameroon"
+msgstr "喀麦隆"
+
+#: aligulac/countries/data.py:550 templates/add.html:158
+msgid "Canada"
+msgstr "加拿大"
+
+#: aligulac/countries/data.py:551
+msgid "Cape Verde"
+msgstr "佛得角"
+
+#: aligulac/countries/data.py:552
+msgid "Cayman Islands"
+msgstr "开曼群岛"
+
+#: aligulac/countries/data.py:553
+msgid "Central African Republic"
+msgstr "中非共和国"
+
+#: aligulac/countries/data.py:554
+msgid "Sri Lanka"
+msgstr "斯里兰卡"
+
+#: aligulac/countries/data.py:555
+msgid "Chad"
+msgstr "乍得"
+
+#: aligulac/countries/data.py:556
+msgid "Chile"
+msgstr "智利"
+
+#: aligulac/countries/data.py:557
+msgid "China"
+msgstr "中国"
+
+#: aligulac/countries/data.py:558
+msgid "Taiwan"
+msgstr "台湾"
+
+#: aligulac/countries/data.py:559
+msgid "Christmas Island"
+msgstr ""
+
+#: aligulac/countries/data.py:560
+msgid "Cocos (Keeling) Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:561
+msgid "Colombia"
+msgstr "哥伦比亚"
+
+#: aligulac/countries/data.py:562
+msgid "Comoros"
+msgstr ""
+
+#: aligulac/countries/data.py:563
+msgid "Mayotte"
+msgstr ""
+
+#: aligulac/countries/data.py:564 aligulac/countries/data.py:565
+msgid "Congo"
+msgstr "刚果"
+
+#: aligulac/countries/data.py:566
+msgid "Cook Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:567
+msgid "Costa Rica"
+msgstr "哥斯达黎加"
+
+#: aligulac/countries/data.py:568
+msgid "Croatia"
+msgstr "克罗地亚"
+
+#: aligulac/countries/data.py:569
+msgid "Cuba"
+msgstr "古巴"
+
+#: aligulac/countries/data.py:570
+msgid "Cyprus"
+msgstr "塞浦路斯"
+
+#: aligulac/countries/data.py:571
+msgid "Czech Republic"
+msgstr "捷克共和国"
+
+#: aligulac/countries/data.py:572
+msgid "Benin"
+msgstr ""
+
+#: aligulac/countries/data.py:573
+msgid "Denmark"
+msgstr "丹麦"
+
+#: aligulac/countries/data.py:574
+msgid "Dominica"
+msgstr "多米尼加"
+
+#: aligulac/countries/data.py:575
+msgid "Dominican Republic"
+msgstr "多米尼加共和国"
+
+#: aligulac/countries/data.py:576
+msgid "Ecuador"
+msgstr "厄瓜多尔"
+
+#: aligulac/countries/data.py:577
+msgid "El Salvador"
+msgstr ""
+
+#: aligulac/countries/data.py:578
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: aligulac/countries/data.py:579
+msgid "Ethiopia"
+msgstr "埃塞俄比亚"
+
+#: aligulac/countries/data.py:580
+msgid "Eritrea"
+msgstr ""
+
+#: aligulac/countries/data.py:581
+msgid "Estonia"
+msgstr "爱沙尼亚"
+
+#: aligulac/countries/data.py:582
+msgid "Faroe Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:583
+msgid "Falkland Islands (Malvinas)"
+msgstr ""
+
+#: aligulac/countries/data.py:584
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:585
+msgid "Fiji"
+msgstr "斐济"
+
+#: aligulac/countries/data.py:586
+msgid "Finland"
+msgstr "芬兰"
+
+#: aligulac/countries/data.py:587
+msgid "Åland Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:588 templates/add.html:159
+msgid "France"
+msgstr "法国"
+
+#: aligulac/countries/data.py:589
+msgid "French Guiana"
+msgstr "法属几内亚"
+
+#: aligulac/countries/data.py:590
+msgid "French Polynesia"
+msgstr ""
+
+#: aligulac/countries/data.py:591
+msgid "French Southern Territories"
+msgstr ""
+
+#: aligulac/countries/data.py:592
+msgid "Djibouti"
+msgstr ""
+
+#: aligulac/countries/data.py:593
+msgid "Gabon"
+msgstr ""
+
+#: aligulac/countries/data.py:594
+msgid "Georgia"
+msgstr "格鲁吉亚"
+
+#: aligulac/countries/data.py:595
+msgid "Gambia"
+msgstr ""
+
+#: aligulac/countries/data.py:596
+msgid "Palestinian Territory"
+msgstr ""
+
+#: aligulac/countries/data.py:597 templates/add.html:160
+msgid "Germany"
+msgstr "德国"
+
+#: aligulac/countries/data.py:598
+msgid "Ghana"
+msgstr ""
+
+#: aligulac/countries/data.py:599
+msgid "Gibraltar"
+msgstr ""
+
+#: aligulac/countries/data.py:600
+msgid "Kiribati"
+msgstr ""
+
+#: aligulac/countries/data.py:601
+msgid "Greece"
+msgstr "希腊"
+
+#: aligulac/countries/data.py:602
+msgid "Greenland"
+msgstr "格陵兰"
+
+#: aligulac/countries/data.py:603
+msgid "Grenada"
+msgstr ""
+
+#: aligulac/countries/data.py:604
+msgid "Guadeloupe"
+msgstr ""
+
+#: aligulac/countries/data.py:605
+msgid "Guam"
+msgstr ""
+
+#: aligulac/countries/data.py:606
+msgid "Guatemala"
+msgstr "危地马拉"
+
+#: aligulac/countries/data.py:607
+msgid "Guinea"
+msgstr "几内亚"
+
+#: aligulac/countries/data.py:608
+msgid "Guyana"
+msgstr "圭亚那"
+
+#: aligulac/countries/data.py:609
+msgid "Haiti"
+msgstr "海地"
+
+#: aligulac/countries/data.py:610
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:611
+msgid "Vatican City"
+msgstr "梵蒂冈"
+
+#: aligulac/countries/data.py:612
+msgid "Honduras"
+msgstr "洪都拉斯"
+
+#: aligulac/countries/data.py:613
+msgid "Hong Kong"
+msgstr "香港"
+
+#: aligulac/countries/data.py:614
+msgid "Hungary"
+msgstr "匈牙利"
+
+#: aligulac/countries/data.py:615
+msgid "Iceland"
+msgstr "冰岛"
+
+#: aligulac/countries/data.py:616
+msgid "India"
+msgstr "印度"
+
+#: aligulac/countries/data.py:617
+msgid "Indonesia"
+msgstr "印度尼西亚"
+
+#: aligulac/countries/data.py:618
+msgid "Iran"
+msgstr "伊朗"
+
+#: aligulac/countries/data.py:619
+msgid "Iraq"
+msgstr "伊拉克"
+
+#: aligulac/countries/data.py:620
+msgid "Ireland"
+msgstr "爱尔兰"
+
+#: aligulac/countries/data.py:621
+msgid "Israel"
+msgstr "以色列"
+
+#: aligulac/countries/data.py:622
+msgid "Italy"
+msgstr "意大利"
+
+#: aligulac/countries/data.py:623
+msgid "Cote d'Ivoire"
+msgstr ""
+
+#: aligulac/countries/data.py:624
+msgid "Jamaica"
+msgstr "牙买加"
+
+#: aligulac/countries/data.py:625
+msgid "Japan"
+msgstr "日本"
+
+#: aligulac/countries/data.py:626
+msgid "Kazakhstan"
+msgstr ""
+
+#: aligulac/countries/data.py:627
+msgid "Jordan"
+msgstr "约旦"
+
+#: aligulac/countries/data.py:628
+msgid "Kenya"
+msgstr "肯尼亚"
+
+#: aligulac/countries/data.py:629
+msgid "North Korea"
+msgstr "朝鲜"
+
+#: aligulac/countries/data.py:630 templates/add.html:161
+#: templates/period.html:383
+msgid "South Korea"
+msgstr "韩国"
+
+#: aligulac/countries/data.py:631
+msgid "Kuwait"
+msgstr "科威特"
+
+#: aligulac/countries/data.py:632
+msgid "Kyrgyzstan"
+msgstr "吉尔吉斯斯坦"
+
+#: aligulac/countries/data.py:633
+msgid "Laos"
+msgstr "老挝"
+
+#: aligulac/countries/data.py:634
+msgid "Lebanon"
+msgstr "黎巴嫩"
+
+#: aligulac/countries/data.py:635
+msgid "Lesotho"
+msgstr ""
+
+#: aligulac/countries/data.py:636
+msgid "Latvia"
+msgstr "拉脱维亚"
+
+#: aligulac/countries/data.py:637
+msgid "Liberia"
+msgstr ""
+
+#: aligulac/countries/data.py:638
+msgid "Libya"
+msgstr ""
+
+#: aligulac/countries/data.py:639
+msgid "Liechtenstein"
+msgstr "列支敦士登"
+
+#: aligulac/countries/data.py:640
+msgid "Lithuania"
+msgstr "立陶宛"
+
+#: aligulac/countries/data.py:641
+msgid "Luxembourg"
+msgstr "卢森堡"
+
+#: aligulac/countries/data.py:642
+msgid "Macao"
+msgstr "澳门"
+
+#: aligulac/countries/data.py:643
+msgid "Madagascar"
+msgstr "马达加斯加"
+
+#: aligulac/countries/data.py:644
+msgid "Malawi"
+msgstr ""
+
+#: aligulac/countries/data.py:645
+msgid "Malaysia"
+msgstr "马来西亚"
+
+#: aligulac/countries/data.py:646
+msgid "Maldives"
+msgstr "马尔代夫"
+
+#: aligulac/countries/data.py:647
+msgid "Mali"
+msgstr ""
+
+#: aligulac/countries/data.py:648
+msgid "Malta"
+msgstr "马耳他"
+
+#: aligulac/countries/data.py:649
+msgid "Martinique"
+msgstr ""
+
+#: aligulac/countries/data.py:650
+msgid "Mauritania"
+msgstr ""
+
+#: aligulac/countries/data.py:651
+msgid "Mauritius"
+msgstr ""
+
+#: aligulac/countries/data.py:652
+msgid "Mexico"
+msgstr "墨西哥"
+
+#: aligulac/countries/data.py:653
+msgid "Mongolia"
+msgstr "蒙古"
+
+#: aligulac/countries/data.py:654
+msgid "Moldova"
+msgstr ""
+
+#: aligulac/countries/data.py:655
+msgid "Montenegro"
+msgstr ""
+
+#: aligulac/countries/data.py:656
+msgid "Montserrat"
+msgstr ""
+
+#: aligulac/countries/data.py:657
+msgid "Morocco"
+msgstr "摩洛哥"
+
+#: aligulac/countries/data.py:658
+msgid "Mozambique"
+msgstr "莫桑比克"
+
+#: aligulac/countries/data.py:659
+msgid "Oman"
+msgstr ""
+
+#: aligulac/countries/data.py:660
+msgid "Namibia"
+msgstr "纳米比亚"
+
+#: aligulac/countries/data.py:661
+msgid "Nauru"
+msgstr "瑙鲁"
+
+#: aligulac/countries/data.py:662
+msgid "Nepal"
+msgstr "尼泊尔"
+
+#: aligulac/countries/data.py:663
+msgid "Netherlands"
+msgstr "荷兰"
+
+#: aligulac/countries/data.py:664
+msgid "Netherlands Antilles"
+msgstr ""
+
+#: aligulac/countries/data.py:665
+msgid "Aruba"
+msgstr "荷属阿鲁巴群岛"
+
+#: aligulac/countries/data.py:666
+msgid "New Caledonia"
+msgstr ""
+
+#: aligulac/countries/data.py:667
+msgid "Vanuatu"
+msgstr ""
+
+#: aligulac/countries/data.py:668
+msgid "New Zealand"
+msgstr "新西兰"
+
+#: aligulac/countries/data.py:669
+msgid "Nicaragua"
+msgstr ""
+
+#: aligulac/countries/data.py:670
+msgid "Niger"
+msgstr ""
+
+#: aligulac/countries/data.py:671
+msgid "Nigeria"
+msgstr ""
+
+#: aligulac/countries/data.py:672
+msgid "Niue"
+msgstr ""
+
+#: aligulac/countries/data.py:673
+msgid "Norfolk Island"
+msgstr ""
+
+#: aligulac/countries/data.py:674
+msgid "Norway"
+msgstr "挪威"
+
+#: aligulac/countries/data.py:675
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:676
+msgid "United States Minor Outlying Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:677
+msgid "Micronesia"
+msgstr ""
+
+#: aligulac/countries/data.py:678
+msgid "Marshall Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:679
+msgid "Palau"
+msgstr ""
+
+#: aligulac/countries/data.py:680
+msgid "Pakistan"
+msgstr "巴基斯坦"
+
+#: aligulac/countries/data.py:681
+msgid "Panama"
+msgstr "巴拿马"
+
+#: aligulac/countries/data.py:682
+msgid "Papua New Guinea"
+msgstr "巴布新几内亚"
+
+#: aligulac/countries/data.py:683
+msgid "Paraguay"
+msgstr "巴拉圭"
+
+#: aligulac/countries/data.py:684
+msgid "Peru"
+msgstr "秘鲁"
+
+#: aligulac/countries/data.py:685
+msgid "Philippines"
+msgstr "菲律宾"
+
+#: aligulac/countries/data.py:686
+msgid "Pitcairn Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:687 templates/add.html:162
+msgid "Poland"
+msgstr "波兰"
+
+#: aligulac/countries/data.py:688
+msgid "Portugal"
+msgstr "葡萄牙"
+
+#: aligulac/countries/data.py:689
+msgid "Guinea-Bissau"
+msgstr "几内亚比绍"
+
+#: aligulac/countries/data.py:690
+msgid "Timor-Leste"
+msgstr ""
+
+#: aligulac/countries/data.py:691
+msgid "Puerto Rico"
+msgstr "波多黎各"
+
+#: aligulac/countries/data.py:692
+msgid "Qatar"
+msgstr "卡塔尔"
+
+#: aligulac/countries/data.py:693
+msgid "Reunion"
+msgstr ""
+
+#: aligulac/countries/data.py:694
+msgid "Romania"
+msgstr "罗马尼亚"
+
+#: aligulac/countries/data.py:695 templates/add.html:163
+msgid "Russia"
+msgstr "俄罗斯"
+
+#: aligulac/countries/data.py:696
+msgid "Rwanda"
+msgstr "卢旺达"
+
+#: aligulac/countries/data.py:697
+msgid "Saint Barthelemy"
+msgstr ""
+
+#: aligulac/countries/data.py:698
+msgid "Saint Helena"
+msgstr ""
+
+#: aligulac/countries/data.py:699
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: aligulac/countries/data.py:700
+msgid "Anguilla"
+msgstr ""
+
+#: aligulac/countries/data.py:701
+msgid "Saint Lucia"
+msgstr ""
+
+#: aligulac/countries/data.py:702
+msgid "Saint Martin"
+msgstr ""
+
+#: aligulac/countries/data.py:703
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: aligulac/countries/data.py:704
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: aligulac/countries/data.py:705
+msgid "San Marino"
+msgstr "圣马力诺"
+
+#: aligulac/countries/data.py:706
+msgid "Sao Tome and Principe"
+msgstr ""
+
+#: aligulac/countries/data.py:707
+msgid "Saudi Arabia"
+msgstr "沙特阿拉伯"
+
+#: aligulac/countries/data.py:708
+msgid "Senegal"
+msgstr "塞内加尔"
+
+#: aligulac/countries/data.py:709
+msgid "Serbia"
+msgstr ""
+
+#: aligulac/countries/data.py:710
+msgid "Sierra Leone"
+msgstr ""
+
+#: aligulac/countries/data.py:711
+msgid "Singapore"
+msgstr "新加坡"
+
+#: aligulac/countries/data.py:712
+msgid "Slovakia"
+msgstr "斯洛伐克"
+
+#: aligulac/countries/data.py:713
+msgid "Vietnam"
+msgstr "越南"
+
+#: aligulac/countries/data.py:714
+msgid "Slovenia"
+msgstr "斯洛文尼亚"
+
+#: aligulac/countries/data.py:715
+msgid "Somalia"
+msgstr "索马里"
+
+#: aligulac/countries/data.py:716
+msgid "South Africa"
+msgstr "南非"
+
+#: aligulac/countries/data.py:717
+msgid "Zimbabwe"
+msgstr "津巴布韦"
+
+#: aligulac/countries/data.py:718
+msgid "Spain"
+msgstr "西班牙"
+
+#: aligulac/countries/data.py:719
+msgid "Western Sahara"
+msgstr ""
+
+#: aligulac/countries/data.py:720
+msgid "Sudan"
+msgstr ""
+
+#: aligulac/countries/data.py:721
+msgid "Suriname"
+msgstr "苏里南"
+
+#: aligulac/countries/data.py:722
+msgid "Svalbard & Jan Mayen Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:723
+msgid "Swaziland"
+msgstr ""
+
+#: aligulac/countries/data.py:724 templates/add.html:164
+msgid "Sweden"
+msgstr "瑞典"
+
+#: aligulac/countries/data.py:725
+msgid "Switzerland"
+msgstr "瑞士"
+
+#: aligulac/countries/data.py:726
+msgid "Syria"
+msgstr ""
+
+#: aligulac/countries/data.py:727
+msgid "Thailand"
+msgstr "泰国"
+
+#: aligulac/countries/data.py:728
+msgid "Togo"
+msgstr ""
+
+#: aligulac/countries/data.py:729
+msgid "Tokelau"
+msgstr ""
+
+#: aligulac/countries/data.py:730
+msgid "Tonga"
+msgstr ""
+
+#: aligulac/countries/data.py:731
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: aligulac/countries/data.py:732
+msgid "United Arab Emirates"
+msgstr "阿拉伯联合酋长国"
+
+#: aligulac/countries/data.py:733
+msgid "Tunisia"
+msgstr ""
+
+#: aligulac/countries/data.py:734
+msgid "Turkey"
+msgstr "土耳其"
+
+#: aligulac/countries/data.py:735
+msgid "Turkmenistan"
+msgstr "土库曼斯坦"
+
+#: aligulac/countries/data.py:736
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: aligulac/countries/data.py:737
+msgid "Tuvalu"
+msgstr ""
+
+#: aligulac/countries/data.py:738
+msgid "Uganda"
+msgstr "乌干达"
+
+#: aligulac/countries/data.py:739 templates/add.html:165
+msgid "Ukraine"
+msgstr "乌克兰"
+
+#: aligulac/countries/data.py:740
+msgid "Macedonia"
+msgstr ""
+
+#: aligulac/countries/data.py:741
+msgid "Egypt"
+msgstr "埃及"
+
+#: aligulac/countries/data.py:742
+msgid "United Kingdom"
+msgstr "英国"
+
+#: aligulac/countries/data.py:743
+msgid "Guernsey"
+msgstr ""
+
+#: aligulac/countries/data.py:744
+msgid "Jersey"
+msgstr ""
+
+#: aligulac/countries/data.py:745
+msgid "Isle of Man"
+msgstr ""
+
+#: aligulac/countries/data.py:746
+msgid "Tanzania"
+msgstr "坦桑尼亚"
+
+#: aligulac/countries/data.py:747
+msgid "United States of America"
+msgstr "美国"
+
+#: aligulac/countries/data.py:748
+msgid "United States Virgin Islands"
+msgstr "美属维京群岛"
+
+#: aligulac/countries/data.py:749
+msgid "Burkina Faso"
+msgstr ""
+
+#: aligulac/countries/data.py:750
+msgid "Uruguay"
+msgstr ""
+
+#: aligulac/countries/data.py:751
+msgid "Uzbekistan"
+msgstr "乌兹别克斯坦"
+
+#: aligulac/countries/data.py:752
+msgid "Venezuela"
+msgstr "委内瑞拉"
+
+#: aligulac/countries/data.py:753
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: aligulac/countries/data.py:754
+msgid "Samoa"
+msgstr ""
+
+#: aligulac/countries/data.py:755
+msgid "Yemen"
+msgstr "也门"
+
+#: aligulac/countries/data.py:756
+msgid "Zambia"
+msgstr "赞比亚"
+
+#: aligulac/faq/views.py:18
+msgid "The FAQ section is only in English, sorry."
+msgstr "抱歉,常见问题与解答为英语"
+
+#: aligulac/faq/views.py:23 templates/language.html:52
+msgid "Frequently asked questions"
+msgstr "常见问题"
+
+#: aligulac/miniURL/views.py:18
+msgid "List of short URLs"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:56
+msgid "Best-of-N match"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:58
+msgid "Expected exactly two players."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:60
+#: aligulac/ratings/inference_views.py:67
+#: aligulac/ratings/inference_views.py:81
+#: aligulac/ratings/inference_views.py:89
+msgid "Expected exactly one 'best of'."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:63
+#: aligulac/ratings/inference_views.py:525
+msgid "Dual tournament"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:65
+msgid "Expected exactly four players."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:70
+#: aligulac/ratings/inference_views.py:604 templates/pred_sebracket.html:10
+msgid "Single elimination bracket"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:72
+msgid "Expected number of players to be a power of two (2,4,8,…)."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:74
+msgid "Expected at least one 'best of'."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:77
+#: aligulac/ratings/inference_views.py:693 templates/pred_rrgroup.html:11
+msgid "Round robin group"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:79
+msgid "Expected at least three players."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:85
+#: aligulac/ratings/inference_views.py:782
+msgid "Proleague team match"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:87
+msgid "Expected an even number of players."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:98
+msgid "Format"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:101
+msgid "Best of"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:102 templates/db.html:65
+#: templates/eventres.html:247 templates/index.html:24
+#: templates/search.html:27 templates/team.html:65 templates/teams.html:27
+msgid "Players"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:123
+msgid "Must be a comma-separated list of positive odd integers (1,3,5,…)."
+msgstr ""
+
+#. Translators: Matches as in search matches
+#. Translators: Matches here as in search matches.
+#: aligulac/ratings/inference_views.py:142
+#: aligulac/ratings/results_views.py:644
+#, python-format
+msgid "No matches found: '%s'."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:154
+msgid "One or more errors found in player list."
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:360 templates/pred_match.html:10
+#, python-format
+msgid "%(pla)s vs. %(plb)s"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:468
+msgid "Intial round"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:469
+msgid "Winners' and losers' matches"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:470
+msgid "Final match"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:547
+#, python-format
+msgid "Round %i"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:647
+#: aligulac/ratings/inference_views.py:648
+msgid "Group play"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:901
+#: aligulac/ratings/inference_views.py:913 templates/pred_4pswiss.html:63
+#: templates/pred_proleague.html:56 templates/pred_rrgroup.html:57
+#: templates/pred_sebracket.html:56
+msgid "Median outcome"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:904
+#: aligulac/ratings/inference_views.py:916
+#: aligulac/ratings/inference_views.py:947
+#: aligulac/ratings/inference_views.py:957
+#: aligulac/ratings/inference_views.py:990
+#: aligulac/ratings/inference_views.py:1000
+#: aligulac/ratings/inference_views.py:1010
+#: aligulac/ratings/inference_views.py:1081
+#: aligulac/ratings/inference_views.py:1091
+#: aligulac/ratings/inference_views.py:1129
+#: aligulac/ratings/inference_views.py:1139 templates/results_search.html:93
+msgid "Modify"
+msgstr "修改"
+
+#: aligulac/ratings/inference_views.py:905
+#: aligulac/ratings/inference_views.py:917
+#: aligulac/ratings/inference_views.py:948
+#: aligulac/ratings/inference_views.py:958
+#: aligulac/ratings/inference_views.py:991
+#: aligulac/ratings/inference_views.py:1001
+#: aligulac/ratings/inference_views.py:1011
+#: aligulac/ratings/inference_views.py:1082
+#: aligulac/ratings/inference_views.py:1092
+#: aligulac/ratings/inference_views.py:1130
+#: aligulac/ratings/inference_views.py:1140
+msgid "Estimated by"
+msgstr ""
+
+#. Translators: Make sure that there are exactly nine characters between the end of each word!
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:20
+msgid "Top 2"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:21
+msgid "1st"
+msgstr "第一"
+
+#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:22
+msgid "2nd"
+msgstr "第二"
+
+#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:23
+msgid "3rd"
+msgstr "第三"
+
+#: aligulac/ratings/inference_views.py:930 templates/pred_4pswiss.html:24
+msgid "4th"
+msgstr "第四"
+
+#. Translators: Win a tournament
+#: aligulac/ratings/inference_views.py:969 templates/pred_sebracket.html:22
+msgid "Win"
+msgstr ""
+
+#. Translators: Top 2, 4 etc. (in tournament)
+#: aligulac/ratings/inference_views.py:971
+#, python-brace-format
+msgid "Top {i}"
+msgstr ""
+
+#: aligulac/ratings/inference_views.py:986
+msgid "Median Outcome Bracket"
+msgstr ""
+
+#. Translators: Team [player], e.g. "Team Jaedong"
+#: aligulac/ratings/inference_views.py:1102
+#: aligulac/ratings/inference_views.py:1104
+#, python-brace-format
+msgid "Team {p}"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:33
+msgid "Miscellaneous Pages"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:37
+msgid "Charts showing balance in StarCraft II over time."
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:40 aligulac/ratings/misc_views.py:184
+msgid "Number of days since…"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:41
+msgid "Page showing the most recent time some things happened."
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:60
+msgid "MMA and DongRaeGu played a Bo5+"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:71
+msgid "Mvp won a premier event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:81
+msgid "A Korean terran won against a Korean protoss in a Bo5+ (offline)"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:89
+msgid "A foreign terran won against a Korean protoss (offline)"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:97
+msgid "A foreigner won in Proleague"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:105
+msgid "A foreigner won in the GSL Code S"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:113
+msgid "A CIS player won a major event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:114
+msgid "Player from BY, RU, UA or KZ with 1st place prize money >= $2000"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:122
+msgid "A Nordic player won a major event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:123
+msgid "Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:131
+msgid "A North American player won a major event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:132
+msgid "Player from US or CA with 1st place prize money >= $2000"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:140
+msgid "A foreigner won a premier event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:141
+msgid "At least one game played offline with 1st place prize money >= $10,000"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:155
+msgid "Jaedong got second place in an event"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:167
+msgid "SlayerS disbanded"
+msgstr ""
+
+#: aligulac/ratings/misc_views.py:173
+msgid "HasuObs joined mousesports"
+msgstr ""
+
+#. Translators: TLPD database
+#: aligulac/ratings/models.py:50
+msgid "WoL Beta"
+msgstr ""
+
+#. Translators: TLPD database
+#: aligulac/ratings/models.py:52
+msgid "WoL Korean"
+msgstr ""
+
+#. Translators: TLPD database
+#: aligulac/ratings/models.py:54
+msgid "WoL International"
+msgstr ""
+
+#. Translators: TLPD database
+#: aligulac/ratings/models.py:56
+msgid "HotS Beta"
+msgstr ""
+
+#. Translators: TLPD database
+#: aligulac/ratings/models.py:58
+msgid "HotS"
+msgstr ""
+
+#. Translators: Event category
+#: aligulac/ratings/models.py:66
+msgid "Individual"
+msgstr ""
+
+#. Translators: Event category
+#: aligulac/ratings/models.py:68 templates/earnings.html:107
+#: templates/player.html:466 templates/player.html.py:735
+#: templates/ratinglist.html:25
+msgid "Team"
+msgstr ""
+
+#. Translators: Event category
+#: aligulac/ratings/models.py:70
+msgid "Frequent"
+msgstr ""
+
+#. Translators: Event type
+#: aligulac/ratings/models.py:78
+msgid "Category"
+msgstr ""
+
+#. Translators: Event type
+#: aligulac/ratings/models.py:80 aligulac/ratings/results_views.py:548
+#: aligulac/ratings/results_views.py:702 aligulac/ratings/staff_views.py:166
+#: aligulac/ratings/staff_views.py:279 aligulac/ratings/staff_views.py:311
+#: templates/add.html:44 templates/clocks.html:56
+msgid "Event"
+msgstr ""
+
+#. Translators: Event type
+#: aligulac/ratings/models.py:82
+msgid "Round"
+msgstr ""
+
+#. Translators: Random race
+#: aligulac/ratings/models.py:91
+#: aligulac/ratings/templatetags/ratings_extras.py:120
+#: templates/period.html:376
+msgid "Random"
+msgstr ""
+
+#. Translators: Race switcher
+#: aligulac/ratings/models.py:93
+msgid "Switcher"
+msgstr ""
+
+#: aligulac/ratings/models.py:96
+msgctxt "possibly small letter (used in the middle of sentences)"
+msgid "Protoss"
+msgstr ""
+
+#: aligulac/ratings/models.py:97
+msgctxt "possibly small letter (used in the middle of sentences)"
+msgid "Terran"
+msgstr ""
+
+#: aligulac/ratings/models.py:98
+msgctxt "possibly small letter (used in the middle of sentences)"
+msgid "Zerg"
+msgstr ""
+
+#. Translators: Random race
+#: aligulac/ratings/models.py:100
+msgctxt "possibly small letter (used in the middle of sentences)"
+msgid "Random"
+msgstr ""
+
+#. Translators: Race switcher
+#: aligulac/ratings/models.py:102
+msgctxt "possibly small letter (used in the middle of sentences)"
+msgid "Switcher"
+msgstr ""
+
+#: aligulac/ratings/models.py:110 templates/db.html:29
+msgid "Wings of Liberty"
+msgstr ""
+
+#: aligulac/ratings/models.py:111 templates/db.html:36
+msgid "Heart of the Swarm"
+msgstr ""
+
+#: aligulac/ratings/models.py:112
+msgid "Legacy of the Void"
+msgstr ""
+
+#. Translators: Message type
+#: aligulac/ratings/models.py:121
+msgid "info"
+msgstr ""
+
+#. Translators: Message type
+#: aligulac/ratings/models.py:123
+msgid "warning"
+msgstr ""
+
+#. Translators: Message type
+#: aligulac/ratings/models.py:125
+msgid "error"
+msgstr ""
+
+#. Translators: Message type
+#: aligulac/ratings/models.py:127
+msgid "success"
+msgstr ""
+
+#: aligulac/ratings/models.py:131 aligulac/ratings/models.py:133
+#: aligulac/ratings/models.py:217
+msgid "Possible confusion"
+msgstr ""
+
+#: aligulac/ratings/models.py:132
+#, python-format
+msgid "You might be looking for %(player)s."
+msgstr "您要找的是不是%(player)s."
+
+#: aligulac/ratings/models.py:135
+#, python-format
+msgid "You might be looking for %(players)s or %(player)s."
+msgstr "您要找的是不死%(players)s或%(player)s."
+
+#: aligulac/ratings/models.py:136 aligulac/ratings/models.py:137
+#: aligulac/ratings/models.py:157
+msgid "Walkover"
+msgstr ""
+
+#: aligulac/ratings/models.py:136
+#, python-format
+msgid "%(player)s recieved a walkover."
+msgstr ""
+
+#: aligulac/ratings/models.py:139
+#, python-format
+msgid "%(player)s recieved a walkover against %(opponent)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:140 aligulac/ratings/models.py:142
+#: aligulac/ratings/models.py:146 aligulac/ratings/models.py:148
+#: aligulac/ratings/models.py:149 aligulac/ratings/models.py:150
+#: aligulac/ratings/models.py:152 aligulac/ratings/models.py:160
+#: aligulac/ratings/models.py:182
+msgid "Forfeit"
+msgstr ""
+
+#: aligulac/ratings/models.py:140
+#, python-format
+msgid "%(player)s forfeited."
+msgstr ""
+
+#: aligulac/ratings/models.py:141
+msgid "Disqualification"
+msgstr ""
+
+#: aligulac/ratings/models.py:141
+#, python-format
+msgid "%(player)s was disqualified."
+msgstr ""
+
+#: aligulac/ratings/models.py:144
+#, python-format
+msgid "%(player)s forfeited and was replaced by %(otherplayer)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:145 aligulac/ratings/models.py:154
+msgid "Forfeits"
+msgstr ""
+
+#: aligulac/ratings/models.py:145
+#, python-format
+msgid "%(players)s and %(player)s forfeited."
+msgstr ""
+
+#: aligulac/ratings/models.py:147
+#, python-format
+msgid "%(player)s forfeited against %(opponent)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:148
+#, python-format
+msgid "%(player)s forfeited after game %(num)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:149
+#, python-format
+msgid "%(player)s forfeited game %(num)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:151
+#, python-format
+msgid "%(player)s forfeited the remaining games."
+msgstr ""
+
+#: aligulac/ratings/models.py:153
+#, python-format
+msgid "%(player)s forfeited the remaining matches."
+msgstr ""
+
+#: aligulac/ratings/models.py:156
+#, python-format
+msgid "%(players)s and %(player)s forfeited the remaining matches."
+msgstr ""
+
+#: aligulac/ratings/models.py:159
+#, python-format
+msgid "In addition, %(player)s received a walkover against %(opponent)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:162
+#, python-format
+msgid "In addition, %(player)s forfeited against %(opponent)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:163
+msgid "Unrated match"
+msgstr ""
+
+#: aligulac/ratings/models.py:165
+#, python-format
+msgid "In addition, %(player)s and %(opponent)s played an unrated match."
+msgstr ""
+
+#: aligulac/ratings/models.py:166
+msgid "2v2"
+msgstr ""
+
+#: aligulac/ratings/models.py:168
+#, python-format
+msgid ""
+"In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and "
+"%(playerd)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:169 aligulac/ratings/models.py:171
+#: aligulac/ratings/models.py:172 aligulac/ratings/models.py:183
+msgid "Race switch"
+msgstr ""
+
+#: aligulac/ratings/models.py:170
+#, python-format
+msgid "%(player)s played %(race)s in game %(num)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:171
+#, python-format
+msgid "%(player)s played %(race)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:174
+#, python-format
+msgid "%(player)s switched to %(race)s after game %(num)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:175 aligulac/ratings/models.py:177
+#: aligulac/ratings/models.py:179
+msgid "Smurf"
+msgstr ""
+
+#: aligulac/ratings/models.py:176
+#, python-format
+msgid "%(player)s was smurfing for %(otherplayer)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:178
+#, python-format
+msgid "%(player)s was smurfing as %(otherplayer)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:181
+#, python-format
+msgid ""
+"%(player)s was smurfing as %(otherplayer)s and was disqualified due to "
+"residency rules."
+msgstr ""
+
+#: aligulac/ratings/models.py:182
+#, python-format
+msgid "%(player)s was unable to attend."
+msgstr ""
+
+#: aligulac/ratings/models.py:184
+msgid "This match was split due to race-changing."
+msgstr ""
+
+#: aligulac/ratings/models.py:185 aligulac/ratings/models.py:188
+#: aligulac/ratings/models.py:191
+msgid "Irregular match"
+msgstr ""
+
+#: aligulac/ratings/models.py:187
+#, python-format
+msgid ""
+"Coming from the winner's bracket, %(player)s started the match with a %(na)s-"
+"%(nb)s lead."
+msgstr ""
+
+#: aligulac/ratings/models.py:190
+#, python-format
+msgid ""
+"%(player)s started the match with a %(na)s–%(nb)s lead from a previous match."
+msgstr ""
+
+#: aligulac/ratings/models.py:193
+#, python-format
+msgid "%(player)s started the match with a %(na)s–%(nb)s lead."
+msgstr ""
+
+#: aligulac/ratings/models.py:194 aligulac/ratings/models.py:197
+#: aligulac/ratings/models.py:200 aligulac/ratings/models.py:203
+#: aligulac/ratings/models.py:209
+msgid "Qualification"
+msgstr ""
+
+#: aligulac/ratings/models.py:196
+#, python-format
+msgid "%(player)s defeated %(opponent)s to qualify for %(event)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:199
+#, python-format
+msgid ""
+"%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:202
+#, python-format
+msgid ""
+"%(player)s defeated %(opponent)s to qualify for %(event)s alongside "
+"%(otherplayer)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:205
+#, python-format
+msgid ""
+"%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s "
+"alongside %(otherplayer)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:206
+msgid "Forfeit and qualification"
+msgstr ""
+
+#: aligulac/ratings/models.py:208
+#, python-format
+msgid ""
+"%(player)s forfeited and was replaced by %(otherplayer)s who won a qualifier "
+"against %(opponent)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:210
+#, python-format
+msgid "Qualification match to replace %(player)s."
+msgstr ""
+
+#: aligulac/ratings/models.py:211 aligulac/ratings/models.py:220
+msgid "Tiebreakers"
+msgstr ""
+
+#: aligulac/ratings/models.py:213
+#, python-format
+msgid "%(players)s and %(player)s played tiebreakers for the %(num)s spots."
+msgstr ""
+
+#: aligulac/ratings/models.py:214
+msgid "Long game"
+msgstr ""
+
+#: aligulac/ratings/models.py:216
+#, python-format
+msgid "Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds."
+msgstr ""
+
+#: aligulac/ratings/models.py:219
+#, python-format
+msgid "%(player)s won %(num)s-X, assumed to be %(num)s-0."
+msgstr ""
+
+#: aligulac/ratings/models.py:220
+msgid "Tiebreaker game."
+msgstr ""
+
+#: aligulac/ratings/models.py:221
+msgid "Seed"
+msgstr ""
+
+#: aligulac/ratings/models.py:221
+#, python-format
+msgid "%(player)s was seededs."
+msgstr ""
+
+#: aligulac/ratings/models.py:222
+msgid "Seeds"
+msgstr ""
+
+#: aligulac/ratings/models.py:222
+#, python-format
+msgid "%(players)s and %(player)s were seeded."
+msgstr ""
+
+#: aligulac/ratings/models.py:223
+msgid "Draw"
+msgstr ""
+
+#: aligulac/ratings/models.py:225
+#, python-format
+msgid "Game %(num)s was a draw and had to be replayed."
+msgstr ""
+
+#: aligulac/ratings/models.py:233
+#, python-format
+msgid "%(player)s wins %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:235
+#, python-format
+msgid "%(player)s defeats %(opponent)s and wins %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:236
+#, python-format
+msgid "%(player)s wins %(event)s as a royal roader"
+msgstr ""
+
+#: aligulac/ratings/models.py:238
+#, python-format
+msgid "%(player)s defeats %(opponent)s and wins %(event)s as a royal roader"
+msgstr ""
+
+#: aligulac/ratings/models.py:239
+#, python-format
+msgid "%(player)s all-kills %(team)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:241
+#, python-format
+msgid "%(player)s all-kills %(team)s and wins %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:242
+#, python-format
+msgid "%(player)s finishes second in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:243
+#, python-format
+msgid "%(player)s finishes third in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:244
+#, python-format
+msgid "%(player)s finishes fourth in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:245
+#, python-format
+msgid "%(player)s finishes top 4 in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:246
+#, python-format
+msgid "%(player)s finishes top 8 in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:247
+#, python-format
+msgid "%(player)s switches to %(race)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:248
+#, python-format
+msgid "%(player)s switches back to %(race)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:249
+#, python-format
+msgid "%(player)s switches from %(racea)s to %(raceb)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:251
+#, python-format
+msgid "%(player)s switches from %(racea)s back to %(raceb)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:253
+#, python-format
+msgid ""
+"%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:255
+#, python-format
+msgid ""
+"%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:256
+#, python-format
+msgid "%(player)s fails to qualify for %(event)s"
+msgstr ""
+
+#: aligulac/ratings/models.py:258
+#, python-format
+msgid "%(player)s fails to qualify for %(event)s after %(num)s appearances"
+msgstr ""
+
+#: aligulac/ratings/models.py:1072 aligulac/ratings/models.py:1611
+msgid "Error"
+msgstr ""
+
+#: aligulac/ratings/models.py:1245
+msgid "All-Kill"
+msgstr ""
+
+#: aligulac/ratings/models.py:1246
+msgid "Proleague"
+msgstr ""
+
+#: aligulac/ratings/models.py:1247 templates/historical.html:20
+#: templates/matchlist.html:39 templates/matchlist.html.py:43
+#: templates/player.html:591 templates/ratinglist.html:29
+#: templates/ratinglist.html.py:31 templates/records.html:22
+msgid "Rating"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:63
+#, python-format
+msgid ""
+"Due to %s's lack of recent games, they have been marked as <em>inactive</em> "
+"and removed from the current rating list. Once they play a rated game they "
+"will be reinstated."
+msgstr ""
+
+#: aligulac/ratings/player_views.py:66
+#, python-format
+msgid ""
+"%s has no rating chart on account of having played matches in fewer than two "
+"periods."
+msgstr ""
+
+#: aligulac/ratings/player_views.py:95
+msgid "Tag"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:96 templates/player.html:394
+msgid "Race"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:97 aligulac/ratings/results_views.py:446
+#: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
+#: templates/earnings.html:106 templates/hof.html:25
+#: templates/ratinglist.html:24 templates/recordlist.html:11
+#: templates/team.html:175 templates/teams.html:17
+msgid "Name"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:98 aligulac/ratings/team_views.py:48
+msgid "AKAs"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:99 templates/player.html:460
+msgid "Birthday"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:101 aligulac/ratings/player_views.py:152
+#: aligulac/ratings/results_views.py:114 aligulac/ratings/results_views.py:204
+msgid "TLPD ID"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:103 aligulac/ratings/results_views.py:116
+msgid "TLPD DB"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:104 aligulac/ratings/player_views.py:153
+#: aligulac/ratings/results_views.py:118 aligulac/ratings/results_views.py:205
+#: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
+msgid "Liquipedia title"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:105 aligulac/ratings/player_views.py:154
+msgid "SC2Earnings.com ID"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:107 aligulac/ratings/player_views.py:183
+#: templates/player.html:402
+msgid "Country"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:135 aligulac/ratings/results_views.py:147
+#: aligulac/ratings/results_views.py:243 aligulac/ratings/results_views.py:338
+#: aligulac/ratings/results_views.py:423 aligulac/ratings/results_views.py:470
+#: aligulac/ratings/results_views.py:517 aligulac/ratings/results_views.py:585
+#: aligulac/ratings/results_views.py:734 aligulac/ratings/staff_views.py:188
+#: aligulac/ratings/staff_views.py:344 aligulac/ratings/staff_views.py:594
+#: aligulac/ratings/staff_views.py:665 aligulac/ratings/staff_views.py:747
+#: aligulac/ratings/team_views.py:74
+msgid "Entered data was invalid, no changes made."
+msgstr ""
+
+#. Translators: Changed something (a noun).
+#: aligulac/ratings/player_views.py:145 aligulac/ratings/results_views.py:201
+#: aligulac/ratings/team_views.py:83
+#, python-format
+msgid "Changed %s."
+msgstr ""
+
+#: aligulac/ratings/player_views.py:147
+msgid "tag"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:148
+msgid "race"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:149
+msgid "country"
+msgstr "国家"
+
+#: aligulac/ratings/player_views.py:150 aligulac/ratings/team_views.py:85
+msgid "name"
+msgstr "姓名"
+
+#: aligulac/ratings/player_views.py:155 aligulac/ratings/results_views.py:207
+msgid "TLPD DBs"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:158 aligulac/ratings/team_views.py:91
+msgid "Changed aliases."
+msgstr ""
+
+#: aligulac/ratings/player_views.py:166 aligulac/ratings/results_views.py:545
+msgid "After"
+msgstr "之后"
+
+#: aligulac/ratings/player_views.py:167 aligulac/ratings/results_views.py:546
+msgid "Before"
+msgstr "之前"
+
+#: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:646
+#: templates/history.html:30 templates/period.html:373
+msgid "No Protoss"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:645
+#: templates/history.html:31 templates/period.html:374
+msgid "No Terran"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:644
+#: templates/history.html:32 templates/period.html:375
+msgid "No Zerg"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:178
+msgid "Opponent race"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:181 templates/earnings.html:44
+#: templates/history.html:37 templates/period.html:385
+msgid "Non-Koreans"
+msgstr "非韩国玩家"
+
+#: aligulac/ratings/player_views.py:188 aligulac/ratings/results_views.py:554
+msgid "Best of 3+"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:555
+msgid "Best of 5+"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:191 aligulac/ratings/results_views.py:557
+msgid "Match format"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:561
+#: aligulac/ratings/results_views.py:906
+msgid "Both"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:103
+#: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:705
+#: aligulac/ratings/results_views.py:908 aligulac/ratings/staff_views.py:282
+#: templates/db.html:50
+msgid "Offline"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:103
+#: aligulac/ratings/results_views.py:563 aligulac/ratings/results_views.py:705
+#: aligulac/ratings/results_views.py:908 templates/db.html:43
+msgid "Online"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:199 aligulac/ratings/results_views.py:104
+#: aligulac/ratings/results_views.py:565 aligulac/ratings/results_views.py:706
+msgid "On/offline"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:100
+#: aligulac/ratings/results_views.py:568 aligulac/ratings/results_views.py:710
+#: aligulac/ratings/staff_views.py:281 templates/add.html:58
+#: templates/eventres.html:224
+msgid "Game version"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:303
+#, python-format
+msgid "%s has no rating yet."
+msgstr ""
+
+#: aligulac/ratings/player_views.py:327
+msgid "joins"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:333
+msgid "leaves"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:521
+msgid " before {}"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:523
+msgid " after {}"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:525
+msgid " between {} and {}"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:633
+msgid "best of"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:635 aligulac/ratings/player_views.py:638
+#: aligulac/ratings/player_views.py:651 aligulac/ratings/player_views.py:664
+msgid "all"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:652
+msgid "foreigners"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:658
+msgid "offline"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:659
+msgid "online"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:660
+msgid "both"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:669
+msgid "Results for"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:670 templates/eventres.html:251
+#: templates/historical.html:29 templates/period.html:332
+#: templates/periods.html:22 templates/player.html:596
+#: templates/pred_rrgroup.html:68
+msgid "Games"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:672
+msgid "Current form"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:673
+msgid "Recent matches"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:674
+msgid "Filters"
+msgstr ""
+
+#. Translators: These have to line up on the right!
+#: aligulac/ratings/player_views.py:676
+msgid "Opponent Race:    "
+msgstr ""
+
+#. Translators: These have to line up on the right!
+#: aligulac/ratings/player_views.py:678
+msgid "Opponent Country: "
+msgstr ""
+
+#. Translators: These have to line up on the right!
+#: aligulac/ratings/player_views.py:680
+msgid "Match Format:     "
+msgstr ""
+
+#. Translators: These have to line up on the right!
+#: aligulac/ratings/player_views.py:682
+msgid "On/offline:       "
+msgstr ""
+
+#. Translators: These have to line up on the right!
+#: aligulac/ratings/player_views.py:684
+msgid "Game Version:     "
+msgstr ""
+
+#: aligulac/ratings/player_views.py:685
+#, python-brace-format
+msgid "Stats by [url={url}]Aligulac[/url]"
+msgstr ""
+
+#. Translators: Link in the sense of a HTTP hyperlink.
+#: aligulac/ratings/player_views.py:687
+msgid "Link"
+msgstr ""
+
+#: aligulac/ratings/ranking_views.py:43
+#, python-format
+msgid ""
+"This is a <em>preview</em> of the next rating list. It will not be finalized "
+"until %s."
+msgstr ""
+
+#: aligulac/ratings/ranking_views.py:51 templates/periods.html:10
+msgid "Historical overview"
+msgstr ""
+
+#. Translators: List (number): (date)
+#: aligulac/ratings/ranking_views.py:207
+#, python-brace-format
+msgid "List {num}: {date}"
+msgstr ""
+
+#: aligulac/ratings/ranking_views.py:289
+msgid "Earnings ranking"
+msgstr ""
+
+#: aligulac/ratings/records_views.py:86 templates/hof.html:10
+msgid "Hall of Fame"
+msgstr "名人堂"
+
+#. Translators: Records for (race)
+#: aligulac/ratings/records_views.py:123
+msgid "Records for"
+msgstr ""
+
+#: aligulac/ratings/reports_views.py:39 templates/reports_balance.html:10
+#: templates/reports_balance.html.py:32
+msgid "Balance report"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:99 aligulac/ratings/results_views.py:103
+#: aligulac/ratings/results_views.py:107 aligulac/ratings/results_views.py:705
+#: aligulac/ratings/results_views.py:709 aligulac/ratings/results_views.py:720
+msgid "No change"
+msgstr ""
+
+#. Translators: Type as in event type
+#. Translators: Event type.
+#: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:447
+#: aligulac/ratings/staff_views.py:543 templates/add.html:61
+#: templates/eventres.html:242
+msgid "Type"
+msgstr ""
+
+#. Translators: Apply (changes) to…
+#: aligulac/ratings/results_views.py:112
+msgid "Apply to all events on the same level"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:113 aligulac/ratings/team_views.py:50
+#: templates/eventres.html:290 templates/events_open.html:35
+#: templates/events_open.html.py:79 templates/events_open.html:127
+#: templates/team.html:112
+msgid "Homepage"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:117 aligulac/ratings/results_views.py:206
+msgid "TL thread"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:157
+msgid "Changed event name."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:162
+#, python-format
+msgid "Changed date for %i match."
+msgid_plural "Changed date for %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/results_views.py:170
+#, python-format
+msgid "Changed game version for %i match."
+msgid_plural "Changed game version for %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/results_views.py:180
+#, python-format
+msgid "Changed on/offline for %i match."
+msgid_plural "Changed on/offline for %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/results_views.py:194
+#, python-format
+msgid "Changed type for %i event."
+msgid_plural "Changed type for %i events."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/results_views.py:203 aligulac/ratings/team_views.py:88
+msgid "homepage"
+msgstr "主页"
+
+#: aligulac/ratings/results_views.py:215 aligulac/ratings/results_views.py:398
+#: templates/add.html:86 templates/player_transfers.html:11
+#: templates/pred_4pswiss.html:17 templates/pred_rrgroup.html:18
+#: templates/pred_rrgroup.html.py:64 templates/pred_sebracket.html:17
+msgid "Player"
+msgstr "玩家"
+
+#: aligulac/ratings/results_views.py:216 aligulac/ratings/results_views.py:399
+#: aligulac/ratings/results_views.py:703 aligulac/ratings/staff_views.py:142
+#: aligulac/ratings/staff_views.py:280 templates/clocks.html:56
+#: templates/eventres.html:206 templates/matchlist.html:38
+#: templates/player_results.html:19 templates/player_transfers.html:18
+#: templates/results_search.html:21
+msgid "Date"
+msgstr "日期"
+
+#: aligulac/ratings/results_views.py:217
+msgid "Story text"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:218
+msgid "Parameters"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:254
+msgid "Story could not be found."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:266
+msgid "Story was successfully changed."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:268 aligulac/ratings/results_views.py:287
+msgid "Parameter verification failed."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:272
+msgid "Story was successfully deleted."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:285
+msgid "Story was successfully created."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:295
+msgid "Currency"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:296
+msgid "Ranked"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:297
+msgid "Unranked"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:326
+#, python-format
+msgid "No such player: '%s'."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:328 aligulac/ratings/staff_views.py:109
+#: aligulac/ratings/staff_views.py:119 aligulac/ratings/staff_views.py:450
+#, python-format
+msgid "Ambiguous player: '%s'."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:368
+msgid "Errors occured, no changes made."
+msgstr ""
+
+#. Translators: New prizepools added to the database.
+#: aligulac/ratings/results_views.py:390
+msgid "New prizes committed."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:400
+msgid "Text"
+msgstr ""
+
+#. Translators: Stories are the dots on a player's rating chart
+#: aligulac/ratings/results_views.py:438
+msgid "Added a story."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:448
+msgid "No Print"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:449
+msgid "Closed"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:483
+msgid "Added a subevent."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:507
+msgid "Unable to get these events."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:525
+msgid "Order invalid, try again?"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:529
+msgid "Non-child event found. This should never happen."
+msgstr ""
+
+#. Translators: Children as in sub-events.
+#: aligulac/ratings/results_views.py:537
+#, python-format
+msgid ""
+"Successfully reordered %i children. Any inconsistencies will be fixed next "
+"update (no more than six hours away)."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:547
+msgid "Involving players"
+msgstr ""
+
+#. Translators: Unassigned as in not assigned to an event.
+#: aligulac/ratings/results_views.py:550
+msgid "Only show unassigned matches"
+msgstr ""
+
+#: aligulac/ratings/results_views.py:673
+#, python-format
+msgid "Too many results (%i). Please add restrictions."
+msgstr ""
+
+#: aligulac/ratings/results_views.py:759
+#, python-format
+msgid "Updated %i match."
+msgid_plural "Updated %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/results_views.py:794 templates/hof.html:54
+#: templates/period.html:305 templates/period.html.py:309
+#: templates/periods.html:28 templates/player.html:226
+#: templates/player.html.py:251 templates/player.html:276
+#: templates/player.html.py:301 templates/player.html:461
+#: templates/player.html.py:475 templates/player.html:481
+#: templates/player.html.py:696 templates/player.html:713
+#: templates/player.html.py:745 templates/player.html:746
+#: templates/ratingdetails.html:43 templates/recordlist.html:46
+#: templates/results.html:11 templates/review.html:43 templates/team.html:20
+#: templates/team.html.py:22 templates/team.html:24 templates/team.html.py:54
+#: templates/team.html:60 templates/team.html.py:194 templates/team.html:195
+msgid "F jS, Y"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:111 aligulac/ratings/staff_views.py:121
+#: aligulac/ratings/staff_views.py:446
+#, python-format
+msgid "Could not find player: '%s'."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:143
+msgid "Approve"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:144
+msgid "Reject"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:145
+msgid "Ignore duplicates"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:173
+msgid "You must either approve or reject."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:178 aligulac/ratings/staff_views.py:335
+msgid "Could not find this event object."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:239 aligulac/ratings/staff_views.py:495
+#, python-format
+msgid "Could not make match %(pla)s vs %(plb)s: possible duplicate found."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:261
+#, python-format
+msgid "Successfully approved %i match."
+msgid_plural "Successfully approved %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/staff_views.py:269
+#, python-format
+msgid "Successfully rejected %i match."
+msgid_plural "Successfully rejected %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/staff_views.py:283 templates/add.html:65
+msgid "Source"
+msgstr "来源"
+
+#: aligulac/ratings/staff_views.py:285 templates/add.html:71
+msgid "Notes"
+msgstr "备注"
+
+#: aligulac/ratings/staff_views.py:380
+#, python-format
+msgid "Could not parse '%(line)s' (%(error)s)."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:402
+#, python-format
+msgid "Error creating match '%(line)s' (%(error)s)."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:418
+#, python-format
+msgid "Successfully added %i match."
+msgid_plural "Successfully added %i matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/staff_views.py:427
+#, python-format
+msgid "Closed '%s'."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:430
+#, python-format
+msgid "Did not close '%s'."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:509
+msgid "Parent ID"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:511
+msgid "Other"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:512
+msgid "Group stage and playoffs"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:513
+msgid "Groups A through D"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:514
+msgid "Groups A through H"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:515
+msgid "Ro64→Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:516
+msgid "Ro32→Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:517
+msgid "Ro16→Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:518
+msgid "Ro8→Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:519
+msgid "Ro4→Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:520
+msgid "Ro64→Final + 3rd place"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:521
+msgid "Ro32→Final + 3rd place"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:522
+msgid "Ro16→Final + 3rd place"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:523
+msgid "Ro8→Final + 3rd place"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:524
+msgid "Ro4→Final + 3rd place"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:525
+msgid "Ro64→Final + early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:526
+msgid "Ro32→Final + early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:527
+msgid "Ro16→Final + early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:528
+msgid "Ro8→Final + early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:529
+msgid "Ro4→Final + early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:531
+msgid "Ro64→Final + 3rd place and early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:532
+msgid "Ro32→Final + 3rd place and early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:533
+msgid "Ro16→Final + 3rd place and early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:534
+msgid "Ro8→Final + 3rd place and early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:535
+msgid "Ro4→Final + 3rd place and early rounds"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:536
+msgid "WB, LB, Final"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:537
+msgid "LB: Round 1->Round 2"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:538
+msgid "LB: Round 1->Round 4"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:539
+msgid "LB: Round 1->Round 6"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:540
+msgid "LB: Round 1->Round 8"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:541
+msgid "Predefined names"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:542
+msgid "Custom names"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:544
+msgid "Big"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:545
+msgid "No print"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:568
+#, python-format
+msgid "Could not find event ID %s."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:573
+msgid "Must specify an event to close."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:577
+msgid "No event names specified."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:618
+#, python-format
+msgid "Successfully created %i new event."
+msgid_plural "Successfully created %i new events."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/staff_views.py:625
+msgid "Successfully closed event."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:633
+msgid "Source ID"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:634
+msgid "Target ID"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:635 aligulac/ratings/staff_views.py:709
+msgid "Confirm"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:651 aligulac/ratings/staff_views.py:657
+#, python-format
+msgid "No player with ID %i."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:672
+msgid "Please confirm player merge."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:694
+#, python-format
+msgid "%(source)s was successfully merged into %(target)s."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:696
+msgid "The merging is complete"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:707
+msgid "Event ID to move"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:708
+msgid "New parent ID"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:725 aligulac/ratings/staff_views.py:731
+#, python-format
+msgid "No event with ID %i."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:738
+msgid "Can't move an event to one of its descendants."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:757
+msgid "Please confirm event move."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:814
+#, python-format
+msgid "Reopened '%s'."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:823 templates/add.html:12
+msgid "Submit results"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:853 templates/review.html:12
+msgid "Review results"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:887 templates/eventmgr.html:11
+msgid "Manage events"
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:926
+#, python-format
+msgid "Successfully closed %i event."
+msgid_plural "Successfully closed %i events."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/staff_views.py:936
+#, python-format
+msgid "Successfully marked %i event as having no prize pool."
+msgid_plural "Successfully marked %i events as having no prize pool."
+msgstr[0] ""
+msgstr[1] ""
+
+#: aligulac/ratings/team_views.py:87
+msgid "short name"
+msgstr ""
+
+#: aligulac/ratings/team_views.py:248 templates/player_transfers.html:6
+msgid "Recent player transfers"
+msgstr ""
+
+#: aligulac/ratings/tools.py:55
+msgid "Euro"
+msgstr "欧元"
+
+#: aligulac/ratings/tools.py:56
+msgid "British Pound"
+msgstr "英镑"
+
+#: aligulac/ratings/tools.py:57
+msgid "Australian Dollar"
+msgstr "澳元"
+
+#: aligulac/ratings/tools.py:58
+msgid "New-Zealand Dollar"
+msgstr ""
+
+#: aligulac/ratings/tools.py:59
+msgid "US Dollar"
+msgstr "美元"
+
+#: aligulac/ratings/tools.py:60
+msgid "Canadian Dollar"
+msgstr "加元"
+
+#: aligulac/ratings/tools.py:61
+msgid "Swiss Franc"
+msgstr "瑞士法郎"
+
+#: aligulac/ratings/tools.py:62
+msgid "Norwegian Krona"
+msgstr "挪威克朗"
+
+#: aligulac/ratings/tools.py:63
+msgid "Swedish Krona"
+msgstr "瑞典克朗"
+
+#: aligulac/ratings/tools.py:64
+msgid "Danish Krona"
+msgstr "丹麦克朗"
+
+#: aligulac/ratings/tools.py:65
+msgid "Japanese Yen"
+msgstr "日元"
+
+#: aligulac/ratings/tools.py:66
+msgid "Chinese Renminbi"
+msgstr "人民币"
+
+#: aligulac/ratings/tools.py:67
+msgid "South Korean won"
+msgstr ""
+
+#: aligulac/ratings/tools.py:68
+msgid "Singapore Dollar"
+msgstr ""
+
+#: aligulac/ratings/tools.py:69
+msgid "Indonesian Rupiah"
+msgstr ""
+
+#: aligulac/ratings/tools.py:70
+msgid "Thai Baht"
+msgstr ""
+
+#: aligulac/ratings/tools.py:71
+msgid "Taiwan Dollar"
+msgstr "台币"
+
+#: aligulac/ratings/tools.py:72
+msgid "Hong Kong Dollar"
+msgstr "港币"
+
+#: aligulac/ratings/tools.py:73
+msgid "Philippines Peso"
+msgstr ""
+
+#: aligulac/ratings/tools.py:74
+msgid "Indian Rupee"
+msgstr ""
+
+#: aligulac/ratings/tools.py:75
+msgid "Malaysian Ringgit"
+msgstr ""
+
+#: aligulac/ratings/tools.py:76
+msgid "Vietnamese Dong"
+msgstr ""
+
+#: aligulac/ratings/tools.py:77
+msgid "Brazilian Real"
+msgstr ""
+
+#: aligulac/ratings/tools.py:78
+msgid "Peruvian Nuevo Sol"
+msgstr ""
+
+#: aligulac/ratings/tools.py:79
+msgid "Argentine Peso"
+msgstr ""
+
+#: aligulac/ratings/tools.py:80
+msgid "Mexican Peso"
+msgstr ""
+
+#: aligulac/ratings/tools.py:81
+msgid "Chilean Peso"
+msgstr ""
+
+#: aligulac/ratings/tools.py:82
+msgid "Colombian Peso"
+msgstr ""
+
+#: aligulac/ratings/tools.py:83
+msgid "Jamaican Dollar"
+msgstr ""
+
+#: aligulac/ratings/tools.py:84
+msgid "Trinidad and Tobago Dollar"
+msgstr ""
+
+#: aligulac/ratings/tools.py:85
+msgid "Bermudian Dollar"
+msgstr ""
+
+#: aligulac/ratings/tools.py:86
+msgid "Czech Koruna"
+msgstr ""
+
+#: aligulac/ratings/tools.py:87
+msgid "Polish Zloty"
+msgstr ""
+
+#: aligulac/ratings/tools.py:88
+msgid "Turkish Lira"
+msgstr ""
+
+#: aligulac/ratings/tools.py:89
+msgid "Hungarian Forint"
+msgstr ""
+
+#: aligulac/ratings/tools.py:90
+msgid "Romanian Leu"
+msgstr ""
+
+#: aligulac/ratings/tools.py:91
+msgid "Russian Ruble"
+msgstr ""
+
+#: aligulac/ratings/tools.py:92
+msgid "Croatian kuna"
+msgstr ""
+
+#: aligulac/ratings/tools.py:93
+msgid "Kazakhstani Tenge"
+msgstr ""
+
+#: aligulac/ratings/tools.py:94
+msgid "Israeli Shekel"
+msgstr ""
+
+#: aligulac/ratings/tools.py:95
+msgid "United Arab Emirates Dirham"
+msgstr ""
+
+#: aligulac/ratings/tools.py:96
+msgid "Qatari Riyal"
+msgstr ""
+
+#: aligulac/ratings/tools.py:97
+msgid "Saudi Riyal"
+msgstr ""
+
+#: aligulac/ratings/tools.py:98
+msgid "Egyptian Pound"
+msgstr ""
+
+#: aligulac/ratings/tools.py:99
+msgid "South African Rand"
+msgstr ""
+
+#: aligulac/ratings/tools.py:100
+msgid "Bitcoin"
+msgstr ""
+
+#: aligulac/ratings/tools.py:189
+#, python-format
+msgid "Player '%s' was not found and cound not be made (missing player tag)"
+msgstr ""
+
+#: aligulac/ratings/tools.py:193
+#, python-format
+msgid "Player '%s' was not found and cound not be made (missing race)"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:121
+msgid "Race switcher"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:246
+msgid "TLPD:WoL:B"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:247
+msgid "TLPD:WoL:KR"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:248
+msgid "TLPD:WoL:IN"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:249
+msgid "TLPD:HotS:B"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:250
+msgid "TLPD:HotS"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:353
+msgid "N/A"
+msgstr ""
+
+#: aligulac/ratings/templatetags/ratings_extras.py:494
+msgid "January"
+msgstr "一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:495
+msgid "February"
+msgstr "二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:496
+msgid "March"
+msgstr "三月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:497
+msgid "April"
+msgstr "四月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:498
+msgid "May"
+msgstr "五月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:499
+msgid "June"
+msgstr "六月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:500
+msgid "July"
+msgstr "七月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:501
+msgid "August"
+msgstr "八月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:502
+msgid "September"
+msgstr "九月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:503
+msgid "October"
+msgstr "十月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:504
+msgid "November"
+msgstr "十一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:505
+msgid "December"
+msgstr "十二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:506
+msgid "Jan."
+msgstr "一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:507
+msgid "Feb."
+msgstr "二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:508
+msgid "Aug."
+msgstr "八月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:509
+msgid "Sept."
+msgstr "九月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:510
+msgid "Oct."
+msgstr "十月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:511
+msgid "Nov."
+msgstr "十一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:512
+msgid "Dec."
+msgstr "十二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:513
+msgid "jan"
+msgstr "一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:514
+msgid "feb"
+msgstr "二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:515
+msgid "mar"
+msgstr "三月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:516
+msgid "apr"
+msgstr "四月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:517
+msgid "may"
+msgstr "五月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:518
+msgid "jun"
+msgstr "六月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:519
+msgid "jul"
+msgstr "七月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:520
+msgid "aug"
+msgstr "八月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:521
+msgid "sep"
+msgstr "九月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:522
+msgid "oct"
+msgstr "十月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:523
+msgid "nov"
+msgstr "十一月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:524
+msgid "dec"
+msgstr "十二月"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:525
+msgid "Monday"
+msgstr "周一"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:526
+msgid "Tuesday"
+msgstr "周二"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:527
+msgid "Wednesday"
+msgstr "周三"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:528
+msgid "Thursday"
+msgstr "周四"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:529
+msgid "Friday"
+msgstr "周五"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:530
+msgid "Saturday"
+msgstr "周六"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:531
+msgid "Sunday"
+msgstr "周日"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:532
+msgid "mon"
+msgstr "周一"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:533
+msgid "tue"
+msgstr "周二"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:534
+msgid "wed"
+msgstr "周三"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:535
+msgid "thu"
+msgstr "周四"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:536
+msgid "fri"
+msgstr "周五"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:537
+msgid "sat"
+msgstr "周六"
+
+#: aligulac/ratings/templatetags/ratings_extras.py:538
+msgid "sun"
+msgstr "周日"
+
+#: templates/404.html:12
+msgid "The page you were looking for was nowhere to be found. Sorry!"
+msgstr "抱歉!你要找的页面不存在."
+
+#: templates/500.html:12
+msgid "An unspeakable awful indescribable horror has occured."
+msgstr "系统发生了令人无语的糟糕情况."
+
+#: templates/500.html:14
+#, python-format
+msgid ""
+"Try to send me an e-mail at %(email)s where you describe what you were "
+"trying to do when this happened."
+msgstr ""
+"请给我发邮件到%(email)s, 并请告诉我您是在何种情况下或何种操作下遇到这种情况"
+"的."
+
+#: templates/add.html:19
+msgid "The following entries were successfully submitted"
+msgstr "以下各项已顺利提交"
+
+#: templates/add.html:20
+msgid "They are pending review before being visible."
+msgstr "这些内容在审查后方为可见."
+
+#: templates/add.html:34
+msgid "Show:"
+msgstr ""
+
+#: templates/add.html:35
+msgid "guide"
+msgstr ""
+
+#: templates/add.html:36
+msgid "match syntax"
+msgstr ""
+
+#: templates/add.html:37
+msgid "examples"
+msgstr ""
+
+#: templates/add.html:38
+msgid "common problems"
+msgstr ""
+
+#: templates/add.html:45
+msgid ""
+"Anything that can be used to identify the tournament the games were played "
+"in.  Please provide as much information as possible. (Rounds, day number, "
+"week number, etc.)"
+msgstr ""
+
+#: templates/add.html:49
+msgid "Event object"
+msgstr ""
+
+#: templates/add.html:50
+msgid "The event the games were played in."
+msgstr ""
+
+#: templates/add.html:52
+#, python-format
+msgid ""
+"If you can't find the correct event object, you have to %(a)smake it</a>. If "
+"these are the final games associated with an event object, please close it "
+"afterwards."
+msgstr ""
+
+#: templates/add.html:55
+msgid "Date played"
+msgstr ""
+
+#: templates/add.html:56
+msgid ""
+"The date the games were played (as accurate as possible). This will be used "
+"to check for possible duplicates."
+msgstr ""
+
+#: templates/add.html:59
+msgid "Indicate which version of SC2 the games were played on."
+msgstr ""
+
+#: templates/add.html:62
+msgid ""
+"Use <strong>offline</strong> for games that were played at a live "
+"tournament, otherwise use <strong>online</strong>."
+msgstr ""
+
+#: templates/add.html:66
+msgid ""
+"An URL to a credible source where the results can be double checked (for "
+"example: official tournament brackets, Liquipedia page or Team Liquid live "
+"report thread)."
+msgstr ""
+
+#: templates/add.html:69
+msgid ""
+"(Optional) A way to contact you if we have questions about your submission. "
+"E-mail, Team Liquid username, Reddit username etc. are fine."
+msgstr ""
+
+#: templates/add.html:72
+msgid ""
+"(Optional) Any extra information you have that may or may not be of use."
+msgstr ""
+
+#: templates/add.html:76
+#, python-format
+msgid ""
+"A list of the results you want to add. Please see %(a)smatch syntax</a> for "
+"more information."
+msgstr ""
+
+#: templates/add.html:80
+#, python-format
+msgid ""
+"Please check out %(tag)scommon problems</a> if you are unsure about a player."
+msgstr ""
+
+#: templates/add.html:84
+msgid ""
+"Each line corresponds to a match, and should be entered using this format:"
+msgstr ""
+
+#: templates/add.html:87 templates/matchlist.html:41
+msgid "Score"
+msgstr ""
+
+#: templates/add.html:91
+msgid ""
+"The player information must uniquely identify the player, and should be "
+"space-separated list of any of the following:"
+msgstr ""
+
+#: templates/add.html:93
+msgid ""
+"The player information does not have to uniquely identify the player, and "
+"should be a space-separated list of any of the following:"
+msgstr ""
+
+#: templates/add.html:97 templates/predict.html:40
+msgid "Player tag, e.g. \"DongRaeGu\"."
+msgstr ""
+
+#: templates/add.html:98
+msgid ""
+"Race, i.e. \"P\", \"T\", \"Z\", \"R\" (Random) or \"S\" (Race Switcher)."
+msgstr ""
+
+#: templates/add.html:99
+#, python-format
+msgid ""
+"A two- or three-letter %(a)sISO 3166-1 alpha-2 country code</a>, e.g. \"KR\" "
+"or \"KOR\", or the common English name of a country (the latter will only "
+"work if the country name does not contain spaces."
+msgstr ""
+
+#: templates/add.html:100 templates/predict.html:43
+msgid "Team name, e.g. \"MVP\"."
+msgstr ""
+
+#: templates/add.html:101
+msgid ""
+"Player or team aliases, e.g. \"DRG\". The most common ones should be "
+"recognized by the system"
+msgstr ""
+
+#: templates/add.html:102
+#, python-format
+msgid ""
+"A player ID number, which you can get from the URL of the %(a)splayer page</"
+"a>, e.g. \"4\"."
+msgstr ""
+
+#: templates/add.html:105
+#, python-format
+msgid ""
+"If you are adding a match by a race switcher you need to tell the system "
+"which race the player was playing in that match. Do this by adding a "
+"%(clause)s clause at the <strong>end</strong> of the player information. For "
+"example, if MorroW plays Protoss, you can do this:"
+msgstr ""
+
+#: templates/add.html:109
+msgid ""
+"Please also provide race information about random players whenever this is "
+"known, though it's not required."
+msgstr ""
+
+#: templates/add.html:111
+msgid ""
+"Everything is based on case-insensitive search. There is no recognizable "
+"difference between \"Mvp\" (the player) and \"MVP\" (the team)."
+msgstr ""
+
+#: templates/add.html:114
+msgid ""
+"When submitted, the system will try to add as many of the matches as it can. "
+"Some entries might produce warnings, in which case you will be notified "
+"about what to do. This happens when:"
+msgstr ""
+
+#: templates/add.html:117
+msgid ""
+"a player is not uniquely identified. In this case, add more information. Use "
+"the ID number if necessary."
+msgstr ""
+
+#: templates/add.html:118
+msgid ""
+"a player can't be found. In this case, add the switch \"<strong>!MAKE</"
+"strong>\" to the end of the respective line(s). This will make a player "
+"entry if needed. In this case, you <strong>must</strong> provide a player "
+"tag and race.  Please also provide a country code if possible, and make sure "
+"the player tag is spelled correctly (including capitalisation)."
+msgstr ""
+
+#: templates/add.html:119
+msgid ""
+"a duplicate entry was found. If you are certain that the two players in "
+"question played more than one match within a single day with the same result "
+"(this can happen, but it's rare), add the switch \"<strong>!DUP</strong>\" "
+"to the end of the respective line(s). This will force the match to be "
+"entered."
+msgstr ""
+
+#: templates/add.html:122
+msgid ""
+"When submitted, the system will try to find as many players as it can. If a "
+"player can't be found, or if the information provided applies to more than "
+"one player, that's fine. We will fix it when reviewing the submission."
+msgstr ""
+
+#: templates/add.html:124
+msgid ""
+"The system will also try to avoid duplicates. If your match appears to be a "
+"duplicate of another match in the database (same players, score and close in "
+"time), you will get a warning. To avoid this, add the switch \"<strong>!DUP</"
+"strong>\" to the end of the match description. This will force the match to "
+"be entered."
+msgstr ""
+
+#: templates/add.html:127
+#, python-format
+msgid ""
+"Most players are uniquely identifiable through their nickname alone. For a "
+"list of the most common exceptions, please look at %(a)scommon problems</a>."
+msgstr ""
+
+#: templates/add.html:131
+msgid "Here are some real-world examples. From the GSL:"
+msgstr ""
+
+#: templates/add.html:139
+msgid ""
+"Some players have to be identified by race and/or country, such as Creator:"
+msgstr ""
+
+#: templates/add.html:143
+msgid ""
+"Some players have aliases to help entering their names, such as BBoongBBoong:"
+msgstr ""
+
+#: templates/add.html:147
+msgid "Some players are more easily identified by team, such as Mvp and HerO:"
+msgstr ""
+
+#: templates/add.html:154
+msgid ""
+"Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer and Clarity "
+"KiLLeR should be identified by team."
+msgstr ""
+
+#: templates/add.html:155
+msgid ""
+"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need "
+"to be identified by race and/or country."
+msgstr ""
+
+#: templates/add.html:157
+msgid "Common country codes"
+msgstr ""
+
+#: templates/add.html:166
+msgid "USA"
+msgstr ""
+
+#: templates/add.html:172 templates/review.html:84
+msgid "Commit"
+msgstr ""
+
+#: templates/add.html:173
+msgid "Commit and close event"
+msgstr ""
+
+#: templates/api.html:28
+msgid "API access key"
+msgstr ""
+
+#: templates/api.html:30
+#, python-format
+msgid ""
+"To use the Aligulac API you first need an API access key. To generate one, "
+"please use %(a)sthis form</a>. You will have to provide your name (or the "
+"name of the organization), and a contact e-mail address."
+msgstr ""
+
+#: templates/api.html:32
+msgid ""
+"If the request is successful, you will be provided with a 20-character "
+"random string. This string will have to be passed with every API request you "
+"make as a parameter named <code>apikey</code>. In the rest of this document, "
+"this parameter will be implied."
+msgstr ""
+
+#: templates/api.html:34
+msgid "API overview"
+msgstr ""
+
+#: templates/api.html:36
+#, python-format
+msgid ""
+"The API is for the most part self-documenting. The root URI is <code>"
+"%(uri)s</code>. Requests to this URI will return a JSON object describing "
+"the available resources and their root URIs, e.g."
+msgstr ""
+
+#: templates/api.html:53
+#, python-format
+msgid ""
+"<strong>NOTE:</strong> For making requests in the browser, please append "
+"%(json)s to the URI."
+msgstr ""
+
+#: templates/api.html:55
+#, python-format
+msgid ""
+"The resources available correspond for the most part to the tables in the "
+"database, which are described %(a)shere</a>. In addition to these, we have "
+"API access to predictions as well, described below."
+msgstr ""
+
+#: templates/api.html:57
+#, python-format
+msgid ""
+"Requests for player objects thus need to go to %(uri)s. For a detailed "
+"description of each resource, go to the schema URI. This will return a JSON "
+"object with the following fields:"
+msgstr ""
+
+#: templates/api.html:60
+msgid "and"
+msgstr ""
+
+#: templates/api.html:61
+#, python-format
+msgid "list of accepted HTTP methods (should always be %(get)s and %(post)s)."
+msgstr ""
+
+#: templates/api.html:63
+#, python-format
+msgid "default reply format (should always be %(json)s)."
+msgstr ""
+
+#: templates/api.html:65
+msgid "default page limit when grabbing many objects at once."
+msgstr ""
+
+#: templates/api.html:67
+msgid ""
+"A dictionary describing each field of the given resource, with the following "
+"information:"
+msgstr ""
+
+#: templates/api.html:70
+#, python-format
+msgid " %(true)s if the field can be %(null)s, %(false)s otherwise."
+msgstr ""
+
+#: templates/api.html:72
+#, python-format
+msgid ""
+"Field type (e.g. %(c)s%(string)s%(d)s, %(c)s%(integer)s%(d)s, %(c)s%(float)s"
+"%(d)s, %(c)s%(datetime)s%(d)s, etc.). For related objects of another type, "
+"this field will read %(c)s%(related)s%(d)s."
+msgstr ""
+
+#: templates/api.html:74
+msgid "Default value, if any (usually not)."
+msgstr ""
+
+#: templates/api.html:76
+msgid "Additional human-readable information."
+msgstr ""
+
+#: templates/api.html:78
+msgid "The other fields are not of interest."
+msgstr ""
+
+#: templates/api.html:80
+#, python-format
+msgid ""
+"A dictionary describing the filters available on each field. For each field, "
+"this is either a list of filters, the integer %(one)s (all filters "
+"available), or the integer %(two)s (all filters available, including related "
+"objects). With very few exceptions, all kinds of filters are allowed."
+msgstr ""
+
+#: templates/api.html:82
+msgid ""
+"A list of fields that allow sorting. With very few exceptions, this will be "
+"all fields."
+msgstr ""
+
+#: templates/api.html:85
+msgid "Getting all objects"
+msgstr ""
+
+#: templates/api.html:87
+#, python-format
+msgid ""
+"To obtain all objects of a given resource, just make a request to the base "
+"resource URI, e.g.  <code>%(uri)s</code>. This will return a JSON object "
+"with two fields: <strong>meta</strong>, giving paging information, and "
+"<strong>objects</strong>, which is a list of objects. By default, this will "
+"return a limited number of objects per page (normally 20). To control the "
+"page size and offset, give the <code>limit</code> and <code>offset</code> "
+"arguments, e.g."
+msgstr ""
+
+#: templates/api.html:91
+msgid ""
+"will return objects number 100-149. In addition, the <strong>meta</strong> "
+"field gives you the URIs for the next and previous pages, as well as the "
+"total count of objects."
+msgstr ""
+
+#: templates/api.html:93
+msgid ""
+"You can get all objects at once by giving <code>limit=0</code>, but this is "
+"disallowed on some resources and otherwise not encouraged."
+msgstr ""
+
+#: templates/api.html:95
+msgid "Getting a single object by ID"
+msgstr ""
+
+#: templates/api.html:97
+#, python-format
+msgid ""
+"If you know the id of the object you are interested in, you can get it "
+"directly. For example, to get Leenock's player information, go to <code>"
+"%(uri)s</code>, since Leenock's id is %(id)s."
+msgstr ""
+
+#: templates/api.html:99
+msgid ""
+"This will return just the object directly, with no metadata and no "
+"surrounding list."
+msgstr ""
+
+#: templates/api.html:101
+msgid "Getting several objects by ID"
+msgstr ""
+
+#: templates/api.html:103
+#, python-format
+msgid ""
+"If you want to access more than one object, you can request them as a "
+"<strong>set</strong> to save both us and yourself from extra work. If you "
+"are interested in Leenock, Creator and Life (ids %(commalist)s and "
+"%(final)s), you can make a request to <code>%(uri)s</code>."
+msgstr ""
+
+#: templates/api.html:105
+msgid "Related objects"
+msgstr ""
+
+#: templates/api.html:107
+msgid ""
+"Fields that point to related objects will usually be given by resource URIs "
+"in the returned objects. For frequently useful information (e.g. players' "
+"current rating), the related object(s) will be given as well, although they "
+"are often stripped-down versions without detailed information."
+msgstr ""
+
+#: templates/api.html:109
+msgid "Filtering"
+msgstr ""
+
+#: templates/api.html:111
+msgid ""
+"You can apply filters to the base URI. They are applied in the following "
+"manner:"
+msgstr ""
+
+#: templates/api.html:115
+msgid ""
+"If filtering on related objects is available, this can be done as follows:"
+msgstr ""
+
+#: templates/api.html:119
+#, python-format
+msgid ""
+"In principle, these chains can be arbitrarily long. The available filters "
+"correspond to those found in <a href=\"%(uri)s\">Django</a>. Here is a brief "
+"overview:"
+msgstr ""
+
+#: templates/api.html:123
+msgid ""
+"Exact lookup (can also be done just as <code>fieldname=value</code>) or case-"
+"insensitive matching for strings."
+msgstr ""
+
+#: templates/api.html:125
+msgid "Case sensitive or insensitive string containment."
+msgstr ""
+
+#: templates/api.html:127
+msgid "Case sensitive or insensitive string prefix or postfix matching."
+msgstr ""
+
+#: templates/api.html:129
+msgid ""
+"Case sensitive or insensitive regular expression matching. The regular "
+"expression syntax is defined by Python's <code>re</code> module."
+msgstr ""
+
+#: templates/api.html:131
+msgid ""
+"The given field value must be an element of the provided comma-separated "
+"list."
+msgstr ""
+
+#: templates/api.html:133
+msgid "Numerical orderings &gt;, ≥, &lt; and ≤."
+msgstr ""
+
+#: templates/api.html:135
+msgid ""
+"The given field value must lie between the given values (separated by a "
+"comma). Useful for dates."
+msgstr ""
+
+#: templates/api.html:137
+msgid ""
+"Applies to date fields, matches only on the specified integer value. Months "
+"and week days are numbered from 1, and the week is assumed to start on "
+"Sunday."
+msgstr ""
+
+#: templates/api.html:139
+msgid ""
+"Takes a boolean, will only match objects where the given field is or is not "
+"null."
+msgstr ""
+
+#: templates/api.html:142
+msgid "Ordering"
+msgstr ""
+
+#: templates/api.html:144
+msgid ""
+"To sort by a field, add the parameter <code>order_by=fieldname</code> for "
+"ascending order, and <code>order_by=-fieldname</code> for descending order."
+msgstr ""
+
+#: templates/api.html:146
+msgid "Prediction requests"
+msgstr ""
+
+#: templates/api.html:148
+#, python-format
+msgid ""
+"Requests for predictions do not correspond to the database, and work a "
+"little differently, but corresponds more or less exactly to the way the <a "
+"href=\"%(uri)s\">prediction page</a> works. We currently support five "
+"different formats:"
+msgstr ""
+
+#: templates/api.html:151
+msgid "Single best-of-N matches"
+msgstr ""
+
+#: templates/api.html:152
+msgid "Dual tournaments"
+msgstr ""
+
+#: templates/api.html:153
+msgid "also called GSL-style groups"
+msgstr ""
+
+#: templates/api.html:154
+msgid "Single-elimination brackets"
+msgstr ""
+
+#: templates/api.html:155
+msgid "Round-robin groups"
+msgstr ""
+
+#: templates/api.html:156
+msgid "Proleague-style team matches"
+msgstr ""
+
+#: templates/api.html:159
+#, python-format
+msgid ""
+"The URI for match prediction is then <code>%(uri)s</code>, where <code>"
+"%(a)s</code> and <code>%(b)s</code> are the ids for the two players. You "
+"also have to supply a <code>%(bo)s</code> parameter denoting the match "
+"length, and this has to be a positive odd integer. The following conditions "
+"apply."
+msgstr ""
+
+#: templates/api.html:162
+msgid "For single matches, you must provide exactly two players."
+msgstr ""
+
+#: templates/api.html:163
+msgid "For dual tournaments, you must provide exactly four players."
+msgstr ""
+
+#: templates/api.html:164
+msgid ""
+"For single elimination brackets, you must provide a number of players that "
+"is a power of two."
+msgstr ""
+
+#: templates/api.html:165
+msgid ""
+"For proleague matches, you must provide an even number of players, one full "
+"team before the other (there does not have to be an odd number of players "
+"per team)."
+msgstr ""
+
+#: templates/api.html:166
+msgid ""
+"For single elimination, and only for this format, you can give different "
+"match lengths for different rounds, just make a comma-separated list with "
+"the first round first and the final last."
+msgstr ""
+
+#: templates/api.html:169
+msgid ""
+"You can give id 0 to denote a BYE, and there is no restriction on duplicate "
+"players (which can be useful for proleague style to simulate ace matches)."
+msgstr ""
+
+#: templates/api.html:171
+msgid ""
+"Requests will return a JSON object containing various information, which you "
+"can look through by querying the schema URI. For the last four formats "
+"(excluding the single match), the two most important fields are "
+"<code>matches</code> and <code>meanres</code>. The former describes the "
+"already entered results, and the latter describes the median outcome "
+"<em>given the former</em>. Each match has a unique identifier which you can "
+"use to prescribe results and update the predictions. E.g. to set match "
+"identifier <code>abc</code> to result in 1–3, pass the arguments "
+"<code>abc_1=1</code> and <code>abc_2=3</code> with the request."
+msgstr ""
+
+#: templates/api.html:173
+msgid ""
+"It may be difficult to predict in advance which matches will have which "
+"identifiers. If you're unsure, make an empty request with no preset results. "
+"The returned object will then give identifiers for as many matches as it "
+"can. As you fill in results, new matches may become available."
+msgstr ""
+
+#: templates/api.html:175
+msgid ""
+"Unlike the <code>matches</code> list, the <code>meanres</code> always "
+"contains predictions to the end of the tournament. For example, with a 16-"
+"player single elimination bracket, the <code>meanres</code> list will always "
+"contain the full 15 matches, trying to predict who will be in the final. As "
+"you enter results, this may disagree with the prediction, and the players in "
+"the final may change. Thus, <strong>only the <code>matches</code> list "
+"contains “sure” information</strong>."
+msgstr ""
+
+#: templates/api.html:177
+msgid "Common use cases"
+msgstr ""
+
+#: templates/api.html:179
+msgid "Get the current top ten rating list"
+msgstr ""
+
+#: templates/api.html:181
+msgid ""
+"Current ratings are delivered together with player objects, so this will "
+"suffice:"
+msgstr ""
+
+#: templates/api.html:192
+msgid ""
+"Null values come before non-null values, so we must filter out the null "
+"ratings first. The filter on <code>decay</code> is to only select active "
+"players. Alternatively, for a cleaner method, just request for ratings "
+"directly."
+msgstr ""
+
+#: templates/api.html:203
+msgid ""
+"Note that in this case you have to query for the period you want. There is "
+"an alias for <code>rating</code> called <code>activerating</code> which "
+"automatically filters away inactive ratings, but otherwise works the same "
+"way. So you could use:"
+msgstr ""
+
+#: templates/changepwd.html:14
+#, python-format
+msgid "To change the password for %(user)s, fill in the form."
+msgstr ""
+
+#: templates/changepwd.html:21
+msgid "Old password"
+msgstr "请输入旧密码"
+
+#: templates/changepwd.html:27
+msgid "New password"
+msgstr "请输入新密码"
+
+#: templates/changepwd.html:33
+msgid "New password again"
+msgstr "请再次输入新密码"
+
+#: templates/changepwd.html:39
+msgid "Change"
+msgstr "更改"
+
+#: templates/clocks.html:10
+msgid "Days since…"
+msgstr ""
+
+#: templates/clocks.html:34
+msgid "year"
+msgid_plural "years"
+msgstr[0] "年"
+
+#: templates/clocks.html:37
+msgid "day"
+msgid_plural "days"
+msgstr[0] "日"
+
+#: templates/clocks.html:60 templates/matchlist.html:156
+msgid "Y-m-d"
+msgstr "年-月-日"
+
+#: templates/clocks.html:81
+msgid ""
+"<b>Major</b> is defined by being a tournament where the first place prize "
+"money exceeds $2,000."
+msgstr ""
+
+#: templates/clocks.html:82
+msgid ""
+"<b>Premier</b> is defined by being an offline tournament where the first "
+"place prize money exceeds $10,000"
+msgstr ""
+
+#: templates/clocks.html:83
+#, python-format
+msgid ""
+"These differ from the definitions used by %(a)sLiquipedia</a>. The reason "
+"for this being that it's hard use their definition when doing a database "
+"lookup as their definitions aren't well-defined."
+msgstr ""
+
+#: templates/db.html:16
+msgid "Last ratings update"
+msgstr ""
+
+#: templates/db.html:18 templates/db.html.py:93
+msgid "F jS, Y, H:i e"
+msgstr ""
+
+#: templates/db.html:19
+msgid "log"
+msgstr ""
+
+#: templates/db.html:25 templates/db.html.py:31 templates/db.html.py:38
+#: templates/db.html:45 templates/db.html.py:52
+#: templates/reports_balance.html:82 templates/reports_balance.html.py:90
+#: templates/reports_balance.html:98
+msgid "games"
+msgstr ""
+
+#: templates/db.html:25 templates/db.html.py:32 templates/db.html.py:39
+#: templates/db.html:46 templates/db.html.py:53
+msgid "matches"
+msgstr ""
+
+#: templates/db.html:57
+msgid "Matches with event info"
+msgstr ""
+
+#: templates/db.html:61
+msgid "Uncatalogued matches"
+msgstr ""
+
+#: templates/db.html:67
+#, python-format
+msgid "%(nplayers)s, of which %(nkoreans)s Koreans"
+msgstr ""
+
+#: templates/db.html:74
+#, python-format
+msgid "%(nteams)s, of which %(nactive)s active"
+msgstr ""
+
+#: templates/db.html:78
+msgid "Top submitters (number of matches)"
+msgstr ""
+
+#: templates/db.html:88
+#, python-format
+msgid ""
+"The database dump file is currently %(span)soffline</span> for reasons "
+"unknown."
+msgstr ""
+
+#: templates/db.html:94
+#, python-format
+msgid ""
+"You can download a PostgreSQL dump <a href=\"%(dump)s\">here</a> (%(dumpmb)s "
+"MiB) or <a href=\"%(gzdump)s\">here</a> (%(gzdumpmb)s MiB gzipped), current "
+"as of %(datetime)s (UTC %(tz)s). It is free to use for non-commercial "
+"purposes if you credit this website when doing so."
+msgstr ""
+
+#: templates/db.html:98
+msgid ""
+"The dump contains 11 tables. Some columns are foreign keys to tables that "
+"have been removed from the dump (primarily involving user accounts)."
+msgstr ""
+
+#: templates/earnings.html:19
+#, python-format
+msgid "In %(year)s, %(origpp)s (%(totalpp)s) was awarded in prize money."
+msgstr ""
+
+#: templates/earnings.html:21
+#, python-format
+msgid "In total, %(origpp)s (%(totalpp)s) was awarded in prize money."
+msgstr ""
+
+#: templates/earnings.html:23
+#, python-format
+msgid "In %(year)s, %(totalpp)s was awarded in prize money."
+msgstr ""
+
+#: templates/earnings.html:25
+#, python-format
+msgid "In total, %(totalpp)s was awarded in prize money."
+msgstr ""
+
+#: templates/earnings.html:28
+msgid "The filters came up empty. :("
+msgstr ""
+
+#: templates/earnings.html:32
+msgid "Filter by year:"
+msgstr "按年份筛选"
+
+#: templates/earnings.html:41
+msgid "Filter by country:"
+msgstr "按国家筛选"
+
+#: templates/earnings.html:49
+msgid "Filter by currency:"
+msgstr "按货币筛选"
+
+#. Translators: The verb "to filter".
+#: templates/earnings.html:57 templates/history.html:42
+#: templates/period.html:392 templates/player_results.html:20
+msgid "Filter"
+msgstr "筛选"
+
+#: templates/earnings.html:80
+#, python-format
+msgid "Page %(page)s/%(npages)s"
+msgstr ""
+
+#: templates/earnings.html:108 templates/player.html:486
+#: templates/team.html:97
+msgid "Total earnings"
+msgstr "总收入"
+
+#: templates/eventmgr.html:17
+msgid ""
+"The events are organized in a tree, loosely hierarchical with "
+"organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so "
+"on. There are no hard rules."
+msgstr ""
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:20
+msgid ""
+"The name displayed everywhere on the site is the concatenation of the event "
+"name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code "
+"S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S Ro32 Group A». "
+"With this in mind, try to name the events so that the full name flows as "
+"well as possible."
+msgstr ""
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:23
+msgid ""
+"Do not repeat information. If you have an event called «Qualifiers», the "
+"subevents should not be called «Korean Qualifiers». Just «Korea» is fine."
+msgstr ""
+
+#: templates/eventmgr.html:25
+msgid ""
+"Matches can only be assigned to leaf events (i.e. events with no subevents)."
+msgstr ""
+
+#: templates/eventmgr.html:27
+msgid ""
+"Close an event after all the matches has been assigned. This will remove it "
+"from the list below and all drop-down boxes on the site, to help "
+"readability. If you want to reopen an event, this can be done in the admin "
+"interface or on the event page."
+msgstr ""
+
+#. Translators: The event names and noprint have to be in English.
+#: templates/eventmgr.html:30
+msgid ""
+"You can improve readability by making an event «invisible» (open the admin "
+"interface and check the «noprint» option). This will hide the name. This is "
+"useful for events called e.g. «Group Stage» to turn «Code S Group Stage "
+"Group A» into «Code S Group A», which flows better. This is often used for "
+"group stages and playoffs."
+msgstr ""
+
+#: templates/eventmgr.html:32
+msgid ""
+"Events with many games should also be marked «big». This will cause the list "
+"of games to be cut off. If you forget, no big deal, it's done automatically."
+msgstr ""
+
+#. Translators: The event names have to be in English.
+#: templates/eventmgr.html:35
+msgid ""
+"<strong>Naming conventions:</strong> Ro («round of») with capital R and "
+"small o, followed immediately by the number. Third place matches should be "
+"named exactly that (not «3rd»)."
+msgstr ""
+
+#: templates/eventmgr.html:38
+msgid "Add root event"
+msgstr ""
+
+#: templates/eventmgr.html:44 templates/eventres.html:335
+#: templates/eventres.html.py:372 templates/eventres.html:392
+#: templates/eventres.html.py:445 templates/player.html:528
+#: templates/team.html:128
+msgid "close"
+msgstr "关闭"
+
+#: templates/eventmgr.html:57
+msgid "Commit new sub-events"
+msgstr ""
+
+#: templates/eventmgr.html:58
+msgid "Close event"
+msgstr ""
+
+#. Translators: Short for "ADMin".
+#: templates/eventmgr.html:131 templates/eventmgr.html.py:201
+#: templates/eventres.html:195
+msgid "adm"
+msgstr ""
+
+#: templates/eventmgr.html:136 templates/eventmgr.html.py:202
+#: templates/eventres.html:175 templates/player.html:388
+#: templates/team.html:32
+msgid "edit"
+msgstr "编辑"
+
+#: templates/eventmgr.html:142 templates/eventmgr.html.py:203
+#: templates/eventres.html:197 templates/matchlist.html:72
+msgid "add"
+msgstr "添加"
+
+#: templates/eventmgr.html:161 templates/eventmgr.html.py:208
+msgid "modify"
+msgstr "修改"
+
+#. Translators: Path in the tree sense.
+#: templates/eventres.html:30
+msgid "path"
+msgstr ""
+
+#: templates/eventres.html:33 templates/period.html:33
+msgid "matchups"
+msgstr ""
+
+#. Translators: Level in the tree sense.
+#: templates/eventres.html:41
+msgid "Same level:"
+msgstr ""
+
+#. Translators: Level in the tree sense.
+#: templates/eventres.html:64
+msgid "Next level:"
+msgstr ""
+
+#. Translators: Path in the tree sense.
+#: templates/eventres.html:88
+msgid "Full path:"
+msgstr ""
+
+#. Translators: root in the tree sense.
+#: templates/eventres.html:92
+msgid "Root"
+msgstr ""
+
+#: templates/eventres.html:103 templates/eventres.html.py:259
+#: templates/period.html:198 templates/period.html.py:336
+#: templates/reports_balance.html:79 templates/reports_balance.html.py:82
+msgid "PvT"
+msgstr ""
+
+#: templates/eventres.html:119 templates/eventres.html.py:265
+#: templates/period.html:214 templates/period.html.py:342
+#: templates/reports_balance.html:87 templates/reports_balance.html.py:90
+msgid "PvZ"
+msgstr ""
+
+#: templates/eventres.html:135 templates/eventres.html.py:271
+#: templates/period.html:230 templates/period.html.py:348
+#: templates/reports_balance.html:95 templates/reports_balance.html.py:98
+msgid "TvZ"
+msgstr ""
+
+#. Translators: Mirror matchups
+#: templates/eventres.html:151 templates/eventres.html.py:277
+#: templates/period.html:245 templates/period.html.py:354
+msgid "Mirrors"
+msgstr ""
+
+#: templates/eventres.html:173
+msgid "Details"
+msgstr "细节"
+
+#. Translators: Short for "add SUBevent".
+#: templates/eventres.html:178
+msgid "sub"
+msgstr ""
+
+#. Translators: Short for "add PrizePool".
+#: templates/eventres.html:182
+msgid "pp"
+msgstr ""
+
+#. Translators: Short for "STories".
+#: templates/eventres.html:187
+msgid "st"
+msgstr ""
+
+#. Translators: Short for "reORDer".
+#: templates/eventres.html:191
+msgid "ord"
+msgstr ""
+
+#: templates/eventres.html:204 templates/player_earnings.html:32
+msgid "Dates"
+msgstr ""
+
+#. Translators: Date to date.
+#: templates/eventres.html:216
+#, python-format
+msgid "%(fst)s to %(snd)s"
+msgstr ""
+
+#: templates/eventres.html:229
+msgid "On-/Offline"
+msgstr ""
+
+#: templates/eventres.html:234
+msgid "Prize pool"
+msgstr ""
+
+#: templates/eventres.html:279 templates/period.html:356
+msgid "PvP"
+msgstr ""
+
+#: templates/eventres.html:280 templates/period.html:356
+msgid "TvT"
+msgstr ""
+
+#: templates/eventres.html:281 templates/period.html:356
+msgid "ZvZ"
+msgstr ""
+
+#: templates/eventres.html:287 templates/player.html:502
+#: templates/team.html:109
+msgid "External"
+msgstr ""
+
+#: templates/eventres.html:294 templates/eventres.html.py:297
+#: templates/eventres.html:300 templates/eventres.html.py:303
+#: templates/eventres.html:306
+msgid "TLPD"
+msgstr ""
+
+#: templates/eventres.html:310 templates/events_open.html:38
+#: templates/events_open.html.py:83 templates/events_open.html:131
+msgid "TL"
+msgstr ""
+
+#. Translators: LP = Liquipedia
+#: templates/eventres.html:313 templates/events_open.html:41
+#: templates/events_open.html.py:87 templates/events_open.html:135
+#: templates/player.html:515 templates/team.html:115
+msgid "LP"
+msgstr ""
+
+#: templates/eventres.html:324
+msgid "This event is still <strong>open</strong>. Games may be added."
+msgstr ""
+
+#: templates/eventres.html:328
+msgid ""
+"This event is <strong>big</strong>, so the list of games has been cut-off. "
+"Go to an event on the next level to see a complete list."
+msgstr ""
+
+#: templates/eventres.html:337
+msgid ""
+"Put the <strong>least significant</strong> events first (the ones played "
+"first, or with most players). Finals should be toward the bottom."
+msgstr ""
+
+#: templates/eventres.html:397
+msgid "Extant stories"
+msgstr ""
+
+#: templates/eventres.html:400 templates/eventres.html.py:433
+#: templates/periods.html:21
+msgid "New"
+msgstr ""
+
+#: templates/eventres.html:434 templates/pred_match.html:170
+msgid "Update"
+msgstr ""
+
+#: templates/eventres.html:435
+msgid "Delete"
+msgstr ""
+
+#: templates/eventres.html:466
+msgid ""
+"<strong>Warning:</strong> Changes to date, game and offline will modify all "
+"matches associated with all events in this tree. Changing type will "
+"potentially change all children and ancestor events! Make sure you know what "
+"you are doing!"
+msgstr ""
+
+#: templates/eventres.html:495
+msgid "This event has no registered games... yet."
+msgstr ""
+
+#: templates/eventres.html:498
+#, python-format
+msgid ""
+"Notice something missing? We're always looking for people to help <a href="
+"\"%(uri)s\">populate our database</a>!"
+msgstr ""
+
+#: templates/events.html:15
+msgid ""
+"The events are organized in a hierarchical fashion. Thus, all GSL "
+"tournaments are filed under GSL, all Code S under their respective seasons, "
+"all groups under their respective Code S event, and so on."
+msgstr ""
+
+#: templates/events.html:17
+msgid "Individual leagues and events"
+msgstr ""
+
+#: templates/events.html:21
+msgid "Team leagues"
+msgstr ""
+
+#: templates/events.html:25
+msgid "Frequently recurring cups"
+msgstr ""
+
+#: templates/events_open.html:12
+msgid ""
+"These events have games, which means that they are currently active and have "
+"not yet finished.  If the event has finished, please make sure that all "
+"matches have been added before closing the event."
+msgstr ""
+
+#: templates/events_open.html:18
+msgid "Open events with games"
+msgstr ""
+
+#: templates/events_open.html:19
+msgid "Last added game"
+msgstr ""
+
+#: templates/events_open.html:20 templates/events_open.html.py:67
+#: templates/events_open.html:115
+msgid "External links"
+msgstr ""
+
+#: templates/events_open.html:56
+msgid "Close events"
+msgstr ""
+
+#: templates/events_open.html:62
+msgid ""
+"These events have no games yet, which means that they are either future "
+"events or finished events that are not yet in the database.  In the latter "
+"case, feel free to use the external links provided to add the matches to the "
+"database and close the event when you are done."
+msgstr ""
+
+#: templates/events_open.html:66
+msgid "Open events without games"
+msgstr ""
+
+#: templates/events_open.html:101
+msgid "Missing prize pool information"
+msgstr ""
+
+#: templates/events_open.html:102
+msgid ""
+"These events are closed and have no information on their prize pools yet."
+msgstr ""
+
+#: templates/events_open.html:105
+msgid ""
+"If you know the prize pool, visit the event page and add the prize pool "
+"information there."
+msgstr ""
+
+#: templates/events_open.html:106
+msgid ""
+"If you know the event has no prize pool, you can mark the event as having no "
+"prize pool. Don't just assume that an event has no prize pool just because "
+"it is a qualifier, however. Some do!"
+msgstr ""
+
+#: templates/events_open.html:107
+msgid ""
+"If you are not sure whether the event has a prize pool or do not have the "
+"exact sums, do nothing"
+msgstr ""
+
+#: templates/events_open.html:114
+msgid "Events with no prize pool information"
+msgstr ""
+
+#: templates/events_open.html:151
+msgid "Marked events have no prize pool"
+msgstr ""
+
+#: templates/eventtable.html:41
+msgid "Smaller events:"
+msgstr ""
+
+#. Translators: Go as in go to a page.
+#: templates/eventtable.html:48 templates/results.html:18
+msgid "Go"
+msgstr ""
+
+#: templates/forms.html:96
+msgctxt "between x and y inclusive"
+msgid "between"
+msgstr ""
+
+#: templates/forms.html:99
+msgctxt "between x and y inclusive"
+msgid "and"
+msgstr ""
+
+#: templates/forms.html:102
+msgctxt "between x and y inclusive"
+msgid "inclusive"
+msgstr ""
+
+#: templates/historical.html:10
+#, python-format
+msgid "%(pl)s rating history"
+msgstr ""
+
+#: templates/historical.html:19 templates/recordlist.html:16
+msgid "List"
+msgstr ""
+
+#: templates/historical.html:22 templates/records.html:50
+msgid "Rating vP"
+msgstr ""
+
+#: templates/historical.html:24 templates/records.html:51
+msgid "Rating vT"
+msgstr ""
+
+#: templates/historical.html:26 templates/records.html:52
+msgid "Rating vZ"
+msgstr ""
+
+#: templates/history.html:16
+msgid "Number of players:"
+msgstr ""
+
+#: templates/history.html:24
+msgid "Races:"
+msgstr ""
+
+#: templates/history.html:34 templates/period.html:380
+msgid "Nationalities:"
+msgstr "国籍"
+
+#: templates/history.html:61 templates/player.html:567
+#: templates/reports_balance.html:35 templates/reports_balance.html.py:127
+msgid "Click and drag to zoom"
+msgstr ""
+
+#: templates/hof.html:14
+msgid ""
+"This list ranks players by <em>periods of domination</em>. The relevant "
+"score is called PP (<em>period-points</em>), and is the sum over a range of "
+"lists of the signed distance from a player to number ten on the list."
+msgstr ""
+
+#: templates/hof.html:16
+msgid ""
+"For most players, their PP is equal to the sum of the rating gaps for each "
+"list in which they were in the top ten. If a player has been there more than "
+"once, the optimal range of lists is chosen, and it can include times when "
+"the player was not in the top ten, if these are sufficiently brief and "
+"negligible."
+msgstr ""
+
+#: templates/hof.html:18
+msgid ""
+"In short, this is a list of players who have ever been top ten, rewarding "
+"both large rating gaps and long periods of rule. Think of it as a king-of-"
+"the-hill hall of fame."
+msgstr ""
+
+#: templates/hof.html:20
+msgid ""
+"To avoid rating artifacts, these records are only counted after 25 periods "
+"(i.e. list 25, on February 9th, 2011)."
+msgstr ""
+
+#: templates/hof.html:30 templates/period.html:304
+msgid "Start"
+msgstr ""
+
+#. Translators: Length as in duration
+#: templates/hof.html:32
+msgid "Length"
+msgstr ""
+
+#: templates/hof.html:57
+msgid "weeks"
+msgstr ""
+
+#: templates/index.html:42
+msgid "Download PNG image"
+msgstr "下载PNG图片"
+
+#: templates/index.html:43
+msgid "Download JPEG image"
+msgstr "下载JPEG图片"
+
+#: templates/index.html:44
+msgid "Download PDF document"
+msgstr "下载PDF文件"
+
+#: templates/index.html:45
+msgid "Download SVG vector image"
+msgstr "下载SVG矢量图片"
+
+#: templates/index.html:46
+msgid "Loading..."
+msgstr "载入中..."
+
+#: templates/index.html:47
+msgid "Print chart"
+msgstr "打印图表"
+
+#: templates/index.html:48
+msgid "Reset zoom"
+msgstr ""
+
+#: templates/index.html:50
+msgctxt "Big first letter"
+msgid "January"
+msgstr "一月"
+
+#: templates/index.html:51
+msgctxt "Big first letter"
+msgid "February"
+msgstr "二月"
+
+#: templates/index.html:52
+msgctxt "Big first letter"
+msgid "March"
+msgstr "三月"
+
+#: templates/index.html:53
+msgctxt "Big first letter"
+msgid "April"
+msgstr "四月"
+
+#: templates/index.html:54 templates/index.html.py:68
+msgctxt "Big first letter"
+msgid "May"
+msgstr "五月"
+
+#: templates/index.html:55
+msgctxt "Big first letter"
+msgid "June"
+msgstr "六月"
+
+#: templates/index.html:56
+msgctxt "Big first letter"
+msgid "July"
+msgstr "七月"
+
+#: templates/index.html:57
+msgctxt "Big first letter"
+msgid "August"
+msgstr "八月"
+
+#: templates/index.html:58
+msgctxt "Big first letter"
+msgid "September"
+msgstr "九月"
+
+#: templates/index.html:59
+msgctxt "Big first letter"
+msgid "October"
+msgstr "十月"
+
+#: templates/index.html:60
+msgctxt "Big first letter"
+msgid "November"
+msgstr "十一月"
+
+#: templates/index.html:61
+msgctxt "Big first letter"
+msgid "December"
+msgstr "十二月"
+
+#: templates/index.html:64
+msgctxt "Big first letter"
+msgid "Jan"
+msgstr "一月"
+
+#: templates/index.html:65
+msgctxt "Big first letter"
+msgid "Feb"
+msgstr "二月"
+
+#: templates/index.html:66
+msgctxt "Big first letter"
+msgid "Mar"
+msgstr "三月"
+
+#: templates/index.html:67
+msgctxt "Big first letter"
+msgid "Apr"
+msgstr "四月"
+
+#: templates/index.html:69
+msgctxt "Big first letter"
+msgid "Jun"
+msgstr "六月"
+
+#: templates/index.html:70
+msgctxt "Big first letter"
+msgid "Jul"
+msgstr "七月"
+
+#: templates/index.html:71
+msgctxt "Big first letter"
+msgid "Aug"
+msgstr "八月"
+
+#: templates/index.html:72
+msgctxt "Big first letter"
+msgid "Sep"
+msgstr "九月"
+
+#: templates/index.html:73
+msgctxt "Big first letter"
+msgid "Oct"
+msgstr "十月"
+
+#: templates/index.html:74
+msgctxt "Big first letter"
+msgid "Nov"
+msgstr "十一月"
+
+#: templates/index.html:75
+msgctxt "Big first letter"
+msgid "Dec"
+msgstr "十二月"
+
+#: templates/index.html:78
+msgctxt "Big first letter"
+msgid "Sunday"
+msgstr "周日"
+
+#: templates/index.html:79
+msgctxt "Big first letter"
+msgid "Monday"
+msgstr "周一"
+
+#: templates/index.html:80
+msgctxt "Big first letter"
+msgid "Tuesday"
+msgstr "周二"
+
+#: templates/index.html:81
+msgctxt "Big first letter"
+msgid "Wednesday"
+msgstr "周三"
+
+#: templates/index.html:82
+msgctxt "Big first letter"
+msgid "Thursday"
+msgstr "周四"
+
+#: templates/index.html:83
+msgctxt "Big first letter"
+msgid "Friday"
+msgstr "周五"
+
+#: templates/index.html:84
+msgctxt "Big first letter"
+msgid "Saturday"
+msgstr "周六"
+
+#: templates/index.html:125
+msgid "DEVELOPMENT SERVER"
+msgstr ""
+
+#: templates/index.html:128
+msgid "StarCraft 2 Progaming Statistics and Predictions"
+msgstr ""
+
+#: templates/index.html:161 templates/language.html:11
+#: templates/language.html.py:17
+msgid "Language"
+msgstr "语言"
+
+#: templates/index.html:165
+msgid "Find player, team or event:"
+msgstr ""
+
+#: templates/index.html:186
+msgid "Current top 10"
+msgstr ""
+
+#: templates/index.html:191
+msgid "F jS"
+msgstr ""
+
+#: templates/index.html:191
+#, python-format
+msgid ""
+"The above list is a preview of the next rating list, which will be finalized "
+"on %(dt)s."
+msgstr ""
+
+#: templates/index.html:203
+#, python-format
+msgid ""
+"Find us on %(a1)sTwitter</a>, %(a2)sGitHub</a> and #aligulac on quakenet."
+msgstr ""
+
+#: templates/index.html:210
+#, python-format
+msgid ""
+"Powered by %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> "
+"and %(a4)sDebian GNU/Linux 6</a>."
+msgstr ""
+
+#: templates/index.html:215
+#, python-format
+msgid ""
+"Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Charts by "
+"%(a3)sHighcharts</a>."
+msgstr ""
+
+#: templates/index.html:219
+msgid "Generate short URL for this page"
+msgstr ""
+
+#. Translators: I would like to use Aligulac in [a certain language]
+#: templates/language.html:21
+msgid "I would like to use Aligulac in…"
+msgstr ""
+
+#: templates/language.html:46
+#, python-format
+msgid ""
+"You could always %(a)shelp us</a> translate Aligulac into your language."
+msgstr ""
+
+#: templates/language.html:48
+msgid "For reasons of convenience, the following will not be translated:"
+msgstr ""
+
+#: templates/language.html:51
+msgid "News"
+msgstr ""
+
+#: templates/language.html:53
+msgid "Event names"
+msgstr ""
+
+#: templates/language.html:54
+msgid "Team names"
+msgstr ""
+
+#: templates/language.html:55
+msgid "Player nicknames"
+msgstr ""
+
+#: templates/login.html:16
+#, python-format
+msgid ""
+"To submit results, please log in with your submitter account. If you don't "
+"have a submitter account, but still want to contribute, please let me know "
+"at: %(email)s."
+msgstr ""
+"如果您要提交结果，请先用您的提交者账号登录。若您没有提交者账号但仍然愿意帮助"
+"我们补充一些结果，请联系我: %(email)s."
+
+#: templates/login.html:22
+msgid "Username:"
+msgstr "用户名"
+
+#: templates/login.html:26
+msgid "Password:"
+msgstr "密码"
+
+#: templates/manage.html:11
+msgid "Miscellaneous"
+msgstr "杂项"
+
+#: templates/manage.html:14
+msgid "Miscellaneous administration"
+msgstr ""
+
+#: templates/manage.html:18
+msgid "Merge players"
+msgstr ""
+
+#: templates/manage.html:27
+msgid "CAREFUL:"
+msgstr "千万注意:"
+
+#. Translators: This will merge X into Y
+#: templates/manage.html:29
+msgid "This will merge"
+msgstr ""
+
+#. Translators: This will merge X into Y
+#: templates/manage.html:31
+msgid "into"
+msgstr ""
+
+#: templates/manage.html:54
+msgid "Merge"
+msgstr ""
+
+#: templates/manage.html:69
+msgid "Move events"
+msgstr ""
+
+#: templates/manage.html:79
+#, python-format
+msgid "This will move %(src)s and all events under it (%(cnt)s) to %(trg)s."
+msgstr ""
+
+#: templates/manage.html:86
+msgid "Move"
+msgstr ""
+
+#: templates/matchlist.html:40
+msgid "Player A"
+msgstr ""
+
+#: templates/matchlist.html:42
+msgid "Player B"
+msgstr ""
+
+#: templates/matchlist.html:66 templates/matchlist.html.py:104
+msgid "Unknown event(s)"
+msgstr ""
+
+#: templates/matchlist.html:76 templates/matchlist.html.py:77
+#: templates/matchlist.html:109 templates/matchlist.html.py:110
+#: templates/matchlist.html:130 templates/matchlist.html.py:131
+#: templates/matchlist.html:145 templates/matchlist.html.py:146
+#: templates/review.html:35
+msgid "hide"
+msgstr ""
+
+#: templates/matchlist.html:76 templates/matchlist.html.py:77
+#: templates/matchlist.html:109 templates/matchlist.html.py:110
+#: templates/matchlist.html:130 templates/matchlist.html.py:131
+#: templates/matchlist.html:145 templates/matchlist.html.py:146
+#: templates/review.html:35
+msgid "show"
+msgstr ""
+
+#. Translators: Check
+#: templates/matchlist.html:82 templates/matchlist.html.py:114
+#: templates/review.html:36
+msgid "chk"
+msgstr ""
+
+#. Translators: Uncheck
+#: templates/matchlist.html:84 templates/matchlist.html.py:115
+#: templates/review.html:37
+msgid "unchk"
+msgstr ""
+
+#: templates/matchlist.html:234
+msgid "unrated"
+msgstr ""
+
+#. Translators: No spaces
+#: templates/matchlist.html:238
+msgid "offline,online"
+msgstr ""
+
+#: templates/period.html:10 templates/period.html.py:301
+#, python-format
+msgid "List %(n)s"
+msgstr ""
+
+#: templates/period.html:27
+msgid "best"
+msgstr ""
+
+#: templates/period.html:30
+msgid "most specialized"
+msgstr ""
+
+#. Translators: Rating changes during a period.
+#: templates/period.html:37
+msgid "Up/Down"
+msgstr ""
+
+#: templates/period.html:69 templates/period.html.py:136
+#: templates/player.html:66 templates/player.html.py:149
+#: templates/player.html:237 templates/ratingdetails.html:63
+#: templates/ratinglist.html:37 templates/ratinglist.html.py:39
+msgid "vP"
+msgstr ""
+
+#: templates/period.html:88 templates/period.html.py:155
+#: templates/player.html:86 templates/player.html.py:169
+#: templates/player.html:262 templates/ratingdetails.html:88
+#: templates/ratinglist.html:45 templates/ratinglist.html.py:47
+msgid "vT"
+msgstr ""
+
+#: templates/period.html:107 templates/period.html.py:174
+#: templates/player.html:106 templates/player.html.py:189
+#: templates/player.html:287 templates/ratingdetails.html:113
+#: templates/ratinglist.html:53 templates/ratinglist.html.py:55
+msgid "vZ"
+msgstr ""
+
+#: templates/period.html:269
+msgid "Winners"
+msgstr ""
+
+#: templates/period.html:286
+msgid "Losers"
+msgstr ""
+
+#: templates/period.html:308
+msgid "End"
+msgstr ""
+
+#: templates/period.html:312
+msgid "Active players"
+msgstr ""
+
+#: templates/period.html:314
+#, python-format
+msgid "%(cnt)s new"
+msgid_plural "%(cnt)s new"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/period.html:318
+msgid "Leading race"
+msgstr ""
+
+#: templates/period.html:325
+msgid "Lagging race"
+msgstr ""
+
+#: templates/period.html:367
+msgid "Show races:"
+msgstr ""
+
+#: templates/period.html:377
+msgid "Race switchers"
+msgstr ""
+
+#: templates/period.html:378
+msgid "Random and race switchers"
+msgstr ""
+
+#: templates/periodpagenav.html:20 templates/periodpagenav.html.py:41
+#: templates/periodpagenav.html:70
+msgid "previous"
+msgstr ""
+
+#: templates/periodpagenav.html:27
+msgid "previous period"
+msgstr ""
+
+#: templates/periodpagenav.html:34
+msgid "first"
+msgstr ""
+
+#: templates/periodpagenav.html:49
+msgid "next"
+msgstr ""
+
+#: templates/periodpagenav.html:56
+msgid "last"
+msgstr ""
+
+#: templates/periodpagenav.html:63
+msgid "next period"
+msgstr ""
+
+#: templates/periods.html:15
+msgid "List date"
+msgstr ""
+
+#. Translators: Overpowered
+#: templates/periods.html:17
+msgid "OP"
+msgstr ""
+
+#. Translators: Underpowered
+#: templates/periods.html:19
+msgid "UP"
+msgstr ""
+
+#: templates/periods.html:20
+msgid "Active"
+msgstr ""
+
+#. Translators: All-time winrates
+#: templates/player.html:29
+msgid "all-time"
+msgstr ""
+
+#. Translators: Recent winrates
+#: templates/player.html:33
+msgid "form"
+msgstr ""
+
+#. Translators: Highest ratings
+#: templates/player.html:37
+msgid "highest"
+msgstr ""
+
+#: templates/player.html:40
+msgid "rivalries"
+msgstr ""
+
+#: templates/player.html:224 templates/player.html.py:249
+#: templates/player.html:274 templates/player.html.py:299
+msgctxt "on date"
+msgid "on"
+msgstr ""
+
+#: templates/player.html:319
+msgid "Biggest rival"
+msgid_plural "Biggest rivals"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/player.html:329
+#, python-format
+msgid "%(cnt)s match"
+msgid_plural "%(cnt)s matches"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/player.html:338
+msgid "Nemesis"
+msgid_plural "Nemeses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/player.html:358
+msgid "Victim"
+msgid_plural "Victims"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/player.html:388
+msgid "Edit info"
+msgstr ""
+
+#: templates/player.html:389
+msgid "Admin interface"
+msgstr ""
+
+#: templates/player.html:389
+msgctxt "admin interface"
+msgid "admin"
+msgstr ""
+
+#: templates/player.html:414 templates/team.html:84
+msgid "Rank"
+msgstr ""
+
+#. Translators: World rank.
+#: templates/player.html:418
+#, python-format
+msgid "#%(rank)s World"
+msgstr ""
+
+#. Translators: Rank among non-Koreans.
+#: templates/player.html:428
+#, python-format
+msgid "#%(rank)s Non-Korean"
+msgstr ""
+
+#. Translators: Rank in a country.
+#: templates/player.html:439
+#, python-format
+msgid "#%(rank)s %(countryfull)s"
+msgstr ""
+
+#: templates/player.html:448
+msgid "Full name"
+msgstr ""
+
+#: templates/player.html:454 templates/team.html:39
+msgid "AKA"
+msgstr ""
+
+#: templates/player.html:474
+msgid "First match"
+msgstr ""
+
+#: templates/player.html:480
+msgid "Last match"
+msgstr ""
+
+#: templates/player.html:491
+msgid "Matches played"
+msgstr ""
+
+#. Translators: SC2E = sc2earnings.com
+#: templates/player.html:511
+msgid "SC2E"
+msgstr ""
+
+#: templates/player.html:564
+#, python-format
+msgid "Rating history for %(tag)s"
+msgstr ""
+
+#: templates/player.html:624
+msgid "Number of games"
+msgstr ""
+
+#: templates/player.html:636
+msgid "vs. Protoss"
+msgstr ""
+
+#: templates/player.html:648
+msgid "vs. Terran"
+msgstr ""
+
+#: templates/player.html:660
+msgid "vs. Zerg"
+msgstr ""
+
+#. Translators: General rating
+#: templates/player.html:673
+msgid "General"
+msgstr ""
+
+#. Translators: Stories are the dots on a player's rating chart.
+#: templates/player.html:686
+msgid "Stories"
+msgstr ""
+
+#: templates/player.html:703
+msgid "Team switches"
+msgstr ""
+
+#: templates/player.html:725
+msgid "Most recent results"
+msgstr ""
+
+#: templates/player.html:732
+msgid "Team history"
+msgstr ""
+
+#: templates/player.html:736 templates/player_transfers.html:17
+#: templates/team.html:178
+msgid "Joined"
+msgstr ""
+
+#. Translators: As in "to leave", not "not right".
+#: templates/player.html:737 templates/player_transfers.html:15
+#: templates/team.html:179
+msgid "Left"
+msgstr ""
+
+#. Translators: Earnings for [someone]
+#: templates/player_earnings.html:12
+#, python-format
+msgid "%(tag)s earnings"
+msgstr ""
+
+#: templates/player_earnings.html:15
+#, python-format
+msgid "In total, %(tag)s has earned $%(money)s."
+msgstr ""
+
+#: templates/player_earnings.html:17
+msgid "Broken down by currency, that is…"
+msgstr ""
+
+#: templates/player_earnings.html:27
+msgid "Placement"
+msgstr ""
+
+#: templates/player_earnings.html:29
+msgid "Tournament"
+msgstr ""
+
+#: templates/player_results.html:11
+#, python-format
+msgid "%(tag)s match history"
+msgstr ""
+
+#: templates/player_results.html:16
+msgid "Filter by"
+msgstr ""
+
+#: templates/player_results.html:34
+#, python-format
+msgid ""
+"In these games, %(tag)s is %(sc_my)s–%(sc_op)s (%(pctg)s%%) in games and "
+"%(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches."
+msgstr ""
+
+#: templates/player_results.html:42
+msgid "Postable History"
+msgstr ""
+
+#: templates/player_results.html:46
+#, python-format
+msgid "The above is code that can be used in posts on %(a)sTeamLiquid.net</a>."
+msgstr ""
+
+#: templates/pred_4pswiss.html:16 templates/pred_rrgroup.html:17
+#: templates/pred_rrgroup.html.py:63 templates/pred_sebracket.html:16
+#: templates/ratinglist.html:20 templates/recordlist.html:10
+#: templates/teams.html:16
+msgid "#"
+msgstr ""
+
+#: templates/pred_4pswiss.html:65 templates/pred_proleague.html:58
+#: templates/pred_rrgroup.html:59 templates/pred_sebracket.html:58
+msgid ""
+"This is the median outcome <em>assuming the already entered results</em>."
+msgstr ""
+
+#: templates/pred_4pswiss.html:71 templates/pred_rrgroup.html:105
+msgid "Update group progress"
+msgstr ""
+
+#: templates/pred_4pswiss.html:73 templates/pred_proleague.html:66
+#: templates/pred_rrgroup.html:107 templates/pred_sebracket.html:66
+msgid ""
+"To modify a result, click on the score in the table below. To view detailed "
+"predictions for a match, click the arrow."
+msgstr ""
+
+#: templates/pred_4pswiss.html:82 templates/pred_proleague.html:75
+#: templates/pred_rrgroup.html:116 templates/pred_sebracket.html:75
+msgid "Update results"
+msgstr ""
+
+#: templates/pred_4pswiss.html:89 templates/pred_proleague.html:82
+#: templates/pred_rrgroup.html:123 templates/pred_sebracket.html:82
+msgid "Clear results"
+msgstr ""
+
+#. Translators: Something that can be posted on a forum.
+#: templates/pred_4pswiss.html:93 templates/pred_match.html:182
+#: templates/pred_proleague.html:86 templates/pred_rrgroup.html:127
+#: templates/pred_sebracket.html:87
+msgid "Postable"
+msgstr ""
+
+#: templates/pred_4pswiss.html:108 templates/pred_match.html:191
+#: templates/pred_proleague.html:101 templates/pred_rrgroup.html:142
+msgid "Formats:"
+msgstr ""
+
+#: templates/pred_4pswiss.html:109 templates/pred_match.html:192
+#: templates/pred_proleague.html:102 templates/pred_rrgroup.html:143
+msgid "Team Liquid"
+msgstr ""
+
+#: templates/pred_4pswiss.html:110 templates/pred_match.html:193
+#: templates/pred_proleague.html:103 templates/pred_rrgroup.html:144
+msgid "Reddit"
+msgstr ""
+
+#: templates/pred_match.html:15
+msgid "Verdict:"
+msgstr ""
+
+#: templates/pred_match.html:16
+msgid "Even chances."
+msgstr ""
+
+#: templates/pred_match.html:17
+#, python-format
+msgid "Slight advantage for %(pl)s."
+msgstr ""
+
+#: templates/pred_match.html:18
+#, python-format
+msgid "Advantage for %(pl)s."
+msgstr ""
+
+#: templates/pred_match.html:19
+#, python-format
+msgid "Large advantage for %(pl)s."
+msgstr ""
+
+#: templates/pred_match.html:20
+#, python-format
+msgid "Overwhelming advantage for %(pl)s."
+msgstr ""
+
+#: templates/pred_match.html:79
+msgid "Historical score"
+msgstr ""
+
+#. Translators: Opposing race here meaning the race relevant to the match being predicted.
+#: templates/pred_match.html:94
+msgid "Score vs. opposing race"
+msgstr ""
+
+#. Translators: Form as in the current form of a player.
+#: templates/pred_match.html:109
+msgid "Form"
+msgstr ""
+
+#: templates/pred_match.html:123
+msgid "Form vs. opposing race"
+msgstr ""
+
+#: templates/pred_match.html:137
+msgid "Score vs. each other"
+msgstr ""
+
+#: templates/pred_match.html:149 templates/pred_proleague.html:64
+msgid "Update match progress"
+msgstr ""
+
+#: templates/pred_match.html:156 templates/pred_match.html.py:162
+#, python-format
+msgid "Score for %(pl)s"
+msgstr ""
+
+#. Translators: player names, so e.g. Team Jaedong vs. Team Mvp
+#: templates/pred_proleague.html:11
+#, python-format
+msgid "Team %(pla)s vs. Team %(plb)s"
+msgstr ""
+
+#. Translators: Team [player], e.g. "Team Jaedong"
+#: templates/pred_proleague.html:19 templates/pred_proleague.html.py:25
+#, python-format
+msgid "Team %(p)s"
+msgstr ""
+
+#: templates/pred_sebracket.html:23
+#, python-format
+msgid "Top %(num)s"
+msgstr ""
+
+#: templates/pred_sebracket.html:64
+msgid "Update bracket progress"
+msgstr ""
+
+#: templates/pred_sebracket.html:105
+msgid "Team Liquid (all)"
+msgstr ""
+
+#: templates/pred_sebracket.html:106
+msgid "Reddit (table)"
+msgstr ""
+
+#: templates/pred_sebracket.html:107
+msgid "Reddit (median bracket)"
+msgstr ""
+
+#: templates/predict.html:27
+msgid "Show me the future!"
+msgstr ""
+
+#: templates/predict.html:28
+msgid "Parse Liquipedia Bracket!"
+msgstr ""
+
+#: templates/predict.html:37
+msgid ""
+"Enter one player per line. The player information must uniquely identify the "
+"player, and should be space-separated list of any of the following:"
+msgstr ""
+
+#: templates/predict.html:41
+msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\"."
+msgstr ""
+
+#: templates/predict.html:42
+#, python-format
+msgid ""
+"A two- or three-letter %(a)sISO 3166-1 alpha-2</a> country code. e.g. \"KR"
+"\", or the common English name of a country."
+msgstr ""
+
+#: templates/predict.html:44
+msgid ""
+"Player or team aliases (we add these to the database when we feel like "
+"they're needed), e.g. \"DRG\"."
+msgstr ""
+
+#: templates/predict.html:45
+msgid ""
+"A player ID number, which you can get from the URL of the player page, e.g. "
+"\"4\"."
+msgstr ""
+
+#: templates/predict.html:48 templates/results_search.html:49
+msgid "Note that everything is case insensitive."
+msgstr ""
+
+#: templates/predict.html:50
+msgid "For <b>single elimination brackets</b> the following is possible:"
+msgstr ""
+
+#: templates/predict.html:53
+msgid ""
+"Use a different match format for each round. For example, \"5,5,7\" means "
+"best-of-5 for the first two rounds, and best-of-7 for the final. You can "
+"still enter a single number to apply to all rounds."
+msgstr ""
+
+#: templates/predict.html:54
+msgid "To indicate a BYE, enter \"bye\" or a single hyphen."
+msgstr ""
+
+#: templates/predict.html:55
+msgid ""
+"You can copy bracket code from Liquipedia and attempt to parse it. Mediawiki "
+"syntax is fairly stretchy, so we make no guarantees, however. Note: you have "
+"to copy the bracket <em>code</em>."
+msgstr ""
+
+#: templates/predict.html:58
+msgid ""
+"For <b>proleague matches</b> enter first all the player of one team, and "
+"then all the players of the other team. There must be an equal number of "
+"each, but it doesn't have to be odd."
+msgstr ""
+
+#. Translators: Rating adjustments for [tag] on list number [listn].
+#: templates/ratingdetails.html:11
+#, python-format
+msgid "%(tag)s list %(listn)s"
+msgstr ""
+
+#: templates/ratingdetails.html:27
+#, python-format
+msgid "List %(listnumber)s"
+msgstr ""
+
+#: templates/ratingdetails.html:45
+#, python-format
+msgid ""
+"This period started on %(start)s and will end on %(end)s. The numbers given "
+"below are projected adjustments and can change before then."
+msgstr ""
+
+#: templates/ratingdetails.html:47
+#, python-format
+msgid "This period started on %(start)s and ended on %(end)s."
+msgstr ""
+
+#: templates/ratingdetails.html:54
+msgid "Old rtg."
+msgstr ""
+
+#: templates/ratingdetails.html:55
+msgid "Opposition"
+msgstr ""
+
+#: templates/ratingdetails.html:56
+msgid "Expected score"
+msgstr ""
+
+#: templates/ratingdetails.html:57
+msgid "Actual score"
+msgstr ""
+
+#: templates/ratingdetails.html:58
+msgid "Performance"
+msgstr ""
+
+#: templates/ratingdetails.html:59
+msgid "New rtg."
+msgstr ""
+
+#: templates/ratingdetails.html:60
+msgid "Adjustment"
+msgstr ""
+
+#: templates/ratingdetails.html:169
+msgid "Exact game details:"
+msgstr ""
+
+#: templates/ratingdetails.html:176
+#, python-format
+msgid ""
+"<strong>Note:</strong> Some games have not been included in the rating "
+"calculations because they were just recently submitted or modified. They "
+"will be included in the next update. This happens every six hours. The time "
+"of the last update can be found %(a)shere</a>."
+msgstr ""
+
+#: templates/ratingdetails.html:180
+#, python-format
+msgid "%(plr)s played no games in this period."
+msgstr ""
+
+#: templates/ratinglist.html:156
+msgid "No entries found."
+msgstr ""
+
+#: templates/records.html:14
+msgid "To avoid rating artifacts, the earliest periods are not counted."
+msgstr ""
+
+#: templates/records.html:17
+#, python-format
+msgid "Highest ratings ever achieved by %(rc)s."
+msgstr ""
+
+#: templates/records.html:19
+msgid "Highest ratings ever achieved"
+msgstr ""
+
+#: templates/records.html:26
+msgid "Highest ratings ever achieved by matchup"
+msgstr ""
+
+#: templates/records.html:29
+msgid "Rating PvP"
+msgstr ""
+
+#: templates/records.html:30
+msgid "Rating PvT"
+msgstr ""
+
+#: templates/records.html:31
+msgid "Rating PvZ"
+msgstr ""
+
+#: templates/records.html:36
+msgid "Rating TvP"
+msgstr ""
+
+#: templates/records.html:37
+msgid "Rating TvT"
+msgstr ""
+
+#: templates/records.html:38
+msgid "Rating TvZ"
+msgstr ""
+
+#: templates/records.html:43
+msgid "Rating ZvP"
+msgstr ""
+
+#: templates/records.html:44
+msgid "Rating ZvT"
+msgstr ""
+
+#: templates/records.html:45
+msgid "Rating ZvZ"
+msgstr ""
+
+#: templates/reports_balance.html:14
+msgid ""
+"The following chart show the historical month-by-month winrates for each non-"
+"mirror matchup in the database."
+msgstr ""
+
+#: templates/reports_balance.html:16
+msgid ""
+"Note that this yields information about <em>metagame</em> balance near the "
+"<em>top of the skill ladder</em>, and is not to be confused with (although "
+"likely correlated to) actual game balance throughout the whole player "
+"population."
+msgstr ""
+
+#: templates/reports_balance.html:18
+msgid ""
+"The winrate is shown with respect to the race listed first, so if the "
+"Protoss vs. Terran graph shoots up, that means Protoss is doing well and "
+"Terran poorly."
+msgstr ""
+
+#: templates/reports_balance.html:59
+#, python-format
+msgid "Winrate [%%]"
+msgstr ""
+
+#: templates/reports_balance.html:82 templates/reports_balance.html.py:90
+#: templates/reports_balance.html:98 templates/reports_balance.html.py:172
+#: templates/reports_balance.html:180 templates/reports_balance.html.py:188
+msgid "F Y"
+msgstr ""
+
+#: templates/reports_balance.html:108
+#, python-format
+msgid ""
+"The performance difference chart shows the <em>approximate</em> difference "
+"between <em>actual performance</em> as evidenced by results and "
+"<em>predicted performance</em> by rating. For example, if, averaged over a "
+"whole month, all Terrans had mean rating difference -100 (which is to say, "
+"their mean rating was equal to 100 less than that of their opponents), but "
+"they performed as if they had a mean rating difference of +100 (about 54.5%% "
+"winrate), then that amounts to a performance difference of <strong>+200</"
+"strong>, which is to be interpreted as that Terran players overall performed "
+"200 points better than expected."
+msgstr ""
+
+#: templates/reports_balance.html:110
+msgid ""
+"This chart can avoid some of the problems with the above, which can "
+"potentially be influenced by incredibly hot streaks from one or two "
+"singularly great players. However, as ratings catch up to the performances "
+"of the players, this chart will tend toward equilibrium, even if balance "
+"never changes."
+msgstr ""
+
+#: templates/reports_balance.html:124
+msgid "Performance difference"
+msgstr ""
+
+#: templates/reports_balance.html:151
+msgid "Performance difference [points]"
+msgstr ""
+
+#: templates/reports_balance.html:172 templates/reports_balance.html.py:180
+#: templates/reports_balance.html:188
+msgid "Difference"
+msgstr ""
+
+#: templates/results.html:11
+#, python-format
+msgid "Results for %(date)s"
+msgstr ""
+
+#: templates/results.html:16
+msgid "Go to date:"
+msgstr ""
+
+#: templates/results.html:33 templates/results.html.py:76
+msgid "previous month"
+msgstr ""
+
+#: templates/results.html:40 templates/results.html.py:83
+msgid "previous day"
+msgstr ""
+
+#: templates/results.html:45 templates/results.html.py:88
+msgid "today (or latest)"
+msgstr ""
+
+#: templates/results.html:50 templates/results.html.py:93
+msgid "next day"
+msgstr ""
+
+#: templates/results.html:57 templates/results.html.py:100
+msgid "next month"
+msgstr ""
+
+#: templates/results.html:108
+msgid "No registered results on this date."
+msgstr ""
+
+#: templates/results.html:111
+#, python-format
+msgid ""
+"Notice something missing? We're always looking for people to help "
+"%(a)spopulate our database</a>!"
+msgstr ""
+
+#: templates/results_search.html:38
+msgid ""
+"Enter players. The player information does not have to uniquely identify the "
+"player, and should be a space-separated list of any of the following:"
+msgstr ""
+
+#: templates/results_search.html:41
+msgid "Player tag, e.g. \"DongRaeGu\""
+msgstr ""
+
+#: templates/results_search.html:42
+msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\""
+msgstr ""
+
+#: templates/results_search.html:43
+#, python-format
+msgid ""
+"A two- or three-letter <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> country "
+"code. e.g. \"KR\", or the common English name of a country"
+msgstr ""
+
+#: templates/results_search.html:44
+msgid "Team name, e.g. \"MVP\""
+msgstr ""
+
+#: templates/results_search.html:45
+msgid ""
+"Player or team aliases (we add these to the database when we feel like "
+"they're needed), e.g. \"DRG\""
+msgstr ""
+
+#: templates/results_search.html:46
+msgid ""
+"A player ID number, which you can get from the URL of the player page, e.g. "
+"\"4\""
+msgstr ""
+
+#: templates/results_search.html:52
+#, python-format
+msgid "Found %(cnt)s match."
+msgid_plural "Found %(cnt)s matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/results_search.html:56
+#, python-format
+msgid ""
+"In these games, <a href=\"%(luri)s\">%(ltag)s</a> is %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) in games and %(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches."
+msgstr ""
+
+#: templates/results_search.html:59
+#, python-format
+msgid ""
+"In these games, <a href=\"%(luri)s\">%(ltag)s</a> is %(sc_my)s–%(sc_op)s "
+"(%(pctg)s%%) in games and %(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches "
+"against <a href=\"%(ruri)s\">%(rtag)s</a>."
+msgstr ""
+
+#: templates/results_search.html:70 templates/results_search.html.py:80
+msgid "Check all"
+msgstr ""
+
+#: templates/results_search.html:71 templates/results_search.html.py:81
+msgid "Uncheck all"
+msgstr ""
+
+#: templates/results_search.html:84
+msgid "The following modifications will be made to all checked matches:"
+msgstr ""
+
+#: templates/review.html:19
+msgid "The following matches were successfully approved:"
+msgstr ""
+
+#: templates/review.html:42
+msgid "Date:"
+msgstr ""
+
+#. Translators: Game version
+#: templates/review.html:47
+msgid "Game:"
+msgstr ""
+
+#: templates/review.html:51
+msgid "Type:"
+msgstr ""
+
+#: templates/review.html:55
+msgid "Source:"
+msgstr ""
+
+#: templates/review.html:59
+msgid "Contact:"
+msgstr ""
+
+#: templates/review.html:63
+msgid "Notes:"
+msgstr ""
+
+#: templates/review.html:71
+msgid "There are no results awaiting review."
+msgstr ""
+
+#: templates/review.html:75
+msgid "To all checked submissions, do the following:"
+msgstr ""
+
+#: templates/search.html:16
+#, python-format
+msgid "No such player, team or event '%(query)s' found."
+msgstr ""
+
+#: templates/team.html:20
+#, python-format
+msgid "%(teamname)s was founded on %(founded)s and disbanded on %(disbanded)s."
+msgstr ""
+
+#: templates/team.html:22
+#, python-format
+msgid "%(teamname)s was founded on %(founded)s."
+msgstr ""
+
+#: templates/team.html:24
+#, python-format
+msgid "%(teamname)s was disbanded on %(disbanded)s."
+msgstr ""
+
+#: templates/team.html:33
+msgid "admin"
+msgstr ""
+
+#: templates/team.html:47
+msgid "Short name"
+msgstr ""
+
+#: templates/team.html:53
+msgid "Founded"
+msgstr ""
+
+#: templates/team.html:59
+msgid "Disbanded"
+msgstr ""
+
+#: templates/team.html:76 templates/teams.html:24
+msgid "Top 5 rating"
+msgstr ""
+
+#. Translators: #[rank] among [name]
+#: templates/team.html:89
+#, python-format
+msgid "#%(rank)s %(name)s"
+msgstr ""
+
+#: templates/team.html:103
+msgid "Offline matches"
+msgstr ""
+
+#: templates/team.html:148
+msgid "Active roster"
+msgstr ""
+
+#: templates/team.html:149
+#, python-format
+msgid ""
+"%(teamname)s has %(cnt)s player who has played a ranked game within the last "
+"two months."
+msgid_plural ""
+"%(teamname)s has %(cnt)s players who have played a ranked game within the "
+"last two months."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/team.html:154
+msgid "Inactive roster"
+msgstr ""
+
+#: templates/team.html:155
+#, python-format
+msgid ""
+"%(teamname)s has %(cnt)s player who has been temporarily removed from the "
+"ranking due to inactivity."
+msgid_plural ""
+"%(teamname)s has %(cnt)s players who have been temporarily removed from the "
+"ranking due to inactivity."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/team.html:160
+msgid "Non-playing members"
+msgstr ""
+
+#: templates/team.html:161
+#, python-format
+msgid "Assigned to %(teamname)s in a non-playing capacity:"
+msgstr ""
+
+#: templates/team.html:171
+msgid "Past members"
+msgstr ""
+
+#: templates/teams.html:19
+msgid "All-kill score"
+msgstr ""
+
+#: templates/teams.html:21
+msgid "Proleague score"
+msgstr ""
+
+#: templates/teams.html:57
+msgid "Disbanded teams"
+msgstr ""
+
+#: templates/miniURL/list.html:9
+msgid "Short URLs list"
+msgstr ""
+
+#: templates/miniURL/list.html:15
+msgid "via"
+msgstr ""
+
+#: templates/miniURL/list.html:16
+#, python-format
+msgid "created by %(sub)s"
+msgstr ""
+
+#: templates/miniURL/list.html:17
+#, python-format
+msgid "(accessed %(ntimes)s time)"
+msgid_plural "(accessed %(ntimes)s times)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/miniURL/list.html:20
+msgid "No short URLs."
+msgstr ""
+
+#: templates/miniURL/new.html:9
+msgid "URL shortener"
+msgstr ""
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "汉语(简化字)"

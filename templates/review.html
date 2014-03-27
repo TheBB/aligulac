@@ -7,85 +7,86 @@ ratings.submitviews.review.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}Review results{% endblock %}
+{% block title %}{% trans "Review results" %}{% endblock %}
 
 {% block content %}
 
-    {% include "messages.html" %}
+{% include "messages.html" %}
 
-    {% if success %}
-    <p>The following matches were successfully approved:</p>
-    <table class="results">
-    {% include "matchlist.html" with lm_list=success lm_adm=adm lm_check=0 lm_header="full" %}
-    </table>
-    <p></p>
-    {% endif %}
+{% if success %}
+<p>{% trans "The following matches were successfully approved:" %}</p>
+<table class="results">
+{% include "matchlist.html" with lm_list=success lm_adm=adm lm_check=0 lm_header="full" %}
+</table>
+<p></p>
+{% endif %}
 
-    {% if groups %}
-    <form method="post" action="/add/review/">
-    {% csrf_token %}
+{% if groups %}
+<form method="post" action="/add/review/">
+{% csrf_token %}
 
-    <table class="results">
-    {% for g in groups %}
-        <tr class="header">
-            <td colspan="5">{{ g.event }}</td>
-            <td colspan="2" style="text-align: right;">
-            <a id="lma-{{ g.id }}" href="#" 
-                onclick="togvis_tbody('lm-{{g.id}}');togHTML('lma-{{g.id}}','hide','show');return false;">
-                show</a>
-            <a href="#" onclick="mark_all(true, 'match-{{g.event|smallhash}}-'); return false;">chk</a>
-            <a href="#" onclick="mark_all(false, 'match-{{g.event|smallhash}}-'); return false;">unchk</a>
-            </td>
-        </tr>
-    <tbody id="lm-{{g.id}}" style="display: none;">
-        <tr class="nonheader row1">
-            <td colspan="1" style="vertical-align: top;">Date:</td>
-            <td colspan="6">{{ g.date|date:"F jS, Y" }}</td>
-        </tr>
-        <tr class="nonheader row1">
-            <td colspan="1" style="vertical-align: top;">Game:</td>
-            <td colspan="6">{{ g.game }}</td>
-        </tr>
-        <tr class="nonheader row1">
-            <td colspan="1" style="vertical-align: top;">Type:</td>
-            <td colspan="6">{{ lm_list.0.group.offline|yesno:"Offline,Online" }}</td>
-        </tr>
-        <tr class="nonheader row1">
-            <td colspan="1">Source:</td>
-            <td colspan="6">{{ g.source|urlify }}</td>
-        </tr>
-        <tr class="nonheader row1">
-            <td colspan="1">Contact:</td>
-            <td colspan="6">{{ g.contact }}</td>
-        </tr>
-        <tr class="nonheader row1">
-            <td colspan="1" style="vertical-align: top;">Notes:</td>
-            <td colspan="6">{{ g.notes|markdown }}</td>
-        </tr>
-        {% include "matchlist.html" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True %}
-    </tbody>
-    {% endfor %}
-    </table>
-    {% else %}
-    <p>There are no results awaiting review.</p>
-    {% endif %}
+<table class="results">
+{% for g in groups %}
+    <tr class="header">
+        <td colspan="5">{{ g.event }}</td>
+        <td colspan="2" style="text-align: right;">
+        <a id="lma-{{ g.id }}" href="#" onclick="togvis_tbody('lm-{{g.id}}');togHTML('lma-{{g.id}}','{% trans "hide" %}','{% trans "show" %}');return false;">{% trans "show" %}</a>
+        <a href="#" onclick="mark_all(true, 'match-{{g.event|smallhash}}-'); return false;">{% trans "chk" %}</a>
+        <a href="#" onclick="mark_all(false, 'match-{{g.event|smallhash}}-'); return false;">{% trans "unchk" %}</a>
+        </td>
+    </tr>
+<tbody id="lm-{{g.id}}" style="display: none;">
+    <tr class="nonheader row1">
+        <td colspan="1" style="vertical-align: top;">{% trans "Date:" %}</td>
+        <td colspan="6">{{ g.date|cdate:_('F jS, Y') }}</td>
+    </tr>
+    <tr class="nonheader row1">
+        {% comment %}Translators: Game version{% endcomment %}
+        <td colspan="1" style="vertical-align: top;">{% trans "Game:" %}</td>
+        <td colspan="6">{{ g.game }}</td>
+    </tr>
+    <tr class="nonheader row1">
+        <td colspan="1" style="vertical-align: top;">{% trans "Type:" %}</td>
+        <td colspan="6">{{ lm_list.0.group.offline|yesno:"Offline,Online" }}</td>
+    </tr>
+    <tr class="nonheader row1">
+        <td colspan="1">{% trans "Source:" %}</td>
+        <td colspan="6">{{ g.source|urlify }}</td>
+    </tr>
+    <tr class="nonheader row1">
+        <td colspan="1">{% trans "Contact:" %}</td>
+        <td colspan="6">{{ g.contact }}</td>
+    </tr>
+    <tr class="nonheader row1">
+        <td colspan="1" style="vertical-align: top;">{% trans "Notes:" %}</td>
+        <td colspan="6">{{ g.notes|markdown }}</td>
+    </tr>
+    {% include "matchlist.html" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True %}
+</tbody>
+{% endfor %}
+</table>
+{% else %}
+<p>{% trans "There are no results awaiting review." %}</p>
+{% endif %}
 
-    {% if groups %}
-    <p>To all checked submissions, do the following:</p>
+{% if groups %}
+<p>{% trans "To all checked submissions, do the following:" %}</p>
 
-    <table class="bigform">
-        {% form "forms.html" %}
-        {% field "select" form.eventobj class="wideinput" %}
-        {% field "date" form.date %}
-        {% field "checkbox" form.approve %}
-        {% field "checkbox" form.reject %}
-        {% field "checkbox" form.dup_flag %}
-        {% use "submit" text="Commit" %}
-        {% endform %}
-    </table>
+<table class="bigform">
+    {% form "forms.html" %}
+    {% field "select" form.eventobj class="wideinput" %}
+    {% field "date" form.date %}
+    {% field "checkbox" form.approve %}
+    {% field "checkbox" form.reject %}
+    {% field "checkbox" form.dup_flag %}
+    {% trans "Commit" as comm %}
+    {% use "submit" text=comm %}
+    {% endform %}
+</table>
 
-    </form>
-    {% endif %}
+</form>
+{% endif %}
 
 {% endblock %}

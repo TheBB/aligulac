@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-27 10:44+0100\n"
-"PO-Revision-Date: 2014-03-27 10:46+0100\n"
+"PO-Revision-Date: 2014-03-27 11:03+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh\n"
@@ -1097,7 +1097,7 @@ msgstr "智利"
 
 #: aligulac/countries/data.py:557
 msgid "China"
-msgstr "中国可爱的中国"
+msgstr "中国"
 
 #: aligulac/countries/data.py:558
 msgid "Taiwan"

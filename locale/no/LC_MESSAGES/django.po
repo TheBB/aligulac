@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 01:03+0100\n"
-"PO-Revision-Date: 2014-03-26 23:03+0100\n"
+"POT-Creation-Date: 2014-03-27 10:44+0100\n"
+"PO-Revision-Date: 2014-03-27 10:45+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -30,6 +30,10 @@ msgstr "Engelsk"
 #: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
 msgid "Norwegian"
 msgstr "Norsk"
+
+#: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
+msgid "Chinese (simplified)"
+msgstr "Kinesisk (forenklet)"
 
 #. Translators: matches as in search matches, not SC2 matches
 #: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119
@@ -4086,8 +4090,7 @@ msgid ""
 "Try to send me an e-mail at %(email)s where you describe what you were "
 "trying to do when this happened."
 msgstr ""
-"Send en e-post til %(email)s hvor du beskriver hva du forsøkte "
-"å gjøre."
+"Send en e-post til %(email)s hvor du beskriver hva du forsøkte å gjøre."
 
 #: templates/add.html:19
 msgid "The following entries were successfully submitted"
@@ -7194,6 +7197,9 @@ msgstr "Ingen korte adresser."
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
 msgstr "Adresseforkorter"
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "Kinesisk (forenklet)"
 
 #~ msgid "Period"
 #~ msgstr "Periode"

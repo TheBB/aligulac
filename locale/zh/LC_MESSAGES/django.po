@@ -5,17 +5,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 01:03+0100\n"
-"PO-Revision-Date: 2014-03-27 00:52+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-03-27 10:44+0100\n"
+"PO-Revision-Date: 2014-03-27 10:46+0100\n"
+"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.6.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: aligulac/currency.py:99
 #, python-format
@@ -29,6 +31,10 @@ msgstr "英语"
 #: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
 msgid "Norwegian"
 msgstr "挪威语"
+
+#: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
+msgid "Chinese (simplified)"
+msgstr "中文(简化字)"
 
 #. Translators: matches as in search matches, not SC2 matches
 #: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119
@@ -4007,8 +4013,8 @@ msgid ""
 "Try to send me an e-mail at %(email)s where you describe what you were "
 "trying to do when this happened."
 msgstr ""
-"请给我发邮件到%(email)s, 并请告诉我您是在何种情况下或何种操作下"
-"遇到这种情况的."
+"请给我发邮件到%(email)s, 并请告诉我您是在何种情况下或何种操作下遇到这种情况"
+"的."
 
 #: templates/add.html:19
 msgid "The following entries were successfully submitted"
@@ -6765,3 +6771,6 @@ msgstr ""
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
 msgstr ""
+
+#~ msgid "Simplified Chinese"
+#~ msgstr "汉语(简化字)"

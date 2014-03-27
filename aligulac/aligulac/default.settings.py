@@ -30,12 +30,15 @@ ALLOWED_HOSTS = ['.aligulac.com']
 LOCALE_PATHS = local.LOCALE_PATHS
 LANGUAGE_CODE = 'en_US'
 
-LANGUAGES = (
+LANGUAGES = [
     ('en', _('English')),
     ('no', _('Norwegian')),
-)
+]
 
-
+if DEBUG:
+    LANGUAGES += [
+        ('zh', _('Chinese (simplified)'))
+    ]
 
 # CUSTOM
 

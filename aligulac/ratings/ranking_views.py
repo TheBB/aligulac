@@ -21,6 +21,7 @@ from ratings.models import (
     Z,
 )
 from ratings.tools import (
+    add_joke,
     count_matchup_games,
     count_mirror_games,
     country_list,
@@ -185,6 +186,9 @@ def period(request, period_id=None):
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
     entries = entries[(page-1)*pagesize : page*pagesize] if page > 0 else []
+
+    if page == 1:
+        entries = add_joke(entries, period)
 
     base.update({
         'page':       page,

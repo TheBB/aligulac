@@ -29,7 +29,9 @@ from aligulac.tools import (
     Message,
     StrippedCharField,
 )
-from aligulac.tools import search as tools_search
+from aligulac.tools import (
+    search as tools_search,
+)
 
 from blog.models import Post
 
@@ -46,6 +48,7 @@ from ratings.models import (
 )
 from ratings.templatetags.ratings_extras import urlfilter
 from ratings.tools import (
+    add_joke,
     count_winloss_games,
     filter_active,
     populate_teams,
@@ -60,6 +63,8 @@ def home(request):
     entries = filter_active(Rating.objects.filter(period=base['curp']))\
               .order_by('-rating')\
               .select_related('player')[0:10]
+
+    entries = add_joke(entries, base['curp'])
 
     populate_teams(entries)
 

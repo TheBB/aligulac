@@ -24,6 +24,7 @@ from countries.transformations import (
 
 import aligulac
 from aligulac.settings import (
+    DEBUG,
     INACTIVE_THRESHOLD,
     INIT_DEV,
     start_rating,
@@ -36,6 +37,39 @@ from ratings.models import (
     Rating,
 )
 # }}}
+
+def add_joke(entries, period):
+    if not joke():
+        return entries
+
+    combatex = Player.objects.get(id=341)
+    try:
+        rtg = combatex.rating_set.get(period=period)
+    except:
+        return entries
+
+    rtg.rating += 1.5
+    try:
+        rtg.prev.rating += 1.5
+    except:
+        pass
+
+    if rtg in entries:
+        return [rtg] + [e for e in entries if e != rtg]
+    else:
+        return [rtg] + list(entries)[:-1]
+
+def add_joke_rtg(rtg):
+    if joke() and rtg.player_id == 341:
+        rtg.rating += 1.5
+        rtg.bf_rating += 1.5
+
+    return rtg
+
+def joke():
+    if DEBUG:
+        return True
+    return datetime(2014,4,1,0,0) <= datetime.now() <= datetime(2014,4,2,6,0)
 
 # {{{ Patchlist
 PATCHES = [
@@ -407,6 +441,11 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
                            else start_rating(r['plb']['country'], m.period_id),
                 'dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
             })
+
+            if r['pla']['id'] == 341 and joke():
+                r['pla']['rating'] += 1.5
+            if r['plb']['id'] == 341 and joke():
+                r['plb']['rating'] += 1.5
         # }}}
 
         # {{{ Switch roles of pla and plb if needed

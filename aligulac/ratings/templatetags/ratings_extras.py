@@ -3,6 +3,7 @@ import hashlib
 import markdown2
 from math import sqrt
 import re
+import random
 from datetime import (
     timedelta,
     date,
@@ -33,6 +34,22 @@ from ratings.models import (
 # }}}
     
 register = template.Library()
+
+@register.filter
+def combatex(_):
+    return random.choice([
+        'Too good!',
+        'Sploosh!',
+        'CombatEX for president!',
+        'The fifth race!',
+        "If CombatEX is wrong, I don't want to be right",
+    ])
+
+@register.filter
+def maxf(value, arg):
+    if float(value) < arg:
+        return value
+    return arg
 
 # {{{ Miscellaneous filters
 

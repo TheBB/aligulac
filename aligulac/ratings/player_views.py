@@ -38,6 +38,8 @@ from ratings.models import (
     Z,
 )
 from ratings.tools import (
+    joke,
+    add_joke_rtg,
     add_counts,
     cdf,
     count_winloss_player,
@@ -260,6 +262,14 @@ def player(request, player_id):
         'vzf':              count_matchup_player(recent, player, Z),
     })
 
+    if player.id == 341 and joke():
+        base.update({
+            'total': (6,-3),
+            'vp': (2,-1),
+            'vt': (2,-1),
+            'vz': (2,-1),
+        })
+
     if player.country is not None:
         base['countryfull'] = transformations.cc_to_cn(player.country)
     # }}}
@@ -283,17 +293,22 @@ def player(request, player_id):
         ratings = total_ratings(player.rating_set.filter(period__computed=True)).select_related('period')
         base.update({
             'highs': (
-                ratings.latest('rating'),
-                ratings.latest('tot_vp'),
-                ratings.latest('tot_vt'),
-                ratings.latest('tot_vz'),
+                add_joke_rtg(ratings.latest('rating')),
+                add_joke_rtg(ratings.latest('tot_vp')),
+                add_joke_rtg(ratings.latest('tot_vt')),
+                add_joke_rtg(ratings.latest('tot_vz')),
             ),
             'recentchange':  player.get_latest_rating_update(),
-            'firstrating':   ratings.earliest('period'),
-            'rating':        player.current_rating,
+            'firstrating':   add_joke_rtg(ratings.earliest('period')),
+            'rating':        add_joke_rtg(player.current_rating),
         })
 
-        if player.current_rating.decay >= INACTIVE_THRESHOLD:
+        if joke() and player.id == 341:
+            base['messages'].append(Message(
+                'This player page is too awesome to view without sunglasses.',
+                "We wouldn't want you to become blind", type=Message.WARNING,
+            ))
+        elif player.current_rating.decay >= INACTIVE_THRESHOLD:
             base['messages'].append(Message(msg_inactive % player.tag, 'Inactive', type=Message.INFO))
 
         base['charts'] = base['recentchange'].period_id > base['firstrating'].period_id
@@ -304,12 +319,15 @@ def player(request, player_id):
 
     # {{{ If the player has enough games to make a chart
     if base['charts']:
-        ratings = (
+        ratings = list(
             total_ratings(player.rating_set.filter(period_id__lte=base['recentchange'].period_id))
                 .select_related('period__end')
                 .prefetch_related('prev__rta', 'prev__rtb')
                 .order_by('period')
         )
+
+        for r in ratings:
+            add_joke_rtg(r)
 
         # {{{ Add stories and other extra information
         earliest = base['firstrating']
@@ -378,6 +396,12 @@ def adjustment(request, player_id, period_id):
     player = get_object_or_404(Player, id=player_id)
     rating = get_object_or_404(Rating, player=player, period=period)
     base = base_ctx('Ranking', 'Adjustments', request, context=player)
+
+    if player.id == 341 and joke():
+        base['messages'].append(Message(
+            "Trust us, we're right. He's just that good.",
+            "Your IP address has been noted", type=Message.INFO,
+        ))
 
     base.update({
         'period':    period,
@@ -650,12 +674,15 @@ def historical(request, player_id):
     base = base_ctx('Ranking', 'Rating history', request, context=player)
 
     latest = player.rating_set.filter(period__computed=True, decay=0).latest('period')
-    historical = (
+    historical = list(
         player.rating_set.filter(period_id__lte=latest.period_id)
             .prefetch_related('prev__rta', 'prev__rtb')
             .select_related('period', 'prev')
             .order_by('-period')
     )
+
+    for r in historical:
+        add_joke_rtg(r)
 
     historical = add_counts(historical)
 

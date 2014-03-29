@@ -31,14 +31,13 @@ from ratings.models import (
     TYPE_EVENT,
     TYPE_ROUND
 )
-from ratings.tools import get_latest_period, find_player
+from ratings.tools import joke, get_latest_period, find_player
 from ratings.templatetags.ratings_extras import urlfilter
 # }}}
 
 # {{{ JsonResponse
 # Works similarily to HttpResponse but returns JSON instead.
 class JsonResponse(HttpResponse):
-
     def __init__(self, content, *args, **kwargs):
         scontent = json.dumps(content)
 
@@ -47,7 +46,6 @@ class JsonResponse(HttpResponse):
 
         super().__init__(scontent, *args, **kwargs)
 # }}}
-
 
 # {{{ Message
 # This class encodes error/success/warning messages sent to the templates.
@@ -223,6 +221,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         'debug':     DEBUG,
         'cur_path':  request.get_full_path(),
         'messages':  [],
+        'joke':      joke(),
         'menu':      [{
             'name': 'Ranking',
             'url': '/periods/latest/',

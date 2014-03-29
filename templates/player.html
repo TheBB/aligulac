@@ -46,7 +46,7 @@ This is the template for the main player page, called from ratings.views.player.
                     {{ total.0|pctg_add:total.1 }}%
                     ({{ total.0 }}/{{ total.1|add:total.0 }})
                 </span>
-                <div class="bar" style="width: {{ total.0|pctg_add:total.1 }}%;"></div>
+                <div class="bar" style="width: {{ total.0|pctg_add:total.1|maxf:100 }}%;"></div>
             </div>
         </td>
         <td style="width: 8em;">
@@ -66,7 +66,7 @@ This is the template for the main player page, called from ratings.views.player.
                     {{ vp.0|pctg_add:vp.1 }}%
                     ({{ vp.0 }}/{{ vp.1|add:vp.0 }})
                 </span>
-                <div class="bar" style="width: {{ vp.0|pctg_add:vp.1 }}%;"></div>
+                <div class="bar" style="width: {{ vp.0|pctg_add:vp.1|maxf:100 }}%;"></div>
             </div>
         </td>
         <td>
@@ -86,7 +86,7 @@ This is the template for the main player page, called from ratings.views.player.
                     {{ vt.0|pctg_add:vt.1 }}%
                     ({{ vt.0 }}/{{ vt.1|add:vt.0 }})
                 </span>
-                <div class="bar" style="width: {{ vt.0|pctg_add:vt.1 }}%;"></div>
+                <div class="bar" style="width: {{ vt.0|pctg_add:vt.1|maxf:100 }}%;"></div>
             </div>
         </td>
         <td>
@@ -106,7 +106,7 @@ This is the template for the main player page, called from ratings.views.player.
                     {{ vz.0|pctg_add:vz.1 }}%
                     ({{ vz.0 }}/{{ vz.1|add:vz.0 }})
                 </span>
-                <div class="bar" style="width: {{ vz.0|pctg_add:vz.1 }}%;"></div>
+                <div class="bar" style="width: {{ vz.0|pctg_add:vz.1|maxf:100 }}%;"></div>
             </div>
         </td>
         <td>
@@ -330,6 +330,9 @@ This is the template for the main player page, called from ratings.views.player.
                 {% ifchanged %}Nemes{{ player.nemesis|length_is:1|yesno:"i,e" }}s{% endifchanged %}
               </td>
               <td{% ifchanged %} style="border-top: 0.1em gray dashed"{% endifchanged %}>
+                {% if player.id == 341 and joke %}
+                  You must be kidding.
+                {% else %}
                 {% if op.country != "" %}
                 <img src="{{ op.country|lower|img:"flags" }}" />
                 {% endif %}
@@ -340,6 +343,7 @@ This is the template for the main player page, called from ratings.views.player.
                   {{ op.pm }}
                 </a>
                 )
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
@@ -475,7 +479,13 @@ This is the template for the main player page, called from ratings.views.player.
         {% if earnings %}
         <div class="row">
             <div class="rowel">Total earnings</div>
-            <div class="rower">${{ earnings|add_separator }}</div>
+            <div class="rower">
+                {% if player.id == 341 and joke %}
+                    $INF
+                {% else %}
+                    ${{ earnings|add_separator }}
+                {% endif %}
+            </div>
         </div>
         {% endif %}
         <div class="row">

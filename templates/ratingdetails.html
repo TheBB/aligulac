@@ -10,6 +10,10 @@ This is the page showing the details of a rating adjustment. It's called from ra
 
 {% block content %}
 
+{% if player.id == 341 and joke %}
+{% include "messages.html" %}
+{% else %}
+
 {% if prevlink or nextlink %}
 <div class="table" style="min-width: 67em;">
     <div class="row">
@@ -174,5 +178,6 @@ numbers given below are projected adjustments and can change before then.</p>
     {% endif %}
 {% else %}
     <p>{{ player.tag }} played no games in this period.</p>
+{% endif %}
 {% endif %}
 {% endblock %}

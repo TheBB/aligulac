@@ -59,7 +59,9 @@ arguments:
             {% endif %}
         </td>
         <td class="rl_icon">
-            {% if entry.position and entry.prev.position and rl_pos_arrow %}
+            {% if entry.player.id == 341 and joke %}
+                <img src="{{ "star_P"|img }}" class="btm" title="{{ "asdf"|combatex }}" />
+            {% elif entry.position and entry.prev.position and rl_pos_arrow %}
                 {% if entry.prev.position < entry.position %}
                 <img src="{{ "downarrow"|img }}" alt="down" class="btm" 
                      title="{{ entry.prev.position|sub:entry.position }}" />

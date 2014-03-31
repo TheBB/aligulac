@@ -48,9 +48,9 @@ def add_joke(entries, period):
     except:
         return entries
 
-    rtg.rating += 1.5
+    rtg.rating += 8.0
     try:
-        rtg.prev.rating += 1.5
+        rtg.prev.rating += 8.0
     except:
         pass
 
@@ -61,8 +61,8 @@ def add_joke(entries, period):
 
 def add_joke_rtg(rtg):
     if joke() and rtg.player_id == 341:
-        rtg.rating += 1.5
-        rtg.bf_rating += 1.5
+        rtg.rating += 8.0
+        rtg.bf_rating += 8.0
 
     return rtg
 
@@ -443,9 +443,9 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             })
 
             if r['pla']['id'] == 341 and joke():
-                r['pla']['rating'] += 1.5
+                r['pla']['rating'] += 8.0
             if r['plb']['id'] == 341 and joke():
-                r['plb']['rating'] += 1.5
+                r['plb']['rating'] += 8.0
         # }}}
 
         # {{{ Switch roles of pla and plb if needed

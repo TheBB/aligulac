@@ -5,7 +5,7 @@ from numpy import (
     pi,
 )
 from math import sqrt
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 import shlex
 

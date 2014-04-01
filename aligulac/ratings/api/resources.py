@@ -416,7 +416,7 @@ class SmallGroupMembershipResourceFromPlayer(ModelResource):
         allowed_methods = ['get', 'post']
         resource_name = 'groupmembership'
         authentication = APIKeyAuthentication()
-        excludes = ['current', 'id']
+        excludes = ['current']
 
     team = fields.ForeignKey('ratings.api.resources.SmallTeamResource', 'group', full=True)
 # }}}
@@ -428,7 +428,7 @@ class SmallGroupMembershipResourceFromGroup(ModelResource):
         allowed_methods = ['get', 'post']
         resource_name = 'groupmembership'
         authentication = APIKeyAuthentication()
-        excludes = ['current', 'playing', 'id']
+        excludes = ['current', 'playing']
 
     player = fields.ForeignKey(SmallPlayerResource, 'player', full=True)
 # }}}

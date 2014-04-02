@@ -13,6 +13,7 @@ from django.db.models import (
     Sum,
     Q,
 )
+from django.utils.translation import ugettext_lazy as _
 
 import ccy
 from countries import data
@@ -47,6 +48,57 @@ PATCHES = [
     (date(year=2013, month=7,  day=11), '2.0.9 BU'),
     (date(year=2013, month=11,  day=11), '2.0.12 BU')
 ]
+# }}}
+
+# {{{ Currency names 
+CURRENCIES = {
+    'EUR': _('Euro'),
+    'GBP': _('British Pound'),
+    'AUD': _('Australian Dollar'),
+    'NZD': _('New-Zealand Dollar'),
+    'USD': _('US Dollar'),
+    'CAD': _('Canadian Dollar'),
+    'CHF': _('Swiss Franc'),
+    'NOK': _('Norwegian Krona'),
+    'SEK': _('Swedish Krona'),
+    'DKK': _('Danish Krona'),
+    'JPY': _('Japanese Yen'),
+    'CNY': _('Chinese Renminbi'),
+    'KRW': _('South Korean won'),
+    'SGD': _('Singapore Dollar'),
+    'IDR': _('Indonesian Rupiah'),
+    'THB': _('Thai Baht'),
+    'TWD': _('Taiwan Dollar'),
+    'HKD': _('Hong Kong Dollar'),
+    'PHP': _('Philippines Peso'),
+    'INR': _('Indian Rupee'),
+    'MYR': _('Malaysian Ringgit'),
+    'VND': _('Vietnamese Dong'),
+    'BRL': _('Brazilian Real'),
+    'PEN': _('Peruvian Nuevo Sol'),
+    'ARS': _('Argentine Peso'),
+    'MXN': _('Mexican Peso'),
+    'CLP': _('Chilean Peso'),
+    'COP': _('Colombian Peso'),
+    'JMD': _('Jamaican Dollar'),
+    'TTD': _('Trinidad and Tobago Dollar'),
+    'BMD': _('Bermudian Dollar'),
+    'CZK': _('Czech Koruna'),
+    'PLN': _('Polish Zloty'),
+    'TRY': _('Turkish Lira'),
+    'HUF': _('Hungarian Forint'),
+    'RON': _('Romanian Leu'),
+    'RUB': _('Russian Ruble'),
+    'HRK': _('Croatian kuna'),
+    'KZT': _('Kazakhstani Tenge'),
+    'ILS': _('Israeli Shekel'),
+    'AED': _('United Arab Emirates Dirham'),
+    'QAR': _('Qatari Riyal'),
+    'SAR': _('Saudi Riyal'),
+    'EGP': _('Egyptian Pound'),
+    'ZAR': _('South African Rand'),
+    'XBT': _('Bitcoin'),
+}
 # }}}
 
 # {{{ find_player: Magic!
@@ -134,11 +186,11 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     if not queryset.exists() and make:
         # {{{ Raise exceptions if missing crucial data
         if tag == None:
-            msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing player tag)") % ' '.join(lst)
             raise Exception(msg)
 
         if race == None:
-            msg = "Player '%s' was not found and cound not be made (missing race)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing race)") % ' '.join(lst)
             raise Exception(msg)
         # }}}
 
@@ -221,7 +273,7 @@ def populate_teams(queryset):
 def country_list(queryset):
     countries = queryset.values('country').distinct()
     country_codes = {c['country'] for c in countries if c['country'] is not None}
-    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
+    country_dict = [{'cc': c, 'name': _(data.ccn_to_cn[data.cca2_to_ccn[c]])} for c in country_codes]
     country_dict.sort(key=lambda a: a['name'])
     return country_dict
 # }}}
@@ -230,7 +282,7 @@ def country_list(queryset):
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
     currency_dict = [
-        {'name': ccy.currency(c['currency']).name, 'code': ccy.currency(c['currency']).code} 
+        {'name': CURRENCIES[ccy.currency(c['currency']).code], 'code': ccy.currency(c['currency']).code} 
         for c in currencies
     ]
     return currency_dict
@@ -418,4 +470,3 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     return ret
 # }}}
-

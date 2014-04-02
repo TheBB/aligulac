@@ -5,24 +5,27 @@ This is the template for the historical overview page, showing all the ranking l
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Historical overview{% endblock %}
+{% block title %}{% trans "Historical overview" %}{% endblock %}
 
 {% block content %}
     <div class="table numtable" style="width: 67em;">
         <div class="rowh">
-            <div class="rowe" style="width: 20em;">List date</div>
-            <div class="rowe" style="width: 7em;">OP</div>
-            <div class="rowe" style="width: 10em;">UP</div>
-            <div class="rowe" style="width: 8em; text-align: right;">Active</div>
-            <div class="rowe" style="width: 8em; text-align: right;">New</div>
-            <div class="rowe" style="width: 8em; text-align: right;">Games</div>
+            <div class="rowe" style="width: 20em;">{% trans "List date" %}</div>
+            {% comment %}Translators: Overpowered{% endcomment %}
+            <div class="rowe" style="width: 7em;">{% trans "OP" %}</div>
+            {% comment %}Translators: Underpowered{% endcomment %}
+            <div class="rowe" style="width: 10em;">{% trans "UP" %}</div>
+            <div class="rowe" style="width: 8em; text-align: right;">{% trans "Active" %}</div>
+            <div class="rowe" style="width: 8em; text-align: right;">{% trans "New" %}</div>
+            <div class="rowe" style="width: 8em; text-align: right;">{% trans "Games" %}</div>
             <div class="rowe" style="width: 6em;"></div>
         </div>
         {% for period in periods %}
         <div class="row {% cycle 'row2' 'row1' %}">
             <div class="rowe">
-                <a href="/periods/{{ period.id }}/">{{ period.end|date:"F jS, Y" }}</a>
+                <a href="/periods/{{ period.id }}/">{{ period.end|cdate:_('F jS, Y') }}</a>
             </div>
             <div class="rowe">
                 <img src="{{ period|oprace|img }}" alt="{{ period|oprace }}" />

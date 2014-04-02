@@ -11,39 +11,48 @@ arguments:
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% include "periodpagenav.html" %}
 
 <table class="results">
     <tr class="header">
-        <td class="rl_number">#</td>
+        <td class="rl_number">{% trans "#" %}</td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
-        <td class="rl_name">Name</td>
-        <td class="rl_team">{% if displayteams %}Team{% endif %}</td>
+        <td class="rl_name">{% trans "Name" %}</td>
+        <td class="rl_team">{% if displayteams %}{% trans "Team" %}{% endif %}</td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">Rating↓</a>
-            {% else %}Rating{% endif %}
+            <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "Rating" %}↓
+            </a>
+            {% else %}{% trans "Rating" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">vP↓</a>
-            {% else %}vP{% endif %}
+            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vP" %}↓
+            </a>
+            {% else %}{% trans "vP" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">vT↓</a>
-            {% else %}vT{% endif %}
+            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vT" %}↓
+            </a>
+            {% else %}{% trans "vT" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">vZ↓</a>
-            {% else %}vZ{% endif %}
+            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vZ" %}↓
+            </a>
+            {% else %}{% trans "vZ" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_arrow"></td>
@@ -144,7 +153,7 @@ arguments:
     {% endfor %}
     {% else %}
     <tr class="nonheader row2">
-        <td colspan="15">No entries found.</td>
+        <td colspan="15">{% trans "No entries found." %}</td>
     </tr>
     {% endif %}
 </table>

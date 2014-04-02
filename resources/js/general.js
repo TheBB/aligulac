@@ -201,7 +201,7 @@ $(function () {
  */
 var aligulacAutocompleteTemplates = function (ajaxobject) {
     if ((!ajaxobject.tag) && (!ajaxobject.name) && (!ajaxobject.fullname)) {
-        return '<span class="autocomplete-header">' + ajaxobject.label + '</span>';
+        return '<span class="autocomplete-header">' + autocomplete_strings[ajaxobject.label] + '</span>';
     }
     switch (ajaxobject.type) {
         case 'player':

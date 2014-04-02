@@ -11,8 +11,13 @@ from datetime import (
 from dateutil.relativedelta import relativedelta
 
 from django import template
-from django.template.defaultfilters import stringfilter
+from django.template.defaultfilters import (
+    stringfilter,
+    date as djangodate,
+)
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 
 from aligulac.settings import (
     PRF_NA,
@@ -54,11 +59,6 @@ def jsescape(value):
 @register.filter
 @stringfilter
 def urlify(value):
-    #urlfinder  = re.compile(r'^(http://\S+)')
-    #urlfinder2 = re.compile(r'\s(http://\S+)')
-    #value = urlfinder.sub(r'<a href="\1">\1</a>', value)
-    #return mark_safe(urlfinder.sub(r' <a href="\1">\1</a>', value))
-
     pat1 = re.compile(
         r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)",
         re.IGNORECASE | re.DOTALL
@@ -71,6 +71,12 @@ def urlify(value):
     value = pat1.sub(r'\1<a href="\2">\3</a>', value)
     value = pat2.sub(r'\1<a href="http://\2">\3</a>', value)
     return mark_safe(value)
+# }}}
+
+# {{{ player_url: Generate a player URL.
+@register.filter
+def player_url(value):
+    return "/players/" + str(value.id) + "-" + urlfilter(value.tag) + "/"
 # }}}
 
 # {{{ vs_url: Generate a search query for the two players
@@ -107,7 +113,13 @@ def pow(value, arg):
 # {{{ racefull: Converts a single-character race to human readable format.
 @register.filter
 def racefull(value):
-    return ['Protoss','Terran','Zerg','Random','Race switcher'][['P','T','Z','R','S'].index(value)]
+    return ([
+        _('Protoss'),
+        _('Terran'),
+        _('Zerg'),
+        _('Random'),
+        _('Race switcher')][['P','T','Z','R','S'].index(value)]
+    )
 # }}}
 
 # {{{ haslogo: Checks whether a team given by ID has a logo file.
@@ -231,11 +243,11 @@ def get_tlpd_list(value):
     value = int(value) if value is not None else 0
 
     dbs = [
-        (TLPD_DB_WOLBETA,           'sc2-beta',           'TLPD:WoL:B'),
-        (TLPD_DB_WOLKOREAN,         'sc2-korean',         'TLPD:WoL:KR'),
-        (TLPD_DB_WOLINTERNATIONAL,  'sc2-international',  'TLPD:WoL:IN'),
-        (TLPD_DB_HOTSBETA,          'hots-beta',          'TLPD:HotS:B'),
-        (TLPD_DB_HOTS,              'hots',               'TLPD:HotS'),
+        (TLPD_DB_WOLBETA,           'sc2-beta',           _('TLPD:WoL:B')),
+        (TLPD_DB_WOLKOREAN,         'sc2-korean',         _('TLPD:WoL:KR')),
+        (TLPD_DB_WOLINTERNATIONAL,  'sc2-international',  _('TLPD:WoL:IN')),
+        (TLPD_DB_HOTSBETA,          'hots-beta',          _('TLPD:HotS:B')),
+        (TLPD_DB_HOTS,              'hots',               _('TLPD:HotS')),
     ]
 
     ret = []
@@ -338,7 +350,7 @@ def ratscaleplus(value):
     elif value <= PRF_INF:
         return '+\u221E'
     elif value <= PRF_NA:
-        return 'N/A'
+        return _('N/A')
     else:
         return ratscale(value)
 # }}}
@@ -473,6 +485,59 @@ def datemin(value, arg):
         return value
     else:
         return arg
+# }}}
+
+# {{{ cdate: Custom translate-friendly date formatting.
+@register.filter
+def cdate(value, arg):
+    temp = (djangodate(value, arg)
+        .replace('January',    ugettext('January'))
+        .replace('February',   ugettext('February'))
+        .replace('March',      ugettext('March'))
+        .replace('April',      ugettext('April'))
+        .replace('May',        ugettext('May'))
+        .replace('June',       ugettext('June'))
+        .replace('July',       ugettext('July'))
+        .replace('August',     ugettext('August'))
+        .replace('September',  ugettext('September'))
+        .replace('October',    ugettext('October'))
+        .replace('November',   ugettext('November'))
+        .replace('December',   ugettext('December'))
+        .replace('Jan.',       ugettext('Jan.'))
+        .replace('Feb.',       ugettext('Feb.'))
+        .replace('Aug.',       ugettext('Aug.'))
+        .replace('Sept.',      ugettext('Sept.'))
+        .replace('Oct.',       ugettext('Oct.'))
+        .replace('Nov.',       ugettext('Nov.'))
+        .replace('Dec.',       ugettext('Dec.'))
+        .replace('jan',        ugettext('jan'))
+        .replace('feb',        ugettext('feb'))
+        .replace('mar',        ugettext('mar'))
+        .replace('apr',        ugettext('apr'))
+        .replace('may',        ugettext('may'))
+        .replace('jun',        ugettext('jun'))
+        .replace('jul',        ugettext('jul'))
+        .replace('aug',        ugettext('aug'))
+        .replace('sep',        ugettext('sep'))
+        .replace('oct',        ugettext('oct'))
+        .replace('nov',        ugettext('nov'))
+        .replace('dec',        ugettext('dec'))
+        .replace('Monday',     ugettext('Monday'))
+        .replace('Tuesday',    ugettext('Tuesday'))
+        .replace('Wednesday',  ugettext('Wednesday'))
+        .replace('Thursday',   ugettext('Thursday'))
+        .replace('Friday',     ugettext('Friday'))
+        .replace('Saturday',   ugettext('Saturday'))
+        .replace('Sunday',     ugettext('Sunday'))
+        .replace('mon',        ugettext('mon'))
+        .replace('tue',        ugettext('tue'))
+        .replace('wed',        ugettext('wed'))
+        .replace('thu',        ugettext('thu'))
+        .replace('fri',        ugettext('fri'))
+        .replace('sat',        ugettext('sat'))
+        .replace('sun',        ugettext('sun'))
+    )
+    return temp
 # }}}
 
 # }}}

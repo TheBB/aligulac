@@ -5,8 +5,9 @@ This template shows a rating list for a given period.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}List {{ period.id }}{% endblock %}
+{% block title %}{% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
@@ -23,29 +24,30 @@ This template shows a rating list for a given period.
 <table style="width: 42em; border-collapse: collapse;">
     <tr>
         <td class="tabsel" onclick="switch_tab('best', tables);" style="width: 25%;" id="best-tab">
-            best
+            {% trans "best" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('spec', tables);" style="width: 25%;" id="spec-tab">
-            most specialized
+            {% trans "most specialized" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('matchup', tables);" style="width: 25%;" id="matchup-tab">
-            matchups
+            {% trans "matchups" %}
         </td>
         <td class="tabunsel" onclick="switch_tab('gainers', tables);" style="width: 25%;" id="gainers-tab">
-            Up/Down
+            {% comment %}Translators: Rating changes during a period.{% endcomment %}
+            {% trans "Up/Down" %}
         </td>
     </tr>
     <tbody id="best">
     <tr> <td colspan="4" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
-        <td style="width: 10em; text-align: center;">All</td>
-        <td style="width: 10em; text-align: center;">Protoss</td>
-        <td style="width: 10em; text-align: center;">Terran</td>
-        <td style="width: 10em; text-align: center;">Zerg</td>
+        <td style="width: 10em; text-align: center;">{% trans "All" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Protoss" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Terran" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Zerg" %}</td>
     </tr>
     <tr>
-        <td>All</td>
+        <td>{% trans "All" %}</td>
         <td>
             <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{best.player.tag}}</a>
             <br/><span class="small">({{ best.rating|ratscale }})</span>
@@ -64,7 +66,7 @@ This template shows a rating list for a given period.
         </td>
     </tr>
     <tr>
-        <td>vP</td>
+        <td>{% trans "vP" %}</td>
         <td>
             <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{bestvp.player.tag}}</a>
             <br/><span class="small">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</span>
@@ -83,7 +85,7 @@ This template shows a rating list for a given period.
         </td>
     </tr>
     <tr>
-        <td>vT</td>
+        <td>{% trans "vT" %}</td>
         <td>
             <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{bestvt.player.tag}}</a>
             <br/><span class="small">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</span>
@@ -102,7 +104,7 @@ This template shows a rating list for a given period.
         </td>
     </tr>
     <tr>
-        <td>vZ</td>
+        <td>{% trans "vZ" %}</td>
         <td>
             <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{bestvz.player.tag}}</a>
             <br/><span class="small">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</span>
@@ -125,13 +127,13 @@ This template shows a rating list for a given period.
     <tr> <td colspan="4" style="border: solid 0.1em;"> <table class="dottedint">
     <tr>
         <td style="width: 2em;"></td>
-        <td style="width: 10em; text-align: center;">All</td>
-        <td style="width: 10em; text-align: center;">Protoss</td>
-        <td style="width: 10em; text-align: center;">Terran</td>
-        <td style="width: 10em; text-align: center;">Zerg</td>
+        <td style="width: 10em; text-align: center;">{% trans "All" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Protoss" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Terran" %}</td>
+        <td style="width: 10em; text-align: center;">{% trans "Zerg" %}</td>
     </tr>
     <tr>
-        <td>vP</td>
+        <td>{% trans "vP" %}</td>
         <td>
             <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{specvp.player.tag}}</a>
             <br/><span class="small">(+{{ specvp.rating_vp|ratscalediff }})</span>
@@ -150,7 +152,7 @@ This template shows a rating list for a given period.
         </td>
     </tr>
     <tr>
-        <td>vT</td>
+        <td>{% trans "vT" %}</td>
         <td>
             <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{specvt.player.tag}}</a>
             <br/><span class="small">(+{{ specvt.rating_vt|ratscalediff }})</span>
@@ -169,7 +171,7 @@ This template shows a rating list for a given period.
         </td>
     </tr>
     <tr>
-        <td>vZ</td>
+        <td>{% trans "vZ" %}</td>
         <td>
             <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{specvz.player.tag}}</a>
             <br/><span class="small">(+{{ specvz.rating_vz|ratscalediff }})</span>
@@ -193,7 +195,7 @@ This template shows a rating list for a given period.
     {% if pvt_wins or pvt_loss %}
     {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
     <tr style="height: 2.5em;">
-        <td style="width: 5em;">PvT</td>
+        <td style="width: 5em;">{% trans "PvT" %}</td>
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
@@ -209,7 +211,7 @@ This template shows a rating list for a given period.
     {% if pvz_wins or pvz_loss %}
     {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
     <tr style="height: 2.5em;">
-        <td style="width: 5em;">PvZ</td>
+        <td style="width: 5em;">{% trans "PvZ" %}</td>
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
@@ -225,7 +227,7 @@ This template shows a rating list for a given period.
     {% if tvz_wins or tvz_loss %}
     {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
     <tr style="height: 2.5em;">
-        <td style="width: 5em;">TvZ</td>
+        <td style="width: 5em;">{% trans "TvZ" %}</td>
         <td style="width: 37em;">
             <div class="progress">
                 <span class="percent">{{ p1 }}%</span>
@@ -240,7 +242,7 @@ This template shows a rating list for a given period.
     {% endif %}
     {% if pvp_games or tvt_games or zvz_games %}
     <tr style="height: 2.5em;">
-        <td style="width: 5em;">Mirrors</td>
+        <td style="width: 5em;">{% trans "Mirrors" %}</td>
         <td style="width: 37em;">
             <div class="progress" style="word-wrap: normal;">
                 <div class="bar" style="width: 100%; background: #c77;"
@@ -264,7 +266,7 @@ This template shows a rating list for a given period.
     {% for r in gainers %}
     <tr>
       <td class="shrink">
-        {% ifchanged %}Winners <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
+        {% ifchanged %}{% trans "Winners" %} <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
         <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">+{{ r.diff|ratscalediff }}</a>
@@ -281,7 +283,7 @@ This template shows a rating list for a given period.
     {% for r in losers %}
     <tr>
       <td class="shrink">
-        {% ifchanged %}Losers <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
+        {% ifchanged %}{% trans "Losers" %} <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
         <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">{{ r.diff|ratscalediff }}</a>
@@ -296,60 +298,62 @@ This template shows a rating list for a given period.
 </td>
 <td style="width: 22em; vertical-align: top;">
 <div class="ibox" style="width: 22em;">
-    <div class="iboxh"> List {{ period.id }} </div>
+    <div class="iboxh">{% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}</div>
     <div class="iboxtable">
         <div class="row">
-            <div class="rowel" style="width: 11em;">Start</div>
-            <div class="rower" style="width: 17em;">{{ period.start|date:"F jS, Y" }}</div>
+            <div class="rowel" style="width: 11em;">{% trans "Start" %}</div>
+            <div class="rower" style="width: 17em;">{{ period.start|cdate:_('F jS, Y') }}</div>
         </div>
         <div class="row">
-            <div class="rowel">End</div>
-            <div class="rower">{{ period.end|date:"F jS, Y" }}</div>
+            <div class="rowel">{% trans "End" %}</div>
+            <div class="rower">{{ period.end|cdate:_('F jS, Y') }}</div>
         </div>
         <div class="row">
-            <div class="rowel">Active players</div>
-            <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} ({{ period.num_newplayers }} new)</div>
+            <div class="rowel">{% trans "Active players" %}</div>
+            <div class="rower">{{ period.num_retplayers|add:period.num_newplayers }} 
+                ({% blocktrans count period.num_newplayers as cnt %}{{cnt}} new{% plural %}{{cnt}} new{% endblocktrans %})
+            </div>
         </div>
         <div class="row">
-            <div class="rowel">Leading race</div>
+            <div class="rowel">{% trans "Leading race" %}</div>
             <div class="rower">
                 <img src="{{ period|oprace|img }}" class="btm" alt="{{ period|oprace|racefull }}" /> 
                 {{ period|oprace|racefull }} ({{ period|oppctg }}%)
             </div>
         </div>
         <div class="row">
-            <div class="rowel">Lagging race</div>
+            <div class="rowel">{% trans "Lagging race" %}</div>
             <div class="rower">
                 <img src="{{ period|uprace|img }}" class="btm" alt="{{ period|uprace|racefull }}" /> 
                 {{ period|uprace|racefull}} ({{ period|uppctg }}%)
             </div>
         </div>
         <div class="row">
-            <div class="rowel">Games</div>
+            <div class="rowel">{% trans "Games" %}</div>
             <div class="rower">{{ period.num_games }}</div>
         </div>
         <div class="row">
-            <div class="rowel">PvT</div>
+            <div class="rowel">{% trans "PvT" %}</div>
             <div class="rower">
                 {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)
             </div>
         </div>
         <div class="row">
-            <div class="rowel">PvZ</div>
+            <div class="rowel">{% trans "PvZ" %}</div>
             <div class="rower">
                 {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)
             </div>
         </div>
         <div class="row">
-            <div class="rowel">TvZ</div>
+            <div class="rowel">{% trans "TvZ" %}</div>
             <div class="rower">
                 {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)
             </div>
         </div>
         <div class="row">
-            <div class="rowel">Mirrors</div>
+            <div class="rowel">{% trans "Mirrors" %}</div>
             <div class="rower">
-                {{ pvp_games }} PvP, {{ tvt_games }} TvT, {{ zvz_games }} ZvZ
+                {{ pvp_games }} {% trans "PvP" %}, {{ tvt_games }} {% trans "TvT" %}, {{ zvz_games }} {% trans "ZvZ" %}
             </div>
         </div>
     </div>
@@ -360,30 +364,32 @@ This template shows a rating list for a given period.
 <form method="get" action="/periods/{{ period.id }}/">
     <input type="hidden" name="page" value="{{ page }}" />
     <input type="hidden" name="sort" value="{{ sort }}" />
-    <p>Show races:
+    <p>{% trans "Show races:" %}
     <select name="race">
-        <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>All</option>
-        <option value="p" {% if race == "p" %}selected{% endif %}>Protoss</option>
-        <option value="t" {% if race == "t" %}selected{% endif %}>Terran</option>
-        <option value="z" {% if race == "z" %}selected{% endif %}>Zerg</option>
-        <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>No Protoss</option>
-        <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>No Terran</option>
-        <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>No Zerg</option>
-        <option value="r" {% if race == "r" %}selected{% endif %}>Random</option>
-        <option value="s" {% if race == "s" %}selected{% endif %}>Race switchers</option>
-        <option value="rs" {% if race == "rs" %}selected{% endif %}>Random and race switchers</option>
+        <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
+        <option value="t" {% if race == "t" %}selected{% endif %}>{% trans "Terran" %}</option>
+        <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
+        <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
+        <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
+        <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
+        <option value="r" {% if race == "r" %}selected{% endif %}>{% trans "Random" %}</option>
+        <option value="s" {% if race == "s" %}selected{% endif %}>{% trans "Race switchers" %}</option>
+        <option value="rs" {% if race == "rs" %}selected{% endif %}>{% trans "Random and race switchers" %}</option>
     </select>
-    and nationalities:
+    {% trans "Nationalities:" %}
     <select name="nats">
-        <option value="all" {% if nats == "all" %}selected{% endif %}>All</option>
-        <option value="KR">South Korea</option>
-        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>Non-Koreans</option>
+        <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="KR">{% trans "South Korea" %}</option>
+        <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>
+            {% trans "Non-Koreans" %}
+        </option>
         <option disabled>------------</option>
         {% for c in countries %}
         <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
         {% endfor %}
     </select>
-    <input type="submit" value="Filter" />
+    <input type="submit" value="{% trans "Filter" %}" />
     </p>
 </form>
 

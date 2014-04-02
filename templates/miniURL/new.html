@@ -4,7 +4,9 @@
 The form to shorten an URL called from miniURL.views.new.
 {% endcomment %}
 
-{% block title %}URL shortener{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "URL shortener" %}{% endblock %}
 
 {% block content %}
    <form method="post" action="/m/new/">

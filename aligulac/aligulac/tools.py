@@ -59,11 +59,15 @@ class Message:
     INFO = 'info'
     SUCCESS = 'success'
 
-    def __init__(self, text=None, title='', type='info', error=None, field=None):
-        if error is None:
+    def __init__(self, text=None, title='', type='info', error=None, field=None, msg=None):
+        if error is None and msg is None:
             self.title = title
             self.text = text
             self.type = type
+        elif msg is not None:
+            self.title = msg.get_title()
+            self.text = msg.get_message()
+            self.type = type or msg.type
         else:
             self.title = None
             self.text = field + ': ' + error

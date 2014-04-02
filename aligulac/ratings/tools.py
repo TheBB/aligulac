@@ -444,7 +444,6 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
                 aligulac.tools.Message(msg=msg, type=msg.type + '-small')
                 for msg in m.message_set.all()
             ]
-            print(r['messages'])
         # }}}
 
         # {{{ Check ratings if needed

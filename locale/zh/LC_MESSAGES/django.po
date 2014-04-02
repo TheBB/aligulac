@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-02 22:22+0200\n"
+"POT-Creation-Date: 2014-04-02 23:06+0200\n"
 "PO-Revision-Date: 2014-04-02 10:28+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2013,6 +2013,20 @@ msgstr ""
 
 #: aligulac/ratings/inference_views.py:904
 #: aligulac/ratings/inference_views.py:916
+#: aligulac/ratings/inference_views.py:946
+#: aligulac/ratings/inference_views.py:956
+#: aligulac/ratings/inference_views.py:989
+#: aligulac/ratings/inference_views.py:999
+#: aligulac/ratings/inference_views.py:1009
+#: aligulac/ratings/inference_views.py:1080
+#: aligulac/ratings/inference_views.py:1090
+#: aligulac/ratings/inference_views.py:1128
+#: aligulac/ratings/inference_views.py:1138 templates/results_search.html:93
+msgid "Modify"
+msgstr "修改"
+
+#: aligulac/ratings/inference_views.py:905
+#: aligulac/ratings/inference_views.py:917
 #: aligulac/ratings/inference_views.py:947
 #: aligulac/ratings/inference_views.py:957
 #: aligulac/ratings/inference_views.py:990
@@ -2021,63 +2035,48 @@ msgstr ""
 #: aligulac/ratings/inference_views.py:1081
 #: aligulac/ratings/inference_views.py:1091
 #: aligulac/ratings/inference_views.py:1129
-#: aligulac/ratings/inference_views.py:1139 templates/results_search.html:93
-msgid "Modify"
-msgstr "修改"
-
-#: aligulac/ratings/inference_views.py:905
-#: aligulac/ratings/inference_views.py:917
-#: aligulac/ratings/inference_views.py:948
-#: aligulac/ratings/inference_views.py:958
-#: aligulac/ratings/inference_views.py:991
-#: aligulac/ratings/inference_views.py:1001
-#: aligulac/ratings/inference_views.py:1011
-#: aligulac/ratings/inference_views.py:1082
-#: aligulac/ratings/inference_views.py:1092
-#: aligulac/ratings/inference_views.py:1130
-#: aligulac/ratings/inference_views.py:1140
+#: aligulac/ratings/inference_views.py:1139
 msgid "Estimated by"
 msgstr ""
 
-#. Translators: Make sure that there are exactly nine characters between the end of each word!
-#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:20
+#: aligulac/ratings/inference_views.py:927 templates/pred_4pswiss.html:20
 msgid "Top 2"
 msgstr ""
 
-#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:21
+#: aligulac/ratings/inference_views.py:927 templates/pred_4pswiss.html:21
 msgid "1st"
 msgstr "第一"
 
-#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:22
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:22
 msgid "2nd"
 msgstr "第二"
 
-#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:23
+#: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:23
 msgid "3rd"
 msgstr "第三"
 
-#: aligulac/ratings/inference_views.py:930 templates/pred_4pswiss.html:24
+#: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:24
 msgid "4th"
 msgstr "第四"
 
 #. Translators: Win a tournament
-#: aligulac/ratings/inference_views.py:969 templates/pred_sebracket.html:22
+#: aligulac/ratings/inference_views.py:968 templates/pred_sebracket.html:22
 msgid "Win"
 msgstr ""
 
 #. Translators: Top 2, 4 etc. (in tournament)
-#: aligulac/ratings/inference_views.py:971
+#: aligulac/ratings/inference_views.py:970
 #, python-brace-format
 msgid "Top {i}"
 msgstr ""
 
-#: aligulac/ratings/inference_views.py:986
+#: aligulac/ratings/inference_views.py:985
 msgid "Median Outcome Bracket"
 msgstr ""
 
 #. Translators: Team [player], e.g. "Team Jaedong"
-#: aligulac/ratings/inference_views.py:1102
-#: aligulac/ratings/inference_views.py:1104
+#: aligulac/ratings/inference_views.py:1101
+#: aligulac/ratings/inference_views.py:1103
 #, python-brace-format
 msgid "Team {p}"
 msgstr ""

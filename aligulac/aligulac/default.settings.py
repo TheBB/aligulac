@@ -37,7 +37,8 @@ LANGUAGES = [
 
 if DEBUG:
     LANGUAGES += [
-        ('zh', _('Chinese (simplified)'))
+        ('zh', _('Chinese (simplified)')),
+        ('ru', _('Russian')),
     ]
 
 # CUSTOM

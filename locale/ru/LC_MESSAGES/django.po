@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Aligulac\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-02 10:27+0200\n"
-"PO-Revision-Date: 2014-04-02 10:28+0100\n"
-"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: zh\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: aligulac/currency.py:99
 #, python-format
@@ -26,19 +26,19 @@ msgstr ""
 
 #: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
 msgid "English"
-msgstr "英语"
+msgstr ""
 
 #: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
 msgid "Norwegian"
-msgstr "挪威语"
+msgstr ""
 
 #: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
 msgid "Chinese (simplified)"
-msgstr "中文(简化字)"
+msgstr ""
 
 #: aligulac/aligulac/default.settings.py:41 aligulac/aligulac/settings.py:41
 msgid "Russian"
-msgstr "俄语"
+msgstr ""
 
 #. Translators: matches as in search matches, not SC2 matches
 #: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119
@@ -64,34 +64,34 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:149
 msgid "You are not logged in."
-msgstr "您未登录."
+msgstr ""
 
 #: aligulac/aligulac/tools.py:149
 msgid "login"
-msgstr "登录"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:152
 #, python-format
 msgid "You are logged in as %s"
-msgstr "您已以%s的身份登录"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:154
 msgid "logout"
-msgstr "退出登录"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:155
 msgid "change password"
-msgstr "更改密码"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:168 aligulac/ratings/staff_views.py:320
 #: aligulac/ratings/staff_views.py:327
 msgid "This field is required."
-msgstr "此处为必填项"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:240 aligulac/aligulac/tools.py:251
 #: templates/history.html:85
 msgid "Ranking"
-msgstr "排名"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:243 templates/player.html:738
 msgid "Current"
@@ -168,20 +168,20 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:267 templates/db.html:23
 msgid "Results"
-msgstr "结果"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:270
 msgid "By Date"
-msgstr "根据日期"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:271
 msgid "By Event"
-msgstr "根据赛事"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:272 templates/results_search.html:11
 #: templates/results_search.html.py:31 templates/search.html:11
 msgid "Search"
-msgstr "搜索"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:275
 msgid "Inference"
@@ -190,11 +190,11 @@ msgstr ""
 #: aligulac/aligulac/tools.py:278 aligulac/ratings/inference_views.py:229
 #: templates/predict.html:11
 msgid "Predict"
-msgstr "预测"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:281 aligulac/aligulac/tools.py:305
 msgid "Misc"
-msgstr "杂项"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:284 aligulac/ratings/misc_views.py:36
 msgid "Balance Report"
@@ -206,19 +206,19 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:288
 msgid "About"
-msgstr "关于"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:291 templates/faq.html:10
 msgid "FAQ"
-msgstr "常见问题与解答"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:292 templates/blog.html:10
 msgid "Blog"
-msgstr "日志"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:293
 msgid "Database"
-msgstr "数据库"
+msgstr ""
 
 #: aligulac/aligulac/tools.py:294
 msgid "API"
@@ -227,7 +227,7 @@ msgstr ""
 #: aligulac/aligulac/tools.py:297 templates/forms.html:118
 #: templates/language.html:41
 msgid "Submit"
-msgstr "提交"
+msgstr ""
 
 #. Translators: Matches as in SC2-matches, not search matches.
 #: aligulac/aligulac/tools.py:301 aligulac/ratings/inference_views.py:725
@@ -284,15 +284,15 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:63
 msgid "in-game name of the player"
-msgstr "玩家游戏名"
+msgstr ""
 
 #: aligulac/aligulac/views.py:64
 msgid "real name"
-msgstr "玩家真实姓名"
+msgstr ""
 
 #: aligulac/aligulac/views.py:65 aligulac/ratings/player_views.py:151
 msgid "birthday"
-msgstr "生日"
+msgstr ""
 
 #: aligulac/aligulac/views.py:66 templates/player.html:496
 msgid "MC number"
@@ -370,11 +370,11 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:99
 msgid "score for player A"
-msgstr "玩家A分数"
+msgstr ""
 
 #: aligulac/aligulac/views.py:100
 msgid "score for player B"
-msgstr "玩家B分数"
+msgstr ""
 
 #: aligulac/aligulac/views.py:102
 msgid ""
@@ -849,16 +849,16 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:434
 msgid "Name/organization"
-msgstr "姓名/机构"
+msgstr ""
 
 #: aligulac/aligulac/views.py:435 aligulac/ratings/staff_views.py:284
 #: templates/add.html:68
 msgid "Contact"
-msgstr "联系方式"
+msgstr ""
 
 #: aligulac/aligulac/views.py:452
 msgid "Entered data was invalid."
-msgstr "您输入的数据无效."
+msgstr ""
 
 #: aligulac/aligulac/views.py:467
 #, python-format
@@ -876,28 +876,28 @@ msgstr ""
 #: aligulac/aligulac/views.py:582 templates/login.html:10
 #: templates/login.html.py:31
 msgid "Login"
-msgstr "登录"
+msgstr ""
 
 #: aligulac/aligulac/views.py:601
 msgid "The old password didn't match. Your password was not changed."
-msgstr "您输入的旧密码有误. 密码尚未修改成功."
+msgstr ""
 
 #: aligulac/aligulac/views.py:607
 msgid "The new passwords didn't match. Your password was not changed."
-msgstr "您输入的两次密码不同。密码尚未修改成功."
+msgstr ""
 
 #: aligulac/aligulac/views.py:614
 #, python-format
 msgid "The password for %s was successfully changed."
-msgstr "您为 %s 设置的密码已经成功更改."
+msgstr ""
 
 #: aligulac/aligulac/views.py:617 templates/changepwd.html:9
 msgid "Change password"
-msgstr "修改密码"
+msgstr ""
 
 #: aligulac/aligulac/views.py:626
 msgid "404: Not found"
-msgstr "404: 未找到该页"
+msgstr ""
 
 #: aligulac/aligulac/views.py:632
 msgid "500: Internal Server Error"
@@ -905,35 +905,35 @@ msgstr ""
 
 #: aligulac/countries/data.py:5
 msgid "Africa"
-msgstr "非洲"
+msgstr ""
 
 #: aligulac/countries/data.py:6 aligulac/countries/data.py:516
 msgid "Antarctica"
-msgstr "南极洲"
+msgstr ""
 
 #: aligulac/countries/data.py:7
 msgid "Asia"
-msgstr "亚洲"
+msgstr ""
 
 #: aligulac/countries/data.py:8
 msgid "Europe"
-msgstr "欧洲"
+msgstr ""
 
 #: aligulac/countries/data.py:9
 msgid "North America"
-msgstr "北美洲"
+msgstr ""
 
 #: aligulac/countries/data.py:10
 msgid "Oceania"
-msgstr "大洋洲"
+msgstr ""
 
 #: aligulac/countries/data.py:11
 msgid "South America"
-msgstr "南美洲"
+msgstr ""
 
 #: aligulac/countries/data.py:514
 msgid "Afghanistan"
-msgstr "阿富汗"
+msgstr ""
 
 #: aligulac/countries/data.py:515
 msgid "Albania"
@@ -949,7 +949,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:519
 msgid "Andorra"
-msgstr "安道尔"
+msgstr ""
 
 #: aligulac/countries/data.py:520
 msgid "Angola"
@@ -961,19 +961,19 @@ msgstr ""
 
 #: aligulac/countries/data.py:522
 msgid "Azerbaijan"
-msgstr "阿塞拜疆"
+msgstr ""
 
 #: aligulac/countries/data.py:523
 msgid "Argentina"
-msgstr "阿根廷"
+msgstr ""
 
 #: aligulac/countries/data.py:524
 msgid "Australia"
-msgstr "澳大利亚"
+msgstr ""
 
 #: aligulac/countries/data.py:525
 msgid "Austria"
-msgstr "奥地利"
+msgstr ""
 
 #: aligulac/countries/data.py:526
 msgid "Bahamas"
@@ -985,7 +985,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:528
 msgid "Bangladesh"
-msgstr "孟加拉国"
+msgstr ""
 
 #: aligulac/countries/data.py:529
 msgid "Armenia"
@@ -997,7 +997,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:531
 msgid "Belgium"
-msgstr "比利时"
+msgstr ""
 
 #: aligulac/countries/data.py:532
 msgid "Bermuda"
@@ -1005,11 +1005,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:533
 msgid "Bhutan"
-msgstr "不丹"
+msgstr ""
 
 #: aligulac/countries/data.py:534
 msgid "Bolivia"
-msgstr "玻利维亚"
+msgstr ""
 
 #: aligulac/countries/data.py:535
 msgid "Bosnia and Herzegovina"
@@ -1017,7 +1017,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:536
 msgid "Botswana"
-msgstr "博兹瓦纳"
+msgstr ""
 
 #: aligulac/countries/data.py:537
 msgid "Bouvet Island"
@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:538
 msgid "Brazil"
-msgstr "巴西"
+msgstr ""
 
 #: aligulac/countries/data.py:539
 msgid "Belize"
@@ -1037,11 +1037,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:541
 msgid "Solomon Islands"
-msgstr "所罗门群岛"
+msgstr ""
 
 #: aligulac/countries/data.py:542
 msgid "British Virgin Islands"
-msgstr "英属维京群岛"
+msgstr ""
 
 #: aligulac/countries/data.py:543
 msgid "Brunei"
@@ -1049,7 +1049,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:544
 msgid "Bulgaria"
-msgstr "保加利亚"
+msgstr ""
 
 #: aligulac/countries/data.py:545
 msgid "Myanmar"
@@ -1061,51 +1061,51 @@ msgstr ""
 
 #: aligulac/countries/data.py:547
 msgid "Belarus"
-msgstr "白俄罗斯"
+msgstr ""
 
 #: aligulac/countries/data.py:548
 msgid "Cambodia"
-msgstr "柬埔寨"
+msgstr ""
 
 #: aligulac/countries/data.py:549
 msgid "Cameroon"
-msgstr "喀麦隆"
+msgstr ""
 
 #: aligulac/countries/data.py:550 templates/add.html:158
 msgid "Canada"
-msgstr "加拿大"
+msgstr ""
 
 #: aligulac/countries/data.py:551
 msgid "Cape Verde"
-msgstr "佛得角"
+msgstr ""
 
 #: aligulac/countries/data.py:552
 msgid "Cayman Islands"
-msgstr "开曼群岛"
+msgstr ""
 
 #: aligulac/countries/data.py:553
 msgid "Central African Republic"
-msgstr "中非共和国"
+msgstr ""
 
 #: aligulac/countries/data.py:554
 msgid "Sri Lanka"
-msgstr "斯里兰卡"
+msgstr ""
 
 #: aligulac/countries/data.py:555
 msgid "Chad"
-msgstr "乍得"
+msgstr ""
 
 #: aligulac/countries/data.py:556
 msgid "Chile"
-msgstr "智利"
+msgstr ""
 
 #: aligulac/countries/data.py:557
 msgid "China"
-msgstr "中国"
+msgstr ""
 
 #: aligulac/countries/data.py:558
 msgid "Taiwan"
-msgstr "台湾"
+msgstr ""
 
 #: aligulac/countries/data.py:559
 msgid "Christmas Island"
@@ -1117,7 +1117,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:561
 msgid "Colombia"
-msgstr "哥伦比亚"
+msgstr ""
 
 #: aligulac/countries/data.py:562
 msgid "Comoros"
@@ -1129,7 +1129,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:564 aligulac/countries/data.py:565
 msgid "Congo"
-msgstr "刚果"
+msgstr ""
 
 #: aligulac/countries/data.py:566
 msgid "Cook Islands"
@@ -1137,23 +1137,23 @@ msgstr ""
 
 #: aligulac/countries/data.py:567
 msgid "Costa Rica"
-msgstr "哥斯达黎加"
+msgstr ""
 
 #: aligulac/countries/data.py:568
 msgid "Croatia"
-msgstr "克罗地亚"
+msgstr ""
 
 #: aligulac/countries/data.py:569
 msgid "Cuba"
-msgstr "古巴"
+msgstr ""
 
 #: aligulac/countries/data.py:570
 msgid "Cyprus"
-msgstr "塞浦路斯"
+msgstr ""
 
 #: aligulac/countries/data.py:571
 msgid "Czech Republic"
-msgstr "捷克共和国"
+msgstr ""
 
 #: aligulac/countries/data.py:572
 msgid "Benin"
@@ -1161,19 +1161,19 @@ msgstr ""
 
 #: aligulac/countries/data.py:573
 msgid "Denmark"
-msgstr "丹麦"
+msgstr ""
 
 #: aligulac/countries/data.py:574
 msgid "Dominica"
-msgstr "多米尼加"
+msgstr ""
 
 #: aligulac/countries/data.py:575
 msgid "Dominican Republic"
-msgstr "多米尼加共和国"
+msgstr ""
 
 #: aligulac/countries/data.py:576
 msgid "Ecuador"
-msgstr "厄瓜多尔"
+msgstr ""
 
 #: aligulac/countries/data.py:577
 msgid "El Salvador"
@@ -1185,7 +1185,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:579
 msgid "Ethiopia"
-msgstr "埃塞俄比亚"
+msgstr ""
 
 #: aligulac/countries/data.py:580
 msgid "Eritrea"
@@ -1193,7 +1193,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:581
 msgid "Estonia"
-msgstr "爱沙尼亚"
+msgstr ""
 
 #: aligulac/countries/data.py:582
 msgid "Faroe Islands"
@@ -1209,11 +1209,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:585
 msgid "Fiji"
-msgstr "斐济"
+msgstr ""
 
 #: aligulac/countries/data.py:586
 msgid "Finland"
-msgstr "芬兰"
+msgstr ""
 
 #: aligulac/countries/data.py:587
 msgid "Åland Islands"
@@ -1221,11 +1221,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:588 templates/add.html:159
 msgid "France"
-msgstr "法国"
+msgstr ""
 
 #: aligulac/countries/data.py:589
 msgid "French Guiana"
-msgstr "法属几内亚"
+msgstr ""
 
 #: aligulac/countries/data.py:590
 msgid "French Polynesia"
@@ -1245,7 +1245,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:594
 msgid "Georgia"
-msgstr "格鲁吉亚"
+msgstr ""
 
 #: aligulac/countries/data.py:595
 msgid "Gambia"
@@ -1257,7 +1257,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:597 templates/add.html:160
 msgid "Germany"
-msgstr "德国"
+msgstr ""
 
 #: aligulac/countries/data.py:598
 msgid "Ghana"
@@ -1273,11 +1273,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:601
 msgid "Greece"
-msgstr "希腊"
+msgstr ""
 
 #: aligulac/countries/data.py:602
 msgid "Greenland"
-msgstr "格陵兰"
+msgstr ""
 
 #: aligulac/countries/data.py:603
 msgid "Grenada"
@@ -1293,19 +1293,19 @@ msgstr ""
 
 #: aligulac/countries/data.py:606
 msgid "Guatemala"
-msgstr "危地马拉"
+msgstr ""
 
 #: aligulac/countries/data.py:607
 msgid "Guinea"
-msgstr "几内亚"
+msgstr ""
 
 #: aligulac/countries/data.py:608
 msgid "Guyana"
-msgstr "圭亚那"
+msgstr ""
 
 #: aligulac/countries/data.py:609
 msgid "Haiti"
-msgstr "海地"
+msgstr ""
 
 #: aligulac/countries/data.py:610
 msgid "Heard Island and McDonald Islands"
@@ -1313,51 +1313,51 @@ msgstr ""
 
 #: aligulac/countries/data.py:611
 msgid "Vatican City"
-msgstr "梵蒂冈"
+msgstr ""
 
 #: aligulac/countries/data.py:612
 msgid "Honduras"
-msgstr "洪都拉斯"
+msgstr ""
 
 #: aligulac/countries/data.py:613
 msgid "Hong Kong"
-msgstr "香港"
+msgstr ""
 
 #: aligulac/countries/data.py:614
 msgid "Hungary"
-msgstr "匈牙利"
+msgstr ""
 
 #: aligulac/countries/data.py:615
 msgid "Iceland"
-msgstr "冰岛"
+msgstr ""
 
 #: aligulac/countries/data.py:616
 msgid "India"
-msgstr "印度"
+msgstr ""
 
 #: aligulac/countries/data.py:617
 msgid "Indonesia"
-msgstr "印度尼西亚"
+msgstr ""
 
 #: aligulac/countries/data.py:618
 msgid "Iran"
-msgstr "伊朗"
+msgstr ""
 
 #: aligulac/countries/data.py:619
 msgid "Iraq"
-msgstr "伊拉克"
+msgstr ""
 
 #: aligulac/countries/data.py:620
 msgid "Ireland"
-msgstr "爱尔兰"
+msgstr ""
 
 #: aligulac/countries/data.py:621
 msgid "Israel"
-msgstr "以色列"
+msgstr ""
 
 #: aligulac/countries/data.py:622
 msgid "Italy"
-msgstr "意大利"
+msgstr ""
 
 #: aligulac/countries/data.py:623
 msgid "Cote d'Ivoire"
@@ -1365,11 +1365,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:624
 msgid "Jamaica"
-msgstr "牙买加"
+msgstr ""
 
 #: aligulac/countries/data.py:625
 msgid "Japan"
-msgstr "日本"
+msgstr ""
 
 #: aligulac/countries/data.py:626
 msgid "Kazakhstan"
@@ -1377,36 +1377,36 @@ msgstr ""
 
 #: aligulac/countries/data.py:627
 msgid "Jordan"
-msgstr "约旦"
+msgstr ""
 
 #: aligulac/countries/data.py:628
 msgid "Kenya"
-msgstr "肯尼亚"
+msgstr ""
 
 #: aligulac/countries/data.py:629
 msgid "North Korea"
-msgstr "朝鲜"
+msgstr ""
 
 #: aligulac/countries/data.py:630 templates/add.html:161
 #: templates/period.html:383
 msgid "South Korea"
-msgstr "韩国"
+msgstr ""
 
 #: aligulac/countries/data.py:631
 msgid "Kuwait"
-msgstr "科威特"
+msgstr ""
 
 #: aligulac/countries/data.py:632
 msgid "Kyrgyzstan"
-msgstr "吉尔吉斯斯坦"
+msgstr ""
 
 #: aligulac/countries/data.py:633
 msgid "Laos"
-msgstr "老挝"
+msgstr ""
 
 #: aligulac/countries/data.py:634
 msgid "Lebanon"
-msgstr "黎巴嫩"
+msgstr ""
 
 #: aligulac/countries/data.py:635
 msgid "Lesotho"
@@ -1414,7 +1414,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:636
 msgid "Latvia"
-msgstr "拉脱维亚"
+msgstr ""
 
 #: aligulac/countries/data.py:637
 msgid "Liberia"
@@ -1426,23 +1426,23 @@ msgstr ""
 
 #: aligulac/countries/data.py:639
 msgid "Liechtenstein"
-msgstr "列支敦士登"
+msgstr ""
 
 #: aligulac/countries/data.py:640
 msgid "Lithuania"
-msgstr "立陶宛"
+msgstr ""
 
 #: aligulac/countries/data.py:641
 msgid "Luxembourg"
-msgstr "卢森堡"
+msgstr ""
 
 #: aligulac/countries/data.py:642
 msgid "Macao"
-msgstr "澳门"
+msgstr ""
 
 #: aligulac/countries/data.py:643
 msgid "Madagascar"
-msgstr "马达加斯加"
+msgstr ""
 
 #: aligulac/countries/data.py:644
 msgid "Malawi"
@@ -1450,11 +1450,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:645
 msgid "Malaysia"
-msgstr "马来西亚"
+msgstr ""
 
 #: aligulac/countries/data.py:646
 msgid "Maldives"
-msgstr "马尔代夫"
+msgstr ""
 
 #: aligulac/countries/data.py:647
 msgid "Mali"
@@ -1462,7 +1462,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:648
 msgid "Malta"
-msgstr "马耳他"
+msgstr ""
 
 #: aligulac/countries/data.py:649
 msgid "Martinique"
@@ -1478,11 +1478,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:652
 msgid "Mexico"
-msgstr "墨西哥"
+msgstr ""
 
 #: aligulac/countries/data.py:653
 msgid "Mongolia"
-msgstr "蒙古"
+msgstr ""
 
 #: aligulac/countries/data.py:654
 msgid "Moldova"
@@ -1498,11 +1498,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:657
 msgid "Morocco"
-msgstr "摩洛哥"
+msgstr ""
 
 #: aligulac/countries/data.py:658
 msgid "Mozambique"
-msgstr "莫桑比克"
+msgstr ""
 
 #: aligulac/countries/data.py:659
 msgid "Oman"
@@ -1510,19 +1510,19 @@ msgstr ""
 
 #: aligulac/countries/data.py:660
 msgid "Namibia"
-msgstr "纳米比亚"
+msgstr ""
 
 #: aligulac/countries/data.py:661
 msgid "Nauru"
-msgstr "瑙鲁"
+msgstr ""
 
 #: aligulac/countries/data.py:662
 msgid "Nepal"
-msgstr "尼泊尔"
+msgstr ""
 
 #: aligulac/countries/data.py:663
 msgid "Netherlands"
-msgstr "荷兰"
+msgstr ""
 
 #: aligulac/countries/data.py:664
 msgid "Netherlands Antilles"
@@ -1530,7 +1530,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:665
 msgid "Aruba"
-msgstr "荷属阿鲁巴群岛"
+msgstr ""
 
 #: aligulac/countries/data.py:666
 msgid "New Caledonia"
@@ -1542,7 +1542,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:668
 msgid "New Zealand"
-msgstr "新西兰"
+msgstr ""
 
 #: aligulac/countries/data.py:669
 msgid "Nicaragua"
@@ -1566,7 +1566,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:674
 msgid "Norway"
-msgstr "挪威"
+msgstr ""
 
 #: aligulac/countries/data.py:675
 msgid "Northern Mariana Islands"
@@ -1590,27 +1590,27 @@ msgstr ""
 
 #: aligulac/countries/data.py:680
 msgid "Pakistan"
-msgstr "巴基斯坦"
+msgstr ""
 
 #: aligulac/countries/data.py:681
 msgid "Panama"
-msgstr "巴拿马"
+msgstr ""
 
 #: aligulac/countries/data.py:682
 msgid "Papua New Guinea"
-msgstr "巴布新几内亚"
+msgstr ""
 
 #: aligulac/countries/data.py:683
 msgid "Paraguay"
-msgstr "巴拉圭"
+msgstr ""
 
 #: aligulac/countries/data.py:684
 msgid "Peru"
-msgstr "秘鲁"
+msgstr ""
 
 #: aligulac/countries/data.py:685
 msgid "Philippines"
-msgstr "菲律宾"
+msgstr ""
 
 #: aligulac/countries/data.py:686
 msgid "Pitcairn Islands"
@@ -1618,15 +1618,15 @@ msgstr ""
 
 #: aligulac/countries/data.py:687 templates/add.html:162
 msgid "Poland"
-msgstr "波兰"
+msgstr ""
 
 #: aligulac/countries/data.py:688
 msgid "Portugal"
-msgstr "葡萄牙"
+msgstr ""
 
 #: aligulac/countries/data.py:689
 msgid "Guinea-Bissau"
-msgstr "几内亚比绍"
+msgstr ""
 
 #: aligulac/countries/data.py:690
 msgid "Timor-Leste"
@@ -1634,11 +1634,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:691
 msgid "Puerto Rico"
-msgstr "波多黎各"
+msgstr ""
 
 #: aligulac/countries/data.py:692
 msgid "Qatar"
-msgstr "卡塔尔"
+msgstr ""
 
 #: aligulac/countries/data.py:693
 msgid "Reunion"
@@ -1646,15 +1646,15 @@ msgstr ""
 
 #: aligulac/countries/data.py:694
 msgid "Romania"
-msgstr "罗马尼亚"
+msgstr ""
 
 #: aligulac/countries/data.py:695 templates/add.html:163
 msgid "Russia"
-msgstr "俄罗斯"
+msgstr ""
 
 #: aligulac/countries/data.py:696
 msgid "Rwanda"
-msgstr "卢旺达"
+msgstr ""
 
 #: aligulac/countries/data.py:697
 msgid "Saint Barthelemy"
@@ -1690,7 +1690,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:705
 msgid "San Marino"
-msgstr "圣马力诺"
+msgstr ""
 
 #: aligulac/countries/data.py:706
 msgid "Sao Tome and Principe"
@@ -1698,11 +1698,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:707
 msgid "Saudi Arabia"
-msgstr "沙特阿拉伯"
+msgstr ""
 
 #: aligulac/countries/data.py:708
 msgid "Senegal"
-msgstr "塞内加尔"
+msgstr ""
 
 #: aligulac/countries/data.py:709
 msgid "Serbia"
@@ -1714,35 +1714,35 @@ msgstr ""
 
 #: aligulac/countries/data.py:711
 msgid "Singapore"
-msgstr "新加坡"
+msgstr ""
 
 #: aligulac/countries/data.py:712
 msgid "Slovakia"
-msgstr "斯洛伐克"
+msgstr ""
 
 #: aligulac/countries/data.py:713
 msgid "Vietnam"
-msgstr "越南"
+msgstr ""
 
 #: aligulac/countries/data.py:714
 msgid "Slovenia"
-msgstr "斯洛文尼亚"
+msgstr ""
 
 #: aligulac/countries/data.py:715
 msgid "Somalia"
-msgstr "索马里"
+msgstr ""
 
 #: aligulac/countries/data.py:716
 msgid "South Africa"
-msgstr "南非"
+msgstr ""
 
 #: aligulac/countries/data.py:717
 msgid "Zimbabwe"
-msgstr "津巴布韦"
+msgstr ""
 
 #: aligulac/countries/data.py:718
 msgid "Spain"
-msgstr "西班牙"
+msgstr ""
 
 #: aligulac/countries/data.py:719
 msgid "Western Sahara"
@@ -1754,7 +1754,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:721
 msgid "Suriname"
-msgstr "苏里南"
+msgstr ""
 
 #: aligulac/countries/data.py:722
 msgid "Svalbard & Jan Mayen Islands"
@@ -1766,11 +1766,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:724 templates/add.html:164
 msgid "Sweden"
-msgstr "瑞典"
+msgstr ""
 
 #: aligulac/countries/data.py:725
 msgid "Switzerland"
-msgstr "瑞士"
+msgstr ""
 
 #: aligulac/countries/data.py:726
 msgid "Syria"
@@ -1778,7 +1778,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:727
 msgid "Thailand"
-msgstr "泰国"
+msgstr ""
 
 #: aligulac/countries/data.py:728
 msgid "Togo"
@@ -1798,7 +1798,7 @@ msgstr ""
 
 #: aligulac/countries/data.py:732
 msgid "United Arab Emirates"
-msgstr "阿拉伯联合酋长国"
+msgstr ""
 
 #: aligulac/countries/data.py:733
 msgid "Tunisia"
@@ -1806,11 +1806,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:734
 msgid "Turkey"
-msgstr "土耳其"
+msgstr ""
 
 #: aligulac/countries/data.py:735
 msgid "Turkmenistan"
-msgstr "土库曼斯坦"
+msgstr ""
 
 #: aligulac/countries/data.py:736
 msgid "Turks and Caicos Islands"
@@ -1822,11 +1822,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:738
 msgid "Uganda"
-msgstr "乌干达"
+msgstr ""
 
 #: aligulac/countries/data.py:739 templates/add.html:165
 msgid "Ukraine"
-msgstr "乌克兰"
+msgstr ""
 
 #: aligulac/countries/data.py:740
 msgid "Macedonia"
@@ -1834,11 +1834,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:741
 msgid "Egypt"
-msgstr "埃及"
+msgstr ""
 
 #: aligulac/countries/data.py:742
 msgid "United Kingdom"
-msgstr "英国"
+msgstr ""
 
 #: aligulac/countries/data.py:743
 msgid "Guernsey"
@@ -1854,15 +1854,15 @@ msgstr ""
 
 #: aligulac/countries/data.py:746
 msgid "Tanzania"
-msgstr "坦桑尼亚"
+msgstr ""
 
 #: aligulac/countries/data.py:747
 msgid "United States of America"
-msgstr "美国"
+msgstr ""
 
 #: aligulac/countries/data.py:748
 msgid "United States Virgin Islands"
-msgstr "美属维京群岛"
+msgstr ""
 
 #: aligulac/countries/data.py:749
 msgid "Burkina Faso"
@@ -1874,11 +1874,11 @@ msgstr ""
 
 #: aligulac/countries/data.py:751
 msgid "Uzbekistan"
-msgstr "乌兹别克斯坦"
+msgstr ""
 
 #: aligulac/countries/data.py:752
 msgid "Venezuela"
-msgstr "委内瑞拉"
+msgstr ""
 
 #: aligulac/countries/data.py:753
 msgid "Wallis and Futuna"
@@ -1890,19 +1890,19 @@ msgstr ""
 
 #: aligulac/countries/data.py:755
 msgid "Yemen"
-msgstr "也门"
+msgstr ""
 
 #: aligulac/countries/data.py:756
 msgid "Zambia"
-msgstr "赞比亚"
+msgstr ""
 
 #: aligulac/faq/views.py:18
 msgid "The FAQ section is only in English, sorry."
-msgstr "抱歉,常见问题与解答为英语"
+msgstr ""
 
 #: aligulac/faq/views.py:23 templates/language.html:52
 msgid "Frequently asked questions"
-msgstr "常见问题"
+msgstr ""
 
 #: aligulac/miniURL/views.py:18
 msgid "List of short URLs"
@@ -2039,7 +2039,7 @@ msgstr ""
 #: aligulac/ratings/inference_views.py:1129
 #: aligulac/ratings/inference_views.py:1139 templates/results_search.html:93
 msgid "Modify"
-msgstr "修改"
+msgstr ""
 
 #: aligulac/ratings/inference_views.py:905
 #: aligulac/ratings/inference_views.py:917
@@ -2062,19 +2062,19 @@ msgstr ""
 
 #: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:21
 msgid "1st"
-msgstr "第一"
+msgstr ""
 
 #: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:22
 msgid "2nd"
-msgstr "第二"
+msgstr ""
 
 #: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:23
 msgid "3rd"
-msgstr "第三"
+msgstr ""
 
 #: aligulac/ratings/inference_views.py:930 templates/pred_4pswiss.html:24
 msgid "4th"
-msgstr "第四"
+msgstr ""
 
 #. Translators: Win a tournament
 #: aligulac/ratings/inference_views.py:969 templates/pred_sebracket.html:22
@@ -2321,12 +2321,12 @@ msgstr ""
 #: aligulac/ratings/models.py:132
 #, python-format
 msgid "You might be looking for %(player)s."
-msgstr "您要找的是不是%(player)s."
+msgstr ""
 
 #: aligulac/ratings/models.py:135
 #, python-format
 msgid "You might be looking for %(players)s or %(player)s."
-msgstr "您要找的是不死%(players)s或%(player)s."
+msgstr ""
 
 #: aligulac/ratings/models.py:136 aligulac/ratings/models.py:137
 #: aligulac/ratings/models.py:157
@@ -2821,11 +2821,11 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:149
 msgid "country"
-msgstr "国家"
+msgstr ""
 
 #: aligulac/ratings/player_views.py:150 aligulac/ratings/team_views.py:85
 msgid "name"
-msgstr "姓名"
+msgstr ""
 
 #: aligulac/ratings/player_views.py:155 aligulac/ratings/results_views.py:207
 msgid "TLPD DBs"
@@ -2837,11 +2837,11 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:166 aligulac/ratings/results_views.py:545
 msgid "After"
-msgstr "之后"
+msgstr ""
 
 #: aligulac/ratings/player_views.py:167 aligulac/ratings/results_views.py:546
 msgid "Before"
-msgstr "之前"
+msgstr ""
 
 #: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:646
 #: templates/history.html:30 templates/period.html:373
@@ -2865,7 +2865,7 @@ msgstr ""
 #: aligulac/ratings/player_views.py:181 templates/earnings.html:44
 #: templates/history.html:37 templates/period.html:385
 msgid "Non-Koreans"
-msgstr "非韩国玩家"
+msgstr ""
 
 #: aligulac/ratings/player_views.py:188 aligulac/ratings/results_views.py:554
 msgid "Best of 3+"
@@ -3040,7 +3040,7 @@ msgstr ""
 
 #: aligulac/ratings/records_views.py:86 templates/hof.html:10
 msgid "Hall of Fame"
-msgstr "名人堂"
+msgstr ""
 
 #. Translators: Records for (race)
 #: aligulac/ratings/records_views.py:123
@@ -3116,14 +3116,14 @@ msgstr[1] ""
 
 #: aligulac/ratings/results_views.py:203 aligulac/ratings/team_views.py:88
 msgid "homepage"
-msgstr "主页"
+msgstr ""
 
 #: aligulac/ratings/results_views.py:215 aligulac/ratings/results_views.py:398
 #: templates/add.html:86 templates/player_transfers.html:11
 #: templates/pred_4pswiss.html:17 templates/pred_rrgroup.html:18
 #: templates/pred_rrgroup.html.py:64 templates/pred_sebracket.html:17
 msgid "Player"
-msgstr "玩家"
+msgstr ""
 
 #: aligulac/ratings/results_views.py:216 aligulac/ratings/results_views.py:399
 #: aligulac/ratings/results_views.py:703 aligulac/ratings/staff_views.py:142
@@ -3132,7 +3132,7 @@ msgstr "玩家"
 #: templates/player_results.html:19 templates/player_transfers.html:18
 #: templates/results_search.html:21
 msgid "Date"
-msgstr "日期"
+msgstr ""
 
 #: aligulac/ratings/results_views.py:217
 msgid "Story text"
@@ -3318,11 +3318,11 @@ msgstr[1] ""
 
 #: aligulac/ratings/staff_views.py:283 templates/add.html:65
 msgid "Source"
-msgstr "来源"
+msgstr ""
 
 #: aligulac/ratings/staff_views.py:285 templates/add.html:71
 msgid "Notes"
-msgstr "备注"
+msgstr ""
 
 #: aligulac/ratings/staff_views.py:380
 #, python-format
@@ -3603,15 +3603,15 @@ msgstr ""
 
 #: aligulac/ratings/tools.py:55
 msgid "Euro"
-msgstr "欧元"
+msgstr ""
 
 #: aligulac/ratings/tools.py:56
 msgid "British Pound"
-msgstr "英镑"
+msgstr ""
 
 #: aligulac/ratings/tools.py:57
 msgid "Australian Dollar"
-msgstr "澳元"
+msgstr ""
 
 #: aligulac/ratings/tools.py:58
 msgid "New-Zealand Dollar"
@@ -3619,35 +3619,35 @@ msgstr ""
 
 #: aligulac/ratings/tools.py:59
 msgid "US Dollar"
-msgstr "美元"
+msgstr ""
 
 #: aligulac/ratings/tools.py:60
 msgid "Canadian Dollar"
-msgstr "加元"
+msgstr ""
 
 #: aligulac/ratings/tools.py:61
 msgid "Swiss Franc"
-msgstr "瑞士法郎"
+msgstr ""
 
 #: aligulac/ratings/tools.py:62
 msgid "Norwegian Krona"
-msgstr "挪威克朗"
+msgstr ""
 
 #: aligulac/ratings/tools.py:63
 msgid "Swedish Krona"
-msgstr "瑞典克朗"
+msgstr ""
 
 #: aligulac/ratings/tools.py:64
 msgid "Danish Krona"
-msgstr "丹麦克朗"
+msgstr ""
 
 #: aligulac/ratings/tools.py:65
 msgid "Japanese Yen"
-msgstr "日元"
+msgstr ""
 
 #: aligulac/ratings/tools.py:66
 msgid "Chinese Renminbi"
-msgstr "人民币"
+msgstr ""
 
 #: aligulac/ratings/tools.py:67
 msgid "South Korean won"
@@ -3667,11 +3667,11 @@ msgstr ""
 
 #: aligulac/ratings/tools.py:71
 msgid "Taiwan Dollar"
-msgstr "台币"
+msgstr ""
 
 #: aligulac/ratings/tools.py:72
 msgid "Hong Kong Dollar"
-msgstr "港币"
+msgstr ""
 
 #: aligulac/ratings/tools.py:73
 msgid "Philippines Peso"
@@ -3825,191 +3825,191 @@ msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:494
 msgid "January"
-msgstr "一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:495
 msgid "February"
-msgstr "二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:496
 msgid "March"
-msgstr "三月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:497
 msgid "April"
-msgstr "四月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:498
 msgid "May"
-msgstr "五月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:499
 msgid "June"
-msgstr "六月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:500
 msgid "July"
-msgstr "七月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:501
 msgid "August"
-msgstr "八月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:502
 msgid "September"
-msgstr "九月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:503
 msgid "October"
-msgstr "十月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:504
 msgid "November"
-msgstr "十一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:505
 msgid "December"
-msgstr "十二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:506
 msgid "Jan."
-msgstr "一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:507
 msgid "Feb."
-msgstr "二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:508
 msgid "Aug."
-msgstr "八月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:509
 msgid "Sept."
-msgstr "九月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:510
 msgid "Oct."
-msgstr "十月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:511
 msgid "Nov."
-msgstr "十一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:512
 msgid "Dec."
-msgstr "十二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:513
 msgid "jan"
-msgstr "一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:514
 msgid "feb"
-msgstr "二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:515
 msgid "mar"
-msgstr "三月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:516
 msgid "apr"
-msgstr "四月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:517
 msgid "may"
-msgstr "五月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:518
 msgid "jun"
-msgstr "六月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:519
 msgid "jul"
-msgstr "七月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:520
 msgid "aug"
-msgstr "八月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:521
 msgid "sep"
-msgstr "九月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:522
 msgid "oct"
-msgstr "十月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:523
 msgid "nov"
-msgstr "十一月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:524
 msgid "dec"
-msgstr "十二月"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:525
 msgid "Monday"
-msgstr "周一"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:526
 msgid "Tuesday"
-msgstr "周二"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:527
 msgid "Wednesday"
-msgstr "周三"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:528
 msgid "Thursday"
-msgstr "周四"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:529
 msgid "Friday"
-msgstr "周五"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:530
 msgid "Saturday"
-msgstr "周六"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:531
 msgid "Sunday"
-msgstr "周日"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:532
 msgid "mon"
-msgstr "周一"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:533
 msgid "tue"
-msgstr "周二"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:534
 msgid "wed"
-msgstr "周三"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:535
 msgid "thu"
-msgstr "周四"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:536
 msgid "fri"
-msgstr "周五"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:537
 msgid "sat"
-msgstr "周六"
+msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:538
 msgid "sun"
-msgstr "周日"
+msgstr ""
 
 #: templates/404.html:12
 msgid "The page you were looking for was nowhere to be found. Sorry!"
-msgstr "抱歉!你要找的页面不存在."
+msgstr ""
 
 #: templates/500.html:12
 msgid "An unspeakable awful indescribable horror has occured."
-msgstr "系统发生了令人无语的糟糕情况."
+msgstr ""
 
 #: templates/500.html:14
 #, python-format
@@ -4017,16 +4017,14 @@ msgid ""
 "Try to send me an e-mail at %(email)s where you describe what you were "
 "trying to do when this happened."
 msgstr ""
-"请给我发邮件到%(email)s, 并请告诉我您是在何种情况下或何种操作下遇到这种情况"
-"的."
 
 #: templates/add.html:19
 msgid "The following entries were successfully submitted"
-msgstr "以下各项已顺利提交"
+msgstr ""
 
 #: templates/add.html:20
 msgid "They are pending review before being visible."
-msgstr "这些内容在审查后方为可见."
+msgstr ""
 
 #: templates/add.html:34
 msgid "Show:"
@@ -4721,19 +4719,19 @@ msgstr ""
 
 #: templates/changepwd.html:21
 msgid "Old password"
-msgstr "请输入旧密码"
+msgstr ""
 
 #: templates/changepwd.html:27
 msgid "New password"
-msgstr "请输入新密码"
+msgstr ""
 
 #: templates/changepwd.html:33
 msgid "New password again"
-msgstr "请再次输入新密码"
+msgstr ""
 
 #: templates/changepwd.html:39
 msgid "Change"
-msgstr "更改"
+msgstr ""
 
 #: templates/clocks.html:10
 msgid "Days since…"
@@ -4742,16 +4740,18 @@ msgstr ""
 #: templates/clocks.html:34
 msgid "year"
 msgid_plural "years"
-msgstr[0] "年"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/clocks.html:37
 msgid "day"
 msgid_plural "days"
-msgstr[0] "日"
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/clocks.html:60 templates/matchlist.html:156
 msgid "Y-m-d"
-msgstr "年-月-日"
+msgstr ""
 
 #: templates/clocks.html:81
 msgid ""
@@ -4867,21 +4867,21 @@ msgstr ""
 
 #: templates/earnings.html:32
 msgid "Filter by year:"
-msgstr "按年份筛选"
+msgstr ""
 
 #: templates/earnings.html:41
 msgid "Filter by country:"
-msgstr "按国家筛选"
+msgstr ""
 
 #: templates/earnings.html:49
 msgid "Filter by currency:"
-msgstr "按货币筛选"
+msgstr ""
 
 #. Translators: The verb "to filter".
 #: templates/earnings.html:57 templates/history.html:42
 #: templates/period.html:392 templates/player_results.html:20
 msgid "Filter"
-msgstr "筛选"
+msgstr ""
 
 #: templates/earnings.html:80
 #, python-format
@@ -4891,7 +4891,7 @@ msgstr ""
 #: templates/earnings.html:108 templates/player.html:486
 #: templates/team.html:97
 msgid "Total earnings"
-msgstr "总收入"
+msgstr ""
 
 #: templates/eventmgr.html:17
 msgid ""
@@ -4963,7 +4963,7 @@ msgstr ""
 #: templates/eventres.html.py:445 templates/player.html:528
 #: templates/team.html:128
 msgid "close"
-msgstr "关闭"
+msgstr ""
 
 #: templates/eventmgr.html:57
 msgid "Commit new sub-events"
@@ -4983,16 +4983,16 @@ msgstr ""
 #: templates/eventres.html:175 templates/player.html:388
 #: templates/team.html:32
 msgid "edit"
-msgstr "编辑"
+msgstr ""
 
 #: templates/eventmgr.html:142 templates/eventmgr.html.py:203
 #: templates/eventres.html:197 templates/matchlist.html:72
 msgid "add"
-msgstr "添加"
+msgstr ""
 
 #: templates/eventmgr.html:161 templates/eventmgr.html.py:208
 msgid "modify"
-msgstr "修改"
+msgstr ""
 
 #. Translators: Path in the tree sense.
 #: templates/eventres.html:30
@@ -5049,7 +5049,7 @@ msgstr ""
 
 #: templates/eventres.html:173
 msgid "Details"
-msgstr "细节"
+msgstr ""
 
 #. Translators: Short for "add SUBevent".
 #: templates/eventres.html:178
@@ -5322,7 +5322,7 @@ msgstr ""
 
 #: templates/history.html:34 templates/period.html:380
 msgid "Nationalities:"
-msgstr "国籍"
+msgstr ""
 
 #: templates/history.html:61 templates/player.html:567
 #: templates/reports_balance.html:35 templates/reports_balance.html.py:127
@@ -5373,27 +5373,27 @@ msgstr ""
 
 #: templates/index.html:42
 msgid "Download PNG image"
-msgstr "下载PNG图片"
+msgstr ""
 
 #: templates/index.html:43
 msgid "Download JPEG image"
-msgstr "下载JPEG图片"
+msgstr ""
 
 #: templates/index.html:44
 msgid "Download PDF document"
-msgstr "下载PDF文件"
+msgstr ""
 
 #: templates/index.html:45
 msgid "Download SVG vector image"
-msgstr "下载SVG矢量图片"
+msgstr ""
 
 #: templates/index.html:46
 msgid "Loading..."
-msgstr "载入中..."
+msgstr ""
 
 #: templates/index.html:47
 msgid "Print chart"
-msgstr "打印图表"
+msgstr ""
 
 #: templates/index.html:48
 msgid "Reset zoom"
@@ -5402,152 +5402,152 @@ msgstr ""
 #: templates/index.html:50
 msgctxt "Big first letter"
 msgid "January"
-msgstr "一月"
+msgstr ""
 
 #: templates/index.html:51
 msgctxt "Big first letter"
 msgid "February"
-msgstr "二月"
+msgstr ""
 
 #: templates/index.html:52
 msgctxt "Big first letter"
 msgid "March"
-msgstr "三月"
+msgstr ""
 
 #: templates/index.html:53
 msgctxt "Big first letter"
 msgid "April"
-msgstr "四月"
+msgstr ""
 
 #: templates/index.html:54 templates/index.html.py:68
 msgctxt "Big first letter"
 msgid "May"
-msgstr "五月"
+msgstr ""
 
 #: templates/index.html:55
 msgctxt "Big first letter"
 msgid "June"
-msgstr "六月"
+msgstr ""
 
 #: templates/index.html:56
 msgctxt "Big first letter"
 msgid "July"
-msgstr "七月"
+msgstr ""
 
 #: templates/index.html:57
 msgctxt "Big first letter"
 msgid "August"
-msgstr "八月"
+msgstr ""
 
 #: templates/index.html:58
 msgctxt "Big first letter"
 msgid "September"
-msgstr "九月"
+msgstr ""
 
 #: templates/index.html:59
 msgctxt "Big first letter"
 msgid "October"
-msgstr "十月"
+msgstr ""
 
 #: templates/index.html:60
 msgctxt "Big first letter"
 msgid "November"
-msgstr "十一月"
+msgstr ""
 
 #: templates/index.html:61
 msgctxt "Big first letter"
 msgid "December"
-msgstr "十二月"
+msgstr ""
 
 #: templates/index.html:64
 msgctxt "Big first letter"
 msgid "Jan"
-msgstr "一月"
+msgstr ""
 
 #: templates/index.html:65
 msgctxt "Big first letter"
 msgid "Feb"
-msgstr "二月"
+msgstr ""
 
 #: templates/index.html:66
 msgctxt "Big first letter"
 msgid "Mar"
-msgstr "三月"
+msgstr ""
 
 #: templates/index.html:67
 msgctxt "Big first letter"
 msgid "Apr"
-msgstr "四月"
+msgstr ""
 
 #: templates/index.html:69
 msgctxt "Big first letter"
 msgid "Jun"
-msgstr "六月"
+msgstr ""
 
 #: templates/index.html:70
 msgctxt "Big first letter"
 msgid "Jul"
-msgstr "七月"
+msgstr ""
 
 #: templates/index.html:71
 msgctxt "Big first letter"
 msgid "Aug"
-msgstr "八月"
+msgstr ""
 
 #: templates/index.html:72
 msgctxt "Big first letter"
 msgid "Sep"
-msgstr "九月"
+msgstr ""
 
 #: templates/index.html:73
 msgctxt "Big first letter"
 msgid "Oct"
-msgstr "十月"
+msgstr ""
 
 #: templates/index.html:74
 msgctxt "Big first letter"
 msgid "Nov"
-msgstr "十一月"
+msgstr ""
 
 #: templates/index.html:75
 msgctxt "Big first letter"
 msgid "Dec"
-msgstr "十二月"
+msgstr ""
 
 #: templates/index.html:78
 msgctxt "Big first letter"
 msgid "Sunday"
-msgstr "周日"
+msgstr ""
 
 #: templates/index.html:79
 msgctxt "Big first letter"
 msgid "Monday"
-msgstr "周一"
+msgstr ""
 
 #: templates/index.html:80
 msgctxt "Big first letter"
 msgid "Tuesday"
-msgstr "周二"
+msgstr ""
 
 #: templates/index.html:81
 msgctxt "Big first letter"
 msgid "Wednesday"
-msgstr "周三"
+msgstr ""
 
 #: templates/index.html:82
 msgctxt "Big first letter"
 msgid "Thursday"
-msgstr "周四"
+msgstr ""
 
 #: templates/index.html:83
 msgctxt "Big first letter"
 msgid "Friday"
-msgstr "周五"
+msgstr ""
 
 #: templates/index.html:84
 msgctxt "Big first letter"
 msgid "Saturday"
-msgstr "周六"
+msgstr ""
 
 #: templates/index.html:125
 msgid "DEVELOPMENT SERVER"
@@ -5560,7 +5560,7 @@ msgstr ""
 #: templates/index.html:161 templates/language.html:11
 #: templates/language.html.py:17
 msgid "Language"
-msgstr "语言"
+msgstr ""
 
 #: templates/index.html:165
 msgid "Find player, team or event:"
@@ -5643,20 +5643,18 @@ msgid ""
 "have a submitter account, but still want to contribute, please let me know "
 "at: %(email)s."
 msgstr ""
-"如果您要提交结果，请先用您的提交者账号登录。若您没有提交者账号但仍然愿意帮助"
-"我们补充一些结果，请联系我: %(email)s."
 
 #: templates/login.html:22
 msgid "Username:"
-msgstr "用户名"
+msgstr ""
 
 #: templates/login.html:26
 msgid "Password:"
-msgstr "密码"
+msgstr ""
 
 #: templates/manage.html:11
 msgid "Miscellaneous"
-msgstr "杂项"
+msgstr ""
 
 #: templates/manage.html:14
 msgid "Miscellaneous administration"
@@ -5668,7 +5666,7 @@ msgstr ""
 
 #: templates/manage.html:27
 msgid "CAREFUL:"
-msgstr "千万注意:"
+msgstr ""
 
 #. Translators: This will merge X into Y
 #: templates/manage.html:29
@@ -6775,6 +6773,3 @@ msgstr ""
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
 msgstr ""
-
-#~ msgid "Simplified Chinese"
-#~ msgstr "汉语(简化字)"

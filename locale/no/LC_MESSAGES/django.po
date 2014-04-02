@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-27 10:44+0100\n"
-"PO-Revision-Date: 2014-03-27 10:45+0100\n"
+"POT-Creation-Date: 2014-04-02 10:27+0200\n"
+"PO-Revision-Date: 2014-04-02 10:27+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -34,6 +34,10 @@ msgstr "Norsk"
 #: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
 msgid "Chinese (simplified)"
 msgstr "Kinesisk (forenklet)"
+
+#: aligulac/aligulac/default.settings.py:41 aligulac/aligulac/settings.py:41
+msgid "Russian"
+msgstr "Russisk"
 
 #. Translators: matches as in search matches, not SC2 matches
 #: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119

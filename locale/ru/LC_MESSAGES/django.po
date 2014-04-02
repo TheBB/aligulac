@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-02 10:37+0200\n"
+"POT-Creation-Date: 2014-04-02 22:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,109 +24,93 @@ msgstr ""
 msgid "Exchange rate not found for currency %(code)s on %(date)s"
 msgstr ""
 
-#: aligulac/aligulac/default.settings.py:34 aligulac/aligulac/settings.py:34
-msgid "English"
-msgstr ""
-
-#: aligulac/aligulac/default.settings.py:35 aligulac/aligulac/settings.py:35
-msgid "Norwegian"
-msgstr ""
-
-#: aligulac/aligulac/default.settings.py:40 aligulac/aligulac/settings.py:40
-msgid "Chinese (simplified)"
-msgstr ""
-
-#: aligulac/aligulac/default.settings.py:41 aligulac/aligulac/settings.py:41
-msgid "Russian"
-msgstr ""
-
 #. Translators: matches as in search matches, not SC2 matches
-#: aligulac/aligulac/tools.py:106 aligulac/aligulac/tools.py:119
+#: aligulac/aligulac/tools.py:110 aligulac/aligulac/tools.py:123
 msgid "Possible matches:"
 msgstr ""
 
 #. Translators: E.g. "John, Lisa, Darren and Mike"
-#: aligulac/aligulac/tools.py:108 aligulac/aligulac/tools.py:130
+#: aligulac/aligulac/tools.py:112 aligulac/aligulac/tools.py:134
 #, python-format
 msgid "%(commalist)s and %(final)s"
 msgstr ""
 
 #. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
-#: aligulac/aligulac/tools.py:121
+#: aligulac/aligulac/tools.py:125
 #, python-format
 msgid "%(commalist)s and %(number)s more"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:137
+#: aligulac/aligulac/tools.py:141
 #, python-format
 msgid "'%s' not unique"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:149
+#: aligulac/aligulac/tools.py:153
 msgid "You are not logged in."
 msgstr ""
 
-#: aligulac/aligulac/tools.py:149
+#: aligulac/aligulac/tools.py:153
 msgid "login"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:152
+#: aligulac/aligulac/tools.py:156
 #, python-format
 msgid "You are logged in as %s"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:154
+#: aligulac/aligulac/tools.py:158
 msgid "logout"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:155
+#: aligulac/aligulac/tools.py:159
 msgid "change password"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:168 aligulac/ratings/staff_views.py:320
+#: aligulac/aligulac/tools.py:172 aligulac/ratings/staff_views.py:320
 #: aligulac/ratings/staff_views.py:327
 msgid "This field is required."
 msgstr ""
 
-#: aligulac/aligulac/tools.py:240 aligulac/aligulac/tools.py:251
+#: aligulac/aligulac/tools.py:244 aligulac/aligulac/tools.py:255
 #: templates/history.html:85
 msgid "Ranking"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:243 templates/player.html:738
+#: aligulac/aligulac/tools.py:247 templates/player.html:738
 msgid "Current"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:244 aligulac/aligulac/tools.py:258
+#: aligulac/aligulac/tools.py:248 aligulac/aligulac/tools.py:262
 #: aligulac/ratings/records_views.py:71 templates/history.html:10
 msgid "History"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:245 aligulac/aligulac/tools.py:351
+#: aligulac/aligulac/tools.py:249 aligulac/aligulac/tools.py:355
 #: templates/player_earnings.html:30
 msgid "Earnings"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:248 aligulac/ratings/team_views.py:128
+#: aligulac/aligulac/tools.py:252 aligulac/ratings/team_views.py:128
 #: templates/db.html:72 templates/index.html:25 templates/search.html:19
 #: templates/teams.html:10
 msgid "Teams"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:252
+#: aligulac/aligulac/tools.py:256
 msgid "Transfers"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:255 aligulac/ratings/records_views.py:125
+#: aligulac/aligulac/tools.py:259 aligulac/ratings/records_views.py:125
 msgid "Records"
 msgstr ""
 
 #. Translators: Hall of fame
-#: aligulac/aligulac/tools.py:260
+#: aligulac/aligulac/tools.py:264
 msgid "HoF"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:261 aligulac/ratings/player_views.py:170
+#: aligulac/aligulac/tools.py:265 aligulac/ratings/player_views.py:170
 #: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:187
 #: aligulac/ratings/results_views.py:553 aligulac/ratings/results_views.py:568
 #: templates/earnings.html:34 templates/earnings.html.py:43
@@ -139,7 +123,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:262 aligulac/ratings/models.py:87
+#: aligulac/aligulac/tools.py:266 aligulac/ratings/models.py:87
 #: aligulac/ratings/player_views.py:171 aligulac/ratings/player_views.py:641
 #: aligulac/ratings/templatetags/ratings_extras.py:117
 #: templates/history.html:27 templates/period.html:45
@@ -148,7 +132,7 @@ msgstr ""
 msgid "Protoss"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:263 aligulac/ratings/models.py:88
+#: aligulac/aligulac/tools.py:267 aligulac/ratings/models.py:88
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
 #: aligulac/ratings/templatetags/ratings_extras.py:118
 #: templates/history.html:28 templates/period.html:46
@@ -157,7 +141,7 @@ msgstr ""
 msgid "Terran"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:264 aligulac/ratings/models.py:89
+#: aligulac/aligulac/tools.py:268 aligulac/ratings/models.py:89
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
 #: aligulac/ratings/templatetags/ratings_extras.py:119
 #: templates/history.html:29 templates/period.html:47
@@ -166,71 +150,71 @@ msgstr ""
 msgid "Zerg"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:267 templates/db.html:23
+#: aligulac/aligulac/tools.py:271 templates/db.html:23
 msgid "Results"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:270
+#: aligulac/aligulac/tools.py:274
 msgid "By Date"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:271
+#: aligulac/aligulac/tools.py:275
 msgid "By Event"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:272 templates/results_search.html:11
+#: aligulac/aligulac/tools.py:276 templates/results_search.html:11
 #: templates/results_search.html.py:31 templates/search.html:11
 msgid "Search"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:275
+#: aligulac/aligulac/tools.py:279
 msgid "Inference"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:278 aligulac/ratings/inference_views.py:229
+#: aligulac/aligulac/tools.py:282 aligulac/ratings/inference_views.py:229
 #: templates/predict.html:11
 msgid "Predict"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:281 aligulac/aligulac/tools.py:305
+#: aligulac/aligulac/tools.py:285 aligulac/aligulac/tools.py:309
 msgid "Misc"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:284 aligulac/ratings/misc_views.py:36
+#: aligulac/aligulac/tools.py:288 aligulac/ratings/misc_views.py:36
 msgid "Balance Report"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:285
+#: aligulac/aligulac/tools.py:289
 msgid "Days Since…"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:288
+#: aligulac/aligulac/tools.py:292
 msgid "About"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:291 templates/faq.html:10
+#: aligulac/aligulac/tools.py:295 templates/faq.html:10
 msgid "FAQ"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:292 templates/blog.html:10
+#: aligulac/aligulac/tools.py:296 templates/blog.html:10
 msgid "Blog"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:293
+#: aligulac/aligulac/tools.py:297
 msgid "Database"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:294
+#: aligulac/aligulac/tools.py:298
 msgid "API"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:297 templates/forms.html:118
+#: aligulac/aligulac/tools.py:301 templates/forms.html:118
 #: templates/language.html:41
 msgid "Submit"
 msgstr ""
 
 #. Translators: Matches as in SC2-matches, not search matches.
-#: aligulac/aligulac/tools.py:301 aligulac/ratings/inference_views.py:725
+#: aligulac/aligulac/tools.py:305 aligulac/ratings/inference_views.py:725
 #: aligulac/ratings/inference_views.py:746
 #: aligulac/ratings/player_views.py:671 aligulac/ratings/staff_views.py:286
 #: templates/add.html:75 templates/eventres.html:255
@@ -238,34 +222,34 @@ msgstr ""
 msgid "Matches"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:302
+#: aligulac/aligulac/tools.py:306
 msgid "Review"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:303 templates/events.html:10
+#: aligulac/aligulac/tools.py:307 templates/events.html:10
 #: templates/events.html.py:13 templates/index.html:26
 #: templates/search.html:41
 msgid "Events"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:304 aligulac/ratings/staff_views.py:979
+#: aligulac/aligulac/tools.py:308 aligulac/ratings/staff_views.py:979
 #: templates/events_open.html:6
 msgid "Open events"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:343
+#: aligulac/aligulac/tools.py:347
 msgid "Summary"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:346
+#: aligulac/aligulac/tools.py:350
 msgid "Rating history"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:348 templates/pred_match.html:146
+#: aligulac/aligulac/tools.py:352 templates/pred_match.html:146
 msgid "Match history"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:354
+#: aligulac/aligulac/tools.py:358
 msgid "Adjustments"
 msgstr ""
 

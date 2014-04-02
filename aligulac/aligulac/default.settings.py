@@ -31,14 +31,17 @@ LOCALE_PATHS = local.LOCALE_PATHS
 LANGUAGE_CODE = 'en_US'
 
 LANGUAGES = [
-    ('en', _('English')),
-    ('no', _('Norwegian')),
+    ('en', 'English'),
+    ('no', 'Norsk'),
 ]
 
 if DEBUG:
     LANGUAGES += [
-        ('zh', _('Chinese (simplified)')),
-        ('ru', _('Russian')),
+        ('zh', '中文(简化字)'),
+        ('ru', 'Русский'),
+        ('es', 'Español'),
+        ('de', 'Deutsch'),
+        ('fr', 'Français'),
     ]
 
 # CUSTOM

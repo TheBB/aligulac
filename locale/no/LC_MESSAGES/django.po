@@ -4086,7 +4086,7 @@ msgstr "Vi fant ikke siden du så etter. Beklager!"
 
 #: templates/500.html:12
 msgid "An unspeakable awful indescribable horror has occured."
-msgstr "En unevnelig forferdelig ubeskrivelig skrekkelig ting har skjedd."
+msgstr "En unevnelig, forferdelig, ubeskrivelig og skrekkelig ting har skjedd."
 
 #: templates/500.html:14
 #, python-format

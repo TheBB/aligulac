@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-02 23:06+0200\n"
+"POT-Creation-Date: 2014-04-03 13:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5724,6 +5724,10 @@ msgstr ""
 #. Translators: No spaces
 #: templates/matchlist.html:238
 msgid "offline,online"
+msgstr ""
+
+#: templates/misc.html:10
+msgid "Miscellaneous Statistics"
 msgstr ""
 
 #: templates/period.html:10 templates/period.html.py:301

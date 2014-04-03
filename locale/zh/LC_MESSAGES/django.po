@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-02 23:06+0200\n"
+"POT-Creation-Date: 2014-04-03 13:35+0200\n"
 "PO-Revision-Date: 2014-04-02 10:28+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5728,6 +5728,11 @@ msgstr ""
 #: templates/matchlist.html:238
 msgid "offline,online"
 msgstr ""
+
+#: templates/misc.html:10
+#, fuzzy
+msgid "Miscellaneous Statistics"
+msgstr "杂项"
 
 #: templates/period.html:10 templates/period.html.py:301
 #, python-format

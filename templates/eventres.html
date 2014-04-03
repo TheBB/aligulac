@@ -225,10 +225,12 @@ ratings.views.events.
             <div class="rower">{{ game }}</div>
         </div>
         {% endif %}
+        {% if offline %}
         <div class="row infobox">
             <div class="rowel">{% trans "On-/Offline" %}</div>
             <div class="rower">{{ offline }}</div>
         </div>
+        {% endif %}
         {% if prizepoolorig %}
         <div class="row infobox">
             <div class="rowel">{% trans "Prize pool" %}</div>

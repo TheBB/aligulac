@@ -904,7 +904,7 @@ def events(request, event_id=None):
     offlines = list(matches.values('offline').distinct())
     if len(offlines) > 1:
         base['offline'] = _('Both')
-    else:
+    elif len(offlines) == 1:
         base['offline'] = _('Offline') if offlines[0]['offline'] else _('Online')
 
     base['pvt_wins'], base['pvt_loss'] = count_matchup_games(matches, 'P', 'T')

@@ -924,7 +924,6 @@ def postable_dual(base, request):
     numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = (
-        # Translators: Make sure that there are exactly nine characters between the end of each word!
         [('{s: >9}'.format(s=ugettext('Top 2')) + '{s: >9}'.format(s=ugettext('1st')) +
           '{s: >9}'.format(s=ugettext('2nd')) + '{s: >9}'.format(s=ugettext('3rd')) +
           '{s: >9}'.format(s=ugettext('4th')), '', ''), None] +

@@ -11,7 +11,7 @@ from django.db.models import (
 from django.template.defaultfilters import (
     date as django_date_filter
 )
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from ratings.models import (
     Earnings,
@@ -30,7 +30,8 @@ from ratings.tools import (
     filter_active,
     populate_teams,
     total_ratings,
-) 
+)
+from ratings.templatetags.ratings_extras import cdate
 from aligulac.cache import cache_page
 from aligulac.tools import (
     Message,
@@ -64,7 +65,7 @@ def period(request, period_id=None):
         period = get_object_or_404(Period, id=period_id, computed=True)
 
     if period.is_preview():
-        base['messages'].append(Message(msg_preview % period.end.strftime('%B %d'), type=Message.INFO))
+        base['messages'].append(Message(msg_preview % cdate(period.end, _('F jS')), type=Message.INFO))
 
     base['period'] = period
     if period.id != base['curp'].id:

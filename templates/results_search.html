@@ -53,11 +53,12 @@ This is the results search function. Called from ratings.views.results_search.
 
     {% if sc_my or sc_op %}
     {% with luri="/players/"|add:left.id|add:"/" pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op ltag=left.tag %}
-    {% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches.{% endblocktrans %}
-    {% if right %}
-    {% with ruri="/players/"|add:right.id|add:"/" rtag=right.tag %}
-    {% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches against <a href="{{ruri}}">{{rtag}}</a>.{% endblocktrans %}
-    {% endwith %}
+    {% if not right %}
+        <p>{% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches.{% endblocktrans %}</p>
+    {% else %}
+        {% with ruri="/players/"|add:right.id|add:"/" rtag=right.tag %}
+        <p>{% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches against <a href="{{ruri}}">{{rtag}}</a>.{% endblocktrans %}</p>
+        {% endwith %}
     {% endif %}
     {% endwith %}
     {% endif %}

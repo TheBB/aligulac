@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-07 17:56+0200\n"
+"POT-Creation-Date: 2014-04-11 15:31+0200\n"
 "PO-Revision-Date: 2014-04-02 10:28+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,8 +67,8 @@ msgstr "退出登录"
 msgid "change password"
 msgstr "更改密码"
 
-#: aligulac/aligulac/tools.py:172 aligulac/ratings/staff_views.py:320
-#: aligulac/ratings/staff_views.py:327
+#: aligulac/aligulac/tools.py:172 aligulac/ratings/staff_views.py:315
+#: aligulac/ratings/staff_views.py:322
 msgid "This field is required."
 msgstr "此处为必填项"
 
@@ -216,7 +216,7 @@ msgstr "提交"
 #. Translators: Matches as in SC2-matches, not search matches.
 #: aligulac/aligulac/tools.py:305 aligulac/ratings/inference_views.py:725
 #: aligulac/ratings/inference_views.py:746
-#: aligulac/ratings/player_views.py:671 aligulac/ratings/staff_views.py:286
+#: aligulac/ratings/player_views.py:671 aligulac/ratings/staff_views.py:283
 #: templates/add.html:75 templates/eventres.html:257
 #: templates/historical.html:28 templates/pred_rrgroup.html:67
 msgid "Matches"
@@ -232,7 +232,7 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:308 aligulac/ratings/staff_views.py:979
+#: aligulac/aligulac/tools.py:308 aligulac/ratings/staff_views.py:951
 #: templates/events_open.html:6
 msgid "Open events"
 msgstr ""
@@ -835,7 +835,7 @@ msgstr ""
 msgid "Name/organization"
 msgstr "姓名/机构"
 
-#: aligulac/aligulac/views.py:435 aligulac/ratings/staff_views.py:284
+#: aligulac/aligulac/views.py:435 aligulac/ratings/staff_views.py:281
 #: templates/add.html:68
 msgid "Contact"
 msgstr "联系方式"
@@ -2214,8 +2214,8 @@ msgstr ""
 
 #. Translators: Event type
 #: aligulac/ratings/models.py:80 aligulac/ratings/results_views.py:548
-#: aligulac/ratings/results_views.py:702 aligulac/ratings/staff_views.py:166
-#: aligulac/ratings/staff_views.py:279 aligulac/ratings/staff_views.py:311
+#: aligulac/ratings/results_views.py:702 aligulac/ratings/staff_views.py:161
+#: aligulac/ratings/staff_views.py:276 aligulac/ratings/staff_views.py:307
 #: templates/add.html:44 templates/clocks.html:56
 msgid "Event"
 msgstr ""
@@ -2785,9 +2785,9 @@ msgstr ""
 #: aligulac/ratings/results_views.py:243 aligulac/ratings/results_views.py:338
 #: aligulac/ratings/results_views.py:423 aligulac/ratings/results_views.py:470
 #: aligulac/ratings/results_views.py:517 aligulac/ratings/results_views.py:585
-#: aligulac/ratings/results_views.py:734 aligulac/ratings/staff_views.py:188
-#: aligulac/ratings/staff_views.py:344 aligulac/ratings/staff_views.py:594
-#: aligulac/ratings/staff_views.py:665 aligulac/ratings/staff_views.py:747
+#: aligulac/ratings/results_views.py:734 aligulac/ratings/staff_views.py:181
+#: aligulac/ratings/staff_views.py:338 aligulac/ratings/staff_views.py:587
+#: aligulac/ratings/staff_views.py:653 aligulac/ratings/staff_views.py:730
 #: aligulac/ratings/team_views.py:74
 msgid "Entered data was invalid, no changes made."
 msgstr ""
@@ -2874,7 +2874,7 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:103
 #: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:705
-#: aligulac/ratings/results_views.py:908 aligulac/ratings/staff_views.py:282
+#: aligulac/ratings/results_views.py:908 aligulac/ratings/staff_views.py:279
 #: templates/db.html:50
 msgid "Offline"
 msgstr ""
@@ -2892,7 +2892,7 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:100
 #: aligulac/ratings/results_views.py:568 aligulac/ratings/results_views.py:710
-#: aligulac/ratings/staff_views.py:281 templates/add.html:58
+#: aligulac/ratings/staff_views.py:278 templates/add.html:58
 #: templates/eventres.html:224
 msgid "Game version"
 msgstr ""
@@ -3053,7 +3053,7 @@ msgstr ""
 #. Translators: Type as in event type
 #. Translators: Event type.
 #: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:447
-#: aligulac/ratings/staff_views.py:543 templates/add.html:61
+#: aligulac/ratings/staff_views.py:539 templates/add.html:61
 #: templates/eventres.html:244
 msgid "Type"
 msgstr ""
@@ -3118,8 +3118,8 @@ msgid "Player"
 msgstr "玩家"
 
 #: aligulac/ratings/results_views.py:216 aligulac/ratings/results_views.py:399
-#: aligulac/ratings/results_views.py:703 aligulac/ratings/staff_views.py:142
-#: aligulac/ratings/staff_views.py:280 templates/clocks.html:56
+#: aligulac/ratings/results_views.py:703 aligulac/ratings/staff_views.py:138
+#: aligulac/ratings/staff_views.py:277 templates/clocks.html:56
 #: templates/eventres.html:206 templates/matchlist.html:38
 #: templates/player_results.html:19 templates/player_transfers.html:18
 #: templates/results_search.html:21
@@ -3171,8 +3171,8 @@ msgstr ""
 msgid "No such player: '%s'."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:328 aligulac/ratings/staff_views.py:109
-#: aligulac/ratings/staff_views.py:119 aligulac/ratings/staff_views.py:450
+#: aligulac/ratings/results_views.py:328 aligulac/ratings/staff_views.py:106
+#: aligulac/ratings/staff_views.py:116 aligulac/ratings/staff_views.py:443
 #, python-format
 msgid "Ambiguous player: '%s'."
 msgstr ""
@@ -3263,322 +3263,327 @@ msgstr[1] ""
 msgid "F jS, Y"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:111 aligulac/ratings/staff_views.py:121
-#: aligulac/ratings/staff_views.py:446
+#: aligulac/ratings/staff_views.py:108 aligulac/ratings/staff_views.py:118
+#: aligulac/ratings/staff_views.py:439
 #, python-format
 msgid "Could not find player: '%s'."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:143
+#: aligulac/ratings/staff_views.py:139
 msgid "Approve"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:144
+#: aligulac/ratings/staff_views.py:140
 msgid "Reject"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:145
+#: aligulac/ratings/staff_views.py:141
 msgid "Ignore duplicates"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:173
+#: aligulac/ratings/staff_views.py:167
 msgid "You must either approve or reject."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:178 aligulac/ratings/staff_views.py:335
+#: aligulac/ratings/staff_views.py:172 aligulac/ratings/staff_views.py:330
 msgid "Could not find this event object."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:239 aligulac/ratings/staff_views.py:495
+#: aligulac/ratings/staff_views.py:232 aligulac/ratings/staff_views.py:487
 #, python-format
 msgid "Could not make match %(pla)s vs %(plb)s: possible duplicate found."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:261
+#: aligulac/ratings/staff_views.py:239 aligulac/ratings/staff_views.py:495
+#, python-format
+msgid "Unknown race in %(pla)s vs %(plb)s: set to random."
+msgstr ""
+
+#: aligulac/ratings/staff_views.py:260
 #, python-format
 msgid "Successfully approved %i match."
 msgid_plural "Successfully approved %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/staff_views.py:269
+#: aligulac/ratings/staff_views.py:268
 #, python-format
 msgid "Successfully rejected %i match."
 msgid_plural "Successfully rejected %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/staff_views.py:283 templates/add.html:65
+#: aligulac/ratings/staff_views.py:280 templates/add.html:65
 msgid "Source"
 msgstr "来源"
 
-#: aligulac/ratings/staff_views.py:285 templates/add.html:71
+#: aligulac/ratings/staff_views.py:282 templates/add.html:71
 msgid "Notes"
 msgstr "备注"
 
-#: aligulac/ratings/staff_views.py:380
+#: aligulac/ratings/staff_views.py:374
 #, python-format
 msgid "Could not parse '%(line)s' (%(error)s)."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:402
+#: aligulac/ratings/staff_views.py:396
 #, python-format
 msgid "Error creating match '%(line)s' (%(error)s)."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:418
+#: aligulac/ratings/staff_views.py:412
 #, python-format
 msgid "Successfully added %i match."
 msgid_plural "Successfully added %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/staff_views.py:427
+#: aligulac/ratings/staff_views.py:421
 #, python-format
 msgid "Closed '%s'."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:430
+#: aligulac/ratings/staff_views.py:424
 #, python-format
 msgid "Did not close '%s'."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:509
+#: aligulac/ratings/staff_views.py:505
 msgid "Parent ID"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:511
+#: aligulac/ratings/staff_views.py:507
 msgid "Other"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:512
+#: aligulac/ratings/staff_views.py:508
 msgid "Group stage and playoffs"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:513
+#: aligulac/ratings/staff_views.py:509
 msgid "Groups A through D"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:514
+#: aligulac/ratings/staff_views.py:510
 msgid "Groups A through H"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:515
+#: aligulac/ratings/staff_views.py:511
 msgid "Ro64→Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:516
+#: aligulac/ratings/staff_views.py:512
 msgid "Ro32→Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:517
+#: aligulac/ratings/staff_views.py:513
 msgid "Ro16→Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:518
+#: aligulac/ratings/staff_views.py:514
 msgid "Ro8→Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:519
+#: aligulac/ratings/staff_views.py:515
 msgid "Ro4→Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:520
+#: aligulac/ratings/staff_views.py:516
 msgid "Ro64→Final + 3rd place"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:521
+#: aligulac/ratings/staff_views.py:517
 msgid "Ro32→Final + 3rd place"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:522
+#: aligulac/ratings/staff_views.py:518
 msgid "Ro16→Final + 3rd place"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:523
+#: aligulac/ratings/staff_views.py:519
 msgid "Ro8→Final + 3rd place"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:524
+#: aligulac/ratings/staff_views.py:520
 msgid "Ro4→Final + 3rd place"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:525
+#: aligulac/ratings/staff_views.py:521
 msgid "Ro64→Final + early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:526
+#: aligulac/ratings/staff_views.py:522
 msgid "Ro32→Final + early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:527
+#: aligulac/ratings/staff_views.py:523
 msgid "Ro16→Final + early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:528
+#: aligulac/ratings/staff_views.py:524
 msgid "Ro8→Final + early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:529
+#: aligulac/ratings/staff_views.py:525
 msgid "Ro4→Final + early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:531
+#: aligulac/ratings/staff_views.py:527
 msgid "Ro64→Final + 3rd place and early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:532
+#: aligulac/ratings/staff_views.py:528
 msgid "Ro32→Final + 3rd place and early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:533
+#: aligulac/ratings/staff_views.py:529
 msgid "Ro16→Final + 3rd place and early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:534
+#: aligulac/ratings/staff_views.py:530
 msgid "Ro8→Final + 3rd place and early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:535
+#: aligulac/ratings/staff_views.py:531
 msgid "Ro4→Final + 3rd place and early rounds"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:536
+#: aligulac/ratings/staff_views.py:532
 msgid "WB, LB, Final"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:537
+#: aligulac/ratings/staff_views.py:533
 msgid "LB: Round 1->Round 2"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:538
+#: aligulac/ratings/staff_views.py:534
 msgid "LB: Round 1->Round 4"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:539
+#: aligulac/ratings/staff_views.py:535
 msgid "LB: Round 1->Round 6"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:540
+#: aligulac/ratings/staff_views.py:536
 msgid "LB: Round 1->Round 8"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:541
+#: aligulac/ratings/staff_views.py:537
 msgid "Predefined names"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:542
+#: aligulac/ratings/staff_views.py:538
 msgid "Custom names"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:544
+#: aligulac/ratings/staff_views.py:540
 msgid "Big"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:545
+#: aligulac/ratings/staff_views.py:541
 msgid "No print"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:568
+#: aligulac/ratings/staff_views.py:562
 #, python-format
 msgid "Could not find event ID %s."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:573
+#: aligulac/ratings/staff_views.py:567
 msgid "Must specify an event to close."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:577
+#: aligulac/ratings/staff_views.py:571
 msgid "No event names specified."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:618
+#: aligulac/ratings/staff_views.py:611
 #, python-format
 msgid "Successfully created %i new event."
 msgid_plural "Successfully created %i new events."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/staff_views.py:625
+#: aligulac/ratings/staff_views.py:618
 msgid "Successfully closed event."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:633
+#: aligulac/ratings/staff_views.py:624
 msgid "Source ID"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:634
+#: aligulac/ratings/staff_views.py:625
 msgid "Target ID"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:635 aligulac/ratings/staff_views.py:709
+#: aligulac/ratings/staff_views.py:626 aligulac/ratings/staff_views.py:695
 msgid "Confirm"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:651 aligulac/ratings/staff_views.py:657
+#: aligulac/ratings/staff_views.py:640 aligulac/ratings/staff_views.py:646
 #, python-format
 msgid "No player with ID %i."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:672
+#: aligulac/ratings/staff_views.py:660
 msgid "Please confirm player merge."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:694
+#: aligulac/ratings/staff_views.py:682
 #, python-format
 msgid "%(source)s was successfully merged into %(target)s."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:696
+#: aligulac/ratings/staff_views.py:684
 msgid "The merging is complete"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:707
+#: aligulac/ratings/staff_views.py:693
 msgid "Event ID to move"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:708
+#: aligulac/ratings/staff_views.py:694
 msgid "New parent ID"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:725 aligulac/ratings/staff_views.py:731
+#: aligulac/ratings/staff_views.py:709 aligulac/ratings/staff_views.py:715
 #, python-format
 msgid "No event with ID %i."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:738
+#: aligulac/ratings/staff_views.py:722
 msgid "Can't move an event to one of its descendants."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:757
+#: aligulac/ratings/staff_views.py:740
 msgid "Please confirm event move."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:814
+#: aligulac/ratings/staff_views.py:795
 #, python-format
 msgid "Reopened '%s'."
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:823 templates/add.html:12
+#: aligulac/ratings/staff_views.py:804 templates/add.html:12
 msgid "Submit results"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:853 templates/review.html:12
+#: aligulac/ratings/staff_views.py:833 templates/review.html:12
 msgid "Review results"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:887 templates/eventmgr.html:11
+#: aligulac/ratings/staff_views.py:865 templates/eventmgr.html:11
 msgid "Manage events"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:926
+#: aligulac/ratings/staff_views.py:902
 #, python-format
 msgid "Successfully closed %i event."
 msgid_plural "Successfully closed %i events."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/staff_views.py:936
+#: aligulac/ratings/staff_views.py:912
 #, python-format
 msgid "Successfully marked %i event as having no prize pool."
 msgid_plural "Successfully marked %i events as having no prize pool."

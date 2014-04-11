@@ -74,7 +74,7 @@ def find_race_override(lst):
             del lst[i]
         else:
             i += 1
-    
+
     return override
 
 def check_duplicates(match, dup_flag):
@@ -160,7 +160,7 @@ class ReviewMatchesForm(forms.Form):
             ],
             required=False, label=_('Event'),
         )
-    
+
     # Custom validation
     def clean(self):
         if self.cleaned_data['approve'] == self.cleaned_data['reject']:
@@ -217,8 +217,8 @@ class ReviewMatchesForm(forms.Form):
                     plb       = pm.plb,
                     sca       = pm.sca,
                     scb       = pm.scb,
-                    rca       = pm.rca or pm.pla.race,
-                    rcb       = pm.rcb or pm.plb.race,
+                    rca       = pm.rca or (pm.pla.race if pm.pla.race != 'S' else 'R'),
+                    rcb       = pm.rcb or (pm.plb.race if pm.plb.race != 'S' else 'R'),
                     date      = self.cleaned_data['date'] or pm.group.date,
                     eventobj  = self.cleaned_data['eventobj'],
                     event     = pm.group.event,
@@ -229,11 +229,17 @@ class ReviewMatchesForm(forms.Form):
 
                 if check_duplicates(m, self.cleaned_data['dup_flag']):
                     self.messages.append(Message(
-                        _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.") 
+                        _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.")
                             % {'pla': m.pla.tag, 'plb': m.plb.tag},
                         type=Message.ERROR,
                     ))
                     continue
+                if 'R' in [m.rca, m.rcb]:
+                    self.messages.append(Message(
+                        _("Unknown race in %(pla)s vs %(plb)s: set to random.")
+                            % {'pla': pla.tag, 'plb': plb.tag},
+                        type=Message.WARNING,
+                    ))
 
                 m.set_period()
                 m.set_ratings()
@@ -468,8 +474,8 @@ class AddMatchesForm(forms.Form):
                 plb      = plb,
                 sca      = sca,
                 scb      = scb,
-                rca      = pla_race_or if pla_race_or is not None else pla.race,
-                rcb      = plb_race_or if plb_race_or is not None else plb.race,
+                rca      = pla_race_or or (pla.race if pla.race != 'S' else 'R'),
+                rcb      = plb_race_or or (plb.race if plb.race != 'S' else 'R'),
                 date     = self.cleaned_data['date'],
                 treated  = False,
                 eventobj = self.cleaned_data['eventobj'],
@@ -484,6 +490,12 @@ class AddMatchesForm(forms.Form):
                 ))
                 self.close_after = False
                 return None
+            if 'R' in [match.rca, match.rcb]:
+                self.messages.append(Message(
+                    _("Unknown race in %(pla)s vs %(plb)s: set to random.")
+                        % {'pla': pla.tag, 'plb': plb.tag},
+                    type=Message.WARNING,
+                ))
             match.set_period()
             match.set_ratings()
             return match

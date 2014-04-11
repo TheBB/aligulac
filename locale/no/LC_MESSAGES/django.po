@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-11 17:36+0200\n"
-"PO-Revision-Date: 2014-04-11 17:42+0100\n"
+"POT-Creation-Date: 2014-04-11 18:56+0200\n"
+"PO-Revision-Date: 2014-04-11 18:57+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -124,7 +124,7 @@ msgstr "Alle"
 
 #: aligulac/aligulac/tools.py:266 aligulac/ratings/models.py:87
 #: aligulac/ratings/player_views.py:171 aligulac/ratings/player_views.py:641
-#: aligulac/ratings/templatetags/ratings_extras.py:117
+#: aligulac/ratings/templatetags/ratings_extras.py:130
 #: templates/history.html:27 templates/period.html:45
 #: templates/period.html.py:131 templates/period.html:370
 #: templates/reports_balance.html:169
@@ -133,7 +133,7 @@ msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:267 aligulac/ratings/models.py:88
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
-#: aligulac/ratings/templatetags/ratings_extras.py:118
+#: aligulac/ratings/templatetags/ratings_extras.py:131
 #: templates/history.html:28 templates/period.html:46
 #: templates/period.html.py:132 templates/period.html:371
 #: templates/reports_balance.html:177
@@ -142,7 +142,7 @@ msgstr "Terran"
 
 #: aligulac/aligulac/tools.py:268 aligulac/ratings/models.py:89
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
-#: aligulac/ratings/templatetags/ratings_extras.py:119
+#: aligulac/ratings/templatetags/ratings_extras.py:132
 #: templates/history.html:29 templates/period.html:47
 #: templates/period.html.py:133 templates/period.html:372
 #: templates/reports_balance.html:185
@@ -2275,7 +2275,7 @@ msgstr "Runde"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:91
-#: aligulac/ratings/templatetags/ratings_extras.py:120
+#: aligulac/ratings/templatetags/ratings_extras.py:133
 #: templates/period.html:376
 msgid "Random"
 msgstr "Tilfeldig"
@@ -3871,211 +3871,211 @@ msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende nick)"
 msgid "Player '%s' was not found and cound not be made (missing race)"
 msgstr "Spilleren '%s' fantes ikke og kunne ikke lages (manglende rase)"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:121
+#: aligulac/ratings/templatetags/ratings_extras.py:134
 msgid "Race switcher"
 msgstr "Rasebytter"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:246
+#: aligulac/ratings/templatetags/ratings_extras.py:249
 msgid "TLPD:WoL:B"
 msgstr "TLPD:WoL:B"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:247
+#: aligulac/ratings/templatetags/ratings_extras.py:250
 msgid "TLPD:WoL:KR"
 msgstr "TLPD:WoL:KR"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:248
+#: aligulac/ratings/templatetags/ratings_extras.py:251
 msgid "TLPD:WoL:IN"
 msgstr "TLPD:WoL:IN"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:249
+#: aligulac/ratings/templatetags/ratings_extras.py:252
 msgid "TLPD:HotS:B"
 msgstr "TLPD:HotS:B"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:250
+#: aligulac/ratings/templatetags/ratings_extras.py:253
 msgid "TLPD:HotS"
 msgstr "TLPD:HotS"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:353
+#: aligulac/ratings/templatetags/ratings_extras.py:344
 msgid "N/A"
 msgstr "N/A"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:494
+#: aligulac/ratings/templatetags/ratings_extras.py:464
 msgid "January"
 msgstr "januar"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:495
+#: aligulac/ratings/templatetags/ratings_extras.py:465
 msgid "February"
 msgstr "februar"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:496
+#: aligulac/ratings/templatetags/ratings_extras.py:466
 msgid "March"
 msgstr "mars"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:497
+#: aligulac/ratings/templatetags/ratings_extras.py:467
 msgid "April"
 msgstr "april"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:498
+#: aligulac/ratings/templatetags/ratings_extras.py:468
 msgid "May"
 msgstr "mai"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:499
+#: aligulac/ratings/templatetags/ratings_extras.py:469
 msgid "June"
 msgstr "juni"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:500
+#: aligulac/ratings/templatetags/ratings_extras.py:470
 msgid "July"
 msgstr "juli"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:501
+#: aligulac/ratings/templatetags/ratings_extras.py:471
 msgid "August"
 msgstr "august"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:502
+#: aligulac/ratings/templatetags/ratings_extras.py:472
 msgid "September"
 msgstr "september"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:503
+#: aligulac/ratings/templatetags/ratings_extras.py:473
 msgid "October"
 msgstr "oktober"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:504
+#: aligulac/ratings/templatetags/ratings_extras.py:474
 msgid "November"
 msgstr "november"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:505
+#: aligulac/ratings/templatetags/ratings_extras.py:475
 msgid "December"
 msgstr "desember"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:506
+#: aligulac/ratings/templatetags/ratings_extras.py:476
 msgid "Jan."
 msgstr "jan."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:507
+#: aligulac/ratings/templatetags/ratings_extras.py:477
 msgid "Feb."
 msgstr "feb."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:508
+#: aligulac/ratings/templatetags/ratings_extras.py:478
 msgid "Aug."
 msgstr "aug."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:509
+#: aligulac/ratings/templatetags/ratings_extras.py:479
 msgid "Sept."
 msgstr "sept."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:510
+#: aligulac/ratings/templatetags/ratings_extras.py:480
 msgid "Oct."
 msgstr "okt."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:511
+#: aligulac/ratings/templatetags/ratings_extras.py:481
 msgid "Nov."
 msgstr "nov."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:512
+#: aligulac/ratings/templatetags/ratings_extras.py:482
 msgid "Dec."
 msgstr "des."
 
-#: aligulac/ratings/templatetags/ratings_extras.py:513
+#: aligulac/ratings/templatetags/ratings_extras.py:483
 msgid "jan"
 msgstr "jan"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:514
+#: aligulac/ratings/templatetags/ratings_extras.py:484
 msgid "feb"
 msgstr "feb"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:515
+#: aligulac/ratings/templatetags/ratings_extras.py:485
 msgid "mar"
 msgstr "mar"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:516
+#: aligulac/ratings/templatetags/ratings_extras.py:486
 msgid "apr"
 msgstr "apr"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:517
+#: aligulac/ratings/templatetags/ratings_extras.py:487
 msgid "may"
 msgstr "mai"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:518
+#: aligulac/ratings/templatetags/ratings_extras.py:488
 msgid "jun"
 msgstr "jun"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:519
+#: aligulac/ratings/templatetags/ratings_extras.py:489
 msgid "jul"
 msgstr "jul"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:520
+#: aligulac/ratings/templatetags/ratings_extras.py:490
 msgid "aug"
 msgstr "aug"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:521
+#: aligulac/ratings/templatetags/ratings_extras.py:491
 msgid "sep"
 msgstr "sep"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:522
+#: aligulac/ratings/templatetags/ratings_extras.py:492
 msgid "oct"
 msgstr "okt"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:523
+#: aligulac/ratings/templatetags/ratings_extras.py:493
 msgid "nov"
 msgstr "nov"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:524
+#: aligulac/ratings/templatetags/ratings_extras.py:494
 msgid "dec"
 msgstr "des"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:525
+#: aligulac/ratings/templatetags/ratings_extras.py:495
 msgid "Monday"
 msgstr "mandag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:526
+#: aligulac/ratings/templatetags/ratings_extras.py:496
 msgid "Tuesday"
 msgstr "tirsdag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:527
+#: aligulac/ratings/templatetags/ratings_extras.py:497
 msgid "Wednesday"
 msgstr "onsdag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:528
+#: aligulac/ratings/templatetags/ratings_extras.py:498
 msgid "Thursday"
 msgstr "torsdag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:529
+#: aligulac/ratings/templatetags/ratings_extras.py:499
 msgid "Friday"
 msgstr "fredag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:530
+#: aligulac/ratings/templatetags/ratings_extras.py:500
 msgid "Saturday"
 msgstr "lørdag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:531
+#: aligulac/ratings/templatetags/ratings_extras.py:501
 msgid "Sunday"
 msgstr "søndag"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:532
+#: aligulac/ratings/templatetags/ratings_extras.py:502
 msgid "mon"
 msgstr "man"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:533
+#: aligulac/ratings/templatetags/ratings_extras.py:503
 msgid "tue"
 msgstr "tir"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:534
+#: aligulac/ratings/templatetags/ratings_extras.py:504
 msgid "wed"
 msgstr "ons"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:535
+#: aligulac/ratings/templatetags/ratings_extras.py:505
 msgid "thu"
 msgstr "tor"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:536
+#: aligulac/ratings/templatetags/ratings_extras.py:506
 msgid "fri"
 msgstr "fre"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:537
+#: aligulac/ratings/templatetags/ratings_extras.py:507
 msgid "sat"
 msgstr "lør"
 
-#: aligulac/ratings/templatetags/ratings_extras.py:538
+#: aligulac/ratings/templatetags/ratings_extras.py:508
 msgid "sun"
 msgstr "søn"
 
@@ -5046,6 +5046,26 @@ msgstr "For disse meta-relasjonene er følgende filtre tilgjengelig:"
 #: templates/api.html:247
 msgid "Direct lookup"
 msgstr "Direktesøk"
+
+#: templates/api.html:253
+msgid "Searching by name"
+msgstr "Søk etter navn"
+
+#: templates/api.html:255
+msgid ""
+"To facilitate easier searching by name (aliases, etc.) we have a different "
+"URL endpoint: <code>/search/json/?q=query</code>. This is the endpoint used "
+"by Aligulac's own autocompletion feature, and so it obeys the same rules (e."
+"g. it will search for teams, events and players, and it will be sensitive to "
+"things like country names and races). This feature is strictly speaking not "
+"part of the API, and so its use does not require an access key."
+msgstr ""
+"For å forenkle søkint etter navn (aliaser osv.) har vi en annen adresse: "
+"<code>/search/json/?q=søketekst</code>. Dette er adressen som brukes av "
+"Aligulacs egen autokompletteringsfunksjon, og dermed følger den de samme "
+"reglene (dvs. den vil søke etter lag, turneringer og spillere, og vil være "
+"sensitiv til felter som land og raser). Denne funksjonen er strengt tatt "
+"ikke del av APIet og du trenger dermed ingen nøkkel for å bruke den."
 
 #: templates/changepwd.html:14
 #, python-format
@@ -6825,7 +6845,7 @@ msgstr ""
 msgid "%(plr)s played no games in this period."
 msgstr "%(plr)s spilte ingen partier i denne perioden."
 
-#: templates/ratinglist.html:156
+#: templates/ratinglist.html:136
 msgid "No entries found."
 msgstr "Ingen treff ble funnet."
 

@@ -250,4 +250,8 @@
     <li><strong>range</strong></li>
 </ul>
 
+<h3>{% trans "Searching by name" %}</h3>
+
+<p>{% blocktrans %}To facilitate easier searching by name (aliases, etc.) we have a different URL endpoint: <code>/search/json/?q=query</code>. This is the endpoint used by Aligulac's own autocompletion feature, and so it obeys the same rules (e.g. it will search for teams, events and players, and it will be sensitive to things like country names and races). This feature is strictly speaking not part of the API, and so its use does not require an access key.{% endblocktrans %}</p>
+
 {% endblock %}

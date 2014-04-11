@@ -1,5 +1,5 @@
-# {{{ Imports
 from datetime import date, timedelta
+# Misc staff tools
 import shlex
 import simplejson
 
@@ -51,9 +51,7 @@ from ratings.tools import (
     display_matches,
     find_player,
 )
-# }}}
 
-# {{{ Auxiliary functions
 def find_dashes(line):
     in_quote = False
     dashes = []
@@ -99,7 +97,6 @@ def review_find_player(query):
 
     return find_player(lst=lst, make=make_flag, soft=False), override
 
-
 def fill_players(pm):
     messages = []
 
@@ -135,16 +132,14 @@ def fill_aux_event(qset):
             if l.parent.tlpd_db is not None:
                 e.up_tlpd_db = l.parent.tlpd_db
                 e.up_tlpd_id = l.parent.tlpd_id
-# }}}
 
-# {{{ ReviewMatchesForm: Form for reviewing matches.
+# Form for reviewing matches.
 class ReviewMatchesForm(forms.Form):
     date = forms.DateField(required=False, label=_('Date'), initial=None)
     approve = forms.BooleanField(required=False, label=_('Approve'), initial=False)
     reject = forms.BooleanField(required=False, label=_('Reject'), initial=False)
     dup_flag = forms.BooleanField(required=False, label=_('Ignore duplicates'), initial=False)
 
-    # {{{ Constructor
     def __init__(self, request=None, submitter=None):
         if request is not None:
             super(ReviewMatchesForm, self).__init__(request.POST)
@@ -165,9 +160,8 @@ class ReviewMatchesForm(forms.Form):
             ],
             required=False, label=_('Event'),
         )
-    # }}}
     
-    # {{{ Custom validation
+    # Custom validation
     def clean(self):
         if self.cleaned_data['approve'] == self.cleaned_data['reject']:
             raise ValidationError(_('You must either approve or reject.'))
@@ -178,9 +172,8 @@ class ReviewMatchesForm(forms.Form):
             raise ValidationError(_('Could not find this event object.'))
 
         return self.cleaned_data
-    # }}}
 
-    # {{{ Commit changes
+    # Commit changes
     def commit(self, post, submitter):
         self.messages = []
 
@@ -271,10 +264,8 @@ class ReviewMatchesForm(forms.Form):
                     len(prematches)) % len(prematches),
                 type=Message.SUCCESS
             ))
-    # }}}
-# }}}
 
-# {{{ AddMatchesForm: Form for adding matches (duh).
+# AddMatchesForm: Form for adding matches (duh).
 class AddMatchesForm(forms.Form):
     eventtext = StrippedCharField(max_length=200, required=False, label=_('Event'))
     date      = forms.DateField(required=True, label=_('Date'))
@@ -285,7 +276,6 @@ class AddMatchesForm(forms.Form):
     notes     = forms.CharField(max_length=10000, required=False, label=_('Notes'), initial='')
     matches   = forms.CharField(max_length=10000, required=True, label=_('Matches'), initial='')
 
-    # {{{ Constructor
     def __init__(self, is_adm, request=None):
         if request is not None:
             super(AddMatchesForm, self).__init__(request.POST)
@@ -310,9 +300,8 @@ class AddMatchesForm(forms.Form):
             ],
             required=False, label=_('Event'),
         )
-    # }}}
 
-    # {{{ Validation
+    # Validation
     def clean_eventtext(self):
         if self.is_adm:
             return self.cleaned_data['eventtext']
@@ -334,9 +323,8 @@ class AddMatchesForm(forms.Form):
             except:
                 raise ValidationError(_('Could not find this event object.'))
         return self.cleaned_data
-    # }}}
 
-    # {{{ Parse the matches
+    # Parse the matches
     def parse_matches(self, submitter):
         self.messages = []
 
@@ -433,9 +421,8 @@ class AddMatchesForm(forms.Form):
         self.data['matches'] = '\n'.join(error_lines)
 
         return matches
-    # }}}
 
-    # {{{ get_player: Auxiliary function for searching for players
+    # Auxiliary function for searching for players
     def get_player(self, query, make_flag):
         players = find_player(lst=query, make=make_flag, soft=False)
 
@@ -452,9 +439,8 @@ class AddMatchesForm(forms.Form):
             return None
 
         return players.first()
-    # }}}
 
-    # {{{ Make matches (called from parse_matches). DOES NOT SAVE THEM.
+    # Make matches (called from parse_matches). DOES NOT SAVE THEM.
     def make_match(self, pla_query, plb_query, pla_race_or, plb_race_or, sca, scb, make_flag, dup_flag):
         pla = self.get_player(pla_query, make_flag)
         plb = self.get_player(plb_query, make_flag)
@@ -501,10 +487,8 @@ class AddMatchesForm(forms.Form):
             match.set_period()
             match.set_ratings()
             return match
-    # }}}
-# }}}
 
-# {{{ AddEventsForm: Form for adding events.
+# Form for adding events.
 class AddEventsForm(forms.Form):
     parent_id = forms.IntegerField(required=True, label=_('Parent ID'))
     predef_names = forms.ChoiceField([
@@ -544,7 +528,6 @@ class AddEventsForm(forms.Form):
     big = forms.BooleanField(required=False, label=_('Big'), initial=False)
     noprint = forms.BooleanField(required=False, label=_('No print'), initial=False)
 
-    # {{{ Constructor
     def __init__(self, request=None):
         if request is None:
             super(AddEventsForm, self).__init__()
@@ -556,9 +539,8 @@ class AddEventsForm(forms.Form):
                 self.action = 'close'
 
         self.label_suffix = ''
-    # }}}
 
-    # {{{ Custom validation
+    # Custom validation
     def clean_parent_id(self):
         try:
             if int(self.cleaned_data['parent_id']) != -1:
@@ -584,9 +566,8 @@ class AddEventsForm(forms.Form):
 
         self.cleaned_data['names'] = [s.strip() for s in names.split(',') if s.strip() != '']
         return self.cleaned_data
-    # }}}
 
-    # {{{ Commit changes
+    # Commit changes
     def commit(self):
         ret = []
 
@@ -625,25 +606,21 @@ class AddEventsForm(forms.Form):
             ret.append(Message(_('Successfully closed event.'), type=Message.SUCCESS))
 
         return ret
-    # }}}
-# }}}
 
-# {{{ MergePlayersForm: Form for merging players.
+# Form for merging players.
 class MergePlayersForm(forms.Form):
     source = forms.IntegerField(required=True, label=_('Source ID'))
     target = forms.IntegerField(required=True, label=_('Target ID'))
     confirm = forms.BooleanField(required=False, label=_('Confirm'), initial=False)
 
-    # {{{ Constructor
     def __init__(self, request=None):
         if request is not None:
             super(MergePlayersForm, self).__init__(request.POST)
         else:
             super(MergePlayersForm, self).__init__()
         self.label_suffix = ''
-    # }}}
 
-    # {{{ Validation
+    # Validation
     def clean_source(self):
         try:
             return Player.objects.get(id=int(self.cleaned_data['source']))
@@ -655,9 +632,8 @@ class MergePlayersForm(forms.Form):
             return Player.objects.get(id=int(self.cleaned_data['target']))
         except:
             raise ValidationError(_('No player with ID %i.') % self.cleaned_data['target'])
-    # }}}
 
-    # {{{ Do stuff
+    # Do stuff
     def merge(self):
         ret = []
 
@@ -699,25 +675,21 @@ class MergePlayersForm(forms.Form):
         source.delete()
 
         return ret
-    # }}}
-# }}}
 
-# {{{ MoveEventForm: Form for merging players.
+# Form for merging players.
 class MoveEventForm(forms.Form):
     subject = forms.IntegerField(required=True, label=_('Event ID to move'))
     target = forms.IntegerField(required=True, label=_('New parent ID'))
     confirm = forms.BooleanField(required=False, label=_('Confirm'), initial=False)
 
-    # {{{ Constructor
     def __init__(self, request=None):
         if request is not None:
             super(MoveEventForm, self).__init__(request.POST)
         else:
             super(MoveEventForm, self).__init__()
         self.label_suffix = ''
-    # }}}
 
-    # {{{ Validation
+    # Validation
     def clean_subject(self):
         try:
             return Event.objects.get(id=int(self.cleaned_data['subject']))
@@ -737,9 +709,8 @@ class MoveEventForm(forms.Form):
         ).exists():
             raise ValidationError(_("Can't move an event to one of its descendants."))
         return self.cleaned_data
-    # }}}
 
-    # {{{ Do stuff
+    # Do stuff
     def move(self):
         ret = []
 
@@ -793,10 +764,8 @@ class MoveEventForm(forms.Form):
         ))
 
         return ret
-    # }}}
-# }}}
 
-# {{{ Add matches view
+# View for adding matches
 def add_matches(request):
     base = base_ctx('Submit', 'Matches', request)
     login_message(base)
@@ -823,9 +792,8 @@ def add_matches(request):
     base.update({"title": _("Submit results")})
 
     return render_to_response('add.html', base)
-# }}}
 
-# {{{ Review matches view
+# View for reviewing matches
 def review_matches(request):
     base = base_ctx('Submit', 'Review', request)
     if not base['adm']:
@@ -853,9 +821,8 @@ def review_matches(request):
     base.update({"title": _("Review results")})
 
     return render_to_response('review.html', base)
-# }}}
 
-# {{{ Event manager view
+# View for event manager
 def events(request):
     base = base_ctx('Submit', 'Events', request)
     if not base['adm']:
@@ -870,7 +837,7 @@ def events(request):
 
     base['form'] = form
 
-    # {{{ Build event list
+    # Build event list
     events = (
         Event.objects.filter(closed=False)
             .annotate(Max('uplink__distance'))
@@ -882,14 +849,12 @@ def events(request):
     #for e in events:
         #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
     base['nodes'] = events
-    # }}}
 
     base.update({"title": _("Manage events")})
 
     return render_to_response('eventmgr.html', base)
-# }}}
 
-# {{{ Auxiliary view for event manager
+# Auxiliary view called by JS code in the event manager for progressively opening subtrees
 def event_children(request, id):
     event = Event.objects.get(id=id)
     ret = [dict(q) for q in
@@ -907,16 +872,15 @@ def event_children(request, id):
         q['uplink__distance__max'] = depth + 1
 
     return HttpResponse(simplejson.dumps(ret))
-# }}}
 
-# {{{ Open events view
+# Event overview
 def open_events(request):
     base = base_ctx('Submit', 'Open events', request)
     if not base['adm']:
         return redirect('/login/')
     login_message(base)
 
-    # {{{ Handle modifications
+    # Handle modifications
     if base['adm'] and 'open_games' in request.POST:
         ids = [int(i) for i in request.POST.getlist('open_games_ids')]
         for id in ids:
@@ -938,9 +902,8 @@ def open_events(request):
                 nevents) % nevents,
             type=Message.SUCCESS
         ))
-    # }}}
 
-    # {{{ Open events with games
+    # Open events with games
     base['open_games'] = (
         Event.objects.filter(type=TYPE_EVENT, closed=False)
             .filter(downlink__child__match__isnull=False)
@@ -948,9 +911,8 @@ def open_events(request):
             .prefetch_related('uplink__parent')
             .order_by('latest', 'idx', 'fullname')
     )
-    # }}}
 
-    # {{{ Open events without games
+    # Open events without games
     base['open_nogames'] = (
         Event.objects.filter(type=TYPE_EVENT, closed=False)
             .exclude(downlink__child__match__isnull=False)
@@ -959,9 +921,8 @@ def open_events(request):
             .prefetch_related('uplink__parent')
             .order_by('fullname')
     )
-    # }}}
 
-    # {{{ Closed non-team events with unknown prizepool status.
+    # Closed non-team events with unknown prizepool status.
     base['pp_events'] = (
         Event.objects.filter(type=TYPE_EVENT, prizepool__isnull=True)
             .filter(match__isnull=False, closed=True)
@@ -970,7 +931,6 @@ def open_events(request):
             .prefetch_related('uplink__parent')
             .order_by('idx', 'fullname')
     )
-    # }}}
 
     fill_aux_event(base['open_games'])
     fill_aux_event(base['open_nogames'])
@@ -979,9 +939,8 @@ def open_events(request):
     base.update({"title": _("Open events")})
 
     return render_to_response('events_open.html', base)
-# }}}
 
-# {{{ Misc management view
+# Misc staff tools
 def misc(request):
     base = base_ctx('Submit', 'Misc', request)
     if not base['adm']:
@@ -1010,4 +969,3 @@ def misc(request):
     })
 
     return render_to_response('manage.html', base)
-# }}}

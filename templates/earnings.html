@@ -41,7 +41,9 @@ This is the template for the earnings of a player. It's called from ratings.view
     {% trans "Filter by country:" %}
     <select name="country">
         <option value="all" {% if filters.country == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+        <option value="KR">{% trans "South Korea" %}</option>
         <option value="foreigners" {% if filters.country == 'foreigners' %}selected{% endif %}>{% trans "Non-Koreans" %}</option>
+        <option disabled>------------</option>
         {% for country in countries %}
         <option value="{{ country.cc }}" {% if filters.country == country.cc %}selected{% endif %}>{{ country.name }}</option>
         {% endfor %}

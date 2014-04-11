@@ -178,7 +178,7 @@ class ResultsFilterForm(forms.Form):
         required=False, label=_('Opponent race'), initial='ptzr'
     )
     country = forms.ChoiceField(
-        choices=[('all',_('All')),('foreigners',_('Non-Koreans'))] + 
+        choices=[('all',_('All')),('KR',_('South Korea')),('foreigners',_('Non-Koreans')),('','')] + 
                 sorted(data.countries, key=lambda a: a[1]),
         required=False, label=_('Country'), initial='all'
     )

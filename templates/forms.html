@@ -36,10 +36,14 @@
                 {% if onchange %}onchange="{{ onchange }}"{% endif %}
                 id="{{ field.auto_id }}">
         {% for value, label in field.field.choices %}
+            {% if not value %}
+            <option disabled>------------</option>
+            {% else %}
             <option value="{{ value }}"
                 {% if value == override %}selected="selected"
                 {% elif not override and field.value == value|safe %}selected="selected"{% endif %}>
                 {{ label }}</option>
+            {% endif %}
         {% endfor %}
         </select>
     </td>

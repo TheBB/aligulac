@@ -211,7 +211,7 @@ class EventModForm(forms.Form):
 # }}} 
 
 class StoriesForm(forms.Form):
-    story_id = forms.IntegerField(required=True)
+    story_id = forms.IntegerField(required=False)
     player = forms.ChoiceField(required=True, label=_('Player'))
     date = forms.DateField(required=True, label=_('Date'))
     text = forms.ChoiceField(choices=STORIES, required=True, label=_('Story text'))
@@ -275,7 +275,6 @@ class StoriesForm(forms.Form):
             story = Story(
                 player=Player.objects.get(id=self.cleaned_data['player']),
                 event=event,
-                text='',
                 date=self.cleaned_data['date'],
                 message=self.cleaned_data['text'],
                 params=self.cleaned_data['params']

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-11 15:31+0200\n"
-"PO-Revision-Date: 2014-04-11 15:32+0100\n"
+"POT-Creation-Date: 2014-04-11 17:36+0200\n"
+"PO-Revision-Date: 2014-04-11 17:42+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
 "Language: no\n"
@@ -4769,10 +4769,18 @@ msgstr ""
 "ikke er) null."
 
 #: templates/api.html:142
+msgid ""
+"<strong>NOTE:</strong> Filtering by events works differently. See the "
+"section below on common use cases."
+msgstr ""
+"<strong>NB:</strong> Filtrering etter turneringer fungerer annerledes. Se "
+"under vanlige bruksområder."
+
+#: templates/api.html:144
 msgid "Ordering"
 msgstr "Sortering"
 
-#: templates/api.html:144
+#: templates/api.html:146
 msgid ""
 "To sort by a field, add the parameter <code>order_by=fieldname</code> for "
 "ascending order, and <code>order_by=-fieldname</code> for descending order."
@@ -4781,11 +4789,11 @@ msgstr ""
 "code> for økende orden, og <code>order_by=-fieldname</code> for synkende "
 "orden."
 
-#: templates/api.html:146
+#: templates/api.html:148
 msgid "Prediction requests"
 msgstr "Prognoseforespørsler"
 
-#: templates/api.html:148
+#: templates/api.html:150
 #, python-format
 msgid ""
 "Requests for predictions do not correspond to the database, and work a "
@@ -4798,31 +4806,31 @@ msgstr ""
 "\">spådomssiden</a> er satt opp. Vi støtter for tiden fem forskjellige "
 "formater:"
 
-#: templates/api.html:151
+#: templates/api.html:153
 msgid "Single best-of-N matches"
 msgstr "Enkelte best-av-N kamper"
 
-#: templates/api.html:152
+#: templates/api.html:154
 msgid "Dual tournaments"
 msgstr "Dualturneringer"
 
-#: templates/api.html:153
+#: templates/api.html:155
 msgid "also called GSL-style groups"
 msgstr "også kjent som GSL-grupper"
 
-#: templates/api.html:154
+#: templates/api.html:156
 msgid "Single-elimination brackets"
 msgstr "Utslagsturneringer"
 
-#: templates/api.html:155
+#: templates/api.html:157
 msgid "Round-robin groups"
 msgstr "Gruppespill"
 
-#: templates/api.html:156
+#: templates/api.html:158
 msgid "Proleague-style team matches"
 msgstr "lagkamp à la Proleague"
 
-#: templates/api.html:159
+#: templates/api.html:161
 #, python-format
 msgid ""
 "The URI for match prediction is then <code>%(uri)s</code>, where <code>"
@@ -4836,22 +4844,22 @@ msgstr ""
 "%(bo)s</code>-parameter for å spesifisere kamplengden, og denne må være et "
 "positivt odde heltall. Noen betingelser må oppfylles:"
 
-#: templates/api.html:162
+#: templates/api.html:164
 msgid "For single matches, you must provide exactly two players."
 msgstr "For enkeltkamper må du oppgi kun to spillere."
 
-#: templates/api.html:163
+#: templates/api.html:165
 msgid "For dual tournaments, you must provide exactly four players."
 msgstr "For dualturneringer må du oppgi kun fire spillere."
 
-#: templates/api.html:164
+#: templates/api.html:166
 msgid ""
 "For single elimination brackets, you must provide a number of players that "
 "is a power of two."
 msgstr ""
 "For utslagsturneringer må du oppgi et antall spillere som er en toerpotens."
 
-#: templates/api.html:165
+#: templates/api.html:167
 msgid ""
 "For proleague matches, you must provide an even number of players, one full "
 "team before the other (there does not have to be an odd number of players "
@@ -4861,7 +4869,7 @@ msgstr ""
 "laget før det andre. (Det trenger ikke være et odde antall spillere på hvert "
 "lag.)"
 
-#: templates/api.html:166
+#: templates/api.html:168
 msgid ""
 "For single elimination, and only for this format, you can give different "
 "match lengths for different rounds, just make a comma-separated list with "
@@ -4871,7 +4879,7 @@ msgstr ""
 "kamplengder for hver runde. Bare oppgi en kommaseparert liste med den første "
 "runden først og finalen til slutt."
 
-#: templates/api.html:169
+#: templates/api.html:171
 msgid ""
 "You can give id 0 to denote a BYE, and there is no restriction on duplicate "
 "players (which can be useful for proleague style to simulate ace matches)."
@@ -4881,7 +4889,7 @@ msgstr ""
 "dupliserte spillere i samme turnering, som kan være nyttig for å simulere "
 "den siste kampen i lagkamper."
 
-#: templates/api.html:171
+#: templates/api.html:173
 msgid ""
 "Requests will return a JSON object containing various information, which you "
 "can look through by querying the schema URI. For the last four formats "
@@ -4902,7 +4910,7 @@ msgstr ""
 "oppgi resultater og oppdatere prognosen. For å sette kamp <code>abc</code> "
 "til 1–3, send parametrene <code>abc_1=1</code> og <code>abc_2=3</code>."
 
-#: templates/api.html:173
+#: templates/api.html:175
 msgid ""
 "It may be difficult to predict in advance which matches will have which "
 "identifiers. If you're unsure, make an empty request with no preset results. "
@@ -4914,7 +4922,7 @@ msgstr ""
 "objektet vil da inneholde kamp-IDer for så mange kamper som mulig. "
 "Etterhvert som du fyller inn nye resultater vil nye kamper bli tilgjengelige."
 
-#: templates/api.html:175
+#: templates/api.html:177
 msgid ""
 "Unlike the <code>matches</code> list, the <code>meanres</code> always "
 "contains predictions to the end of the tournament. For example, with a 16-"
@@ -4932,22 +4940,22 @@ msgstr ""
 "si at <strong>kun <code>matches</code>-listen inneholder “sikker” "
 "informasjon</strong>."
 
-#: templates/api.html:177
+#: templates/api.html:179
 msgid "Common use cases"
 msgstr "Vanlige brukstilfeller"
 
-#: templates/api.html:179
+#: templates/api.html:181
 msgid "Get the current top ten rating list"
 msgstr "Å hente topp ti-listen."
 
-#: templates/api.html:181
+#: templates/api.html:183
 msgid ""
 "Current ratings are delivered together with player objects, so this will "
 "suffice:"
 msgstr ""
 "Dagens ratingtall leveres sammen med spillerobjekter, så dette vil holde:"
 
-#: templates/api.html:192
+#: templates/api.html:194
 msgid ""
 "Null values come before non-null values, so we must filter out the null "
 "ratings first. The filter on <code>decay</code> is to only select active "
@@ -4959,7 +4967,7 @@ msgstr ""
 "Alternativt, for en renere tilnærming, kan vi sende en forespørsel direkte "
 "til ratingobjekter."
 
-#: templates/api.html:203
+#: templates/api.html:205
 msgid ""
 "Note that in this case you have to query for the period you want. There is "
 "an alias for <code>rating</code> called <code>activerating</code> which "
@@ -4970,6 +4978,74 @@ msgstr ""
 "fins et alias for <code>rating</code> kalt <code>activerating</code> som "
 "automatisk filtrerer vekk inaktive ratinger, men som ellers fungerer på "
 "samme måte, så du kan bruke:"
+
+#: templates/api.html:215
+msgid "Filtering by event"
+msgstr "Filtrering etter turnering"
+
+#: templates/api.html:217
+msgid ""
+"You could use the <code>eventobj</code> relation to filter matches by "
+"events, but since matches are only assigned to the lowest level event "
+"objects, you can't use this to get, say, all WCS matches in 2014. That's "
+"because no matches are assigned to event object 23398 (which is WCS 2014), "
+"rather they are assigned to subevents."
+msgstr ""
+"Du kunne bruke <code>eventobj</code>-relasjonen til å filtrere kamper etter "
+"turnering, men siden kamper kun er tilknyttet turneringer på det laveste "
+"nivået kan du ikke bruke dette til å hente (for eksempel) alle WCS-kampene i "
+"2014. Det er fordi ingen kamper er tilknyttet turneringsobjekt nummer 23398 "
+"(altså WCS 2014), de er kun tilknyttet underturneringer."
+
+#: templates/api.html:219
+msgid ""
+"For event objects, two meta-relations are available called <code>uplink</"
+"code> (which links to higher-level events), and <code>downlink</code> (which "
+"links to lower-level events)."
+msgstr ""
+"For dette formålet har vi to meta-relasjoner som kalles <code>uplink</code> "
+"(som linker til turneringer lengre oppe i treet) og <code>downlink</code> "
+"(som linker til turneringer lengre nede)."
+
+#: templates/api.html:222
+msgid "<code>uplink__parent</code> is the ancestor event."
+msgstr "<code>uplink__parent</code> er stamfaren."
+
+#: templates/api.html:223
+msgid "<code>downlink__child</code> is the ancestor event."
+msgstr "<code>downlink__child</code> er etterkommeren."
+
+#: templates/api.html:224
+msgid ""
+"<code>uplink__distance</code> and <code>downlink__distance</code> is the "
+"distance between them."
+msgstr ""
+"<code>uplink__distance</code> og <code>downlink__distance</code> er "
+"avstanden mellom dem."
+
+#: templates/api.html:227
+msgid ""
+"So to get all WCS matches in 2014 (matches assigned to subevents of the WCS "
+"2014 event), you can use:"
+msgstr ""
+"Så for å hente alle WCS-kampene i 2014 (kampene som er tilknyttet "
+"underturneringer av WCS 2014) kan du bruke:"
+
+#: templates/api.html:235
+msgid ""
+"This is also available for event objects, so to get all children and "
+"grandchildren of WCS 2014 you can use:"
+msgstr ""
+"Dette er også tilgjengelig for turneringsobjekter, så for å finne alle barn "
+"og barnebarn av WCS 2014 kan du bruke:"
+
+#: templates/api.html:244
+msgid "For these meta-relations you can use the following filters:"
+msgstr "For disse meta-relasjonene er følgende filtre tilgjengelig:"
+
+#: templates/api.html:247
+msgid "Direct lookup"
+msgstr "Direktesøk"
 
 #: templates/changepwd.html:14
 #, python-format

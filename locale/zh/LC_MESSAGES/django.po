@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-11 15:31+0200\n"
+"POT-Creation-Date: 2014-04-11 17:36+0200\n"
 "PO-Revision-Date: 2014-04-02 10:28+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4559,20 +4559,26 @@ msgid ""
 msgstr ""
 
 #: templates/api.html:142
-msgid "Ordering"
+msgid ""
+"<strong>NOTE:</strong> Filtering by events works differently. See the "
+"section below on common use cases."
 msgstr ""
 
 #: templates/api.html:144
+msgid "Ordering"
+msgstr ""
+
+#: templates/api.html:146
 msgid ""
 "To sort by a field, add the parameter <code>order_by=fieldname</code> for "
 "ascending order, and <code>order_by=-fieldname</code> for descending order."
 msgstr ""
 
-#: templates/api.html:146
+#: templates/api.html:148
 msgid "Prediction requests"
 msgstr ""
 
-#: templates/api.html:148
+#: templates/api.html:150
 #, python-format
 msgid ""
 "Requests for predictions do not correspond to the database, and work a "
@@ -4581,31 +4587,31 @@ msgid ""
 "different formats:"
 msgstr ""
 
-#: templates/api.html:151
+#: templates/api.html:153
 msgid "Single best-of-N matches"
 msgstr ""
 
-#: templates/api.html:152
+#: templates/api.html:154
 msgid "Dual tournaments"
 msgstr ""
 
-#: templates/api.html:153
+#: templates/api.html:155
 msgid "also called GSL-style groups"
 msgstr ""
 
-#: templates/api.html:154
+#: templates/api.html:156
 msgid "Single-elimination brackets"
 msgstr ""
 
-#: templates/api.html:155
+#: templates/api.html:157
 msgid "Round-robin groups"
 msgstr ""
 
-#: templates/api.html:156
+#: templates/api.html:158
 msgid "Proleague-style team matches"
 msgstr ""
 
-#: templates/api.html:159
+#: templates/api.html:161
 #, python-format
 msgid ""
 "The URI for match prediction is then <code>%(uri)s</code>, where <code>"
@@ -4615,41 +4621,41 @@ msgid ""
 "apply."
 msgstr ""
 
-#: templates/api.html:162
+#: templates/api.html:164
 msgid "For single matches, you must provide exactly two players."
 msgstr ""
 
-#: templates/api.html:163
+#: templates/api.html:165
 msgid "For dual tournaments, you must provide exactly four players."
 msgstr ""
 
-#: templates/api.html:164
+#: templates/api.html:166
 msgid ""
 "For single elimination brackets, you must provide a number of players that "
 "is a power of two."
 msgstr ""
 
-#: templates/api.html:165
+#: templates/api.html:167
 msgid ""
 "For proleague matches, you must provide an even number of players, one full "
 "team before the other (there does not have to be an odd number of players "
 "per team)."
 msgstr ""
 
-#: templates/api.html:166
+#: templates/api.html:168
 msgid ""
 "For single elimination, and only for this format, you can give different "
 "match lengths for different rounds, just make a comma-separated list with "
 "the first round first and the final last."
 msgstr ""
 
-#: templates/api.html:169
+#: templates/api.html:171
 msgid ""
 "You can give id 0 to denote a BYE, and there is no restriction on duplicate "
 "players (which can be useful for proleague style to simulate ace matches)."
 msgstr ""
 
-#: templates/api.html:171
+#: templates/api.html:173
 msgid ""
 "Requests will return a JSON object containing various information, which you "
 "can look through by querying the schema URI. For the last four formats "
@@ -4662,7 +4668,7 @@ msgid ""
 "<code>abc_1=1</code> and <code>abc_2=3</code> with the request."
 msgstr ""
 
-#: templates/api.html:173
+#: templates/api.html:175
 msgid ""
 "It may be difficult to predict in advance which matches will have which "
 "identifiers. If you're unsure, make an empty request with no preset results. "
@@ -4670,7 +4676,7 @@ msgid ""
 "can. As you fill in results, new matches may become available."
 msgstr ""
 
-#: templates/api.html:175
+#: templates/api.html:177
 msgid ""
 "Unlike the <code>matches</code> list, the <code>meanres</code> always "
 "contains predictions to the end of the tournament. For example, with a 16-"
@@ -4681,21 +4687,21 @@ msgid ""
 "contains “sure” information</strong>."
 msgstr ""
 
-#: templates/api.html:177
+#: templates/api.html:179
 msgid "Common use cases"
 msgstr ""
 
-#: templates/api.html:179
+#: templates/api.html:181
 msgid "Get the current top ten rating list"
 msgstr ""
 
-#: templates/api.html:181
+#: templates/api.html:183
 msgid ""
 "Current ratings are delivered together with player objects, so this will "
 "suffice:"
 msgstr ""
 
-#: templates/api.html:192
+#: templates/api.html:194
 msgid ""
 "Null values come before non-null values, so we must filter out the null "
 "ratings first. The filter on <code>decay</code> is to only select active "
@@ -4703,12 +4709,67 @@ msgid ""
 "directly."
 msgstr ""
 
-#: templates/api.html:203
+#: templates/api.html:205
 msgid ""
 "Note that in this case you have to query for the period you want. There is "
 "an alias for <code>rating</code> called <code>activerating</code> which "
 "automatically filters away inactive ratings, but otherwise works the same "
 "way. So you could use:"
+msgstr ""
+
+#: templates/api.html:215
+#, fuzzy
+msgid "Filtering by event"
+msgstr "按年份筛选"
+
+#: templates/api.html:217
+msgid ""
+"You could use the <code>eventobj</code> relation to filter matches by "
+"events, but since matches are only assigned to the lowest level event "
+"objects, you can't use this to get, say, all WCS matches in 2014. That's "
+"because no matches are assigned to event object 23398 (which is WCS 2014), "
+"rather they are assigned to subevents."
+msgstr ""
+
+#: templates/api.html:219
+msgid ""
+"For event objects, two meta-relations are available called <code>uplink</"
+"code> (which links to higher-level events), and <code>downlink</code> (which "
+"links to lower-level events)."
+msgstr ""
+
+#: templates/api.html:222
+msgid "<code>uplink__parent</code> is the ancestor event."
+msgstr ""
+
+#: templates/api.html:223
+msgid "<code>downlink__child</code> is the ancestor event."
+msgstr ""
+
+#: templates/api.html:224
+msgid ""
+"<code>uplink__distance</code> and <code>downlink__distance</code> is the "
+"distance between them."
+msgstr ""
+
+#: templates/api.html:227
+msgid ""
+"So to get all WCS matches in 2014 (matches assigned to subevents of the WCS "
+"2014 event), you can use:"
+msgstr ""
+
+#: templates/api.html:235
+msgid ""
+"This is also available for event objects, so to get all children and "
+"grandchildren of WCS 2014 you can use:"
+msgstr ""
+
+#: templates/api.html:244
+msgid "For these meta-relations you can use the following filters:"
+msgstr ""
+
+#: templates/api.html:247
+msgid "Direct lookup"
 msgstr ""
 
 #: templates/changepwd.html:14

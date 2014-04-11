@@ -311,6 +311,19 @@ class EventResource(ModelResource):
         null=True, help_text='Prizes awarded'
     )
 
+    def build_filters(self, filters=None):
+        check = ['uplink__parent', 'uplink__distance', 'downlink__child', 'downlink__distance']
+        fits = lambda s: any(filter(lambda k: s.startswith(k), check))
+        other_filters = {f: filters[f] for f in filters if not fits(f)}
+        orm_filters = super(EventResource, self).build_filters(other_filters)
+        for f in filter(fits, filters):
+            is_pure = f in check
+            if is_pure or any(filter(lambda s: f.endswith(s), ['gt', 'gte', 'lt', 'lte'])):
+                orm_filters[f] = filters[f]
+            elif any(filter(lambda s: f.endswith(s), ['in', 'range'])):
+                orm_filters[f] = filters[f].split(',')
+        return orm_filters
+
 class MatchResource(ModelResource):
     class Meta:
         queryset = Match.objects.all()
@@ -345,6 +358,24 @@ class MatchResource(ModelResource):
     rta = fields.ForeignKey(SmallRatingResource, 'rta', null=True, full=True)
     rtb = fields.ForeignKey(SmallRatingResource, 'rtb', null=True, full=True)
     eventobj = fields.ForeignKey(SmallEventResource, 'eventobj', null=True, full=True)
+
+    def build_filters(self, filters=None):
+        check = [
+            'eventobj__uplink__parent',
+            'eventobj__uplink__distance',
+            'eventobj__downlink__child',
+            'eventobj__downlink__distance',
+        ]
+        fits = lambda s: any(filter(lambda k: s.startswith(k), check))
+        other_filters = {f: filters[f] for f in filters if not fits(f)}
+        orm_filters = super(MatchResource, self).build_filters(other_filters)
+        for f in filter(fits, filters):
+            is_pure = f in check
+            if is_pure or any(filter(lambda s: f.endswith(s), ['gt', 'gte', 'lt', 'lte'])):
+                orm_filters[f] = filters[f]
+            elif any(filter(lambda s: f.endswith(s), ['in', 'range'])):
+                orm_filters[f] = filters[f].split(',')
+        return orm_filters
 
 class EarningResource(ModelResource):
     class Meta:

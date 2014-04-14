@@ -93,7 +93,7 @@ for tbl in public_tables:
 pub_pg_dump.append(pg_dump[-1])
 
 with open(public_path, 'w') as f:
-    subprocess.call(pg_dump, stdout=f)
+    subprocess.call(pub_pg_dump, stdout=f)
 
 # }}}
 

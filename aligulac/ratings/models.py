@@ -1072,7 +1072,7 @@ class Story(models.Model):
             params = self.get_param_dict()
             return STORIES_DICT[self.message] % self.get_param_dict()
         except:
-            return _('Error')
+            return '[[[Error]]]'
 
     def get_text_index(self):
         return STORIES_IDX.index(self.message)

@@ -55,10 +55,25 @@ class AliasesInline(admin.TabularInline):
     model = Alias
     fields = ['name']
 
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
 class MessagesInline(admin.StackedInline):
     model = Message
     fields = ['type', 'message', 'params']
     extra = 0
+    form = MessageForm
     def formfield_for_dbfield(self, db_field, **kwargs):
         formfield = super(MessagesInline, self).formfield_for_dbfield(db_field, **kwargs)
         if db_field.name == 'params':
@@ -68,10 +83,25 @@ class MessagesInline(admin.StackedInline):
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
+class StoriesForm(forms.ModelForm):
+    class Meta:
+        model = Story
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
 class StoriesInline(admin.StackedInline):
     extra = 0
     model = Story
     fields = ['date', 'message', 'params']
+    form = StoriesForm
     def formfield_for_dbfield(self, db_field, **kwargs):
         formfield = super(StoriesInline, self).formfield_for_dbfield(db_field, **kwargs)
         if db_field.name == 'params':

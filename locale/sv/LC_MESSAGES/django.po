@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-11 18:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2014-04-18 16:06+0000\n"
+"PO-Revision-Date: 2014-04-18 22:14+0100\n"
+"Last-Translator: Rasmus Précenth <rprecenth@gmail.com>\n"
+"Language-Team: Rasmus Précenth <rprecenth@gmail.com>\n"
 "Language: se\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-Basepath: /home/prillan/projects/aligulac-dev/aligulac\n"
 
 #: aligulac/currency.py:99
 #, python-format
@@ -25,50 +27,50 @@ msgstr ""
 #. Translators: matches as in search matches, not SC2 matches
 #: aligulac/aligulac/tools.py:110 aligulac/aligulac/tools.py:123
 msgid "Possible matches:"
-msgstr ""
+msgstr "Möjliga träffar:"
 
 #. Translators: E.g. "John, Lisa, Darren and Mike"
 #: aligulac/aligulac/tools.py:112 aligulac/aligulac/tools.py:134
 #, python-format
 msgid "%(commalist)s and %(final)s"
-msgstr ""
+msgstr "%(commalist)s och %(final)s"
 
 #. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
 #: aligulac/aligulac/tools.py:125
 #, python-format
 msgid "%(commalist)s and %(number)s more"
-msgstr ""
+msgstr "%(commalist)s och %(number)s andra"
 
 #: aligulac/aligulac/tools.py:141
 #, python-format
 msgid "'%s' not unique"
-msgstr ""
+msgstr "'%s' är inte unik"
 
 #: aligulac/aligulac/tools.py:153
 msgid "You are not logged in."
-msgstr ""
+msgstr "Du är inte inloggad."
 
 #: aligulac/aligulac/tools.py:153
 msgid "login"
-msgstr ""
+msgstr "logga in"
 
 #: aligulac/aligulac/tools.py:156
 #, python-format
 msgid "You are logged in as %s"
-msgstr ""
+msgstr "Du är inloggad som %s"
 
 #: aligulac/aligulac/tools.py:158
 msgid "logout"
-msgstr ""
+msgstr "logga ut"
 
 #: aligulac/aligulac/tools.py:159
 msgid "change password"
-msgstr ""
+msgstr "byt lösenord"
 
 #: aligulac/aligulac/tools.py:172 aligulac/ratings/staff_views.py:315
 #: aligulac/ratings/staff_views.py:322
 msgid "This field is required."
-msgstr ""
+msgstr "Det här fältet är obligatoriskt"
 
 #: aligulac/aligulac/tools.py:244 aligulac/aligulac/tools.py:255
 #: templates/history.html:85
@@ -77,12 +79,12 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:247 templates/player.html:738
 msgid "Current"
-msgstr ""
+msgstr "Aktuell"
 
 #: aligulac/aligulac/tools.py:248 aligulac/aligulac/tools.py:262
 #: aligulac/ratings/records_views.py:71 templates/history.html:10
 msgid "History"
-msgstr ""
+msgstr "Historik"
 
 #: aligulac/aligulac/tools.py:249 aligulac/aligulac/tools.py:355
 #: templates/player_earnings.html:30
@@ -93,11 +95,11 @@ msgstr ""
 #: templates/db.html:72 templates/index.html:25 templates/search.html:19
 #: templates/teams.html:10
 msgid "Teams"
-msgstr ""
+msgstr "Lag"
 
 #: aligulac/aligulac/tools.py:256
 msgid "Transfers"
-msgstr ""
+msgstr "Övergångar"
 
 #: aligulac/aligulac/tools.py:259 aligulac/ratings/records_views.py:125
 msgid "Records"
@@ -106,13 +108,13 @@ msgstr ""
 #. Translators: Hall of fame
 #: aligulac/aligulac/tools.py:264
 msgid "HoF"
-msgstr ""
+msgstr "HoF"
 
 #: aligulac/aligulac/tools.py:265 aligulac/ratings/player_views.py:170
 #: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:187
-#: aligulac/ratings/results_views.py:553 aligulac/ratings/results_views.py:568
+#: aligulac/ratings/results_views.py:552 aligulac/ratings/results_views.py:567
 #: templates/earnings.html:34 templates/earnings.html.py:43
-#: templates/earnings.html:51 templates/history.html:26
+#: templates/earnings.html:53 templates/history.html:26
 #: templates/history.html.py:36 templates/period.html:44
 #: templates/period.html.py:50 templates/period.html:130
 #: templates/period.html.py:369 templates/period.html:382
@@ -128,7 +130,7 @@ msgstr ""
 #: templates/period.html.py:131 templates/period.html:370
 #: templates/reports_balance.html:169
 msgid "Protoss"
-msgstr ""
+msgstr "protoss"
 
 #: aligulac/aligulac/tools.py:267 aligulac/ratings/models.py:88
 #: aligulac/ratings/player_views.py:172 aligulac/ratings/player_views.py:642
@@ -137,7 +139,7 @@ msgstr ""
 #: templates/period.html.py:132 templates/period.html:371
 #: templates/reports_balance.html:177
 msgid "Terran"
-msgstr ""
+msgstr "terran"
 
 #: aligulac/aligulac/tools.py:268 aligulac/ratings/models.py:89
 #: aligulac/ratings/player_views.py:173 aligulac/ratings/player_views.py:643
@@ -146,70 +148,70 @@ msgstr ""
 #: templates/period.html.py:133 templates/period.html:372
 #: templates/reports_balance.html:185
 msgid "Zerg"
-msgstr ""
+msgstr "zerg"
 
 #: aligulac/aligulac/tools.py:271 templates/db.html:23
 msgid "Results"
-msgstr ""
+msgstr "Resultat"
 
 #: aligulac/aligulac/tools.py:274
 msgid "By Date"
-msgstr ""
+msgstr "Efter datum"
 
 #: aligulac/aligulac/tools.py:275
 msgid "By Event"
-msgstr ""
+msgstr "Efter turnering"
 
 #: aligulac/aligulac/tools.py:276 templates/results_search.html:11
 #: templates/results_search.html.py:31 templates/search.html:11
 msgid "Search"
-msgstr ""
+msgstr "Sök"
 
 #: aligulac/aligulac/tools.py:279
 msgid "Inference"
-msgstr ""
+msgstr "Inferens"
 
 #: aligulac/aligulac/tools.py:282 aligulac/ratings/inference_views.py:229
 #: templates/predict.html:11
 msgid "Predict"
-msgstr ""
+msgstr "Förutspå"
 
 #: aligulac/aligulac/tools.py:285 aligulac/aligulac/tools.py:309
 msgid "Misc"
-msgstr ""
+msgstr "Diverse"
 
 #: aligulac/aligulac/tools.py:288 aligulac/ratings/misc_views.py:36
 msgid "Balance Report"
-msgstr ""
+msgstr "Balansrapport"
 
 #: aligulac/aligulac/tools.py:289
 msgid "Days Since…"
-msgstr ""
+msgstr "Dagar sedan..."
 
 #: aligulac/aligulac/tools.py:292
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: aligulac/aligulac/tools.py:295 templates/faq.html:10
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: aligulac/aligulac/tools.py:296 templates/blog.html:10
 msgid "Blog"
-msgstr ""
+msgstr "Blogg"
 
 #: aligulac/aligulac/tools.py:297
 msgid "Database"
-msgstr ""
+msgstr "Databas"
 
 #: aligulac/aligulac/tools.py:298
 msgid "API"
-msgstr ""
+msgstr "API"
 
-#: aligulac/aligulac/tools.py:301 templates/forms.html:118
+#: aligulac/aligulac/tools.py:301 templates/forms.html:122
 #: templates/language.html:41
 msgid "Submit"
-msgstr ""
+msgstr "Skicka in"
 
 #. Translators: Matches as in SC2-matches, not search matches.
 #: aligulac/aligulac/tools.py:305 aligulac/ratings/inference_views.py:725
@@ -218,26 +220,26 @@ msgstr ""
 #: templates/add.html:75 templates/eventres.html:257
 #: templates/historical.html:28 templates/pred_rrgroup.html:67
 msgid "Matches"
-msgstr ""
+msgstr "Matcher"
 
 #: aligulac/aligulac/tools.py:306
 msgid "Review"
-msgstr ""
+msgstr "Granska"
 
 #: aligulac/aligulac/tools.py:307 templates/events.html:10
 #: templates/events.html.py:13 templates/index.html:26
 #: templates/search.html:41
 msgid "Events"
-msgstr ""
+msgstr "Turneringar"
 
-#: aligulac/aligulac/tools.py:308 aligulac/ratings/staff_views.py:951
+#: aligulac/aligulac/tools.py:308 aligulac/ratings/staff_views.py:953
 #: templates/events_open.html:6
 msgid "Open events"
-msgstr ""
+msgstr "Öppna turneringar"
 
 #: aligulac/aligulac/tools.py:347
 msgid "Summary"
-msgstr ""
+msgstr "Sammanfattning"
 
 #: aligulac/aligulac/tools.py:350
 msgid "Rating history"
@@ -245,15 +247,15 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:352 templates/pred_match.html:146
 msgid "Match history"
-msgstr ""
+msgstr "Matchhistorik"
 
 #: aligulac/aligulac/tools.py:358
 msgid "Adjustments"
-msgstr ""
+msgstr "Justeringar"
 
 #: aligulac/aligulac/views.py:60
 msgid "Contains player information."
-msgstr ""
+msgstr "Innehåller spelarinformation."
 
 #: aligulac/aligulac/views.py:62 aligulac/aligulac/views.py:92
 #: aligulac/aligulac/views.py:132 aligulac/aligulac/views.py:171
@@ -823,119 +825,120 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:341 aligulac/blog/views.py:18
 msgid "The blog/news section is only in English, sorry."
-msgstr ""
+msgstr "Blogg- och nyhetssektionen är tyvärr bara tillgänglig på engelska."
 
 #: aligulac/aligulac/views.py:427 templates/db.html:11
 msgid "Database status"
-msgstr ""
+msgstr "Databasstatus"
 
 #: aligulac/aligulac/views.py:434
 msgid "Name/organization"
-msgstr ""
+msgstr "Namn/organisation"
 
 #: aligulac/aligulac/views.py:435 aligulac/ratings/staff_views.py:281
 #: templates/add.html:68
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
+# -
 #: aligulac/aligulac/views.py:452
 msgid "Entered data was invalid."
-msgstr ""
+msgstr "Felaktigt angiven information."
 
 #: aligulac/aligulac/views.py:467
 #, python-format
 msgid "Your API key is '%s'. Please keep it safe."
-msgstr ""
+msgstr "Din API-nyckel är \"%s\". Förvara den säkert."
 
 #: aligulac/aligulac/views.py:482 templates/api.html:7
 msgid "API documentation"
-msgstr ""
+msgstr "API-dokumentation"
 
-#: aligulac/aligulac/views.py:517 aligulac/ratings/results_views.py:948
+#: aligulac/aligulac/views.py:517 aligulac/ratings/results_views.py:947
 msgid "Search results"
-msgstr ""
+msgstr "Sökresultat"
 
 #: aligulac/aligulac/views.py:582 templates/login.html:10
 #: templates/login.html.py:31
 msgid "Login"
-msgstr ""
+msgstr "Inloggning"
 
 #: aligulac/aligulac/views.py:601
 msgid "The old password didn't match. Your password was not changed."
-msgstr ""
+msgstr "De tidigare lösenord matchade inte så ditt lösenord har inte ändrats."
 
 #: aligulac/aligulac/views.py:607
 msgid "The new passwords didn't match. Your password was not changed."
-msgstr ""
+msgstr "De nya lösenorden matchade inte så ditt lösenord har inte ändrats."
 
 #: aligulac/aligulac/views.py:614
 #, python-format
 msgid "The password for %s was successfully changed."
-msgstr ""
+msgstr "Lösenordsbytet för %s lyckades."
 
 #: aligulac/aligulac/views.py:617 templates/changepwd.html:9
 msgid "Change password"
-msgstr ""
+msgstr "Byt lösenord"
 
 #: aligulac/aligulac/views.py:626
 msgid "404: Not found"
-msgstr ""
+msgstr "404: Hittades inte"
 
 #: aligulac/aligulac/views.py:632
 msgid "500: Internal Server Error"
-msgstr ""
+msgstr "500: Internt serverfel"
 
 #: aligulac/countries/data.py:5
 msgid "Africa"
-msgstr ""
+msgstr "Afrika"
 
 #: aligulac/countries/data.py:6 aligulac/countries/data.py:516
 msgid "Antarctica"
-msgstr ""
+msgstr "Antarktis"
 
 #: aligulac/countries/data.py:7
 msgid "Asia"
-msgstr ""
+msgstr "Asien"
 
 #: aligulac/countries/data.py:8
 msgid "Europe"
-msgstr ""
+msgstr "Europa"
 
 #: aligulac/countries/data.py:9
 msgid "North America"
-msgstr ""
+msgstr "Nordamerika"
 
 #: aligulac/countries/data.py:10
 msgid "Oceania"
-msgstr ""
+msgstr "Oceanien"
 
 #: aligulac/countries/data.py:11
 msgid "South America"
-msgstr ""
+msgstr "Sydamerika"
 
 #: aligulac/countries/data.py:514
 msgid "Afghanistan"
-msgstr ""
+msgstr "Afghanistan"
 
 #: aligulac/countries/data.py:515
 msgid "Albania"
-msgstr ""
+msgstr "Albanien"
 
 #: aligulac/countries/data.py:517
 msgid "Algeria"
-msgstr ""
+msgstr "Algeriet"
 
 #: aligulac/countries/data.py:518
 msgid "American Samoa"
-msgstr ""
+msgstr "Amerikanska Samoa"
 
 #: aligulac/countries/data.py:519
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #: aligulac/countries/data.py:520
 msgid "Angola"
-msgstr ""
+msgstr "Angola"
 
 #: aligulac/countries/data.py:521
 msgid "Antigua and Barbuda"
@@ -1369,8 +1372,8 @@ msgstr ""
 msgid "North Korea"
 msgstr ""
 
-#: aligulac/countries/data.py:630 templates/add.html:161
-#: templates/period.html:383
+#: aligulac/countries/data.py:630 aligulac/ratings/player_views.py:181
+#: templates/add.html:161 templates/earnings.html:44 templates/period.html:383
 msgid "South Korea"
 msgstr ""
 
@@ -1880,134 +1883,135 @@ msgstr ""
 
 #: aligulac/faq/views.py:18
 msgid "The FAQ section is only in English, sorry."
-msgstr ""
+msgstr "FAQ:n finns tyvärr bara på engelska."
 
 #: aligulac/faq/views.py:23 templates/language.html:52
 msgid "Frequently asked questions"
-msgstr ""
+msgstr "Vanliga frågpr"
 
 #: aligulac/miniURL/views.py:18
 msgid "List of short URLs"
-msgstr ""
+msgstr "Lista av korta URL:er"
 
 #: aligulac/ratings/inference_views.py:56
 msgid "Best-of-N match"
-msgstr ""
+msgstr "Bäst-av-N match"
 
 #: aligulac/ratings/inference_views.py:58
 msgid "Expected exactly two players."
-msgstr ""
+msgstr "Två spelare förväntades."
 
 #: aligulac/ratings/inference_views.py:60
 #: aligulac/ratings/inference_views.py:67
 #: aligulac/ratings/inference_views.py:81
 #: aligulac/ratings/inference_views.py:89
 msgid "Expected exactly one 'best of'."
-msgstr ""
+msgstr "Förväntades bara ta emot ett värde på \"bäst av\"."
 
 #: aligulac/ratings/inference_views.py:63
 #: aligulac/ratings/inference_views.py:525
 msgid "Dual tournament"
-msgstr ""
+msgstr "Dualturnering"
 
 #: aligulac/ratings/inference_views.py:65
 msgid "Expected exactly four players."
-msgstr ""
+msgstr "Fyra spelare förväntades."
 
 #: aligulac/ratings/inference_views.py:70
 #: aligulac/ratings/inference_views.py:604 templates/pred_sebracket.html:10
 msgid "Single elimination bracket"
-msgstr ""
+msgstr "Enkel utslagsturnering"
 
 #: aligulac/ratings/inference_views.py:72
 msgid "Expected number of players to be a power of two (2,4,8,…)."
-msgstr ""
+msgstr "En jämn tvåpotens (2, 4, 8, ...) av spelare förväntades."
 
 #: aligulac/ratings/inference_views.py:74
 msgid "Expected at least one 'best of'."
-msgstr ""
+msgstr "Förväntades ta emot minst ett värde på \"bäst av\"."
 
 #: aligulac/ratings/inference_views.py:77
 #: aligulac/ratings/inference_views.py:693 templates/pred_rrgroup.html:11
 msgid "Round robin group"
-msgstr ""
+msgstr "Gruppspel"
 
 #: aligulac/ratings/inference_views.py:79
 msgid "Expected at least three players."
-msgstr ""
+msgstr "Minst tre spelare förväntades."
 
 #: aligulac/ratings/inference_views.py:85
 #: aligulac/ratings/inference_views.py:782
 msgid "Proleague team match"
-msgstr ""
+msgstr "Lagmatch i Proleague-format"
 
 #: aligulac/ratings/inference_views.py:87
 msgid "Expected an even number of players."
-msgstr ""
+msgstr "Ett jämnt antal spelare förväntades."
 
 #: aligulac/ratings/inference_views.py:98
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: aligulac/ratings/inference_views.py:101
 msgid "Best of"
-msgstr ""
+msgstr "Bäst av"
 
 #: aligulac/ratings/inference_views.py:102 templates/db.html:65
 #: templates/eventres.html:249 templates/index.html:24
 #: templates/search.html:27 templates/team.html:65 templates/teams.html:27
 msgid "Players"
-msgstr ""
+msgstr "Spelare"
 
 #: aligulac/ratings/inference_views.py:123
 msgid "Must be a comma-separated list of positive odd integers (1,3,5,…)."
 msgstr ""
+"Måste vara en kommaseparerad lista av udda positiva heltal (1, 3, 5, ...)."
 
 #. Translators: Matches as in search matches
 #. Translators: Matches here as in search matches.
 #: aligulac/ratings/inference_views.py:142
-#: aligulac/ratings/results_views.py:644
+#: aligulac/ratings/results_views.py:643
 #, python-format
 msgid "No matches found: '%s'."
-msgstr ""
+msgstr "Inga träffar för: \"%s\"."
 
 #: aligulac/ratings/inference_views.py:154
 msgid "One or more errors found in player list."
-msgstr ""
+msgstr "Ett eller flera fel hittades is listan över spelare."
 
 #: aligulac/ratings/inference_views.py:360 templates/pred_match.html:10
 #, python-format
 msgid "%(pla)s vs. %(plb)s"
-msgstr ""
+msgstr "%(pla)s vs. %(plb)s"
 
 #: aligulac/ratings/inference_views.py:468
 msgid "Intial round"
-msgstr ""
+msgstr "Första rundan"
 
 #: aligulac/ratings/inference_views.py:469
 msgid "Winners' and losers' matches"
-msgstr ""
+msgstr "Vinnar- och förlorarmatcher"
 
 #: aligulac/ratings/inference_views.py:470
 msgid "Final match"
-msgstr ""
+msgstr "Avslutande match"
 
 #: aligulac/ratings/inference_views.py:547
 #, python-format
 msgid "Round %i"
-msgstr ""
+msgstr "Runda %i"
 
 #: aligulac/ratings/inference_views.py:647
 #: aligulac/ratings/inference_views.py:648
 msgid "Group play"
-msgstr ""
+msgstr "Gruppspel"
 
 #: aligulac/ratings/inference_views.py:901
 #: aligulac/ratings/inference_views.py:913 templates/pred_4pswiss.html:63
 #: templates/pred_proleague.html:56 templates/pred_rrgroup.html:57
 #: templates/pred_sebracket.html:56
 msgid "Median outcome"
-msgstr ""
+msgstr "Medianresultat"
 
 #: aligulac/ratings/inference_views.py:904
 #: aligulac/ratings/inference_views.py:916
@@ -2021,7 +2025,7 @@ msgstr ""
 #: aligulac/ratings/inference_views.py:1128
 #: aligulac/ratings/inference_views.py:1138 templates/results_search.html:94
 msgid "Modify"
-msgstr ""
+msgstr "Modifiera"
 
 #: aligulac/ratings/inference_views.py:905
 #: aligulac/ratings/inference_views.py:917
@@ -2035,294 +2039,300 @@ msgstr ""
 #: aligulac/ratings/inference_views.py:1129
 #: aligulac/ratings/inference_views.py:1139
 msgid "Estimated by"
-msgstr ""
+msgstr "Uppskattat av"
 
 #: aligulac/ratings/inference_views.py:927 templates/pred_4pswiss.html:20
 msgid "Top 2"
-msgstr ""
+msgstr "Topp 2"
 
 #: aligulac/ratings/inference_views.py:927 templates/pred_4pswiss.html:21
 msgid "1st"
-msgstr ""
+msgstr "1:a"
 
 #: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:22
 msgid "2nd"
-msgstr ""
+msgstr "2:a"
 
 #: aligulac/ratings/inference_views.py:928 templates/pred_4pswiss.html:23
 msgid "3rd"
-msgstr ""
+msgstr "3:e"
 
 #: aligulac/ratings/inference_views.py:929 templates/pred_4pswiss.html:24
 msgid "4th"
-msgstr ""
+msgstr "4:e"
 
 #. Translators: Win a tournament
 #: aligulac/ratings/inference_views.py:968 templates/pred_sebracket.html:22
 msgid "Win"
-msgstr ""
+msgstr "Vinna"
 
 #. Translators: Top 2, 4 etc. (in tournament)
 #: aligulac/ratings/inference_views.py:970
 #, python-brace-format
 msgid "Top {i}"
-msgstr ""
+msgstr "Topp {i}"
 
 #: aligulac/ratings/inference_views.py:985
 msgid "Median Outcome Bracket"
-msgstr ""
+msgstr "Träd vid medianutfallet"
 
 #. Translators: Team [player], e.g. "Team Jaedong"
 #: aligulac/ratings/inference_views.py:1101
 #: aligulac/ratings/inference_views.py:1103
 #, python-brace-format
 msgid "Team {p}"
-msgstr ""
+msgstr "Lag {p}"
 
 #: aligulac/ratings/misc_views.py:33
 msgid "Miscellaneous Pages"
-msgstr ""
+msgstr "Diverse sidor"
 
 #: aligulac/ratings/misc_views.py:37
 msgid "Charts showing balance in StarCraft II over time."
-msgstr ""
+msgstr "Grafer som visar balansen i StarCraft II över tid."
 
 #: aligulac/ratings/misc_views.py:40 aligulac/ratings/misc_views.py:184
 msgid "Number of days since…"
-msgstr ""
+msgstr "Antal dagar sedan..."
 
 #: aligulac/ratings/misc_views.py:41
 msgid "Page showing the most recent time some things happened."
-msgstr ""
+msgstr "En sida som visar när några saker senast hände."
 
 #: aligulac/ratings/misc_views.py:60
 msgid "MMA and DongRaeGu played a Bo5+"
-msgstr ""
+msgstr "MMA och DongRaeGu spelade en Bo5+"
 
 #: aligulac/ratings/misc_views.py:71
 msgid "Mvp won a premier event"
-msgstr ""
+msgstr "Mvp vann en stor turnering"
 
 #: aligulac/ratings/misc_views.py:81
 msgid "A Korean terran won against a Korean protoss in a Bo5+ (offline)"
-msgstr ""
+msgstr "En koreansk terran vann mot en koreansk protoss i en Bo5+ (offline)"
 
 #: aligulac/ratings/misc_views.py:89
 msgid "A foreign terran won against a Korean protoss (offline)"
-msgstr ""
+msgstr "En icke-koreansk terran vann mot en koreansk protoss (offline)"
 
 #: aligulac/ratings/misc_views.py:97
 msgid "A foreigner won in Proleague"
-msgstr ""
+msgstr "En icke-korean vann i Proleague"
 
 #: aligulac/ratings/misc_views.py:105
 msgid "A foreigner won in the GSL Code S"
-msgstr ""
+msgstr "En icke-korean vann i GSL Code S"
 
 #: aligulac/ratings/misc_views.py:113
 msgid "A CIS player won a major event"
-msgstr ""
+msgstr "En OSS-spelare vann en mellanstor turnering"
 
 #: aligulac/ratings/misc_views.py:114
 msgid "Player from BY, RU, UA or KZ with 1st place prize money >= $2000"
 msgstr ""
+"En spelare från BY, RU, UA eller KZ med ett förstaplatspris på över 2 000 "
+"dollar"
 
 #: aligulac/ratings/misc_views.py:122
 msgid "A Nordic player won a major event"
-msgstr ""
+msgstr "En nordisk spelare vann en medelstor turnering"
 
 #: aligulac/ratings/misc_views.py:123
 msgid "Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"
 msgstr ""
+"En spelare från SE, NO, DK, IS eller FI med ett förstaplatspris på över 2 "
+"000 dollar"
 
 #: aligulac/ratings/misc_views.py:131
 msgid "A North American player won a major event"
-msgstr ""
+msgstr "En nordamerikansk spelare vann en medelstor turnering"
 
 #: aligulac/ratings/misc_views.py:132
 msgid "Player from US or CA with 1st place prize money >= $2000"
 msgstr ""
+"En spelare från US eller CA med ett förstaplatspris på över 2 000 dollar"
 
 #: aligulac/ratings/misc_views.py:140
 msgid "A foreigner won a premier event"
-msgstr ""
+msgstr "En icke-korean vann en stor turnering"
 
 #: aligulac/ratings/misc_views.py:141
 msgid "At least one game played offline with 1st place prize money >= $10,000"
 msgstr ""
+"Minst en match spelad offline med ett förstaplatspris på över 10 000 dollar"
 
 #: aligulac/ratings/misc_views.py:155
 msgid "Jaedong got second place in an event"
-msgstr ""
+msgstr "Jaedong kom på andra plats i en turnering"
 
 #: aligulac/ratings/misc_views.py:167
 msgid "SlayerS disbanded"
-msgstr ""
+msgstr "SlayerS upplöstes"
 
 #: aligulac/ratings/misc_views.py:173
 msgid "HasuObs joined mousesports"
-msgstr ""
+msgstr "HasuObs blev värvad av mousesports"
 
 #. Translators: TLPD database
 #: aligulac/ratings/models.py:50
 msgid "WoL Beta"
-msgstr ""
+msgstr "WoL Beta"
 
 #. Translators: TLPD database
 #: aligulac/ratings/models.py:52
 msgid "WoL Korean"
-msgstr ""
+msgstr "WoL Korean"
 
 #. Translators: TLPD database
 #: aligulac/ratings/models.py:54
 msgid "WoL International"
-msgstr ""
+msgstr "WoL International"
 
 #. Translators: TLPD database
 #: aligulac/ratings/models.py:56
 msgid "HotS Beta"
-msgstr ""
+msgstr "HotS Beta"
 
 #. Translators: TLPD database
 #: aligulac/ratings/models.py:58
 msgid "HotS"
-msgstr ""
+msgstr "HotS"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:66
 msgid "Individual"
-msgstr ""
+msgstr "Individuell"
 
 #. Translators: Event category
-#: aligulac/ratings/models.py:68 templates/earnings.html:107
+#: aligulac/ratings/models.py:68 templates/earnings.html:109
 #: templates/player.html:466 templates/player.html.py:735
 #: templates/ratinglist.html:25
 msgid "Team"
-msgstr ""
+msgstr "Lag"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:70
 msgid "Frequent"
-msgstr ""
+msgstr "Frekvent"
 
 #. Translators: Event type
 #: aligulac/ratings/models.py:78
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #. Translators: Event type
-#: aligulac/ratings/models.py:80 aligulac/ratings/results_views.py:548
-#: aligulac/ratings/results_views.py:702 aligulac/ratings/staff_views.py:161
+#: aligulac/ratings/models.py:80 aligulac/ratings/results_views.py:547
+#: aligulac/ratings/results_views.py:701 aligulac/ratings/staff_views.py:161
 #: aligulac/ratings/staff_views.py:276 aligulac/ratings/staff_views.py:307
 #: templates/add.html:44 templates/clocks.html:56
 msgid "Event"
-msgstr ""
+msgstr "Turnering"
 
 #. Translators: Event type
 #: aligulac/ratings/models.py:82
 msgid "Round"
-msgstr ""
+msgstr "Runda"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:91
 #: aligulac/ratings/templatetags/ratings_extras.py:133
 #: templates/period.html:376
 msgid "Random"
-msgstr ""
+msgstr "Slumpmässig"
 
 #. Translators: Race switcher
 #: aligulac/ratings/models.py:93
 msgid "Switcher"
-msgstr ""
+msgstr "Rasbytare"
 
 #: aligulac/ratings/models.py:96
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Protoss"
-msgstr ""
+msgstr "protoss"
 
 #: aligulac/ratings/models.py:97
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Terran"
-msgstr ""
+msgstr "terran"
 
 #: aligulac/ratings/models.py:98
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Zerg"
-msgstr ""
+msgstr "zerg"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:100
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Random"
-msgstr ""
+msgstr "slumpmässig"
 
 #. Translators: Race switcher
 #: aligulac/ratings/models.py:102
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Switcher"
-msgstr ""
+msgstr "rasbytare"
 
 #: aligulac/ratings/models.py:110 templates/db.html:29
 msgid "Wings of Liberty"
-msgstr ""
+msgstr "Wings of Liberty"
 
 #: aligulac/ratings/models.py:111 templates/db.html:36
 msgid "Heart of the Swarm"
-msgstr ""
+msgstr "Heart of the Swarm"
 
 #: aligulac/ratings/models.py:112
 msgid "Legacy of the Void"
-msgstr ""
+msgstr "Legacy of the Void"
 
 #. Translators: Message type
 #: aligulac/ratings/models.py:121
 msgid "info"
-msgstr ""
+msgstr "info"
 
 #. Translators: Message type
 #: aligulac/ratings/models.py:123
 msgid "warning"
-msgstr ""
+msgstr "varning"
 
 #. Translators: Message type
 #: aligulac/ratings/models.py:125
 msgid "error"
-msgstr ""
+msgstr "fel"
 
 #. Translators: Message type
 #: aligulac/ratings/models.py:127
 msgid "success"
-msgstr ""
+msgstr "lyckad"
 
 #: aligulac/ratings/models.py:131 aligulac/ratings/models.py:133
 #: aligulac/ratings/models.py:220
 msgid "Possible confusion"
-msgstr ""
+msgstr "Möjlig förvirring"
 
 #: aligulac/ratings/models.py:132
 #, python-format
 msgid "You might be looking for %(player)s."
-msgstr ""
+msgstr "Letar du efter %(player)s?"
 
 #: aligulac/ratings/models.py:135
 #, python-format
 msgid "You might be looking for %(players)s or %(player)s."
-msgstr ""
+msgstr "Letar du efter %(players)s eller %(player)s?"
 
 #: aligulac/ratings/models.py:136 aligulac/ratings/models.py:137
 #: aligulac/ratings/models.py:157
 msgid "Walkover"
-msgstr ""
+msgstr "Walkover"
 
 #: aligulac/ratings/models.py:136
 #, python-format
 msgid "%(player)s recieved a walkover."
-msgstr ""
+msgstr "%(player)s vann på w.o."
 
 #: aligulac/ratings/models.py:139
 #, python-format
 msgid "%(player)s recieved a walkover against %(opponent)s."
-msgstr ""
+msgstr "%(player)s vann på w.o. mot %(opponent)s."
 
 #: aligulac/ratings/models.py:140 aligulac/ratings/models.py:142
 #: aligulac/ratings/models.py:146 aligulac/ratings/models.py:148
@@ -2339,12 +2349,12 @@ msgstr ""
 
 #: aligulac/ratings/models.py:141
 msgid "Disqualification"
-msgstr ""
+msgstr "Diskvalificering"
 
 #: aligulac/ratings/models.py:141
 #, python-format
 msgid "%(player)s was disqualified."
-msgstr ""
+msgstr "%(player)s blev diskvalificerad."
 
 #: aligulac/ratings/models.py:144
 #, python-format
@@ -2402,16 +2412,16 @@ msgstr ""
 
 #: aligulac/ratings/models.py:163
 msgid "Unrated match"
-msgstr ""
+msgstr "Orankad match"
 
 #: aligulac/ratings/models.py:165
 #, python-format
 msgid "In addition, %(player)s and %(opponent)s played an unrated match."
-msgstr ""
+msgstr "%(player)s och %(opponent)s spelade dessutom en orankad match."
 
 #: aligulac/ratings/models.py:166
 msgid "2v2"
-msgstr ""
+msgstr "2 mot 2"
 
 #: aligulac/ratings/models.py:168
 #, python-format
@@ -2419,41 +2429,43 @@ msgid ""
 "In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and "
 "%(playerd)s."
 msgstr ""
+"Dessutom vann %(playera)s och %(playerb)s en 2 mot 2 mot %(playerc)s och "
+"%(playerd)s."
 
 #: aligulac/ratings/models.py:169 aligulac/ratings/models.py:171
 #: aligulac/ratings/models.py:172 aligulac/ratings/models.py:183
 msgid "Race switch"
-msgstr ""
+msgstr "Rasbyte"
 
 #: aligulac/ratings/models.py:170
 #, python-format
 msgid "%(player)s played %(race)s in game %(num)s."
-msgstr ""
+msgstr "%(player)s spelade %(race)s i game %(num)s."
 
 #: aligulac/ratings/models.py:171
 #, python-format
 msgid "%(player)s played %(race)s."
-msgstr ""
+msgstr "%(player)s spelade %(race)s."
 
 #: aligulac/ratings/models.py:174
 #, python-format
 msgid "%(player)s switched to %(race)s after game %(num)s."
-msgstr ""
+msgstr "%(player)s bytte till %(race)s efter game %(num)s."
 
 #: aligulac/ratings/models.py:175 aligulac/ratings/models.py:177
 #: aligulac/ratings/models.py:179
 msgid "Smurf"
-msgstr ""
+msgstr "Smurf"
 
 #: aligulac/ratings/models.py:176
 #, python-format
 msgid "%(player)s was smurfing for %(otherplayer)s."
-msgstr ""
+msgstr "%(player)s smurfade åt %(otherplayer)s."
 
 #: aligulac/ratings/models.py:178
 #, python-format
 msgid "%(player)s was smurfing as %(otherplayer)s."
-msgstr ""
+msgstr "%(player)s smurfade som %(otherplayer)s."
 
 #: aligulac/ratings/models.py:181
 #, python-format
@@ -2461,25 +2473,28 @@ msgid ""
 "%(player)s was smurfing as %(otherplayer)s and was disqualified due to "
 "residency rules."
 msgstr ""
+"%(player)s smurfade som %(otherplayer)s och blev därmed diskvalificerad."
 
 #: aligulac/ratings/models.py:182
 #, python-format
 msgid "%(player)s was unable to attend."
-msgstr ""
+msgstr "%(player)s kunde inte delta."
 
 #: aligulac/ratings/models.py:184
 msgid "This match was split due to race-changing."
-msgstr ""
+msgstr "Den här matchen har delats upp p.g.a. rasbyte."
 
 #: aligulac/ratings/models.py:185 aligulac/ratings/models.py:188
 #: aligulac/ratings/models.py:191 aligulac/ratings/models.py:194
 msgid "Irregular match"
-msgstr ""
+msgstr "Oregelbunden match"
 
 #: aligulac/ratings/models.py:187
 #, python-format
 msgid "Coming from the loser's bracket, %(player)s had to win two Bo%(num)ss."
 msgstr ""
+"Eftersom %(player)s kom från det nedre trädet behövde hen vinna två Bo"
+"%(num)s:or."
 
 #: aligulac/ratings/models.py:190
 #, python-format
@@ -2487,34 +2502,41 @@ msgid ""
 "Coming from the winner's bracket, %(player)s started the match with a %(na)s-"
 "%(nb)s lead."
 msgstr ""
+"Eftersom %(player)s kom från det övre trädet började hen med ett %(na)s-"
+"%(nb)s övertag."
 
 #: aligulac/ratings/models.py:193
 #, python-format
 msgid ""
 "%(player)s started the match with a %(na)s–%(nb)s lead from a previous match."
 msgstr ""
+"%(player)s började matchen med ett %(na)s-%(nb)s övertag från en tidigare "
+"match."
 
 #: aligulac/ratings/models.py:196
 #, python-format
 msgid "%(player)s started the match with a %(na)s–%(nb)s lead."
-msgstr ""
+msgstr "%(player)s började matchen med ett %(na)s-%(nb)s övertag."
 
 #: aligulac/ratings/models.py:197 aligulac/ratings/models.py:200
 #: aligulac/ratings/models.py:203 aligulac/ratings/models.py:206
 #: aligulac/ratings/models.py:212
 msgid "Qualification"
-msgstr ""
+msgstr "Kvalificering"
 
 #: aligulac/ratings/models.py:199
 #, python-format
 msgid "%(player)s defeated %(opponent)s to qualify for %(event)s."
 msgstr ""
+"%(player)s kvalificerade sig för %(event)s genom att besegra %(opponent)s."
 
 #: aligulac/ratings/models.py:202
 #, python-format
 msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s."
 msgstr ""
+"%(player)s kvalificerade sig för %(event)s genom att besegra %(opponents)s "
+"och %(opponent)s."
 
 #: aligulac/ratings/models.py:205
 #, python-format
@@ -2522,6 +2544,8 @@ msgid ""
 "%(player)s defeated %(opponent)s to qualify for %(event)s alongside "
 "%(otherplayer)s."
 msgstr ""
+"%(player)s kvalificerade sig tillsammans med %(otherplayer)s för %(event)s "
+"genom att besegra %(opponent)s."
 
 #: aligulac/ratings/models.py:208
 #, python-format
@@ -2529,6 +2553,8 @@ msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s "
 "alongside %(otherplayer)s."
 msgstr ""
+"%(player)s kvalificerade sig tillsammans med %(otherplayer)s för %(event)s "
+"genom att besegra %(opponents)s och %(opponent)s."
 
 #: aligulac/ratings/models.py:209
 msgid "Forfeit and qualification"
@@ -2548,166 +2574,172 @@ msgstr ""
 
 #: aligulac/ratings/models.py:214 aligulac/ratings/models.py:223
 msgid "Tiebreakers"
-msgstr ""
+msgstr "Tiebreaker"
 
 #: aligulac/ratings/models.py:216
 #, python-format
 msgid "%(players)s and %(player)s played tiebreakers for the %(num)s spots."
-msgstr ""
+msgstr "%(players)s och %(player)s spelade tiebreakers för %(num)s platser."
 
 #: aligulac/ratings/models.py:217
 msgid "Long game"
-msgstr ""
+msgstr "Långt game"
 
 #: aligulac/ratings/models.py:219
 #, python-format
 msgid "Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds."
-msgstr ""
+msgstr "Game %(num)s höll på i %(h)s timmar, %(m)s minuter och %(s)s sekunder."
 
 #: aligulac/ratings/models.py:222
 #, python-format
 msgid "%(player)s won %(num)s-X, assumed to be %(num)s-0."
 msgstr ""
+"%(player)s vann med %(num)s game-vinster, resultatet antas vara %(num)s-0."
 
 #: aligulac/ratings/models.py:223
 msgid "Tiebreaker game."
-msgstr ""
+msgstr "Tiebreaker."
 
 #: aligulac/ratings/models.py:224
 msgid "Seed"
-msgstr ""
+msgstr "Seedning"
 
 #: aligulac/ratings/models.py:224
 #, python-format
 msgid "%(player)s was seededs."
-msgstr ""
+msgstr "%(player)s blev seedad."
 
 #: aligulac/ratings/models.py:225
 msgid "Seeds"
-msgstr ""
+msgstr "Seedningar"
 
 #: aligulac/ratings/models.py:225
 #, python-format
 msgid "%(players)s and %(player)s were seeded."
-msgstr ""
+msgstr "%(players)s och %(player)s blev seedade."
 
 #: aligulac/ratings/models.py:226
 msgid "Draw"
-msgstr ""
+msgstr "Oavgjort"
 
 #: aligulac/ratings/models.py:228
 #, python-format
 msgid "Game %(num)s was a draw and had to be replayed."
-msgstr ""
+msgstr "Game %(num)s blev oavgjort och resulterade i att gamet fick spelas om."
 
 #: aligulac/ratings/models.py:236
 #, python-format
 msgid "%(player)s wins %(event)s"
-msgstr ""
+msgstr "%(player)s vinner %(event)s"
 
 #: aligulac/ratings/models.py:238
 #, python-format
 msgid "%(player)s defeats %(opponent)s and wins %(event)s"
-msgstr ""
+msgstr "%(player)s besegrar %(opponent)s och vinner därmed %(event)s"
 
 #: aligulac/ratings/models.py:239
 #, python-format
 msgid "%(player)s wins %(event)s as a royal roader"
-msgstr ""
+msgstr "%(player)s vinner %(event)s som en \"royal roader\""
 
 #: aligulac/ratings/models.py:241
 #, python-format
 msgid "%(player)s defeats %(opponent)s and wins %(event)s as a royal roader"
 msgstr ""
+"%(player)s besegrar %(opponent)s och vinner därmed %(event)s som en \"royal "
+"roader\""
 
 #: aligulac/ratings/models.py:242
 #, python-format
 msgid "%(player)s all-kills %(team)s"
-msgstr ""
+msgstr "%(player)s besegrar %(team)s med en \"all-kill\""
 
 #: aligulac/ratings/models.py:244
 #, python-format
 msgid "%(player)s all-kills %(team)s and wins %(event)s"
 msgstr ""
+"%(player)s besegrar %(team)s med en \"all-kill\" och vinner därmed %(event)s"
 
 #: aligulac/ratings/models.py:245
 #, python-format
 msgid "%(player)s finishes second in %(event)s"
-msgstr ""
+msgstr "%(player)s kommer tvåa i %(event)s"
 
 #: aligulac/ratings/models.py:246
 #, python-format
 msgid "%(player)s finishes third in %(event)s"
-msgstr ""
+msgstr "%(player)s kommer trea i %(event)s"
 
 #: aligulac/ratings/models.py:247
 #, python-format
 msgid "%(player)s finishes fourth in %(event)s"
-msgstr ""
+msgstr "%(player)s kommer fyra i %(event)s"
 
 #: aligulac/ratings/models.py:248
 #, python-format
 msgid "%(player)s finishes top 4 in %(event)s"
-msgstr ""
+msgstr "%(player)s kommer topp 4 i %(event)s"
 
 #: aligulac/ratings/models.py:249
 #, python-format
 msgid "%(player)s finishes top 8 in %(event)s"
-msgstr ""
+msgstr "%(player)s kommer topp 8 i %(event)s"
 
 #: aligulac/ratings/models.py:250
 #, python-format
 msgid "%(player)s switches to %(race)s"
-msgstr ""
+msgstr "%(player)s byter ras till %(race)s"
 
 #: aligulac/ratings/models.py:251
 #, python-format
 msgid "%(player)s switches back to %(race)s"
-msgstr ""
+msgstr "%(player)s byter tillbaka till %(race)s"
 
 #: aligulac/ratings/models.py:252
 #, python-format
 msgid "%(player)s switches from %(racea)s to %(raceb)s"
-msgstr ""
+msgstr "%(player)s byter ras från %(racea)s till %(raceb)s"
 
 #: aligulac/ratings/models.py:254
 #, python-format
 msgid "%(player)s switches from %(racea)s back to %(raceb)s"
-msgstr ""
+msgstr "%(player)s byter tillbaka till %(raceb)s från %(racea)s"
 
 #: aligulac/ratings/models.py:256
 #, python-format
 msgid ""
 "%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s"
 msgstr ""
+"%(player)s besegrar %(opponent)s och påbörjar en serie med %(num)s vinster i "
+"%(event)s"
 
 #: aligulac/ratings/models.py:258
 #, python-format
 msgid ""
 "%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s"
 msgstr ""
+"%(player)s förlorar mot %(opponent)s och avslutar därmed sin serie av "
+"%(num)s vinster i %(event)s"
 
 #: aligulac/ratings/models.py:259
 #, python-format
 msgid "%(player)s fails to qualify for %(event)s"
-msgstr ""
+msgstr "%(player)s misslyckas med att kvalificera sig för %(event)s"
 
 #: aligulac/ratings/models.py:261
 #, python-format
 msgid "%(player)s fails to qualify for %(event)s after %(num)s appearances"
 msgstr ""
-
-#: aligulac/ratings/models.py:1075 aligulac/ratings/models.py:1614
-msgid "Error"
-msgstr ""
+"%(player)s misslyckas med att kvalificera sig för %(event)s efter %(num)s "
+"förekomster."
 
 #: aligulac/ratings/models.py:1248
 msgid "All-Kill"
-msgstr ""
+msgstr "All-Kill"
 
 #: aligulac/ratings/models.py:1249
 msgid "Proleague"
-msgstr ""
+msgstr "Proleague"
 
 #: aligulac/ratings/models.py:1250 templates/historical.html:20
 #: templates/matchlist.html:39 templates/matchlist.html.py:43
@@ -2716,6 +2748,10 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
+#: aligulac/ratings/models.py:1614
+msgid "Error"
+msgstr "Fel"
+
 #: aligulac/ratings/player_views.py:63
 #, python-format
 msgid ""
@@ -2723,6 +2759,9 @@ msgid ""
 "and removed from the current rating list. Once they play a rated game they "
 "will be reinstated."
 msgstr ""
+"P.g.a. avsaknaden av matcher den senaste tiden av %s så har hen blivit satt "
+"som <em>inaktiv</em> och blivit bortplockade från rankingen. Hen kommer att "
+"sättas som aktiv så fort hen spelar en match igen."
 
 #: aligulac/ratings/player_views.py:66
 #, python-format
@@ -2730,170 +2769,172 @@ msgid ""
 "%s has no rating chart on account of having played matches in fewer than two "
 "periods."
 msgstr ""
+"%s har ingen graf eftersom hen inte har spelat några matcher de senaste två "
+"perioderna."
 
 #: aligulac/ratings/player_views.py:95
 msgid "Tag"
-msgstr ""
+msgstr "Nick"
 
 #: aligulac/ratings/player_views.py:96 templates/player.html:394
 msgid "Race"
-msgstr ""
+msgstr "Ras"
 
-#: aligulac/ratings/player_views.py:97 aligulac/ratings/results_views.py:446
+#: aligulac/ratings/player_views.py:97 aligulac/ratings/results_views.py:445
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
-#: templates/earnings.html:106 templates/hof.html:25
+#: templates/earnings.html:108 templates/hof.html:25
 #: templates/ratinglist.html:24 templates/recordlist.html:11
 #: templates/team.html:175 templates/teams.html:17
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #: aligulac/ratings/player_views.py:98 aligulac/ratings/team_views.py:48
 msgid "AKAs"
-msgstr ""
+msgstr "Alias"
 
 #: aligulac/ratings/player_views.py:99 templates/player.html:460
 msgid "Birthday"
-msgstr ""
+msgstr "Förelsedag"
 
 #: aligulac/ratings/player_views.py:101 aligulac/ratings/player_views.py:152
 #: aligulac/ratings/results_views.py:114 aligulac/ratings/results_views.py:204
 msgid "TLPD ID"
-msgstr ""
+msgstr "TLPD ID"
 
 #: aligulac/ratings/player_views.py:103 aligulac/ratings/results_views.py:116
 msgid "TLPD DB"
-msgstr ""
+msgstr "TLPD DB"
 
 #: aligulac/ratings/player_views.py:104 aligulac/ratings/player_views.py:153
 #: aligulac/ratings/results_views.py:118 aligulac/ratings/results_views.py:205
 #: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
 msgid "Liquipedia title"
-msgstr ""
+msgstr "Liquipedia titel"
 
 #: aligulac/ratings/player_views.py:105 aligulac/ratings/player_views.py:154
 msgid "SC2Earnings.com ID"
-msgstr ""
+msgstr "SC2Earnings.com ID"
 
 #: aligulac/ratings/player_views.py:107 aligulac/ratings/player_views.py:183
 #: templates/player.html:402
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: aligulac/ratings/player_views.py:135 aligulac/ratings/results_views.py:147
-#: aligulac/ratings/results_views.py:243 aligulac/ratings/results_views.py:338
-#: aligulac/ratings/results_views.py:423 aligulac/ratings/results_views.py:470
-#: aligulac/ratings/results_views.py:517 aligulac/ratings/results_views.py:585
-#: aligulac/ratings/results_views.py:734 aligulac/ratings/staff_views.py:181
+#: aligulac/ratings/results_views.py:243 aligulac/ratings/results_views.py:337
+#: aligulac/ratings/results_views.py:422 aligulac/ratings/results_views.py:469
+#: aligulac/ratings/results_views.py:516 aligulac/ratings/results_views.py:584
+#: aligulac/ratings/results_views.py:733 aligulac/ratings/staff_views.py:181
 #: aligulac/ratings/staff_views.py:338 aligulac/ratings/staff_views.py:587
-#: aligulac/ratings/staff_views.py:653 aligulac/ratings/staff_views.py:730
+#: aligulac/ratings/staff_views.py:653 aligulac/ratings/staff_views.py:732
 #: aligulac/ratings/team_views.py:74
 msgid "Entered data was invalid, no changes made."
-msgstr ""
+msgstr "Inga ändringar har sparats då den inmatade datan är ogiltig."
 
 #. Translators: Changed something (a noun).
 #: aligulac/ratings/player_views.py:145 aligulac/ratings/results_views.py:201
 #: aligulac/ratings/team_views.py:83
 #, python-format
 msgid "Changed %s."
-msgstr ""
+msgstr "Ändrade %s."
 
 #: aligulac/ratings/player_views.py:147
 msgid "tag"
-msgstr ""
+msgstr "nick"
 
 #: aligulac/ratings/player_views.py:148
 msgid "race"
-msgstr ""
+msgstr "ras"
 
 #: aligulac/ratings/player_views.py:149
 msgid "country"
-msgstr ""
+msgstr "land"
 
 #: aligulac/ratings/player_views.py:150 aligulac/ratings/team_views.py:85
 msgid "name"
-msgstr ""
+msgstr "namn"
 
 #: aligulac/ratings/player_views.py:155 aligulac/ratings/results_views.py:207
 msgid "TLPD DBs"
-msgstr ""
+msgstr "TLPD DB:er"
 
 #: aligulac/ratings/player_views.py:158 aligulac/ratings/team_views.py:91
 msgid "Changed aliases."
-msgstr ""
+msgstr "Ändrade alias."
 
-#: aligulac/ratings/player_views.py:166 aligulac/ratings/results_views.py:545
+#: aligulac/ratings/player_views.py:166 aligulac/ratings/results_views.py:544
 msgid "After"
-msgstr ""
+msgstr "Efter"
 
-#: aligulac/ratings/player_views.py:167 aligulac/ratings/results_views.py:546
+#: aligulac/ratings/player_views.py:167 aligulac/ratings/results_views.py:545
 msgid "Before"
-msgstr ""
+msgstr "Före"
 
 #: aligulac/ratings/player_views.py:174 aligulac/ratings/player_views.py:646
 #: templates/history.html:30 templates/period.html:373
 msgid "No Protoss"
-msgstr ""
+msgstr "Ingen protoss"
 
 #: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:645
 #: templates/history.html:31 templates/period.html:374
 msgid "No Terran"
-msgstr ""
+msgstr "Ingen terran"
 
 #: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:644
 #: templates/history.html:32 templates/period.html:375
 msgid "No Zerg"
-msgstr ""
+msgstr "Ingen zerg"
 
 #: aligulac/ratings/player_views.py:178
 msgid "Opponent race"
-msgstr ""
+msgstr "Motståndarras"
 
-#: aligulac/ratings/player_views.py:181 templates/earnings.html:44
+#: aligulac/ratings/player_views.py:181 templates/earnings.html:45
 #: templates/history.html:37 templates/period.html:385
 msgid "Non-Koreans"
-msgstr ""
+msgstr "Icke-koreaner"
 
-#: aligulac/ratings/player_views.py:188 aligulac/ratings/results_views.py:554
+#: aligulac/ratings/player_views.py:188 aligulac/ratings/results_views.py:553
 msgid "Best of 3+"
-msgstr ""
+msgstr "Bäst av 3+"
 
-#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:555
+#: aligulac/ratings/player_views.py:189 aligulac/ratings/results_views.py:554
 msgid "Best of 5+"
-msgstr ""
+msgstr "Bäst av 5+"
 
-#: aligulac/ratings/player_views.py:191 aligulac/ratings/results_views.py:557
+#: aligulac/ratings/player_views.py:191 aligulac/ratings/results_views.py:556
 msgid "Match format"
-msgstr ""
+msgstr "Matchformat"
 
-#: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:561
-#: aligulac/ratings/results_views.py:906
+#: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:560
+#: aligulac/ratings/results_views.py:905
 msgid "Both"
-msgstr ""
+msgstr "Båda"
 
 #: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:103
-#: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:705
-#: aligulac/ratings/results_views.py:908 aligulac/ratings/staff_views.py:279
+#: aligulac/ratings/results_views.py:561 aligulac/ratings/results_views.py:704
+#: aligulac/ratings/results_views.py:907 aligulac/ratings/staff_views.py:279
 #: templates/db.html:50
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 #: aligulac/ratings/player_views.py:197 aligulac/ratings/results_views.py:103
-#: aligulac/ratings/results_views.py:563 aligulac/ratings/results_views.py:705
-#: aligulac/ratings/results_views.py:908 templates/db.html:43
+#: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:704
+#: aligulac/ratings/results_views.py:907 templates/db.html:43
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 #: aligulac/ratings/player_views.py:199 aligulac/ratings/results_views.py:104
-#: aligulac/ratings/results_views.py:565 aligulac/ratings/results_views.py:706
+#: aligulac/ratings/results_views.py:564 aligulac/ratings/results_views.py:705
 msgid "On/offline"
-msgstr ""
+msgstr "On- eller offline"
 
 #: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:100
-#: aligulac/ratings/results_views.py:568 aligulac/ratings/results_views.py:710
+#: aligulac/ratings/results_views.py:567 aligulac/ratings/results_views.py:709
 #: aligulac/ratings/staff_views.py:278 templates/add.html:58
 #: templates/eventres.html:224
 msgid "Game version"
-msgstr ""
+msgstr "StarCraft II version"
 
 #: aligulac/ratings/player_views.py:303
 #, python-format
@@ -2902,106 +2943,106 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:327
 msgid "joins"
-msgstr ""
+msgstr "går med i"
 
 #: aligulac/ratings/player_views.py:333
 msgid "leaves"
-msgstr ""
+msgstr "lämnar"
 
 #: aligulac/ratings/player_views.py:521
 msgid " before {}"
-msgstr ""
+msgstr "före {}"
 
 #: aligulac/ratings/player_views.py:523
 msgid " after {}"
-msgstr ""
+msgstr "efter {}"
 
 #: aligulac/ratings/player_views.py:525
 msgid " between {} and {}"
-msgstr ""
+msgstr "mellan {} och {}"
 
 #: aligulac/ratings/player_views.py:633
 msgid "best of"
-msgstr ""
+msgstr "bäst av"
 
 #: aligulac/ratings/player_views.py:635 aligulac/ratings/player_views.py:638
 #: aligulac/ratings/player_views.py:651 aligulac/ratings/player_views.py:664
 msgid "all"
-msgstr ""
+msgstr "alla"
 
 #: aligulac/ratings/player_views.py:652
 msgid "foreigners"
-msgstr ""
+msgstr "icke-koreaner"
 
 #: aligulac/ratings/player_views.py:658
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: aligulac/ratings/player_views.py:659
 msgid "online"
-msgstr ""
+msgstr "online"
 
 #: aligulac/ratings/player_views.py:660
 msgid "both"
-msgstr ""
+msgstr "båda"
 
 #: aligulac/ratings/player_views.py:669
 msgid "Results for"
-msgstr ""
+msgstr "Resultat för"
 
 #: aligulac/ratings/player_views.py:670 templates/eventres.html:253
 #: templates/historical.html:29 templates/period.html:332
 #: templates/periods.html:22 templates/player.html:596
 #: templates/pred_rrgroup.html:68
 msgid "Games"
-msgstr ""
+msgstr "Game"
 
 #: aligulac/ratings/player_views.py:672
 msgid "Current form"
-msgstr ""
+msgstr "Aktuell form"
 
 #: aligulac/ratings/player_views.py:673
 msgid "Recent matches"
-msgstr ""
+msgstr "Senaste matcherna"
 
 #: aligulac/ratings/player_views.py:674
 msgid "Filters"
-msgstr ""
+msgstr "Filter"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:676
 msgid "Opponent Race:    "
-msgstr ""
+msgstr "Motståndarras:"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:678
 msgid "Opponent Country: "
-msgstr ""
+msgstr "Motståndarland:"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:680
 msgid "Match Format:     "
-msgstr ""
+msgstr "Matchformat:"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:682
 msgid "On/offline:       "
-msgstr ""
+msgstr "On- eller offline:"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:684
 msgid "Game Version:     "
-msgstr ""
+msgstr "StarCraft II version:"
 
 #: aligulac/ratings/player_views.py:685
 #, python-brace-format
 msgid "Stats by [url={url}]Aligulac[/url]"
-msgstr ""
+msgstr "Statistik av [url={url}]Aligulac[/url]"
 
 #. Translators: Link in the sense of a HTTP hyperlink.
 #: aligulac/ratings/player_views.py:687
 msgid "Link"
-msgstr ""
+msgstr "Länk"
 
 #: aligulac/ratings/ranking_views.py:44
 #, python-format
@@ -3009,28 +3050,30 @@ msgid ""
 "This is a <em>preview</em> of the next rating list. It will not be finalized "
 "until %s."
 msgstr ""
+"Detta är en <em>förhandstitt</em> på nästa rankinglista. Den kommer inte att "
+"vara klar förrän den %s."
 
 #: aligulac/ratings/ranking_views.py:52 templates/periods.html:10
 msgid "Historical overview"
-msgstr ""
+msgstr "Historisk översikt"
 
 #: aligulac/ratings/ranking_views.py:68 templates/index.html:191
 msgid "F jS"
-msgstr ""
+msgstr "jS F"
 
 #. Translators: List (number): (date)
 #: aligulac/ratings/ranking_views.py:208
 #, python-brace-format
 msgid "List {num}: {date}"
-msgstr ""
+msgstr "Lista {num}: {date}"
 
 #: aligulac/ratings/ranking_views.py:290
 msgid "Earnings ranking"
-msgstr ""
+msgstr "Ranking över vunna prispengar"
 
 #: aligulac/ratings/records_views.py:86 templates/hof.html:10
 msgid "Hall of Fame"
-msgstr ""
+msgstr "Hall of Fame"
 
 #. Translators: Records for (race)
 #: aligulac/ratings/records_views.py:123
@@ -3040,213 +3083,215 @@ msgstr ""
 #: aligulac/ratings/reports_views.py:39 templates/reports_balance.html:10
 #: templates/reports_balance.html.py:32
 msgid "Balance report"
-msgstr ""
+msgstr "Balansrapport"
 
 #: aligulac/ratings/results_views.py:99 aligulac/ratings/results_views.py:103
-#: aligulac/ratings/results_views.py:107 aligulac/ratings/results_views.py:705
-#: aligulac/ratings/results_views.py:709 aligulac/ratings/results_views.py:720
+#: aligulac/ratings/results_views.py:107 aligulac/ratings/results_views.py:704
+#: aligulac/ratings/results_views.py:708 aligulac/ratings/results_views.py:719
 msgid "No change"
-msgstr ""
+msgstr "Ingen förändring"
 
 #. Translators: Type as in event type
 #. Translators: Event type.
-#: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:447
+#: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:446
 #: aligulac/ratings/staff_views.py:539 templates/add.html:61
 #: templates/eventres.html:244
 msgid "Type"
-msgstr ""
+msgstr "Sort"
 
 #. Translators: Apply (changes) to…
 #: aligulac/ratings/results_views.py:112
 msgid "Apply to all events on the same level"
-msgstr ""
+msgstr "Tillämpa på alla turneringar på samma nivå"
 
 #: aligulac/ratings/results_views.py:113 aligulac/ratings/team_views.py:50
 #: templates/eventres.html:292 templates/events_open.html:35
 #: templates/events_open.html.py:79 templates/events_open.html:127
 #: templates/team.html:112
 msgid "Homepage"
-msgstr ""
+msgstr "Hemsida"
 
 #: aligulac/ratings/results_views.py:117 aligulac/ratings/results_views.py:206
 msgid "TL thread"
-msgstr ""
+msgstr "TL tråd"
 
 #: aligulac/ratings/results_views.py:157
 msgid "Changed event name."
-msgstr ""
+msgstr "Ändrat turneringsnamn."
 
 #: aligulac/ratings/results_views.py:162
 #, python-format
 msgid "Changed date for %i match."
 msgid_plural "Changed date for %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ändrade datumet för %i match."
+msgstr[1] "Ändrade datumet för %i matcher."
 
 #: aligulac/ratings/results_views.py:170
 #, python-format
 msgid "Changed game version for %i match."
 msgid_plural "Changed game version for %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ändrade spelversion för %i match."
+msgstr[1] "Ändrade spelversion för %i matcher."
 
 #: aligulac/ratings/results_views.py:180
 #, python-format
 msgid "Changed on/offline for %i match."
 msgid_plural "Changed on/offline for %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ändrade värde på on- eller offline för %i match."
+msgstr[1] "Ändrade värde på on- eller offline för %i matcher."
 
 #: aligulac/ratings/results_views.py:194
 #, python-format
 msgid "Changed type for %i event."
 msgid_plural "Changed type for %i events."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ändrade turneringstyp på %i turnering."
+msgstr[1] "Ändrade turneringstyp på %i turneringar."
 
 #: aligulac/ratings/results_views.py:203 aligulac/ratings/team_views.py:88
 msgid "homepage"
-msgstr ""
+msgstr "hemsida"
 
-#: aligulac/ratings/results_views.py:215 aligulac/ratings/results_views.py:398
+#: aligulac/ratings/results_views.py:215 aligulac/ratings/results_views.py:397
 #: templates/add.html:86 templates/player_transfers.html:11
 #: templates/pred_4pswiss.html:17 templates/pred_rrgroup.html:18
 #: templates/pred_rrgroup.html.py:64 templates/pred_sebracket.html:17
 msgid "Player"
-msgstr ""
+msgstr "Spelare"
 
-#: aligulac/ratings/results_views.py:216 aligulac/ratings/results_views.py:399
-#: aligulac/ratings/results_views.py:703 aligulac/ratings/staff_views.py:138
+#: aligulac/ratings/results_views.py:216 aligulac/ratings/results_views.py:398
+#: aligulac/ratings/results_views.py:702 aligulac/ratings/staff_views.py:138
 #: aligulac/ratings/staff_views.py:277 templates/clocks.html:56
 #: templates/eventres.html:206 templates/matchlist.html:38
 #: templates/player_results.html:19 templates/player_transfers.html:18
 #: templates/results_search.html:21
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: aligulac/ratings/results_views.py:217
 msgid "Story text"
-msgstr ""
+msgstr "Händelsetext"
 
 #: aligulac/ratings/results_views.py:218
 msgid "Parameters"
-msgstr ""
+msgstr "Parametrar"
 
 #: aligulac/ratings/results_views.py:254
 msgid "Story could not be found."
-msgstr ""
+msgstr "Händelsen kunde inte hittas."
 
 #: aligulac/ratings/results_views.py:266
 msgid "Story was successfully changed."
-msgstr ""
+msgstr "Händelsen ändrades."
 
-#: aligulac/ratings/results_views.py:268 aligulac/ratings/results_views.py:287
+#: aligulac/ratings/results_views.py:268 aligulac/ratings/results_views.py:286
 msgid "Parameter verification failed."
-msgstr ""
+msgstr "Verifieringen av parametrarna misslyckades."
 
 #: aligulac/ratings/results_views.py:272
 msgid "Story was successfully deleted."
-msgstr ""
+msgstr "Bortagningen av händelsen lyckades."
 
-#: aligulac/ratings/results_views.py:285
+#: aligulac/ratings/results_views.py:284
 msgid "Story was successfully created."
-msgstr ""
+msgstr "Tilläggningen av händelsen lyckades."
+
+#: aligulac/ratings/results_views.py:294
+msgid "Currency"
+msgstr "Valuta"
 
 #: aligulac/ratings/results_views.py:295
-msgid "Currency"
-msgstr ""
+msgid "Ranked"
+msgstr "Rankad"
 
 #: aligulac/ratings/results_views.py:296
-msgid "Ranked"
-msgstr ""
-
-#: aligulac/ratings/results_views.py:297
 msgid "Unranked"
-msgstr ""
+msgstr "Orankad"
 
-#: aligulac/ratings/results_views.py:326
+#: aligulac/ratings/results_views.py:325
 #, python-format
 msgid "No such player: '%s'."
-msgstr ""
+msgstr "Ingen sådan spelare: \"%s\"."
 
-#: aligulac/ratings/results_views.py:328 aligulac/ratings/staff_views.py:106
+#: aligulac/ratings/results_views.py:327 aligulac/ratings/staff_views.py:106
 #: aligulac/ratings/staff_views.py:116 aligulac/ratings/staff_views.py:443
 #, python-format
 msgid "Ambiguous player: '%s'."
-msgstr ""
+msgstr "Tvetydig spelare: \"%s\"."
 
-#: aligulac/ratings/results_views.py:368
+#: aligulac/ratings/results_views.py:367
 msgid "Errors occured, no changes made."
-msgstr ""
+msgstr "Inga ändringar utfördes då fel upptäcktes."
 
 #. Translators: New prizepools added to the database.
-#: aligulac/ratings/results_views.py:390
+#: aligulac/ratings/results_views.py:389
 msgid "New prizes committed."
-msgstr ""
+msgstr "Ny prispott tillagd."
 
-#: aligulac/ratings/results_views.py:400
+#: aligulac/ratings/results_views.py:399
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #. Translators: Stories are the dots on a player's rating chart
-#: aligulac/ratings/results_views.py:438
+#: aligulac/ratings/results_views.py:437
 msgid "Added a story."
-msgstr ""
+msgstr "Lade till en händelse."
+
+#: aligulac/ratings/results_views.py:447
+msgid "No Print"
+msgstr "Göm namn"
 
 #: aligulac/ratings/results_views.py:448
-msgid "No Print"
-msgstr ""
-
-#: aligulac/ratings/results_views.py:449
 msgid "Closed"
-msgstr ""
+msgstr "Avslutad"
 
-#: aligulac/ratings/results_views.py:483
+#: aligulac/ratings/results_views.py:482
 msgid "Added a subevent."
-msgstr ""
+msgstr "Lade till en underturnering."
 
-#: aligulac/ratings/results_views.py:507
+#: aligulac/ratings/results_views.py:506
 msgid "Unable to get these events."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:525
+#: aligulac/ratings/results_views.py:524
 msgid "Order invalid, try again?"
-msgstr ""
+msgstr "Ogiltig ordning, försöka igen?"
 
-#: aligulac/ratings/results_views.py:529
+#: aligulac/ratings/results_views.py:528
 msgid "Non-child event found. This should never happen."
 msgstr ""
 
 #. Translators: Children as in sub-events.
-#: aligulac/ratings/results_views.py:537
+#: aligulac/ratings/results_views.py:536
 #, python-format
 msgid ""
 "Successfully reordered %i children. Any inconsistencies will be fixed next "
 "update (no more than six hours away)."
 msgstr ""
+"Lyckades med omsorteringen av %i underturneringar. Det kan dröja upp till "
+"sex timmar (tiden till nästa uppdatering) innan förändringarna syns överallt."
 
-#: aligulac/ratings/results_views.py:547
+#: aligulac/ratings/results_views.py:546
 msgid "Involving players"
-msgstr ""
+msgstr "Innefattande spelare"
 
 #. Translators: Unassigned as in not assigned to an event.
-#: aligulac/ratings/results_views.py:550
+#: aligulac/ratings/results_views.py:549
 msgid "Only show unassigned matches"
-msgstr ""
+msgstr "Visa bara matcher som inte är tilldelade någon turnering"
 
-#: aligulac/ratings/results_views.py:673
+#: aligulac/ratings/results_views.py:672
 #, python-format
 msgid "Too many results (%i). Please add restrictions."
-msgstr ""
+msgstr "För många resultat (%i). Var vänlig och lägg till några restriktioner."
 
-#: aligulac/ratings/results_views.py:759
+#: aligulac/ratings/results_views.py:758
 #, python-format
 msgid "Updated %i match."
 msgid_plural "Updated %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uppdaterade %i match."
+msgstr[1] "Uppdaterade %i matcher."
 
-#: aligulac/ratings/results_views.py:794 templates/hof.html:54
+#: aligulac/ratings/results_views.py:793 templates/hof.html:54
 #: templates/period.html:305 templates/period.html.py:309
 #: templates/periods.html:28 templates/player.html:226
 #: templates/player.html.py:251 templates/player.html:276
@@ -3265,186 +3310,189 @@ msgstr ""
 #: aligulac/ratings/staff_views.py:439
 #, python-format
 msgid "Could not find player: '%s'."
-msgstr ""
+msgstr "Hittade inte spelare: \"%s\"."
 
 #: aligulac/ratings/staff_views.py:139
 msgid "Approve"
-msgstr ""
+msgstr "Godkänn"
 
 #: aligulac/ratings/staff_views.py:140
 msgid "Reject"
-msgstr ""
+msgstr "Neka"
 
 #: aligulac/ratings/staff_views.py:141
 msgid "Ignore duplicates"
-msgstr ""
+msgstr "Ignorera dubbletter"
 
 #: aligulac/ratings/staff_views.py:167
 msgid "You must either approve or reject."
-msgstr ""
+msgstr "Du måste antingen godkänna eller neka."
 
 #: aligulac/ratings/staff_views.py:172 aligulac/ratings/staff_views.py:330
 msgid "Could not find this event object."
-msgstr ""
+msgstr "Hittade inte det här turneringsobjektet."
 
 #: aligulac/ratings/staff_views.py:232 aligulac/ratings/staff_views.py:487
 #, python-format
 msgid "Could not make match %(pla)s vs %(plb)s: possible duplicate found."
 msgstr ""
+"Skapade inte matchen mellan %(pla)s och %(plb)s: en möjlig dubblett hittades."
 
 #: aligulac/ratings/staff_views.py:239 aligulac/ratings/staff_views.py:495
 #, python-format
 msgid "Unknown race in %(pla)s vs %(plb)s: set to random."
 msgstr ""
+"Okänd ras i matchen mellan %(pla)s och %(plb)s så den sätts till "
+"\"slumpmässig\"."
 
 #: aligulac/ratings/staff_views.py:260
 #, python-format
 msgid "Successfully approved %i match."
 msgid_plural "Successfully approved %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lyckades med godkännandet av %i match."
+msgstr[1] "Lyckades med godkännandet av %i matcher."
 
 #: aligulac/ratings/staff_views.py:268
 #, python-format
 msgid "Successfully rejected %i match."
 msgid_plural "Successfully rejected %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lyckades med nekandet av %i match."
+msgstr[1] "Lyckades med nekandet av %i matcher."
 
 #: aligulac/ratings/staff_views.py:280 templates/add.html:65
 msgid "Source"
-msgstr ""
+msgstr "Källa"
 
 #: aligulac/ratings/staff_views.py:282 templates/add.html:71
 msgid "Notes"
-msgstr ""
+msgstr "Anteckningar"
 
 #: aligulac/ratings/staff_views.py:374
 #, python-format
 msgid "Could not parse '%(line)s' (%(error)s)."
-msgstr ""
+msgstr "Klarade inte av att tolka \"%(line)s\" (%(error)s)."
 
 #: aligulac/ratings/staff_views.py:396
 #, python-format
 msgid "Error creating match '%(line)s' (%(error)s)."
-msgstr ""
+msgstr "Fel vid skapandet av match \"%(line)s\" (%(error)s)."
 
 #: aligulac/ratings/staff_views.py:412
 #, python-format
 msgid "Successfully added %i match."
 msgid_plural "Successfully added %i matches."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lade till %i match."
+msgstr[1] "Lade till %i matcher."
 
 #: aligulac/ratings/staff_views.py:421
 #, python-format
 msgid "Closed '%s'."
-msgstr ""
+msgstr "Avslutade \"%s\"."
 
 #: aligulac/ratings/staff_views.py:424
 #, python-format
 msgid "Did not close '%s'."
-msgstr ""
+msgstr "Kunde inte avsluta \"%s\"."
 
 #: aligulac/ratings/staff_views.py:505
 msgid "Parent ID"
-msgstr ""
+msgstr "Förälder ID"
 
 #: aligulac/ratings/staff_views.py:507
 msgid "Other"
-msgstr ""
+msgstr "Annat"
 
 #: aligulac/ratings/staff_views.py:508
 msgid "Group stage and playoffs"
-msgstr ""
+msgstr "Gruppspel med slutspel"
 
 #: aligulac/ratings/staff_views.py:509
 msgid "Groups A through D"
-msgstr ""
+msgstr "Grupper A till D"
 
 #: aligulac/ratings/staff_views.py:510
 msgid "Groups A through H"
-msgstr ""
+msgstr "Grupper A till H"
 
 #: aligulac/ratings/staff_views.py:511
 msgid "Ro64→Final"
-msgstr ""
+msgstr "32-delsfinal→Final"
 
 #: aligulac/ratings/staff_views.py:512
 msgid "Ro32→Final"
-msgstr ""
+msgstr "16-delsfinal→Final"
 
 #: aligulac/ratings/staff_views.py:513
 msgid "Ro16→Final"
-msgstr ""
+msgstr "8-delsfinal→Final"
 
 #: aligulac/ratings/staff_views.py:514
 msgid "Ro8→Final"
-msgstr ""
+msgstr "Kvartsfinal→Final"
 
 #: aligulac/ratings/staff_views.py:515
 msgid "Ro4→Final"
-msgstr ""
+msgstr "Semifinal→Final"
 
 #: aligulac/ratings/staff_views.py:516
 msgid "Ro64→Final + 3rd place"
-msgstr ""
+msgstr "32-delsfinal→Final + match om tredje pris"
 
 #: aligulac/ratings/staff_views.py:517
 msgid "Ro32→Final + 3rd place"
-msgstr ""
+msgstr "16-delsfinal→Final + match om tredje pris"
 
 #: aligulac/ratings/staff_views.py:518
 msgid "Ro16→Final + 3rd place"
-msgstr ""
+msgstr "8-delsfinal→Final + match om tredje pris"
 
 #: aligulac/ratings/staff_views.py:519
 msgid "Ro8→Final + 3rd place"
-msgstr ""
+msgstr "Kvartsfinal→Final + match om tredje pris"
 
 #: aligulac/ratings/staff_views.py:520
 msgid "Ro4→Final + 3rd place"
-msgstr ""
+msgstr "Semifinal→Final + match om tredje pris"
 
 #: aligulac/ratings/staff_views.py:521
 msgid "Ro64→Final + early rounds"
-msgstr ""
+msgstr "32-delsfinal→Final + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:522
 msgid "Ro32→Final + early rounds"
-msgstr ""
+msgstr "16-delsfinal→Final + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:523
 msgid "Ro16→Final + early rounds"
-msgstr ""
+msgstr "8-delsfinal→Final + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:524
 msgid "Ro8→Final + early rounds"
-msgstr ""
+msgstr "Kvartsfinal→Final + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:525
 msgid "Ro4→Final + early rounds"
-msgstr ""
+msgstr "Semifinal→Final + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:527
 msgid "Ro64→Final + 3rd place and early rounds"
-msgstr ""
+msgstr "32-delsfinal→Final + match om tredje pris + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:528
 msgid "Ro32→Final + 3rd place and early rounds"
-msgstr ""
+msgstr "16-delsfinal→Final + match om tredje pris + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:529
 msgid "Ro16→Final + 3rd place and early rounds"
-msgstr ""
+msgstr "8-delsfinal→Final + match om tredje pris + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:530
 msgid "Ro8→Final + 3rd place and early rounds"
-msgstr ""
+msgstr "Kvartsfinal→Final + match om tredje pris + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:531
 msgid "Ro4→Final + 3rd place and early rounds"
-msgstr ""
+msgstr "Semifinal→Final + match om tredje pris + tidiga rundor"
 
 #: aligulac/ratings/staff_views.py:532
 msgid "WB, LB, Final"
@@ -3468,317 +3516,320 @@ msgstr ""
 
 #: aligulac/ratings/staff_views.py:537
 msgid "Predefined names"
-msgstr ""
+msgstr "Fördefinerade namn"
 
 #: aligulac/ratings/staff_views.py:538
 msgid "Custom names"
-msgstr ""
+msgstr "Annat namn"
 
 #: aligulac/ratings/staff_views.py:540
 msgid "Big"
-msgstr ""
+msgstr "Stor"
 
 #: aligulac/ratings/staff_views.py:541
 msgid "No print"
-msgstr ""
+msgstr "Göm namn"
 
 #: aligulac/ratings/staff_views.py:562
 #, python-format
 msgid "Could not find event ID %s."
-msgstr ""
+msgstr "Hittade inte turneringen med ID %s."
 
 #: aligulac/ratings/staff_views.py:567
 msgid "Must specify an event to close."
-msgstr ""
+msgstr "Du måste välja vilken turnering som ska avslutas."
 
 #: aligulac/ratings/staff_views.py:571
 msgid "No event names specified."
-msgstr ""
+msgstr "Inga turneringsnamn angivna."
 
 #: aligulac/ratings/staff_views.py:611
 #, python-format
 msgid "Successfully created %i new event."
 msgid_plural "Successfully created %i new events."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lyckades med att skapa %i nya turnering."
+msgstr[1] "Lyckades med att skapa %i nya turneringar."
 
 #: aligulac/ratings/staff_views.py:618
 msgid "Successfully closed event."
-msgstr ""
+msgstr "Lyckades med stänga turneringen."
 
 #: aligulac/ratings/staff_views.py:624
 msgid "Source ID"
-msgstr ""
+msgstr "Källans ID"
 
 #: aligulac/ratings/staff_views.py:625
 msgid "Target ID"
-msgstr ""
+msgstr "Målets ID"
 
-#: aligulac/ratings/staff_views.py:626 aligulac/ratings/staff_views.py:695
+#: aligulac/ratings/staff_views.py:626 aligulac/ratings/staff_views.py:697
 msgid "Confirm"
-msgstr ""
+msgstr "Bekräfta"
 
 #: aligulac/ratings/staff_views.py:640 aligulac/ratings/staff_views.py:646
 #, python-format
 msgid "No player with ID %i."
-msgstr ""
+msgstr "Ingen spelare med ID %i."
 
 #: aligulac/ratings/staff_views.py:660
 msgid "Please confirm player merge."
-msgstr ""
+msgstr "Var vänlig och bekräfta sammanslagningen av spelarna."
 
 #: aligulac/ratings/staff_views.py:682
 #, python-format
 msgid "%(source)s was successfully merged into %(target)s."
-msgstr ""
+msgstr "Lyckades med ihopslagningen av %(source)s och %(target)s."
 
-#: aligulac/ratings/staff_views.py:684
+#: aligulac/ratings/staff_views.py:686
 msgid "The merging is complete"
 msgstr ""
 
-#: aligulac/ratings/staff_views.py:693
+#: aligulac/ratings/staff_views.py:695
 msgid "Event ID to move"
-msgstr ""
+msgstr "ID för turneringen som ska flyttas"
 
-#: aligulac/ratings/staff_views.py:694
+#: aligulac/ratings/staff_views.py:696
 msgid "New parent ID"
-msgstr ""
+msgstr "Nytt förälder-ID"
 
-#: aligulac/ratings/staff_views.py:709 aligulac/ratings/staff_views.py:715
+#: aligulac/ratings/staff_views.py:711 aligulac/ratings/staff_views.py:717
 #, python-format
 msgid "No event with ID %i."
-msgstr ""
+msgstr "Igen turnering hittades med ID %i."
 
-#: aligulac/ratings/staff_views.py:722
+#: aligulac/ratings/staff_views.py:724
 msgid "Can't move an event to one of its descendants."
-msgstr ""
+msgstr "Kan inte flytta en turnering till en utav dess underturneringar."
 
-#: aligulac/ratings/staff_views.py:740
+#: aligulac/ratings/staff_views.py:742
 msgid "Please confirm event move."
-msgstr ""
+msgstr "Var vänlig och bekräfta flytten av turneringen."
 
-#: aligulac/ratings/staff_views.py:795
+#: aligulac/ratings/staff_views.py:797
 #, python-format
 msgid "Reopened '%s'."
-msgstr ""
+msgstr "Ångrade avslutandet av \"%s\"."
 
-#: aligulac/ratings/staff_views.py:804 templates/add.html:12
+#: aligulac/ratings/staff_views.py:806 templates/add.html:12
 msgid "Submit results"
-msgstr ""
+msgstr "Lägg till resultat"
 
-#: aligulac/ratings/staff_views.py:833 templates/review.html:12
+#: aligulac/ratings/staff_views.py:835 templates/review.html:12
 msgid "Review results"
-msgstr ""
+msgstr "Godkänn resultat"
 
-#: aligulac/ratings/staff_views.py:865 templates/eventmgr.html:11
+#: aligulac/ratings/staff_views.py:867 templates/eventmgr.html:11
 msgid "Manage events"
-msgstr ""
+msgstr "Hantera turneringar"
 
-#: aligulac/ratings/staff_views.py:902
+#: aligulac/ratings/staff_views.py:904
 #, python-format
 msgid "Successfully closed %i event."
 msgid_plural "Successfully closed %i events."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lyckades med avslutandet av %i turnering."
+msgstr[1] "Lyckades med avslutandet av %i turneringar."
 
-#: aligulac/ratings/staff_views.py:912
+#: aligulac/ratings/staff_views.py:914
 #, python-format
 msgid "Successfully marked %i event as having no prize pool."
 msgid_plural "Successfully marked %i events as having no prize pool."
 msgstr[0] ""
+"Lyckades med markerandet att %i turnering inte innefattade några prispengar."
 msgstr[1] ""
+"Lyckades med markerandet att %i turneringar inte innefattade några "
+"prispengar."
 
 #: aligulac/ratings/team_views.py:87
 msgid "short name"
-msgstr ""
+msgstr "kort namn"
 
 #: aligulac/ratings/team_views.py:248 templates/player_transfers.html:6
 msgid "Recent player transfers"
-msgstr ""
+msgstr "Senaste spelarövergångarna"
 
 #: aligulac/ratings/tools.py:55
 msgid "Euro"
-msgstr ""
+msgstr "Euro"
 
 #: aligulac/ratings/tools.py:56
 msgid "British Pound"
-msgstr ""
+msgstr "Britiska pund"
 
 #: aligulac/ratings/tools.py:57
 msgid "Australian Dollar"
-msgstr ""
+msgstr "Australiensiska dollar"
 
 #: aligulac/ratings/tools.py:58
 msgid "New-Zealand Dollar"
-msgstr ""
+msgstr "Nyzeeländska dollar"
 
 #: aligulac/ratings/tools.py:59
 msgid "US Dollar"
-msgstr ""
+msgstr "Amerikanska dollar"
 
 #: aligulac/ratings/tools.py:60
 msgid "Canadian Dollar"
-msgstr ""
+msgstr "Kanadensiska dollar"
 
 #: aligulac/ratings/tools.py:61
 msgid "Swiss Franc"
-msgstr ""
+msgstr "Schweiziska frank"
 
 #: aligulac/ratings/tools.py:62
 msgid "Norwegian Krona"
-msgstr ""
+msgstr "Norska kronor"
 
 #: aligulac/ratings/tools.py:63
 msgid "Swedish Krona"
-msgstr ""
+msgstr "Svenska kronor"
 
 #: aligulac/ratings/tools.py:64
 msgid "Danish Krona"
-msgstr ""
+msgstr "Danska kronor"
 
 #: aligulac/ratings/tools.py:65
 msgid "Japanese Yen"
-msgstr ""
+msgstr "Japanska yen"
 
 #: aligulac/ratings/tools.py:66
 msgid "Chinese Renminbi"
-msgstr ""
+msgstr "Kinesiska renminbi"
 
 #: aligulac/ratings/tools.py:67
 msgid "South Korean won"
-msgstr ""
+msgstr "Sydkoreanska won"
 
 #: aligulac/ratings/tools.py:68
 msgid "Singapore Dollar"
-msgstr ""
+msgstr "Singaporianska dollar"
 
 #: aligulac/ratings/tools.py:69
 msgid "Indonesian Rupiah"
-msgstr ""
+msgstr "Indonesiska rupiah"
 
 #: aligulac/ratings/tools.py:70
 msgid "Thai Baht"
-msgstr ""
+msgstr "Thailändska baht"
 
 #: aligulac/ratings/tools.py:71
 msgid "Taiwan Dollar"
-msgstr ""
+msgstr "Taiwanesiska dollar"
 
 #: aligulac/ratings/tools.py:72
 msgid "Hong Kong Dollar"
-msgstr ""
+msgstr "Hongkongdollar"
 
 #: aligulac/ratings/tools.py:73
 msgid "Philippines Peso"
-msgstr ""
+msgstr "Filippinska peso"
 
 #: aligulac/ratings/tools.py:74
 msgid "Indian Rupee"
-msgstr ""
+msgstr "Indiska rupier"
 
 #: aligulac/ratings/tools.py:75
 msgid "Malaysian Ringgit"
-msgstr ""
+msgstr "Malaysiska ringgit"
 
 #: aligulac/ratings/tools.py:76
 msgid "Vietnamese Dong"
-msgstr ""
+msgstr "Vietnamesiska dong"
 
 #: aligulac/ratings/tools.py:77
 msgid "Brazilian Real"
-msgstr ""
+msgstr "Brasilianska real"
 
 #: aligulac/ratings/tools.py:78
 msgid "Peruvian Nuevo Sol"
-msgstr ""
+msgstr "Peruanska nuevo sol"
 
 #: aligulac/ratings/tools.py:79
 msgid "Argentine Peso"
-msgstr ""
+msgstr "Argentinska peso"
 
 #: aligulac/ratings/tools.py:80
 msgid "Mexican Peso"
-msgstr ""
+msgstr "Mexikanska peso"
 
 #: aligulac/ratings/tools.py:81
 msgid "Chilean Peso"
-msgstr ""
+msgstr "Chilenska peso"
 
 #: aligulac/ratings/tools.py:82
 msgid "Colombian Peso"
-msgstr ""
+msgstr "Colombianska peso"
 
 #: aligulac/ratings/tools.py:83
 msgid "Jamaican Dollar"
-msgstr ""
+msgstr "Jamaikanska dollar"
 
 #: aligulac/ratings/tools.py:84
 msgid "Trinidad and Tobago Dollar"
-msgstr ""
+msgstr "Trinidaddollar"
 
 #: aligulac/ratings/tools.py:85
 msgid "Bermudian Dollar"
-msgstr ""
+msgstr "Bermudiska dollar"
 
 #: aligulac/ratings/tools.py:86
 msgid "Czech Koruna"
-msgstr ""
+msgstr "Tjeckiska kronor"
 
 #: aligulac/ratings/tools.py:87
 msgid "Polish Zloty"
-msgstr ""
+msgstr "Polska złoty"
 
 #: aligulac/ratings/tools.py:88
 msgid "Turkish Lira"
-msgstr ""
+msgstr "Turkiska lira"
 
 #: aligulac/ratings/tools.py:89
 msgid "Hungarian Forint"
-msgstr ""
+msgstr "Ungerska forint"
 
 #: aligulac/ratings/tools.py:90
 msgid "Romanian Leu"
-msgstr ""
+msgstr "Rumänska leu"
 
 #: aligulac/ratings/tools.py:91
 msgid "Russian Ruble"
-msgstr ""
+msgstr "Rysska rubel"
 
 #: aligulac/ratings/tools.py:92
 msgid "Croatian kuna"
-msgstr ""
+msgstr "Kroatiska kuna"
 
 #: aligulac/ratings/tools.py:93
 msgid "Kazakhstani Tenge"
-msgstr ""
+msgstr "Kazakstansk tenge"
 
 #: aligulac/ratings/tools.py:94
 msgid "Israeli Shekel"
-msgstr ""
+msgstr "Israelisk shekel"
 
 #: aligulac/ratings/tools.py:95
 msgid "United Arab Emirates Dirham"
-msgstr ""
+msgstr "Emiratiska dirham"
 
 #: aligulac/ratings/tools.py:96
 msgid "Qatari Riyal"
-msgstr ""
+msgstr "Qatariska rial"
 
 #: aligulac/ratings/tools.py:97
 msgid "Saudi Riyal"
-msgstr ""
+msgstr "Saudiarabiska rial"
 
 #: aligulac/ratings/tools.py:98
 msgid "Egyptian Pound"
-msgstr ""
+msgstr "Egyptiska pund"
 
 #: aligulac/ratings/tools.py:99
 msgid "South African Rand"
-msgstr ""
+msgstr "Sydafrikanska pund"
 
 #: aligulac/ratings/tools.py:100
 msgid "Bitcoin"
-msgstr ""
+msgstr "Bitcoin"
 
 #: aligulac/ratings/tools.py:189
 #, python-format
@@ -3820,191 +3871,191 @@ msgstr ""
 
 #: aligulac/ratings/templatetags/ratings_extras.py:464
 msgid "January"
-msgstr ""
+msgstr "Januari"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:465
 msgid "February"
-msgstr ""
+msgstr "Februari"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:466
 msgid "March"
-msgstr ""
+msgstr "Mars"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:467
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:468
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:469
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:470
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:471
 msgid "August"
-msgstr ""
+msgstr "Augusti"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:472
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:473
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:474
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:475
 msgid "December"
-msgstr ""
+msgstr "December"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:476
 msgid "Jan."
-msgstr ""
+msgstr "Jan."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:477
 msgid "Feb."
-msgstr ""
+msgstr "Feb."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:478
 msgid "Aug."
-msgstr ""
+msgstr "Aug."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:479
 msgid "Sept."
-msgstr ""
+msgstr "Sept."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:480
 msgid "Oct."
-msgstr ""
+msgstr "Oct."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:481
 msgid "Nov."
-msgstr ""
+msgstr "Nov."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:482
 msgid "Dec."
-msgstr ""
+msgstr "Dec."
 
 #: aligulac/ratings/templatetags/ratings_extras.py:483
 msgid "jan"
-msgstr ""
+msgstr "jan"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:484
 msgid "feb"
-msgstr ""
+msgstr "feb"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:485
 msgid "mar"
-msgstr ""
+msgstr "mar"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:486
 msgid "apr"
-msgstr ""
+msgstr "apr"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:487
 msgid "may"
-msgstr ""
+msgstr "maj"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:488
 msgid "jun"
-msgstr ""
+msgstr "jun"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:489
 msgid "jul"
-msgstr ""
+msgstr "jul"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:490
 msgid "aug"
-msgstr ""
+msgstr "aug"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:491
 msgid "sep"
-msgstr ""
+msgstr "sep"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:492
 msgid "oct"
-msgstr ""
+msgstr "oct"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:493
 msgid "nov"
-msgstr ""
+msgstr "nov"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:494
 msgid "dec"
-msgstr ""
+msgstr "dec"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:495
 msgid "Monday"
-msgstr ""
+msgstr "Måndag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:496
 msgid "Tuesday"
-msgstr ""
+msgstr "Tisdag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:497
 msgid "Wednesday"
-msgstr ""
+msgstr "Onsdag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:498
 msgid "Thursday"
-msgstr ""
+msgstr "Torsdag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:499
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:500
 msgid "Saturday"
-msgstr ""
+msgstr "Lördag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:501
 msgid "Sunday"
-msgstr ""
+msgstr "Söndag"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:502
 msgid "mon"
-msgstr ""
+msgstr "mån"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:503
 msgid "tue"
-msgstr ""
+msgstr "tis"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:504
 msgid "wed"
-msgstr ""
+msgstr "ons"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:505
 msgid "thu"
-msgstr ""
+msgstr "tors"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:506
 msgid "fri"
-msgstr ""
+msgstr "fre"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:507
 msgid "sat"
-msgstr ""
+msgstr "lör"
 
 #: aligulac/ratings/templatetags/ratings_extras.py:508
 msgid "sun"
-msgstr ""
+msgstr "sön"
 
 #: templates/404.html:12
 msgid "The page you were looking for was nowhere to be found. Sorry!"
-msgstr ""
+msgstr "Sidan du letade efter finns inte!"
 
 #: templates/500.html:12
 msgid "An unspeakable awful indescribable horror has occured."
-msgstr ""
+msgstr "Ett förfärligt och jättehemskt fel har inträffat."
 
 #: templates/500.html:14
 #, python-format
@@ -4012,34 +4063,36 @@ msgid ""
 "Try to send me an e-mail at %(email)s where you describe what you were "
 "trying to do when this happened."
 msgstr ""
+"Prova att skicka ett mail till mig (%(email)s) och beskriv vad du gjorde för "
+"att få det här felet."
 
 #: templates/add.html:19
 msgid "The following entries were successfully submitted"
-msgstr ""
+msgstr "Följande inlägg lades till"
 
 #: templates/add.html:20
 msgid "They are pending review before being visible."
-msgstr ""
+msgstr "De behöver granskas innan de blir synliga."
 
 #: templates/add.html:34
 msgid "Show:"
-msgstr ""
+msgstr "Visa:"
 
 #: templates/add.html:35
 msgid "guide"
-msgstr ""
+msgstr "guide"
 
 #: templates/add.html:36
 msgid "match syntax"
-msgstr ""
+msgstr "matchsyntax"
 
 #: templates/add.html:37
 msgid "examples"
-msgstr ""
+msgstr "exempel"
 
 #: templates/add.html:38
 msgid "common problems"
-msgstr ""
+msgstr "vanliga problem"
 
 #: templates/add.html:45
 msgid ""
@@ -4047,14 +4100,17 @@ msgid ""
 "in.  Please provide as much information as possible. (Rounds, day number, "
 "week number, etc.)"
 msgstr ""
+"Vad som helst som kan hjälpa till vid identifieringen av turneringen som "
+"matcherna spelades i. Var vänlig och lägg till så mycket information som "
+"möjligt. (Rundor, dag, vecka, etc.)"
 
 #: templates/add.html:49
 msgid "Event object"
-msgstr ""
+msgstr "Turneringsobjekt"
 
 #: templates/add.html:50
 msgid "The event the games were played in."
-msgstr ""
+msgstr "Turneringen matcherna spelades i."
 
 #: templates/add.html:52
 #, python-format
@@ -4063,26 +4119,33 @@ msgid ""
 "these are the final games associated with an event object, please close it "
 "afterwards."
 msgstr ""
+"Om du inte kan hitta det korrekta turneringsobjektet så måste du %(a)sskapa "
+"det</a>. Om dessa matcher är de sista som ska läggas till i turneringen så "
+"ska du avsluta den efteråt."
 
 #: templates/add.html:55
 msgid "Date played"
-msgstr ""
+msgstr "Datum"
 
 #: templates/add.html:56
 msgid ""
 "The date the games were played (as accurate as possible). This will be used "
 "to check for possible duplicates."
 msgstr ""
+"Datumet då matcherna spelades (så exakt som möjligt). Detta kommer att "
+"användas för att leta efter eventuella dubbletter."
 
 #: templates/add.html:59
 msgid "Indicate which version of SC2 the games were played on."
-msgstr ""
+msgstr "Fyll i vilken version av SC2 som matcherna spelades med."
 
 #: templates/add.html:62
 msgid ""
 "Use <strong>offline</strong> for games that were played at a live "
 "tournament, otherwise use <strong>online</strong>."
 msgstr ""
+"Använd <strong>offline</strong> för matcher som spelades under en "
+"liveturnering, annars använd <strong>online</strong>."
 
 #: templates/add.html:66
 msgid ""
@@ -4090,17 +4153,22 @@ msgid ""
 "example: official tournament brackets, Liquipedia page or Team Liquid live "
 "report thread)."
 msgstr ""
+"En länk till en pålitlig källa där resultaten kan dubbelkollas (t.ex. "
+"officiella turneringsträd, Liquipediasidor eller Team Liquids "
+"liverapporteringstrådar)."
 
 #: templates/add.html:69
 msgid ""
 "(Optional) A way to contact you if we have questions about your submission. "
 "E-mail, Team Liquid username, Reddit username etc. are fine."
 msgstr ""
+"(Valfritt) Ett sätt att kontakta dig på vid frågor. E-mail, Team Liquid-"
+"användarnamn, Reddit-användarnamn o.s.v går bra."
 
 #: templates/add.html:72
 msgid ""
 "(Optional) Any extra information you have that may or may not be of use."
-msgstr ""
+msgstr "(Valfritt) Annan extra information som kan vara till använding."
 
 #: templates/add.html:76
 #, python-format
@@ -4108,42 +4176,50 @@ msgid ""
 "A list of the results you want to add. Please see %(a)smatch syntax</a> for "
 "more information."
 msgstr ""
+"En lista över de matcher du vill lägga till. Var vänlig och kolla upp "
+"%(a)smatchsyntaxen</a> för mer information."
 
 #: templates/add.html:80
 #, python-format
 msgid ""
 "Please check out %(tag)scommon problems</a> if you are unsure about a player."
-msgstr ""
+msgstr "Kolla upp %(tag)scommon problems</a> om du är osäker om en spelare."
 
 #: templates/add.html:84
 msgid ""
 "Each line corresponds to a match, and should be entered using this format:"
-msgstr ""
+msgstr "Varje rad motsvarar en match, och ska matas in i följande format:"
 
 #: templates/add.html:87 templates/matchlist.html:41
 msgid "Score"
-msgstr ""
+msgstr "Poäng"
 
 #: templates/add.html:91
 msgid ""
 "The player information must uniquely identify the player, and should be "
 "space-separated list of any of the following:"
 msgstr ""
+"Spelarinformationen måste otvetydigt identifiera spelaren, och ska vara en "
+"mellanrumsseparerad lista av något av det följande:"
 
 #: templates/add.html:93
 msgid ""
 "The player information does not have to uniquely identify the player, and "
 "should be a space-separated list of any of the following:"
 msgstr ""
+"Spelarinformationen måste otvetydigt identifiera spelaren, och ska vara en "
+"mellanrumsseparerad lista av något av det följande:"
 
 #: templates/add.html:97 templates/predict.html:40
 msgid "Player tag, e.g. \"DongRaeGu\"."
-msgstr ""
+msgstr "Spelar nick, t.ex. \"DongRaeGu\"."
 
 #: templates/add.html:98
 msgid ""
 "Race, i.e. \"P\", \"T\", \"Z\", \"R\" (Random) or \"S\" (Race Switcher)."
 msgstr ""
+"Ras, d.v.s. \"P\", \"T\", \"Z\", \"R\" (slumpmässig, från \"Random\") eller "
+"\"S\" (rasbytare, från \"Switcher\")."
 
 #: templates/add.html:99
 #, python-format
@@ -4152,16 +4228,21 @@ msgid ""
 "or \"KOR\", or the common English name of a country (the latter will only "
 "work if the country name does not contain spaces."
 msgstr ""
+"En två eller tre bokstäver lång %(a)sISO 3166-1 alpha-2 landskod</a>, t.ex. "
+"\"KR\" eller \"KOR\", eller det vanliga engelska namnet på landet (fungerar "
+"bara om landet är ett ord och inte innehåller några bindestreck)."
 
 #: templates/add.html:100 templates/predict.html:43
 msgid "Team name, e.g. \"MVP\"."
-msgstr ""
+msgstr "Lagnamn, t.ex. \"MVP\"."
 
 #: templates/add.html:101
 msgid ""
 "Player or team aliases, e.g. \"DRG\". The most common ones should be "
 "recognized by the system"
 msgstr ""
+"Spelar- eller lagalias, t.ex. \"DRG\". De flesta vanliga namnen borde kännas "
+"igen."
 
 #: templates/add.html:102
 #, python-format
@@ -4169,6 +4250,8 @@ msgid ""
 "A player ID number, which you can get from the URL of the %(a)splayer page</"
 "a>, e.g. \"4\"."
 msgstr ""
+"Spelarens ID som du kan få från länken till %(a)sspelarens sida</a>, t.ex. "
+"\"4\"."
 
 #: templates/add.html:105
 #, python-format
@@ -4178,18 +4261,26 @@ msgid ""
 "%(clause)s clause at the <strong>end</strong> of the player information. For "
 "example, if MorroW plays Protoss, you can do this:"
 msgstr ""
+"Om du lägger till en match som spelades av en rasbytare så måste du ange "
+"vilken ras spelaren spelade som. Detta gör du genom att lägga till en "
+"%(clause)s-term på <strong>slutet</strong> av spelarinformationen. Till "
+"exempel, om MorroW spelar protoss så kan du skriva:"
 
 #: templates/add.html:109
 msgid ""
 "Please also provide race information about random players whenever this is "
 "known, though it's not required."
 msgstr ""
+"Var vänlig och lägg till rasinformation om spelare som spelar med "
+"slumpmässig ras, om möjligt."
 
 #: templates/add.html:111
 msgid ""
 "Everything is based on case-insensitive search. There is no recognizable "
 "difference between \"Mvp\" (the player) and \"MVP\" (the team)."
 msgstr ""
+"Ingen skillnad görs på gemener och versaler. Det är alltså ingen skillnad på "
+"\"Mvp\" (spelaren) och \"MVP\" (laget)."
 
 #: templates/add.html:114
 msgid ""
@@ -4197,12 +4288,17 @@ msgid ""
 "Some entries might produce warnings, in which case you will be notified "
 "about what to do. This happens when:"
 msgstr ""
+"Vid inskickning kommer systemet att försöka lägga till så många matcher som "
+"möjligt. Skulle några matcher orsaka varningar så kommer du att bli "
+"notifierad om detta. Det kan hända när:"
 
 #: templates/add.html:117
 msgid ""
 "a player is not uniquely identified. In this case, add more information. Use "
 "the ID number if necessary."
 msgstr ""
+"en spelare inte är otvetydigt identifierad. I det här fallet måste du lägga "
+"till mer information. Använd ID-nummret om det behövs."
 
 #: templates/add.html:118
 msgid ""
@@ -4212,6 +4308,11 @@ msgid ""
 "tag and race.  Please also provide a country code if possible, and make sure "
 "the player tag is spelled correctly (including capitalisation)."
 msgstr ""
+"en spelare inte kan hittas. I det här fallet, lägg till flaggan \"<strong>!"
+"MAKE</strong>\" på slutet av respektive rad(er). Då kommer en spelare skapas "
+"om det är nödvändigt. Du <strong>måste</strong> ange spelarens nick och ras. "
+"Lägg även till landsinformation om det ör möjligt, och se till att spelarens "
+"nick är rätstavat (inklusive versalisering)."
 
 #: templates/add.html:119
 msgid ""
@@ -4221,6 +4322,10 @@ msgid ""
 "to the end of the respective line(s). This will force the match to be "
 "entered."
 msgstr ""
+"en dubblett hittades. Om du är säker på att spelarna har spelat mer än en "
+"match inom en dag med samma resultat, lägg till flaggan \"<strong>!DUP</"
+"strong>\" på slutet av respektive rad(er). Detta ser till att matchen läggs "
+"till oavsett."
 
 #: templates/add.html:122
 msgid ""
@@ -4228,6 +4333,10 @@ msgid ""
 "player can't be found, or if the information provided applies to more than "
 "one player, that's fine. We will fix it when reviewing the submission."
 msgstr ""
+"Vid inskickning av resultaten kommer systemet att försöka hitta så många "
+"spelare som möjligt. Det gör inget om en spelare inte kan hittas, eller om "
+"informationen inte är tillräckligt för att otvetydigt identifiera en "
+"spelare. Vi fixar det när vi granskar resultaten."
 
 #: templates/add.html:124
 msgid ""
@@ -4237,6 +4346,10 @@ msgid ""
 "strong>\" to the end of the match description. This will force the match to "
 "be entered."
 msgstr ""
+"Systemet kommer också att försöka undvika dubbletter. Du kommer se en "
+"varning om det verkar som att matchen redan finns i databasen. För att "
+"undvika detta kan du lägga till flaggan \"<strong>!DUP</strong>\" på slutet "
+"av matchbeskrivningen. Detta ser till att matchen läggs till ändå."
 
 #: templates/add.html:127
 #, python-format
@@ -4244,56 +4357,68 @@ msgid ""
 "Most players are uniquely identifiable through their nickname alone. For a "
 "list of the most common exceptions, please look at %(a)scommon problems</a>."
 msgstr ""
+"De flesta spelarna går att identifiera genom att enbart ange deras nick. För "
+"att få se en lista med de vanligaste undantagen, se %(a)slistan över vanliga "
+"problem</a>."
 
 #: templates/add.html:131
 msgid "Here are some real-world examples. From the GSL:"
-msgstr ""
+msgstr "Här är några exempel. Från GSL:"
 
 #: templates/add.html:139
 msgid ""
 "Some players have to be identified by race and/or country, such as Creator:"
 msgstr ""
+"Vissa spelare måste identifieras med hjälp av rasen och/eller landet, t.ex. "
+"Creator:"
 
 #: templates/add.html:143
 msgid ""
 "Some players have aliases to help entering their names, such as BBoongBBoong:"
 msgstr ""
+"Vissa spelare har alias som hjälper till vid inmatningen, t.ex. BBoongBBoong:"
 
 #: templates/add.html:147
 msgid "Some players are more easily identified by team, such as Mvp and HerO:"
 msgstr ""
+"Vissa spelare är enklast att identifiera med hjälp av deras lag, t.ex. Mvp "
+"och HerO:"
 
 #: templates/add.html:154
 msgid ""
 "Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer and Clarity "
 "KiLLeR should be identified by team."
 msgstr ""
+"Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer och Clarity "
+"KiLLeR bör identifieras med hjälp av deras lag."
 
 #: templates/add.html:155
 msgid ""
 "Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need "
 "to be identified by race and/or country."
 msgstr ""
+"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, och Top behöver "
+"ras och/eller land för att kunna identifieras."
 
 #: templates/add.html:157
 msgid "Common country codes"
-msgstr ""
+msgstr "Vanliga landskoder"
 
 #: templates/add.html:166
 msgid "USA"
-msgstr ""
+msgstr "USA"
 
 #: templates/add.html:172 templates/review.html:84
 msgid "Commit"
-msgstr ""
+msgstr "Skicka"
 
 #: templates/add.html:173
 msgid "Commit and close event"
-msgstr ""
+msgstr "Skicka och avsluta turnering"
 
 #: templates/api.html:28
 msgid "API access key"
-msgstr ""
+msgstr "API-nyckel"
 
 #: templates/api.html:30
 #, python-format
@@ -4302,6 +4427,10 @@ msgid ""
 "please use %(a)sthis form</a>. You will have to provide your name (or the "
 "name of the organization), and a contact e-mail address."
 msgstr ""
+"För att använda Aligulacs API behöver du en API-nyckel. För att generera en "
+"så måste du fylla i %(a)sdet här formuläret</a>. Där måste du ange ditt namn "
+"(eller namnet på din organisation), och en e-mailadress som vi kan kontakta "
+"dig på."
 
 #: templates/api.html:32
 msgid ""
@@ -4310,10 +4439,14 @@ msgid ""
 "make as a parameter named <code>apikey</code>. In the rest of this document, "
 "this parameter will be implied."
 msgstr ""
+"Om förfrågan lyckas så kommer du att få en 20 tecken lång textsträng. Den "
+"behöver anges varje gång du gör en förfrågning till API:t genom att ange "
+"parametern <code>apikey</code>. Den parametern är underförstådd i resten av "
+"detta dokument."
 
 #: templates/api.html:34
 msgid "API overview"
-msgstr ""
+msgstr "API-översikt"
 
 #: templates/api.html:36
 #, python-format
@@ -4322,6 +4455,9 @@ msgid ""
 "%(uri)s</code>. Requests to this URI will return a JSON object describing "
 "the available resources and their root URIs, e.g."
 msgstr ""
+"Det mesta av API:t är självdokumenterande. Rot-URI:en är <code>%(uri)s</"
+"code>. Förfrågningar till denna URL returnerar ett JSON-objekt med en "
+"beskrivning av de tillgängliga resurserna och deras rot-URI:er, t.ex."
 
 #: templates/api.html:53
 #, python-format
@@ -4329,6 +4465,8 @@ msgid ""
 "<strong>NOTE:</strong> For making requests in the browser, please append "
 "%(json)s to the URI."
 msgstr ""
+"<strong>NOTERA:</strong> För att göra förfrågningar i webbläsaren måste du "
+"lägga till %(json)s till URI:en."
 
 #: templates/api.html:55
 #, python-format
@@ -4804,35 +4942,39 @@ msgstr ""
 
 #: templates/clocks.html:10
 msgid "Days since…"
-msgstr ""
+msgstr "Dagar sedan..."
 
 #: templates/clocks.html:34
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "år"
+msgstr[1] "år"
 
 #: templates/clocks.html:37
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dag"
+msgstr[1] "dagar"
 
 #: templates/clocks.html:60 templates/matchlist.html:156
 msgid "Y-m-d"
-msgstr ""
+msgstr "Y-m-d"
 
 #: templates/clocks.html:81
 msgid ""
 "<b>Major</b> is defined by being a tournament where the first place prize "
 "money exceeds $2,000."
 msgstr ""
+"En <b>mellanstor</b> turnering är en turnering där förstapris utgörs av "
+"minst 2 000 dollar."
 
 #: templates/clocks.html:82
 msgid ""
 "<b>Premier</b> is defined by being an offline tournament where the first "
 "place prize money exceeds $10,000"
 msgstr ""
+"En <b>stor</b> turnering är en turnering där förstapris utgörs av minst 10 "
+"000 dollar."
 
 #: templates/clocks.html:83
 #, python-format
@@ -4841,10 +4983,13 @@ msgid ""
 "for this being that it's hard use their definition when doing a database "
 "lookup as their definitions aren't well-defined."
 msgstr ""
+"Dessa definitioner skiljer sig från %(a)sLiquipedias</a> definitioner av "
+"\"premier\" och \"major\" då deras definitioner är svåra att använda när man "
+"ska kolla upp saker i en databas."
 
 #: templates/db.html:16
 msgid "Last ratings update"
-msgstr ""
+msgstr "Senaste uppdateringen"
 
 #: templates/db.html:18 templates/db.html.py:93
 msgid "F jS, Y, H:i e"
@@ -4852,41 +4997,41 @@ msgstr ""
 
 #: templates/db.html:19
 msgid "log"
-msgstr ""
+msgstr "logg"
 
 #: templates/db.html:25 templates/db.html.py:31 templates/db.html.py:38
 #: templates/db.html:45 templates/db.html.py:52
 #: templates/reports_balance.html:82 templates/reports_balance.html.py:90
 #: templates/reports_balance.html:98
 msgid "games"
-msgstr ""
+msgstr "game"
 
 #: templates/db.html:25 templates/db.html.py:32 templates/db.html.py:39
 #: templates/db.html:46 templates/db.html.py:53
 msgid "matches"
-msgstr ""
+msgstr "matcher"
 
 #: templates/db.html:57
 msgid "Matches with event info"
-msgstr ""
+msgstr "Matcher med turneringsinfo"
 
 #: templates/db.html:61
 msgid "Uncatalogued matches"
-msgstr ""
+msgstr "Okategoriserade matcher"
 
 #: templates/db.html:67
 #, python-format
 msgid "%(nplayers)s, of which %(nkoreans)s Koreans"
-msgstr ""
+msgstr "%(nplayers)s, varav %(nkoreans)s är koreaner"
 
 #: templates/db.html:74
 #, python-format
 msgid "%(nteams)s, of which %(nactive)s active"
-msgstr ""
+msgstr "%(nteams)s, varav %(nactive)s aktiva"
 
 #: templates/db.html:78
 msgid "Top submitters (number of matches)"
-msgstr ""
+msgstr "Användare med flest inskickade matcher"
 
 #: templates/db.html:88
 #, python-format
@@ -4903,64 +5048,71 @@ msgid ""
 "as of %(datetime)s (UTC %(tz)s). It is free to use for non-commercial "
 "purposes if you credit this website when doing so."
 msgstr ""
+"Du kan ladda ner en PostgreSQL-dump <a href=\"%(dump)s\">här</a> (%(dumpmb)s "
+"MiB) och <a href=\"%(gzdump)s\">här</a> (%(gzdumpmb)s MiB gzippad), skapad "
+"%(datetime)s (UTC %(tz)s). Det är tillåtet att använda den i icke-"
+"kommersiella sammanhang så länge du visar att den kommer härifrån."
 
 #: templates/db.html:98
 msgid ""
 "The dump contains 11 tables. Some columns are foreign keys to tables that "
 "have been removed from the dump (primarily involving user accounts)."
 msgstr ""
+"Databasdumpen innehåller 11 tabeller. Några kolonner innehåller nycklar till "
+"andra tabeller som har tagits bort från dumpen (t.ex. de som innehåller "
+"användarkonton)"
 
 #: templates/earnings.html:19
 #, python-format
 msgid "In %(year)s, %(origpp)s (%(totalpp)s) was awarded in prize money."
-msgstr ""
+msgstr "Under %(year)s har %(origpp)s (%(totalpp)s) delats ut i prispengar."
 
 #: templates/earnings.html:21
 #, python-format
 msgid "In total, %(origpp)s (%(totalpp)s) was awarded in prize money."
-msgstr ""
+msgstr "Totalt har %(origpp)s (%(totalpp)s) delats ut i prispengar."
 
 #: templates/earnings.html:23
 #, python-format
 msgid "In %(year)s, %(totalpp)s was awarded in prize money."
-msgstr ""
+msgstr "Under %(year)s har %(totalpp)s delats ut i prispengar."
 
 #: templates/earnings.html:25
 #, python-format
 msgid "In total, %(totalpp)s was awarded in prize money."
-msgstr ""
+msgstr "Totalt har %(totalpp)s delats ut i prispengar."
 
 #: templates/earnings.html:28
 msgid "The filters came up empty. :("
-msgstr ""
+msgstr "Allt filtrerades bort. :("
 
 #: templates/earnings.html:32
 msgid "Filter by year:"
-msgstr ""
+msgstr "Filtrera efter år:"
 
 #: templates/earnings.html:41
 msgid "Filter by country:"
-msgstr ""
+msgstr "Filtrera efter land:"
 
-#: templates/earnings.html:49
+#: templates/earnings.html:51
 msgid "Filter by currency:"
-msgstr ""
+msgstr "Filtrera efter valuta:"
 
 #. Translators: The verb "to filter".
-#: templates/earnings.html:57 templates/history.html:42
+#: templates/earnings.html:59 templates/history.html:42
 #: templates/period.html:392 templates/player_results.html:20
 msgid "Filter"
-msgstr ""
+msgstr "Filtrera"
 
-#: templates/earnings.html:80
+#: templates/earnings.html:82
 #, python-format
 msgid "Page %(page)s/%(npages)s"
-msgstr ""
+msgstr "Sida %(page)s/%(npages)s"
 
-#: templates/earnings.html:108 templates/player.html:486
+#: templates/earnings.html:110 templates/player.html:486
 #: templates/team.html:97
 msgid "Total earnings"
-msgstr ""
+msgstr "Summa prispengar"
 
 #: templates/eventmgr.html:17
 msgid ""
@@ -4985,6 +5137,9 @@ msgid ""
 "Do not repeat information. If you have an event called «Qualifiers», the "
 "subevents should not be called «Korean Qualifiers». Just «Korea» is fine."
 msgstr ""
+"Upprepa inte information. Om du har en turnering vid namn \"Qualifiers\", så "
+"ska inte underturneringarna heta \"Korean Qualifiers\". Det räcker med "
+"\"Korea\"."
 
 #: templates/eventmgr.html:25
 msgid ""
@@ -5096,29 +5251,29 @@ msgstr ""
 #: templates/period.html:198 templates/period.html.py:336
 #: templates/reports_balance.html:79 templates/reports_balance.html.py:82
 msgid "PvT"
-msgstr ""
+msgstr "PvT"
 
 #: templates/eventres.html:119 templates/eventres.html.py:267
 #: templates/period.html:214 templates/period.html.py:342
 #: templates/reports_balance.html:87 templates/reports_balance.html.py:90
 msgid "PvZ"
-msgstr ""
+msgstr "PvZ"
 
 #: templates/eventres.html:135 templates/eventres.html.py:273
 #: templates/period.html:230 templates/period.html.py:348
 #: templates/reports_balance.html:95 templates/reports_balance.html.py:98
 msgid "TvZ"
-msgstr ""
+msgstr "TvZ"
 
 #. Translators: Mirror matchups
 #: templates/eventres.html:151 templates/eventres.html.py:279
 #: templates/period.html:245 templates/period.html.py:354
 msgid "Mirrors"
-msgstr ""
+msgstr "Spegelmatcher"
 
 #: templates/eventres.html:173
 msgid "Details"
-msgstr ""
+msgstr "Detaljer"
 
 #. Translators: Short for "add SUBevent".
 #: templates/eventres.html:178
@@ -5160,42 +5315,44 @@ msgstr ""
 
 #: templates/eventres.html:281 templates/period.html:356
 msgid "PvP"
-msgstr ""
+msgstr "PvP"
 
 #: templates/eventres.html:282 templates/period.html:356
 msgid "TvT"
-msgstr ""
+msgstr "TvT"
 
 #: templates/eventres.html:283 templates/period.html:356
 msgid "ZvZ"
-msgstr ""
+msgstr "ZvZ"
 
 #: templates/eventres.html:289 templates/player.html:502
 #: templates/team.html:109
 msgid "External"
-msgstr ""
+msgstr "Externa länkar"
 
 #: templates/eventres.html:296 templates/eventres.html.py:299
 #: templates/eventres.html:302 templates/eventres.html.py:305
 #: templates/eventres.html:308
 msgid "TLPD"
-msgstr ""
+msgstr "TLPD"
 
 #: templates/eventres.html:312 templates/events_open.html:38
 #: templates/events_open.html.py:83 templates/events_open.html:131
 msgid "TL"
-msgstr ""
+msgstr "TL"
 
 #. Translators: LP = Liquipedia
 #: templates/eventres.html:315 templates/events_open.html:41
 #: templates/events_open.html.py:87 templates/events_open.html:135
 #: templates/player.html:515 templates/team.html:115
 msgid "LP"
-msgstr ""
+msgstr "LP"
 
 #: templates/eventres.html:326
 msgid "This event is still <strong>open</strong>. Games may be added."
 msgstr ""
+"Den här turneringen är forfarande <strong>oavslutad</strong>. Matcher kan "
+"fortfarande läggas till."
 
 #: templates/eventres.html:330
 msgid ""
@@ -5345,17 +5502,17 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: templates/forms.html:96
+#: templates/forms.html:100
 msgctxt "between x and y inclusive"
 msgid "between"
 msgstr ""
 
-#: templates/forms.html:99
+#: templates/forms.html:103
 msgctxt "between x and y inclusive"
 msgid "and"
 msgstr ""
 
-#: templates/forms.html:102
+#: templates/forms.html:106
 msgctxt "between x and y inclusive"
 msgid "inclusive"
 msgstr ""
@@ -5442,202 +5599,202 @@ msgstr ""
 
 #: templates/index.html:42
 msgid "Download PNG image"
-msgstr ""
+msgstr "Ladda ner PNG-bild"
 
 #: templates/index.html:43
 msgid "Download JPEG image"
-msgstr ""
+msgstr "Ladda ner JPEG-bild"
 
 #: templates/index.html:44
 msgid "Download PDF document"
-msgstr ""
+msgstr "Ladda ner PDF-dokument"
 
 #: templates/index.html:45
 msgid "Download SVG vector image"
-msgstr ""
+msgstr "Ladda ner SVG-bild"
 
 #: templates/index.html:46
 msgid "Loading..."
-msgstr ""
+msgstr "Laddar..."
 
 #: templates/index.html:47
 msgid "Print chart"
-msgstr ""
+msgstr "Skriv ut graf"
 
 #: templates/index.html:48
 msgid "Reset zoom"
-msgstr ""
+msgstr "Nollställ zoom"
 
 #: templates/index.html:50
 msgctxt "Big first letter"
 msgid "January"
-msgstr ""
+msgstr "Januari"
 
 #: templates/index.html:51
 msgctxt "Big first letter"
 msgid "February"
-msgstr ""
+msgstr "Februari"
 
 #: templates/index.html:52
 msgctxt "Big first letter"
 msgid "March"
-msgstr ""
+msgstr "Mars"
 
 #: templates/index.html:53
 msgctxt "Big first letter"
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: templates/index.html:54 templates/index.html.py:68
 msgctxt "Big first letter"
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: templates/index.html:55
 msgctxt "Big first letter"
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: templates/index.html:56
 msgctxt "Big first letter"
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: templates/index.html:57
 msgctxt "Big first letter"
 msgid "August"
-msgstr ""
+msgstr "Augusti"
 
 #: templates/index.html:58
 msgctxt "Big first letter"
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: templates/index.html:59
 msgctxt "Big first letter"
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: templates/index.html:60
 msgctxt "Big first letter"
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: templates/index.html:61
 msgctxt "Big first letter"
 msgid "December"
-msgstr ""
+msgstr "December"
 
 #: templates/index.html:64
 msgctxt "Big first letter"
 msgid "Jan"
-msgstr ""
+msgstr "Jan"
 
 #: templates/index.html:65
 msgctxt "Big first letter"
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
 #: templates/index.html:66
 msgctxt "Big first letter"
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 #: templates/index.html:67
 msgctxt "Big first letter"
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 #: templates/index.html:69
 msgctxt "Big first letter"
 msgid "Jun"
-msgstr ""
+msgstr "Jun"
 
 #: templates/index.html:70
 msgctxt "Big first letter"
 msgid "Jul"
-msgstr ""
+msgstr "Jul"
 
 #: templates/index.html:71
 msgctxt "Big first letter"
 msgid "Aug"
-msgstr ""
+msgstr "Aug"
 
 #: templates/index.html:72
 msgctxt "Big first letter"
 msgid "Sep"
-msgstr ""
+msgstr "Sep"
 
 #: templates/index.html:73
 msgctxt "Big first letter"
 msgid "Oct"
-msgstr ""
+msgstr "Okt"
 
 #: templates/index.html:74
 msgctxt "Big first letter"
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 #: templates/index.html:75
 msgctxt "Big first letter"
 msgid "Dec"
-msgstr ""
+msgstr "Dec"
 
 #: templates/index.html:78
 msgctxt "Big first letter"
 msgid "Sunday"
-msgstr ""
+msgstr "Söndag"
 
 #: templates/index.html:79
 msgctxt "Big first letter"
 msgid "Monday"
-msgstr ""
+msgstr "Måndag"
 
 #: templates/index.html:80
 msgctxt "Big first letter"
 msgid "Tuesday"
-msgstr ""
+msgstr "Tisdag"
 
 #: templates/index.html:81
 msgctxt "Big first letter"
 msgid "Wednesday"
-msgstr ""
+msgstr "Onsdag"
 
 #: templates/index.html:82
 msgctxt "Big first letter"
 msgid "Thursday"
-msgstr ""
+msgstr "Torsdag"
 
 #: templates/index.html:83
 msgctxt "Big first letter"
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: templates/index.html:84
 msgctxt "Big first letter"
 msgid "Saturday"
-msgstr ""
+msgstr "Lördag"
 
 #: templates/index.html:125
 msgid "DEVELOPMENT SERVER"
-msgstr ""
+msgstr "UTVECKLINGSSERVER"
 
 #: templates/index.html:128
 msgid "StarCraft 2 Progaming Statistics and Predictions"
-msgstr ""
+msgstr "StarCraft 2 Statistik och Inferenser"
 
 #: templates/index.html:161 templates/language.html:11
 #: templates/language.html.py:17
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #: templates/index.html:165
 msgid "Find player, team or event:"
-msgstr ""
+msgstr "Hitta spelare, lag eller turnering:"
 
 #: templates/index.html:186
 msgid "Current top 10"
-msgstr ""
+msgstr "Aktuell topp 10"
 
 #: templates/index.html:191
 #, python-format
@@ -5645,12 +5802,16 @@ msgid ""
 "The above list is a preview of the next rating list, which will be finalized "
 "on %(dt)s."
 msgstr ""
+"Ovanstående lista är en förhandstitt av nästa rankinglista, som kommer att "
+"finaliseras den %(dt)s."
 
 #: templates/index.html:203
 #, python-format
 msgid ""
 "Find us on %(a1)sTwitter</a>, %(a2)sGitHub</a> and #aligulac on quakenet."
 msgstr ""
+"Hitta och följ oss på %(a1)sTwitter</a>, %(a2)sGitHub</a> och #aligulac på "
+"quakenet."
 
 #: templates/index.html:210
 #, python-format
@@ -5658,6 +5819,8 @@ msgid ""
 "Powered by %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> "
 "and %(a4)sDebian GNU/Linux 6</a>."
 msgstr ""
+"Byggd med %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> och "
+"%(a4)sDebian GNU/Linux 6</a>."
 
 #: templates/index.html:215
 #, python-format
@@ -5665,41 +5828,44 @@ msgid ""
 "Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Charts by "
 "%(a3)sHighcharts</a>."
 msgstr ""
+"Ikoner av Mark James. Rasikoner av %(a1)sLiquipedia</a>. Grafer av "
+"%(a3)sHighcharts</a>."
 
 #: templates/index.html:219
 msgid "Generate short URL for this page"
-msgstr ""
+msgstr "Generera en kort URL för denna sida"
 
 #. Translators: I would like to use Aligulac in [a certain language]
 #: templates/language.html:21
 msgid "I would like to use Aligulac in…"
-msgstr ""
+msgstr "Jag skulle vilja använda Aligulac på..."
 
 #: templates/language.html:46
 #, python-format
 msgid ""
 "You could always %(a)shelp us</a> translate Aligulac into your language."
 msgstr ""
+"Du kan alltid %(a)shjälpa oss</a> med att översätta Aligulac till ditt språk."
 
 #: templates/language.html:48
 msgid "For reasons of convenience, the following will not be translated:"
-msgstr ""
+msgstr "Av bekvämlighetsskäl kommer följande inte att översättas:"
 
 #: templates/language.html:51
 msgid "News"
-msgstr ""
+msgstr "Nyheter"
 
 #: templates/language.html:53
 msgid "Event names"
-msgstr ""
+msgstr "Turneringsnamn"
 
 #: templates/language.html:54
 msgid "Team names"
-msgstr ""
+msgstr "Lagnamn"
 
 #: templates/language.html:55
 msgid "Player nicknames"
-msgstr ""
+msgstr "Spelarnicks"
 
 #: templates/login.html:16
 #, python-format
@@ -5711,66 +5877,68 @@ msgstr ""
 
 #: templates/login.html:22
 msgid "Username:"
-msgstr ""
+msgstr "Användarnamn:"
 
 #: templates/login.html:26
 msgid "Password:"
-msgstr ""
+msgstr "Lösenord:"
 
 #: templates/manage.html:11
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Diverse"
 
 #: templates/manage.html:14
 msgid "Miscellaneous administration"
-msgstr ""
+msgstr "Diverse administrering"
 
 #: templates/manage.html:18
 msgid "Merge players"
-msgstr ""
+msgstr "Slå ihop spelare"
 
 #: templates/manage.html:27
 msgid "CAREFUL:"
-msgstr ""
+msgstr "VAR FÖRSIKTIG:"
 
 #. Translators: This will merge X into Y
 #: templates/manage.html:29
 msgid "This will merge"
-msgstr ""
+msgstr "Detta kommer att slå ihop"
 
 #. Translators: This will merge X into Y
 #: templates/manage.html:31
 msgid "into"
-msgstr ""
+msgstr "och"
 
 #: templates/manage.html:54
 msgid "Merge"
-msgstr ""
+msgstr "Slå ihop"
 
 #: templates/manage.html:69
 msgid "Move events"
-msgstr ""
+msgstr "Flytta turnering"
 
 #: templates/manage.html:79
 #, python-format
 msgid "This will move %(src)s and all events under it (%(cnt)s) to %(trg)s."
 msgstr ""
+"Detta kommer att flytta %(src)s och alla dess underturneringar (%(cnt)s st.) "
+"till %(trg)s."
 
 #: templates/manage.html:86
 msgid "Move"
-msgstr ""
+msgstr "Flytta"
 
 #: templates/matchlist.html:40
 msgid "Player A"
-msgstr ""
+msgstr "Spelare A"
 
 #: templates/matchlist.html:42
 msgid "Player B"
-msgstr ""
+msgstr "Spelare B"
 
 #: templates/matchlist.html:66 templates/matchlist.html.py:104
 msgid "Unknown event(s)"
-msgstr ""
+msgstr "Okänd(a) turnering(ar)"
 
 #: templates/matchlist.html:76 templates/matchlist.html.py:77
 #: templates/matchlist.html:109 templates/matchlist.html.py:110
@@ -5778,7 +5946,7 @@ msgstr ""
 #: templates/matchlist.html:145 templates/matchlist.html.py:146
 #: templates/review.html:35
 msgid "hide"
-msgstr ""
+msgstr "göm"
 
 #: templates/matchlist.html:76 templates/matchlist.html.py:77
 #: templates/matchlist.html:109 templates/matchlist.html.py:110
@@ -5786,19 +5954,19 @@ msgstr ""
 #: templates/matchlist.html:145 templates/matchlist.html.py:146
 #: templates/review.html:35
 msgid "show"
-msgstr ""
+msgstr "visa"
 
 #. Translators: Check
 #: templates/matchlist.html:82 templates/matchlist.html.py:114
 #: templates/review.html:36
 msgid "chk"
-msgstr ""
+msgstr "mrk"
 
 #. Translators: Uncheck
 #: templates/matchlist.html:84 templates/matchlist.html.py:115
 #: templates/review.html:37
 msgid "unchk"
-msgstr ""
+msgstr "avmkr"
 
 #: templates/matchlist.html:234
 msgid "unrated"
@@ -5807,332 +5975,332 @@ msgstr ""
 #. Translators: No spaces
 #: templates/matchlist.html:238
 msgid "offline,online"
-msgstr ""
+msgstr "offline,online"
 
 #: templates/misc.html:10
 msgid "Miscellaneous Statistics"
-msgstr ""
+msgstr "Diverse statistik"
 
 #: templates/period.html:10 templates/period.html.py:301
 #, python-format
 msgid "List %(n)s"
-msgstr ""
+msgstr "Lista %(n)s"
 
 #: templates/period.html:27
 msgid "best"
-msgstr ""
+msgstr "bästa"
 
 #: templates/period.html:30
 msgid "most specialized"
-msgstr ""
+msgstr "mest specializerad"
 
 #. Translators: Rating changes during a period.
 #: templates/period.html:37
 msgid "Up/Down"
-msgstr ""
+msgstr "Upp/Ner"
 
 #: templates/period.html:69 templates/period.html.py:136
 #: templates/player.html:66 templates/player.html.py:149
 #: templates/player.html:237 templates/ratingdetails.html:63
 #: templates/ratinglist.html:37 templates/ratinglist.html.py:39
 msgid "vP"
-msgstr ""
+msgstr "vP"
 
 #: templates/period.html:88 templates/period.html.py:155
 #: templates/player.html:86 templates/player.html.py:169
 #: templates/player.html:262 templates/ratingdetails.html:88
 #: templates/ratinglist.html:45 templates/ratinglist.html.py:47
 msgid "vT"
-msgstr ""
+msgstr "vT"
 
 #: templates/period.html:107 templates/period.html.py:174
 #: templates/player.html:106 templates/player.html.py:189
 #: templates/player.html:287 templates/ratingdetails.html:113
 #: templates/ratinglist.html:53 templates/ratinglist.html.py:55
 msgid "vZ"
-msgstr ""
+msgstr "vZ"
 
 #: templates/period.html:269
 msgid "Winners"
-msgstr ""
+msgstr "Vinnare"
 
 #: templates/period.html:286
 msgid "Losers"
-msgstr ""
+msgstr "Förlorare"
 
 #: templates/period.html:308
 msgid "End"
-msgstr ""
+msgstr "Slut"
 
 #: templates/period.html:312
 msgid "Active players"
-msgstr ""
+msgstr "Aktiva spelare"
 
 #: templates/period.html:314
 #, python-format
 msgid "%(cnt)s new"
 msgid_plural "%(cnt)s new"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)s ny"
+msgstr[1] "%(cnt)s nya"
 
 #: templates/period.html:318
 msgid "Leading race"
-msgstr ""
+msgstr "Ledande ras"
 
 #: templates/period.html:325
 msgid "Lagging race"
-msgstr ""
+msgstr "Tappande ras"
 
 #: templates/period.html:367
 msgid "Show races:"
-msgstr ""
+msgstr "Visa raser:"
 
 #: templates/period.html:377
 msgid "Race switchers"
-msgstr ""
+msgstr "Rasbytare"
 
 #: templates/period.html:378
 msgid "Random and race switchers"
-msgstr ""
+msgstr "Slumpmässiga och rasbytare"
 
 #: templates/periodpagenav.html:20 templates/periodpagenav.html.py:41
 #: templates/periodpagenav.html:70
 msgid "previous"
-msgstr ""
+msgstr "föregående"
 
 #: templates/periodpagenav.html:27
 msgid "previous period"
-msgstr ""
+msgstr "föregående period"
 
 #: templates/periodpagenav.html:34
 msgid "first"
-msgstr ""
+msgstr "första"
 
 #: templates/periodpagenav.html:49
 msgid "next"
-msgstr ""
+msgstr "nästa"
 
 #: templates/periodpagenav.html:56
 msgid "last"
-msgstr ""
+msgstr "sista"
 
 #: templates/periodpagenav.html:63
 msgid "next period"
-msgstr ""
+msgstr "nästa period"
 
 #: templates/periods.html:15
 msgid "List date"
-msgstr ""
+msgstr "Listdatum"
 
 #. Translators: Overpowered
 #: templates/periods.html:17
 msgid "OP"
-msgstr ""
+msgstr "OP"
 
 #. Translators: Underpowered
 #: templates/periods.html:19
 msgid "UP"
-msgstr ""
+msgstr "UP"
 
 #: templates/periods.html:20
 msgid "Active"
-msgstr ""
+msgstr "Aktiva"
 
 #. Translators: All-time winrates
 #: templates/player.html:29
 msgid "all-time"
-msgstr ""
+msgstr "Alla"
 
 #. Translators: Recent winrates
 #: templates/player.html:33
 msgid "form"
-msgstr ""
+msgstr "form"
 
 #. Translators: Highest ratings
 #: templates/player.html:37
 msgid "highest"
-msgstr ""
+msgstr "högsta"
 
 #: templates/player.html:40
 msgid "rivalries"
-msgstr ""
+msgstr "rivaliteter"
 
 #: templates/player.html:224 templates/player.html.py:249
 #: templates/player.html:274 templates/player.html.py:299
 msgctxt "on date"
 msgid "on"
-msgstr ""
+msgstr "den"
 
 #: templates/player.html:319
 msgid "Biggest rival"
 msgid_plural "Biggest rivals"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Den största rivalen"
+msgstr[1] "De största rivalerna"
 
 #: templates/player.html:329
 #, python-format
 msgid "%(cnt)s match"
 msgid_plural "%(cnt)s matches"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)s match"
+msgstr[1] "%(cnt)s matcher"
 
 #: templates/player.html:338
 msgid "Nemesis"
 msgid_plural "Nemeses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ärkefiende"
+msgstr[1] "Ärkefiender"
 
 #: templates/player.html:358
 msgid "Victim"
 msgid_plural "Victims"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Offer"
+msgstr[1] "Offer"
 
 #: templates/player.html:388
 msgid "Edit info"
-msgstr ""
+msgstr "Redigera"
 
 #: templates/player.html:389
 msgid "Admin interface"
-msgstr ""
+msgstr "Adminsida"
 
 #: templates/player.html:389
 msgctxt "admin interface"
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: templates/player.html:414 templates/team.html:84
 msgid "Rank"
-msgstr ""
+msgstr "Rank"
 
 #. Translators: World rank.
 #: templates/player.html:418
 #, python-format
 msgid "#%(rank)s World"
-msgstr ""
+msgstr "#%(rank)s i världen"
 
 #. Translators: Rank among non-Koreans.
 #: templates/player.html:428
 #, python-format
 msgid "#%(rank)s Non-Korean"
-msgstr ""
+msgstr "#%(rank)s bland icke-koreaner"
 
 #. Translators: Rank in a country.
 #: templates/player.html:439
 #, python-format
 msgid "#%(rank)s %(countryfull)s"
-msgstr ""
+msgstr "#%(rank)s i %(countryfull)s"
 
 #: templates/player.html:448
 msgid "Full name"
-msgstr ""
+msgstr "Namn"
 
 #: templates/player.html:454 templates/team.html:39
 msgid "AKA"
-msgstr ""
+msgstr "Alias"
 
 #: templates/player.html:474
 msgid "First match"
-msgstr ""
+msgstr "Första matchen"
 
 #: templates/player.html:480
 msgid "Last match"
-msgstr ""
+msgstr "Senaste matchen"
 
 #: templates/player.html:491
 msgid "Matches played"
-msgstr ""
+msgstr "Antal matcher spelade"
 
 #. Translators: SC2E = sc2earnings.com
 #: templates/player.html:511
 msgid "SC2E"
-msgstr ""
+msgstr "SC2E"
 
 #: templates/player.html:564
 #, python-format
 msgid "Rating history for %(tag)s"
-msgstr ""
+msgstr "Ratinghistorik för %(tag)s"
 
 #: templates/player.html:624
 msgid "Number of games"
-msgstr ""
+msgstr "Antal game"
 
 #: templates/player.html:636
 msgid "vs. Protoss"
-msgstr ""
+msgstr "mot protoss"
 
 #: templates/player.html:648
 msgid "vs. Terran"
-msgstr ""
+msgstr "mot terran"
 
 #: templates/player.html:660
 msgid "vs. Zerg"
-msgstr ""
+msgstr "mot zerg"
 
 #. Translators: General rating
 #: templates/player.html:673
 msgid "General"
-msgstr ""
+msgstr "Generell"
 
 #. Translators: Stories are the dots on a player's rating chart.
 #: templates/player.html:686
 msgid "Stories"
-msgstr ""
+msgstr "Händelser"
 
 #: templates/player.html:703
 msgid "Team switches"
-msgstr ""
+msgstr "Lagbyten"
 
 #: templates/player.html:725
 msgid "Most recent results"
-msgstr ""
+msgstr "Senaste matcherna"
 
 #: templates/player.html:732
 msgid "Team history"
-msgstr ""
+msgstr "Laghistorik"
 
 #: templates/player.html:736 templates/player_transfers.html:17
 #: templates/team.html:178
 msgid "Joined"
-msgstr ""
+msgstr "Gick med"
 
 #. Translators: As in "to leave", not "not right".
 #: templates/player.html:737 templates/player_transfers.html:15
 #: templates/team.html:179
 msgid "Left"
-msgstr ""
+msgstr "Lämnade"
 
 #. Translators: Earnings for [someone]
 #: templates/player_earnings.html:12
 #, python-format
 msgid "%(tag)s earnings"
-msgstr ""
+msgstr "%(tag)s prispengar"
 
 #: templates/player_earnings.html:15
 #, python-format
 msgid "In total, %(tag)s has earned $%(money)s."
-msgstr ""
+msgstr "Totalt har %(tag)s tjänat %(money)s dollar."
 
 #: templates/player_earnings.html:17
 msgid "Broken down by currency, that is…"
-msgstr ""
+msgstr "Det är, per valuta..."
 
 #: templates/player_earnings.html:27
 msgid "Placement"
-msgstr ""
+msgstr "Placering"
 
 #: templates/player_earnings.html:29
 msgid "Tournament"
-msgstr ""
+msgstr "Turnering"
 
 #: templates/player_results.html:11
 #, python-format
 msgid "%(tag)s match history"
-msgstr ""
+msgstr "%(tag)s matchhistorik"
 
 #: templates/player_results.html:16
 msgid "Filter by"
-msgstr ""
+msgstr "Filtrera efter"
 
 #: templates/player_results.html:34
 #, python-format
@@ -6140,32 +6308,35 @@ msgid ""
 "In these games, %(tag)s is %(sc_my)s–%(sc_op)s (%(pctg)s%%) in games and "
 "%(msc_my)s–%(msc_op)s (%(mpctg)s%%) in matches."
 msgstr ""
+"Bland dessa matcher är %(tag)s %(sc_my)s–%(sc_op)s (%(pctg)s%%) i game och "
+"%(msc_my)s–%(msc_op)s (%(mpctg)s%%) i matcher."
 
 #: templates/player_results.html:42
 msgid "Postable History"
-msgstr ""
+msgstr "Postbar historik"
 
 #: templates/player_results.html:46
 #, python-format
 msgid "The above is code that can be used in posts on %(a)sTeamLiquid.net</a>."
 msgstr ""
+"Det ovanstående är kod som kan användas i inlägg på %(a)sTeamLiquid.net</a>."
 
 #: templates/pred_4pswiss.html:16 templates/pred_rrgroup.html:17
 #: templates/pred_rrgroup.html.py:63 templates/pred_sebracket.html:16
 #: templates/ratinglist.html:20 templates/recordlist.html:10
 #: templates/teams.html:16
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: templates/pred_4pswiss.html:65 templates/pred_proleague.html:58
 #: templates/pred_rrgroup.html:59 templates/pred_sebracket.html:58
 msgid ""
 "This is the median outcome <em>assuming the already entered results</em>."
-msgstr ""
+msgstr "Detta är medianresultatet <em>givet de redan inmatade resultaten</em>."
 
 #: templates/pred_4pswiss.html:71 templates/pred_rrgroup.html:105
 msgid "Update group progress"
-msgstr ""
+msgstr "Uppdatera gruppen"
 
 #: templates/pred_4pswiss.html:73 templates/pred_proleague.html:66
 #: templates/pred_rrgroup.html:107 templates/pred_sebracket.html:66
@@ -6173,148 +6344,152 @@ msgid ""
 "To modify a result, click on the score in the table below. To view detailed "
 "predictions for a match, click the arrow."
 msgstr ""
+"För att modifiera ett resultat klickar du på poängen i tabellen nedan. För "
+"att se detaljerad information om en match klickar du på pilen."
 
 #: templates/pred_4pswiss.html:82 templates/pred_proleague.html:75
 #: templates/pred_rrgroup.html:116 templates/pred_sebracket.html:75
 msgid "Update results"
-msgstr ""
+msgstr "Uppdatera resultat"
 
 #: templates/pred_4pswiss.html:89 templates/pred_proleague.html:82
 #: templates/pred_rrgroup.html:123 templates/pred_sebracket.html:82
 msgid "Clear results"
-msgstr ""
+msgstr "Rensa resultat"
 
 #. Translators: Something that can be posted on a forum.
 #: templates/pred_4pswiss.html:93 templates/pred_match.html:182
 #: templates/pred_proleague.html:86 templates/pred_rrgroup.html:127
 #: templates/pred_sebracket.html:87
 msgid "Postable"
-msgstr ""
+msgstr "Postbar"
 
 #: templates/pred_4pswiss.html:108 templates/pred_match.html:191
 #: templates/pred_proleague.html:101 templates/pred_rrgroup.html:142
 msgid "Formats:"
-msgstr ""
+msgstr "Format:"
 
 #: templates/pred_4pswiss.html:109 templates/pred_match.html:192
 #: templates/pred_proleague.html:102 templates/pred_rrgroup.html:143
 msgid "Team Liquid"
-msgstr ""
+msgstr "Team Liquid"
 
 #: templates/pred_4pswiss.html:110 templates/pred_match.html:193
 #: templates/pred_proleague.html:103 templates/pred_rrgroup.html:144
 msgid "Reddit"
-msgstr ""
+msgstr "Reddit"
 
 #: templates/pred_match.html:15
 msgid "Verdict:"
-msgstr ""
+msgstr "Dom:"
 
 #: templates/pred_match.html:16
 msgid "Even chances."
-msgstr ""
+msgstr "Jämna chanser."
 
 #: templates/pred_match.html:17
 #, python-format
 msgid "Slight advantage for %(pl)s."
-msgstr ""
+msgstr "Litet övertag för %(pl)s."
 
 #: templates/pred_match.html:18
 #, python-format
 msgid "Advantage for %(pl)s."
-msgstr ""
+msgstr "Övertag för %(pl)s."
 
 #: templates/pred_match.html:19
 #, python-format
 msgid "Large advantage for %(pl)s."
-msgstr ""
+msgstr "Stort övertag för %(pl)s."
 
 #: templates/pred_match.html:20
 #, python-format
 msgid "Overwhelming advantage for %(pl)s."
-msgstr ""
+msgstr "Överväldigande stort övertag för %(pl)s."
 
 #: templates/pred_match.html:79
 msgid "Historical score"
-msgstr ""
+msgstr "Historiska resultat"
 
 #. Translators: Opposing race here meaning the race relevant to the match being predicted.
 #: templates/pred_match.html:94
 msgid "Score vs. opposing race"
-msgstr ""
+msgstr "Poäng mot motståndarens ras"
 
 #. Translators: Form as in the current form of a player.
 #: templates/pred_match.html:109
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: templates/pred_match.html:123
 msgid "Form vs. opposing race"
-msgstr ""
+msgstr "Form mot motståndarens ras"
 
 #: templates/pred_match.html:137
 msgid "Score vs. each other"
-msgstr ""
+msgstr "Poäng mot motståndarens ras"
 
 #: templates/pred_match.html:149 templates/pred_proleague.html:64
 msgid "Update match progress"
-msgstr ""
+msgstr "Uppdatera matchen"
 
 #: templates/pred_match.html:156 templates/pred_match.html.py:162
 #, python-format
 msgid "Score for %(pl)s"
-msgstr ""
+msgstr "Poäng för %(pl)s"
 
 #. Translators: player names, so e.g. Team Jaedong vs. Team Mvp
 #: templates/pred_proleague.html:11
 #, python-format
 msgid "Team %(pla)s vs. Team %(plb)s"
-msgstr ""
+msgstr "Lag %(pla)s mot Lag %(plb)s"
 
 #. Translators: Team [player], e.g. "Team Jaedong"
 #: templates/pred_proleague.html:19 templates/pred_proleague.html.py:25
 #, python-format
 msgid "Team %(p)s"
-msgstr ""
+msgstr "Lag %(p)s"
 
 #: templates/pred_sebracket.html:23
 #, python-format
 msgid "Top %(num)s"
-msgstr ""
+msgstr "Topp %(num)s"
 
 #: templates/pred_sebracket.html:64
 msgid "Update bracket progress"
-msgstr ""
+msgstr "Uppdatera trädet"
 
 #: templates/pred_sebracket.html:105
 msgid "Team Liquid (all)"
-msgstr ""
+msgstr "Team Liquid (allt)"
 
 #: templates/pred_sebracket.html:106
 msgid "Reddit (table)"
-msgstr ""
+msgstr "Reddit (tabellen)"
 
 #: templates/pred_sebracket.html:107
 msgid "Reddit (median bracket)"
-msgstr ""
+msgstr "Reddit (trädet)"
 
 #: templates/predict.html:27
 msgid "Show me the future!"
-msgstr ""
+msgstr "Förutspå framtiden!"
 
 #: templates/predict.html:28
 msgid "Parse Liquipedia Bracket!"
-msgstr ""
+msgstr "Läs in ett träd från Liquipedia!"
 
 #: templates/predict.html:37
 msgid ""
 "Enter one player per line. The player information must uniquely identify the "
 "player, and should be space-separated list of any of the following:"
 msgstr ""
+"Fyll i en spelare per rad. Spelarinformationen måste otvetydigt identifiera "
+"spelaren och ska vara en mellanrumsseparerad lista något av det följande:"
 
 #: templates/predict.html:41
 msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\"."
-msgstr ""
+msgstr "Ras, d.v.s. \"P\", \"T\", \"Z\", \"R\" eller \"S\"."
 
 #: templates/predict.html:42
 #, python-format
@@ -6322,26 +6497,32 @@ msgid ""
 "A two- or three-letter %(a)sISO 3166-1 alpha-2</a> country code. e.g. \"KR"
 "\", or the common English name of a country."
 msgstr ""
+"En två eller tre bokstäver lång %(a)sISO 3166-1 alpha-2</a> landskod, t.ex. "
+"\"KR\", eller det vanliga engelska namnet på landet."
 
 #: templates/predict.html:44
 msgid ""
 "Player or team aliases (we add these to the database when we feel like "
 "they're needed), e.g. \"DRG\"."
 msgstr ""
+"Spelar- eller lagalias (vi lägger till dessa till databasen när vi känner "
+"att de behövs), t.ex. \"DRG\"."
 
 #: templates/predict.html:45
 msgid ""
 "A player ID number, which you can get from the URL of the player page, e.g. "
 "\"4\"."
 msgstr ""
+"Spelarens ID som du kan få från länken till spelarens sida, t.ex. \"4\"."
 
 #: templates/predict.html:48 templates/results_search.html:49
 msgid "Note that everything is case insensitive."
 msgstr ""
+"Notera att det inte spelar någon roll om du använder gemener eller versaler"
 
 #: templates/predict.html:50
 msgid "For <b>single elimination brackets</b> the following is possible:"
-msgstr ""
+msgstr "För en <b>enkelutslagning</b> är det följande möjligt:"
 
 #: templates/predict.html:53
 msgid ""
@@ -6349,10 +6530,15 @@ msgid ""
 "best-of-5 for the first two rounds, and best-of-7 for the final. You can "
 "still enter a single number to apply to all rounds."
 msgstr ""
+"Att använda ett annat matchformat för varje runda. Till exempel, \"5,5,7\" "
+"betyder bäst-av-5 de två första rundorna och bäst-av-7 i finalen. Det går "
+"också bra att endast fylla i ett värde som appliceras på alla rundor."
 
 #: templates/predict.html:54
 msgid "To indicate a BYE, enter \"bye\" or a single hyphen."
 msgstr ""
+"För att indikera att en spelare fick gå vidare utan att spela matchen, skriv "
+"\"bye\" eller \"-\"."
 
 #: templates/predict.html:55
 msgid ""
@@ -6360,6 +6546,9 @@ msgid ""
 "syntax is fairly stretchy, so we make no guarantees, however. Note: you have "
 "to copy the bracket <em>code</em>."
 msgstr ""
+"Du kan kopiera trädets kod från Liquipedia och försöka att tolka det. "
+"Mediawikis syntax är dock lite opålitligt så vi lovar inget. Notera: du "
+"måste kopiera trädets <em>kod</em>."
 
 #: templates/predict.html:58
 msgid ""
@@ -6367,6 +6556,9 @@ msgid ""
 "then all the players of the other team. There must be an equal number of "
 "each, but it doesn't have to be odd."
 msgstr ""
+"För matcher i <b>proleague-format</b> så måste du fylla i alla spelarna från "
+"det första laget följt av alla spelarna från det andra laget. Självklart "
+"måste antalet spelare i båda lagen vara lika."
 
 #. Translators: Rating adjustments for [tag] on list number [listn].
 #: templates/ratingdetails.html:11
@@ -6377,7 +6569,7 @@ msgstr ""
 #: templates/ratingdetails.html:27
 #, python-format
 msgid "List %(listnumber)s"
-msgstr ""
+msgstr "Lista %(listnumber)s"
 
 #: templates/ratingdetails.html:45
 #, python-format
@@ -6393,31 +6585,31 @@ msgstr ""
 
 #: templates/ratingdetails.html:54
 msgid "Old rtg."
-msgstr ""
+msgstr "Gammal rtg."
 
 #: templates/ratingdetails.html:55
 msgid "Opposition"
-msgstr ""
+msgstr "Motstånd"
 
 #: templates/ratingdetails.html:56
 msgid "Expected score"
-msgstr ""
+msgstr "Förväntat resultat"
 
 #: templates/ratingdetails.html:57
 msgid "Actual score"
-msgstr ""
+msgstr "Faktistkt resultat"
 
 #: templates/ratingdetails.html:58
 msgid "Performance"
-msgstr ""
+msgstr "Prestation"
 
 #: templates/ratingdetails.html:59
 msgid "New rtg."
-msgstr ""
+msgstr "Ny rtg."
 
 #: templates/ratingdetails.html:60
 msgid "Adjustment"
-msgstr ""
+msgstr "Justering"
 
 #: templates/ratingdetails.html:169
 msgid "Exact game details:"
@@ -6460,39 +6652,39 @@ msgstr ""
 
 #: templates/records.html:29
 msgid "Rating PvP"
-msgstr ""
+msgstr "Rating i PvP"
 
 #: templates/records.html:30
 msgid "Rating PvT"
-msgstr ""
+msgstr "Rating i PvT"
 
 #: templates/records.html:31
 msgid "Rating PvZ"
-msgstr ""
+msgstr "Rating i PvZ"
 
 #: templates/records.html:36
 msgid "Rating TvP"
-msgstr ""
+msgstr "Rating i TvP"
 
 #: templates/records.html:37
 msgid "Rating TvT"
-msgstr ""
+msgstr "Rating i TvT"
 
 #: templates/records.html:38
 msgid "Rating TvZ"
-msgstr ""
+msgstr "Rating i TvZ"
 
 #: templates/records.html:43
 msgid "Rating ZvP"
-msgstr ""
+msgstr "Rating i ZvP"
 
 #: templates/records.html:44
 msgid "Rating ZvT"
-msgstr ""
+msgstr "Rating i ZvT"
 
 #: templates/records.html:45
 msgid "Rating ZvZ"
-msgstr ""
+msgstr "Rating i ZvZ"
 
 #: templates/reports_balance.html:14
 msgid ""
@@ -6518,7 +6710,7 @@ msgstr ""
 #: templates/reports_balance.html:59
 #, python-format
 msgid "Winrate [%%]"
-msgstr ""
+msgstr "Vinstprocent"
 
 #: templates/reports_balance.html:82 templates/reports_balance.html.py:90
 #: templates/reports_balance.html:98 templates/reports_balance.html.py:172
@@ -6551,16 +6743,16 @@ msgstr ""
 
 #: templates/reports_balance.html:124
 msgid "Performance difference"
-msgstr ""
+msgstr "Prestationsskillnad"
 
 #: templates/reports_balance.html:151
 msgid "Performance difference [points]"
-msgstr ""
+msgstr "Prestationsskillnad"
 
 #: templates/reports_balance.html:172 templates/reports_balance.html.py:180
 #: templates/reports_balance.html:188
 msgid "Difference"
-msgstr ""
+msgstr "Skillnad"
 
 #: templates/results.html:11
 #, python-format
@@ -6569,27 +6761,27 @@ msgstr ""
 
 #: templates/results.html:16
 msgid "Go to date:"
-msgstr ""
+msgstr "Hoppa till datum:"
 
 #: templates/results.html:33 templates/results.html.py:76
 msgid "previous month"
-msgstr ""
+msgstr "föregåend månad"
 
 #: templates/results.html:40 templates/results.html.py:83
 msgid "previous day"
-msgstr ""
+msgstr "föregående dag"
 
 #: templates/results.html:45 templates/results.html.py:88
 msgid "today (or latest)"
-msgstr ""
+msgstr "idag (eller senaste dagen med resultat)"
 
 #: templates/results.html:50 templates/results.html.py:93
 msgid "next day"
-msgstr ""
+msgstr "nästa dag"
 
 #: templates/results.html:57 templates/results.html.py:100
 msgid "next month"
-msgstr ""
+msgstr "nästa månad"
 
 #: templates/results.html:108
 msgid "No registered results on this date."
@@ -6610,11 +6802,11 @@ msgstr ""
 
 #: templates/results_search.html:41
 msgid "Player tag, e.g. \"DongRaeGu\""
-msgstr ""
+msgstr "Spelarnick, t.ex. \"DongRaeGu\""
 
 #: templates/results_search.html:42
 msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\""
-msgstr ""
+msgstr "Ras, d.v.s. \"P\", \"T\", \"Z\", \"R\" eller \"S\""
 
 #: templates/results_search.html:43
 #, python-format
@@ -6622,10 +6814,12 @@ msgid ""
 "A two- or three-letter <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> country "
 "code. e.g. \"KR\", or the common English name of a country"
 msgstr ""
+"En två eller tre bokstäver lång <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> "
+"landskod, t.ex. \"KR\", eller det vanliga engelska namnet på landet."
 
 #: templates/results_search.html:44
 msgid "Team name, e.g. \"MVP\""
-msgstr ""
+msgstr "Lagnamn, t.ex. \"MVP\""
 
 #: templates/results_search.html:45
 msgid ""
@@ -6732,23 +6926,23 @@ msgstr ""
 
 #: templates/team.html:33
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: templates/team.html:47
 msgid "Short name"
-msgstr ""
+msgstr "Kort namn"
 
 #: templates/team.html:53
 msgid "Founded"
-msgstr ""
+msgstr "Grundat"
 
 #: templates/team.html:59
 msgid "Disbanded"
-msgstr ""
+msgstr "Upplöst"
 
 #: templates/team.html:76 templates/teams.html:24
 msgid "Top 5 rating"
-msgstr ""
+msgstr "Topp 5 rating"
 
 #. Translators: #[rank] among [name]
 #: templates/team.html:89
@@ -6762,7 +6956,7 @@ msgstr ""
 
 #: templates/team.html:148
 msgid "Active roster"
-msgstr ""
+msgstr "Aktiva spelare"
 
 #: templates/team.html:149
 #, python-format
@@ -6777,7 +6971,7 @@ msgstr[1] ""
 
 #: templates/team.html:154
 msgid "Inactive roster"
-msgstr ""
+msgstr "Inaktiva spelare"
 
 #: templates/team.html:155
 #, python-format
@@ -6792,7 +6986,7 @@ msgstr[1] ""
 
 #: templates/team.html:160
 msgid "Non-playing members"
-msgstr ""
+msgstr "Icke-spelande medlemmar"
 
 #: templates/team.html:161
 #, python-format
@@ -6801,32 +6995,32 @@ msgstr ""
 
 #: templates/team.html:171
 msgid "Past members"
-msgstr ""
+msgstr "Tidigare spelare"
 
 #: templates/teams.html:19
 msgid "All-kill score"
-msgstr ""
+msgstr "\"All-kill\"-poäng"
 
 #: templates/teams.html:21
 msgid "Proleague score"
-msgstr ""
+msgstr "Proleague-poäng"
 
 #: templates/teams.html:57
 msgid "Disbanded teams"
-msgstr ""
+msgstr "Upplösta lag"
 
 #: templates/miniURL/list.html:9
 msgid "Short URLs list"
-msgstr ""
+msgstr "Lista över korta URL:er"
 
 #: templates/miniURL/list.html:15
 msgid "via"
-msgstr ""
+msgstr "via"
 
 #: templates/miniURL/list.html:16
 #, python-format
 msgid "created by %(sub)s"
-msgstr ""
+msgstr "skapad av %(sub)s"
 
 #: templates/miniURL/list.html:17
 #, python-format
@@ -6837,8 +7031,8 @@ msgstr[1] ""
 
 #: templates/miniURL/list.html:20
 msgid "No short URLs."
-msgstr ""
+msgstr "Inga korta URL:er."
 
 #: templates/miniURL/new.html:9
 msgid "URL shortener"
-msgstr ""
+msgstr "URL-förkortare"

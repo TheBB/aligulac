@@ -12,6 +12,7 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.views.decorators.csrf import csrf_protect
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -43,11 +44,11 @@ from ratings.tools import (
 
 # {{{ TeamModForm: Form for modifying a team.
 class TeamModForm(forms.Form):
-    name      = StrippedCharField(max_length=100, required=True, label='Name')
-    akas      = forms.CharField(max_length=200, required=False, label='AKAs')
-    shortname = StrippedCharField(max_length=100, required=False, label='Name')
-    homepage  = StrippedCharField(max_length=200, required=False, label='Homepage')
-    lp_name   = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
+    name      = StrippedCharField(max_length=100, required=True, label=_('Name'))
+    akas      = forms.CharField(max_length=200, required=False, label=_('AKAs'))
+    shortname = StrippedCharField(max_length=100, required=False, label=_('Name'))
+    homepage  = StrippedCharField(max_length=200, required=False, label=_('Homepage'))
+    lp_name   = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
 
     # {{{ Constructor
     def __init__(self, request=None, team=None):
@@ -70,7 +71,7 @@ class TeamModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -79,15 +80,15 @@ class TeamModForm(forms.Form):
         def update(value, attr, setter, label):
             if value != getattr(team, attr):
                 getattr(team, setter)(value)
-                ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
+                ret.append(Message(_('Changed %s.') % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['name'],       'name',       'set_name',       'name')
-        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    'Liquipedia title')
-        update(self.cleaned_data['shortname'],  'shortname',  'set_shortname',  'short name')
-        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   'homepage')
+        update(self.cleaned_data['name'],       'name',       'set_name',       _('name'))
+        update(self.cleaned_data['lp_name'],    'lp_name',    'set_lp_name',    _('Liquipedia title'))
+        update(self.cleaned_data['shortname'],  'shortname',  'set_shortname',  _('short name'))
+        update(self.cleaned_data['homepage'],   'homepage',   'set_homepage',   _('homepage'))
 
         if team.set_aliases(self.cleaned_data['akas'].split(',')):
-            ret.append(Message('Changed aliases.', type=Message.SUCCESS))
+            ret.append(Message(_('Changed aliases.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -124,7 +125,7 @@ def teams(request):
         'inactive': inactive,
     })
 
-    base.update({"title": "Teams"})
+    base.update({"title": _("Teams")})
 
     return render_to_response('teams.html', base)
 # }}}
@@ -134,7 +135,7 @@ def teams(request):
 def team(request, team_id):
     # {{{ Get team object and base context, generate messages and make changes if needed
     team = get_object_or_404(Group, id=team_id)
-    base = base_ctx('Ranking', None, request)
+    base = base_ctx('Teams', None, request)
 
     if request.method == 'POST' and base['adm']:
         form = TeamModForm(request)
@@ -244,7 +245,7 @@ def transfers(request):
 
     base['trades'] = pretrades[0:25]
 
-    base.update({"title": "Recent player transfers"})
+    base.update({"title": _("Recent player transfers")})
 
     return render_to_response('player_transfers.html', base)
 # }}}

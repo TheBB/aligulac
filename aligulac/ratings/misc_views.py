@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import F, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response
+from django.utils.translation import ugettext_lazy as _
 
 from itertools import zip_longest
 
@@ -29,15 +30,15 @@ from ratings.templatetags.ratings_extras import (
 def home(request):
     ctx = base_ctx('Misc', request=request)
 
-    ctx["title"] = "Miscellaneous Pages"
+    ctx["title"] = _("Miscellaneous Pages")
     ctx["miscpages"] = (
         { "url": "/misc/balance/",
-          "title": "Balance Report",
-          "desc": "Charts showing balance in StarCraft II over time."
+          "title": _("Balance Report"),
+          "desc": _("Charts showing balance in StarCraft II over time.")
         },
         { "url": "/misc/days/",
-          "title": "Number of days since...",
-          "desc": "Page showing the most recent time some things happened."
+          "title": _("Number of days since…"),
+          "desc": _("Page showing the most recent time some things happened.")
         },
     )
 
@@ -51,12 +52,12 @@ def home(request):
 
     return render_to_response("misc.html", ctx)
 
-# {{{
+# {{{ Clocks
 # Format (description, hover_description, queryset, type)
 Clock = namedtuple('Clock', ['desc', 'alt_desc', 'object', 'type', 'date', 'years', 'days', 'extra'])
 CLOCKS = [
     (
-        "MMA and DongRaeGu played a Bo5+",
+        _("MMA and DongRaeGu played a Bo5+"),
         None,
         (
             Match.objects
@@ -67,7 +68,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "Mvp won a premier event",
+        _("Mvp won a premier event"),
         None,
         Event.objects.filter(type="event",
                              earnings__player_id=13,
@@ -77,7 +78,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A Korean terran won against a Korean protoss in a Bo5+ (offline)",
+        _("A Korean terran won against a Korean protoss in a Bo5+ (offline)"),
         None,
         Match.objects.symmetric_filter(
             Q(pla__country="KR", rca="P", scb__gt=F("sca"), rcb="T", plb__country="KR")
@@ -85,7 +86,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreign terran won against a Korean protoss (offline)",
+        _("A foreign terran won against a Korean protoss (offline)"),
         None,
         Match.objects.symmetric_filter(
             Q(pla__country="KR", rca="P", scb__gt=F("sca"), rcb="T") & ~Q(plb__country="KR")
@@ -93,7 +94,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreigner won in Proleague",
+        _("A foreigner won in Proleague"),
         None,
         Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))
         .filter(eventobj__fullname__istartswith="proleague")
@@ -101,7 +102,7 @@ CLOCKS = [
         "match"
     ),
     (
-        "A foreigner won in the GSL Code S",
+        _("A foreigner won in the GSL Code S"),
         None,
         Match.objects.symmetric_filter(~Q(pla__country="KR") & Q(sca__gt=F("scb")))
         .filter(eventobj__fullname__istartswith="GSL", eventobj__fullname__icontains="Code S")
@@ -109,8 +110,8 @@ CLOCKS = [
         "match"
     ),
     (
-        "A CIS player won a major event",
-        "Player from BY, RU, UA or KZ with 1st place prize money >= $2000",
+        _("A CIS player won a major event"),
+        _("Player from BY, RU, UA or KZ with 1st place prize money >= $2000"),
         Event.objects.filter(earnings__placement=1,
                              earnings__player__country__in=["BY","RU","UA","KZ"],
                              earnings__earnings__gte=2000)
@@ -118,8 +119,8 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A Nordic player won a major event",
-        "Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000",
+        _("A Nordic player won a major event"),
+        _("Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"),
         Event.objects.filter(earnings__placement=1,
                              earnings__player__country__in=["SE", "NO", "FI"],
                              earnings__earnings__gte=2000)
@@ -127,8 +128,8 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A North American player won a major event",
-        "Player from US or CA with 1st place prize money >= $2000",
+        _("A North American player won a major event"),
+        _("Player from US or CA with 1st place prize money >= $2000"),
         Event.objects.filter(earnings__placement=1,
                              earnings__player__country__in=["US", "CA"],
                              earnings__earnings__gte=2000)
@@ -136,8 +137,8 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "A foreigner won a premier event",
-        "At least on game played offline with 1st place prize money >= $10,000",
+        _("A foreigner won a premier event"),
+        _("At least one game played offline with 1st place prize money >= $10,000"),
         (
             Event.objects
             .filter(type="event")
@@ -151,7 +152,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "Jaedong got second place in an event",
+        _("Jaedong got second place in an event"),
         None,
         (
             Event.objects
@@ -163,13 +164,13 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        "SlayerS disbanded",
+        _("SlayerS disbanded"),
         None,
         lambda: Group.objects.get(id=47).disbanded,
         "one_time"
     ),
     (
-        "HasuObs joined mousesports",
+        _("HasuObs joined mousesports"),
         None,
         lambda: GroupMembership.objects.get(player_id=83,group_id=22).start,
         "one_time"
@@ -178,9 +179,9 @@ CLOCKS = [
 
 @cache_page
 def clocks(request):
-    ctx = base_ctx('Misc', 'Days Since...', request)
+    ctx = base_ctx('Misc', 'Days Since…', request)
 
-    ctx["title"] = "Number of days since..."
+    ctx["title"] = _("Number of days since…")
     ctx["clocks"] = list()
     for desc, alt_desc, q, t in CLOCKS:
         obj = None
@@ -225,61 +226,4 @@ def clocks(request):
     ctx["clocks"].sort(key=lambda c: c.date, reverse=True)
 
     return render_to_response("clocks.html", ctx)
-# }}}
-
-# {{{ training view
-# Questions to TheBB
-def training(request, team_id):
-    team = get_object_or_404(Group, id=team_id)
-
-    allowed = [
-        ('Wake', 'mousesports'),
-        ('mouz', 'mousesports'),
-        ('TheBB', 'mousesports'),
-    ]
-
-    if not request.user.is_authenticated() or (request.user.username, team.name) not in allowed:
-        raise PermissionDenied
-
-    players = Player.objects.filter(
-        groupmembership__group=team,
-        groupmembership__current=True,
-        groupmembership__playing=True,
-    )
-
-    out = []
-
-    for rca in 'ptz':
-        players_race = players.filter(race=rca.upper())
-        for rcb in 'ptz':
-            players_race_weak = players_race
-            for other in [r for r in 'ptz' if r != rcb]:
-                players_race_weak = players_race_weak.filter(
-                    **{'current_rating__rating_v%s__lt' % rcb: F('current_rating__rating_v%s' % other)}
-                )
-
-            if players_race_weak.exists():
-                out.append('<h3>Weak %sv%s</h3><ul>' % (rca.upper(), rcb.upper()))
-                for p in players_race_weak:
-                    out.append(
-                        '<li>%s (%.0f; %+.0f)</li>' 
-                        % ( 
-                            p.tag, 
-                            ratscale(p.current_rating.get_totalrating(rcb.upper())),
-                            ratscalediff(p.current_rating.get_rating(rcb.upper())),
-                        )
-                    )
-                out.append('</ul>')
-
-                opponents = sorted(
-                    [p for p in players if p.race == rcb.upper()],
-                    key=lambda p: p.current_rating.get_totalrating(rca.upper()), reverse=True
-                )
-
-                out.append(
-                    '<p>Strongest %sv%s players are, in order: %s.</p>'
-                    % (rcb.upper(), rca.upper(), ', '.join([o.tag for o in opponents]))
-                )
-
-    return HttpResponse('\n'.join(out))
 # }}}

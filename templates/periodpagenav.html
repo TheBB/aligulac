@@ -9,6 +9,7 @@ expects the arguments:
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% if page %}
 <div class="table" style="min-width: 67em;">
@@ -16,28 +17,28 @@ expects the arguments:
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if period.id > 1 %}
             <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "prev"|img }}" alt="previous" class="btm" />
+                <img src="{{ "prev"|img }}" alt="{% trans "previous" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 21.5em; text-align: left;">
             {% if period.id > 1 %}
             <a href="/periods/{{ period.id|add:"-1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                previous period
+                {% trans "previous period" %}
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page=1&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "first"|img }}" alt="first" class="btm" />
+                <img src="{{ "first"|img }}" alt="{% trans "first" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if page > 1 %}
             <a href="?page={{ page|add:"-1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "prev"|img }}" alt="previous" class="btm" />
+                <img src="{{ "prev"|img }}" alt="{% trans "previous" %}" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -45,28 +46,28 @@ expects the arguments:
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ page|add:"1" }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "next"|img }}" alt="next" class="btm" />
+                <img src="{{ "next"|img }}" alt="{% trans "next" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if page < npages %}
             <a href="?page={{ npages }}&amp;sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "last"|img }}" alt="last" class="btm" />
+                <img src="{{ "last"|img }}" alt="{% trans "last" %}" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 21.5em; text-align: right;">
             {% if period.id < nperiods %}
             <a href="/periods/{{ period.id|add:"1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                next period
+                {% trans "next period" %}
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if period.id < nperiods %}
             <a href="/periods/{{ period.id|add:"1" }}/?sort={{ sort }}&amp;race={{ race }}&amp;nats={{ nats }}">
-                <img src="{{ "next"|img }}" alt="previous" class="btm" />
+                <img src="{{ "next"|img }}" alt="{% trans "previous" %}" class="btm" />
             </a>
             {% endif %}
         </div>

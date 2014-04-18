@@ -3,6 +3,7 @@ This prints a table of root events. Called from events.html.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 <div class="table" style="width: 67em;">
 {% for part in bigs %}
@@ -37,13 +38,14 @@ This prints a table of root events. Called from events.html.
 
 {% if smalls %}
     <form method="get" action="/results/events/">
-    <p><strong>Smaller events:</strong>
+    <p><strong>{% trans "Smaller events:" %}</strong>
     <select name="goto">
     {% for e in smalls %}
         <option value="{{ e.id }}">{{ e.name }}</option>
     {% endfor %}
     </select>
-    <input type="submit" value="Go" />
+    {% comment %}Translators: Go as in go to a page.{% endcomment %}
+    <input type="submit" value="{% trans "Go" %}" />
     </p>
     </form>
 {% endif %}

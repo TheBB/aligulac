@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext as _
 import json
 import urllib
 from aligulac import settings
@@ -94,5 +95,10 @@ class ExchangeRates(object):
 
 class RateNotFoundError(Exception):
     def __init__(self, currency, date, *args, **kwargs):
-        super().__init__("Exchange rate not found for currency"\
-                            " {} on {}".format(currency, date), *args, **kwargs)
+        super().__init__(
+            _("Exchange rate not found for currency %(code)s on %(date)s") % {
+                'code': currency,
+                'date': date,
+            }, 
+            *args, **kwargs
+        )

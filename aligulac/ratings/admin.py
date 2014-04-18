@@ -55,23 +55,64 @@ class AliasesInline(admin.TabularInline):
     model = Alias
     fields = ['name']
 
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
 class MessagesInline(admin.StackedInline):
     model = Message
-    fields = ['type', 'title', 'text']
-    extra = 1
+    fields = ['type', 'message', 'params']
+    extra = 0
+    form = MessageForm
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(MessagesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
-class StoriesInline(admin.TabularInline):
+class StoriesForm(forms.ModelForm):
+    class Meta:
+        model = Story
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
+class StoriesInline(admin.StackedInline):
+    extra = 0
     model = Story
-    fields = ['date', 'text']
+    fields = ['date', 'message', 'params']
+    form = StoriesForm
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(StoriesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
-            (None,          {'fields': ['tag','race']}),
-            ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
+        (None,          {'fields': ['tag','race']}),
+        ('Optional',    {'fields': ['name','birthday','country']}),
+        ('External',    {'fields': ['tlpd_id','lp_name','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']
@@ -164,7 +205,6 @@ class PeriodAdmin(admin.ModelAdmin):
     def recompute(self, request, queryset):
         queryset.update(needs_recompute=True)
     recompute.short_description = "Recompute selected"
-
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)

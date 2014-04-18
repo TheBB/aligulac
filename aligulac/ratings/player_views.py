@@ -10,6 +10,7 @@ from django.db.models import Sum, Q, Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -33,6 +34,8 @@ from ratings.models import (
     Player,
     RACES,
     Rating,
+    STORIES,
+    Story,
     T,
     TLPD_DBS,
     Z,
@@ -56,11 +59,11 @@ from countries import (
 )
 # }}}
 
-msg_inactive = (
+msg_inactive = _(
     'Due to %s\'s lack of recent games, they have been marked as <em>inactive</em> and '
     'removed from the current rating list. Once they play a rated game they will be reinstated.'
 )
-msg_nochart  = '%s has no rating chart on account of having played matches in fewer than two periods.'
+msg_nochart  = _('%s has no rating chart on account of having played matches in fewer than two periods.')
 
 # {{{ meandate: Rudimentary function for sorting objects with a start and end date.
 def meandate(tm):
@@ -89,20 +92,19 @@ def interp_rating(date, ratings):
 
 # {{{ PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
-    tag      = StrippedCharField(max_length=30, required=True, label='Tag')
-    race     = forms.ChoiceField(choices=RACES, required=True, label='Race')
-    name     = StrippedCharField(max_length=100, required=False, label='Name')
-    akas     = forms.CharField(max_length=200, required=False, label='AKAs')
-    birthday = forms.DateField(required=False, label='Birthday')
+    tag      = StrippedCharField(max_length=30, required=True, label=_('Tag'))
+    race     = forms.ChoiceField(choices=RACES, required=True, label=_('Race'))
+    name     = StrippedCharField(max_length=100, required=False, label=_('Name'))
+    akas     = forms.CharField(max_length=200, required=False, label=_('AKAs'))
+    birthday = forms.DateField(required=False, label=_('Birthday'))
 
-    tlpd_id  = forms.IntegerField(required=False, label='TLPD ID')
+    tlpd_id  = forms.IntegerField(required=False, label=_('TLPD ID'))
     tlpd_db  = forms.MultipleChoiceField(
-        required=False, choices=TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
-    lp_name  = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
-    sc2c_id  = forms.IntegerField(required=False, label='SC2Charts.net ID')
-    sc2e_id  = forms.IntegerField(required=False, label='SC2Earnings.com ID')
+        required=False, choices=TLPD_DBS, label=_('TLPD DB'), widget=forms.CheckboxSelectMultiple)
+    lp_name  = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
+    sc2e_id  = forms.IntegerField(required=False, label=_('SC2Earnings.com ID'))
 
-    country = forms.ChoiceField(choices=data.countries, required=False, label='Country')
+    country = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
 
     # {{{ Constructor
     def __init__(self, request=None, player=None):
@@ -116,7 +118,6 @@ class PlayerModForm(forms.Form):
                 'name':      player.name,
                 'akas':      ', '.join(player.get_aliases()),
                 'birthday':  player.birthday,
-                'sc2c_id':   player.sc2c_id,
                 'sc2e_id':   player.sc2e_id,
                 'lp_name':   player.lp_name,
                 'tlpd_id':   player.tlpd_id,
@@ -131,7 +132,7 @@ class PlayerModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -140,21 +141,21 @@ class PlayerModForm(forms.Form):
         def update(value, attr, setter, label):
             if value != getattr(player, attr):
                 getattr(player, setter)(value)
-                ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
+                # Translators: Changed something (a noun).
+                ret.append(Message(_('Changed %s.') % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['tag'],       'tag',       'set_tag',       'tag')
-        update(self.cleaned_data['race'],      'race',      'set_race',      'race')
-        update(self.cleaned_data['country'],   'country',   'set_country',   'country')
-        update(self.cleaned_data['name'],      'name',      'set_name',      'name')
-        update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  'birthday')
-        update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   'TLPD ID')
-        update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   'Liquipedia title')
-        update(self.cleaned_data['sc2c_id'],   'sc2c_id',   'set_sc2c_id',   'SC2Charts.net ID')
-        update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   'SC2Earnings.com ID')
-        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
+        update(self.cleaned_data['tag'],       'tag',       'set_tag',       _('tag'))
+        update(self.cleaned_data['race'],      'race',      'set_race',      _('race'))
+        update(self.cleaned_data['country'],   'country',   'set_country',   _('country'))
+        update(self.cleaned_data['name'],      'name',      'set_name',      _('name'))
+        update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  _('birthday'))
+        update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   _('TLPD ID'))
+        update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   _('Liquipedia title'))
+        update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   _('SC2Earnings.com ID'))
+        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
         if player.set_aliases(self.cleaned_data['akas'].split(',')):
-            ret.append(Message('Changed aliases.', type=Message.SUCCESS))
+            ret.append(Message(_('Changed aliases.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -162,42 +163,43 @@ class PlayerModForm(forms.Form):
 
 # {{{ ResultsFilterForm: Form for filtering results.
 class ResultsFilterForm(forms.Form):
-    after  = forms.DateField(required=False, label='After')
-    before = forms.DateField(required=False, label='Before')
+    after  = forms.DateField(required=False, label=_('After'))
+    before = forms.DateField(required=False, label=_('Before'))
     race   = forms.ChoiceField(
         choices=[
-            ('ptzr',  'All'),
-            ('p',     'Protoss'),
-            ('t',     'Terran'),
-            ('z',     'Zerg'),
-            ('tzr',   'No Protoss'),
-            ('pzr',   'No Terran'),
-            ('ptr',   'No Zerg'),
+            ('ptzr',  _('All')),
+            ('p',     _('Protoss')),
+            ('t',     _('Terran')),
+            ('z',     _('Zerg')),
+            ('tzr',   _('No Protoss')),
+            ('pzr',   _('No Terran')),
+            ('ptr',   _('No Zerg')),
         ],
-        required=False, label='Opponent race', initial='ptzr'
+        required=False, label=_('Opponent race'), initial='ptzr'
     )
     country = forms.ChoiceField(
-        choices=[('all','All'),('foreigners','Non-Koreans')]+data.countries,
-        required=False, label='Country', initial='all'
+        choices=[('all',_('All')),('KR',_('South Korea')),('foreigners',_('Non-Koreans')),('','')] + 
+                sorted(data.countries, key=lambda a: a[1]),
+        required=False, label=_('Country'), initial='all'
     )
     bestof = forms.ChoiceField(
         choices=[
-            ('all',  'All'),
-            ('3',    'Best of 3+'),
-            ('5',    'Best of 5+'),
+            ('all',  _('All')),
+            ('3',    _('Best of 3+')),
+            ('5',    _('Best of 5+')),
         ],
-        required=False, label='Match format', initial='all'
+        required=False, label=_('Match format'), initial='all'
     )
     offline = forms.ChoiceField(
         choices=[
-            ('both',     'Both'),
-            ('offline',  'Offline'),
-            ('online',   'Online'),
+            ('both',     _('Both')),
+            ('offline',  _('Offline')),
+            ('online',   _('Online')),
         ],
-        required=False, label='On/offline', initial='both',
+        required=False, label=_('On/offline'), initial='both',
     )
     game = forms.ChoiceField(
-        choices=[('all','All')]+GAMES, required=False, label='Game version', initial='all')
+        choices=[('all','All')]+GAMES, required=False, label=_('Game version'), initial='all')
 
     # {{{ Constructor
     def __init__(self, *args, **kwargs):
@@ -227,11 +229,11 @@ def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Summary', request, context=player)
 
-    if request.method == 'POST' and base['adm']:
-        form = PlayerModForm(request)
-        base['messages'] += form.update_player(player)
+    if request.method == 'POST' and 'modplayer' in request.POST and base['adm']:
+        modform = PlayerModForm(request)
+        base['messages'] += modform.update_player(player)
     else:
-        form = PlayerModForm(player=player)
+        modform = PlayerModForm(player=player)
 
     base['messages'] += generate_messages(player)
     # }}}
@@ -242,7 +244,7 @@ def player(request, player_id):
 
     base.update({
         'player':           player,
-        'form':             form,
+        'modform':          modform,
         'first':            etn(lambda: matches.earliest('date')),
         'last':             etn(lambda: matches.latest('date')),
         'totalmatches':     matches.count(),
@@ -298,7 +300,7 @@ def player(request, player_id):
 
         base['charts'] = base['recentchange'].period_id > base['firstrating'].period_id
     else:
-        base['messages'].append(Message('%s has no rating yet.' % player.tag, type=Message.INFO))
+        base['messages'].append(Message(_('%s has no rating yet.') % player.tag, type=Message.INFO))
         base['charts'] = False
     # }}}
 
@@ -322,13 +324,13 @@ def player(request, player_id):
                 teampoints.append({
                     'date':    mem.start,
                     'rating':  interp_rating(mem.start, ratings),
-                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': 'joins'}],
+                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': _('joins')}],
                 })
             if mem.end and earliest.period.end < mem.end < latest.period.end:
                 teampoints.append({
                     'date':    mem.end,
                     'rating':  interp_rating(mem.end, ratings),
-                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': 'leaves'}],
+                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': _('leaves')}],
                 })
         teampoints.sort(key=lambda p: p['date'])
 
@@ -508,7 +510,6 @@ def results(request, player_id):
     })
     # }}}
 
-    
     # {{{ TL Postable
     
     has_after = form.cleaned_data['after'] is not None
@@ -517,12 +518,12 @@ def results(request, player_id):
     if not has_after and not has_before:
         match_date = ""
     elif not has_after: # and has_before
-        match_date = " before {}".format(form.cleaned_data['before'])
+        match_date = _(" before {}").format(form.cleaned_data['before'])
     elif not has_before: # and has_after
-        match_date = " after {}".format(form.cleaned_data['after'])
+        match_date = _(" after {}").format(form.cleaned_data['after'])
     else:
-        match_date = " between {} and {}".format(form.cleaned_data['after'],
-                                                form.cleaned_data['before'])
+        match_date = _(" between {} and {}").format(form.cleaned_data['after'],
+                                                    form.cleaned_data['before'])
 
     match_filter = ""
 
@@ -589,6 +590,8 @@ def results(request, player_id):
                       for k in form.cleaned_data
                       if form.cleaned_data[k] is not None)
 
+    print(get_params)
+
     country = ""
     if player.country is not None:
         country = ":{}:".format(player.country.lower())
@@ -624,13 +627,65 @@ def results(request, player_id):
 
     tl_params.update(get_params)
 
-    # Final clean up
+    # Final clean up and translation
 
     if tl_params["bestof"] != "all":
-        tl_params["bestof"] = "Bo{}+".format(tl_params["bestof"])
+        tl_params["bestof"] = _('best of') + ' {}'.format(tl_params["bestof"])
+    else:
+        tl_params['bestof'] = _('all')
 
     if set(tl_params["race"]) == set('ptzr'):
-        tl_params["race"] = "all"
+        tl_params["race"] = _('all')
+    else:
+        tl_params['race'] = {
+            'p': _('Protoss'),
+            't': _('Terran'),
+            'z': _('Zerg'),
+            'ptr': _('No Zerg'),
+            'pzr': _('No Terran'),
+            'tzr': _('No Protoss'),
+        }[tl_params['race']]
+
+    if tl_params['country'] in ['all', 'foreigners']:
+        tl_params['country'] = {
+            'all': _('all'),
+            'foreigners': _('foreigners'),
+        }[tl_params['country']]
+    else:
+        tl_params['country'] = transformations.ccn_to_cn(transformations.cca2_to_ccn(tl_params['country']))
+
+    tl_params['offline'] = {
+        'offline': _('offline'),
+        'online': _('online'),
+        'both': _('both'),
+    }[tl_params['offline']]
+
+    if tl_params['game'] == 'all':
+        tl_params['game'] = _('all')
+    else:
+        tl_params['game'] = dict(GAMES)[tl_params['game']]
+
+    tl_params.update({
+        'resfor': _('Results for'),
+        'games': _('Games'),
+        'matches': _('Matches'),
+        'curform': _('Current form'),
+        'recentmatches': _('Recent matches'),
+        'filters': _('Filters'),
+        # Translators: These have to line up on the right!
+        'opprace': _('Opponent Race:    '),
+        # Translators: These have to line up on the right!
+        'oppcountry': _('Opponent Country: '),
+        # Translators: These have to line up on the right!
+        'matchformat': _('Match Format:     '),
+        # Translators: These have to line up on the right!
+        'onoff': _('On/offline:       '),
+        # Translators: These have to line up on the right!
+        'version': _('Game Version:     '),
+        'statslink': _('Stats by [url={url}]Aligulac[/url]'),
+        # Translators: Link in the sense of a HTTP hyperlink.
+        'link': _('Link'),
+    })
 
     base.update({
         "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params)
@@ -708,27 +763,27 @@ def earnings(request, player_id):
 
 # {{{ Postable templates
 TL_HISTORY_TEMPLATE = (
-    "Results for {player_country_formatted} :{player_race}: "
-    "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n"
-    "\n"
-    "[b]Games:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n"
-    "[b]Matches:[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n"
-    "\n"
-    "[b][big]Current Form:[/big][/b]\n"
-    "[indent]{form}\n"
-    "[b][big]Recent Matches:[/big][/b]\n"
-    "{recent}\n"
-    "\n\n"
-    "Filters:\n"
-    "[spoiler][code]"
-    "Opponent Race:    {race}\n"
-    "Opponent Country: {country}\n"
-    "Match Format:     {bestof}\n"
-    "On/offline:       {offline}\n"
-    "Game Version:     {game}\n"
-    "[/code][/spoiler]\n"
-    "[small]Stats by [url={url}]Aligulac[/url]. "
-    "[url={url}/players/{pid}/results/?{get}]Link[/url].[/small]"
+    "{resfor} {player_country_formatted} :{player_race}: " +
+    "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n" +
+    "\n" +
+    "[b]{games}:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n" +
+    "[b]{matches}:[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n" +
+    "\n" +
+    "[b][big]{curform}:[/big][/b]\n" +
+    "[indent]{form}\n" +
+    "[b][big]{recentmatches}:[/big][/b]\n" +
+    "{recent}\n" +
+    "\n\n" +
+    "{filters}:\n" +
+    "[spoiler][code]" +
+    "{opprace}{race}\n" +
+    "{oppcountry}{country}\n" +
+    "{matchformat}{bestof}\n" +
+    "{onoff}{offline}\n" +
+    "{version}{game}\n" +
+    "[/code][/spoiler]\n" +
+    "[small]{statslink}. " +
+    "[url={url}/players/{pid}/results/?{get}]{link}[/url].[/small]"
 )
 
 TL_HISTORY_MATCH_TEMPLATE = (

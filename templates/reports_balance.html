@@ -5,20 +5,17 @@ This is the template for the main player page, called from ratings.views.player.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Balance report{% endblock %}
+{% block title %}{% trans "Balance report" %}{% endblock %}
 
 {% block content %}
 
-<p>The following chart show the historical month-by-month winrates for each non-mirror matchup in the
-database.</p>
+<p>{% blocktrans %}The following chart show the historical month-by-month winrates for each non-mirror matchup in the database.{% endblocktrans %}</p>
 
-<p>Note that this yields information about <em>metagame</em> balance near the <em>top of the skill
-    ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout
-the whole player population.</p>
+<p>{% blocktrans %}Note that this yields information about <em>metagame</em> balance near the <em>top of the skill ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout the whole player population.{% endblocktrans %}</p>
 
-<p>The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up,
-that means Protoss is doing well and Terran poorly.</p>
+<p>{% blocktrans %}The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up, that means Protoss is doing well and Terran poorly.{% endblocktrans %}</p>
 
 <script type="text/javascript">
     $(document).ready(function() { 
@@ -32,10 +29,10 @@ that means Protoss is doing well and Terran poorly.</p>
                 enabled: false
             },
             title: {
-                text: 'Balance report'
+                text: '{% trans "Balance report" %}'
             },
             subtitle: {
-                text: 'Click and drag to zoom'
+                text: '{% trans "Click and drag to zoom" %}'
             },
             xAxis: {
                 type: 'datetime',
@@ -59,7 +56,7 @@ that means Protoss is doing well and Terran poorly.</p>
             },
             yAxis: {
                 title: {
-                    text: 'Winrate [%]' 
+                    text: '{% trans "Winrate [%]" %}'
                 },
                 min: 30,
                 max: 70
@@ -79,26 +76,26 @@ that means Protoss is doing well and Terran poorly.</p>
                 },
             },
             series: [{ 
-                name: 'PvT',
+                name: '{% trans "PvT" %}',
                 color: '#00aaaa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>PvT: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} games',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvT" %}: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.pvt_wins|pctg_add_f:r.pvt_losses}} 
                 },{% endfor %}]
             }, {
-                name: 'PvZ',
+                name: '{% trans "PvZ" %}',
                 color: '#aaaa00',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>PvZ: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} games',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvZ" %}: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.pvz_wins|pctg_add_f:r.pvz_losses}} 
                 },{% endfor %}]
             }, {
-                name: 'TvZ',
+                name: '{% trans "TvZ" %}',
                 color: '#aa00aa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>TvZ: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} games',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "TvZ" %}: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} {% trans "games" %}',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.tvz_wins|pctg_add_f:r.tvz_losses}} 
                 },{% endfor %}]
@@ -108,17 +105,9 @@ that means Protoss is doing well and Terran poorly.</p>
 </script>
 <div style="width: 67em; height: 30em;" id="chart-rates"></div>
 
-<p>The performance difference chart shows the <em>approximate</em> difference between <em>actual
-performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if,
-averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating
-was equal to 100 less than that of their opponents), but they performed as if they had a mean rating
-difference of +100 (about 54.5% winrate), then that amounts to a performance difference of
-<strong>+200</strong>, which is to be interpreted as that Terran players overall performed 200 points better
-than expected.</p>
+<p>{% blocktrans %}The performance difference chart shows the <em>approximate</em> difference between <em>actual performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if, averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating was equal to 100 less than that of their opponents), but they performed as if they had a mean rating difference of +100 (about 54.5% winrate), then that amounts to a performance difference of <strong>+200</strong>, which is to be interpreted as that Terran players overall performed 200 points better than expected.{% endblocktrans %}</p>
 
-<p>This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly
-hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the
-players, this chart will tend toward equilibrium, even if balance never changes.</p>
+<p>{% blocktrans %}This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the players, this chart will tend toward equilibrium, even if balance never changes.{% endblocktrans %}</p>
 
 <script type="text/javascript">
     $(document).ready(function() { 
@@ -132,10 +121,10 @@ players, this chart will tend toward equilibrium, even if balance never changes.
                 enabled: false
             },
             title: {
-                text: 'Performance difference'
+                text: '{% trans "Performance difference" %}'
             },
             subtitle: {
-                text: 'Click and drag to zoom'
+                text: '{% trans "Click and drag to zoom" %}'
             },
             xAxis: {
                 type: 'datetime',
@@ -159,7 +148,7 @@ players, this chart will tend toward equilibrium, even if balance never changes.
             },
             yAxis: {
                 title: {
-                    text: 'Performance difference [points]'
+                    text: '{% trans "Performance difference [points]" %}'
                 },
             },
             tooltip: {
@@ -177,26 +166,26 @@ players, this chart will tend toward equilibrium, even if balance never changes.
                 },
             },
             series: [{ 
-                name: 'Protoss',
+                name: '{% trans "Protoss" %}',
                 color: '#00aa00',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.p_gains|ratscalediff}} 
                 },{% endfor %}]
             }, {
-                name: 'Terran',
+                name: '{% trans "Terran" %}',
                 color: '#0000aa',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.t_gains|ratscalediff}} 
                 },{% endfor %}]
             }, {
-                name: 'Zerg',
+                name: '{% trans "Zerg" %}',
                 color: '#aa0000',
                 data: [{% for r in entries %} { 
-                    'name': '{{r.date|date:"F Y"}}<br/>Difference: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
+                    'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
                     'x': {{r.date|milliseconds}},
                     'y': {{r.z_gains|ratscalediff}} 
                 },{% endfor %}]

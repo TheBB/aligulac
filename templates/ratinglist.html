@@ -11,39 +11,48 @@ arguments:
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% include "periodpagenav.html" %}
 
 <table class="results">
     <tr class="header">
-        <td class="rl_number">#</td>
+        <td class="rl_number">{% trans "#" %}</td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
-        <td class="rl_name">Name</td>
-        <td class="rl_team">{% if displayteams %}Team{% endif %}</td>
+        <td class="rl_name">{% trans "Name" %}</td>
+        <td class="rl_team">{% if displayteams %}{% trans "Team" %}{% endif %}</td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">Rating↓</a>
-            {% else %}Rating{% endif %}
+            <a href="?page={{ page }}&amp;sort=&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "Rating" %}↓
+            </a>
+            {% else %}{% trans "Rating" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">vP↓</a>
-            {% else %}vP{% endif %}
+            <a href="?page={{ page }}&amp;sort=vp&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vP" %}↓
+            </a>
+            {% else %}{% trans "vP" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">vT↓</a>
-            {% else %}vT{% endif %}
+            <a href="?page={{ page }}&amp;sort=vt&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vT" %}↓
+            </a>
+            {% else %}{% trans "vT" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_rating">
             {% if sortable %}
-            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">vZ↓</a>
-            {% else %}vZ{% endif %}
+            <a href="?page={{ page }}&amp;sort=vz&amp;race={{ race }}&amp;nats={{ nats }}">
+                {% trans "vZ" %}↓
+            </a>
+            {% else %}{% trans "vZ" %}{% endif %}
         </td>
         <td class="rl_icon"></td>
         <td class="rl_arrow"></td>
@@ -90,49 +99,29 @@ arguments:
         <td class="rl_rating">{{ entry.rating|ratscale }}</td>
         <td class="rl_icon">
             {% if entry.prev %}
-                {% if entry.prev.rating > entry.rating %}
-                <img src="{{ "downarrow"|img }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff|ratscalediff }}" />
-                {% elif entry.prev.rating < entry.rating %}
-                <img src="{{ "uparrow"|img }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff|ratscalediff }}" />
-                {% endif %}
+            <img src="{{ entry.rating_diff|makearrows|img }}" style="vertical-align: text-bottom;"
+                 title="{{ entry.rating_diff|ratscalediff|signify }}" />
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating_vp|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
             {% if entry.prev %}
-                {% if entry.prev.rating|addf:entry.prev.rating_vp > entry.rating|addf:entry.rating_vp %}
-                <img src="{{ "downarrow"|img }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vp|ratscalediff }}" />
-                {% elif entry.prev.rating|addf:entry.prev.rating_vp < entry.rating|addf:entry.rating_vp %}
-                <img src="{{ "uparrow"|img }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vp|ratscalediff }}" />
-                {% endif %}
+            <img src="{{ entry.rating_diff_vp|makearrows|img }}" style="vertical-align: text-bottom;"
+                 title="{{ entry.rating_diff_vp|ratscalediff|signify }}" />
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating_vt|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
             {% if entry.prev %}
-                {% if entry.prev.rating|addf:entry.prev.rating_vt > entry.rating|addf:entry.rating_vt %}
-                <img src="{{ "downarrow"|img }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vt|ratscalediff }}" />
-                {% elif entry.prev.rating|addf:entry.prev.rating_vt < entry.rating|addf:entry.rating_vt %}
-                <img src="{{ "uparrow"|img }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vt|ratscalediff }}" />
-                {% endif %}
+            <img src="{{ entry.rating_diff_vt|makearrows|img }}" style="vertical-align: text-bottom;"
+                 title="{{ entry.rating_diff_vt|ratscalediff|signify }}" />
             {% endif %}
         </td>
         <td class="rl_rating">{{ entry.rating_vz|addf:entry.rating|ratscale }}</td>
         <td class="rl_icon">
             {% if entry.prev %}
-                {% if entry.prev.rating|addf:entry.prev.rating_vz > entry.rating|addf:entry.rating_vz %}
-                <img src="{{ "downarrow"|img }}" alt="down" style="vertical-align: text-bottom;" 
-                     title="{{ entry.rating_diff_vz|ratscalediff }}" />
-                {% elif entry.prev.rating|addf:entry.prev.rating_vz < entry.rating|addf:entry.rating_vz %}
-                <img src="{{ "uparrow"|img }}" alt="up" style="vertical-align: text-bottom;" 
-                     title="+{{ entry.rating_diff_vz|ratscalediff }}" />
-                {% endif %}
+            <img src="{{ entry.rating_diff_vz|makearrows|img }}" style="vertical-align: text-bottom;"
+                 title="{{ entry.rating_diff_vz|ratscalediff|signify }}" />
             {% endif %}
         </td>
         <td class="rl_arrow">
@@ -144,7 +133,7 @@ arguments:
     {% endfor %}
     {% else %}
     <tr class="nonheader row2">
-        <td colspan="15">No entries found.</td>
+        <td colspan="15">{% trans "No entries found." %}</td>
     </tr>
     {% endif %}
 </table>

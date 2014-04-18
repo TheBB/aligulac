@@ -1,4 +1,3 @@
-# {{{ Imports
 from urllib.request import unquote
 
 from tastypie import fields
@@ -32,9 +31,7 @@ from ratings.tools import (
     filter_active,
     total_ratings,
 )
-# }}}
 
-# {{{ Authenticator
 class APIKeyAuthentication(Authentication):
     def is_authenticated(self, request, **kwargs):
         if DEBUG:
@@ -47,9 +44,7 @@ class APIKeyAuthentication(Authentication):
 
         modified = APIKey.objects.filter(key=key).update(requests=F('requests')+1)
         return modified == 1
-# }}}
 
-# {{{ PeriodResource
 class PeriodResource(ModelResource):
     class Meta:
         queryset = Period.objects.filter(computed=True)
@@ -58,32 +53,20 @@ class PeriodResource(ModelResource):
         authentication = APIKeyAuthentication()
         excludes = ['computed']
         filtering = {
-            key: ALL
-            for key in [
-                'id',
-                'start',
-                'end',
-                'needs_recompute',
-                'num_retplayers',
-                'num_games',
-                'dom_p',
-                'dom_t',
-                'dom_z',
-        ]}
+            'id':               ALL,
+            'start':            ALL,
+            'end':              ALL,
+            'needs_recompute':  ALL,
+            'num_retplayers':   ALL,
+            'num_games':        ALL,
+            'dom_p':            ALL,
+            'dom_t':            ALL,
+            'dom_z':            ALL,
+        }
         ordering = [
-            'id',
-            'start',
-            'end',
-            'num_retplayers',
-            'num_newplayers',
-            'num_games',
-            'dom_p',
-            'dom_t',
-            'dom_z',
+            'id', 'start', 'end', 'num_retplayers', 'num_newplayers', 'num_games', 'dom_p', 'dom_t', 'dom_z',
         ]
-# }}}
 
-# {{{ SmallRatingResource (for inline)
 class SmallRatingResource(ModelResource):
     class Meta:
         queryset = total_ratings(Rating.objects.all())
@@ -91,22 +74,16 @@ class SmallRatingResource(ModelResource):
         resource_name = 'rating'
         authentication = APIKeyAuthentication()
         fields = [
-            'id',
-            'rating',
-            'rating_vp',
-            'rating_vt',
-            'rating_vz',
-            'dev',
-            'dev_vp',
-            'dev_vt',
-            'dev_vz',
+            'rating', 'rating_vp', 'rating_vt', 'rating_vz',
+            'dev', 'dev_vp', 'dev_vt', 'dev_vz',
             'decay',
         ]
         filtering = {
-            'period': ALL_WITH_RELATIONS,
-            'player': ALL_WITH_RELATIONS,
-            'prev': ALL_WITH_RELATIONS,
-            'decay': ALL,
+            'id':         ALL,
+            'period':     ALL_WITH_RELATIONS,
+            'player':     ALL_WITH_RELATIONS,
+            'prev':       ALL_WITH_RELATIONS,
+            'decay':      ALL,
             'domination': ALL,
             'rating':     ALL, 'rating_vp':     ALL, 'rating_vt':     ALL, 'rating_vz':     ALL,
             'dev':        ALL, 'dev_vp':        ALL, 'dev_vt':        ALL, 'dev_vz':        ALL,
@@ -121,9 +98,7 @@ class SmallRatingResource(ModelResource):
         bundle.data['tot_vt'] = bundle.data['rating'] + bundle.data['rating_vt']
         bundle.data['tot_vz'] = bundle.data['rating'] + bundle.data['rating_vz']
         return bundle
-# }}}
 
-# {{{ RatingResource
 class RatingResource(ModelResource):
     class Meta:
         queryset = total_ratings(Rating.objects.all())
@@ -131,10 +106,11 @@ class RatingResource(ModelResource):
         resource_name = 'rating'
         authentication = APIKeyAuthentication()
         filtering = {
-            'period': ALL_WITH_RELATIONS,
-            'player': ALL_WITH_RELATIONS,
-            'prev': ALL_WITH_RELATIONS,
-            'decay': ALL,
+            'id':         ALL,
+            'period':     ALL_WITH_RELATIONS,
+            'player':     ALL_WITH_RELATIONS,
+            'prev':       ALL_WITH_RELATIONS,
+            'decay':      ALL,
             'domination': ALL,
             'rating':     ALL, 'rating_vp':     ALL, 'rating_vt':     ALL, 'rating_vz':     ALL,
             'dev':        ALL, 'dev_vp':        ALL, 'dev_vt':        ALL, 'dev_vz':        ALL,
@@ -144,7 +120,12 @@ class RatingResource(ModelResource):
             'position':   ALL, 'position_vp':   ALL, 'position_vt':   ALL, 'position_vz':   ALL,
         }
         ordering = [
-            'period', 'player', 'prev', 'decay', 'domination',
+            'id',
+            'period',
+            'player',
+            'prev',
+            'decay',
+            'domination',
             'rating',     'rating_vp',     'rating_vt',     'rating_vz',
             'dev',        'dev_vp',        'dev_vt',        'dev_vz',
             'bf_rating',  'bf_rating_vp',  'bf_rating_vt',  'bf_rating_vz',
@@ -162,9 +143,7 @@ class RatingResource(ModelResource):
     period = fields.ForeignKey(PeriodResource, 'period', null=False)
     player = fields.ForeignKey('ratings.api.resources.SmallPlayerResource', 'player', null=False, full=True)
     prev = fields.ForeignKey('self', 'prev', null=True)
-# }}}
 
-# {{{ ActiveRatingResource
 class ActiveRatingResource(ModelResource):
     class Meta:
         queryset = filter_active(total_ratings(Rating.objects.all()))
@@ -172,10 +151,11 @@ class ActiveRatingResource(ModelResource):
         resource_name = 'activerating'
         authentication = APIKeyAuthentication()
         filtering = {
-            'period': ALL_WITH_RELATIONS,
-            'player': ALL_WITH_RELATIONS,
-            'prev': ALL_WITH_RELATIONS,
-            'decay': ALL,
+            'id':         ALL,
+            'period':     ALL_WITH_RELATIONS,
+            'player':     ALL_WITH_RELATIONS,
+            'prev':       ALL_WITH_RELATIONS,
+            'decay':      ALL,
             'domination': ALL,
             'rating':     ALL, 'rating_vp':     ALL, 'rating_vt':     ALL, 'rating_vz':     ALL,
             'dev':        ALL, 'dev_vp':        ALL, 'dev_vt':        ALL, 'dev_vz':        ALL,
@@ -185,7 +165,12 @@ class ActiveRatingResource(ModelResource):
             'position':   ALL, 'position_vp':   ALL, 'position_vt':   ALL, 'position_vz':   ALL,
         }
         ordering = [
-            'period', 'player', 'prev', 'decay', 'domination',
+            'id',
+            'period',
+            'player',
+            'prev',
+            'decay',
+            'domination',
             'rating',     'rating_vp',     'rating_vt',     'rating_vz',
             'dev',        'dev_vp',        'dev_vt',        'dev_vz',
             'bf_rating',  'bf_rating_vp',  'bf_rating_vt',  'bf_rating_vz',
@@ -203,31 +188,21 @@ class ActiveRatingResource(ModelResource):
     period = fields.ForeignKey(PeriodResource, 'period', null=False)
     player = fields.ForeignKey('ratings.api.resources.SmallPlayerResource', 'player', null=False, full=True)
     prev = fields.ForeignKey('self', 'prev', null=True)
-# }}}
 
-# {{{ SmallPlayerResource (for inline)
 class SmallPlayerResource(ModelResource):
     class Meta:
         queryset = Player.objects.all()
         allowed_methods = ['get', 'post']
         resource_name = 'player'
         authentication = APIKeyAuthentication()
-        fields = [
-            'id',
-            'tag',
-            'country',
-            'race',
-        ]
+        fields = ['id', 'tag', 'country', 'race']
         filtering = {
-            'id':              ALL,
-            'tag':             ALL,
-            'country':         ALL,
-            'race':            ALL
+            'id':       ALL,
+            'tag':      ALL,
+            'country':  ALL,
+            'race':     ALL
         }
-            
-# }}}
 
-# {{{ PlayerResource
 class PlayerResource(ModelResource):
     class Meta:
         queryset = Player.objects.all().prefetch_related('alias_set')
@@ -235,6 +210,7 @@ class PlayerResource(ModelResource):
         resource_name = 'player'
         authentication = APIKeyAuthentication()
         filtering = {
+            'id':              ALL,
             'tag':             ALL,
             'name':            ALL,
             'birthday':        ALL,
@@ -242,7 +218,6 @@ class PlayerResource(ModelResource):
             'tlpd_id':         ALL,
             'tlpd_db':         ALL,
             'lp_name':         ALL,
-            'sc2c_id':         ALL,
             'sc2e_id':         ALL,
             'country':         ALL,
             'race':            ALL,
@@ -252,21 +227,8 @@ class PlayerResource(ModelResource):
             'dom_end':         ALL_WITH_RELATIONS,
         }
         ordering = [
-            'tag',
-            'name',
-            'birthday',
-            'mcnum',
-            'tlpd_id',
-            'tlpd_db',
-            'lp_name',
-            'sc2c_id',
-            'sc2e_id',
-            'country',
-            'race',
-            'dom_val',
-            'current_rating',
-            'dom_start',
-            'dom_end',
+            'id', 'tag', 'name', 'birthday', 'mcnum', 'tlpd_id', 'tlpd_db', 'lp_name', 'sc2e_id', 'country',
+            'race', 'dom_val', 'current_rating', 'dom_start', 'dom_end',
         ]
 
     def dehydrate_aliases(self, bundle):
@@ -288,9 +250,7 @@ class PlayerResource(ModelResource):
     )
 
     aliases = fields.ListField(null=True, help_text='Aliases')
-# }}}
 
-# {{{ SmallEventResource (for inline)
 class SmallEventResource(ModelResource):
     class Meta:
         queryset = Event.objects.all()
@@ -299,26 +259,22 @@ class SmallEventResource(ModelResource):
         authentication = APIKeyAuthentication()
         fields = ['id', 'fullname']
         filtering = {
-            key: ALL
-            for key in [
-                'id',
-                'name',
-                'fullname',
-                'parent',
-                'homepage',
-                'lp_name',
-                'tlpd_id',
-                'tlpd_db',
-                'tl_thread',
-                'prizepool',
-                'earliest',
-                'latest',
-                'category',
-                'type',
-        ]}
-# }}}
+            'id':         ALL,
+            'name':       ALL,
+            'fullname':   ALL,
+            'parent':     ALL_WITH_RELATIONS,
+            'homepage':   ALL,
+            'lp_name':    ALL,
+            'tlpd_id':    ALL,
+            'tlpd_db':    ALL,
+            'tl_thread':  ALL,
+            'prizepool':  ALL,
+            'earliest':   ALL,
+            'latest':     ALL,
+            'category':   ALL,
+            'type':       ALL,
+        }
 
-# {{{ EventResource
 class EventResource(ModelResource):
     class Meta:
         queryset = Event.objects.all()
@@ -327,24 +283,23 @@ class EventResource(ModelResource):
         authentication = APIKeyAuthentication()
         excludes = ['lft', 'rgt', 'closed', 'big', 'noprint']
         filtering = {
-            key: ALL
-            for key in [
-                'name',
-                'fullname',
-                'parent',
-                'homepage',
-                'lp_name',
-                'tlpd_id',
-                'tlpd_db',
-                'tl_thread',
-                'prizepool',
-                'earliest',
-                'latest',
-                'category',
-                'type',
-                'idx',
-        ]}
-        ordering = ['earliest', 'latest', 'idx']
+            'id':         ALL,
+            'name':       ALL,
+            'fullname':   ALL,
+            'parent':     ALL_WITH_RELATIONS,
+            'homepage':   ALL,
+            'lp_name':    ALL,
+            'tlpd_id':    ALL,
+            'tlpd_db':    ALL,
+            'tl_thread':  ALL,
+            'prizepool':  ALL,
+            'earliest':   ALL,
+            'latest':     ALL,
+            'category':   ALL,
+            'type':       ALL,
+            'idx':        ALL,
+        }
+        ordering = ['id', 'earliest', 'latest', 'idx']
 
     parent = fields.ForeignKey('self', 'parent', null=True)
     children = fields.ToManyField(
@@ -352,12 +307,23 @@ class EventResource(ModelResource):
         null=True, help_text='Direct children events'
     )
     earnings = fields.ToManyField(
-        'ratings.api.resources.EarningResource', attribute = lambda b: b.obj.earnings_set,
+        'ratings.api.resources.EarningResource', attribute=lambda b: b.obj.earnings_set,
         null=True, help_text='Prizes awarded'
     )
-# }}}
 
-# {{{ MatchResource
+    def build_filters(self, filters=None):
+        check = ['uplink__parent', 'uplink__distance', 'downlink__child', 'downlink__distance']
+        fits = lambda s: any(filter(lambda k: s.startswith(k), check))
+        other_filters = {f: filters[f] for f in filters if not fits(f)}
+        orm_filters = super(EventResource, self).build_filters(other_filters)
+        for f in filter(fits, filters):
+            is_pure = f in check
+            if is_pure or any(filter(lambda s: f.endswith(s), ['gt', 'gte', 'lt', 'lte'])):
+                orm_filters[f] = filters[f]
+            elif any(filter(lambda s: f.endswith(s), ['in', 'range'])):
+                orm_filters[f] = filters[f].split(',')
+        return orm_filters
+
 class MatchResource(ModelResource):
     class Meta:
         queryset = Match.objects.all()
@@ -365,20 +331,26 @@ class MatchResource(ModelResource):
         resource_name = 'match'
         authentication = APIKeyAuthentication()
         filtering = {
-            'period': ALL_WITH_RELATIONS,
-            'eventobj': ALL_WITH_RELATIONS,
-            'rta': ALL_WITH_RELATIONS, 'rtb': ALL_WITH_RELATIONS,
-            'pla': ALL_WITH_RELATIONS, 'plb': ALL_WITH_RELATIONS,
-            'sca': ALL, 'scb': ALL, 'rca': ALL, 'rcb': ALL,
-            'date': ALL,
-            'treated': ALL,
-            'event': ALL,
-            'game': ALL,
-            'offline': ALL,
+            'id':        ALL,
+            'period':    ALL_WITH_RELATIONS,
+            'eventobj':  ALL_WITH_RELATIONS,
+            'rta':       ALL_WITH_RELATIONS,
+            'rtb':       ALL_WITH_RELATIONS,
+            'pla':       ALL_WITH_RELATIONS,
+            'plb':       ALL_WITH_RELATIONS,
+            'sca':       ALL,
+            'scb':       ALL,
+            'rca':       ALL,
+            'rcb':       ALL,
+            'date':      ALL,
+            'treated':   ALL,
+            'event':     ALL,
+            'game':      ALL,
+            'offline':   ALL,
         }
         ordering = [
-            'period', 'eventobj', 'rta', 'rtb', 'pla', 'plb', 'sca', 'scb', 'rca', 'rcb',
-            'date', 'treated', 'event', 'game', 'offline'
+            'id', 'period', 'eventobj', 'rta', 'rtb', 'pla', 'plb', 'sca', 'scb', 'rca', 'rcb',
+            'date', 'treated', 'event', 'game', 'offline',
         ]
 
     pla = fields.ForeignKey(SmallPlayerResource, 'pla', null=False, full=True)
@@ -386,9 +358,25 @@ class MatchResource(ModelResource):
     rta = fields.ForeignKey(SmallRatingResource, 'rta', null=True, full=True)
     rtb = fields.ForeignKey(SmallRatingResource, 'rtb', null=True, full=True)
     eventobj = fields.ForeignKey(SmallEventResource, 'eventobj', null=True, full=True)
-# }}}
 
-# {{{ EarningResource
+    def build_filters(self, filters=None):
+        check = [
+            'eventobj__uplink__parent',
+            'eventobj__uplink__distance',
+            'eventobj__downlink__child',
+            'eventobj__downlink__distance',
+        ]
+        fits = lambda s: any(filter(lambda k: s.startswith(k), check))
+        other_filters = {f: filters[f] for f in filters if not fits(f)}
+        orm_filters = super(MatchResource, self).build_filters(other_filters)
+        for f in filter(fits, filters):
+            is_pure = f in check
+            if is_pure or any(filter(lambda s: f.endswith(s), ['gt', 'gte', 'lt', 'lte'])):
+                orm_filters[f] = filters[f]
+            elif any(filter(lambda s: f.endswith(s), ['in', 'range'])):
+                orm_filters[f] = filters[f].split(',')
+        return orm_filters
+
 class EarningResource(ModelResource):
     class Meta:
         queryset = Earnings.objects.all()
@@ -396,6 +384,7 @@ class EarningResource(ModelResource):
         resource_name = 'earning'
         authentication = APIKeyAuthentication()
         filtering = {
+            'id':            ALL,
             'event':         ALL_WITH_RELATIONS,
             'player':        ALL_WITH_RELATIONS,
             'earnings':      ALL,
@@ -403,37 +392,31 @@ class EarningResource(ModelResource):
             'currency':      ALL,
             'placement':     ALL,
         }
-        ordering = ['event', 'player', 'earnings', 'origearnings', 'currency', 'placement']
+        ordering = ['id', 'event', 'player', 'earnings', 'origearnings', 'currency', 'placement']
 
     event = fields.ForeignKey(SmallEventResource, 'event', null=False, full=True)
     player = fields.ForeignKey(SmallPlayerResource, 'player', null=False, full=True)
-# }}}
 
-# {{{ SmallGroupMembershipResourceFromPlayer
 class SmallGroupMembershipResourceFromPlayer(ModelResource):
     class Meta:
         queryset = GroupMembership.objects.all()
         allowed_methods = ['get', 'post']
         resource_name = 'groupmembership'
         authentication = APIKeyAuthentication()
-        excludes = ['current', 'id']
+        excludes = ['current']
 
     team = fields.ForeignKey('ratings.api.resources.SmallTeamResource', 'group', full=True)
-# }}}
 
-# {{{ SmallGroupMembershipResourceFromGroup
 class SmallGroupMembershipResourceFromGroup(ModelResource):
     class Meta:
         queryset = GroupMembership.objects.all()
         allowed_methods = ['get', 'post']
         resource_name = 'groupmembership'
         authentication = APIKeyAuthentication()
-        excludes = ['current', 'playing', 'id']
+        excludes = ['current', 'playing']
 
     player = fields.ForeignKey(SmallPlayerResource, 'player', full=True)
-# }}}
 
-# {{{ SmallTeamResource
 class SmallTeamResource(ModelResource):
     class Meta:
         queryset = Group.objects.filter(is_team=True)
@@ -442,23 +425,19 @@ class SmallTeamResource(ModelResource):
         authentication = APIKeyAuthentication()
         fields = ['name', 'shortname', 'id']
         filtering = {
-            key: ALL
-            for key in [
-                'id',
-                'name',
-                'shortname',
-                'scoreak',
-                'scorepl',
-                'meanrating',
-                'founded',
-                'disbanded',
-                'active',
-                'homepage',
-                'lp_name',
-        ]}
-# }}}
+            'id': ALL,
+            'name': ALL,
+            'shortname': ALL,
+            'scoreak': ALL,
+            'scorepl': ALL,
+            'meanrating': ALL,
+            'founded': ALL,
+            'disbanded': ALL,
+            'active': ALL,
+            'homepage': ALL,
+            'lp_name': ALL,
+        }
 
-# {{{ TeamResource
 class TeamResource(ModelResource):
     class Meta:
         queryset = Group.objects.filter(is_team=True).prefetch_related('alias_set')
@@ -467,30 +446,21 @@ class TeamResource(ModelResource):
         authentication = APIKeyAuthentication()
         excludes = ['is_team', 'is_manual']
         filtering = {
-            key: ALL
-            for key in [
-                'name',
-                'shortname',
-                'scoreak',
-                'scorepl',
-                'meanrating',
-                'founded',
-                'disbanded',
-                'active',
-                'homepage',
-                'lp_name',
-        ]}
+            'id': ALL,
+            'name': ALL,
+            'shortname': ALL,
+            'scoreak': ALL,
+            'scorepl': ALL,
+            'meanrating': ALL,
+            'founded': ALL,
+            'disbanded': ALL,
+            'active': ALL,
+            'homepage': ALL,
+            'lp_name': ALL,
+        }
         ordering = [
-            'name',
-            'shortname',
-            'scoreak',
-            'scorepl',
-            'meanrating',
-            'founded',
-            'disbanded',
-            'active',
-            'homepage',
-            'lp_name',
+            'id', 'name', 'shortname', 'scoreak', 'scorepl', 'meanrating', 'founded', 'disbanded', 'active',
+            'homepage', 'lp_name',
         ]
 
     def dehydrate_aliases(self, bundle):
@@ -513,9 +483,7 @@ class TeamResource(ModelResource):
     )
 
     aliases = fields.ListField(null=True, help_text='Aliases')
-# }}}
 
-# {{{ PredictResource
 class PredictResource(Resource):
     def get_resource_uri(self, bundle_or_obj):
         kwargs = {'resource_name': self._meta.resource_name}
@@ -559,9 +527,7 @@ class PredictResource(Resource):
         bundle = self.full_dehydrate(bundle)
         bundle = self.alter_detail_data_to_serialize(request, bundle)
         return self.create_response(request, bundle)
-# }}}
 
-# {{{ PredictCombinationResource
 class PredictCombinationResource(PredictResource):
     def dehydrate_matches(self, bundle):
         for m in bundle.data['matches']:
@@ -585,9 +551,7 @@ class PredictCombinationResource(PredictResource):
 
     matches = fields.ListField('matches', null=False, help_text='Matches')
     meanres = fields.ListField('meanres', null=False, help_text='Median results')
-# }}}
 
-# {{{ PredictMatchResource
 class PredictMatchResource(PredictResource):
     class Meta:
         allowed_methods = ['get', 'post']
@@ -614,9 +578,7 @@ class PredictMatchResource(PredictResource):
             s1=args.get('s1', 0),
             s2=args.get('s2', 0),
         )
-# }}}
 
-# {{{ PredictDualResource
 class PredictDualResource(PredictCombinationResource):
     class Meta:
         allowed_methods = ['get', 'post']
@@ -625,9 +587,7 @@ class PredictDualResource(PredictCombinationResource):
         object_class = DualPredictionResult
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
-# }}}
 
-# {{{ PredictSEBracketResource
 class PredictSEBracketResource(PredictCombinationResource):
     class Meta:
         allowed_methods = ['get', 'post']
@@ -636,9 +596,7 @@ class PredictSEBracketResource(PredictCombinationResource):
         object_class = SingleEliminationPredictionResult
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
-# }}}
 
-# {{{ PredictRRGroupResource
 class PredictRRGroupResource(PredictCombinationResource):
     class Meta:
         allowed_methods = ['get', 'post']
@@ -648,9 +606,7 @@ class PredictRRGroupResource(PredictCombinationResource):
 
     table = fields.ListField('table', null=False, help_text='Predicted table')
     mtable = fields.ListField('mtable', null=False, help_text='Median table')
-# }}}
 
-# {{{ ProleaguePredictionResult
 class PredictPLResource(PredictCombinationResource):
     class Meta:
         allowed_methods = ['get', 'post']
@@ -664,4 +620,3 @@ class PredictPLResource(PredictCombinationResource):
     prob_draw = fields.FloatField('prob_draw', null=False, help_text='Probability for a draw')
     sca = fields.IntegerField('s1', null=False, help_text='Predefined score for Team A')
     scb = fields.IntegerField('s2', null=False, help_text='Predefined score for Team B')
-# }}}

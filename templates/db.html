@@ -6,74 +6,76 @@ dump. Called from aligulac.views.db.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Database status{% endblock %}
+{% block title %}{% trans "Database status" %}{% endblock %}
 
 {% block content %}
 <div class="table" style="width: 67em;">
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel" style="width: 33.5em;">Last ratings update</div>
+        <div class="rowel" style="width: 33.5em;">{% trans "Last ratings update" %}</div>
         <div class="rower" style="width: 33.5em;">
-            {{ updated|date:"F jS Y, H:i e" }} (UTC {{ updated|date:"O" }})
-            (<a href="{{ "update.txt"|static }}">log</a>)
+            {{ updated|cdate:_('F jS, Y, H:i e') }} (UTC {{ updated|date:"O" }})
+            (<a href="{{ "update.txt"|static }}">{% trans "log" %}</a>)
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel" style="width: 33.5em;">Results</div>
-        <div class="rower" style="width: 33.5em;">{{ ngames }} games, {{ nmatches }} matches</div>
+        <div class="rowel" style="width: 33.5em;">{% trans "Results" %}</div>
+        <div class="rower" style="width: 33.5em;">
+            {{ ngames }} {% trans "games" %}, {{ nmatches }} {% trans "matches" %}
+        </div>
     </div>
     <div class="row">
-        <div class="rowel">Wings of Liberty</div>
+        <div class="rowel">{% trans "Wings of Liberty" %}</div>
         <div class="rower">
-            {{ nwolgames }} games <span class="small">({{ nwolgames|pctg:ngames }}%)</span>,
-            {{ nwol }} matches <span class="small">({{ nwol|pctg:nmatches }}%)</span>
+            {{ nwolgames }} {% trans "games" %} <span class="small">({{ nwolgames|pctg:ngames }}%)</span>,
+            {{ nwol }} {% trans "matches" %} <span class="small">({{ nwol|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Heart of the Swarm</div>
+        <div class="rowel">{% trans "Heart of the Swarm" %}</div>
         <div class="rower">
-            {{ nhotsgames }} games <span class="small">({{ nhotsgames|pctg:ngames }}%)</span>,
-            {{ nhots }} matches <span class="small">({{ nhots|pctg:nmatches }}%)</span>
+            {{ nhotsgames }} {% trans "games" %} <span class="small">({{ nhotsgames|pctg:ngames }}%)</span>,
+            {{ nhots }} {% trans "matches" %} <span class="small">({{ nhots|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row">
-        <div class="rowel">Online</div>
+        <div class="rowel">{% trans "Online" %}</div>
         <div class="rower">
-            {{ nonlinegames }} games <span class="small">({{ nonlinegames|pctg:ngames}}%)</span>,
-            {{ nonline }} matches <span class="small">({{ nonline|pctg:nmatches}}%)</span>
+            {{ nonlinegames }} {% trans "games" %} <span class="small">({{ nonlinegames|pctg:ngames}}%)</span>,
+            {{ nonline }} {% trans "matches" %} <span class="small">({{ nonline|pctg:nmatches}}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Offline</div>
+        <div class="rowel">{% trans "Offline" %}</div>
         <div class="rower">
-            {{ nofflinegames }} games <span class="small">({{ nofflinegames|pctg:ngames}}%)</span>,
-            {{ noffline }} matches <span class="small">({{ noffline|pctg:nmatches }}%)</span>
+            {{ nofflinegames }} {% trans "games" %} <span class="small">({{ nofflinegames|pctg:ngames}}%)</span>,
+            {{ noffline }} {% trans "matches" %} <span class="small">({{ noffline|pctg:nmatches }}%)</span>
         </div>
     </div>
     <div class="row">
-        <div class="rowel">Matches with event info</div>
+        <div class="rowel">{% trans "Matches with event info" %}</div>
         <div class="rower">{{ npartial }} <span class="small">({{ npartial|pctg:nmatches }}%)</span></div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Uncatalogued matches</div>
+        <div class="rowel">{% trans "Uncatalogued matches" %}</div>
         <div class="rower">{{ nuncatalogued }} <span class="small">({{ nuncatalogued|pctg:nmatches }}%)</span></div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Players</div>
+        <div class="rowel">{% trans "Players" %}</div>
         <div class="rower">
-            {{ nplayers }}, 
-            of which {{ nkoreans }} Koreans <span class="small">({{ nkoreans|pctg:nplayers }}%)</span>
+            {% blocktrans %}{{ nplayers }}, of which {{ nkoreans }} Koreans{% endblocktrans %}
+            <span class="small">({{ nkoreans|pctg:nplayers }}%)</span>
         </div>
     </div>
     <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
-        <div class="rowel">Teams</div>
+        <div class="rowel">{% trans "Teams" %}</div>
         <div class="rower">
-            {{ nteams }},
-            of which {{ nactive }} active
+            {% blocktrans %}{{ nteams }}, of which {{ nactive }} active{% endblocktrans %}
         </div>
     </div>
     <div class="row">
-        <div class="rowel">Top submitters (number of matches)</div>
+        <div class="rowel">{% trans "Top submitters (number of matches)" %}</div>
         <div class="rower">
             {% for s in submitters %}
             {{ s.username }} ({{ s.nmatches}}){% if not forloop.last %},{% endif %}
@@ -83,272 +85,35 @@ dump. Called from aligulac.views.db.
 </div>
 
 {% if not dump %}
-<p>The database dump file is currently <span style="color: #dd0000;">offline</span> for reasons unknown.</p>
+<p>{% blocktrans with span="<span style=\"color: #dd0000;\">" %}The database dump file is currently {{span}}offline</span> for reasons unknown.{% endblocktrans %}</p>
 {% else %}
-<p>You can download a PostgreSQL dump <a href="{{ "aligulac.sql"|static }}">here</a> 
-({{ megabytes|floatformat:1 }} MiB) or <a href="{{ "aligulac.sql.gz"|static }}">here</a> 
-({{ gz_megabytes|floatformat:1 }} MiB gzipped), current as of {{ modified|date:"F jS Y, H:i e" }} 
-(UTC {{ modified|date:"O" }}). It is free to use for non-commercial purposes if you credit this website when
-doing so.</p>
+<p>
+{% with dump="aligulac.sql"|static dumpmb=megabytes|floatformat:1 %}
+{% with gzdump="aligulac.sql.gz"|static gzdumpmb=gz_megabytes|floatformat:1 %}
+{% with datetime=modified|cdate:_('F jS, Y, H:i e') tz=modified|date:"O" %}
+{% blocktrans %}You can download a PostgreSQL dump <a href="{{dump}}">here</a> ({{dumpmb}} MiB) or <a href="{{gzdump}}">here</a> ({{gzdumpmb}} MiB gzipped), current as of {{datetime}} (UTC {{tz}}). It is free to use for non-commercial purposes if you credit this website when doing so.{% endblocktrans %}
+{% endwith %} {% endwith %} {% endwith %}
+</p> 
 
-<p>The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump
-(primarily involving user accounts).</p>
+<p>{% blocktrans %}The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump (primarily involving user accounts).{% endblocktrans %}</p>
 
-<p><strong>player</strong><br/>
-Contains player information.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    tag             character varying(30) not null          in-game name of the player
-    name            character varying(100)                  real name
-    birthday        date                                    birthday
-    mcnum           integer                                 MC number
-    tlpd_id         integer                                 external TLPD ID
-    tlpd_db         integer                                 bit-flag value denoting which TLPD databases this 
-                                                              player is in: 1 = KR WoL, 2 = IN WoL, 4 = HotS, 
-                                                              8 = HotS beta, 16 = WoL beta
-    lp_name         character varying(200)                  title of Liquipedia page (the part after 
-                                                              http://wiki.teamliquid.net/starcraft2/)
-    sc2c_id         integer                                 external sc2charts.net ID
-    sc2e_id         integer                                 external sc2earnings.com ID
-    country         character varying(2)                    ISO-3166-1 alpha-2 country code
-    race            character varying(1) not null           P, T or Z for normal races, R for random and S for
-                                                              race switcher
-    dom_val         double precision                        their PP score (see Hall of Fame)
-    dom_start_id    integer                                 foreign key to period; start of PP-period
-    dom_end_id      integer                                 foreign key to period; first period after end of 
-                                                              PP-period
-    current_rating_id integer                               foreign key to rating; should link to the latest
-                                                              published rating of the player
-    </pre>
-</code>
+{% for table in dbtables %}
+<p><strong>{{ table.name }}</strong><br/>
+{{ table.desc|safe }}</p>
+<div class="table" style="width: 67em;">
+    {% for col in table.cols %}
+    {% if forloop.last %}
+    <div class="row">
+    {% else %}
+    <div class="row" style="border-style: none none dotted none; border-width: 0.1em;">
+    {% endif %}
+        <div class="rower" style="width: 7em;">{{ col.0 }}</div>
+        <div class="rowel" style="width: 20em;">{{ col.1 }}</div>
+        <div class="rower" style="width: 40em;">{{ col.2|safe }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
 
-<p><strong>match</strong><br/>
-Contains game information.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    period_id       integer not null                        foreign key to period; the period this match was 
-                                                              played in
-    date            date not null                           when the match was played (often approximate)
-    pla_id          integer not null                        foreign key to player; player A
-    plb_id          integer not null                        foreign key to player; player B
-    sca             smallint not null                       score for player A
-    scb             smallint not null                       score for player B
-    rca             character varying(1) not null           race for player A (not necessarily same as 
-                                                              pla.race, S is not allowed)
-    rcb             character varying(1) not null           race for player B (not necessarily same as
-                                                              plb.race, S is not allowed)
-    treated         boolean not null                        true if the match has been rated
-    event           character varying(200) not null         tournament, round, group etc. (superceded by
-                                                              eventobj_id if not null)
-    eventobj_id     integer                                 foreign key to event (supercedes event field)
-    submitter_id    integer                                 foreign key to a table removed from the dump
-    game            character varying(200) not null         game version used (WoL, HotS, LotV)
-    offline         boolean not null                        whether this match was played offline
-    rta_id          integer                                 foreign key to rating; rating of player A at the
-                                                              time of the match
-    rtb_id          integer                                 foreign key to rating; rating of player B at the
-                                                              time of the match
-    </pre>
-</code>
-
-<p><strong>event</strong><br/>
-Contains event information. Events are organized in a tree as defined by the <strong>eventadjacency</strong>
-table. «Event» in this case means anything from organizer, season, tournament, round (incl. qualifiers),
-group, days and weeks, etc.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    name            character varying(100) not null         name of this node
-    parent_id       integer                                 parent node
-    lft             integer                                 (deprecated)
-    rgt             integer                                 (deprecated)
-    closed          boolean not null                        whether the event is finished or not
-    big             boolean not null                        whether the event is considered large (many games)
-    noprint         boolean not null                        whether this event should be skipped in the 
-                                                              fullname of descendants
-    fullname        character varying(500) not null         full name of this event (including names of
-                                                              ancestors)
-    homepage        character varying(200)                  URL of the event website
-    lp_name         character varying(200)                  title of Liquipedia page (the part after
-                                                              http://wiki.teamliquid.net/starcraft2/)
-    tlpd_id         integer                                 external TLPD ID
-    tlpd_db         integer                                 bit-flag value denoting which TLPD databases this 
-                                                              event is in: 1 = KR WoL, 2 = IN WoL, 4 = HotS, 
-                                                              8 = HotS beta, 16 = WoL beta
-    tl_thread       integer                                 TL.net forum thread ID
-    prizepool       boolean                                 whether this event has an associated prizepool
-                                                              (NULL if unknown)
-    earliest        date                                    date of earliest match
-    latest          date                                    date of latest match
-    category        character varying(50)                   team, individual or frequent; only set for root
-                                                              nodes
-    type            character varying(50) not null          category, event (i.e. tournament) or round; you
-                                                              can assume that ancestors of events are always
-                                                              categories and that descendants of events are
-                                                              always rounds
-    idx             integer not null                        sorting index
-    </pre>
-</code>
-
-<p><strong>eventadjacency</strong><br/>
-Contains the tree information for events. There is a row here for every ancestor-descendant relationship. This
-table contains the transitive closure, so links of any distance are listed.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    parent_id       integer not null                        foreign key to event
-    child_id        integer not null                        foreign key to event
-    distance        integer                                 how many edges between the nodes
-    </pre>
-</code>
-
-<p><strong>rating</strong><br/>
-Contains rating information.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    period_id       integer not null                        foreign key to period
-    player_id       integer not null                        foreign key to player
-    rating          double precision not null               current rating
-    rating_vp       double precision not null               current rating delta vP
-    rating_vt       double precision not null               current rating delta vT
-    rating_vz       double precision not null               current rating delta vZ
-    dev             double precision not null               current RD
-    dev_vp          double precision not null               current RD vP
-    dev_vt          double precision not null               current RD vT
-    dev_vz          double precision not null               current RD vZ
-    comp_rat        double precision                        performance rating in this period
-    comp_rat_vp     double precision                        performance rating vP in this period
-    comp_rat_vz     double precision                        performance rating vT in this period
-    comp_rat_vt     double precision                        performance rating vZ in this period
-    bf_rating       double precision not null               smoothed rating
-    bf_rating_vp    double precision not null               smoothed rating vP
-    bf_rating_vt    double precision not null               smoothed rating vT
-    bf_rating_vz    double precision not null               smoothed rating vZ
-    bf_dev          double precision                        smoothed RD
-    bf_dev_vp       double precision                        smoothed RD vP
-    bf_dev_vt       double precision                        smoothed RD vZ
-    bf_dev_vz       double precision                        smoothed RD vT
-    position        integer                                 rank
-    position_vp     integer                                 rank vP
-    position_vt     integer                                 rank vT
-    position_vz     integer                                 rank vZ
-    decay           integer not null                        number of periods since last game
-    domination      double precision                        rating gap to number 7 (used in the hall of fame)
-    prev_id         integer                                 foreign key to rating; previous rating for this
-                                                              player
-    </pre>
-</code>
-
-<p><strong>period</strong><br/>
-A period represents a discrete time interval used for rating computation purposes.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    start           date                                    starting date (inclusive)
-    end             date                                    ending date (inclusive)
-    computed        boolean not null                        whether this period has been rated
-    needs_recompute boolean not null                        whether this period needs re-rating (something
-                                                              has changed)
-    num_retplayers  integer not null                        number of returning players
-    num_newplayers  integer not null                        number of new players
-    num_games       integer not null                        number of games played
-    dom_p           double precision                        OP-score for Protoss
-    dom_t           double precision                        OP-score for Terran
-    dom_p           double precision                        OP-score for Zerg
-    </pre>
-</code>
-
-<p><strong>group</strong><br/>
-Contains group information (for now, this means teams).</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    name            character varying (100) not null        name of group
-    shortname       character varying (25)                  short name of group
-    scoreak         double precision                        all-kill score (if team)
-    scorepl         double precision                        proleague score (if team)
-    founded         date                                    date founded
-    disbanded       date                                    date disbanded
-    active          boolean not null                        whether the group is active
-    homepage        character varying (200)                 URL of team website
-    lp_name         character varying (200)                 title of Liquipedia page (the part after
-                                                              http://wiki.teamliquid.net/starcraft2/)
-    is_team         boolean not null                        whether this group is a proper team
-    is_manual       boolean not null                        whether this group has manually added members
-                                                              or not (currently has no effect, there are no
-                                                              automatic groups)
-    </pre>
-</code>
-
-<p><strong>groupmembership</strong><br/>
-Links teams and players together in a many-to-many relationship.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    player_id       integer not null                        foreign key to player
-    group_id        integer not null                        foreign key to group
-    start           date                                    start date of membership
-    end             date                                    end date of membership
-    current         boolean not null                        whether the membership is in effect (many end
-                                                              dates are unknown, so this is needed)
-    playing         boolean not null                        whether the player is a playing member (false e.g. 
-                                                              for coaches)
-    </pre>
-</code>
-
-<p><strong>earnings</strong><br/>
-Contains prize pool information. Each row represents a single payout to a single player.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    event_id        integer not null                        foreign key to event
-    player_id       integer not null                        foreign key to player
-    earnings        integer                                 amount in USD at win-time
-    origearnings    numeric(20,8)                           amount in original currency
-    currency        character varying(30) not null          currency code
-    placement       integer not null                        place in the event
-    </pre>
-</code>
-
-<p><strong>alias</strong><br/>
-Contains aliases for teams and players (common nicknames and shortened names).</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    name            character varying(100)                  the alias
-    player_id       integer                                 foreign key to player
-    group_id        integer                                 foreign key to group
-    </pre>
-</code>
-
-<p><strong>message</strong><br/>
-Contains messages associated with some objects, containing perhaps relevant information.</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    type            character varying(10) not null          info, warning, sucess or error
-    title           character varying(100)                  a title
-    text            text not null                           the message text
-    player_id       integer                                 foreign key to player
-    event_id        integer                                 foreign key to event
-    group_id        integer                                 foreign key to group
-    match_id        integer                                 foreign key to match
-    </pre>
-</code>
-
-<p><strong>story</strong><br/>
-Contains stories (dots plotted in some players' rating charts).</p>
-<code>
-    <pre>
-    id              integer not null                        primary key
-    player_id       integer not null                        foreign key to player
-    text            character varying(200) not null         text describing this story
-    date            date not null                           when it happened
-    event_id        integer                                 foreign key to event (if applicable)
-    </pre>
-</code>
 {% endif %}
 {% endblock %}

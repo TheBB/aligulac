@@ -5,25 +5,26 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Teams{% endblock %}
+{% block title %}{% trans "Teams" %}{% endblock %}
 
 {% block content %}
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 2.5em; text-align: right;">#</div>
-        <div class="rowe" style="width: 15em;">Name</div>
+        <div class="rowe" style="width: 2.5em; text-align: right;">{% trans "#" %}</div>
+        <div class="rowe" style="width: 15em;">{% trans "Name" %}</div>
         <div class="rowe" style="width: 10em; text-align: right;">
-            <a href="/teams/?sort=ak">All-kill score</a></div>
+            <a href="/teams/?sort=ak">{% trans "All-kill score" %}</a></div>
         <div class="rowe" style="width: 14em; text-align: right;">
-            <a href="/teams/?sort=pl">Proleague score</a>
+            <a href="/teams/?sort=pl">{% trans "Proleague score" %}</a>
         </div>
         <div class="rowe" style="width: 10.5em; text-align: right;">
-            <a href="/teams/?sort=rt">Top 5 rating</a>
+            <a href="/teams/?sort=rt">{% trans "Top 5 rating" %}</a>
         </div>
         <div class="rowe" style="width: 10em; text-align: right;">
-            <a href="/teams/?sort=np">Players</a>
+            <a href="/teams/?sort=np">{% trans "Players" %}</a>
         </div>
     </div>
     {% for team in active %}
@@ -53,7 +54,7 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
 </div>
 
 {% if inactive %}
-<h2>Disbanded teams</h2>
+<h2>{% trans "Disbanded teams" %}</h2>
 <p>{% for team in inactive %}<a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 {% endif %}
 {% endblock %}

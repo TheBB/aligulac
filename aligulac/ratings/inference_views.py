@@ -11,6 +11,10 @@ from django.shortcuts import (
     redirect, 
     render_to_response,
 )
+from django.utils.translation import (
+    ugettext_lazy as _,
+    ugettext
+)
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -49,40 +53,40 @@ from simul.formats.teampl import TeamPL
 # {{{ Prediction formats
 FORMATS = [{
     'url':        'match',
-    'name':       'Best-of-N match',
+    'name':       _('Best-of-N match'),
     'np-check':   lambda a: a == 2,
-    'np-errmsg':  "Expected exactly two players.",
+    'np-errmsg':  _("Expected exactly two players."),
     'bo-check':   lambda a: a == 1,
-    'bo-errmsg':  "Expected exactly one 'best of'.",
+    'bo-errmsg':  _("Expected exactly one 'best of'."),
 }, {
     'url':        'dual',
-    'name':       'Dual tournament',
+    'name':       _('Dual tournament'),
     'np-check':   lambda a: a == 4,
-    'np-errmsg':  "Expected exactly four players.",
+    'np-errmsg':  _("Expected exactly four players."),
     'bo-check':   lambda a: a == 1,
-    'bo-errmsg':  "Expected exactly one 'best of'.",
+    'bo-errmsg':  _("Expected exactly one 'best of'."),
 }, {
     'url':        'sebracket',
-    'name':       'Single elimination bracket',
+    'name':       _('Single elimination bracket'),
     'np-check':   lambda a: a > 1 and not a & (a-1), 
-    'np-errmsg':  "Expected number of players to be a power of two (2,4,8,…).",
+    'np-errmsg':  _("Expected number of players to be a power of two (2,4,8,…)."),
     'bo-check':   lambda a: a > 0,
-    'bo-errmsg':  "Expected at least one 'best of'.",
+    'bo-errmsg':  _("Expected at least one 'best of'."),
 }, {
     'url':        'rrgroup',
-    'name':       'Round robin group',
+    'name':       _('Round robin group'),
     'np-check':   lambda a: a > 2,
-    'np-errmsg':  "Expected at least three players.",
+    'np-errmsg':  _("Expected at least three players."),
     'bo-check':   lambda a: a == 1,
-    'bo-errmsg':  "Expected exactly one 'best of'.",
+    'bo-errmsg':  _("Expected exactly one 'best of'."),
 
 }, {
     'url':        'proleague',
-    'name':       'Proleague team match',
+    'name':       _('Proleague team match'),
     'np-check':   lambda a: a % 2 == 0,
-    'np-errmsg':  "Expected an even number of players.",
+    'np-errmsg':  _("Expected an even number of players."),
     'bo-check':   lambda a: a == 1,
-    'bo-errmsg':  "Expected exactly one 'best of'.",
+    'bo-errmsg':  _("Expected exactly one 'best of'."),
 }]
 # }}}
 
@@ -91,11 +95,11 @@ class PredictForm(forms.Form):
     format = forms.ChoiceField(
         choices=[(i, f['name']) for i, f in enumerate(FORMATS)],
         required=True,
-        label='Format',
+        label=_('Format'),
         initial=0,
     )
-    bestof = StrippedCharField(max_length=100, required=True, label='Best of', initial='1')
-    players = forms.CharField(max_length=10000, required=True, label='Players', initial='')
+    bestof = StrippedCharField(max_length=100, required=True, label=_('Best of'), initial='1')
+    players = forms.CharField(max_length=10000, required=True, label=_('Players'), initial='')
 
     # {{{ Constructor
     def __init__(self, request=None):
@@ -116,7 +120,7 @@ class PredictForm(forms.Form):
                 assert(a > 0 and a % 2 == 1)
             return ret
         except:
-            raise ValidationError("Must be a comma-separated list of positive odd integers (1,3,5,…).")
+            raise ValidationError(_("Must be a comma-separated list of positive odd integers (1,3,5,…)."))
 
     def clean_players(self):
         lines = self.cleaned_data['players'].splitlines()
@@ -134,7 +138,8 @@ class PredictForm(forms.Form):
 
             pls = find_player(query=line, make=False)
             if not pls.exists():
-                self.messages.append(Message("No matches found: '%s'." % line.strip(), type=Message.ERROR))
+                # Translators: Matches as in search matches
+                self.messages.append(Message(_("No matches found: '%s'.") % line.strip(), type=Message.ERROR))
                 ok = False
             elif pls.count() > 1:
                 self.messages.append(NotUniquePlayerMessage(
@@ -146,7 +151,7 @@ class PredictForm(forms.Form):
                 players.append(pls.first())
 
         if not ok:
-            raise ValidationError('One or more errors found in player list.')
+            raise ValidationError(_('One or more errors found in player list.'))
 
         return players
     # }}}
@@ -221,7 +226,7 @@ def group_by(lst, key):
 def predict(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    base.update({"title": "Predict"})
+    base.update({"title": _("Predict")})
 
     if 'submitted' not in request.GET:
         base['form'] = PredictForm()
@@ -352,7 +357,7 @@ def match(request):
 
     postable_match(base, request)
 
-    base.update({"title": "{} vs. {}".format(dbpl[0].tag, dbpl[1].tag)})
+    base.update({"title": _("%(pla)s vs. %(plb)s") % {'pla': dbpl[0].tag, 'plb': dbpl[1].tag}})
 
     return render_to_response('pred_match.html', base)
 # }}}
@@ -460,9 +465,9 @@ class DualPredictionResult(CombinationPredictionResult):
 
         prefixes = '12wlf'
         rounds = [
-            ('Intial round',                    '12'),
-            ('Winners\' and losers\' matches',  'wl'),
-            ('Final match',                     'f'),
+            (_('Intial round'),                    '12'),
+            (_('Winners\' and losers\' matches'),  'wl'),
+            (_('Final match'),                     'f'),
         ]
 
         self.bos = bos
@@ -517,7 +522,7 @@ def dual(request):
 
     postable_dual(base, request)
 
-    base.update({"title": "Dual tournament"})
+    base.update({"title": _("Dual tournament")})
 
     return render_to_response('pred_4pswiss.html', base)
 # }}}
@@ -539,7 +544,7 @@ class SingleEliminationPredictionResult(CombinationPredictionResult):
 
         prefixes = ['%i-%i' % (rnd, j) for rnd in range(1, nrounds+1) for j in range(1, 2**(nrounds-rnd)+1)]
         rounds = [
-            ('Round %i' % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
+            (_('Round %i') % rnd, ['%i-%i' % (rnd, j) for j in range(1, 2**(nrounds-rnd)+1)])
             for rnd in range(1, nrounds+1)
         ]
 
@@ -596,7 +601,7 @@ def sebracket(request):
 
     postable_sebracket(base, request, group_by(base['meanres'], key=lambda a: a['eventtext']))
 
-    base.update({"title": "Single elimination bracket"})
+    base.update({"title": _("Single elimination bracket")})
 
     return render_to_response('pred_sebracket.html', base)
 # }}}
@@ -639,8 +644,8 @@ class RoundRobinPredictionResult(CombinationPredictionResult):
             for p in players
         ]
 
-        self.matches = self.create_matches(obj, [('Group play', prefixes)])
-        self.meanres = self.create_median_matches(obj, [('Group play', prefixes)])
+        self.matches = self.create_matches(obj, [(_('Group play'), prefixes)])
+        self.meanres = self.create_median_matches(obj, [(_('Group play'), prefixes)])
 
         obj.compute()
 
@@ -685,7 +690,7 @@ def rrgroup(request):
 
     postable_rrgroup(base, request)
 
-    base.update({"title": "Round robin group"})
+    base.update({"title": _("Round robin group")})
 
     return render_to_response('pred_rrgroup.html', base)
 # }}}
@@ -717,7 +722,7 @@ class ProleaguePredictionResult(CombinationPredictionResult):
         self.update_matches(obj, prefixes, args)
         obj.compute()
 
-        self.matches = self.create_matches(obj, [('Matches', prefixes)])
+        self.matches = self.create_matches(obj, [(_('Matches'), prefixes)])
 
         self.outcomes = []
         self.prob_draw = 0
@@ -738,7 +743,7 @@ class ProleaguePredictionResult(CombinationPredictionResult):
         self.proba = sum(r['proba'] for r in self.outcomes)
         self.probb = sum(r['probb'] for r in self.outcomes)
 
-        self.meanres = self.create_median_matches(obj, [('Matches', prefixes)])
+        self.meanres = self.create_median_matches(obj, [(_('Matches'), prefixes)])
 # }}}
 
 # {{{ Proleage prediction view
@@ -774,7 +779,7 @@ def proleague(request):
 
     postable_proleague(base, request)
 
-    base.update({"title": "Proleague team match"})
+    base.update({"title": _("Proleague team match")})
 
     return render_to_response('pred_proleague.html', base)
 # }}}
@@ -786,34 +791,40 @@ def proleague(request):
 # {{{ Headers and footers
 TL_HEADER = '[center][code]'
 TL_SEBRACKET_MIDDLE = (
-    '[/code][/center][b]Median Outcome Bracket[/b]\n'
+    '[/code][/center][b]%(medoutbr)s[/b]\n'
     '[spoiler][code]'
 )
 TL_SEBRACKET_FOOTER = (
     '[/code][/spoiler]\n'
-    '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '
-    '[url=%s]Modify[/url].[/small]'
+    '[small]%(estby)s [url=http://aligulac.com/]Aligulac[/url]. '
+    '[url=%(modurl)s]%(modify)s[/url].[/small]'
 )
 TL_FOOTER = (
     '[/code][/center]\n'
-    '[small]Estimated by [url=http://aligulac.com/]Aligulac[/url]. '
-    '[url=%s]Modify[/url].[/small]'
+    '[small]%(estby)s [url=http://aligulac.com/]Aligulac[/url]. '
+    '[url=%(modurl)s]%(modify)s[/url].[/small]'
 )
 
 REDDIT_HEADER = ''
-REDDIT_FOOTER = '\n\n^(Estimated by) [^Aligulac](http://aligulac.com/)^. [^Modify](%s)^.'
+REDDIT_FOOTER = '\n\n^(%(estby)s) [^Aligulac](http://aligulac.com/)^. [^%(modify)s](%(modurl)s)^.'
 # }}}
 
 # {{{ ordinal: Converts an integer to its ordinal (string) representation
 def ordinal(value):
-    try:
-        value = int(value)
-    except (TypeError, ValueError):
-        return value
-    suffixes = ('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th')
-    if value % 100 in (11, 12, 13):
-        return "%d%s" % (value, suffixes[0])
-    return "%d%s" % (value, suffixes[value % 10])
+    return str(value)
+
+    # If we find a way to make this translation-friendly then good.
+    # Until then, this is how it'll be.
+    # -- TheBB
+
+    #try:
+        #value = int(value)
+    #except (TypeError, ValueError):
+        #return value
+    #suffixes = ('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th')
+    #if value % 100 in (11, 12, 13):
+        #return "%d%s" % (value, suffixes[0])
+    #return "%d%s" % (value, suffixes[value % 10])
 ## }}}
 
 # {{{ left_center_right(strings, gap=2, justify=True, indent=0): Aid for pretty-printing tables
@@ -886,17 +897,25 @@ def postable_match(base, request):
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings)
-        + ('\n\nMedian outcome: {pla} {sca}-{scb} {plb}'.format(
-            pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
-        + TL_FOOTER % request.build_absolute_uri()
+        + ('\n\n{medout}: {pla} {sca}-{scb} {plb}'.format(
+            medout=_('Median outcome'), pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
+        + TL_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_reddit'] = (
           REDDIT_HEADER 
         + left_center_right(strings, justify=False, indent=4) 
-        + ('\n\n    Median outcome: {pla} {sca}-{scb} {plb}'.format(
-            pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + ('\n\n    {medout}: {pla} {sca}-{scb} {plb}'.format(
+            medout=_('Median outcome'), pla=pla.name, sca=median[1], scb=median[2], plb=plb.name))
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 # }}}
 
@@ -905,7 +924,9 @@ def postable_dual(base, request):
     numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = (
-        [('Top 2      1st      2nd      3rd      4th', '', ''), None] +
+        [('{s: >9}'.format(s=ugettext('Top 2')) + '{s: >9}'.format(s=ugettext('1st')) +
+          '{s: >9}'.format(s=ugettext('2nd')) + '{s: >9}'.format(s=ugettext('3rd')) +
+          '{s: >9}'.format(s=ugettext('4th')), '', ''), None] +
         [('{name: >{nl}}   {top2: >7.2f}% {p1: >7.2f}% {p2: >7.2f}% {p3: >7.2f}% {p4: >7.2f}%'.format(
             top2 = 100*(p['probs'][0]+p['probs'][1]),
             p1   = 100*p['probs'][0],
@@ -920,13 +941,21 @@ def postable_dual(base, request):
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings, justify=False, gap=0)
-        + TL_FOOTER % request.build_absolute_uri()
+        + TL_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_reddit'] = (
           REDDIT_HEADER
         + left_center_right(strings, justify=False, gap=0, indent=4)
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 # }}}
 
@@ -935,9 +964,11 @@ def postable_sebracket(base, request, bracket):
     numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
     strings = [(''.join(
-        ['Win    '] + 
-        ['Top {i: <5}'.format(i=2**rnd) for rnd in range(1, int(log(len(base['table']),2)))] +
-        ['Top {i}'.format(i=len(base['table']))]
+        # Translators: Win a tournament
+        ['{s: >9}'.format(s=ugettext('Win'))] + 
+        # Translators: Top 2, 4 etc. (in tournament)
+        ['{s: >9}'.format(s=ugettext('Top {i}').format(i=2**rnd))
+         for rnd in range(1, int(log(len(base['table']),2)) + 1)]
     ), '', ''), None]
 
     for p in base['table']:
@@ -951,21 +982,33 @@ def postable_sebracket(base, request, bracket):
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings, justify=False, gap=0)
-        + TL_SEBRACKET_MIDDLE
+        + TL_SEBRACKET_MIDDLE % {'medoutbr': _('Median Outcome Bracket')}
         + create_postable_bracket(bracket)
-        + TL_SEBRACKET_FOOTER % request.build_absolute_uri()
+        + TL_SEBRACKET_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_reddit'] = (
           REDDIT_HEADER
         + left_center_right(strings, justify=False, gap=0, indent=4)
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_bracket_reddit'] = (
           REDDIT_HEADER
         + create_postable_bracket(bracket, indent=4)
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 # }}}
 
@@ -1032,13 +1075,21 @@ def postable_rrgroup(base, request):
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings, justify=False, gap=0)
-        + TL_FOOTER % request.build_absolute_uri()
+        + TL_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_reddit'] = (
           REDDIT_HEADER
         + left_center_right(strings, justify=False, gap=0, indent=4)
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 # }}}
 
@@ -1046,9 +1097,10 @@ def postable_rrgroup(base, request):
 def postable_proleague(base, request):
     numlen = len(str((len(base['matches']) + 1) // 2))
     strings = [(
-        'Team {p}'.format(p=base['matches'][0]['pla']['tag']),
+        # Translators: Team [player], e.g. "Team Jaedong"
+        ugettext('Team {p}').format(p=base['matches'][0]['pla']['tag']),
         '{sca: >{nl}}-{scb: <{nl}}'.format(sca=base['s1'], scb=base['s2'], nl=numlen),
-        'Team {p}'.format(p=base['matches'][0]['plb']['tag']),
+        ugettext('Team {p}').format(p=base['matches'][0]['plb']['tag']),
     ), None]
 
     for r in base['outcomes']:
@@ -1071,13 +1123,21 @@ def postable_proleague(base, request):
     base['postable_tl'] = (
           TL_HEADER
         + left_center_right(strings)
-        + TL_FOOTER % request.build_absolute_uri()
+        + TL_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 
     base['postable_reddit'] = (
           REDDIT_HEADER 
         + left_center_right(strings, justify=False, indent=4) 
-        + REDDIT_FOOTER % request.build_absolute_uri()
+        + REDDIT_FOOTER % {
+              'modurl': request.build_absolute_uri(),
+              'modify': _('Modify'),
+              'estby': _('Estimated by'),
+          }
     )
 # }}}
 

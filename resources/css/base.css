@@ -815,8 +815,15 @@ td.tabunsel a {
     font-family: 'Marcellus SC';
 }
 
-.ui-menu .ui-menu-item a {
+.ui-autocomplete .ui-menu-item a {
     cursor: pointer;
+    white-space: normal;
+}
+
+.ui-autocomplete .ui-menu-item .right {
+    float: right;
+    text-align: right;
+    margin-left: 1em;
 }
 
 .ui-menu:not(.ui-buttonset) .ui-menu-item {

@@ -4,7 +4,7 @@
 
 aligulacAutocompleteTemplates = (obj) ->
     if not (obj.tag? || obj.name? || obj.fullname?)
-        return "<span class='autocomplete-header'>#{ obj.label }</span>"
+        return "<span class='autocomplete-header'>#{ autocomplete_strings[obj.label] }</span>"
 
     switch obj.type
         when 'player'

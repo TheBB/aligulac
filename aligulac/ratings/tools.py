@@ -13,6 +13,7 @@ from django.db.models import (
     Sum,
     Q,
 )
+from django.utils.translation import ugettext_lazy as _
 
 import ccy
 from countries import data
@@ -49,8 +50,59 @@ PATCHES = [
 ]
 # }}}
 
+# {{{ Currency names 
+CURRENCIES = {
+    'EUR': _('Euro'),
+    'GBP': _('British Pound'),
+    'AUD': _('Australian Dollar'),
+    'NZD': _('New-Zealand Dollar'),
+    'USD': _('US Dollar'),
+    'CAD': _('Canadian Dollar'),
+    'CHF': _('Swiss Franc'),
+    'NOK': _('Norwegian Krona'),
+    'SEK': _('Swedish Krona'),
+    'DKK': _('Danish Krona'),
+    'JPY': _('Japanese Yen'),
+    'CNY': _('Chinese Renminbi'),
+    'KRW': _('South Korean won'),
+    'SGD': _('Singapore Dollar'),
+    'IDR': _('Indonesian Rupiah'),
+    'THB': _('Thai Baht'),
+    'TWD': _('Taiwan Dollar'),
+    'HKD': _('Hong Kong Dollar'),
+    'PHP': _('Philippines Peso'),
+    'INR': _('Indian Rupee'),
+    'MYR': _('Malaysian Ringgit'),
+    'VND': _('Vietnamese Dong'),
+    'BRL': _('Brazilian Real'),
+    'PEN': _('Peruvian Nuevo Sol'),
+    'ARS': _('Argentine Peso'),
+    'MXN': _('Mexican Peso'),
+    'CLP': _('Chilean Peso'),
+    'COP': _('Colombian Peso'),
+    'JMD': _('Jamaican Dollar'),
+    'TTD': _('Trinidad and Tobago Dollar'),
+    'BMD': _('Bermudian Dollar'),
+    'CZK': _('Czech Koruna'),
+    'PLN': _('Polish Zloty'),
+    'TRY': _('Turkish Lira'),
+    'HUF': _('Hungarian Forint'),
+    'RON': _('Romanian Leu'),
+    'RUB': _('Russian Ruble'),
+    'HRK': _('Croatian kuna'),
+    'KZT': _('Kazakhstani Tenge'),
+    'ILS': _('Israeli Shekel'),
+    'AED': _('United Arab Emirates Dirham'),
+    'QAR': _('Qatari Riyal'),
+    'SAR': _('Saudi Riyal'),
+    'EGP': _('Egyptian Pound'),
+    'ZAR': _('South African Rand'),
+    'XBT': _('Bitcoin'),
+}
+# }}}
+
 # {{{ find_player: Magic!
-def find_player(query=None, lst=None, make=False, soft=False):
+def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     queryset = Player.objects.all()
 
     if not lst:
@@ -75,51 +127,57 @@ def find_player(query=None, lst=None, make=False, soft=False):
             continue
 
         # Otherwise, always search by player tag, team and aliases
+        filter_type = "iexact"
         if soft:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__icontains=s) | Q(alias__name__icontains=s)
-            )
-        else:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__iexact=s) | Q(alias__name__iexact=s)
-            )
+            filter_type = "icontains"
 
-        # ...and perhaps country codes
-        found_country = False
-        if len(s) == 2 and s.upper() in data.cca2_to_ccn:
-            country = s.upper()
-            found_country = True
-            q |= Q(country=s.upper())
+        # Helper function that formats the filter to use `filter_type`
+        def format_filter(**kwargs):
+            ret = dict()
+            for k in kwargs:
+                if k.endswith("MATCHES"):
+                    ret[k.replace("MATCHES", filter_type)] = kwargs[k]
+                else:
+                    ret[k] = kwargs[k]
+            return ret
 
-        if len(s) == 3 and s.upper() in data.cca3_to_ccn:
-            country = ccn_to_cca2(cca3_to_ccn(s.upper()))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+        tag_filter = format_filter(tag__MATCHES=s)
+        alias_filter = format_filter(alias__name__MATCHES=s)
 
-        renorm = s[0].upper() + s[1:].lower()
-        if renorm in data.cn_to_ccn:
-            country = ccn_to_cca2(cn_to_ccn(renorm))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+        q = Q(**tag_filter) | Q(**alias_filter)
+        if not strict or len(lst) > 1:
+            group_name_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__name__MATCHES=s,
+                groupmembership__group__is_team=True)
 
-        if not found_country:
-            tag = s
+            group_alias_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__alias__name__MATCHES=s,
+                groupmembership__group__is_team=True)
+
+            q |= Q(**group_name_filter) | Q(**group_alias_filter)
+
+            # ...and perhaps country codes
+            found_country = False
+            if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+                country = s.upper()
+                found_country = True
+                q |= Q(country=s.upper())
+
+            if len(s) == 3 and s.upper() in data.cca3_to_ccn:
+                country = ccn_to_cca2(cca3_to_ccn(s.upper()))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+
+            renorm = s[0].upper() + s[1:].lower()
+            if renorm in data.cn_to_ccn:
+                country = ccn_to_cca2(cn_to_ccn(renorm))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+
+            if not found_country:
+                tag = s
 
         queryset = queryset.filter(q)
     # }}}
@@ -128,11 +186,11 @@ def find_player(query=None, lst=None, make=False, soft=False):
     if not queryset.exists() and make:
         # {{{ Raise exceptions if missing crucial data
         if tag == None:
-            msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing player tag)") % ' '.join(lst)
             raise Exception(msg)
 
         if race == None:
-            msg = "Player '%s' was not found and cound not be made (missing race)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing race)") % ' '.join(lst)
             raise Exception(msg)
         # }}}
 
@@ -215,7 +273,7 @@ def populate_teams(queryset):
 def country_list(queryset):
     countries = queryset.values('country').distinct()
     country_codes = {c['country'] for c in countries if c['country'] is not None}
-    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
+    country_dict = [{'cc': c, 'name': _(data.ccn_to_cn[data.cca2_to_ccn[c]])} for c in country_codes]
     country_dict.sort(key=lambda a: a['name'])
     return country_dict
 # }}}
@@ -224,7 +282,7 @@ def country_list(queryset):
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
     currency_dict = [
-        {'name': ccy.currency(c['currency']).name, 'code': ccy.currency(c['currency']).code} 
+        {'name': CURRENCIES[ccy.currency(c['currency']).code], 'code': ccy.currency(c['currency']).code} 
         for c in currencies
     ]
     return currency_dict
@@ -374,7 +432,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             r['eventtext'] = m.eventobj.fullname if m.eventobj is not None else m.event
 
         # If event is not closed and add_links=True, show add link
-        r['add_links'] = add_links and not m.eventobj.closed
+        r['add_links'] = add_links and m.eventobj is not None and not m.eventobj.closed
         # }}}
 
         # {{{ Add dates and messages if needed
@@ -383,7 +441,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
         if messages:
             r['messages'] = [
-                aligulac.tools.Message(msg.text, msg.title, msg.type + '-small')
+                aligulac.tools.Message(msg=msg, type=msg.type + '-small')
                 for msg in m.message_set.all()
             ]
         # }}}
@@ -412,4 +470,3 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     return ret
 # }}}
-

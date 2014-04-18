@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+from django.utils.translation import ugettext_lazy as _
 
 import aligulac.local as local
 
@@ -26,6 +27,22 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['.aligulac.com']
 
+LOCALE_PATHS = local.LOCALE_PATHS
+LANGUAGE_CODE = 'en_US'
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('no', 'Norsk'),
+]
+
+if DEBUG:
+    LANGUAGES += [
+        ('zh', '中文(简化字)'),
+        ('ru', 'Русский'),
+        ('es', 'Español'),
+        ('de', 'Deutsch'),
+        ('fr', 'Français'),
+    ]
 
 # CUSTOM
 
@@ -111,6 +128,7 @@ INSTALLED_APPS.append('south')
 
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -138,6 +156,28 @@ DATABASES = {
     }
 }
 
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': local.ERROR_LOG_FILE
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': True
+        }
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
@@ -146,9 +186,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 

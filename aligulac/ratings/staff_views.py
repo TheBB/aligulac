@@ -679,7 +679,9 @@ class MergePlayersForm(forms.Form):
         Earnings.objects.filter(player=source).update(player=target)
 
         ret.append(Message(
-            _('%(source)s was successfully merged into %(target)s.') % (source.tag, target.tag),
+            _('%(source)s was successfully merged into %(target)s.') % {
+                'source': source.tag,
+                'target': target.tag},
             # Translate: Merging of two players, this is a reference to the archon from SC:BW.
             title=_('The merging is complete'), type=Message.SUCCESS
         ))

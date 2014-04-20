@@ -869,15 +869,16 @@ table.comp th, td {
     margin: 1px;
 }
 
+th.comp-head a {
+    color: black;
+}
+
 th.comp-head {
     text-align: center;
     vertical-align: middle;
 }
 
-/* div.comp-player-race { */
-/*    */
-/* } */
-div.comp-player-race > img {
+div.comp-player-race img {
     max-height: 100px;
     max-width: 100px;
 }

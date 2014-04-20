@@ -329,14 +329,27 @@ def compare_search(request):
     base = base_ctx('Misc', 'Compare', request)
     base["title"] = _("Comparison")
 
+    if "op" in request.GET:
+        op = request.GET["op"].lower()
+
     if "players" not in request.GET:
         form = CompareForm()
+        validate = False
     else:
         form = CompareForm(request=request)
+        if "op" not in request.GET:
+            validate = False
+        elif op == "compare":
+            validate = True
+        else:
+            validate = False
 
     base["form"] = form
 
-    if not form.is_valid() or request.GET["op"] == "edit":
+    if not validate:
+        return render_to_response('compare.search.html', base)
+
+    if not form.is_valid():
         base["messages"] += form.get_messages()
         return render_to_response('compare.search.html', base)
 

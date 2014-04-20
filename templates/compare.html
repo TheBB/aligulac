@@ -18,7 +18,7 @@ Number of days since.
       {% for p in players %}
       <th class="comp-head">
         <div class="comp-player-race">
-	  {{ p.race|large_race_img|safe }}
+          {{ p.race|large_race_img|safe }}
         </div>
       </th>
       {% endfor %}
@@ -27,7 +27,9 @@ Number of days since.
       <th></th>
       {% for p in players %}
       <th class="comp-head">
-        <div class="comp-player-tag">{{ p.tag }}</div>
+        <a href="{{ p|player_url }}" target="_blank">
+          <div class="comp-player-tag">{{ p.tag }}</div>
+        </a>
       </th>
       {% endfor %}
     </tr>
@@ -37,10 +39,12 @@ Number of days since.
       <th class="comp-head">
         {% if p.country %}
         <div class="comp-player-country">
-	  <img src="{{ p.country|lower|img:'flags' }}" />
-          {{ p.country|countryfull }}
+          <a href="/periods/latest/?nats={{ p.country }}" target="_blank">
+            <img src="{{ p.country|lower|img:'flags' }}" />
+            {{ p.country|countryfull }}
+          </a>
         </div>
-	{% endif %}
+        {% endif %}
       </th>
       {% endfor %}
     </tr>

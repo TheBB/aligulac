@@ -345,6 +345,11 @@ td.expand {
     width: 99%;
 }
 
+tr.hline {
+    background-color: #555555;
+    height: 1px;
+}
+
 /* =====================================================================
  * Menu
  * =====================================================================
@@ -849,3 +854,50 @@ td.tabunsel a {
     color: black;
     margin: 0;
 }
+
+
+/* Comparisions */
+
+table.comp {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.comp th, td {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin: 1px;
+}
+
+th.comp-head {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* div.comp-player-race { */
+/*    */
+/* } */
+div.comp-player-race > img {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+div.comp-player-tag {
+    font-size: larger;
+}
+
+/* alt 1 */
+td.comp-best {
+    color: darkgreen;
+}
+td.comp-worst {
+    color: red;
+}
+
+/* alt 2 */
+/* td.comp-best { */
+/*     background-color: lightgreen; */
+/* } */
+/* td.comp-worst { */
+/*     background-color: salmon; */
+/* } */

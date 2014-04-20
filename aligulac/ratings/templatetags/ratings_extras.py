@@ -2,6 +2,10 @@ import hashlib
 import markdown2
 from math import sqrt
 import re
+
+from countries import (
+    transformations,
+)
 from datetime import (
     timedelta,
     date,
@@ -133,6 +137,13 @@ def racefull(value):
         _('Random'),
         _('Race switcher')][['P','T','Z','R','S'].index(value)]
     )
+
+# countryfull: Converts a country code to human readable format.
+@register.filter
+def countryfull(value):
+    if value is not None:
+        return transformations.cc_to_cn(value)
+    return value
 
 # haslogo: Checks whether a team given by ID has a logo file.
 @register.filter
@@ -562,17 +573,45 @@ def player(value):
     if not isinstance(value, Player):
         return value
 
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
     return mark_safe((
         "<span class='player'>"
         "<a href='/players/{id}-{safetag}/'>"
-        "<img src='{flag}' /><img src='{race}' />{tag}"
+        "{flag}<img src='{race}' />{tag}"
         "</a>"
         "</span>"
-        ).format(tag=value.tag,
-                 safetag=urlfilter(value.tag),
-                 id=value.id,
-                 flag=img("flags/" + value.country.lower()),
-                 race=img(value.race)))
+        ).format(
+            tag=value.tag,
+            safetag=urlfilter(value.tag),
+            id=value.id,
+            flag=flag,
+            race=img(value.race)))
+
+@register.filter
+def player_no_race(value):
+    if not isinstance(value, Player):
+        return value
+
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
+    return mark_safe((
+        "<span class='player'>"
+        "<a href='/players/{id}-{safetag}/'>"
+        "{flag}{tag}"
+        "</a>"
+        "</span>"
+        ).format(
+            tag=value.tag,
+            safetag=urlfilter(value.tag),
+            id=value.id,
+            flag=flag))
 
 @register.filter
 def event(value):
@@ -585,3 +624,23 @@ def event(value):
         "</a>").format(id=value.id,
                        name=value.fullname,
                        safename=urlfilter(value.fullname)))
+
+
+@register.filter
+def large_race_img(value):
+
+    img_src = ''
+    if value == 'P':
+        img_src = 'protoss'
+    elif value == 'T':
+        img_src = 'terran'
+    elif value == 'Z':
+        img_src = 'zerg'
+    elif value == 'R':
+        img_src = 'random'
+    elif value == 'S':
+        img_src = 'switcher'
+
+    img_src = img(img_src)
+
+    return '<img src="{}" title="{}" />'.format(img_src, racefull(value))

@@ -212,8 +212,9 @@ Changes here will mostly be visible on the entire site.
 
                     {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
                     {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
-                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
-                    {% endwith %}{% endwith %}<br/><br/>
+                    {% with a4="<a target=\"_blank\" href=\"http://printgestalt.deviantart.com/\">" %}
+                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a> and {{a4}}Printgestalt</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}{% endwith %}<br/><br/>
 
                     <span id="genshort">
                     <input type="submit" value="{% trans "Generate short URL for this page" %}" 

@@ -74,6 +74,7 @@ class SmallRatingResource(ModelResource):
         resource_name = 'rating'
         authentication = APIKeyAuthentication()
         fields = [
+            'id',
             'rating', 'rating_vp', 'rating_vt', 'rating_vz',
             'dev', 'dev_vp', 'dev_vt', 'dev_vz',
             'decay',

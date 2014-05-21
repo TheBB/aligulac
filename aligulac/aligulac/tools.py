@@ -392,7 +392,11 @@ ntz = lambda k: k if k is not None else 0
 # {{{ search: Helper function for performing searches
 def search(query, search_for=['players', 'teams', 'events'], strict=False):
     # {{{ Split query
-    terms = [s.strip() for s in shlex.split(query) if s.strip() != '']
+    lex = shlex.shlex(query, posix=True)
+    lex.wordchars += "'"
+    lex.quotes = '"'
+
+    terms = [s.strip() for s in list(lex) if s.strip() != '']
     if len(terms) == 0:
         return None
     # }}}

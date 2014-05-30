@@ -76,7 +76,7 @@ if count != 0:
     @commit_on_success
     def fix_artifacts():
         print("Found")
-        print("[%s] Fixing artifacts...")
+        print("[%s] Fixing artifacts..." % str(datetime.now()))
         for m in itertools.chain(q, q2):
             print("    Correcting match: %s" % str(m))
             m.set_ratings()

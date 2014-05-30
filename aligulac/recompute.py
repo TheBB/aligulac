@@ -5,6 +5,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
 
 from datetime import date, datetime
+import itertools
 import sys
 import subprocess
 
@@ -53,6 +54,39 @@ if q.count() > 0:
 
     Period.objects.filter(id__in=period_set).update(needs_recompute=True)
     print('    Done! (%i matches, %i periods)' % (len(matches), len(period_set)))
+else:
+    print('Done! None found!')
+
+print('[%s] Checking for Match Rating <-> Match Player artifacts... ' % (str(datetime.now())), end="")
+
+q = Match.objects.symmetric_filter(
+    ~Q(period__isnull=False, period=F('rta__period') + 1)
+)
+
+q2 = Match.objects.filter(
+    ~Q(pla=F('rta__player')) |
+    ~Q(plb=F('rtb__player'))
+)
+
+count = q.count() + q2.count()
+
+if count != 0:
+    period_set = set()
+
+    @commit_on_success
+    def fix_artifacts():
+        print("Found")
+        print("[%s] Fixing artifacts...")
+        for m in itertools.chain(q, q2):
+            print("    Correcting match: %s" % str(m))
+            m.set_ratings()
+            m.save()
+            period_set.add(m.period_id)
+
+    fix_artifacts()
+    Period.objects.filter(id__in=period_set).update(needs_recompute=True)
+
+    print('    Done! (%i matches, %i periods)' % (count, len(period_set)))
 else:
     print('Done! None found!')
 

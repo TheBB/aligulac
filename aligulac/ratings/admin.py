@@ -47,7 +47,7 @@ def player_team(p):
     except:
         return ''
 player_team.short_description = 'Team'
-    
+
 class MembersInline(admin.TabularInline):
     model = Group.members.through
 
@@ -140,7 +140,7 @@ class MatchForm(forms.ModelForm):
 
     def commit(self, request):
         super().commit(request)
-        
+
         self.cleaned_data['period'].update(needs_recompute=True)
 
 def match_delete_wrapper(f):
@@ -157,7 +157,7 @@ class MatchAdmin(admin.ModelAdmin):
     inlines = [MessagesInline]
     exclude = ('rta', 'rtb', 'period')
     list_filter = [
-        ('date', DateFieldListFilter), 
+        ('date', DateFieldListFilter),
         ('game', AllValuesFieldListFilter),
     ]
     form = MatchForm
@@ -168,7 +168,7 @@ class MatchAdmin(admin.ModelAdmin):
         if 'delete_selected' in actions:
             fun, name, desc = actions['delete_selected']
             actions['delete_selected'] = (match_delete_wrapper(fun), name, desc)
-            
+
         return actions
 
     def get_res(self, obj):
@@ -193,7 +193,7 @@ class PeriodAdmin(admin.ModelAdmin):
 
     def get_actions(self, request):
         actions = super().get_actions(request)
-        
+
         if 'delete_selected' in actions:
             del actions['delete_selected']
 
@@ -211,11 +211,11 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [MessagesInline]
     exclude = ('lft', 'rgt', 'idx', 'tlpd_db')
     readonly_fields = (
-        'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx', 'close')
+        'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx')
     search_fields = ['fullname']
     actions = ['open_event_action', 'close_event_action']
 
-    
+
     def open_event_action(self, request, queryset):
         count = 0
         for event in queryset:

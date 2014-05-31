@@ -1469,6 +1469,7 @@ class Match(models.Model):
 
         # If the period has been changed, or another effective change has been made, flag period(s).
         if self.changed_period() or self.changed_effect():
+            self.set_ratings()
             try:
                 self.orig_period.needs_recompute = True
                 self.orig_period.save()
@@ -1521,12 +1522,12 @@ class Match(models.Model):
         try:
             self.rta = Rating.objects.get(player=self.pla, period_id=self.period_id-1)
         except:
-            pass
+            self.rta = None
 
         try:
             self.rtb = Rating.objects.get(player=self.plb, period_id=self.period_id-1)
         except:
-            pass
+            self.rtb = None
     # }}}
 
     # {{{ set_date(date): Exactly what it says on the tin.

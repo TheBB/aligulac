@@ -5,17 +5,20 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}{{ dbpl.0.tag }} vs. {{ dbpl.1.tag }}{% endblock %}
+{% block title %}{% blocktrans with pla=dbpl.0.tag plb=dbpl.1.tag %}{{pla}} vs. {{plb}}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
-    <p>Verdict: 
-    {% if   max <= 0.55 %}Even chances.
-    {% elif max <= 0.65 %}Slight advantage for {{ fav.tag }}.
-    {% elif max <= 0.75 %}Advantage for {{ fav.tag }}.
-    {% elif max <= 0.90 %}Large advantage for {{ fav.tag }}.
-    {% else %}Overwhelming advantage for {{ fav.tag }}.{% endif %}</p>
+{% with pl=fav.tag %}
+<p>{% trans "Verdict:" %}
+{% if   max <= 0.55 %}{% trans "Even chances." %}
+{% elif max <= 0.65 %}{% blocktrans %}Slight advantage for {{pl}}.{% endblocktrans %}
+{% elif max <= 0.75 %}{% blocktrans %}Advantage for {{pl}}.{% endblocktrans %}
+{% elif max <= 0.90 %}{% blocktrans %}Large advantage for {{pl}}.{% endblocktrans %}
+{% else %}{% blocktrans %}Overwhelming advantage for {{pl}}.{% endblocktrans %}{% endif %}</p>
+{% endwith %}
 
     <table class="results" style="width: 67em;">
         <tr class="header">
@@ -25,15 +28,15 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
                     {{ dbpl.0.tag }}</a>
             </td>
             <td style="width: 5em;">
-                <img src="{{ dbpl.0.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.0.country }}" />
-                <img src="{{ dbpl.0.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.0.race|racefull }}" class="btm" />
+                <img src="{{ dbpl.0.country|lower|img:"flags" }}" alt="{{ dbpl.0.country }}" />
+                <img src="{{ dbpl.0.race|add:"m"|img }}" alt="{{ dbpl.0.race|racefull }}" class="btm" />
             </td>
             <td style="width: 5em; text-align: center;">
                 {{ match.get_result.0 }}–{{ match.get_result.1 }}
             </td>
             <td style="width: 5em; text-align: right;">
-                <img src="{{ dbpl.1.race|add:"m"|imgfolder|static }}" alt="{{ dbpl.1.race|racefull }}" class="btm" />
-                <img src="{{ dbpl.1.country|lower|imgfolder:"flags"|static }}" alt="{{ dbpl.1.country }}" />
+                <img src="{{ dbpl.1.race|add:"m"|img }}" alt="{{ dbpl.1.race|racefull }}" class="btm" />
+                <img src="{{ dbpl.1.country|lower|img:"flags" }}" alt="{{ dbpl.1.country }}" />
             </td>
             <td style="width: 26em;">
                 <a href="/players/{{ dbpl.1.id }}-{{ dbpl.1.tag|urlfilter }}/">
@@ -73,59 +76,65 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
                 {{ tot_w_a }}–{{ tot_l_a }} ({{ tot_w_a|pctg_add:tot_l_a }}%)
             {% if tot_w_a|pctg_add_f:tot_l_a > tot_w_b|pctg_add_f:tot_l_b %}</strong>{% endif %}
             </td>
-            <td style="text-align: center;" colspan="3">Historical score</td>
+            <td style="text-align: center;" colspan="3">{% trans "Historical score" %}</td>
             <td style="padding-left: 2em;">
             {% if tot_w_a|pctg_add_f:tot_l_a < tot_w_b|pctg_add_f:tot_l_b %}<strong>{% endif %}
                 ({{ tot_w_b|pctg_add:tot_l_b }}%) {{ tot_w_b }}–{{ tot_l_b }} 
             {% if tot_w_a|pctg_add_f:tot_l_a < tot_w_b|pctg_add_f:tot_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% if mu_w_a and mu_w_b %}
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
             {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
                 {{ mu_w_a }}–{{ mu_l_a }} ({{ mu_w_a|pctg_add:mu_l_a }}%)
             {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
             </td>
-            <td style="text-align: center;" colspan="3">Score vs. opposing race</td>
+            {% comment %}Translators: Opposing race here meaning the race relevant to the match being predicted.{% endcomment %}
+            <td style="text-align: center;" colspan="3">{% trans "Score vs. opposing race" %}</td>
             <td style="padding-left: 2em;">
             {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
                 ({{ mu_w_b|pctg_add:mu_l_b }}%) {{ mu_w_b }}–{{ mu_l_b }} 
             {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% endif %}
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
             {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}<strong>{% endif %}
                 {{ frm_w_a }}–{{ frm_l_a }} ({{ frm_w_a|pctg_add:frm_l_a }}%)
             {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}</strong>{% endif %}
             </td>
-            <td style="text-align: center;" colspan="3">Form</td>
+            {% comment %}Translators: Form as in the current form of a player.{% endcomment %}
+            <td style="text-align: center;" colspan="3">{% trans "Form" %}</td>
             <td style="padding-left: 2em;">
             {% if frm_w_a|pctg_add_f:frm_l_a < frm_w_b|pctg_add_f:frm_l_b %}<strong>{% endif %}
                 ({{ frm_w_b|pctg_add:frm_l_b }}%) {{ frm_w_b }}–{{ frm_l_b }} 
             {% if frm_w_a|pctg_add_f:frm_l_a < frm_w_b|pctg_add_f:frm_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% if fmu_w_a and fmu_w_b %}
         <tr class="nonheader row1">
             <td style="text-align: right; padding-right: 2em;">
             {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}<strong>{% endif %}
                 {{ fmu_w_a }}–{{ fmu_l_a }} ({{ fmu_w_a|pctg_add:fmu_l_a }}%)
             {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}</strong>{% endif %}
             </td>
-            <td style="text-align: center;" colspan="3">Form vs. opposing race</td>
+            <td style="text-align: center;" colspan="3">{% trans "Form vs. opposing race" %}</td>
             <td style="padding-left: 2em;">
             {% if fmu_w_a|pctg_add_f:fmu_l_a < fmu_w_b|pctg_add_f:fmu_l_b %}<strong>{% endif %}
                 ({{ fmu_w_b|pctg_add:fmu_l_b }}%) {{ fmu_w_b }}–{{ fmu_l_b }} 
             {% if fmu_w_a|pctg_add_f:fmu_l_a < fmu_w_b|pctg_add_f:fmu_l_b %}</strong>{% endif %}
             </td>
         </tr>
+        {% endif %}
         <tr class="nonheader row2">
             <td style="text-align: right; padding-right: 2em;">
             {% if vs_a > vs_b %}<strong>{% endif %}
                 {{ vs_a }}–{{ vs_b }} ({{ vs_a|pctg_add:vs_b }}%)
             {% if vs_a > vs_b %}</strong>{% endif %}
             </td>
-            <td style="text-align: center;" colspan="3">Score vs. each other</td>
+            <td style="text-align: center;" colspan="3">{% trans "Score vs. each other" %}</td>
             <td style="padding-left: 2em;">
             {% if vs_a < vs_b %}<strong>{% endif %}
                 ({{ vs_b|pctg_add:vs_a }}%) {{ vs_b }}–{{ vs_a }} 
@@ -134,23 +143,23 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
         </tr>
     </table>
     <table class="results">
-    {% include "matchlist.html" with lm_list=matches lm_header="fixed" lm_fixedheader="Match history" lm_autohide=True %}
+    {% include "matchlist.html" with lm_list=matches lm_header="fixed" lm_fixedheader=_('Match history') lm_autohide=True %}
     </table>
 
-    <h3>Update match progress</h3>
+    <h3>{% trans "Update match progress" %}</h3>
 
     <form method="get" action="/inference/match/">
     <input type="hidden" name="bo" value="{{ form.bo.value }}" />
     <input type="hidden" name="ps" value="{{ form.ps.value }}" />
     <table class="bigform">
         <tr>
-            <td class="form_left">Score for {{ dbpl.0.tag }}</td>
+            <td class="form_left">{% blocktrans with pl=dbpl.0.tag %}Score for {{pl}}{% endblocktrans %}</td>
             <td class="form_right">
                 <input name="s1" type="text" class="narrowform" value="{{ match.get_result.0 }}" />
             </td>
         </tr>
         <tr>
-            <td class="form_left">Score for {{ dbpl.1.tag }}</td>
+            <td class="form_left">{% blocktrans with pl=dbpl.1.tag %}Score for {{pl}}{% endblocktrans %}</td>
             <td class="form_right">
                 <input name="s2" type="text" class="narrowform" value="{{ match.get_result.1 }}" />
             </td>
@@ -158,7 +167,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
         <tr>
             <td class="form_left"></td>
             <td class="form_right">
-                <input type="submit" value="Update" />
+                <input type="submit" value="{% trans "Update" %}" />
             </td>
         </tr>
     </table>
@@ -170,7 +179,7 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
     //-->
     </script>
 
-    <h3>Postable</h3>
+    <h3>{% trans "Postable" %}</h3>
 
     <div id="tl">
         <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
@@ -179,8 +188,8 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
         <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
     </div>
 
-    <p>Formats: 
-    <a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
-    <a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
+    <p>{% trans "Formats:" %}
+    <a href="#" onclick="switch_to('tl',togs); return false;">{% trans "Team Liquid" %}</a>,
+    <a href="#" onclick="switch_to('reddit',togs); return false;">{% trans "Reddit" %}</a>.</p>
 
 {% endblock %}

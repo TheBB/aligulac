@@ -58,10 +58,13 @@ class Match(Format):
             if not dep.is_fixed():
                 return False
 
+        if self._players[0].name == 'BYE' or self._players[1].name == 'BYE':
+            return False
+
         return True
 
     def modify(self, num_a, num_b):
-        if not self.can_modify():
+        if not self.can_modify() and self._players[0].name != 'BYE' and self._players[1].name != 'BYE':
             return False
 
         if num_a < 0 or num_b < 0 or num_a > self._num or num_b > self._num or\
@@ -153,6 +156,7 @@ class Match(Format):
     def compute_partial(self):
         start_a = self._result[0]
         start_b = self._result[1]
+
         num = self._num
         p0 = 0
         p1 = 0

@@ -6,40 +6,45 @@ This is the prediction page for single elimination brackets. It's called from ra
 
 {% load ratings_extras %}
 {% load humanize %}
+{% load i18n %}
 
-{% block title %}Round robin group{% endblock %}
+{% block title %}{% trans "Round robin group" %}{% endblock %}
 
 {% block content %}
 
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 2.5em; text-align: right;">#</td>
-        <td style="width: 10em;">Player</td>
+        <td style="width: 2.5em; text-align: right;">{% trans "#" %}</td>
+        <td style="width: 10em;">{% trans "Player" %}</td>
         <td style="width: 1em;"></td>
         <td style="width: 1em;"></td>
-        {% for t in players.0.tally %}
+        {% for t in table.0.probs %}
         <td style="width: 8em; text-align: right;">
-            {{ forloop.counter|ordinal }}
+            {% comment %}TODO: Ordinals translateable?{% endcomment %}
+            {{ forloop.counter }}
         </td>
         {% endfor %}
     </tr>
-    {% for p in players %}
+    {% for p in table %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">
+                {{ p.player.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% if p.player.country != "" %}
+            <img src="{{ p.player.country|lower|img:"flags" }}" 
+                 alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm" />
         </td>
-        {% for t in p.tally %}
+        {% for t in p.probs %}
         <td style="text-align: right;">
             {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
         </td>
@@ -48,41 +53,44 @@ This is the prediction page for single elimination brackets. It's called from ra
     {% endfor %}
 </table>
 
-<h3>Median outcome</h3>
+<h3>{% trans "Median outcome" %}</h3>
 
-<p>This is the median outcome <em>assuming the already entered results</em>.</p>
+<p>{% blocktrans %}This is the median outcome <em>assuming the already entered results</em>.{% endblocktrans %}</p>
 
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 2.5em; text-align: right;">#</td>
-        <td style="width: 14em;">Player</td>
+        <td style="width: 2.5em; text-align: right;">{% trans "#" %}</td>
+        <td style="width: 14em;">{% trans "Player" %}</td>
         <td style="width: 1em;"></td>
         <td style="width: 1em;"></td>
-        <td style="width: 9em; text-align: right;">Matches</td>
-        <td style="width: 5em; text-align: right;">Sets</td>
+        <td style="width: 9em; text-align: right;">{% trans "Matches" %}</td>
+        <td style="width: 5em; text-align: right;">{% trans "Games" %}</td>
         <td style="width: 25.5em;"></td>
     </tr>
-    {% for p in mplayers %}
+    {% for p in mtable %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">
+                {{ p.player.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
+            {% if p.player.country != "" %}
+            <img src="{{ p.player.country|lower|img:"flags" }}" 
+                 alt="{{ p.player.country }}" />
             {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm" />
         </td>
         <td style="text-align: right;">
-            {{ p.mtally.exp_mscore.0|floatformat:"0" }}–{{ p.mtally.exp_mscore.1|floatformat:"0" }}
+            {{ p.exp_match_wins|floatformat:"0" }}–{{ p.exp_match_losses|floatformat:"0" }}
         </td>
         <td style="text-align: right;">
-            {{ p.mtally.exp_sscore.0|floatformat:"0" }}–{{ p.mtally.exp_sscore.1|floatformat:"0" }}
+            {{ p.exp_set_wins|floatformat:"0" }}–{{ p.exp_set_losses|floatformat:"0" }}
         </td>
         <td></td>
     </tr>
@@ -93,10 +101,9 @@ This is the prediction page for single elimination brackets. It's called from ra
 {% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True lm_autohide=True %}
 </table>
 
-<h3>Update group progress</h3>
+<h3>{% trans "Update group progress" %}</h3>
 
-<p>To modify a result, click on the score in the table below. To view detailed predictions for a match, click
-the arrow.</p>
+<p>{% blocktrans %}To modify a result, click on the score in the table below. To view detailed predictions for a match, click the arrow.{% endblocktrans %}</p>
 
 <form method="get" action="/inference/rrgroup/">
     <input type="hidden" name="bo" value="{{ form.bo.value }}" />
@@ -105,18 +112,18 @@ the arrow.</p>
     {% include "matchlist.html" with lm_list=matches lm_header="custom" lm_predict=True %}
     </table>
     <div style="margin-top: 0.2em; text-align: right;">
-        <input type="submit" value="Update results" />
+        <input type="submit" value="{% trans "Update results" %}" />
     </div>
 </form>
 <div style="margin-top: 0.2em; text-align: right;">
     <form method="get" action="/inference/rrgroup/">
     <input type="hidden" name="bo" value="{{ form.bo.value }}" />
     <input type="hidden" name="ps" value="{{ form.ps.value }}" />
-    <input type="submit" value="Clear results" />
+    <input type="submit" value="{% trans "Clear results" %}" />
     </form>
 </div>
 
-<h3>Postable</h3>
+<h3>{% trans "Postable" %}</h3>
 
 <script type="text/javascript">
 <!--
@@ -131,7 +138,8 @@ the arrow.</p>
     <textarea style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
 </div>
 
-<a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid</a>,
-<a href="#" onclick="switch_to('reddit',togs); return false;">Reddit</a>.</p>
+<p>{% trans "Formats:" %}
+<a href="#" onclick="switch_to('tl',togs); return false;">{% trans "Team Liquid" %}</a>,
+<a href="#" onclick="switch_to('reddit',togs); return false;">{% trans "Reddit" %}</a>.</p>
 
 {% endblock %}

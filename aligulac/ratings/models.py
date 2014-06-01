@@ -1,6 +1,10 @@
 # {{{ Imports
 import datetime
+from itertools import islice
 from math import sqrt
+import random
+import re
+import string
 
 from django.contrib.auth.models import User
 from django.db import (
@@ -13,8 +17,12 @@ from django.db.models import (
     Min,
     Q,
 )
+from django.utils.translation import (
+    ugettext_lazy as _,
+    pgettext_lazy
+)
 
-from aligulac.settings import start_rating
+from aligulac.settings import start_rating, INACTIVE_THRESHOLD
 
 from currency import ExchangeRates
 
@@ -22,6 +30,7 @@ from countries import (
     transformations,
     data,
 )
+from ratings.model_tools import swap_q_object
 # }}}
 
 # List of countries
@@ -37,48 +46,70 @@ TLPD_DB_HOTS             = 0b00100
 TLPD_DB_HOTSBETA         = 0b01000
 TLPD_DB_WOLBETA          = 0b10000
 TLPD_DBS = [
-    (TLPD_DB_WOLBETA,          'WoL Beta'),
-    (TLPD_DB_WOLKOREAN,        'WoL Korean'),
-    (TLPD_DB_WOLINTERNATIONAL, 'WoL International'),
-    (TLPD_DB_HOTSBETA,         'HotS Beta'),
-    (TLPD_DB_HOTS,             'HotS'),
+    # Translators: TLPD database
+    (TLPD_DB_WOLBETA,          _('WoL Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLKOREAN,        _('WoL Korean')),
+    # Translators: TLPD database
+    (TLPD_DB_WOLINTERNATIONAL, _('WoL International')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTSBETA,         _('HotS Beta')),
+    # Translators: TLPD database
+    (TLPD_DB_HOTS,             _('HotS')),
 ]
 
 CAT_INDIVIDUAL = 'individual'
 CAT_TEAM       = 'team'
 CAT_FREQUENT   = 'frequent'
 EVENT_CATEGORIES = [
-    (CAT_INDIVIDUAL, 'Individual'),
-    (CAT_TEAM,       'Team'),
-    (CAT_FREQUENT,   'Frequent'),
+    # Translators: Event category
+    (CAT_INDIVIDUAL, _('Individual')),
+    # Translators: Event category
+    (CAT_TEAM,       _('Team')),
+    # Translators: Event category
+    (CAT_FREQUENT,   _('Frequent')),
 ]
 
 TYPE_CATEGORY = 'category'
 TYPE_EVENT    = 'event'
 TYPE_ROUND    = 'round'
 EVENT_TYPES = [
-    (TYPE_CATEGORY, 'Category'),
-    (TYPE_EVENT,    'Event'),
-    (TYPE_ROUND,    'Round'),
+    # Translators: Event type
+    (TYPE_CATEGORY, _('Category')),
+    # Translators: Event type
+    (TYPE_EVENT,    _('Event')),
+    # Translators: Event type
+    (TYPE_ROUND,    _('Round')),
 ]
 
 P, T, Z, R, S = 'PTZRS'
 RACES = [
-    (P, 'Protoss'),
-    (T, 'Terran'),
-    (Z, 'Zerg'),
-    (R, 'Random'),
-    (S, 'Switcher'),
+    (P, _('Protoss')),
+    (T, _('Terran')),
+    (Z, _('Zerg')),
+    # Translators: Random race
+    (R, _('Random')),
+    # Translators: Race switcher
+    (S, _('Switcher')),
 ]
+SRACES = dict([
+    (P, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Protoss')),
+    (T, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Terran')),
+    (Z, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Zerg')),
+    # Translators: Random race
+    (R, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Random')),
+    # Translators: Race switcher
+    (S, pgettext_lazy('possibly small letter (used in the middle of sentences)', 'Switcher')),
+])
 MRACES = RACES[:-1]
 
 WOL  = 'WoL'
 HOTS = 'HotS'
 LOTV = 'LotV'
 GAMES = [
-    (WOL,  'Wings of Liberty'),
-    (HOTS, 'Heart of the Swarm'),
-    (LOTV, 'Legacy of the Void'),
+    (WOL,  _('Wings of Liberty')),
+    (HOTS, _('Heart of the Swarm')),
+    (LOTV, _('Legacy of the Void')),
 ]
 
 TYPE_INFO    = 'info'
@@ -86,11 +117,151 @@ TYPE_WARNING = 'warning'
 TYPE_ERROR   = 'error'
 TYPE_SUCCESS = 'success'
 MESSAGE_TYPES = [
-    (TYPE_INFO,    'info'),
-    (TYPE_WARNING, 'warning'),
-    (TYPE_ERROR,   'error'),
-    (TYPE_SUCCESS, 'success'),
+    # Translators: Message type
+    (TYPE_INFO,    _('info')),
+    # Translators: Message type
+    (TYPE_WARNING, _('warning')),
+    # Translators: Message type
+    (TYPE_ERROR,   _('error')),
+    # Translators: Message type
+    (TYPE_SUCCESS, _('success')),
 ]
+
+MESSAGES_SRC = [
+    (_('Possible confusion'),
+        'You might be looking for %(player)s.', _('You might be looking for %(player)s.')),
+    (_('Possible confusion'),
+        'You might be looking for %(players)s or %(player)s.',
+        _('You might be looking for %(players)s or %(player)s.')),
+    (_('Walkover'), '%(player)s recieved a walkover.', _('%(player)s recieved a walkover.')),
+    (_('Walkover'),
+        '%(player)s recieved a walkover against %(opponent)s.',
+        _('%(player)s recieved a walkover against %(opponent)s.')),
+    (_('Forfeit'), '%(player)s forfeited.', _('%(player)s forfeited.')),
+    (_('Disqualification'), '%(player)s was disqualified.', _('%(player)s was disqualified.')),
+    (_('Forfeit'),
+        '%(player)s forfeited and was replaced by %(otherplayer)s.',
+        _('%(player)s forfeited and was replaced by %(otherplayer)s.')),
+    (_('Forfeits'), '%(players)s and %(player)s forfeited.', _('%(players)s and %(player)s forfeited.')),
+    (_('Forfeit'),
+        '%(player)s forfeited against %(opponent)s.', _('%(player)s forfeited against %(opponent)s.')),
+    (_('Forfeit'), '%(player)s forfeited after game %(num)s.', _('%(player)s forfeited after game %(num)s.')),
+    (_('Forfeit'), '%(player)s forfeited game %(num)s.', _('%(player)s forfeited game %(num)s.')),
+    (_('Forfeit'),
+        '%(player)s forfeited the remaining games.', _('%(player)s forfeited the remaining games.')),
+    (_('Forfeit'),
+        '%(player)s forfeited the remaining matches.', _('%(player)s forfeited the remaining matches.')),
+    (_('Forfeits'),
+        '%(players)s and %(player)s forfeited the remaining matches.',
+        _('%(players)s and %(player)s forfeited the remaining matches.')),
+    (_('Walkover'),
+        'In addition, %(player)s received a walkover against %(opponent)s.',
+        _('In addition, %(player)s received a walkover against %(opponent)s.')),
+    (_('Forfeit'),
+        'In addition, %(player)s forfeited against %(opponent)s.',
+        _('In addition, %(player)s forfeited against %(opponent)s.')),
+    (_('Unrated match'),
+        'In addition, %(player)s and %(opponent)s played an unrated match.',
+        _('In addition, %(player)s and %(opponent)s played an unrated match.')),
+    (_('2v2'),
+        'In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and %(playerd)s.',
+        _('In addition, %(playera)s and %(playerb)s won a 2v2 against %(playerc)s and %(playerd)s.')),
+    (_('Race switch'),
+        '%(player)s played %(race)s in game %(num)s.', _('%(player)s played %(race)s in game %(num)s.')),
+    (_('Race switch'), '%(player)s played %(race)s.', _('%(player)s played %(race)s.')),
+    (_('Race switch'),
+        '%(player)s switched to %(race)s after game %(num)s.',
+        _('%(player)s switched to %(race)s after game %(num)s.')),
+    (_('Smurf'),
+        '%(player)s was smurfing for %(otherplayer)s.', _('%(player)s was smurfing for %(otherplayer)s.')),
+    (_('Smurf'), 
+        '%(player)s was smurfing as %(otherplayer)s.', _('%(player)s was smurfing as %(otherplayer)s.')),
+    (_('Smurf'),
+        '%(player)s was smurfing as %(otherplayer)s and was disqualified due to residency rules.',
+        _('%(player)s was smurfing as %(otherplayer)s and was disqualified due to residency rules.')),
+    (_('Forfeit'), '%(player)s was unable to attend.', _('%(player)s was unable to attend.')),
+    (_('Race switch'),
+        'This match was split due to race-changing.', _('This match was split due to race-changing.')),
+    (_('Irregular match'),
+        'Coming from the loser\'s bracket, %(player)s had to win two Bo%(num)ss.',
+        _('Coming from the loser\'s bracket, %(player)s had to win two Bo%(num)ss.')),
+    (_('Irregular match'),
+        'Coming from the winner\'s bracket, %(player)s started the match with a %(na)s-%(nb)s lead.',
+        _('Coming from the winner\'s bracket, %(player)s started the match with a %(na)s-%(nb)s lead.')),
+    (_('Irregular match'),
+        '%(player)s started the match with a %(na)s–%(nb)s lead from a previous match.',
+        _('%(player)s started the match with a %(na)s–%(nb)s lead from a previous match.')),
+    (_('Irregular match'),
+        '%(player)s started the match with a %(na)s–%(nb)s lead.',
+        _('%(player)s started the match with a %(na)s–%(nb)s lead.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponent)s to qualify for %(event)s.',
+        _('%(player)s defeated %(opponent)s to qualify for %(event)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s.',
+        _('%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.',
+        _('%(player)s defeated %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.')),
+    (_('Qualification'),
+        '%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.',
+        _('%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s alongside %(otherplayer)s.')),
+    (_('Forfeit and qualification'),
+        '%(player)s forfeited and was replaced by %(otherplayer)s who won a qualifier against %(opponent)s.',
+        _('%(player)s forfeited and was replaced by %(otherplayer)s who won a qualifier against %(opponent)s.')),
+    (_('Qualification'),
+        'Qualification match to replace %(player)s.', _('Qualification match to replace %(player)s.')),
+    (_('Tiebreakers'),
+        '%(players)s and %(player)s played tiebreakers for the %(num)s spots.',
+        _('%(players)s and %(player)s played tiebreakers for the %(num)s spots.')),
+    (_('Long game'),
+        'Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds.',
+        _('Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds.')),
+    (_('Possible confusion'),
+        '%(player)s won %(num)s-X, assumed to be %(num)s-0.',
+        _('%(player)s won %(num)s-X, assumed to be %(num)s-0.')),
+    (_('Tiebreakers'), 'Tiebreaker game.', _('Tiebreaker game.')),
+    (_('Seed'), '%(player)s was seeded.', _('%(player)s was seededs.')),
+    (_('Seeds'), '%(players)s and %(player)s were seeded.', _('%(players)s and %(player)s were seeded.')),
+    (_('Draw'),
+        'Game %(num)s was a draw and had to be replayed.', 
+        _('Game %(num)s was a draw and had to be replayed.')),
+]
+MESSAGES = list(map(lambda m: (m[1], m[2]), MESSAGES_SRC))
+MESSAGES_DICT = dict(MESSAGES)
+MESSAGES_TITLE_DICT = dict(map(lambda m: (m[1], m[0]), MESSAGES_SRC))
+MESSAGES_IDX = list(map(lambda m: m[1], MESSAGES))
+
+STORIES = [
+    ('%(player)s wins %(event)s', _('%(player)s wins %(event)s')),
+    ('%(player)s defeats %(opponent)s and wins %(event)s', 
+        _('%(player)s defeats %(opponent)s and wins %(event)s')),
+    ('%(player)s wins %(event)s as a royal roader', _('%(player)s wins %(event)s as a royal roader')),
+    ('%(player)s defeats %(opponent)s and wins %(event)s as a royal roader',
+        _('%(player)s defeats %(opponent)s and wins %(event)s as a royal roader')),
+    ('%(player)s all-kills %(team)s', _('%(player)s all-kills %(team)s')),
+    ('%(player)s all-kills %(team)s and wins %(event)s',
+        _('%(player)s all-kills %(team)s and wins %(event)s')),
+    ('%(player)s finishes second in %(event)s', _('%(player)s finishes second in %(event)s')),
+    ('%(player)s finishes third in %(event)s', _('%(player)s finishes third in %(event)s')),
+    ('%(player)s finishes fourth in %(event)s', _('%(player)s finishes fourth in %(event)s')),
+    ('%(player)s finishes top 4 in %(event)s', _('%(player)s finishes top 4 in %(event)s')),
+    ('%(player)s finishes top 8 in %(event)s', _('%(player)s finishes top 8 in %(event)s')),
+    ('%(player)s switches to %(race)s', _('%(player)s switches to %(race)s')),
+    ('%(player)s switches back to %(race)s', _('%(player)s switches back to %(race)s')),
+    ('%(player)s switches from %(racea)s to %(raceb)s', _('%(player)s switches from %(racea)s to %(raceb)s')),
+    ('%(player)s switches from %(racea)s back to %(raceb)s',
+        _('%(player)s switches from %(racea)s back to %(raceb)s')),
+    ('%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s',
+        _('%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s')),
+    ('%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s',
+        _('%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s')),
+    ('%(player)s fails to qualify for %(event)s', _('%(player)s fails to qualify for %(event)s')),
+    ('%(player)s fails to qualify for %(event)s after %(num)s appearances',
+        _('%(player)s fails to qualify for %(event)s after %(num)s appearances')),
+]
+STORIES_DICT = dict(STORIES)
+STORIES_IDX = list(map(lambda m: m[0], STORIES))
 # }}}
 
 # {{{ Periods
@@ -98,16 +269,45 @@ class Period(models.Model):
     class Meta:
         db_table = 'period'
 
-    start = models.DateField('Start date', null=False, db_index=True)
-    end = models.DateField('End date', null=False, db_index=True)
+    # {{{ Fields
+    start = models.DateField(
+        'Start date', null=False, db_index=True,
+        help_text='Start date'
+    )
+    end = models.DateField(
+        'End date', null=False, db_index=True,
+        help_text='End date'
+    )
     computed = models.BooleanField('Computed', null=False, default=False, db_index=True)
-    needs_recompute = models.BooleanField('Requires recomputation', null=False, default=False, db_index=True)
-    num_retplayers = models.IntegerField('# returning players', default=0)
-    num_newplayers = models.IntegerField('# new players', default=0)
-    num_games = models.IntegerField('# games', default=0)
-    dom_p = models.FloatField('Protoss OP value', null=True)
-    dom_t = models.FloatField('Terran OP value', null=True)
-    dom_z = models.FloatField('Zerg OP value', null=True)
+    needs_recompute = models.BooleanField(
+        'Requires recomputation', null=False, default=False, db_index=True,
+        help_text='True if this period needs to be recomputed'
+    )
+    num_retplayers = models.IntegerField(
+        '# returning players', default=0,
+        help_text='Number of returning players'
+    )
+    num_newplayers = models.IntegerField(
+        '# new players', default=0,
+        help_text='Number of new players'
+    )
+    num_games = models.IntegerField(
+        '# games', default=0,
+        help_text='Number of games played'
+    )
+    dom_p = models.FloatField(
+        'Protoss OP value', null=True,
+        help_text='Protoss OP value'
+    )
+    dom_t = models.FloatField(
+        'Terran OP value', null=True,
+        help_text='Terran OP value'
+    )
+    dom_z = models.FloatField(
+        'Zerg OP value', null=True,
+        help_text='Zerg OP value'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -126,36 +326,79 @@ class Event(models.Model):
         ordering = ['idx', 'latest', 'fullname']
         db_table = 'event'
 
-    name = models.CharField('Name', max_length=100)
-    parent = models.ForeignKey('Event', null=True, blank=True, related_name='parent_event')
+    # {{{ Fields
+    name = models.CharField(
+        'Name', max_length=100,
+        help_text='Event name'
+    )
+    parent = models.ForeignKey(
+        'Event', null=True, blank=True, related_name='parent_event',
+        help_text='Parent event'
+    )
     lft = models.IntegerField('Left', null=True, blank=True, default=None)
     rgt = models.IntegerField('Right', null=True, blank=True, default=None)
-    idx = models.IntegerField('Index', null=False, blank=False, db_index=True)
+    idx = models.IntegerField(
+        'Index', null=False, blank=False, db_index=True,
+        help_text='Canonical sort index'
+    )
     closed = models.BooleanField('Closed', default=False, db_index=True)
     big = models.BooleanField('Big', default=False)
     noprint = models.BooleanField('No print', default=False, db_index=True)
-    fullname = models.CharField('Full name', max_length=500, default='')
-    homepage = models.CharField('Homepage', blank=True, null=True, max_length=200)
-    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
+    fullname = models.CharField(
+        'Full name', max_length=500, default='',
+        help_text='Full event name'
+    )
+    homepage = models.CharField(
+        'Homepage', blank=True, null=True, max_length=200,
+        help_text='Homepage URI'
+    )
+    lp_name = models.CharField(
+        'Liquipedia title', blank=True, null=True, max_length=200,
+        help_text='Liquipedia title'
+    )
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
-    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
-    tl_thread = models.IntegerField('Teamliquid.net thread ID', blank=True, null=True)
+    tlpd_id = models.IntegerField(
+        'TLPD ID', blank=True, null=True,
+        help_text='TLPD id'
+    )
+    tlpd_db = models.IntegerField(
+        'TLPD Databases', blank=True, null=True,
+        help_text='TLPD databases (bit-flag value, 1=WoL KR, 2=WoL intl, 4=HotS, 8=HotS beta, 16=WoL beta)'
+    )
+    tl_thread = models.IntegerField(
+        'Teamliquid.net thread ID', blank=True, null=True,
+        help_text='TL.net thread id'
+    )
 
-    prizepool = models.NullBooleanField('Has prize pool', blank=True, null=True, db_index=True)
+    prizepool = models.NullBooleanField(
+        'Has prize pool', blank=True, null=True, db_index=True,
+        help_text='Has prizepool? True, false or null (unknown)'
+    )
 
-    earliest = models.DateField('Earliest match', blank=True, null=True, db_index=True)
-    latest = models.DateField('Latest match', blank=True, null=True, db_index=True)
+    earliest = models.DateField(
+        'Earliest match', blank=True, null=True, db_index=True,
+        help_text='Earliest match'
+    )
+    latest = models.DateField(
+        'Latest match', blank=True, null=True, db_index=True,
+        help_text='Latest match'
+    )
 
     category = models.CharField(
-        'Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES, db_index=True)
-    type = models.CharField(max_length=50, null=False, choices=EVENT_TYPES, db_index=True)
+        'Category', max_length=50, null=True, blank=True, choices=EVENT_CATEGORIES, db_index=True,
+        help_text='Category (individual, team or frequent), only for root events'
+    )
+    type = models.CharField(
+        max_length=50, null=False, choices=EVENT_TYPES, db_index=True,
+        help_text='Type (category, event or round)'
+    )
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
+    # }}}
 
     # {{{ open_events: Not used... is this useful?
     @staticmethod
@@ -288,11 +531,11 @@ class Event(models.Model):
     # }}}
 
     # {{{ update_dates: Updates the fields earliest and latest
-    # Raw SQL query is much faster and/or I don't know how to get the same SQL query as a django query 
     def update_dates(self):
         res = self.get_matchset().aggregate(Max('date'), Min('date'))
         self.latest = res['date__max']
         self.earliest = res['date__min']
+        self.save()
     # }}}
 
     # {{{ change_type(type): Modifies the type of this event, and possibly all ancestors and events
@@ -438,33 +681,75 @@ class Player(models.Model):
         ordering = ['tag']
         db_table = 'player'
 
-    tag = models.CharField('In-game name', max_length=30, null=False, db_index=True)
-    name = models.CharField('Full name', max_length=100, blank=True, null=True)
-    birthday = models.DateField('Birthday', blank=True, null=True)
-    mcnum = models.IntegerField('MC number', blank=True, null=True, default=None)
+    # {{{ Fields
+    tag = models.CharField(
+        'In-game name', max_length=30, null=False, db_index=True,
+        help_text='Player tag'
+    )
+    name = models.CharField(
+        'Full name', max_length=100, blank=True, null=True,
+        help_text='Full name'
+    )
+    birthday = models.DateField(
+        'Birthday', blank=True, null=True,
+        help_text='Birthday'
+    )
+    mcnum = models.IntegerField(
+        'MC number', blank=True, null=True, default=None,
+        help_text='MC number'
+    )
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
     # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
     # Use bitwise AND (&) with the flags to check.
-    tlpd_id = models.IntegerField('TLPD ID', blank=True, null=True)
-    tlpd_db = models.IntegerField('TLPD Databases', blank=True, null=True)
+    tlpd_id = models.IntegerField(
+        'TLPD ID', blank=True, null=True,
+        help_text='TLPD id'
+    )
+    tlpd_db = models.IntegerField(
+        'TLPD Databases', blank=True, null=True,
+        help_text='TLPD databases (bit-flag value, 1=WoL KR, 2=WoL intl, 4=HotS, 8=HotS beta, 16=WoL beta)'
+    )
 
-    lp_name = models.CharField('Liquipedia title', blank=True, null=True, max_length=200)
-    sc2c_id = models.IntegerField('SC2Charts.net ID', blank=True, null=True)
-    sc2e_id = models.IntegerField('SC2Earnings.com ID', blank=True, null=True)
+    lp_name = models.CharField(
+        'Liquipedia title', blank=True, null=True, max_length=200,
+        help_text='Liquipedia title'
+    )
+    sc2e_id = models.IntegerField(
+        'SC2Earnings.com ID', blank=True, null=True,
+        help_text='SC2Earnings.com ID'
+    )
 
     country = models.CharField(
-        'Country', max_length=2, choices=countries, blank=True, null=True, db_index=True)
+        'Country', max_length=2, choices=countries, blank=True, null=True, db_index=True,
+        help_text='Country (ISO 3166-1 alpha-2)'
+    )
 
-    race = models.CharField('Race', max_length=1, choices=RACES, null=False, db_index=True)
+    race = models.CharField(
+        'Race', max_length=1, choices=RACES, null=False, db_index=True,
+        help_text='Race (P, T, Z, R or S)'
+    )
 
-    current_rating = models.ForeignKey('Rating', blank=True, null=True, related_name='current')
+    current_rating = models.ForeignKey(
+        'Rating', blank=True, null=True, related_name='current',
+        help_text='Current rating'
+    )
 
     # Domination fields (for use in the hall of fame)
-    dom_val = models.FloatField('Domination', blank=True, null=True)
-    dom_start = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_start')
-    dom_end   = models.ForeignKey(Period, blank=True, null=True, related_name='player_dom_end')
+    dom_val = models.FloatField(
+        'Domination', blank=True, null=True,
+        help_text='Domination score (PP)'
+    )
+    dom_start = models.ForeignKey(
+        Period, blank=True, null=True, related_name='player_dom_start',
+        help_text='Start of domination period'
+    )
+    dom_end = models.ForeignKey(
+        Period, blank=True, null=True, related_name='player_dom_end',
+        help_text='End of domination period'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -493,10 +778,6 @@ class Player(models.Model):
     
     def set_birthday(self, birthday):
         self.birthday = None if birthday == '' else birthday
-        self.save()
-
-    def set_sc2c_id(self, sc2c_id):
-        self.sc2c_id = None if sc2c_id == '' else sc2c_id
         self.save()
 
     def set_tlpd_id(self, tlpd_id):
@@ -621,7 +902,154 @@ class Player(models.Model):
         qset = qset.prefetch_related('message_set')
 
         return qset.order_by('-date', '-id')
-     # }}}
+    # }}}
+
+    # {{{ get_rank: Calculates the rank for the player with country as filter
+    def get_rank(self, country=''):
+        if '_ranks' not in dir(self):
+            self._ranks = dict()
+        if country in self._ranks:
+            return self._ranks[country]
+
+        q = Rating.objects.filter(period=self.current_rating.period,
+                                  rating__gt=self.current_rating.rating,
+                                  decay__lt=INACTIVE_THRESHOLD)\
+                          .exclude(player=self)
+        
+        if country == "foreigners":
+            q = q.exclude(player__country='KR')
+        elif country != '':
+            q = q.filter(player__country=country)
+
+        c = q.count()
+        self._ranks[country] = c + 1
+        return self._ranks[country]
+
+    @property
+    def world_rank(self):
+        return self.get_rank()
+
+    @property
+    def country_rank(self):
+        if self.country is not None and self.country != '':
+            return self.get_rank(self.country)
+
+    @property
+    def foreigner_rank(self):
+        return self.get_rank('foreigners')
+
+    # }}}
+
+
+    # {{{ rivalries
+    @property
+    def rivals(self):
+        if '_rivals' in dir(self):
+            return self._rivals
+
+        q = Player.objects.raw(PLAYER_RIVAL_QUERY, {"id": self.id})
+
+        rivals = list(islice(q, 5))
+        
+        if len(rivals) == 0:
+            self._rivals = None
+        else:
+            self._rivals = rivals
+
+        return self._rivals
+
+    @property
+    def nemesis(self):
+        if '_nemesis' in dir(self):
+            return self._nemesis
+
+        pm = self._nemesis_victim_helper()
+
+        nemesis = list(islice(reversed([x for x in pm if x.pm < 0]), 5))
+
+        if len(nemesis) > 0:
+            self._nemesis = nemesis
+        else:
+            self._nemesis = None
+        
+        return self._nemesis
+
+    @property
+    def victim(self):
+        if '_victim' in dir(self):
+            return self._victim
+    
+        pm = self._nemesis_victim_helper()
+        
+        victim = list(islice((x for x in pm if x.pm > 0), 5))
+
+        if len(victim) > 0:
+            self._victim = victim
+        else:
+            self._victim = None
+
+        return self._victim
+
+    def _nemesis_victim_helper(self):
+        if '_nv_pm' not in dir(self):
+            q = Player.objects.raw(PLAYER_PM_QUERY, {"id": self.id})
+            self._nv_pm = list(q)
+        return self._nv_pm
+
+    @property
+    def rivals_pretty(self):
+        return ', '.join(str(x) for x in self.rivals)
+
+    # }}}
+
+PLAYER_RIVAL_QUERY = """
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race", Count(T2."plid") AS "matches" 
+FROM player 
+JOIN (
+     SELECT "player"."id" AS "plid", "match"."id" AS "mid" 
+     FROM player JOIN match ON 
+         ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
+     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s 
+     ) T2 
+ON "player"."id" = T2."plid" 
+GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
+ORDER BY "matches" DESC
+LIMIT 5;"""
+
+PLAYER_PM_QUERY = """
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race", 
+       Sum(T2."for") - Sum(T2."against") AS "pm"
+FROM player JOIN (
+     SELECT 
+     	    "player"."id" AS "plid", 
+	    "match"."id" AS "mid", 
+	    (CASE 
+	    	  WHEN "player"."id" = "match"."pla_id" THEN 
+		       "match"."scb"
+		  ELSE
+		       "match"."sca"
+		  END
+            ) AS "for", 
+	    (CASE 
+	    	  WHEN "player"."id" = "match"."pla_id" THEN 
+		       "match"."sca"
+		  ELSE
+		       "match"."scb"
+		  END
+            ) AS "against", 
+	    "match"."sca" AS "sca",
+	    "match"."scb" AS "scb",
+	    "match"."pla_id",
+	    "match"."plb_id"
+     FROM player JOIN match ON 
+     ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
+     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s
+     ) T2 
+     ON "player"."id" = T2."plid" 
+GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
+ORDER BY "pm" DESC;
+"""
+
 # }}}
 
 # {{{ Stories
@@ -629,16 +1057,45 @@ class Story(models.Model):
     class Meta:
         db_table = 'story'
         verbose_name_plural = 'stories'
+        ordering = ['date']
 
     player = models.ForeignKey(Player, null=False)
-    text = models.CharField('Text', max_length=200, null=False)
     date = models.DateField('Date', null=False)
-    event = models.ForeignKey(Event, null=True)
+    event = models.ForeignKey(Event, null=True, blank=True)
 
-    # {{{ String representation
+    message = models.CharField(
+        'Message', max_length=1000, null=False, blank=False, choices=STORIES, default='')
+    params = models.CharField('Parameters', max_length=1000, null=False, blank=False, default='')
+
     def __str__(self):
-        return '%s - %s on %s' % (self.player.tag, self.text, str(self.date))
-    # }}}
+        try:
+            params = self.get_param_dict()
+            return STORIES_DICT[self.message] % self.get_param_dict()
+        except:
+            return '[[[Error]]]'
+
+    def get_text_index(self):
+        return STORIES_IDX.index(self.message)
+
+    def get_esc_params(self):
+        return r"\n".join(self.params.replace("'", r"\'").splitlines())
+
+    def get_param_dict(self):
+        params = {}
+        for p in self.params.splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params:
+                params[key] = SRACES[params[key]]
+        return params
+
+    def verify(self):
+        try:
+            _ = self.message % self.get_param_dict()
+            return True
+        except:
+            return False
 # }}}
 
 # {{{ Groups
@@ -646,20 +1103,52 @@ class Group(models.Model):
     class Meta:
         db_table = 'group'
 
-    name = models.CharField('Name', max_length=100, null=False, db_index=True)
-    shortname = models.CharField('Short name', max_length=25, null=True, blank=True)
+    # {{{ Fields
+    name = models.CharField(
+        'Name', max_length=100, null=False, db_index=True,
+        help_text='Team name'
+    )
+    shortname = models.CharField(
+        'Short name', max_length=25, null=True, blank=True,
+        help_text='Short team name'
+    )
     members = models.ManyToManyField(Player, through='GroupMembership')
-    scoreak = models.FloatField('AK score', null=True, default=0.0)
-    scorepl = models.FloatField('PL score', null=True, default=0.0)
-    meanrating = models.FloatField('Rating', null=True, default=0.0)
-    founded = models.DateField('Date founded', null=True, blank=True)
-    disbanded = models.DateField('Date disbanded', null=True, blank=True)
-    active = models.BooleanField('Active', null=False, default=True, db_index=True)
-    homepage = models.CharField('Homepage', null=True, blank=True, max_length=200)
-    lp_name = models.CharField('Liquipedia title', null=True, blank=True, max_length=200) 
+    scoreak = models.FloatField(
+        'AK score', null=True, default=0.0,
+        help_text='All-kill score'
+    )
+    scorepl = models.FloatField(
+        'PL score', null=True, default=0.0,
+        help_text='Proleague score'
+    )
+    meanrating = models.FloatField(
+        'Rating', null=True, default=0.0,
+        help_text='Latest mean rating of top five players'
+    )
+    founded = models.DateField(
+        'Date founded', null=True, blank=True,
+        help_text='Date founded'
+    )
+    disbanded = models.DateField(
+        'Date disbanded', null=True, blank=True,
+        help_text='Date disbanded (if inactive)'
+    )
+    active = models.BooleanField(
+        'Active', null=False, default=True, db_index=True,
+        help_text='True if active'
+    )
+    homepage = models.CharField(
+        'Homepage', null=True, blank=True, max_length=200,
+        help_text='Team homepage URI'
+    )
+    lp_name = models.CharField(
+        'Liquipedia title', null=True, blank=True, max_length=200,
+        help_text='Liquipedia title'
+    )
 
     is_team = models.BooleanField('Team', null=False, default=True, db_index=True)
     is_manual = models.BooleanField('Manual entry', null=False, default=True)
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -710,6 +1199,59 @@ class Group(models.Model):
     def get_aliases(self):
         return [a.name for a in self.alias_set.all()]
     # }}}
+
+    # {{{ get_rank: Calculates the rank for the team given a metric
+    def get_rank(self, rank_type):
+        if rank_type not in {"scoreak", "scorepl", "meanrating"}:
+            raise Exception()
+        if '_ranks' not in dir(self):
+            self._ranks = dict()
+        if rank_type in self._ranks:
+            return self._ranks[rank_type]
+
+        if getattr(self, rank_type) is None or \
+           getattr(self, rank_type) in {-10, 0} or \
+           not self.active or \
+           self.disbanded is not None:
+            self._ranks[rank_type] = None
+            return None
+
+        filters = {
+            rank_type+"__isnull": False,
+            rank_type+"__gt": getattr(self, rank_type),
+            "active": True,
+            "is_team": True
+        }
+        q = Group.objects.filter(**filters)\
+                         .exclude(id=self.id)\
+
+        c = q.count()
+        self._ranks[rank_type] = c + 1
+        return self._ranks[rank_type]
+
+    @property
+    def ak_rank(self):
+        return self.get_rank("scoreak")
+
+    @property
+    def pl_rank(self):
+        return self.get_rank("scorepl")
+
+    @property
+    def rating_rank(self):
+        return self.get_rank('meanrating')
+
+    # Shortcut for use in templates
+    @property
+    def ranks(self):
+        return (
+            (_("All-Kill"), self.ak_rank, "ak"),
+            (_("Proleague"), self.pl_rank, "pl"),
+            (_("Rating"), self.rating_rank, "rt")
+        )
+
+    # }}}
+
 # }}}
 
 # {{{ GroupMemberships
@@ -763,46 +1305,121 @@ class Alias(models.Model):
 # }}}
 
 # {{{ Matches
+
+# This can operate on querysets in the current dev branch
+# of Django. Worth noting for the future. So currently it
+# works like this:
+#   q = Match.objects.symmetric_filter(...)
+# But in the future we can have things like:
+#   q = Match.objects.filter(date="2014-03-08")
+#   q = q.symmetric_filter(...)
+#
+# -- Prillan, 2014-03-08
+class MatchManager(models.Manager):
+
+    def symmetric_filter(self, *args, **kwargs):
+        q = Q(*args, **kwargs)
+        swapped = swap_q_object(q)
+        return super().filter(q | swapped)
+
 class Match(models.Model):
     class Meta:
         verbose_name_plural = 'matches'
         db_table = 'match'
 
-    period = models.ForeignKey(Period, null=False)
-    date = models.DateField('Date played', null=False)
-    pla = models.ForeignKey(Player, related_name='match_pla', verbose_name='Player A', null=False)
-    plb = models.ForeignKey(Player, related_name='match_plb', verbose_name='Player B', null=False)
-    sca = models.SmallIntegerField('Score for player A', null=False, db_index=True)
-    scb = models.SmallIntegerField('Score for player B', null=False, db_index=True)
+    objects = MatchManager()
 
-    rca = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True)
-    rcb = models.CharField(max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True)
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False,
+        help_text='Period in which the match was played'
+    )
+    date = models.DateField(
+        'Date played', null=False,
+        help_text='Date played'
+    )
+    pla = models.ForeignKey(
+        Player, related_name='match_pla', verbose_name='Player A', null=False,
+        help_text='Player A'
+    )
+    plb = models.ForeignKey(
+        Player, related_name='match_plb', verbose_name='Player B', null=False,
+        help_text='Player B'
+    )
+    sca = models.SmallIntegerField(
+        'Score for player A', null=False, db_index=True,
+        help_text='Score for player A'
+    )
+    scb = models.SmallIntegerField(
+        'Score for player B', null=False, db_index=True,
+        help_text='Score for player B'
+    )
 
-    treated = models.BooleanField('Computed', default=False, null=False)
-    event = models.CharField('Event text (deprecated)', max_length=200, default='', blank=True)
-    eventobj = models.ForeignKey(Event, null=True, blank=True, verbose_name='Event')
+    rca = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True,
+        help_text='Race for player A'
+    )
+    rcb = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True,
+        help_text='Race for player B'
+    )
+
+    treated = models.BooleanField(
+        'Computed', default=False, null=False,
+        help_text='True if the given period has been recomputed since last change'
+    )
+    event = models.CharField(
+        'Event text (deprecated)', max_length=200, default='', blank=True,
+        help_text='Event text (if no event object)'
+    )
+    eventobj = models.ForeignKey(
+        Event, null=True, blank=True, verbose_name='Event',
+        help_text='Event object'
+    )
     submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
 
     game = models.CharField(
-        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True)
-    offline = models.BooleanField('Offline', default=False, null=False, db_index=True)
+        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True,
+        help_text='Game version'
+    )
+    offline = models.BooleanField(
+        'Offline', default=False, null=False, db_index=True,
+        help_text='True if the match was played offline'
+    )
 
     # Helper fields for fast loading of frequently accessed information
-    rta = models.ForeignKey('Rating', related_name='rta', verbose_name='Rating A', null=True)
-    rtb = models.ForeignKey('Rating', related_name='rtb', verbose_name='Rating B', null=True)
+    rta = models.ForeignKey(
+        'Rating', related_name='rta', verbose_name='Rating A', null=True,
+        help_text='Rating for player A at the time the match was played'
+    )
+    rtb = models.ForeignKey(
+        'Rating', related_name='rtb', verbose_name='Rating B', null=True,
+        help_text='Rating for player B at the time the match was played'
+    )
+    # }}}
 
     # {{{ populate_orig: Populates the original data fields, to check later if anything changed.
     def populate_orig(self):
-        try:
-            self.orig_pla    = self.pla_id
-            self.orig_plb    = self.plb_id
-            self.orig_rca    = self.rca
-            self.orig_rcb    = self.rcb
-            self.orig_sca    = self.sca
-            self.orig_scb    = self.scb
-            self.orig_date   = self.date
-            self.orig_period = self.period_id
-        except:
+        if self.pk:
+            try:
+                self.orig_pla    = self.pla_id
+                self.orig_plb    = self.plb_id
+                self.orig_rca    = self.rca
+                self.orig_rcb    = self.rcb
+                self.orig_sca    = self.sca
+                self.orig_scb    = self.scb
+                self.orig_date   = self.date
+                self.orig_period = self.period_id
+            except:
+                self.orig_pla    = None
+                self.orig_plb    = None
+                self.orig_rca    = None
+                self.orig_rcb    = None
+                self.orig_sca    = None
+                self.orig_scb    = None
+                self.orig_date   = None
+                self.orig_period = None
+        else:
             self.orig_pla    = None
             self.orig_plb    = None
             self.orig_rca    = None
@@ -852,6 +1469,7 @@ class Match(models.Model):
 
         # If the period has been changed, or another effective change has been made, flag period(s).
         if self.changed_period() or self.changed_effect():
+            self.set_ratings()
             try:
                 self.orig_period.needs_recompute = True
                 self.orig_period.save()
@@ -872,9 +1490,9 @@ class Match(models.Model):
 
         if update_dates:
             for event in self.eventobj.get_ancestors(id=True):
-                if self.date < event.earliest:
+                if event.earliest is None or self.date < event.earliest:
                     event.set_earliest(self.date)
-                if self.date > event.latest:
+                if event.latest is None or self.date > event.latest:
                     event.set_latest(self.date)
     # }}}
 
@@ -904,12 +1522,12 @@ class Match(models.Model):
         try:
             self.rta = Rating.objects.get(player=self.pla, period_id=self.period_id-1)
         except:
-            pass
+            self.rta = None
 
         try:
             self.rtb = Rating.objects.get(player=self.plb, period_id=self.period_id-1)
         except:
-            pass
+            self.rtb = None
     # }}}
 
     # {{{ set_date(date): Exactly what it says on the tin.
@@ -980,26 +1598,86 @@ class Message(models.Model):
 
     type = models.CharField('Type', max_length=10, choices=MESSAGE_TYPES)
 
-    title = models.CharField('Title', max_length=100, null=True)
-    text = models.TextField('Text')
+    message = models.CharField(
+        'Message', max_length=1000, null=False, blank=False, choices=MESSAGES, default='')
+    params = models.CharField('Parameters', max_length=1000, null=False, blank=False, default='')
 
     player = models.ForeignKey(Player, null=True)
     event = models.ForeignKey(Event, null=True)
     group = models.ForeignKey(Group, null=True)
     match = models.ForeignKey(Match, null=True)
+
+    def __str__(self):
+        try:
+            params = self.get_param_dict()
+            return MESSAGES_DICT[self.message] % self.get_param_dict()
+        except:
+            return _('Error')
+
+    def get_message(self):
+        return str(self)
+
+    def get_title(self):
+        return MESSAGES_TITLE_DICT[self.message]
+
+    def get_text_index(self):
+        return MESSAGES_IDX.index(self.message)
+
+    def get_esc_params(self):
+        return r"\n".join(self.params.replace("'", r"\'").splitlines())
+
+    def get_param_dict(self):
+        params = {}
+        for p in self.params.splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params:
+                params[key] = SRACES[params[key]]
+        return params
+
+    def verify(self):
+        try:
+            _ = self.message % self.get_param_dict()
+            return True
+        except:
+            return False
 # }}}
 
 # {{{ Earnings
 class Earnings(models.Model):
     class Meta:
         db_table = 'earnings'
+        ordering = ['-earnings']
 
-    event = models.ForeignKey(Event, verbose_name='Event', null=False)
-    player = models.ForeignKey(Player, verbose_name='Player', null=False)
-    earnings = models.IntegerField('Earnings (USD)', null=True, blank=True)
-    origearnings = models.IntegerField('Earnings (original currency)')
-    currency = models.CharField('Original currency', max_length=30)
-    placement = models.IntegerField('Place')
+    # {{{ Fields
+    event = models.ForeignKey(
+        Event, verbose_name='Event', null=False,
+        help_text='Event in which this prize was awarded'
+    )
+    player = models.ForeignKey(
+        Player, verbose_name='Player', null=False,
+        help_text='Player to which this prize was awarded'
+    )
+    earnings = models.IntegerField(
+        'Earnings (USD)', null=True, blank=True,
+        help_text='Prize money converted to USD (historically accurate conversion rate)'
+    )
+    origearnings = models.DecimalField(
+        'Earnings (original currency)',
+        help_text='Prize money in original currency',
+        decimal_places=8, # Bitcoin uses 8 places
+        max_digits=12+8
+    )
+    currency = models.CharField(
+        'Original currency', max_length=30,
+        help_text='Original currency (ISO 4217)'
+    )
+    placement = models.IntegerField(
+        'Place',
+        help_text='Placement'
+    )
+    # }}}
 
     # {{{ set_earnings(event, payouts, currency): Sets earnings for a given event.
     # Payouts is a list of dicts with keys 'player', 'prize' and 'placement'.
@@ -1029,6 +1707,7 @@ class Earnings(models.Model):
     @staticmethod
     def convert_earnings(event):
         earningobjs = Earnings.objects.filter(event=event)
+        event.update_dates()
         date = event.latest
 
         for earning in earningobjs:
@@ -1107,7 +1786,6 @@ class PreMatch(models.Model):
 
     # {{{ is_valid: Checks if this can be turned into a Match.
     def is_valid(self):
-        print(self.pla, self.plb, self.rca, self.rcb)
         return self.pla is not None and self.plb is not None
     # }}}
 # }}}
@@ -1118,51 +1796,140 @@ class Rating(models.Model):
         ordering = ['period']
         db_table = 'rating'
 
-    period = models.ForeignKey(Period, null=False, verbose_name='Period')
-    player = models.ForeignKey(Player, null=False, verbose_name='Player')
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False, verbose_name='Period',
+        help_text='This rating applies to the given period'
+    )
+    player = models.ForeignKey(
+        Player, null=False, verbose_name='Player',
+        help_text='This rating applies to the given player'
+    )
     cluster = models.IntegerField(null=True, blank=True, default=None, verbose_name='Cluster')
 
     # Helper fields for fast loading of frequently accessed information
-    prev = models.ForeignKey('Rating', related_name='prevrating', verbose_name='Previous rating', null=True)
+    prev = models.ForeignKey(
+        'Rating', related_name='prevrating', verbose_name='Previous rating', null=True,
+        help_text='Previous rating for the same player'
+    )
 
     # Standard rating numbers
-    rating = models.FloatField('Rating', null=False)
-    rating_vp = models.FloatField('R-del vP', null=False)
-    rating_vt = models.FloatField('R-del vT', null=False)
-    rating_vz = models.FloatField('R-del vZ', null=False)
+    rating = models.FloatField(
+        'Rating', null=False,
+        help_text='Mean rating'
+    )
+    rating_vp = models.FloatField(
+        'R-del vP', null=False,
+        help_text='Adjustment vP'
+    )
+    rating_vt = models.FloatField(
+        'R-del vT', null=False,
+        help_text='Adjustment vT'
+    )
+    rating_vz = models.FloatField(
+        'R-del vZ', null=False,
+        help_text='Adjustment vZ'
+    )
 
     # Standard rating deviations
-    dev = models.FloatField('RD', null=False)
-    dev_vp = models.FloatField('RD vP', null=False)
-    dev_vt = models.FloatField('RD vT', null=False)
-    dev_vz = models.FloatField('RD vZ', null=False)
+    dev = models.FloatField(
+        'RD', null=False,
+        help_text='Mean rating deviation'
+    )
+    dev_vp = models.FloatField(
+        'RD vP', null=False,
+        help_text='Extra rating deviation vP'
+    )
+    dev_vt = models.FloatField(
+        'RD vT', null=False,
+        help_text='Extra rating deviation vT'
+    )
+    dev_vz = models.FloatField(
+        'RD vZ', null=False,
+        help_text='Extra rating deviation vZ'
+    )
 
     # Computed performance ratings
-    comp_rat = models.FloatField('Perf', null=True, blank=True)
-    comp_rat_vp = models.FloatField('P-del vP', null=True, blank=True)
-    comp_rat_vt = models.FloatField('P-del vT', null=True, blank=True)
-    comp_rat_vz = models.FloatField('P-del vZ', null=True, blank=True)
+    comp_rat = models.FloatField(
+        'Perf', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vp = models.FloatField(
+        'P-del vP', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vt = models.FloatField(
+        'P-del vT', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
+    comp_rat_vz = models.FloatField(
+        'P-del vZ', null=True, blank=True,
+        help_text='Mean performance rating (-1000: N/A, -2000: +INF, -3000: -INF)'
+    )
 
     # Backwards filtered rating numbers
-    bf_rating = models.FloatField('BF', default=0, null=False)
-    bf_rating_vp = models.FloatField('BF-del vP', default=0, null=False)
-    bf_rating_vt = models.FloatField('BF-del vT', default=0, null=False)
-    bf_rating_vz = models.FloatField('BF-del vZ', default=0, null=False)
+    bf_rating = models.FloatField(
+        'BF', default=0, null=False,
+        help_text='Mean backwards filtered rating'
+    )
+    bf_rating_vp = models.FloatField(
+        'BF-del vP', default=0, null=False,
+        help_text='Backwards filtered adjustment vP'
+    )
+    bf_rating_vt = models.FloatField(
+        'BF-del vT', default=0, null=False,
+        help_text='Backwards filtered adjustment vT'
+    )
+    bf_rating_vz = models.FloatField(
+        'BF-del vZ', default=0, null=False,
+        help_text='Backwards filtered adjustment vZ'
+    )
 
     # Backwards filtered rating deviations
-    bf_dev = models.FloatField('BFD', null=True, blank=True, default=1)
-    bf_dev_vp = models.FloatField('BFD vP', null=True, blank=True, default=1)
-    bf_dev_vt = models.FloatField('BFD vT', null=True, blank=True, default=1)
-    bf_dev_vz = models.FloatField('BFD vZ', null=True, blank=True, default=1)
+    bf_dev = models.FloatField(
+        'BFD', null=True, blank=True, default=1,
+        help_text='Mean backwards filtered rating deviation'
+    )
+    bf_dev_vp = models.FloatField(
+        'BFD vP', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vP'
+    )
+    bf_dev_vt = models.FloatField(
+        'BFD vT', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vT'
+    )
+    bf_dev_vz = models.FloatField(
+        'BFD vZ', null=True, blank=True, default=1,
+        help_text='Extra backwards filtered rating deviation vZ'
+    )
 
     # Ranks among all players (if player is active)
-    position = models.IntegerField('Rank', null=True)
-    position_vp = models.IntegerField('Rank vP', null=True)
-    position_vt = models.IntegerField('Rank vT', null=True)
-    position_vz = models.IntegerField('Rank vZ', null=True)
+    position = models.IntegerField(
+        'Rank', null=True,
+        help_text='Mean rating rank (if active)'
+    )
+    position_vp = models.IntegerField(
+        'Rank vP', null=True,
+        help_text='vP rating rank (if active)'
+    )
+    position_vt = models.IntegerField(
+        'Rank vT', null=True,
+        help_text='vT rating rank (if active)'
+    )
+    position_vz = models.IntegerField(
+        'Rank vZ', null=True,
+        help_text='vZ rating rank (if active)'
+    )
 
-    decay = models.IntegerField('Decay', default=0, null=False)
-    domination = models.FloatField(null=True, blank=True)
+    decay = models.IntegerField(
+        'Decay', default=0, null=False,
+        help_text='Number of periods since last game'
+    )
+    domination = models.FloatField(
+        null=True, blank=True,
+        help_text='Difference from number 7 on rating list'
+    )
+    # }}}
 
     # {{{ String representation
     def __str__(self):
@@ -1323,4 +2090,23 @@ class BalanceEntry(models.Model):
     p_gains = models.FloatField('P gains', null=False)
     t_gains = models.FloatField('T gains', null=False)
     z_gains = models.FloatField('Z gains', null=False)
+# }}}
+
+# {{{ API access keys
+class APIKey(models.Model):
+    class Meta:
+        db_table = 'apikey'
+
+    key = models.CharField('Key', max_length=20, null=False, db_index=True, primary_key=True)
+    date_opened = models.DateField('Date opened', null=False, auto_now_add=True)
+    organization = models.CharField('Name/organization', max_length=200, null=False)
+    contact = models.CharField('Contact', max_length=200, null=False)
+    requests = models.IntegerField('Requests', null=False)
+
+    def __str__(self):
+        return self.organization
+
+    def generate_key(self):
+        characters = string.ascii_letters + string.digits
+        self.key = ''.join([random.choice(characters) for _ in range(20)])
 # }}}

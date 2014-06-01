@@ -1,4 +1,6 @@
 # {{{ Imports
+from datetime import datetime
+
 from django.contrib import admin
 from django.contrib.admin import (
     AllValuesFieldListFilter,
@@ -10,19 +12,23 @@ from django.db.models import (
 )
 from django import forms
 
+from tastypie.models import ApiKey as TPApiKey
+
 from ratings.models import (
-    Player,
-    Group,
-    Period,
-    Match,
-    Rating,
-    Event,
     Alias,
+    APIKey,
     Earnings,
-    PreMatchGroup,
-    PreMatch,
-    Story,
+    Event,
+    EventAdjacency,
+    Group,
+    Match,
     Message,
+    Period,
+    Player,
+    PreMatch,
+    PreMatchGroup,
+    Rating,
+    Story,
 )
 
 from countries import transformations
@@ -41,7 +47,7 @@ def player_team(p):
     except:
         return ''
 player_team.short_description = 'Team'
-    
+
 class MembersInline(admin.TabularInline):
     model = Group.members.through
 
@@ -49,23 +55,64 @@ class AliasesInline(admin.TabularInline):
     model = Alias
     fields = ['name']
 
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
 class MessagesInline(admin.StackedInline):
     model = Message
-    fields = ['type', 'title', 'text']
-    extra = 1
+    fields = ['type', 'message', 'params']
+    extra = 0
+    form = MessageForm
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(MessagesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class EarningsInline(admin.TabularInline):
     model = Earnings
 
-class StoriesInline(admin.TabularInline):
+class StoriesForm(forms.ModelForm):
+    class Meta:
+        model = Story
+
+    def clean(self):
+        params = {}
+        for p in self.cleaned_data['params'].splitlines():
+            l, _, r = p.partition(':')
+            params[l.strip()] = r.strip()
+        for key in ['race', 'racea', 'raceb']:
+            if key in params and params[key] not in 'PTZRS':
+                raise forms.ValidationError('Invalid parameters. Did you choose P, T, Z, R or S for race?')
+        return self.cleaned_data
+
+class StoriesInline(admin.StackedInline):
+    extra = 0
     model = Story
-    fields = ['date', 'text']
+    fields = ['date', 'message', 'params']
+    form = StoriesForm
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        formfield = super(StoriesInline, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name == 'params':
+            formfield.widget = forms.Textarea(attrs={'size': 15})
+        return formfield
 
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
-            (None,          {'fields': ['tag','race']}),
-            ('Optional',    {'fields': ['name','birthday','country']}),
-            ('External',    {'fields': ['tlpd_id','lp_name','sc2c_id','sc2e_id']})
+        (None,          {'fields': ['tag','race']}),
+        ('Optional',    {'fields': ['name','birthday','country']}),
+        ('External',    {'fields': ['tlpd_id','lp_name','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]
     search_fields = ['tag']
@@ -91,33 +138,125 @@ class MatchForm(forms.ModelForm):
             q = q | Q(id=self.instance.eventobj.id)
         self.fields['eventobj'].queryset = Event.objects.filter(q).order_by('fullname')
 
+    def commit(self, request):
+        super().commit(request)
+
+        self.cleaned_data['period'].update(needs_recompute=True)
+
+def match_delete_wrapper(f):
+    def wrapper(self, request, objlist):
+        result = f(self, request, objlist)
+        for obj in objlist:
+            obj.period.needs_recompute = True
+            obj.period.save()
+        return result
+    return wrapper
+
 class MatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', match_period, 'treated', 'offline', 'game', 'eventobj', 'submitter')
     inlines = [MessagesInline]
     exclude = ('rta', 'rtb', 'period')
     list_filter = [
-        ('date', DateFieldListFilter), 
+        ('date', DateFieldListFilter),
         ('game', AllValuesFieldListFilter),
     ]
     form = MatchForm
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+
+        if 'delete_selected' in actions:
+            fun, name, desc = actions['delete_selected']
+            actions['delete_selected'] = (match_delete_wrapper(fun), name, desc)
+
+        return actions
 
     def get_res(self, obj):
         return '%s %i-%i %s' % (str(obj.pla), obj.sca, obj.scb, str(obj.plb))
     get_res.short_description = 'Result'
 
+    def has_add_permission(self, request):
+        return False
+
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = ('id', 'start', 'end', 'computed', 'needs_recompute')
+    list_filter = ('computed', 'needs_recompute')
+
+    actions = ['recompute']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.list_display_links = (None, )
+
+    def get_queryset(self, request):
+        return Period.objects.filter(start__lte=datetime.today())
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+
+        return actions
+
+    def has_add_permission(self, request):
+        return False
+
+    def recompute(self, request, queryset):
+        queryset.update(needs_recompute=True)
+    recompute.short_description = "Recompute selected"
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'name', 'closed', 'big', 'noprint', 'type',)
     inlines = [MessagesInline]
     exclude = ('lft', 'rgt', 'idx', 'tlpd_db')
-    readonly_fields = ('parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx')
+    readonly_fields = (
+        'parent', 'prizepool', 'earliest', 'latest', 'type', 'name', 'fullname', 'idx')
     search_fields = ['fullname']
+    actions = ['open_event_action', 'close_event_action']
+
+
+    def open_event_action(self, request, queryset):
+        count = 0
+        for event in queryset:
+            objects = EventAdjacency.objects.filter(child=event, parent__closed=True).select_related()
+            for rel in objects:
+                rel.parent.closed = False
+                rel.parent.save()
+                count += 1
+        self.message_user(request, "Successfully opened {} event{}.".format(count, "" if count == 1 else "s"))
+
+    open_event_action.short_description = "Open event supertree"
+
+    def close_event_action(self, request, queryset):
+        count = 0
+        for event in queryset:
+            objects = EventAdjacency.objects.filter(parent=event, child__closed=False).select_related()
+            for rel in objects:
+                closed = rel.child.closed
+                rel.child.closed = True
+                rel.child.save()
+                if not closed:
+                    count += 1
+        self.message_user(request, "Successfully closed {} event{}.".format(count, "" if count == 1 else "s"))
+
+    close_event_action.short_description = "Close event subtree"
+
+    def has_add_permission(self, request):
+        return False
 
 class PreMatchGroupAdmin(admin.ModelAdmin):
     list_display = ('date', 'event')
 
+    def has_add_permission(self, request):
+        return False
+
 class PreMatchAdmin(admin.ModelAdmin):
     list_display = ('date', 'get_res', 'get_event')
     readonly_fields = ('group',)
+
+    def has_add_permission(self, request):
+        return False
 
     def get_res(self, obj):
         s = obj.pla_string if obj.pla is None else str(obj.pla)
@@ -130,9 +269,20 @@ class PreMatchAdmin(admin.ModelAdmin):
         return obj.group.event
     get_event.short_description = 'Event'
 
+class APIKeyAdmin(admin.ModelAdmin):
+    list_display = ('date_opened', 'organization', 'contact', 'requests')
+    readonly_fields = ('date_opened', 'key', 'requests')
+
+    def has_add_permission(self, request):
+        return False
+
 admin.site.register(Player, PlayerAdmin)
+admin.site.register(Period, PeriodAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(PreMatchGroup, PreMatchGroupAdmin)
 admin.site.register(PreMatch, PreMatchAdmin)
+admin.site.register(APIKey, APIKeyAdmin)
+
+admin.site.unregister(TPApiKey)

@@ -5,8 +5,10 @@ This is the page showing the details of a rating adjustment. It's called from ra
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}{{ player.tag }} list {{ period.id }}{% endblock %}
+{% comment %}Translators: Rating adjustments for [tag] on list number [listn].{% endcomment %}
+{% block title %}{% blocktrans with tag=player.tag listn=period.id %}{{ tag }} list {{ listn }}{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
@@ -17,17 +19,17 @@ This is the page showing the details of a rating adjustment. It's called from ra
         <div class="rowe" style="width: 1em; text-align: left;">
             {% if prevlink %}
             <a href="/players/{{ prevlink.player.id }}-{{prevlink.player.tag|urlfilter}}/period/{{ prevlink.period.id }}/">
-                <img src="{{ "prev.png"|static }}" alt="previous" class="btm" />
+                <img src="{{ "prev"|img }}" alt="previous" class="btm" />
             </a>
             {% endif %}
         </div>
         <div class="rowe" style="width: 10em; text-align: center;">
-        List {{ period.id }}
+        {% blocktrans with listnumber=period.id %}List {{ listnumber }}{% endblocktrans %}
         </div>
         <div class="rowe" style="width: 1em; text-align: right;">
             {% if nextlink %}
             <a href="/players/{{ nextlink.player.id }}-{{ nextlink.player.tag|urlfilter }}/period/{{ nextlink.period.id }}/">
-                <img src="{{ "next.png"|static }}" alt="next" class="btm" />
+                <img src="{{ "next"|img }}" alt="next" class="btm" />
             </a>
             {% endif %}
         </div>
@@ -38,26 +40,27 @@ This is the page showing the details of a rating adjustment. It's called from ra
 
 {% if matches %}
 {% if has_treated %}
+{% with start=period.start|cdate:_('F jS, Y') end=period.end|cdate:_('F jS, Y') %}
 {% if period.is_preview %}
-<p>This period started on {{ period.start|date:"F jS, Y" }} and will end on {{ period.end|date:"F jS" }}. The
-numbers given below are projected adjustments and can change before then.</p>
+<p>{% blocktrans %}This period started on {{ start }} and will end on {{ end }}. The numbers given below are projected adjustments and can change before then.{% endblocktrans %}</p>
 {% else %}
-<p>This period started on {{ period.start|date:"F jS, Y" }} and ended on {{ period.end|date:"F jS, Y" }}.</p>
+<p>{% blocktrans %}This period started on {{ start }} and ended on {{ end }}.{% endblocktrans %}</p>
 {% endif %}
+{% endwith %}
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
         <div class="rowe" style="width: 3em;"></div>
-        <div class="rowe" style="width: 6em; text-align: right;">Old rtg.</div>
-        <div class="rowe" style="width: 9em; text-align: right;">Opposition</div>
-        <div class="rowe" style="width: 11em; text-align: right;">Expected score</div>
-        <div class="rowe" style="width: 10em; text-align: right;">Actual score</div>
-        <div class="rowe" style="width: 9em; text-align: right;">Performance</div>
-        <div class="rowe" style="width: 9em; text-align: right;">New rtg.</div>
-        <div class="rowe" style="width: 10em; text-align: right;">Adjustment</div>
+        <div class="rowe" style="width: 6em; text-align: right;">{% trans "Old rtg." %}</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Opposition" %}</div>
+        <div class="rowe" style="width: 11em; text-align: right;">{% trans "Expected score" %}</div>
+        <div class="rowe" style="width: 10em; text-align: right;">{% trans "Actual score" %}</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Performance" %}</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "New rtg." %}</div>
+        <div class="rowe" style="width: 10em; text-align: right;">{% trans "Adjustment" %}</div>
     </div>
     <div class="row row1">
-        <div class="rowe">vP</div>
+        <div class="rowe">{% trans "vP" %}</div>
         <div class="rowe" style="text-align: right;">
             {% if rating.prev %}
                 {{ rating.prev.rating|addf:rating.prev.rating_vp|ratscale }}
@@ -82,7 +85,7 @@ numbers given below are projected adjustments and can change before then.</p>
         </div>
     </div>
     <div class="row row2">
-        <div class="rowe">vT</div>
+        <div class="rowe">{% trans "vT" %}</div>
         <div class="rowe" style="text-align: right;">
             {% if rating.prev %}
                 {{ rating.prev.rating|addf:rating.prev.rating_vt|ratscale }}
@@ -107,7 +110,7 @@ numbers given below are projected adjustments and can change before then.</p>
         </div>
     </div>
     <div class="row row1">
-        <div class="rowe">vZ</div>
+        <div class="rowe">{% trans "vZ" %}</div>
         <div class="rowe" style="text-align: right;">
             {% if rating.prev %}
                 {{ rating.prev.rating|addf:rating.prev.rating_vz|ratscale }}
@@ -162,17 +165,18 @@ numbers given below are projected adjustments and can change before then.</p>
     </div>
 </div>
 {% endif %}
-    
-<p>Exact game details:</p>
-    <table class="results">
-    {% include "matchlist.html" with lm_list=matches lm_header="info" %}
-    </table>
-    {% if has_nontreated %} 
-        <p><strong>Note:</strong> Some games have not been included in the rating calculations because they
-        were just recently submitted or modified. They will be included in the next update. This happens every
-        six hours. The time of the last update can be found <a href="/db/">here</a>.</p>
-    {% endif %}
+
+<p>{% trans "Exact game details:" %}</p>
+
+<table class="results">
+{% include "matchlist.html" with lm_list=matches lm_header="info" %}
+</table>
+
+{% if has_nontreated %} 
+<p>{% blocktrans with a="<a href=\"/db/\">" %}<strong>Note:</strong> Some games have not been included in the rating calculations because they were just recently submitted or modified. They will be included in the next update. This happens every six hours. The time of the last update can be found {{a}}here</a>.{% endblocktrans %}</p>
+{% endif %}
+
 {% else %}
-    <p>{{ player.tag }} played no games in this period.</p>
+    <p>{% blocktrans with plr=player.tag %}{{ plr }} played no games in this period.{% endblocktrans %}</p>
 {% endif %}
 {% endblock %}

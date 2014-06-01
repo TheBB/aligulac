@@ -4,6 +4,7 @@ Changes here will mostly be visible on the entire site.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html>
@@ -14,15 +15,78 @@ Changes here will mostly be visible on the entire site.
         <meta name="author" content="Eivind Fonn" />
 
         <title>{% block title %}Aligulac{% endblock %}</title>
+        <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
         <link href="{{ "base"|css }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ "datepicker"|css }}" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src="{{ "general"|js }}"></script>
-        <script type="text/javascript" src="{{ "datepicker"|js }}" /></script>
+        <link href="{{ "jquery.tagsInput"|css }}" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript">
+        <!--
+        var autocomplete_strings = {
+            'Players': '{% trans "Players" %}',
+            'Teams': '{% trans "Teams" %}',
+            'Events': '{% trans "Events" %}',
+        };
+        -->
+        </script>
         <script type="text/javascript" src="{{ "jquery-1.10.2.min"|js }}"></script>
         <script type="text/javascript" src="{{ "jquery-ui.min"|js }}"></script>
+        <script type="text/javascript" src="{{ "jquery.ui.datepicker-"|add:lang|js }}"></script>
+        <script type="text/javascript" src="{{ "jquery.tagsInput"|js }}"></script>
+        <script type="text/javascript" src="{{ "general"|js }}"></script>
         {% if charts %}
             <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
             <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+            <script type="text/javascript">
+            <!--
+            Highcharts.setOptions({
+                lang: {
+                    downloadPNG: '{% trans "Download PNG image" %}',
+                    downloadJPEG: '{% trans "Download JPEG image" %}',
+                    downloadPDF: '{% trans "Download PDF document" %}',
+                    downloadSVG: '{% trans "Download SVG vector image" %}',
+                    loading: '{% trans "Loading..." %}',
+                    printChart: '{% trans "Print chart" %}',
+                    resetZoom: '{% trans "Reset zoom" %}',
+                    months: [
+                        '{% trans "January" context "Big first letter" %}',
+                        '{% trans "February" context "Big first letter" %}',
+                        '{% trans "March" context "Big first letter" %}',
+                        '{% trans "April" context "Big first letter" %}',
+                        '{% trans "May" context "Big first letter" %}',
+                        '{% trans "June" context "Big first letter" %}',
+                        '{% trans "July" context "Big first letter" %}',
+                        '{% trans "August" context "Big first letter" %}',
+                        '{% trans "September" context "Big first letter" %}',
+                        '{% trans "October" context "Big first letter" %}',
+                        '{% trans "November" context "Big first letter" %}',
+                        '{% trans "December" context "Big first letter" %}',
+                    ],
+                    shortMonths: [
+                        '{% trans "Jan" context "Big first letter" %}',
+                        '{% trans "Feb" context "Big first letter" %}',
+                        '{% trans "Mar" context "Big first letter" %}',
+                        '{% trans "Apr" context "Big first letter" %}',
+                        '{% trans "May" context "Big first letter" %}',
+                        '{% trans "Jun" context "Big first letter" %}',
+                        '{% trans "Jul" context "Big first letter" %}',
+                        '{% trans "Aug" context "Big first letter" %}',
+                        '{% trans "Sep" context "Big first letter" %}',
+                        '{% trans "Oct" context "Big first letter" %}',
+                        '{% trans "Nov" context "Big first letter" %}',
+                        '{% trans "Dec" context "Big first letter" %}',
+                    ],
+                    weekdays: [
+                        '{% trans "Sunday" context "Big first letter" %}',
+                        '{% trans "Monday" context "Big first letter" %}',
+                        '{% trans "Tuesday" context "Big first letter" %}',
+                        '{% trans "Wednesday" context "Big first letter" %}',
+                        '{% trans "Thursday" context "Big first letter" %}',
+                        '{% trans "Friday" context "Big first letter" %}',
+                        '{% trans "Saturday" context "Big first letter" %}'
+                    ]
+                }
+            });
+            //-->
+            </script>
         {% endif %}
         {% if curpage == "Predict" %}
             <script type="text/javascript" src="{{ "lp-bracket-parser"|js }}" ></script>
@@ -40,15 +104,10 @@ Changes here will mostly be visible on the entire site.
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();
         </script>
+        <!-- Helper variables for using javascript to reference images -->
         <script type="text/javascript">
-        <!--
-        $(document).ready(function() {
-            $(".menu > .menu").mouseenter(function(){
-                $(".menu span").each(function() {$(this).hide();});
-                $("#submenu_" + $(this).attr("data-sub-menu")).show();
-            });
-        });
-        //-->
+          var flagsDir = '{{ "flags/"|imgdir }}';
+          var racesDir = '{{ "/"|imgdir }}';
         </script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Donegal+One&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -57,50 +116,58 @@ Changes here will mostly be visible on the entire site.
     <body>
         <table id="main">
             <tr>
-                <td id="heading"><a href="/" id="title" />ALIGULAC</a></td>
+                <td colspan="2" id="heading"><a href="/" id="title" />ALIGULAC</a></td>
             </tr>
             <tr>
-                <td id="subheading">
+                <td colspan="2" id="subheading">
                     {% if debug %}
-                        <span style="color: #ff0000; font-weight: bold;">DEVELOPMENT SERVER</span>
+                        <span style="color: #ff0000; font-weight: bold;">
+                            {% trans "DEVELOPMENT SERVER" %}
+                        </span>
                     {% else %}
-                        StarCraft 2 Progaming Statistics and Predictions
+                        {% trans "StarCraft 2 Progaming Statistics and Predictions" %}
                     {% endif %}
                 </td>
             </tr>
             <tbody id="menu_container">
             <tr>
-                <td class="menu">
-                {% for main in menu %}
-                <a href="{{ main.url }}" data-sub-menu="{{ main.name }}" class="menu{% if curpage == main.name %} menucur{% endif %}">{{ main.name }}</a>
-                {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td class="menu">
-                &nbsp;
-                {% for main in menu %}
-                    <span id="submenu_{{ main.name }}" {% if curpage != main.name %}style="display: none;"{% endif %}>
-                    {% for subname, suburl in main.submenu %}               
-                    {% if cursubpage == subname and curpage == main.name %}
-                        <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
-                    {% else %}
-                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
-                    {% endif %}
-                    {% endfor %}
-                    </span>
-                {% endfor %}
-                &nbsp;
+                <td colspan="2" class="menu">
+                    <ul>
+                        {% for main in menu %}
+                            <li>
+                                <div>
+                                    <a href="{{ main.url }}" class="{% if curpage == main.id %} menucur{% endif %}">{{ main.name }}</a>
+                                    <a href="#" class="actionSelector" style="display: none;">.</a>
+                                </div>
+                                <ul>
+                                {% for subid, subname, suburl in main.submenu %}               
+                                    <li>
+                                        {% if cursubpage == subid and curpage == main.id %}
+                                        <a href="{{ suburl }}" class="menu menucur">{{ subname }}</a>
+                                        {% else %}
+                                        <a href="{{ suburl }}" class="menu">{{ subname }}</a>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
             </tbody>
             <tr>
+                <td style="text-align: left;">
+                    {% trans "Language" %}: 
+                    <a href="/language/"><img src="{{ lang|img:"flags" }}" /></a>
+                </td>
                 <td style="text-align: right;"> <form action="/search/" method="get">
-                    Find player, team or event: <input type="text" name="q" />
+                    {% trans "Find player, team or event:" %}
+                    <input type="text" name="q" id="SearchTextBox" />
                 </form> </td>
             </tr>
             <tr>
-                <td id="content">
+                <td colspan="2" id="content">
                     {% if title %}
                     <h2>
                         {{ title }}
@@ -116,42 +183,40 @@ Changes here will mostly be visible on the entire site.
                     </h2>
                     {% endif %}
                     {% block content %}
-                    <h2>Current top 10</h2>
+                    <h2>{% trans "Current top 10" %}</h2>
 
                     {% include "ratinglist.html" with localcount=1 rl_pos_arrow=1 displayteams=1 %}
 
                     {% if curp.is_preview %}
-                    <p>The above list is a preview of the next rating list, which will be finalized on 
-                    {{ curp.end|date:"F jS" }}.</p>
+                    <p>{% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{ dt }}.{% endblocktrans %}</p>
                     {% endif %}
 
+                    {% include "messages.html" %}
                     {% include "blogposts.html" %}
                     {% endblock %}
                 </td>
             </tr>
             <tr>
-                <td id="footer">
-                    Find us on
-                    <a target="_blank" href="http://twitter.com/Sc2Aligulac">Twitter</a>,
-                    <a target="_blank" href="https://github.com/TheBB/aligulac">GitHub</a> and
-                    #aligulac on quakenet.<br/><br/>
-                    
-                    Powered by 
-                    <a target="_blank" href="http://www.djangoproject.com/">Django 1.6</a>, 
-                    <a target="_blank" href="http://python.org">Python 3.2</a>, 
-                    <a target="_blank" href="http://httpd.apache.org">Apache 2</a> and
-                    <a target="_blank" href="http://debian.org">Debian GNU/Linux 6</a>.<br/><br/>
+                <td colspan="2" id="footer">
+                    {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
+                    {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
+                    {% blocktrans %}Find us on {{a1}}Twitter</a>, {{a2}}GitHub</a> and #aligulac on quakenet.{% endblocktrans %}
+                    {% endwith %}{% endwith %}<br/><br/>
 
-                    Icons by Mark James. 
-                    Race icons by
-                    <a target="_blank" href="http://wiki.teamliquid.net/starcraft2/Main_Page">Liquipedia</a>.
-                    Date widget by
-                    <a target="_blank" href="http://www.frequency-decoder.com/">Frequency Decoder</a>.
-                    Charts by
-                    <a target="_blank" href="http://highcharts.com/">Highcharts</a>.<br/><br/>
+                    {% with a1="<a target=\"_blank\" href=\"http://www.djangoproject.com/\">" %}
+                    {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
+                    {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
+                    {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
+                    {% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}{% endwith %}{% endwith %}<br/><br/>
+
+                    {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
+                    {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
+                    {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
+                    {% endwith %}{% endwith %}<br/><br/>
 
                     <span id="genshort">
-                    <input type="submit" value="Generate short URL for this page" 
+                    <input type="submit" value="{% trans "Generate short URL for this page" %}" 
                            onclick="gen_short();" />
                     </span>
                     <span id="dispshort" style="display: none;">
@@ -160,14 +225,9 @@ Changes here will mostly be visible on the entire site.
                         function gen_short()
                         {
                             var http = new XMLHttpRequest();
-                            var url = "/m/new/";
-                            var params = "url=" + encodeURIComponent("{{ cur_path }}") + 
-                                "&csrfmiddlewaretoken={{ csrf_token }}";
-                            http.open("POST", url, true);
-                            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                            http.setRequestHeader("Content-length", params.length);
-                            http.setRequestHeader("Connection", "close");
-                            http.onreadystatechange = function() {//Call a function when the state changes.
+                            http.open("GET", "/m/new/?url=" + encodeURIComponent("{{ cur_path }}", false));
+
+                            http.onreadystatechange = function() {
                                 if (http.readyState == 4 & http.status == 200)
                                 {
                                     togvis('genshort', 'none');
@@ -177,7 +237,8 @@ Changes here will mostly be visible on the entire site.
                                     togvis('dispshort', 'inline');
                                 }
                             }
-                            http.send(params);
+
+                            http.send(null);
                         }
                     </script>
                 </td>

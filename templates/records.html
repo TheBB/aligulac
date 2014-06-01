@@ -5,18 +5,54 @@ This is the basic records page, called from ratings.views.records.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% block title %}Records{% if race %} for {{ race|racefull }}{% endif %}{% endblock %}
 
 {% block content %}
 
-    <p>To avoid rating artifacts, the earliest periods are not counted.</p>
+<p>{% trans "To avoid rating artifacts, the earliest periods are not counted." %}</p>
 
-    <h3>Highest ratings ever achieved{% if race %} by {{ race|racefull }}{% endif %}</h3>
-    {% include "recordlist.html" with high=hightot rt="Rating" %}
+{% if race %}
+<h3>{% blocktrans with rc=race|racefull%}Highest ratings ever achieved by {{ rc }}.{% endblocktrans %}</h3>
+{% else %}
+<h3>{% blocktrans %}Highest ratings ever achieved{% endblocktrans %}</h3>
+{% endif %}
 
-    <h3>Highest ratings ever achieved by matchup</h3>
-    {% include "recordlist.html" with high=highp rt="Rating "|add:race|add:"vP" race="P" %}
-    {% include "recordlist.html" with high=hight rt="Rating "|add:race|add:"vT" race="T" %}
-    {% include "recordlist.html" with high=highz rt="Rating "|add:race|add:"vZ" race="Z" %}
+{% trans "Rating" as rttrans %}
+{% trans "All" as alltrans %}
+{% include "recordlist.html" with high=hightot rt=rttrans race=alltrans %}
+
+<h3>{% blocktrans %}Highest ratings ever achieved by matchup{% endblocktrans %}</h3>
+
+{% if race == "P" %}
+    {% trans "Rating PvP" as pvp %}
+    {% trans "Rating PvT" as pvt %}
+    {% trans "Rating PvZ" as pvz %}
+    {% include "recordlist.html" with high=highp rt=pvp race="P" %}
+    {% include "recordlist.html" with high=hight rt=pvt race="T" %}
+    {% include "recordlist.html" with high=highz rt=pvz race="Z" %}
+{% elif race == "T" %}
+    {% trans "Rating TvP" as tvp %}
+    {% trans "Rating TvT" as tvt %}
+    {% trans "Rating TvZ" as tvz %}
+    {% include "recordlist.html" with high=highp rt=tvp race="P" %}
+    {% include "recordlist.html" with high=hight rt=tvt race="T" %}
+    {% include "recordlist.html" with high=highz rt=tvz race="Z" %}
+{% elif race == "Z" %}
+    {% trans "Rating ZvP" as zvp %}
+    {% trans "Rating ZvT" as zvt %}
+    {% trans "Rating ZvZ" as zvz %}
+    {% include "recordlist.html" with high=highp rt=zvp race="P" %}
+    {% include "recordlist.html" with high=hight rt=zvt race="T" %}
+    {% include "recordlist.html" with high=highz rt=zvz race="Z" %}
+{% else %}
+    {% trans "Rating vP" as vp %}
+    {% trans "Rating vT" as vt %}
+    {% trans "Rating vZ" as vz %}
+    {% include "recordlist.html" with high=highp rt=vp race="P" %}
+    {% include "recordlist.html" with high=hight rt=vt race="T" %}
+    {% include "recordlist.html" with high=highz rt=vz race="Z" %}
+{% endif %}
+
 {% endblock %}

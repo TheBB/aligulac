@@ -5,41 +5,45 @@ This is the prediction page for single elimination brackets. It's called from ra
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Single elimination bracket{% endblock %}
+{% block title %}{% trans "Single elimination bracket" %}{% endblock %}
 
 {% block content %}
 
 <table class="results" style="width: 67em;">
     <tr class="header">
-        <td style="width: 2.5em; text-align: right;">#</td>
-        <td style="width: 10em;">Player</td>
+        <td style="width: 2.5em; text-align: right;">{% trans "#" %}</td>
+        <td style="width: 10em;">{% trans "Player" %}</td>
         <td style="width: 1em;"></td>
         <td style="width: 1em;"></td>
-        {% for t in players.0.tally %}
+        {% for t in table.0.probs %}
         <td style="width: 8em; text-align: right;">
-            {% if forloop.first %}Win{%else %}Top {{ 2|pow:forloop.counter0 }}{% endif %}
+            {% if forloop.first %}{% trans "Win" %}
+            {% else %}{% blocktrans with num=2|pow:forloop.counter0 %}Top {{num}}{% endblocktrans %}{% endif %}
         </td>
         {% endfor %}
     </tr>
-    {% for p in players %}
-    {% if p.dbpl %}
+    {% for e in table %}
+    {% if e.player.id %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
         <td style="text-align: right;">
             {{ forloop.counter }}.
         </td>
         <td>
-            <a href="/players/{{ p.dbpl.id }}-{{ p.dbpl.tag|urlfilter }}/">{{ p.dbpl.tag }}</a>
+            <a href="/players/{{ e.player.id }}-{{ e.player.tag|urlfilter }}/">
+                {{ e.player.tag }}
+            </a>
         </td>
         <td>
-            {% if p.dbpl.country != "" %}
-            <img src="{{ p.dbpl.country|lower|imgfolder:"flags"|static }}" alt="{{ p.dbpl.country }}" />
-            {% endif %}
+        {% if e.player.country != "" %}
+        <img src="{{ e.player.country|lower|img:"flags" }}" alt="{{ e.player.country }}" />
+        {% endif %}
         </td>
         <td>
-            <img src="{{ p.dbpl.race|imgfolder|static }}" alt="{{ p.dbpl.race }}" class="btm" />
+            <img src="{{ e.player.race|img }}" alt="{{ e.player.race }}" class="btm" />
         </td>
-        {% for t in p.tally %}
+        {% for t in e.probs %}
         <td style="text-align: right;">
             {% if t > 0 %}{{ t|pctg_one }}%{% endif %}
         </td>
@@ -49,18 +53,17 @@ This is the prediction page for single elimination brackets. It's called from ra
     {% endfor %}
 </table>
 
-<h3>Median outcome</h3>
+<h3>{% trans "Median outcome" %}</h3>
 
-<p>This is the median outcome <em>assuming the already entered results</em>.</p>
+<p>{% blocktrans %}This is the median outcome <em>assuming the already entered results</em>.{% endblocktrans %}</p>
 
 <table class="results">
 {% include "matchlist.html" with lm_list=meanres lm_header="custom" lm_noright=True %}
 </table>
 
-<h3>Update bracket progress</h3>
+<h3>{% trans "Update bracket progress" %}</h3>
 
-<p>To modify a result, click on the score in the table below. To view detailed predictions for a match, click
-the arrow.</p>
+<p>{% blocktrans %}To modify a result, click on the score in the table below. To view detailed predictions for a match, click the arrow.{% endblocktrans %}</p>
 
 <form method="get" action="/inference/sebracket/">
     <input type="hidden" name="bo" value="{{ form.bo.value }}" />
@@ -69,18 +72,19 @@ the arrow.</p>
     {% include "matchlist.html" with lm_list=matches lm_header="custom" lm_predict=True %}
     </table>
     <div style="margin-top: 0.2em; text-align: right;">
-        <input type="submit" value="Update results" />
+        <input type="submit" value="{% trans "Update results" %}" />
     </div>
 </form>
 <div style="margin-top: 0.2em; text-align: right;">
     <form method="get" action="/inference/sebracket/">
     <input type="hidden" name="bo" value="{{ form.bo.value }}" />
     <input type="hidden" name="ps" value="{{ form.ps.value }}" />
-    <input type="submit" value="Clear results" />
+    <input type="submit" value="{% trans "Clear results" %}" />
     </form>
 </div>
 
-<h3>Postable</h3>
+{% comment %}Translators: Something that can be posted on a forum.{% endcomment %}
+<h3>{% trans "Postable" %}</h3>
 
 <script type="text/javascript">
 <!--
@@ -98,8 +102,8 @@ the arrow.</p>
     <textarea style="width: 100%;" rows="10">{{ postable_bracket_reddit }}</textarea>
 </div>
 
-<a href="#" onclick="switch_to('tl',togs); return false;">Team Liquid (all)</a>,
-<a href="#" onclick="switch_to('reddit',togs); return false;">Reddit (table)</a>,
-<a href="#" onclick="switch_to('bracketreddit',togs); return false;">Reddit (median bracket)</a>.</p>
+<a href="#" onclick="switch_to('tl',togs); return false;">{% trans "Team Liquid (all)" %}</a>,
+<a href="#" onclick="switch_to('reddit',togs); return false;">{% trans "Reddit (table)" %}</a>,
+<a href="#" onclick="switch_to('bracketreddit',togs); return false;">{% trans "Reddit (median bracket)" %}</a>.</p>
 
 {% endblock %}

@@ -6,8 +6,9 @@ This is the results search function. Called from ratings.views.results_search.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}Search{% endblock %}
+{% block title %}{% trans "Search" %}{% endblock %}
 
 {% block content %}
 
@@ -17,7 +18,8 @@ This is the results search function. Called from ratings.views.results_search.
     <table class="bigform">
     {% form "forms.html" %}
         {% use "hidden" name="search" value="" %}
-        {% use "daterange" label="Date" after=searchform.after before=searchform.before %}
+        {% trans "Date" as date %}
+        {% use "daterange" label=date after=searchform.after before=searchform.before %}
         {% field "textarea"     searchform.players      class="wideinput" rows="6" %}
         {% field "basic"        searchform.event        class="wideinput" %}
         {% if adm %}
@@ -26,35 +28,39 @@ This is the results search function. Called from ratings.views.results_search.
         {% field "select"       searchform.bestof       class="narrowinput" %}
         {% field "select"       searchform.offline      class="narrowinput" %}
         {% field "select"       searchform.game         class="narrowinput" %}
-        {% use "submit" text="Search" %}
+        {% trans "Search" as search %}
+        {% use "submit" text=search %}
     {% endform %}
     </table>
     </form>
 
     {% if not matches %}
-    <p>Enter one player per line. The player information does not have to uniquely identify the player, and
-    should be a space-separated list of any of the following:</p>
+    <p>{% blocktrans %}Enter players. The player information does not have to uniquely identify the player, and should be a space-separated list of any of the following:{% endblocktrans %}</p>
 
     <ul>
-        <li>Player tag, e.g. &quot;DongRaeGu&quot;</li>
-        <li>Race, i.e. &quot;P&quot;, &quot;T&quot;, &quot;Z&quot;, &quot;R&quot; or &quot;S&quot;</li>
-        <li>A two- or three-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>
-        country code. e.g. &quot;KR&quot;, or the common English name of a country</li> 
-        <li>Team name, e.g. &quot;MVP&quot;</li>
-        <li>Player or team aliases (we add these to the database when we feel like they're needed), e.g. &quot;DRG&quot;</li>
-        <li>A player ID number, which you can get from the URL of the player page, e.g. &quot;4&quot;</li>
+        <li>{% blocktrans %}Player tag, e.g. "DongRaeGu"{% endblocktrans %}</li>
+        <li>{% blocktrans %}Race, i.e. "P", "T", "Z", "R" or "S"{% endblocktrans %}</li>
+        <li>{% blocktrans with uri="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" %}A two- or three-letter <a href="{{uri}}">ISO 3166-1 alpha-2</a> country code. e.g. "KR", or the common English name of a country{% endblocktrans %}</li>
+        <li>{% blocktrans %}Team name, e.g. "MVP"{% endblocktrans %}</li>
+        <li>{% blocktrans %}Player or team aliases (we add these to the database when we feel like they're needed), e.g. "DRG"{% endblocktrans %}</li>
+        <li>{% blocktrans %}A player ID number, which you can get from the URL of the player page, e.g. "4"{% endblocktrans %}</li>
     </ul>
 
-    <p>Note that everything is case insensitive.</p>
+    <p>{% trans "Note that everything is case insensitive." %}</p>
     {% else %}
 
-    <p>Found {{ count }} matches.</p>
+    <p>{% blocktrans count count as cnt %}Found {{ cnt }} match.{% plural %}Found {{ cnt }} matches.{% endblocktrans %}</p>
 
     {% if sc_my or sc_op %}
-    <p>In these games, <a href="/players/{{ left.id }}-{{ left.tag|urlfilter}}/">{{ left.tag }}</a> 
-    is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg_add:sc_op }}%) in games and 
-    {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches
-    {% if right %}against <a href="/players/{{ right.id }}-{{ right.tag|urlfilter }}/">{{ right.tag }}</a>{% endif %}.</p>
+    {% with luri="/players/"|add:left.id|add:"/" pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op ltag=left.tag %}
+    {% if not right %}
+        <p>{% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches.{% endblocktrans %}</p>
+    {% else %}
+        {% with ruri="/players/"|add:right.id|add:"/" rtag=right.tag %}
+        <p>{% blocktrans %}In these games, <a href="{{luri}}">{{ltag}}</a> is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches against <a href="{{ruri}}">{{rtag}}</a>.{% endblocktrans %}</p>
+        {% endwith %}
+    {% endif %}
+    {% endwith %}
     {% endif %}
 
     {% if adm %}
@@ -62,8 +68,8 @@ This is the results search function. Called from ratings.views.results_search.
         {% csrf_token %}
 
         <p>
-            <input type="button" onclick="mark_all(true, 'match-');" value="Check all" />
-            <input type="button" onclick="mark_all(false, 'match-');" value="Uncheck all" />
+        <input type="button" onclick="mark_all(true, 'match-');" value="{% trans "Check all" %}" />
+        <input type="button" onclick="mark_all(false, 'match-');" value="{% trans "Uncheck all" %}" />
         </p>
     {% endif %}
 
@@ -72,11 +78,11 @@ This is the results search function. Called from ratings.views.results_search.
     </table>
     {% if adm %}
         <p>
-            <input type="button" onclick="mark_all(true, 'match-');" value="Check all" />
-            <input type="button" onclick="mark_all(false, 'match-');" value="Uncheck all" />
+        <input type="button" onclick="mark_all(true, 'match-');" value="{% trans "Check all" %}" />
+        <input type="button" onclick="mark_all(false, 'match-');" value="{% trans "Uncheck all" %}" />
         </p>
 
-        <p>The following modifications will be made to all checked matches:</p>
+        <p>{% trans "The following modifications will be made to all checked matches:" %}</p>
 
         <table class="bigform">
         {% form "forms.html" %}
@@ -85,11 +91,13 @@ This is the results search function. Called from ratings.views.results_search.
             {% field "date"         modform.date %}
             {% field "select"       modform.offline         class="narrowinput" %}
             {% field "select"       modform.game            class="narrowinput" %}
-            {% use "submit" text="Modify" %}
+            {% trans "Modify" as mod %}
+            {% use "submit" text=mod %}
         {% endform %}
         </table>
         </form>
     {% endif %}
 
     {% endif %}
+
 {% endblock %}

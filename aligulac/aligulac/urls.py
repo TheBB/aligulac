@@ -1,10 +1,29 @@
 # {{{ Imports
+from tastypie.api import Api
+
 from django.conf.urls import (
     patterns,
     include,
     url,
 )
+
 from aligulac import settings
+
+from ratings.api.resources import (
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
+    PeriodResource,
+    PlayerResource,
+    RatingResource,
+    TeamResource,
+    PredictDualResource,
+    PredictMatchResource,
+    PredictSEBracketResource,
+    PredictRRGroupResource,
+    PredictPLResource,
+)
 
 from django.contrib import admin
 admin.autodiscover()
@@ -13,11 +32,36 @@ admin.autodiscover()
 handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
 
+beta_api = Api(api_name='beta')
+v1_api = Api(api_name='v1')
+resources = [
+    ActiveRatingResource,
+    EarningResource,
+    EventResource,
+    MatchResource,
+    PeriodResource,
+    PlayerResource,
+    RatingResource,
+    TeamResource,
+    PredictDualResource,
+    PredictMatchResource,
+    PredictSEBracketResource,
+    PredictRRGroupResource,
+    PredictPLResource,
+]
+for res in resources:
+    beta_api.register(res())
+    v1_api.register(res())
+
 urlpatterns = patterns('',
     url(r'^$', 'aligulac.views.home'),
 
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^language/', 'aligulac.views.language'),
+
     url(r'^periods/$', 'ratings.ranking_views.periods'),
     url(r'^periods/(?P<period_id>\d+)/$', 'ratings.ranking_views.period'),
+    url(r'^periods/latest/$', 'ratings.ranking_views.period'),
 
     url(r'^earnings/$', 'ratings.ranking_views.earnings'),
 
@@ -43,10 +87,15 @@ urlpatterns = patterns('',
 
     url(r'^faq/$', 'faq.views.faq'),
     url(r'^blog/$', 'blog.views.blog'),
-    #url(r'^staff/$', 'aligulac.views.staff'),
     url(r'^db/$', 'aligulac.views.db'),
     url(r'^search/$', 'aligulac.views.search'),
+    url(r'^search/json/$', 'aligulac.views.auto_complete_search'),
     url(r'^m/', include('miniURL.urls')),
+
+    url(r'^about/faq/$', 'faq.views.faq'),
+    url(r'^about/blog/$', 'blog.views.blog'),
+    url(r'^about/db/$', 'aligulac.views.db'),
+    url(r'^about/api/$', 'aligulac.views.api'),
 
     url(r'^inference/$', 'ratings.inference_views.predict'),
     url(r'^inference/match/$', 'ratings.inference_views.match'),
@@ -69,21 +118,28 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'aligulac.views.logout_view'),
     url(r'^changepwd/$', 'aligulac.views.changepwd'),
 
+    url(r'^misc/$', 'ratings.misc_views.home'),
+    url(r'^misc/days/$', 'ratings.misc_views.clocks'),
+    url(r'^misc/balance/$', 'ratings.reports_views.balance'),
+
     url(r'^404/$', 'aligulac.views.h404'),
     url(r'^500/$', 'aligulac.views.h500'),
 
     url(r'^admin/', include(admin.site.urls)),
 
-    # Remove when we get replacement
-    url(r'^api/rating_list/(?P<period>\d+)/$', 'ratings.api_views.rating_list'),
+    # Tastypie
+    url(r'^api/', include(beta_api.urls)),
+    url(r'^api/', include(v1_api.urls)),
 )
 
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../templates/css'}),
+            {'document_root': settings.PROJECT_PATH + '../resources/css'}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../templates/js'}),
+            {'document_root': settings.PROJECT_PATH + '../resources/js'}),
+        url(r'^img/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.PROJECT_PATH + '../resources/img'})
     )
 # }}}

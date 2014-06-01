@@ -6,30 +6,43 @@ This is the template for the match history of a player. It's called from ratings
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}{{ player.tag }} match history{% endblock %}
+{% block title %}{% blocktrans with tag=player.tag %}{{ tag }} match history{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <form method="get" action="/players/{{ player.id }}/results/">
-<p>Filter by</p>
+<p>{% trans "Filter by" %}</p>
 <table class="bigform">
 {% form "forms.html" %}
-    {% use "daterange" label="Date" after=form.after before=form.before %}
+    {% trans "Date" as date %}
+    {% trans "Filter" as filtr %}
+    {% use "daterange" label=date after=form.after before=form.before %}
     {% field "select"       form.race       class="narrowinput" %}
     {% field "select"       form.country    class="narrowinput" %}
     {% field "select"       form.bestof     class="narrowinput" %}
     {% field "select"       form.offline    class="narrowinput" %}
     {% field "select"       form.game       class="narrowinput" %}
-    {% use "submit" text="Filter" %}
+    {% use "submit" text=filtr %}
 {% endform %}
 </table>
 </form>
 
-<p>In these games, {{ player.tag }} is {{ sc_my }}–{{ sc_op }} ({{ sc_my|pctg_add:sc_op }}%) in games
-and {{ msc_my }}–{{ msc_op }} ({{ msc_my|pctg_add:msc_op }}%) in matches.</p>
+<p>
+{% with tag=player.tag pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op %}
+{% blocktrans %}In these games, {{tag}} is {{sc_my}}–{{sc_op}} ({{pctg}}%) in games and {{msc_my}}–{{msc_op}} ({{mpctg}}%) in matches.{% endblocktrans %}
+{% endwith %}
+</p>
 
 <table class="results">
 {% include "matchlist.html" with lm_list=matches lm_header="partial" %}
 </table>
+
+<h3>{% trans "Postable History" %}</h3>
+<div id="tl">
+  <textarea style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+</div>
+<small>{% blocktrans with a="<a href=\"http://teamliquid.net\" target=\"_blank\">" %}The above is code that can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</small>
+
 {% endblock %}

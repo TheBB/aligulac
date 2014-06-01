@@ -1,18 +1,21 @@
 {% extends "index.html" %}
-{% load ratings_extras %}
 
-{% block title %}Recent player transfers{% endblock %}
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Recent player transfers" %}{% endblock %}
 
 {% block content %}
 <table class="results">
     <tr class="header">
-        <td class="rl_name" style="width: 8em;">Player</td>
+        <td class="rl_name" style="width: 8em;">{% trans "Player" %}</td>
         <td class="rl_icon"></td>
         <td class="rl_icon"></td>
-        <td class="rl_name" style="width: 20em; text-align: right;">Left</td>
+        {% comment %}Translators: As in "to leave", not "not right".{% endcomment %}
+        <td class="rl_name" style="width: 20em; text-align: right;">{% trans "Left" %}</td>
         <td class="rl_name" style="width: 2em; text-align: center;"></td>
-        <td class="rl_name" style="width: 20em;">Joined</td>
-        <td class="lm_date" style="width: 12em;">Date</td>
+        <td class="rl_name" style="width: 20em;">{% trans "Joined" %}</td>
+        <td class="lm_date" style="width: 12em;">{% trans "Date" %}</td>
     </tr>
     {% for trade in trades %}
     <tr class="nonheader {% cycle 'row2' 'row1' %}">
@@ -21,11 +24,11 @@
     </td>
     <td class="rl_icon">
         {% if trade.player.country %}
-        <img src="{{ trade.player.country|lower|imgfolder:"flags"|static }}" alt="{{ trade.player.country }}" />
+        <img src="{{ trade.player.country|lower|img:"flags" }}" alt="{{ trade.player.country }}" />
         {% endif %}
     </td>
     <td class="rl_icon">
-        <img src="{{ trade.player.race|imgfolder|static }}" alt="{{ trade.player.race }}" class="btm" />
+        <img src="{{ trade.player.race|img }}" alt="{{ trade.player.race }}" class="btm" />
     </td>
     <td style="text-align: right;">
         {% if trade.left %}

@@ -5,29 +5,28 @@ This shows the rating history of a player. It's called from ratings.views.player
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}{{ player.tag }} rating history{% endblock %}
+{% block title %}{% blocktrans with pl=player.tag %}{{ pl }} rating history{% endblocktrans %}{% endblock %}
 
 {% block content %}
-
-<p>Return to <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">player page</a>.</p>
 
 {% comment %}
 Could the ratinglist.html template be extended and called from here?
 {% endcomment %}
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 11em;">List</div>
-        <div class="rowe" style="width: 9em; text-align: right;">Rating</div>
+        <div class="rowe" style="width: 11em;">{% trans "List" %}</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Rating" %}</div>
         <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 9em; text-align: right;">Rating vP</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Rating vP" %}</div>
         <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 9em; text-align: right;">Rating vT</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Rating vT" %}</div>
         <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 9em; text-align: right;">Rating vZ</div>
+        <div class="rowe" style="width: 9em; text-align: right;">{% trans "Rating vZ" %}</div>
         <div class="rowe" style="width: 1em;"></div>
-        <div class="rowe" style="width: 6em; text-align: right;">Matches</div>
-        <div class="rowe" style="width: 6em; text-align: right;">Games</div>
+        <div class="rowe" style="width: 6em; text-align: right;">{% trans "Matches" %}</div>
+        <div class="rowe" style="width: 6em; text-align: right;">{% trans "Games" %}</div>
         <div class="rowe" style="width: 4em;"></div>
     </div>
     {% for rating in historical %}
@@ -40,52 +39,32 @@ Could the ratinglist.html template be extended and called from here?
             <div class="rowe" style="text-align: right;">{{ rating.rating|ratscale }}</div>
             <div class="rowe">
                 {% if rating.prev %}
-                    {% if rating.prev.rating > rating.rating %}
-                    <img src="{{ "downarrow.png"|static }}" 
-                         alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.rating < rating.rating %}
-                    <img src="{{ "uparrow.png"|static }}" 
-                         alt="up" style="vertical-align: text-bottom;" />
-                    {% endif %}
+                <img src="{{ rating.rating_diff|makearrows|img }}" style="vertical-align: text-bottom;"
+                     title="{{ rating.rating_diff|ratscalediff|signify }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vp|ratscale }}</div>
             <div class="rowe">
                 {% if rating.prev %}
-                    {% if rating.prev.get_totalrating_vp > rating.get_totalrating_vp %}
-                    <img src="{{ "downarrow.png"|static }}" 
-                         alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.get_totalrating_vp < rating.get_totalrating_vp %}
-                    <img src="{{ "uparrow.png"|static }}" 
-                         alt="up" style="vertical-align: text-bottom;" />
-                    {% endif %}
+                <img src="{{ rating.rating_diff_vp|makearrows|img }}" style="vertical-align: text-bottom;"
+                     title="{{ rating.rating_diff_vp|ratscalediff|signify }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vt|ratscale }}</div>
             <div class="rowe">
                 {% if rating.prev %}
-                    {% if rating.prev.get_totalrating_vt > rating.get_totalrating_vt %}
-                    <img src="{{ "downarrow.png"|static }}" 
-                         alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.get_totalrating_vt < rating.get_totalrating_vt %}
-                    <img src="{{ "uparrow.png"|static }}" 
-                         alt="up" style="vertical-align: text-bottom;" />
-                    {% endif %}
+                <img src="{{ rating.rating_diff_vt|makearrows|img }}" style="vertical-align: text-bottom;"
+                     title="{{ rating.rating_diff_vt|ratscalediff|signify }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="text-align: right;">
                 {{ rating.rating|addf:rating.rating_vz|ratscale }}</div>
             <div class="rowe">
                 {% if rating.prev %}
-                    {% if rating.prev.get_totalrating_vz > rating.get_totalrating_vz %}
-                    <img src="{{ "downarrow.png"|static }}" 
-                         alt="down" style="vertical-align: text-bottom;" />
-                    {% elif rating.prev.get_totalrating_vz < rating.get_totalrating_vz %}
-                    <img src="{{ "uparrow.png"|static }}" 
-                         alt="up" style="vertical-align: text-bottom;" />
-                    {% endif %}
+                <img src="{{ rating.rating_diff_vz|makearrows|img }}" style="vertical-align: text-bottom;"
+                     title="{{ rating.rating_diff_vz|ratscalediff|signify }}" />
                 {% endif %}
             </div>
             <div class="rowe" style="text-align: right;">
@@ -96,7 +75,7 @@ Could the ratinglist.html template be extended and called from here?
             </div>
             <div class="rowe" style="text-align: right;">
                 {% if rating.decay == 0 %}
-                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ rating.period.id }}/">→</a>
+                    <a href="{{ player|player_url }}period/{{ rating.period.id }}/">→</a>
                 {% endif %}
             </div>
         </div>

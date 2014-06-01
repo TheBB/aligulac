@@ -5,26 +5,25 @@ This shows the event overview page. Called from ratings.views.events.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Events{% endblock %}
+{% block title %}{% trans "Events" %}{% endblock %}
 
 {% block content %}
-    <h2>Events</h2>
+<h2>{% trans "Events" %}</h2>
 
-    <p style="text-align: justify;">The events are organized in a hierarchical fashion. Thus, all GSL
-    tournaments are filed under GSL, all Code S under their respective seasons, all groups under their
-    respective Code S event, and so on.</p>
+<p style="text-align: justify;">{% blocktrans %}The events are organized in a hierarchical fashion. Thus, all GSL tournaments are filed under GSL, all Code S under their respective seasons, all groups under their respective Code S event, and so on.{% endblocktrans %}</p>
 
-    <h2>Individual leagues and events</h2>
+<h2>{% trans "Individual leagues and events" %}</h2>
 
-    {% include "eventtable.html" with bigs=ind_bigs smalls=ind_smalls %}
+{% include "eventtable.html" with bigs=ind_bigs smalls=ind_smalls %}
 
-    <h2>Team leagues</h2>
+<h2>{% trans "Team leagues" %}</h2>
 
-    {% include "eventtable.html" with bigs=team_bigs smalls=team_smalls %}
+{% include "eventtable.html" with bigs=team_bigs smalls=team_smalls %}
 
-    <h2>Frequently recurring cups</h2>
+<h2>{% trans "Frequently recurring cups" %}</h2>
 
-    {% include "eventtable.html" with bigs=freq_bigs smalls=freq_smalls %}
+{% include "eventtable.html" with bigs=freq_bigs smalls=freq_smalls %}
 
 {% endblock %}

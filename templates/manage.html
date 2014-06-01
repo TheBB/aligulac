@@ -6,15 +6,16 @@ This is the page for miscellaneous administrative functions. Called from ratings
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
-{% block title %}Miscellaneous{% endblock %}
+{% block title %}{% trans "Miscellaneous" %}{% endblock %}
 
 {% block content %}
-<h2>Miscellaneous administration</h2>
+<h2>{% trans "Miscellaneous administration" %}</h2>
 
 {% include "messages.html" %}
 
-<h2>Merge players</h2>
+<h2>{% trans "Merge players" %}</h2>
 
 <form method="post" action="/add/misc/">
 {% csrf_token %}
@@ -23,21 +24,26 @@ This is the page for miscellaneous administrative functions. Called from ratings
     <tr>
         <td class="form_left"></td>
         <td class="form_right">
-            <span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will merge 
+            {% trans "CAREFUL:" as careful %}
+            {% comment %}Translators: This will merge X into Y{% endcomment %}
+            {% trans "This will merge" as thiswillmerge %}
+            {% comment %}Translators: This will merge X into Y{% endcomment %}
+            {% trans "into" as into %}
+            <span style="color: #ff0000; font-weight: bold;">{{ careful }}</span> {{ thiswillmerge }}
             {% with pl=mergeform.cleaned_data.source %}
                 <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
                 {% if pl.country != "" %}
-                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                    <img src="{{ pl.country|lower|img:"flags" }}" alt="{{ pl.country }}" />
                 {% endif %}
-                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+                <img src="{{ pl.race|img }}" alt="{{ pl.race }}" class="btm" />
             {% endwith %}
-            into
+            {{ into }}
             {% with pl=mergeform.cleaned_data.target %}
                 <a href="/players/{{ pl.id }}-{{ pl.tag|urlfilter }}/">{{ pl.tag }}</a>
                 {% if pl.country != "" %}
-                    <img src="{{ pl.country|lower|imgfolder:"flags"|static }}" alt="{{ pl.country }}" />
+                    <img src="{{ pl.country|lower|img:"flags" }}" alt="{{ pl.country }}" />
                 {% endif %}
-                <img src="{{ pl.race|imgfolder|static }}" alt="{{ pl.race }}" class="btm" />
+                <img src="{{ pl.race|img }}" alt="{{ pl.race }}" class="btm" />
             {% endwith %}.
         </td>
     </tr>
@@ -45,7 +51,8 @@ This is the page for miscellaneous administrative functions. Called from ratings
     {% use "hidden" name=mergeform.source.html_name value=mergeform.cleaned_data.source.id %}
     {% use "hidden" name=mergeform.target.html_name value=mergeform.cleaned_data.target.id %}
     {% field "checkbox" mergeform.confirm %}
-    {% use "submit" text="Merge" name="merge" %}
+    {% trans "Merge" as merge %}
+    {% use "submit" text=merge name="merge" %}
 {% endform %}
 </table>
 {% else %}
@@ -53,13 +60,13 @@ This is the page for miscellaneous administrative functions. Called from ratings
 {% form "forms.html" %}
     {% field "basic"        mergeform.source        class="narrowinput" %}
     {% field "basic"        mergeform.target        class="narrowinput" %}
-    {% use "submit" text="Merge" name="merge" %}
+    {% use "submit" text=merge name="merge" %}
 {% endform %}
 </table>
 {% endif %}
 </form>
 
-<h2>Move events</h2>
+<h2>{% trans "Move events" %}</h2>
 
 <form method="post" action="/add/misc/">
 {% csrf_token %}
@@ -68,17 +75,16 @@ This is the page for miscellaneous administrative functions. Called from ratings
     <tr>
         <td class="form_left"></td>
         <td class="form_right">
-            <span style="color: #ff0000; font-weight: bold;">CAREFUL:</span> This will move
-            {{ moveform.cleaned_data.subject.fullname }} and all events under it 
-            ({{ moveform.cleaned_data.subject.get_children.count }}) to
-            {{ moveform.cleaned_data.target.fullname }}.
+            <span style="color: #ff0000; font-weight: bold;">{{ careful }}</span> 
+            {% blocktrans with src=moveform.cleaned_data.subject.fullname cnt=moveform.cleaned_data.subject.get_children.count trg=moveform.cleaned_data.target.fullname %}This will move {{src}} and all events under it ({{cnt}}) to {{trg}}.{% endblocktrans %}
         </td>
     </tr>
 {% form "forms.html" %}
     {% use "hidden" name=moveform.subject.html_name value=moveform.cleaned_data.subject.id %}
     {% use "hidden" name=moveform.target.html_name value=moveform.cleaned_data.target.id %}
     {% field "checkbox" moveform.confirm %}
-    {% use "submit" text="Move" name="move" %}
+    {% trans "Move" as move %}
+    {% use "submit" text=move name="move" %}
 {% endform %}
 </table>
 {% else %}
@@ -86,7 +92,7 @@ This is the page for miscellaneous administrative functions. Called from ratings
 {% form "forms.html" %}
     {% field "basic"        moveform.subject        class="narrowinput" %}
     {% field "basic"        moveform.target         class="narrowinput" %}
-    {% use "submit" text="Move" name="move" %}
+    {% use "submit" text=move name="move" %}
 {% endform %}
 </table>
 {% endif %}

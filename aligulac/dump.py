@@ -2,6 +2,9 @@
 
 from datetime import datetime
 import os
+import subprocess
+from subprocess import Popen
+import shutil
 
 from aligulac.settings import (
     BACKUP_PATH,
@@ -24,27 +27,92 @@ public_tables = [
     'story',
 ]
 
+def info(string):
+    print("[{}]: {}".format(datetime.now(), string))
+
 dt = datetime.now()
-table_string = ' '.join(['-t ' + tbl for tbl in public_tables])
-call = 'pg_dump -O -c -U %s' % DATABASES['default']['USER']
+
+this_file_name = dt.isoformat() + '.sql.gz'
+this_backup_path = os.path.join(BACKUP_PATH, this_file_name)
 
 # {{{ Backup and private dump
-os.system(call + ' aligulac > ' + BACKUP_PATH + dt.isoformat() + '.sql')
 
-with open(BACKUP_PATH + 'files', 'r') as f:
-    files = f.readlines()
-files = [f.strip() for f in files if f.strip() != '']
-files.append(dt.isoformat() + '.sql')
+info("Dumping full database.")
+
+pg_dump = [
+    "pg_dump", "-O", "-c", "-U", 
+    DATABASES['default']['USER'],
+    DATABASES['default']['NAME']
+]
+
+with open(this_backup_path, "w") as f:
+    p_pg = Popen(pg_dump, stdout=subprocess.PIPE)
+    p_gzip = Popen(["gzip"], stdin=p_pg.stdout, stdout=f)
+    p_gzip.communicate()
+
+files_path = os.path.join(BACKUP_PATH, 'files')
+
+if not os.path.exists(files_path):
+    files = []
+else:
+    with open(files_path, 'r') as f:
+        files = f.readlines()
+    files = [f.strip() for f in files if f.strip() != '']
+files.append(this_file_name)
+
 if len(files) > 100:
-    os.system('rm ' + BACKUP_PATH + files[0])
-    files = files[1:]
-with open(BACKUP_PATH + 'files', 'w') as f:
+    for f in files[:-100]:
+        try:
+            os.remove(os.path.join(BACKUP_PATH, f))
+        except:
+            pass
+    files = files[-100:]
+
+with open(files_path, 'w') as f:
     for item in files:
         f.write('%s\n' % item)
 
-os.system('cp ' + BACKUP_PATH + dt.isoformat() + '.sql ' + DUMP_PATH + 'full.sql')
+full_path = os.path.join(DUMP_PATH, 'full.sql.gz')
+
+info("Copying to dump dir.")
+
+shutil.copy(this_backup_path, full_path)
 # }}}
 
 # {{{ Public dump
-os.system(call + ' ' + table_string + ' aligulac > ' + DUMP_PATH + 'aligulac.sql')
+
+info("Dumping public database.")
+
+public_path = os.path.join(DUMP_PATH, 'aligulac.sql')
+
+pub_pg_dump = pg_dump[:5]
+
+for tbl in public_tables:
+    pub_pg_dump.extend(['-t', tbl])
+
+pub_pg_dump.append(pg_dump[-1])
+
+with open(public_path, 'w') as f:
+    subprocess.call(pub_pg_dump, stdout=f)
+
+# }}}
+
+# {{{ Compress/decompress files
+
+def compress_file(source):
+    info("Compressing {}".format(source))
+    with open(source, "r") as src:
+        with open(source + ".gz", "w") as dst:
+            subprocess.call(["gzip"], stdin=src, stdout=dst)
+
+def decompress_file(source):
+    info("Decompressing {}".format(source))
+    with open(source, "r") as src:
+        with open(source[:-3], "w") as dst:
+            subprocess.call(["gunzip"], stdin=src, stdout=dst)
+
+
+compress_file(public_path)
+decompress_file(full_path)
+
 # }}}

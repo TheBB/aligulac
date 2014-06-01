@@ -3,12 +3,14 @@ from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from functools import partial
 from math import sqrt
+from urllib.parse import urlencode
 
 from django import forms
 from django.db.models import Sum, Q, Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -32,6 +34,8 @@ from ratings.models import (
     Player,
     RACES,
     Rating,
+    STORIES,
+    Story,
     T,
     TLPD_DBS,
     Z,
@@ -55,11 +59,11 @@ from countries import (
 )
 # }}}
 
-msg_inactive = (
+msg_inactive = _(
     'Due to %s\'s lack of recent games, they have been marked as <em>inactive</em> and '
     'removed from the current rating list. Once they play a rated game they will be reinstated.'
 )
-msg_nochart  = '%s has no rating chart on account of having played matches in fewer than two periods.'
+msg_nochart  = _('%s has no rating chart on account of having played matches in fewer than two periods.')
 
 # {{{ meandate: Rudimentary function for sorting objects with a start and end date.
 def meandate(tm):
@@ -88,20 +92,19 @@ def interp_rating(date, ratings):
 
 # {{{ PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
-    tag      = StrippedCharField(max_length=30, required=True, label='Tag')
-    race     = forms.ChoiceField(choices=RACES, required=True, label='Race')
-    name     = StrippedCharField(max_length=100, required=False, label='Name')
-    akas     = forms.CharField(max_length=200, required=False, label='AKAs')
-    birthday = forms.DateField(required=False, label='Birthday')
+    tag      = StrippedCharField(max_length=30, required=True, label=_('Tag'))
+    race     = forms.ChoiceField(choices=RACES, required=True, label=_('Race'))
+    name     = StrippedCharField(max_length=100, required=False, label=_('Name'))
+    akas     = forms.CharField(max_length=200, required=False, label=_('AKAs'))
+    birthday = forms.DateField(required=False, label=_('Birthday'))
 
-    tlpd_id  = forms.IntegerField(required=False, label='TLPD ID')
+    tlpd_id  = forms.IntegerField(required=False, label=_('TLPD ID'))
     tlpd_db  = forms.MultipleChoiceField(
-        required=False, choices=TLPD_DBS, label='TLPD DB', widget=forms.CheckboxSelectMultiple)
-    lp_name  = StrippedCharField(max_length=200, required=False, label='Liquipedia title')
-    sc2c_id  = forms.IntegerField(required=False, label='SC2Charts.net ID')
-    sc2e_id  = forms.IntegerField(required=False, label='SC2Earnings.com ID')
+        required=False, choices=TLPD_DBS, label=_('TLPD DB'), widget=forms.CheckboxSelectMultiple)
+    lp_name  = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
+    sc2e_id  = forms.IntegerField(required=False, label=_('SC2Earnings.com ID'))
 
-    country = forms.ChoiceField(choices=data.countries, required=False, label='Country')
+    country = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
 
     # {{{ Constructor
     def __init__(self, request=None, player=None):
@@ -115,7 +118,6 @@ class PlayerModForm(forms.Form):
                 'name':      player.name,
                 'akas':      ', '.join(player.get_aliases()),
                 'birthday':  player.birthday,
-                'sc2c_id':   player.sc2c_id,
                 'sc2e_id':   player.sc2e_id,
                 'lp_name':   player.lp_name,
                 'tlpd_id':   player.tlpd_id,
@@ -130,7 +132,7 @@ class PlayerModForm(forms.Form):
         ret = []
 
         if not self.is_valid():
-            ret.append(Message('Entered data was invalid, no changes made.', type=Message.ERROR))
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
             for field, errors in self.errors.items():
                 for error in errors:
                     ret.append(Message(error=error, field=self.fields[field].label))
@@ -139,21 +141,21 @@ class PlayerModForm(forms.Form):
         def update(value, attr, setter, label):
             if value != getattr(player, attr):
                 getattr(player, setter)(value)
-                ret.append(Message('Changed %s.' % label, type=Message.SUCCESS))
+                # Translators: Changed something (a noun).
+                ret.append(Message(_('Changed %s.') % label, type=Message.SUCCESS))
 
-        update(self.cleaned_data['tag'],       'tag',       'set_tag',       'tag')
-        update(self.cleaned_data['race'],      'race',      'set_race',      'race')
-        update(self.cleaned_data['country'],   'country',   'set_country',   'country')
-        update(self.cleaned_data['name'],      'name',      'set_name',      'name')
-        update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  'birthday')
-        update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   'TLPD ID')
-        update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   'Liquipedia title')
-        update(self.cleaned_data['sc2c_id'],   'sc2c_id',   'set_sc2c_id',   'SC2Charts.net ID')
-        update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   'SC2Earnings.com ID')
-        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', 'TLPD DBs')
+        update(self.cleaned_data['tag'],       'tag',       'set_tag',       _('tag'))
+        update(self.cleaned_data['race'],      'race',      'set_race',      _('race'))
+        update(self.cleaned_data['country'],   'country',   'set_country',   _('country'))
+        update(self.cleaned_data['name'],      'name',      'set_name',      _('name'))
+        update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  _('birthday'))
+        update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   _('TLPD ID'))
+        update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   _('Liquipedia title'))
+        update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   _('SC2Earnings.com ID'))
+        update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
-        if player.set_aliases(self.cleaned_data['akas'].split(',')):
-            ret.append(Message('Changed aliases.', type=Message.SUCCESS))
+        if player.set_aliases([x for x in self.cleaned_data['akas'].split(',') if x.strip() != '']):
+            ret.append(Message(_('Changed aliases.'), type=Message.SUCCESS))
 
         return ret
     # }}}
@@ -161,42 +163,43 @@ class PlayerModForm(forms.Form):
 
 # {{{ ResultsFilterForm: Form for filtering results.
 class ResultsFilterForm(forms.Form):
-    after  = forms.DateField(required=False, label='After')
-    before = forms.DateField(required=False, label='Before')
+    after  = forms.DateField(required=False, label=_('After'))
+    before = forms.DateField(required=False, label=_('Before'))
     race   = forms.ChoiceField(
         choices=[
-            ('ptzr',  'All'),
-            ('p',     'Protoss'),
-            ('t',     'Terran'),
-            ('z',     'Zerg'),
-            ('tzr',   'No Protoss'),
-            ('pzr',   'No Terran'),
-            ('ptr',   'No Zerg'),
+            ('ptzr',  _('All')),
+            ('p',     _('Protoss')),
+            ('t',     _('Terran')),
+            ('z',     _('Zerg')),
+            ('tzr',   _('No Protoss')),
+            ('pzr',   _('No Terran')),
+            ('ptr',   _('No Zerg')),
         ],
-        required=False, label='Opponent race', initial='ptzr'
+        required=False, label=_('Opponent race'), initial='ptzr'
     )
     country = forms.ChoiceField(
-        choices=[('all','All'),('foreigners','Non-Koreans')]+data.countries,
-        required=False, label='Country', initial='all'
+        choices=[('all',_('All')),('KR',_('South Korea')),('foreigners',_('Non-Koreans')),('','')] + 
+                sorted(data.countries, key=lambda a: a[1]),
+        required=False, label=_('Country'), initial='all'
     )
     bestof = forms.ChoiceField(
         choices=[
-            ('all',  'All'),
-            ('3',    'Best of 3+'),
-            ('5',    'Best of 5+'),
+            ('all',  _('All')),
+            ('3',    _('Best of 3+')),
+            ('5',    _('Best of 5+')),
         ],
-        required=False, label='Match format', initial='all'
+        required=False, label=_('Match format'), initial='all'
     )
     offline = forms.ChoiceField(
         choices=[
-            ('both',     'Both'),
-            ('offline',  'Offline'),
-            ('online',   'Online'),
+            ('both',     _('Both')),
+            ('offline',  _('Offline')),
+            ('online',   _('Online')),
         ],
-        required=False, label='On/offline', initial='both',
+        required=False, label=_('On/offline'), initial='both',
     )
     game = forms.ChoiceField(
-        choices=[('all','All')]+GAMES, required=False, label='Game version', initial='all')
+        choices=[('all','All')]+GAMES, required=False, label=_('Game version'), initial='all')
 
     # {{{ Constructor
     def __init__(self, *args, **kwargs):
@@ -226,11 +229,11 @@ def player(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Summary', request, context=player)
 
-    if request.method == 'POST' and base['adm']:
-        form = PlayerModForm(request)
-        base['messages'] += form.update_player(player)
+    if request.method == 'POST' and 'modplayer' in request.POST and base['adm']:
+        modform = PlayerModForm(request)
+        base['messages'] += modform.update_player(player)
     else:
-        form = PlayerModForm(player=player)
+        modform = PlayerModForm(player=player)
 
     base['messages'] += generate_messages(player)
     # }}}
@@ -241,9 +244,9 @@ def player(request, player_id):
 
     base.update({
         'player':           player,
-        'form':             form,
-        'first':            matches.earliest('date'),
-        'last':             matches.latest('date'),
+        'modform':          modform,
+        'first':            etn(lambda: matches.earliest('date')),
+        'last':             etn(lambda: matches.latest('date')),
         'totalmatches':     matches.count(),
         'offlinematches':   matches.filter(offline=True).count(),
         'aliases':          player.alias_set.all(),
@@ -297,7 +300,7 @@ def player(request, player_id):
 
         base['charts'] = base['recentchange'].period_id > base['firstrating'].period_id
     else:
-        base['messages'].append(Message('%s has no rating yet.' % player.tag, type=Message.INFO))
+        base['messages'].append(Message(_('%s has no rating yet.') % player.tag, type=Message.INFO))
         base['charts'] = False
     # }}}
 
@@ -321,13 +324,13 @@ def player(request, player_id):
                 teampoints.append({
                     'date':    mem.start,
                     'rating':  interp_rating(mem.start, ratings),
-                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': 'joins'}],
+                    'data':    [{'date': mem.start, 'team': mem.group, 'jol': _('joins')}],
                 })
             if mem.end and earliest.period.end < mem.end < latest.period.end:
                 teampoints.append({
                     'date':    mem.end,
                     'rating':  interp_rating(mem.end, ratings),
-                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': 'leaves'}],
+                    'data':    [{'date': mem.end, 'team': mem.group, 'jol': _('leaves')}],
                 })
         teampoints.sort(key=lambda p: p['date'])
 
@@ -415,23 +418,23 @@ def adjustment(request, player_id, period_id):
             continue
         base['has_treated'] = True
 
-        total_score = m['pla_score'] + m['plb_score']
+        total_score = m['pla']['score'] + m['plb']['score']
 
-        scale = sqrt(1 + m['pla_dev']**2 + m['plb_dev']**2)
-        expected = total_score * cdf(m['pla_rating'] - m['plb_rating'], scale=scale)
+        scale = sqrt(1 + m['pla']['dev']**2 + m['plb']['dev']**2)
+        expected = total_score * cdf(m['pla']['rating'] - m['plb']['rating'], scale=scale)
 
         ngames['M']     += total_score
-        tot_rating['M'] += m['plb_rating'] * total_score
+        tot_rating['M'] += m['plb']['rating'] * total_score
         expwins['M']    += expected
-        nwins['M']      += m['pla_score']
+        nwins['M']      += m['pla']['score']
 
-        vs_races = [m['plb_race']] if m['plb_race'] in 'PTZ' else 'PTZ'
+        vs_races = [m['plb']['race']] if m['plb']['race'] in 'PTZ' else 'PTZ'
         weight = 1/len(vs_races)
         for r in vs_races:
             ngames[r]     += weight * total_score
-            tot_rating[r] += weight * m['plb_rating'] * total_score
+            tot_rating[r] += weight * m['plb']['rating'] * total_score
             expwins[r]    += weight * expected
-            nwins[r]      += weight * m['pla_score']
+            nwins[r]      += weight * m['pla']['score']
 
     for r in 'MPTZ':
         if ngames[r] > 0:
@@ -497,13 +500,197 @@ def results(request, player_id):
     # }}}
 
     # {{{ Statistics
-    base['matches'] = display_matches(matches, fix_left=player)
+    matches = display_matches(matches, fix_left=player)
+    base['matches'] = matches
     base.update({
-        'sc_my':  sum([m['pla_score'] for m in base['matches']]),
-        'sc_op':  sum([m['plb_score'] for m in base['matches']]),
-        'msc_my': sum([1 if m['pla_score'] > m['plb_score'] else 0 for m in base['matches']]),
-        'msc_op': sum([1 if m['plb_score'] > m['pla_score'] else 0 for m in base['matches']]),
+        'sc_my':  sum(m['pla']['score'] for m in base['matches']),
+        'sc_op':  sum(m['plb']['score'] for m in base['matches']),
+        'msc_my': sum(1 for m in base['matches'] if m['pla']['score'] > m['plb']['score']),
+        'msc_op': sum(1 for m in base['matches'] if m['plb']['score'] > m['pla']['score']),
     })
+    # }}}
+
+    # {{{ TL Postable
+    
+    has_after = form.cleaned_data['after'] is not None
+    has_before = form.cleaned_data['before'] is not None
+    
+    if not has_after and not has_before:
+        match_date = ""
+    elif not has_after: # and has_before
+        match_date = _(" before {}").format(form.cleaned_data['before'])
+    elif not has_before: # and has_after
+        match_date = _(" after {}").format(form.cleaned_data['after'])
+    else:
+        match_date = _(" between {} and {}").format(form.cleaned_data['after'],
+                                                    form.cleaned_data['before'])
+
+    match_filter = ""
+
+    def switcher(race):
+        if race == "S":
+            return "R"
+        elif race == "s":
+            return "r"
+        return race
+
+    def win(match):
+        return match['pla']['score'] >= match['plb']['score']
+
+    def format_match(d):
+        # TL only recognizes lower case country codes :(
+        if d["pla"]["country"] is not None:
+            d["pla_country_formatted"] = ":{}:".format(d["pla"]["country"].lower())
+        else:
+            d["pla_country_formatted"] = ""
+
+        if d["plb"]["country"] is not None:
+            d["plb_country_formatted"] = ":{}:".format(d["plb"]["country"].lower())
+        else:
+            d["plb_country_formatted"] = ""
+
+        # and no race switchers
+        d["pla_race"] = switcher(d["pla"]["race"])
+        d["plb_race"] = switcher(d["plb"]["race"])
+
+        # Check who won
+        temp = {
+            "plaws": "",
+            "plawe": "",
+            "plbws": "",
+            "plbwe": ""
+        }
+
+        if win(d):
+            temp["plaws"] = "[b]"
+            temp["plawe"] = "[/b]"
+        else:
+            temp["plbws"] = "[b]"
+            temp["plbwe"] = "[/b]"
+
+        d.update(temp)
+        d["pla_id"] = d["pla"]["id"]
+        d["pla_tag"] = d["pla"]["tag"]
+        d["pla_score"] = d["pla"]["score"]
+        d["plb_id"] = d["plb"]["id"]
+        d["plb_tag"] = d["plb"]["tag"]
+        d["plb_score"] = d["plb"]["score"]
+
+        return TL_HISTORY_MATCH_TEMPLATE.format(**d)
+
+    recent_matches = matches[:min(10, len(matches))]
+
+    recent = "\n".join(format_match(m) for m in recent_matches)
+
+    recent_form = " ".join("W" if win(m) else "L"
+                           for m in reversed(recent_matches))
+    
+    # Get the parameters and remove those with None value
+    get_params = dict((k, form.cleaned_data[k])
+                      for k in form.cleaned_data
+                      if form.cleaned_data[k] is not None)
+
+    print(get_params)
+
+    country = ""
+    if player.country is not None:
+        country = ":{}:".format(player.country.lower())
+
+    tl_params = {
+        "player_tag": player.tag,
+        "player_country_formatted": country,
+        "player_race": switcher(player.race),
+        "filter": match_filter,
+        "date": match_date,
+        "recent": recent,
+        "pid": player_id,
+        "get": urlencode(get_params),
+        "url": "http://aligulac.com"
+    }
+
+    tl_params.update({
+        "sc_my": base["sc_my"],
+        "sc_op": base["sc_op"],
+        "msc_my": base["msc_my"],
+        "msc_op": base["msc_op"],
+        "form": recent_form
+    })
+
+    def calc_percent(s):
+        f, a = float(int(tl_params[s+"_my"])), int(tl_params[s+"_op"])
+        return round(100 * f / (f+a), 2)
+
+    tl_params.update({
+        "sc_percent": calc_percent("sc"),
+        "msc_percent": calc_percent("msc")
+    })
+
+    tl_params.update(get_params)
+
+    # Final clean up and translation
+
+    if tl_params["bestof"] != "all":
+        tl_params["bestof"] = _('best of') + ' {}'.format(tl_params["bestof"])
+    else:
+        tl_params['bestof'] = _('all')
+
+    if set(tl_params["race"]) == set('ptzr'):
+        tl_params["race"] = _('all')
+    else:
+        tl_params['race'] = {
+            'p': _('Protoss'),
+            't': _('Terran'),
+            'z': _('Zerg'),
+            'ptr': _('No Zerg'),
+            'pzr': _('No Terran'),
+            'tzr': _('No Protoss'),
+        }[tl_params['race']]
+
+    if tl_params['country'] in ['all', 'foreigners']:
+        tl_params['country'] = {
+            'all': _('all'),
+            'foreigners': _('foreigners'),
+        }[tl_params['country']]
+    else:
+        tl_params['country'] = transformations.ccn_to_cn(transformations.cca2_to_ccn(tl_params['country']))
+
+    tl_params['offline'] = {
+        'offline': _('offline'),
+        'online': _('online'),
+        'both': _('both'),
+    }[tl_params['offline']]
+
+    if tl_params['game'] == 'all':
+        tl_params['game'] = _('all')
+    else:
+        tl_params['game'] = dict(GAMES)[tl_params['game']]
+
+    tl_params.update({
+        'resfor': _('Results for'),
+        'games': _('Games'),
+        'matches': _('Matches'),
+        'curform': _('Current form'),
+        'recentmatches': _('Recent matches'),
+        'filters': _('Filters'),
+        # Translators: These have to line up on the right!
+        'opprace': _('Opponent Race:    '),
+        # Translators: These have to line up on the right!
+        'oppcountry': _('Opponent Country: '),
+        # Translators: These have to line up on the right!
+        'matchformat': _('Match Format:     '),
+        # Translators: These have to line up on the right!
+        'onoff': _('On/offline:       '),
+        # Translators: These have to line up on the right!
+        'version': _('Game Version:     '),
+        'statslink': _('Stats by [url={url}]Aligulac[/url]'),
+        # Translators: Link in the sense of a HTTP hyperlink.
+        'link': _('Link'),
+    })
+
+    base.update({
+        "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params)
+    })
+    
     # }}}
 
     base.update({"title": player.tag})
@@ -571,4 +758,41 @@ def earnings(request, player_id):
     base.update({"title": player.tag})
 
     return render_to_response('player_earnings.html', base)
+# }}}
+
+
+# {{{ Postable templates
+TL_HISTORY_TEMPLATE = (
+    "{resfor} {player_country_formatted} :{player_race}: " +
+    "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n" +
+    "\n" +
+    "[b]{games}:[/b] {sc_percent:0<5}% ({sc_my}-{sc_op})\n" +
+    "[b]{matches}:[/b] {msc_percent:0<5}% ({msc_my}-{msc_op})\n" +
+    "\n" +
+    "[b][big]{curform}:[/big][/b]\n" +
+    "[indent]{form}\n" +
+    "[b][big]{recentmatches}:[/big][/b]\n" +
+    "{recent}\n" +
+    "\n\n" +
+    "{filters}:\n" +
+    "[spoiler][code]" +
+    "{opprace}{race}\n" +
+    "{oppcountry}{country}\n" +
+    "{matchformat}{bestof}\n" +
+    "{onoff}{offline}\n" +
+    "{version}{game}\n" +
+    "[/code][/spoiler]\n" +
+    "[small]{statslink}. " +
+    "[url={url}/players/{pid}/results/?{get}]{link}[/url].[/small]"
+)
+
+TL_HISTORY_MATCH_TEMPLATE = (
+    "[indent]"
+    " {pla_country_formatted} :{pla_race}: "
+    " {plaws}[url=http://aligulac.com/players/{pla_id}/]{pla_tag}[/url]{plawe}"
+    " {pla_score:>2} – {plb_score:<2} "
+    " {plb_country_formatted} :{plb_race}: "
+    " {plbws}[url=http://aligulac.com/players/{plb_id}/]{plb_tag}[/url]{plbwe}"
+)
+
 # }}}

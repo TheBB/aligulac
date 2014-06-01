@@ -4,12 +4,15 @@ from django.shortcuts import (
     render_to_response,
 )
 from django.db.models import (
+    F,
     Q,
     Sum,
 )
 from django.template.defaultfilters import (
     date as django_date_filter
 )
+from django.utils.translation import ugettext_lazy as _
+
 from ratings.models import (
     Earnings,
     P,
@@ -27,7 +30,8 @@ from ratings.tools import (
     filter_active,
     populate_teams,
     total_ratings,
-) 
+)
+from ratings.templatetags.ratings_extras import cdate
 from aligulac.cache import cache_page
 from aligulac.tools import (
     Message,
@@ -37,7 +41,7 @@ from aligulac.tools import (
 from aligulac.settings import INACTIVE_THRESHOLD
 # }}}
 
-msg_preview = 'This is a <em>preview</em> of the next rating list. It will not be finalized until %s.'
+msg_preview = _('This is a <em>preview</em> of the next rating list. It will not be finalized until %s.')
 
 # {{{ periods view
 @cache_page
@@ -45,19 +49,23 @@ def periods(request):
     base = base_ctx('Ranking', 'History', request)
     base['periods'] = Period.objects.filter(computed=True).order_by('-id')
     
-    base.update({"title": "Historical overview"})
+    base.update({"title": _("Historical overview")})
     return render_to_response('periods.html', base)
 # }}}
 
 # {{{ period view
 @cache_page
-def period(request, period_id):
+def period(request, period_id=None):
     base = base_ctx('Ranking', 'Current', request)
 
     # {{{ Get period object
-    period = get_object_or_404(Period, id=period_id, computed=True)
+    if not period_id:
+        period = base['curp']
+    else:
+        period = get_object_or_404(Period, id=period_id, computed=True)
+
     if period.is_preview():
-        base['messages'].append(Message(msg_preview % period.end.strftime('%B %d'), type=Message.INFO))
+        base['messages'].append(Message(msg_preview % cdate(period.end, _('F jS')), type=Message.INFO))
 
     base['period'] = period
     if period.id != base['curp'].id:
@@ -98,6 +106,26 @@ def period(request, period_id):
         'speczvp':  qsetz.extra(select={'d':  'rating_vp/dev_vp*(rating+1.5)'}).latest('d'),
         'speczvt':  qsetz.extra(select={'d':  'rating_vt/dev_vt*(rating+1.5)'}).latest('d'),
         'speczvz':  qsetz.extra(select={'d':  'rating_vz/dev_vz*(rating+1.5)'}).latest('d'),
+    })
+    # }}}
+
+    # {{{ Highest gainer and biggest losers
+
+    # TODO: Fix these queries, highly dependent on the way django does things.
+    gainers = filter_active(Rating.objects.filter(period=period))\
+        .filter(prev__isnull=False)\
+        .select_related('prev', 'player')\
+        .extra(select={'diff': 'rating.rating - T3.rating'})\
+        .order_by('-diff')
+    losers = filter_active(Rating.objects.filter(period=period))\
+        .filter(prev__isnull=False)\
+        .select_related('prev', 'player')\
+        .extra(select={'diff': 'rating.rating - T3.rating'})\
+        .order_by('diff')
+
+    base.update({
+        'gainers': gainers[:5],
+        'losers': losers[:5]
     })
     # }}}
 
@@ -144,6 +172,8 @@ def period(request, period_id):
     else:
         entries = entries.extra(select={'d':'rating+rating_'+sort}).order_by('-d', 'player__tag')
 
+    entries = entries.prefetch_related('prev')
+
     base.update({
         'race': race,
         'nats': nats,
@@ -157,7 +187,7 @@ def period(request, period_id):
     nitems = entries.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
-    entries = entries[(page-1)*pagesize : page*pagesize]
+    entries = entries[(page-1)*pagesize : page*pagesize] if page > 0 else []
 
     base.update({
         'page':       page,
@@ -174,7 +204,8 @@ def period(request, period_id):
     })
         
     fmt_date = django_date_filter(period.end, "F jS, Y")
-    base.update({"title": "List {}: {}".format(period.id, fmt_date)})
+    # Translators: List (number): (date)
+    base.update({"title": _("List {num}: {date}").format(num=period.id, date=fmt_date)})
 
     return render_to_response('period.html', base)
 # }}}
@@ -191,7 +222,7 @@ def earnings(request):
     # }}}
 
     # {{{ Initial filtering of earnings
-    preranking = Earnings.objects
+    preranking = Earnings.objects.filter(earnings__isnull=False)
 
     # Filtering by year
     year = get_param(request, 'year', 'all')
@@ -256,7 +287,7 @@ def earnings(request):
     base['ranking'] = ranking
     # }}}
 
-    base.update({"title": "Earnings ranking"})
+    base.update({"title": _("Earnings ranking")})
 
     return render_to_response('earnings.html', base)
 # }}}

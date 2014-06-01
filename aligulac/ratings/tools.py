@@ -6,12 +6,14 @@ from numpy import (
 )
 from math import sqrt
 from datetime import date
+from decimal import Decimal
 import shlex
 
 from django.db.models import (
     Sum,
     Q,
 )
+from django.utils.translation import ugettext_lazy as _
 
 import ccy
 from countries import data
@@ -44,15 +46,70 @@ PATCHES = [
     (date(year=2012, month=2,  day=21), '1.4.3'),
     (date(year=2013, month=3,  day=12), 'HotS'),
     (date(year=2013, month=7,  day=11), '2.0.9 BU'),
+    (date(year=2013, month=11,  day=11), '2.0.12 BU')
 ]
 # }}}
 
+# {{{ Currency names 
+CURRENCIES = {
+    'EUR': _('Euro'),
+    'GBP': _('British Pound'),
+    'AUD': _('Australian Dollar'),
+    'NZD': _('New-Zealand Dollar'),
+    'USD': _('US Dollar'),
+    'CAD': _('Canadian Dollar'),
+    'CHF': _('Swiss Franc'),
+    'NOK': _('Norwegian Krona'),
+    'SEK': _('Swedish Krona'),
+    'DKK': _('Danish Krona'),
+    'JPY': _('Japanese Yen'),
+    'CNY': _('Chinese Renminbi'),
+    'KRW': _('South Korean won'),
+    'SGD': _('Singapore Dollar'),
+    'IDR': _('Indonesian Rupiah'),
+    'THB': _('Thai Baht'),
+    'TWD': _('Taiwan Dollar'),
+    'HKD': _('Hong Kong Dollar'),
+    'PHP': _('Philippines Peso'),
+    'INR': _('Indian Rupee'),
+    'MYR': _('Malaysian Ringgit'),
+    'VND': _('Vietnamese Dong'),
+    'BRL': _('Brazilian Real'),
+    'PEN': _('Peruvian Nuevo Sol'),
+    'ARS': _('Argentine Peso'),
+    'MXN': _('Mexican Peso'),
+    'CLP': _('Chilean Peso'),
+    'COP': _('Colombian Peso'),
+    'JMD': _('Jamaican Dollar'),
+    'TTD': _('Trinidad and Tobago Dollar'),
+    'BMD': _('Bermudian Dollar'),
+    'CZK': _('Czech Koruna'),
+    'PLN': _('Polish Zloty'),
+    'TRY': _('Turkish Lira'),
+    'HUF': _('Hungarian Forint'),
+    'RON': _('Romanian Leu'),
+    'RUB': _('Russian Ruble'),
+    'HRK': _('Croatian kuna'),
+    'KZT': _('Kazakhstani Tenge'),
+    'ILS': _('Israeli Shekel'),
+    'AED': _('United Arab Emirates Dirham'),
+    'QAR': _('Qatari Riyal'),
+    'SAR': _('Saudi Riyal'),
+    'EGP': _('Egyptian Pound'),
+    'ZAR': _('South African Rand'),
+    'XBT': _('Bitcoin'),
+}
+# }}}
+
 # {{{ find_player: Magic!
-def find_player(query=None, lst=None, make=False, soft=False):
+def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     queryset = Player.objects.all()
 
     if not lst:
-        lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
+        try:
+            lst = [s.strip() for s in shlex.split(query) if s.strip() != '']
+        except:
+            return []
 
     tag, country, race = None, None, None
 
@@ -70,51 +127,57 @@ def find_player(query=None, lst=None, make=False, soft=False):
             continue
 
         # Otherwise, always search by player tag, team and aliases
+        filter_type = "iexact"
         if soft:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__icontains=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__icontains=s) | Q(alias__name__icontains=s)
-            )
-        else:
-            q = (
-                Q(
-                    groupmembership__current=True,
-                    groupmembership__group__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(
-                    groupmembership__current=True,
-                    groupmembership__group__alias__name__iexact=s,
-                    groupmembership__group__is_team=True,
-                ) | Q(tag__iexact=s) | Q(alias__name__iexact=s)
-            )
+            filter_type = "icontains"
 
-        # ...and perhaps country codes
-        found_country = False
-        if len(s) == 2 and s.upper() in data.cca2_to_ccn:
-            country = s.upper()
-            found_country = True
-            q |= Q(country=s.upper())
+        # Helper function that formats the filter to use `filter_type`
+        def format_filter(**kwargs):
+            ret = dict()
+            for k in kwargs:
+                if k.endswith("MATCHES"):
+                    ret[k.replace("MATCHES", filter_type)] = kwargs[k]
+                else:
+                    ret[k] = kwargs[k]
+            return ret
 
-        if len(s) == 3 and s.upper() in data.cca3_to_ccn:
-            country = ccn_to_cca2(cca3_to_ccn(s.upper()))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+        tag_filter = format_filter(tag__MATCHES=s)
+        alias_filter = format_filter(alias__name__MATCHES=s)
 
-        renorm = s[0].upper() + s[1:].lower()
-        if renorm in data.cn_to_ccn:
-            country = ccn_to_cca2(cn_to_ccn(renorm))
-            found_country = True
-            q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+        q = Q(**tag_filter) | Q(**alias_filter)
+        if not strict or len(lst) > 1:
+            group_name_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__name__MATCHES=s,
+                groupmembership__group__is_team=True)
 
-        if not found_country:
-            tag = s
+            group_alias_filter = format_filter(
+                groupmembership__current=True,
+                groupmembership__group__alias__name__MATCHES=s,
+                groupmembership__group__is_team=True)
+
+            q |= Q(**group_name_filter) | Q(**group_alias_filter)
+
+            # ...and perhaps country codes
+            found_country = False
+            if len(s) == 2 and s.upper() in data.cca2_to_ccn:
+                country = s.upper()
+                found_country = True
+                q |= Q(country=s.upper())
+
+            if len(s) == 3 and s.upper() in data.cca3_to_ccn:
+                country = ccn_to_cca2(cca3_to_ccn(s.upper()))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cca3_to_ccn(s.upper())))
+
+            renorm = s[0].upper() + s[1:].lower()
+            if renorm in data.cn_to_ccn:
+                country = ccn_to_cca2(cn_to_ccn(renorm))
+                found_country = True
+                q |= Q(country=ccn_to_cca2(cn_to_ccn(renorm)))
+
+            if not found_country:
+                tag = s
 
         queryset = queryset.filter(q)
     # }}}
@@ -123,11 +186,11 @@ def find_player(query=None, lst=None, make=False, soft=False):
     if not queryset.exists() and make:
         # {{{ Raise exceptions if missing crucial data
         if tag == None:
-            msg = "Player '%s' was not found and cound not be made (missing player tag)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing player tag)") % ' '.join(lst)
             raise Exception(msg)
 
         if race == None:
-            msg = "Player '%s' was not found and cound not be made (missing race)" % ' '.join(lst)
+            msg = _("Player '%s' was not found and cound not be made (missing race)") % ' '.join(lst)
             raise Exception(msg)
         # }}}
 
@@ -210,7 +273,7 @@ def populate_teams(queryset):
 def country_list(queryset):
     countries = queryset.values('country').distinct()
     country_codes = {c['country'] for c in countries if c['country'] is not None}
-    country_dict = [{'cc': c, 'name': data.ccn_to_cn[data.cca2_to_ccn[c]]} for c in country_codes]
+    country_dict = [{'cc': c, 'name': _(data.ccn_to_cn[data.cca2_to_ccn[c]])} for c in country_codes]
     country_dict.sort(key=lambda a: a['name'])
     return country_dict
 # }}}
@@ -219,10 +282,26 @@ def country_list(queryset):
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
     currency_dict = [
-        {'name': ccy.currency(c['currency']).name, 'code': ccy.currency(c['currency']).code} 
+        {'name': CURRENCIES[ccy.currency(c['currency']).code], 'code': ccy.currency(c['currency']).code} 
         for c in currencies
     ]
     return currency_dict
+# }}}
+
+
+# {{{
+def currency_strip(value):
+    """
+    Pretty prints the value using as few characters as possible
+    """
+    if isinstance(value, str):
+        return value.rstrip('0').rstrip('.')
+        
+    if isinstance(value, Decimal):
+        return currency_strip(str(value))
+
+    if isinstance(value, int):
+        return str(value)
 # }}}
 
 # {{{ filter_flags: Splits an integer representing bitwise or into a list of each flag.
@@ -320,7 +399,7 @@ def add_counts(queryset):
 # - fix_left: Set to a player object if you want that player to be always listed on the left.
 # - ratings: True to display ratings, false if not.
 # - messages: True to display messages, false if not.
-def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False):
+def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False, add_links=False):
     ret = []
     for idx, m in enumerate(matches):
         # {{{ Basic stuff
@@ -330,16 +409,20 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             'game':         m.game if isinstance(m, Match) else m.group.game,
             'offline':      m.offline if isinstance(m, Match) else m.group.offline,
             'treated':      isinstance(m, Match) and m.treated,
-            'pla_id':       m.pla_id,
-            'plb_id':       m.plb_id,
-            'pla_tag':      m.pla.tag if m.pla is not None else m.pla_string,
-            'plb_tag':      m.plb.tag if m.plb is not None else m.plb_string,
-            'pla_race':     m.rca,
-            'plb_race':     m.rcb,
-            'pla_country':  m.pla.country if m.pla else None,
-            'plb_country':  m.plb.country if m.plb else None,
-            'pla_score':    m.sca,
-            'plb_score':    m.scb,
+            'pla': {
+                'id': m.pla_id,
+                'tag': m.pla.tag if m.pla is not None else m.pla_string,
+                'race': m.rca,
+                'country': m.pla.country if m.pla else None,
+                'score': m.sca,
+            },
+            'plb': {
+                'id': m.plb_id,
+                'tag': m.plb.tag if m.plb is not None else m.plb_string,
+                'race': m.rcb,
+                'country': m.plb.country if m.plb else None,
+                'score': m.scb,
+            },
         }
 
         if eventcount:
@@ -347,6 +430,9 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
         if isinstance(m, Match):
             r['eventtext'] = m.eventobj.fullname if m.eventobj is not None else m.event
+
+        # If event is not closed and add_links=True, show add link
+        r['add_links'] = add_links and m.eventobj is not None and not m.eventobj.closed
         # }}}
 
         # {{{ Add dates and messages if needed
@@ -355,29 +441,29 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
         if messages:
             r['messages'] = [
-                aligulac.tools.Message(msg.text, msg.title, msg.type + '-small')
+                aligulac.tools.Message(msg=msg, type=msg.type + '-small')
                 for msg in m.message_set.all()
             ]
         # }}}
 
         # {{{ Check ratings if needed
         if ratings and isinstance(m, Match):
-            r.update({
-                'pla_rating':  m.rta.get_totalrating(m.rcb) if m.rta
-                               else start_rating(r['pla_country'], m.period_id),
-                'plb_rating':  m.rtb.get_totalrating(m.rca) if m.rtb
-                               else start_rating(r['plb_country'], m.period_id),
-                'pla_dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
-                'plb_dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
+            r['pla'].update({
+                'rating':  m.rta.get_totalrating(m.rcb) if m.rta
+                           else start_rating(r['pla']['country'], m.period_id),
+                'dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
+            })
+
+            r['plb'].update({
+                'rating':  m.rtb.get_totalrating(m.rca) if m.rtb
+                           else start_rating(r['plb']['country'], m.period_id),
+                'dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
             })
         # }}}
 
         # {{{ Switch roles of pla and plb if needed
-        if fix_left is not None and fix_left.id == r['plb_id']:
-            for k in r.keys():
-                if k[0:3] == 'pla':
-                    l = 'plb' + k[3:]
-                    r[k], r[l] = r[l], r[k]
+        if fix_left is not None and fix_left.id == r['plb']['id']:
+            r['pla'], r['plb'] = r['plb'], r['pla']
         # }}}
 
         ret.append(r)

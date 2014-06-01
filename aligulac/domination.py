@@ -22,8 +22,8 @@ LIMIT = 7
 FIRST_PERIOD = 25
 
 # {{{ Evaluate the domination scores
-print('[%s] Erasing domination scores' % str(datetime.now()), flush=True)
-Rating.objects.update(domination=None)
+#print('[%s] Erasing domination scores' % str(datetime.now()), flush=True)
+#Rating.objects.update(domination=None)
 
 print('[%s] Reevaluating domination scores' % str(datetime.now()), flush=True)
 for period in Period.objects.filter(computed=True, id__gte=FIRST_PERIOD):

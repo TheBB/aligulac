@@ -1,0 +1,257 @@
+{% extends "index.html" %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "API documentation" %}{% endblock %}
+
+{% block content %}
+{% include "messages.html" %}
+
+<div class="hiddenform" style="display: none;" id="apikey">
+<div class="close-button">
+    <a href="#" onclick="$('#apikey').hide(); return false;">close</a>
+</div>
+<form method="post" action="/about/api/">
+<table class="hiddenform bigform">
+{% csrf_token %}
+{% form "forms.html" %}
+    {% field "basic"        form.organization        class="wideinput" %}
+    {% field "basic"        form.contact             class="wideinput" %}
+    {% use "submit" %}
+{% endform %}
+</table>
+</form>
+</div>
+
+<h3>{% trans "API access key" %}</h3>
+
+<p>{% blocktrans with a="<a href=\"#\" onclick=\"toggle_form('apikey'); return false;\">" %}To use the Aligulac API you first need an API access key. To generate one, please use {{a}}this form</a>. You will have to provide your name (or the name of the organization), and a contact e-mail address.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}If the request is successful, you will be provided with a 20-character random string. This string will have to be passed with every API request you make as a parameter named <code>apikey</code>. In the rest of this document, this parameter will be implied.{% endblocktrans %}</p>
+
+<h3>{% trans "API overview" %}</h3>
+
+<p>{% blocktrans with uri="/api/v1/" %}The API is for the most part self-documenting. The root URI is <code>{{uri}}</code>. Requests to this URI will return a JSON object describing the available resources and their root URIs, e.g.{% endblocktrans %}</p>
+
+<code>
+    <pre>
+    {
+        "period": {
+            "list_endpoint": "/api/v1/period/",
+            "schema": "/api/v1/period/schema/"
+        },
+        "player": {
+            "list_endpoint": "/api/v1/player/",
+            "schema": "/api/v1/player/schema/"
+        }
+    }
+    </pre>
+</code>
+
+<p>{% blocktrans with json="<code>?format=json</code>" %}<strong>NOTE:</strong> For making requests in the browser, please append {{json}} to the URI.{% endblocktrans %}</p>
+
+<p>{% blocktrans with a="<a href=\"/about/db/\">" %}The resources available correspond for the most part to the tables in the database, which are described {{a}}here</a>. In addition to these, we have API access to predictions as well, described below.{% endblocktrans %}</p>
+
+<p>{% blocktrans with uri="<code>/api/v1/player/</code>" %}Requests for player objects thus need to go to {{uri}}. For a detailed description of each resource, go to the schema URI. This will return a JSON object with the following fields:{% endblocktrans %}</p>
+
+<ul>
+    <li><strong>allowed_detail_http_methods</strong> {% trans "and" %} <strong>allowed_list_http_methods</strong>: 
+    {% blocktrans with get="<code>get</code>" post="<code>post</code>" %}list of accepted HTTP methods (should always be {{get}} and {{post}}).{% endblocktrans %}</li>
+    <li><strong>default_format</strong>:
+    {% blocktrans with json="<code>application/json</code>" %}default reply format (should always be {{json}}).{% endblocktrans %}</li>
+    <li><strong>default_limit</strong>:
+    {% blocktrans %}default page limit when grabbing many objects at once.{% endblocktrans %}</li>
+    <li><strong>fields</strong>:
+    {% blocktrans %}A dictionary describing each field of the given resource, with the following information:{% endblocktrans %}
+    <ul>
+        <li><strong>nullable</strong>:
+        {% blocktrans with true="<code>true</code>" null="<code>null</code>" false="<code>false</code>" %} {{true}} if the field can be {{null}}, {{false}} otherwise.{% endblocktrans %}</li>
+        <li><strong>type</strong>:
+        {% blocktrans with c="<code>\"" d="\"</code>" string="string" integer="integer" float="float" datetime="datetime" related="related" %}Field type (e.g. {{c}}{{string}}{{d}}, {{c}}{{integer}}{{d}}, {{c}}{{float}}{{d}}, {{c}}{{datetime}}{{d}}, etc.). For related objects of another type, this field will read {{c}}{{related}}{{d}}.{% endblocktrans %}</li>
+        <li><strong>default</strong>:
+        {% trans "Default value, if any (usually not)." %}</li>
+        <li><strong>help_text</strong>:
+        {% trans "Additional human-readable information." %}</li>
+    </ul>
+    {% trans "The other fields are not of interest." %}</li>
+    <li><strong>filtering</strong>:
+    {% blocktrans with one="<code>1</code>" two="<code>2</code>" %}A dictionary describing the filters available on each field. For each field, this is either a list of filters, the integer {{one}} (all filters available), or the integer {{two}} (all filters available, including related objects). With very few exceptions, all kinds of filters are allowed.{% endblocktrans %}</li>
+    <li><strong>ordering</strong>:
+    {% trans "A list of fields that allow sorting. With very few exceptions, this will be all fields." %}</li>
+</ul>
+
+<h3>{% trans "Getting all objects" %}</h3>
+
+<p>{% blocktrans with uri="/api/v1/period/" %}To obtain all objects of a given resource, just make a request to the base resource URI, e.g.  <code>{{ uri }}</code>. This will return a JSON object with two fields: <strong>meta</strong>, giving paging information, and <strong>objects</strong>, which is a list of objects. By default, this will return a limited number of objects per page (normally 20). To control the page size and offset, give the <code>limit</code> and <code>offset</code> arguments, e.g.{% endblocktrans %}</p>
+
+<code>/api/v1/period?limit=50&amp;offset=100</code>
+
+<p>{% blocktrans %}will return objects number 100-149. In addition, the <strong>meta</strong> field gives you the URIs for the next and previous pages, as well as the total count of objects.{% endblocktrans %}<p>
+
+<p>{% blocktrans %}You can get all objects at once by giving <code>limit=0</code>, but this is disallowed on some resources and otherwise not encouraged.{% endblocktrans %}</p>
+
+<h3>{% trans "Getting a single object by ID" %}</h3>
+
+<p>{% blocktrans with uri="/api/v1/player/1/" id="1" %}If you know the id of the object you are interested in, you can get it directly. For example, to get Leenock's player information, go to <code>{{ uri }}</code>, since Leenock's id is {{ id }}.{% endblocktrans %}</p>
+
+<p>{% trans "This will return just the object directly, with no metadata and no surrounding list." %}</p>
+
+<h3>{% trans "Getting several objects by ID" %}</h3>
+
+<p>{% blocktrans with uri="/api/v1/player/set/1;2;3/" commalist="1, 2" final="3" %}If you want to access more than one object, you can request them as a <strong>set</strong> to save both us and yourself from extra work. If you are interested in Leenock, Creator and Life (ids {{ commalist }} and {{ final }}), you can make a request to <code>{{ uri }}</code>.{% endblocktrans %}</p>
+
+<h3>{% trans "Related objects" %}</h3>
+
+<p>{% blocktrans %}Fields that point to related objects will usually be given by resource URIs in the returned objects. For frequently useful information (e.g. players' current rating), the related object(s) will be given as well, although they are often stripped-down versions without detailed information.{% endblocktrans %}</p>
+
+<h3>{% trans "Filtering" %}</h3>
+
+<p>{% trans "You can apply filters to the base URI. They are applied in the following manner:" %}</p>
+
+<code>/api/v1/resourcename/?fieldname__filtername=value</code>
+
+<p>{% trans "If filtering on related objects is available, this can be done as follows:" %}</p>
+
+<code>/api/v1/resourcename/?relatedobject__fieldname__filtername=value</code>
+
+<p>{% blocktrans with uri="https://docs.djangoproject.com/en/1.6/ref/models/querysets/#field-lookups" %}In principle, these chains can be arbitrarily long. The available filters correspond to those found in <a href="{{ uri }}">Django</a>. Here is a brief overview:{% endblocktrans %}</p>
+
+<ul>
+    <li><strong>exact, iexact</strong>:
+    {% blocktrans %}Exact lookup (can also be done just as <code>fieldname=value</code>) or case-insensitive matching for strings.{% endblocktrans %}</li>
+    <li><strong>contains, icontains</strong>:
+    {% blocktrans %}Case sensitive or insensitive string containment.{% endblocktrans %}</li>
+    <li><strong>startswith, istartswith, endswith, iendswith</strong>:
+    {% blocktrans %}Case sensitive or insensitive string prefix or postfix matching.{% endblocktrans %}</li>
+    <li><strong>regex, iregex</strong>:
+    {% blocktrans %}Case sensitive or insensitive regular expression matching. The regular expression syntax is defined by Python's <code>re</code> module.{% endblocktrans %}</li>
+    <li><strong>in</strong>:
+    {% blocktrans %}The given field value must be an element of the provided comma-separated list.{% endblocktrans %}</li>
+    <li><strong>gt, gte, lt, lte</strong>:
+    {% blocktrans %}Numerical orderings &gt;, ≥, &lt; and ≤.{% endblocktrans %}</li>
+    <li><strong>range</strong>:
+    {% blocktrans %}The given field value must lie between the given values (separated by a comma). Useful for dates.{% endblocktrans %}</li>
+    <li><strong>year, month, day, week_day</strong>:
+    {% blocktrans %}Applies to date fields, matches only on the specified integer value. Months and week days are numbered from 1, and the week is assumed to start on Sunday.{% endblocktrans %}</li>
+    <li><strong>isnull</strong>:
+    {% blocktrans %}Takes a boolean, will only match objects where the given field is or is not null.{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}<strong>NOTE:</strong> Filtering by events works differently. See the section below on common use cases.{% endblocktrans %}</p>
+
+<h3>{% trans "Ordering" %}</h3>
+
+<p>{% blocktrans %}To sort by a field, add the parameter <code>order_by=fieldname</code> for ascending order, and <code>order_by=-fieldname</code> for descending order.{% endblocktrans %}</p>
+
+<h2>{% trans "Prediction requests" %}</h2>
+
+<p>{% blocktrans with uri="/inference/" %}Requests for predictions do not correspond to the database, and work a little differently, but corresponds more or less exactly to the way the <a href="{{ uri }}">prediction page</a> works. We currently support five different formats:{% endblocktrans %}</p>
+
+<ul>
+<li><strong>{% trans "Single best-of-N matches" %}</strong> (<code>predictmatch</code>)</li>
+<li><strong>{% trans "Dual tournaments" %}</strong> (<code>predictdual</code>), 
+{% trans "also called GSL-style groups" %}</li>
+<li><strong>{% trans "Single-elimination brackets" %}</strong> (<code>predictsebracket</code>)</li>
+<li><strong>{% trans "Round-robin groups" %}</strong> (<code>predictrrgroup</code>)</li>
+<li><strong>{% trans "Proleague-style team matches" %}</strong> (<code>predictproleague</code>)</li>
+</ul>
+
+<p>{% blocktrans with uri="/api/v1/predictmatch/id1,id2/" a="id1" b="id2" bo="bo" %}The URI for match prediction is then <code>{{ uri }}</code>, where <code>{{ a }}</code> and <code>{{ b }}</code> are the ids for the two players. You also have to supply a <code>{{ bo }}</code> parameter denoting the match length, and this has to be a positive odd integer. The following conditions apply.{% endblocktrans %}</p>
+
+<ul>
+    <li>{% trans "For single matches, you must provide exactly two players." %}</li>
+    <li>{% trans "For dual tournaments, you must provide exactly four players." %}</li>
+    <li>{% blocktrans %}For single elimination brackets, you must provide a number of players that is a power of two.{% endblocktrans %}</li>
+    <li>{% blocktrans %}For proleague matches, you must provide an even number of players, one full team before the other (there does not have to be an odd number of players per team).{% endblocktrans %}</li>
+    <li>{% blocktrans %}For single elimination, and only for this format, you can give different match lengths for different rounds, just make a comma-separated list with the first round first and the final last.{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}You can give id 0 to denote a BYE, and there is no restriction on duplicate players (which can be useful for proleague style to simulate ace matches).{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Requests will return a JSON object containing various information, which you can look through by querying the schema URI. For the last four formats (excluding the single match), the two most important fields are <code>matches</code> and <code>meanres</code>. The former describes the already entered results, and the latter describes the median outcome <em>given the former</em>. Each match has a unique identifier which you can use to prescribe results and update the predictions. E.g. to set match identifier <code>abc</code> to result in 1–3, pass the arguments <code>abc_1=1</code> and <code>abc_2=3</code> with the request.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}It may be difficult to predict in advance which matches will have which identifiers. If you're unsure, make an empty request with no preset results. The returned object will then give identifiers for as many matches as it can. As you fill in results, new matches may become available.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Unlike the <code>matches</code> list, the <code>meanres</code> always contains predictions to the end of the tournament. For example, with a 16-player single elimination bracket, the <code>meanres</code> list will always contain the full 15 matches, trying to predict who will be in the final. As you enter results, this may disagree with the prediction, and the players in the final may change. Thus, <strong>only the <code>matches</code> list contains “sure” information</strong>.{% endblocktrans %}</p>
+
+<h2>{% trans "Common use cases" %}</h2>
+
+<h3>{% trans "Get the current top ten rating list" %}</h3>
+
+<p>{% trans "Current ratings are delivered together with player objects, so this will suffice:" %}</p>
+
+<code>
+    <pre>
+    /api/v1/player/?current_rating__isnull=false
+                   &amp;current_rating__decay__lt=4
+                   &amp;order_by=-current_rating__rating
+                   &amp;limit=10
+    </pre>
+</code>
+
+<p>{% blocktrans %}Null values come before non-null values, so we must filter out the null ratings first. The filter on <code>decay</code> is to only select active players. Alternatively, for a cleaner method, just request for ratings directly.{% endblocktrans %}</p>
+
+<code>
+    <pre>
+    /api/v1/rating/?period=95
+                   &amp;decay__lt=4
+                   &amp;order_by=-rating
+                   &amp;limit=10
+    </pre>
+</code>
+
+<p>{% blocktrans %}Note that in this case you have to query for the period you want. There is an alias for <code>rating</code> called <code>activerating</code> which automatically filters away inactive ratings, but otherwise works the same way. So you could use:{% endblocktrans %}</p>
+
+<code>
+    <pre>
+    /api/v1/activerating/?period=95
+                         &amp;order_by=-rating
+                         &amp;limit=10
+    </pre>
+</code>
+
+<h3>{% trans "Filtering by event" %}</h3>
+
+<p>{% blocktrans %}You could use the <code>eventobj</code> relation to filter matches by events, but since matches are only assigned to the lowest level event objects, you can't use this to get, say, all WCS matches in 2014. That's because no matches are assigned to event object 23398 (which is WCS 2014), rather they are assigned to subevents.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}For event objects, two meta-relations are available called <code>uplink</code> (which links to higher-level events), and <code>downlink</code> (which links to lower-level events).{% endblocktrans %}</p>
+
+<ul>
+    <li>{% blocktrans %}<code>uplink__parent</code> is the ancestor event.{% endblocktrans %}</li>
+    <li>{% blocktrans %}<code>downlink__child</code> is the ancestor event.{% endblocktrans %}</li>
+    <li>{% blocktrans %}<code>uplink__distance</code> and <code>downlink__distance</code> is the distance between them.{% endblocktrans %}</li>
+</ul>
+
+<p>{% blocktrans %}So to get all WCS matches in 2014 (matches assigned to subevents of the WCS 2014 event), you can use:{% endblocktrans %}</p>
+
+<code>
+    <pre>
+    /api/v1/match/?eventobj__uplink__parent=23398
+    </pre>
+</code>
+
+<p>{% blocktrans %}This is also available for event objects, so to get all children and grandchildren of WCS 2014 you can use:{% endblocktrans %}</p>
+
+<code>
+    <pre>
+    /api/v1/event/?uplink__parent=23398
+                  &amp;distance__range=1,2
+    </pre>
+</code>
+
+<p>{% blocktrans %}For these meta-relations you can use the following filters:{% endblocktrans %}</p>
+
+<ul>
+    <li>{% trans "Direct lookup" %}</li>
+    <li><strong>gt, gte, lt, lte</strong></li>
+    <li><strong>in</strong></li>
+    <li><strong>range</strong></li>
+</ul>
+
+<h3>{% trans "Searching by name" %}</h3>
+
+<p>{% blocktrans %}To facilitate easier searching by name (aliases, etc.) we have a different URL endpoint: <code>/search/json/?q=query</code>. This is the endpoint used by Aligulac's own autocompletion feature, and so it obeys the same rules (e.g. it will search for teams, events and players, and it will be sensitive to things like country names and races). This feature is strictly speaking not part of the API, and so its use does not require an access key.{% endblocktrans %}</p>
+
+{% endblock %}

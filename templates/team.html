@@ -6,6 +6,7 @@ This shows a team page. Called from ratings.teamviews.team.
 
 {% load ratings_extras %}
 {% load formulation %}
+{% load i18n %}
 
 {% block title %}{{ team.name }}{% endblock %}
 
@@ -16,26 +17,26 @@ This shows a team page. Called from ratings.teamviews.team.
 <table style="width: 67em;"><tr>
 <td style="width: 42em; vertical-align: top;">
 {% if team.founded and team.disbanded %}
-    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }} and disbanded on 
-    {{ team.disbanded|date:"F jS, Y" }}.</p>
+<p>{% blocktrans with teamname=team.name founded=team.founded|cdate:_('F jS, Y') disbanded=team.disbanded|cdate:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}</p>
 {% elif team.founded %}
-    <p>{{ team.name }} was founded on {{ team.founded|date:"F jS, Y" }}.</p>
+<p>{% blocktrans with teamname=team.name founded=team.founded|cdate:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }}.{% endblocktrans %}</p>
 {% elif team.disbanded %}
-    <p>{{ team.name }} was disbanded on {{ team.disbanded|date:"F jS, Y" }}.</p>
+<p>{% blocktrans with teamname=team.name disbanded=team.disbanded|cdate:_('F jS, Y') %}{{ teamname }} was disbanded on {{ disbanded }}.{% endblocktrans %}</p>
 {% endif %}
 </td>
+
 <td style="width: 25em; vertical-align: top;">
 <div class="ibox" style="width: 25em;">
     <div class="iboxh">{{ team.name }}
     {% if adm %} 
-        (<a href="#" onclick="toggle_form('modteam'); return false;" title="Edit info">edit</a>, 
-        <a href="/admin/ratings/group/{{ team.id }}/" title="Admin interface">admin</a>)
+    (<a href="#" onclick="toggle_form('modteam'); return false;">{% trans "edit" %}</a>, 
+        <a href="/admin/ratings/group/{{ team.id }}/">{% trans "admin" %}</a>)
     {% endif %}
     </div>
     <div class="iboxtable">
     {% if aliases %}
         <div class="row infobox">
-            <div class="rowel" style="width: 10em;">AKA</div>
+            <div class="rowel" style="width: 10em;">{% trans "AKA" %}</div>
             <div class="rower" style="width: 20em;">
                 {% for alias in team.aliases_set %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
             </div>
@@ -43,60 +44,75 @@ This shows a team page. Called from ratings.teamviews.team.
     {% endif %}
     {% if team.shortname and adm %}
         <div class="row infobox">
-            <div class="rowel" style="width: 10em;">Short name</div>
+            <div class="rowel" style="width: 10em;">{% trans "Short name" %}</div>
             <div class="rower" style="width: 20em;">{{ team.shortname }}</div>
         </div>
     {% endif %}
     {% if team.founded %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Founded</div>
-            <div class="rower" style="width: 20em;">{{ team.founded|date:"F jS, Y" }}</div>
+            <div class="rowel" style="width: 10em;">{% trans "Founded" %}</div>
+            <div class="rower" style="width: 20em;">{{ team.founded|cdate:_('F jS, Y') }}</div>
         </div>
     {% endif %}
     {% if team.disbanded %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Disbanded</div>
-            <div class="rower" style="width: 20em;">{{ team.disbanded|date:"F jS, Y" }}</div>
+            <div class="rowel" style="width: 10em;">{% trans "Disbanded" %}</div>
+            <div class="rower" style="width: 20em;">{{ team.disbanded|cdate:_('F jS, Y') }}</div>
         </div>
     {% endif %}
     {% if nplayers %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Players</div>
+            <div class="rowel" style="width: 10em;">{% trans "Players" %}</div>
             <div class="rower" style="width: 20em;">
                 {{ nplayers }}
-                ({{ nprotoss }} <img src="{{ 'P'|imgfolder|static }}" alt="Protoss" class="btm" />, 
-                {{ nterran }} <img src="{{ 'T'|imgfolder|static }}" alt="Terran" class="btm" />, 
-                {{ nzerg }} <img src="{{ 'Z'|imgfolder|static }}" alt="Zerg" class="btm" />)
+                ({{ nprotoss }} <img src="{{ 'P'|img }}" class="btm" />, 
+                {{ nterran }} <img src="{{ 'T'|img }}" class="btm" />, 
+                {{ nzerg }} <img src="{{ 'Z'|img }}" class="btm" />)
             </div>
         </div>
     {% endif %}
     {% if team.meanrating > -10 %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Top 5 rating</div>
+            <div class="rowel" style="width: 10em;">{% trans "Top 5 rating" %}</div>
             <div class="rower" style="width: 20em;">{{ team.meanrating|ratscale }}</div>
         </div>
     {% endif %}
+    {% for name, rank, sort_val in team.ranks %}
+    {% if rank %}
+    <div class="row infobox">
+      <div class="rowel">
+        {% ifchanged %}{% trans "Rank" %}{% endifchanged %}
+      </div>
+      <div class="rower">
+        <a href="/teams?sort={{ sort_val }}">
+            {% comment %}Translators: #[rank] among [name]{% endcomment %}
+          {% blocktrans %}#{{ rank }} {{ name }}{% endblocktrans %}
+        </a>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
     {% if earnings %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Total earnings</div>
+            <div class="rowel" style="width: 10em;">{% trans "Total earnings" %}</div>
             <div class="rower" style="width: 20em;">${{ earnings|add_separator }}</div>
         </div>
     {% endif %}
     {% if nmatches %}
         <div class="row">
-            <div class="rowel" style="width: 10em;">Offline matches</div>
+            <div class="rowel" style="width: 10em;">{% trans "Offline matches" %}</div>
             <div class="rower" style="width: 20em;">{{ noffline|pctg:nmatches }}%</div>
         </div>
     {% endif %}
     {% if team.homepage or team.lp_name %}
         <div class="row infobox" id="external">
-            <div class="rowel">External</div>
+            <div class="rowel">{% trans "External" %}</div>
             <div class="rower">
                 {% if team.homepage %}
-                <a href="{{ team.homepage }}" target="_blank">Homepage</a>
+                <a href="{{ team.homepage }}" target="_blank">{% trans "Homepage" %}</a>
                 {% endif %} 
                 {% if team.lp_name %}
-                <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">LP</a>
+                <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -109,7 +125,7 @@ This shows a team page. Called from ratings.teamviews.team.
 {% if adm %}
 <div class="hiddenform" style="display: none;" id="modteam">
 <div class="close-button">
-    <a href="#" onclick="$('#modteam').hide(); return false;">close</a>
+    <a href="#" onclick="$('#modteam').hide(); return false;">{% trans "close" %}</a>
 </div>
 <form method="post" action="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">
 <table class="hiddenform bigform">
@@ -127,39 +143,40 @@ This shows a team page. Called from ratings.teamviews.team.
 </div>
 {% endif %}
     
+{% with teamname=team.name %}
 {% if active %}
-    <h3>Active roster</h3>
-    <p>{{ team.name }} has {{ active.count }} players who have played a ranked game within the last
-    two months.</p>
+    <h3>{% trans "Active roster" %}</h3>
+    <p>{% blocktrans count active.count as cnt %}{{ teamname }} has {{ cnt }} player who has played a ranked game within the last two months.{% plural %}{{ teamname }} has {{ cnt }} players who have played a ranked game within the last two months.{% endblocktrans %}</p>
     {% include "ratinglist.html" with entries=active rl_pos_arrow=0 displayteams=0 %}
 {% endif %}
 
 {% if inactive %}
-    <h3>Inactive roster</h3>
-    <p>{{ team.name }} has {{ inactive.count }} players who have been temporarily removed from the
-    ranking due to inactivity.</p>
+    <h3>{% trans "Inactive roster" %}</h3>
+    <p>{% blocktrans count inactive.count as cnt %}{{ teamname }} has {{ cnt }} player who has been temporarily removed from the ranking due to inactivity.{% plural %}{{ teamname }} has {{ cnt }} players who have been temporarily removed from the ranking due to inactivity.{% endblocktrans %}</p>
     {% include "ratinglist.html" with entries=inactive rl_pos_arrow=0 displayteams=0 %}
 {% endif %}
 
 {% if nonplaying %}
-    <h3>Non-playing members</h3>
-    <p>{% for p in nonplaying %}
-    <a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">{{ p.player.tag }}</a>{% if forloop.revcounter > 2 %}, 
-    {% elif forloop.revcounter == 2 %} and {% endif %}{% endfor %} 
-    {% if nonplaying|length > 1 %}are{% else %}is{% endif %} assigned to {{ team.name }} in a
-    non-playing capacity.</p>
+    <h3>{% trans "Non-playing members" %}</h3>
+    <p>{% blocktrans %}Assigned to {{ teamname }} in a non-playing capacity:{% endblocktrans %}</p>
+    <ul>
+        {% for p in nonplaying %}
+        <li><a href="/players/{{ p.player.id }}-{{ p.player.tag|urlfilter }}/">{{ p.player.tag }}</a></li>
+        {% endfor %}
+    </ul>
 {% endif %}
+{% endwith %}
 
 {% if past %}
-<h3>Past members</h3>
+<h3>{% trans "Past members" %}</h3>
 
 <div class="table numtable" style="width: 67em;">
     <div class="rowh">
-        <div class="rowe" style="width: 19em;">Name</div>
+        <div class="rowe" style="width: 19em;">{% trans "Name" %}</div>
         <div class="rowe" style="width: 1em;"></div>
         <div class="rowe" style="width: 6em;"></div>
-        <div class="rowe" style="width: 15em;">Joined</div>
-        <div class="rowe" style="width: 26em;">Left</div>
+        <div class="rowe" style="width: 15em;">{% trans "Joined" %}</div>
+        <div class="rowe" style="width: 26em;">{% trans "Left" %}</div>
     </div>
     {% for tm in past %}
     <div class="row {% cycle 'row2' 'row1' %}">
@@ -168,14 +185,14 @@ This shows a team page. Called from ratings.teamviews.team.
         </div>
         <div class="rowe">
             {% if tm.player.country != "" %}
-                <img src="{{ tm.player.country|lower|imgfolder:"flags"|static }}" alt="{{ tm.player.country }}" />
+                <img src="{{ tm.player.country|lower|img:"flags" }}" alt="{{ tm.player.country }}" />
             {% endif %}
         </div>
         <div class="rowe">
-            <img src="{{ tm.player.race|imgfolder|static }}" alt="{{tm.player.race}}" class="btm" />
+            <img src="{{ tm.player.race|img }}" alt="{{tm.player.race}}" class="btm" />
         </div>
-        <div class="rowe">{{ tm.start|date:"F jS, Y" }}</div>
-        <div class="rowe">{{ tm.end|date:"F jS, Y" }}</div>
+        <div class="rowe">{{ tm.start|cdate:_('F jS, Y') }}</div>
+        <div class="rowe">{{ tm.end|cdate:_('F jS, Y') }}</div>
     </div>
     {% endfor %}
 </div>

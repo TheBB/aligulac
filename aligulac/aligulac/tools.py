@@ -1,5 +1,7 @@
 # {{{ Imports
+import json
 import random
+import shlex
 import string
 from datetime import (
     date, 
@@ -12,6 +14,8 @@ from django.contrib.auth import (
     login,
 )
 from django.core.context_processors import csrf
+from django.db.models import Q, F
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
@@ -19,12 +23,32 @@ from aligulac.settings import DEBUG
 
 from ratings.models import (
     Earnings,
+    Event,
+    Group,
     Player,
     Rating,
+    TYPE_CATEGORY,
+    TYPE_EVENT,
+    TYPE_ROUND
 )
-from ratings.tools import get_latest_period
+from ratings.tools import get_latest_period, find_player
 from ratings.templatetags.ratings_extras import urlfilter
+from django.utils.translation import ugettext as _
 # }}}
+
+# {{{ JsonResponse
+# Works similarily to HttpResponse but returns JSON instead.
+class JsonResponse(HttpResponse):
+
+    def __init__(self, content, *args, **kwargs):
+        scontent = json.dumps(content)
+
+        if "content_type" not in kwargs:
+            kwargs["content_type"] = "application/json"
+
+        super().__init__(scontent, *args, **kwargs)
+# }}}
+
 
 # {{{ Message
 # This class encodes error/success/warning messages sent to the templates.
@@ -35,11 +59,15 @@ class Message:
     INFO = 'info'
     SUCCESS = 'success'
 
-    def __init__(self, text=None, title='', type='info', error=None, field=None):
-        if error is None:
+    def __init__(self, text=None, title='', type='info', error=None, field=None, msg=None):
+        if error is None and msg is None:
             self.title = title
             self.text = text
             self.type = type
+        elif msg is not None:
+            self.title = msg.get_title()
+            self.text = msg.get_message()
+            self.type = type or msg.type
         else:
             self.title = None
             self.text = field + ': ' + error
@@ -77,37 +105,59 @@ class NotUniquePlayerMessage(Message):
 
         num = 5
         if len(lst) < num:
-            s = 'Possible matches: ' + ', '.join(lst[:-1]) + ' and ' + lst[-1] + '.'
-        else:
-            rand = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
             s = (
-                'Possible matches: <span id="%s-a">' % rand + ', '.join(lst[:num-1]) +
-                ' and <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand +
-                'togvis(\'%s-b\',\'inline\'); return false;">' % rand +
-                '%i more</a></span>' % (len(lst) - num + 1) +
-                '<span id="%s-b" style="display: none;">%s</span>' %
-                    (rand, ', '.join(lst[:-1]) + ' and ' + lst[-1]) +
+                # Translators: matches as in search matches, not SC2 matches
+                _('Possible matches:') + ' ' +
+                # Translators: E.g. "John, Lisa, Darren and Mike"
+                _('%(commalist)s and %(final)s') % {
+                    'commalist': ', '.join(lst[:-1]), 
+                    'final': lst[-1]
+                } +
                 '.'
             )
+        else:
+            rand = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
 
-        Message.__init__(self, s, '\'%s\' not unique' % search, type)
+            # Yes, I know this is ugly as seven hells. -- TheBB
+            s = (
+                _('Possible matches:') + ' ' +
+                # Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
+                _('%(commalist)s and %(number)s more') % {
+                    'commalist': '<span id="%s-a">' % rand + ', '.join(lst[:num-1]),
+                    'number': 
+                        ' <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand +
+                        'togvis(\'%s-b\',\'inline\'); return false;">' % rand +
+                        '%i' % (len(lst) - num + 1)
+                } +
+                '</a></span><span id="%s-b" style="display: none;">%s</span>' % (
+                    rand,
+                    _('%(commalist)s and %(final)s') % {
+                        'commalist': ', '.join(lst[:-1]),
+                        'final': lst[-1] 
+                    }
+                ) + '.'
+            )
+
+        Message.__init__(self, s, _('\'%s\' not unique') % search, type)
         self.id = id
 # }}}
 
 # {{{ generate_messages: Generates a list of message objects for an object that supports them.
 def generate_messages(obj):
-    return [Message(m.text, m.title, m.type) for m in obj.message_set.all()]
+    return [Message(m.get_message(), m.get_title(), m.type) for m in obj.message_set.all()]
 # }}}
 
 # {{{ login_message: Generates a message notifying about login status.
 def login_message(base, extra=''):
     if not base['adm']:
-        text = ' '.join(['You are not logged in.', extra, '(<a href="/login/">login</a>)'])
+        text = ' '.join([_('You are not logged in.'), extra, '(<a href="/login/">%s</a>)' % _('login')])
     else:
         text = ' '.join([
-            'You are logged in as',
-            base['user'],
-            '(<a href="/logout/">logout</a>, <a href="/changepwd/">change password</a>)'
+            _('You are logged in as %s') % base['user'],
+            '(<a href="/logout/">%s</a>, <a href="/changepwd/">%s</a>)' % (
+                _('logout'),
+                _('change password')
+            )
         ])
     base['messages'].append(Message(text, type=Message.INFO))
 # }}}
@@ -119,7 +169,7 @@ class StrippedCharField(forms.CharField):
         if value is not None:
             value = value.strip()
             if self.required and value == '':
-                raise ValidationError('This field is required.')
+                raise ValidationError(_('This field is required.'))
             elif value == '':
                 return None
             return value
@@ -183,79 +233,80 @@ def post_param(request, param, default):
 def base_ctx(section=None, subpage=None, request=None, context=None):
     curp = get_latest_period()
 
-    menu = [
-        ('Ranking',    '/periods/%i/' % curp.id),
-        ('Teams',      '/teams/'),
-        ('Records',    '/records/history'),
-        ('Results',    '/results/'),
-        ('Reports',    '/reports/'),
-        ('Inference',  '/inference/'),
-        ('About',      '/faq/'),
-        ('Submit',     '/add/'),
-    ]
-
     base = {
         'curp':      curp,
-        'menu':      menu,
         'debug':     DEBUG,
         'cur_path':  request.get_full_path(),
         'messages':  [],
+        'lang':      request.LANGUAGE_CODE,
         'menu':      [{
-            'name': 'Ranking',
-            'url': '/periods/%i' % curp.id,
+            'id': 'Ranking',
+            'name': _('Ranking'),
+            'url': '/periods/latest/',
             'submenu': [
-                ('Current',  '/periods/%i/' % curp.id),
-                ('History',  '/periods/'),
-                ('Earnings', '/earnings/'),
+                ('Current', _('Current'),  '/periods/latest/'),
+                ('History', _('History'),  '/periods/'),
+                ('Earnings', _('Earnings'), '/earnings/'),
         ]}, {
-            'name': 'Teams',
+            'id': 'Teams',
+            'name': _('Teams'),
             'url': '/teams/',
             'submenu': [
-                ('Ranking', '/teams/'),
-                ('Transfers', '/transfers/'),
+                ('Ranking', _('Ranking'), '/teams/'),
+                ('Transfers', _('Transfers'), '/transfers/'),
         ]}, {
-            'name': 'Records',
+            'id': 'Records',
+            'name': _('Records'),
             'url': '/records/history/',
             'submenu': [
-                ('History', '/records/history/'),
-                ('HoF', '/records/hof/'),
-                ('All', '/records/race/?race=all'),
-                ('Protoss', '/records/race/?race=P'),
-                ('Terran', '/records/race/?race=T'),
-                ('Zerg', '/records/race/?race=Z'),
+                ('History', _('History'), '/records/history/'),
+                # Translators: Hall of fame
+                ('HoF', _('HoF'), '/records/hof/'),
+                ('All', _('All'), '/records/race/?race=all'),
+                ('Protoss', _('Protoss'), '/records/race/?race=P'),
+                ('Terran', _('Terran'), '/records/race/?race=T'),
+                ('Zerg', _('Zerg'), '/records/race/?race=Z'),
         ]}, {
-            'name': 'Results',
+            'id': 'Results',
+            'name': _('Results'),
             'url': '/results/',
             'submenu': [
-                ('By Date', '/results/'),
-                ('By Event', '/results/events/'),
-                ('Search', '/results/search/'),
+                ('By Date', _('By Date'), '/results/'),
+                ('By Event', _('By Event'), '/results/events/'),
+                ('Search', _('Search'), '/results/search/'),
         ]}, {
-            'name': 'Reports',
-            'url': '/reports/',
-            'submenu': [
-                ('Balance', '/reports/balance/'),
-        ]}, {
-            'name': 'Inference',
+            'id': 'Inference',
+            'name': _('Inference'),
             'url': '/inference/',
             'submenu': [
-                ('Predict', '/inference/'),
+                ('Predict', _('Predict'), '/inference/'),
         ]}, {
-            'name': 'About',
-            'url': '/faq/',
+            'id': 'Misc',
+            'name': _('Misc'),
+            'url': '/misc/',
             'submenu': [
-                ('FAQ', '/faq/'),
-                ('Blog', '/blog/'),
-                ('Database', '/db/'),
+                ('Balance Report', _('Balance Report'), '/misc/balance/'),
+                ('Days Since…', _('Days Since…'), '/misc/days/'),
         ]}, {
-            'name': 'Submit',
+            'id': 'About',
+            'name': _('About'),
+            'url': '/about/faq/',
+            'submenu': [
+                ('FAQ', _('FAQ'), '/about/faq/'),
+                ('Blog', _('Blog'), '/about/blog/'),
+                ('Database', _('Database'), '/about/db/'),
+                ('API', _('API'), '/about/api/'),
+        ]}, {
+            'id': 'Submit',
+            'name': _('Submit'),
             'url': '/add/',
             'submenu': [
-                ('Matches', '/add/'),
-                ('Review', '/add/review/'),
-                ('Events', '/add/events/'),
-                ('Open events', '/add/open_events/'),
-                ('Misc', '/add/misc/'),
+                # Translators: Matches as in SC2-matches, not search matches.
+                ('Matches', _('Matches'), '/add/'),
+                ('Review', _('Review'), '/add/review/'),
+                ('Events', _('Events'), '/add/events/'),
+                ('Open events', _('Open events'), '/add/open_events/'),
+                ('Misc', _('Misc'), '/add/misc/'),
         ]}]
     }
     base.update({"subnav": None})
@@ -271,9 +322,9 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         if user != None and user.is_active:
             login(request, user)
 
-    # Check for admin rights.
+    # Check for admin rights (must belong to match uploader group, but this is the only group that exists)
     if request != None:
-        base['adm'] = request.user.is_authenticated()
+        base['adm'] = request.user.is_authenticated() and request.user.groups.exists()
         base['user'] = request.user.username
     else:
         base['adm'] = False
@@ -293,18 +344,18 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             earnings = context.has_earnings()
 
             base_url = '/players/%i-%s/' % (context.id, urlfilter(context.tag))
-            add_subnav('Summary', base_url)
+            add_subnav(_('Summary'), base_url)
 
             if rating is not None:
-                add_subnav('Rating history', base_url + 'historical/')
+                add_subnav(_('Rating history'), base_url + 'historical/')
 
-            add_subnav('Match history', base_url + 'results/')
+            add_subnav(_('Match history'), base_url + 'results/')
 
             if context.has_earnings():
-                add_subnav('Earnings', base_url + 'earnings/')
+                add_subnav(_('Earnings'), base_url + 'earnings/')
 
             if rating is not None:
-                add_subnav('Adjustments', base_url + 'period/%i/' % rating.period.id)
+                add_subnav(_('Adjustments'), base_url + 'period/%i/' % rating.period.id)
 
     return base
 # }}}
@@ -335,4 +386,46 @@ def etn(f):
 # {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
 # AS IT FUCKING SHOULD BE.
 ntz = lambda k: k if k is not None else 0
+# }}}
+
+
+# {{{ search: Helper function for performing searches
+def search(query, search_for=['players', 'teams', 'events'], strict=False):
+    # {{{ Split query
+    lex = shlex.shlex(query, posix=True)
+    lex.wordchars += "'"
+    lex.quotes = '"'
+
+    terms = [s.strip() for s in list(lex) if s.strip() != '']
+    if len(terms) == 0:
+        return None
+    # }}}
+
+    # {{{ Search for players, teams and events
+    if 'players' in search_for:
+        players = find_player(lst=terms, make=False, soft=True, strict=strict)
+    else:
+        players = None
+
+    if 'teams' in search_for:
+        teams = Group.objects.filter(is_team=True)
+    else:
+        teams = None
+
+    if 'events' in search_for:
+        events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('idx')
+    else:
+        events = None
+
+    for term in terms:
+        if 'teams' in search_for:
+            teams = teams.filter(Q(name__icontains=term) | Q(alias__name__icontains=term))
+        if 'events' in search_for:
+            events = events.filter(Q(fullname__icontains=term))
+
+    if 'teams' in search_for:
+        teams = teams.distinct()
+    # }}}
+
+    return players, teams, events
 # }}}

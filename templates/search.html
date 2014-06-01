@@ -6,47 +6,49 @@ aligulac.views.search.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}Search{% endblock %}
+{% block title %}{% trans "Search" %}{% endblock %}
 
 {% block content %}
 
-    {% if players.count == 0 and teams.count == 0 and events.count == 0 %}
-        No such player, team or event '{{ query }}' found.
-    {% else %}
-        {% if teams %}
-            <h3>Teams ({{ teams.count }})</h3>
-            <ul>
-            {% for team in teams %}
-            <li><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-        {% if players %}
-            <h3>Players ({{ players.count }})</h3>
-            <ul>
-                {% for player in players %}
-                <li>
-                {% if player.country %}
-                <img src="{{ player.country|lower|imgfolder:"flags"|static }}" alt="{{ player.country }}" />
-                {% endif %}
-                <img src="{{ player.race|imgfolder|static }}" alt="{{ player.race|racefull }}" />
-                <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">{{ player.tag }}</a> 
-                </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% if events %}
-            <h3>Events ({{ events.count }})</h3>
-            <ul>
-                {% for event in events %}
-                <li>
-                <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">
-                    {{ event.fullname }}
-                </a>
-                </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+{% if players.count == 0 and teams.count == 0 and events.count == 0 %}
+{% blocktrans %}No such player, team or event '{{ query }}' found.{% endblocktrans %}
+{% else %}
+    {% if teams %}
+    <h3>{% trans "Teams" %} ({{ teams.count }})</h3>
+        <ul>
+        {% for team in teams %}
+        <li><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></li>
+        {% endfor %}
+        </ul>
     {% endif %}
+    {% if players %}
+        <h3>{% trans "Players" %} ({{ players.count }})</h3>
+        <ul>
+            {% for player in players %}
+            <li>
+            {% if player.country %}
+            <img src="{{ player.country|lower|img:"flags" }}" alt="{{ player.country }}" />
+            {% endif %}
+            <img src="{{ player.race|img }}" alt="{{ player.race|racefull }}" />
+            <a href="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">{{ player.tag }}</a> 
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if events %}
+        <h3>{% trans "Events" %} ({{ events.count }})</h3>
+        <ul>
+            {% for event in events %}
+            <li>
+            <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">
+                {{ event.fullname }}
+            </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}
+
 {% endblock %}

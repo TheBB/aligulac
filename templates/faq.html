@@ -5,10 +5,13 @@ The FAQ template, called from faq.views.faq.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
-{% block title %}FAQ{% endblock %}
+{% block title %}{% trans "FAQ" %}{% endblock %}
 
 {% block content %}
+    {% include "messages.html" %}
+
     {% for post in posts %}
         <div class="faqpost">
         <h2 id="{{ post.id }}">{{ post.title }}</h2>

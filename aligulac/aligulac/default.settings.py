@@ -99,10 +99,6 @@ PRF_NA = -1000
 PRF_INF = -2000
 PRF_MININF = -3000
 
-def start_rating(country, period):
-    return 0.2 if country == 'KR' else 0.0
-
-
 # Application definition
 
 INSTALLED_APPS = [

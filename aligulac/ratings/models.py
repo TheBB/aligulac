@@ -22,7 +22,7 @@ from django.utils.translation import (
     pgettext_lazy
 )
 
-from aligulac.settings import start_rating, INACTIVE_THRESHOLD
+from aligulac.settings import INACTIVE_THRESHOLD
 
 from currency import ExchangeRates
 
@@ -1052,6 +1052,37 @@ ORDER BY "pm" DESC;
 
 # }}}
 
+class Cluster(models.Model):
+    class Meta:
+        unique_together = ('period', 'index')
+    period = models.ForeignKey(Period)
+    mean_rating = models.FloatField(null=True)
+    min_rating = models.FloatField(null=True)
+    max_rating = models.FloatField(null=True)
+    index = models.IntegerField()
+
+    def __str__(self):
+        return "P{:0>4}C{:0>5}".format(self.period_id, self.index)
+
+class ClusterConnection(models.Model):
+    cluster = models.ForeignKey(Cluster)
+    player = models.ForeignKey(Player)
+    def __str__(self):
+        return "{}  <-->  {}".format(self.cluster, self.player)
+
+def start_rating(player, period):
+    print("Start rating for {} P:{}".format(player, period))
+    try:
+        cluster = Cluster.objects.get(
+            period=period,
+            clusterconnection__player=player
+        )
+        if cluster.mean_rating is not None:
+            return cluster.mean_rating
+        return 0.0
+    except:
+        return 0.0
+
 # {{{ Stories
 class Story(models.Model):
     class Meta:
@@ -1805,7 +1836,6 @@ class Rating(models.Model):
         Player, null=False, verbose_name='Player',
         help_text='This rating applies to the given player'
     )
-    cluster = models.IntegerField(null=True, blank=True, default=None, verbose_name='Cluster')
 
     # Helper fields for fast loading of frequently accessed information
     prev = models.ForeignKey(

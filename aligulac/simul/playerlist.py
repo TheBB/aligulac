@@ -2,17 +2,17 @@ from math import sqrt
 
 from aligulac.settings import (
     INIT_DEV,
-    start_rating,
 )
 from aligulac.tools import etn
 
 from ratings.models import (
     Player,
     Rating, 
+    start_rating,
 )
 from ratings.tools import (
     cdf,
-    get_latest_period,
+    get_latest_period
 )
 
 debug = False

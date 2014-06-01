@@ -109,6 +109,7 @@ latest = Period.objects.filter(start__lte=date.today()).latest('id')
 print('[%s] Recomputing periods %i through %i' % (str(datetime.now()), earliest.id, latest.id), flush=True)
 
 for i in range(earliest.id, latest.id+1):
+    subprocess.call([os.path.join(PROJECT_PATH, 'clustering.py'), str(i)])
     subprocess.call([os.path.join(PROJECT_PATH, 'period.py'), str(i)])
 
 if 'debug' not in sys.argv:

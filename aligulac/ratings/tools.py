@@ -26,8 +26,7 @@ from countries.transformations import (
 import aligulac
 from aligulac.settings import (
     INACTIVE_THRESHOLD,
-    INIT_DEV,
-    start_rating,
+    INIT_DEV
 )
 
 from ratings.models import (
@@ -35,6 +34,7 @@ from ratings.models import (
     Period,
     Player,
     Rating,
+    start_rating
 )
 # }}}
 

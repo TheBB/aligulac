@@ -19,7 +19,6 @@ from aligulac.settings import (
     INACTIVE_THRESHOLD,
     INIT_DEV,
     OFFLINE_WEIGHT,
-    start_rating,
 )
 
 from rating import (
@@ -35,6 +34,7 @@ from ratings.models import (
     Rating,
     T,
     Z,
+    start_rating
 )
 from ratings.tools import (
     filter_active,
@@ -75,15 +75,17 @@ if prev:
         }
 
 new_players = (
-    Player.objects.filter(Q(match_pla__period=period) | Q(match_plb__period=period))
-        .exclude(id__in=players.keys())
+    Player.objects
+    .filter(Q(match_pla__period=period) | Q(match_plb__period=period))
+    .exclude(id__in=players.keys())
+    .distinct()
 )
 
 for p in new_players:
     players[p.id] = {
         'player': p,
         'rating': None,
-        'prev_ratings': { 'M': start_rating(p.country, period.id), 'P': 0.0, 'T': 0.0, 'Z': 0.0 },
+        'prev_ratings': { 'M': start_rating(p, period.id), 'P': 0.0, 'T': 0.0, 'Z': 0.0 },
         'prev_devs': { 'M': INIT_DEV, 'P': INIT_DEV, 'T': INIT_DEV, 'Z': INIT_DEV },
         'opp_c': [], 'opp_r': [], 'opp_d': [], 'wins': [], 'losses': [],
     }

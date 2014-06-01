@@ -17,6 +17,8 @@ from tastypie.models import ApiKey as TPApiKey
 from ratings.models import (
     Alias,
     APIKey,
+    Cluster,
+    ClusterConnection,
     Earnings,
     Event,
     EventAdjacency,
@@ -276,6 +278,13 @@ class APIKeyAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+class ClusterConnectionInline(admin.StackedInline):
+    model = ClusterConnection
+    fields = ['player', 'cluster']
+
+class ClusterAdmin(admin.ModelAdmin):
+    inlines = [ClusterConnectionInline]
+
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Period, PeriodAdmin)
 admin.site.register(Group, GroupAdmin)
@@ -284,5 +293,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(PreMatchGroup, PreMatchGroupAdmin)
 admin.site.register(PreMatch, PreMatchAdmin)
 admin.site.register(APIKey, APIKeyAdmin)
+admin.site.register(Cluster, ClusterAdmin)
+admin.site.register(ClusterConnection)
 
 admin.site.unregister(TPApiKey)

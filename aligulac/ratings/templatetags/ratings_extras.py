@@ -98,8 +98,11 @@ def urlify(value):
 
 # player_url: Generate a player URL.
 @register.filter
-def player_url(value):
-    return "/players/" + str(value.id) + "-" + urlfilter(value.tag) + "/"
+def player_url(value, with_path=True):
+    step1 = "{}-{}".format(value.id, urlfilter(value.tag))
+    if not with_path:
+        return step1
+    return "/players/" + step1 + "/"
 
 # vs_url: Generate a search query for the two players
 @register.filter

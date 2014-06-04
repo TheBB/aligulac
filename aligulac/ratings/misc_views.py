@@ -1,4 +1,6 @@
 # {{{ Imports
+import re
+
 from collections import Counter, namedtuple
 from datetime import datetime
 
@@ -31,6 +33,7 @@ from ratings.models import (
     Match,
     Player,
 )
+from ratings.templatetags.ratings_extras import player_url
 from aligulac.cache import cache_page
 from aligulac.tools import (
     base_ctx,
@@ -318,7 +321,10 @@ class CompareForm(forms.Form):
     # {{{ generate_url: Returns an URL to continue to (assumes validation has passed)
     def generate_url(self):
         return '/misc/compare/%s/' % (
-            ','.join(str(p.id) for p in self.cleaned_data['players']),
+            ','.join(
+                player_url(p, with_path=False)
+                for p in self.cleaned_data['players']
+            ),
         )
     # }}}
 
@@ -363,8 +369,13 @@ def compare(request, players):
     if players is None:
         return redirect('/misc/compare/')
 
+    player_regex = re.compile(r"(\d+)(-[^ /,]*)?")
+
     try:
-        players = [int(x.strip()) for x in players.split(',')]
+        players = [
+            int(player_regex.match(x).group(1))
+            for x in players.split(',')
+        ]
     except:
         return redirect('/misc/compare/')
 

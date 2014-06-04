@@ -299,6 +299,10 @@ table.results tr.nonheader {
     font-family: Verdana, Geneva, sans-serif;
 }
 
+table.comp tr.nonheader {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
 tr.row2 {
     background: #eeeeee;
 }

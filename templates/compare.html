@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% comment %}
-Number of days since.
+Player comparison
 {% endcomment %}
 
 {% load ratings_extras %}
@@ -52,7 +52,7 @@ Number of days since.
   <tbody>
     {% for comp in comparisons %}
     {% if comp and comp.name %}
-    <tr class="{% cycle 'row1' 'row2' %}">
+    <tr class="nonheader {% cycle 'row1' 'row2' %}">
       <th>
         {{ comp.name }}
       </th>

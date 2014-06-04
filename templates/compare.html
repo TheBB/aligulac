@@ -13,21 +13,24 @@ Player comparison
 
 <table class="comp">
   <thead>
-    <tr>
-      <th></th>
-      {% for p in players %}
-      <th class="comp-head">
-        <div class="comp-player-race">
-          {{ p.race|large_race_img|safe }}
-        </div>
-      </th>
-      {% endfor %}
-    </tr>
+    <!-- <tr> -->
+    <!--   <th></th> -->
+    <!--   {% for p in players %} -->
+    <!--   <th class="comp-head"> -->
+    <!--     <div class="comp-player-race"> -->
+    <!--       {{ p.race|large_race_img|safe }} -->
+    <!--     </div> -->
+    <!--   </th> -->
+    <!--   {% endfor %} -->
+    <!-- </tr> -->
     <tr>
       <th></th>
       {% for p in players %}
       <th class="comp-head">
         <a href="{{ p|player_url }}" target="_blank">
+	  <div class="comp-player-race">
+	    <img src="{{ p.race|img }}" />
+	  </div>
           <div class="comp-player-tag">{{ p.tag }}</div>
         </a>
       </th>
@@ -45,6 +48,22 @@ Player comparison
           </a>
         </div>
         {% endif %}
+      </th>
+      {% endfor %}
+    </tr>
+    <tr>
+      <th></th>
+      {% for p in players %}
+      <th class="comp-head">
+	{% with team=p.get_current_team %}
+        {% if team %}
+        <div class="comp-player-team">
+          <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/" target="_blank">
+	    {{ team }}
+          </a>
+        </div>
+        {% endif %}
+	{% endwith %}
       </th>
       {% endfor %}
     </tr>

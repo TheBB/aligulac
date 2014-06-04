@@ -440,7 +440,7 @@ def compare(request, players):
 
     if len(clean_players) == 4:
         comparisons.append(PredictionComparison(
-            clean_players, _("a dual tournament"), bo=3, kind='rr')
+            clean_players, _("a dual tournament"), bo=3, kind='dual')
         )
 
     if len(clean_players) == 2:
@@ -462,6 +462,25 @@ def compare(request, players):
     comparisons.append(_("Lifetime"))
     matches = Match.objects.symmetric_filter(
         pla__in=players
+    )
+    comparisons.append(MatchComparison(
+        clean_players, _("Match wins"), matches))
+    comparisons.append(MatchComparison(
+        clean_players, _("Match win %"), matches, percent=True))
+    comparisons.append(MatchComparison(
+        clean_players, _("Match +/-"), matches, pm=True))
+    comparisons.append(None)
+    comparisons.append(MatchComparison(
+        clean_players, _("Game wins"), matches, kind="games"))
+    comparisons.append(MatchComparison(
+        clean_players, _("Game win %"), matches, kind="games", percent=True))
+    comparisons.append(MatchComparison(
+        clean_players, _("Game +/-"), matches, kind="games", pm=True))
+
+    comparisons.append(_("WCS 2014"))
+    matches = Match.objects.symmetric_filter(
+        pla__in=players,
+        eventobj__uplink__parent=23398
     )
     comparisons.append(MatchComparison(
         clean_players, _("Match wins"), matches))

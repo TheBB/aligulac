@@ -882,13 +882,15 @@ th.comp-head {
     vertical-align: middle;
 }
 
-div.comp-player-race img {
-    max-height: 100px;
-    max-width: 100px;
+div.comp-player-race {
+    /* max-height: 100px; */
+    /* max-width: 100px; */
+    display: inline;
 }
 
 div.comp-player-tag {
     font-size: larger;
+    display: inline;
 }
 
 /* alt 1 */

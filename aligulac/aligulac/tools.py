@@ -414,14 +414,17 @@ def search(query, search_for=['players', 'teams', 'events'], strict=False):
 
     if 'events' in search_for:
         events = Event.objects.filter(type__in=[TYPE_CATEGORY, TYPE_EVENT]).order_by('idx')
+        events = events.filter(
+            fullname__iregex=(
+                r"\s".join(r".*{}.*".format(term) for term in terms)
+            )
+        )
     else:
         events = None
 
     for term in terms:
         if 'teams' in search_for:
             teams = teams.filter(Q(name__icontains=term) | Q(alias__name__icontains=term))
-        if 'events' in search_for:
-            events = events.filter(Q(fullname__icontains=term))
 
     if 'teams' in search_for:
         teams = teams.distinct()

@@ -541,6 +541,7 @@ def auto_complete_search(request):
         players = players.extra(select=EXTRA_NULL_SELECT)\
                          .order_by("-null_curr", "-current_rating__rating")
 
+        num = 5 if teams is not None or events is not None else 10
         data['players'] = [{
             "id": p.id,
             "tag": p.tag,
@@ -553,23 +554,25 @@ def auto_complete_search(request):
                         current=True,
                         group__is_team=True
                 )]
-        } for p in players[:5]]
+        } for p in players[:num]]
 
     if teams is not None:
         teams = teams.order_by('name')
 
+        num = 5 if players is not None or events is not None else 10
         data['teams'] = [{
             "id": t.id,
             "name": t.name
-            } for t in teams[:5]]
+            } for t in teams[:num]]
 
     if events is not None:
         events = events.order_by("fullname")
 
+        num = 5 if players is not None or teams is not None else 10
         data['events'] = [{
             "id": e.id,
             "fullname": e.fullname
-            } for e in events[:5]]
+            } for e in events[:num]]
 
     return JsonResponse(data)
 # }}}

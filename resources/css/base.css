@@ -883,8 +883,6 @@ th.comp-head {
 }
 
 div.comp-player-race {
-    /* max-height: 100px; */
-    /* max-width: 100px; */
     display: inline;
 }
 
@@ -893,7 +891,6 @@ div.comp-player-tag {
     display: inline;
 }
 
-/* alt 1 */
 td.comp-best {
     color: darkgreen;
 }
@@ -901,10 +898,6 @@ td.comp-worst {
     color: red;
 }
 
-/* alt 2 */
-/* td.comp-best { */
-/*     background-color: lightgreen; */
-/* } */
-/* td.comp-worst { */
-/*     background-color: salmon; */
-/* } */
+td.comp-entry {
+    text-align: right;
+}

@@ -13,24 +13,14 @@ Player comparison
 
 <table class="comp">
   <thead>
-    <!-- <tr> -->
-    <!--   <th></th> -->
-    <!--   {% for p in players %} -->
-    <!--   <th class="comp-head"> -->
-    <!--     <div class="comp-player-race"> -->
-    <!--       {{ p.race|large_race_img|safe }} -->
-    <!--     </div> -->
-    <!--   </th> -->
-    <!--   {% endfor %} -->
-    <!-- </tr> -->
     <tr>
       <th></th>
       {% for p in players %}
       <th class="comp-head">
         <a href="{{ p|player_url }}" target="_blank">
-	  <div class="comp-player-race">
-	    <img src="{{ p.race|img }}" />
-	  </div>
+          <div class="comp-player-race">
+            <img src="{{ p.race|img }}" />
+          </div>
           <div class="comp-player-tag">{{ p.tag }}</div>
         </a>
       </th>
@@ -55,15 +45,15 @@ Player comparison
       <th></th>
       {% for p in players %}
       <th class="comp-head">
-	{% with team=p.get_current_team %}
+        {% with team=p.get_current_team %}
         {% if team %}
         <div class="comp-player-team">
           <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/" target="_blank">
-	    {{ team }}
+            {{ team }}
           </a>
         </div>
         {% endif %}
-	{% endwith %}
+        {% endwith %}
       </th>
       {% endfor %}
     </tr>
@@ -76,7 +66,9 @@ Player comparison
         {{ comp.name }}
       </th>
       {% for e in comp.entries %}
-      <td class="{% if e.is_best %}comp-best{% elif e.is_worst %}comp-worst{% endif %}" title="#{{ e.index }}">{{ e.value_print }}</td>
+      <td class="{% if e.is_best %}comp-best{% elif e.is_worst %}comp-worst{% endif %} comp-entry" title="#{{ e.index }}">
+        {{ e.value_print }}
+      </td>
       {% endfor %}
     </tr>
     {% elif comp %}

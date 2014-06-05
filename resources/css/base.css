@@ -697,17 +697,6 @@ div.close-button {
 
 /* TABS */
 
-td.tabnonsel {
-    text-align: center;
-    border: solid 0.1em #000000;
-    background: #555555;
-    color: #ffffff;
-    font-weight: bold;
-    font-family: 'Marcellus SC', Times, serif;
-    padding: 0.3em;
-    font-size: 1.1em;
-}
-
 td.tabsel {
     text-align: center;
     border: solid 0.1em #000000;

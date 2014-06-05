@@ -300,6 +300,8 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    if ($('.event-ac').length == 0)
+        return;
     $('.event-ac').autocomplete({
         source: function (request, response) {
 

@@ -1,4 +1,6 @@
 # {{{ Imports
+import shlex
+
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from functools import partial
@@ -6,7 +8,7 @@ from math import sqrt
 from urllib.parse import urlencode
 
 from django import forms
-from django.db.models import F, Sum, Q, Count
+from django.db.models import Sum, Q, Count
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -500,7 +502,17 @@ def results(request, player_id):
         matches = matches.filter(date__lte=form.cleaned_data['before'])
 
     if form.cleaned_data['event'] is not None:
-        matches = matches.filter(eventobj__fullname__istartswith=form.cleaned_data['event'])
+        lex = shlex.shlex(form.cleaned_data['event'], posix=True)
+        lex.wordchars += "'"
+        lex.quotes = '"'
+
+        terms = [s.strip() for s in list(lex) if s.strip() != '']
+
+        matches = matches.filter(
+            eventobj__fullname__iregex=(
+                r"\s".join(r".*{}.*".format(term) for term in terms)
+            )
+        )
     # }}}
 
     # {{{ Statistics

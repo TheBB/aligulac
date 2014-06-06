@@ -16,7 +16,7 @@ def list(request):
     base['minis'] = MiniURL.objects.order_by('-nb_access')
     
     base.update({"title": _("List of short URLs")})
-    return render(request, 'miniURL/list.html', base)
+    return render(request, 'miniURL/list.djhtml', base)
 
 @csrf_protect
 def new(request):

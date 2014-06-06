@@ -792,7 +792,7 @@ def results(request):
 
     base.update({"title": cdate(day, _("F jS, Y"))})
 
-    return render_to_response('results.html', base)
+    return render_to_response('results.djhtml', base)
 # }}}
 
 # {{{ events view
@@ -823,7 +823,7 @@ def events(request, event_id=None):
             'freq_smalls': root_events.filter(big=False, category=CAT_FREQUENT).order_by('name'),
         })
 
-        return render_to_response('events.html', base)
+        return render_to_response('events.djhtml', base)
     # }}}
 
     # {{{ Get object, generate messages, and ensure big is set. Find familial relationships.
@@ -914,7 +914,7 @@ def events(request, event_id=None):
 
     base.update({"title": event})
 
-    return render_to_response('eventres.html', base)
+    return render_to_response('eventres.djhtml', base)
 # }}}
 
 # {{{ search view
@@ -946,5 +946,5 @@ def search(request):
 
     base.update({"title": _("Search results")})
 
-    return render_to_response('results_search.html', base, context_instance=RequestContext(request))
+    return render_to_response('results_search.djhtml', base, context_instance=RequestContext(request))
 # }}}

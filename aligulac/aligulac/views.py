@@ -355,7 +355,7 @@ def home(request):
         'blogposts': blogs
     })
 
-    return render_to_response('index.html', base)
+    return render_to_response('index.djhtml', base)
 # }}}
 
 # {{{ Language change page
@@ -364,7 +364,7 @@ def language(request):
 
     base['languages'] = LANGUAGES
 
-    return render_to_response('language.html', base)
+    return render_to_response('language.djhtml', base)
 # }}}
 
 # {{{ db view
@@ -426,7 +426,7 @@ def db(request):
 
     base.update({'title': _('Database status')})
 
-    return render_to_response('db.html', base)
+    return render_to_response('db.djhtml', base)
 # }}}
 
 # {{{ API documentation and keys
@@ -483,7 +483,7 @@ def api(request):
         'form': form,
     })
 
-    return render_to_response('api.html', base)
+    return render_to_response('api.djhtml', base)
 # }}}
 
 # {{{ search view
@@ -516,7 +516,7 @@ def search(request):
 
     base.update({'title': _('Search results')})
 
-    return render_to_response('search.html', base)
+    return render_to_response('search.djhtml', base)
 # }}}
 
 # {{{ auto-complete search view
@@ -580,7 +580,7 @@ def login_view(request):
     login_message(base)
 
     base.update({"title": _("Login")})
-    return render_to_response('login.html', base)
+    return render_to_response('login.djhtml', base)
 
 def logout_view(request):
     logout(request)
@@ -594,19 +594,19 @@ def changepwd(request):
     login_message(base)
 
     if not ('old' in request.POST and 'new' in request.POST and 'newre' in request.POST):
-        return render_to_response('changepwd.html', base)
+        return render_to_response('changepwd.djhtml', base)
 
     if not request.user.check_password(request.POST['old']):
         base['messages'].append(
             Message(_("The old password didn't match. Your password was not changed."), type=Message.ERROR)
         )
-        return render_to_response('changepwd.html', base)
+        return render_to_response('changepwd.djhtml', base)
 
     if request.POST['new'] != request.POST['newre']:
         base['messages'].append(
             Message(_("The new passwords didn't match. Your password was not changed."), type=Message.ERROR)
         )
-        return render_to_response('changepwd.html', base)
+        return render_to_response('changepwd.djhtml', base)
 
     request.user.set_password(request.POST['new'])
     request.user.save()
@@ -616,7 +616,7 @@ def changepwd(request):
 
     base.update({"title": _("Change password")})
 
-    return render_to_response('changepwd.html', base)
+    return render_to_response('changepwd.djhtml', base)
 # }}}
 
 # {{{ Error handlers
@@ -624,11 +624,11 @@ def changepwd(request):
 def h404(request):
     base = base_ctx(request=request)
     base.update({"title": _("404: Not found")})
-    return HttpResponseNotFound(render_to_string('404.html', base))
+    return HttpResponseNotFound(render_to_string('404.djhtml', base))
 
 @cache_page
 def h500(request):
     base = base_ctx(request=request)
     base.update({"title": _("500: Internal Server Error")})
-    return HttpResponseNotFound(render_to_string('500.html', base))
+    return HttpResponseNotFound(render_to_string('500.djhtml', base))
 # }}}

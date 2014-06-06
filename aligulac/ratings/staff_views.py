@@ -805,7 +805,7 @@ def add_matches(request):
 
     base.update({"title": _("Submit results")})
 
-    return render_to_response('add.html', base)
+    return render_to_response('add.djhtml', base)
 
 # View for reviewing matches
 def review_matches(request):
@@ -834,7 +834,7 @@ def review_matches(request):
 
     base.update({"title": _("Review results")})
 
-    return render_to_response('review.html', base)
+    return render_to_response('review.djhtml', base)
 
 # View for event manager
 def events(request):
@@ -866,7 +866,7 @@ def events(request):
 
     base.update({"title": _("Manage events")})
 
-    return render_to_response('eventmgr.html', base)
+    return render_to_response('eventmgr.djhtml', base)
 
 # Auxiliary view called by JS code in the event manager for progressively opening subtrees
 def event_children(request, id):
@@ -952,7 +952,7 @@ def open_events(request):
 
     base.update({"title": _("Open events")})
 
-    return render_to_response('events_open.html', base)
+    return render_to_response('events_open.djhtml', base)
 
 # Misc staff tools
 def misc(request):
@@ -982,4 +982,4 @@ def misc(request):
         'moveform':   moveform,
     })
 
-    return render_to_response('manage.html', base)
+    return render_to_response('manage.djhtml', base)

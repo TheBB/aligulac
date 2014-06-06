@@ -230,13 +230,13 @@ def predict(request):
 
     if 'submitted' not in request.GET:
         base['form'] = PredictForm()
-        return render_to_response('predict.html', base)
+        return render_to_response('predict.djhtml', base)
 
     base['form'] = PredictForm(request=request)
     base['messages'] += base['form'].get_messages()
 
     if not base['form'].is_valid():
-        return render_to_response('predict.html', base)
+        return render_to_response('predict.djhtml', base)
     return redirect(base['form'].generate_url())
 # }}}
 
@@ -359,7 +359,7 @@ def match(request):
 
     base.update({"title": _("%(pla)s vs. %(plb)s") % {'pla': dbpl[0].tag, 'plb': dbpl[1].tag}})
 
-    return render_to_response('pred_match.html', base)
+    return render_to_response('pred_match.djhtml', base)
 # }}}
 
 # }}}
@@ -524,7 +524,7 @@ def dual(request):
 
     base.update({"title": _("Dual tournament")})
 
-    return render_to_response('pred_4pswiss.html', base)
+    return render_to_response('pred_4pswiss.djhtml', base)
 # }}}
 
 # }}}
@@ -603,7 +603,7 @@ def sebracket(request):
 
     base.update({"title": _("Single elimination bracket")})
 
-    return render_to_response('pred_sebracket.html', base)
+    return render_to_response('pred_sebracket.djhtml', base)
 # }}}
 
 # }}}
@@ -692,7 +692,7 @@ def rrgroup(request):
 
     base.update({"title": _("Round robin group")})
 
-    return render_to_response('pred_rrgroup.html', base)
+    return render_to_response('pred_rrgroup.djhtml', base)
 # }}}
 
 # }}}
@@ -781,7 +781,7 @@ def proleague(request):
 
     base.update({"title": _("Proleague team match")})
 
-    return render_to_response('pred_proleague.html', base)
+    return render_to_response('pred_proleague.djhtml', base)
 # }}}
 
 # }}}

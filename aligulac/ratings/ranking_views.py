@@ -50,7 +50,7 @@ def periods(request):
     base['periods'] = Period.objects.filter(computed=True).order_by('-id')
     
     base.update({"title": _("Historical overview")})
-    return render_to_response('periods.html', base)
+    return render_to_response('periods.djhtml', base)
 # }}}
 
 # {{{ period view
@@ -207,7 +207,7 @@ def period(request, period_id=None):
     # Translators: List (number): (date)
     base.update({"title": _("List {num}: {date}").format(num=period.id, date=fmt_date)})
 
-    return render_to_response('period.html', base)
+    return render_to_response('period.djhtml', base)
 # }}}
 
 # {{{ earnings view
@@ -289,5 +289,5 @@ def earnings(request):
 
     base.update({"title": _("Earnings ranking")})
 
-    return render_to_response('earnings.html', base)
+    return render_to_response('earnings.djhtml', base)
 # }}}

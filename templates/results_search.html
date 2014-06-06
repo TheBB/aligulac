@@ -21,7 +21,7 @@ This is the results search function. Called from ratings.views.results_search.
         {% trans "Date" as date %}
         {% use "daterange" label=date after=searchform.after before=searchform.before %}
         {% field "textarea"     searchform.players      class="wideinput" rows="6" %}
-        {% field "basic"        searchform.event        class="wideinput" %}
+        {% field "basic"        searchform.event        class="wideinput event-ac" %}
         {% if adm %}
             {% field "checkbox"     searchform.unassigned       class="narrowinput" %}
         {% endif %}

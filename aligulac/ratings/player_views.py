@@ -1,4 +1,6 @@
 # {{{ Imports
+import shlex
+
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from functools import partial
@@ -165,6 +167,7 @@ class PlayerModForm(forms.Form):
 class ResultsFilterForm(forms.Form):
     after  = forms.DateField(required=False, label=_('After'))
     before = forms.DateField(required=False, label=_('Before'))
+    event = forms.CharField(required=False, label=_('Event'))
     race   = forms.ChoiceField(
         choices=[
             ('ptzr',  _('All')),
@@ -497,16 +500,41 @@ def results(request, player_id):
 
     if form.cleaned_data['before'] is not None:
         matches = matches.filter(date__lte=form.cleaned_data['before'])
+
+    if form.cleaned_data['event'] is not None:
+        lex = shlex.shlex(form.cleaned_data['event'], posix=True)
+        lex.wordchars += "'"
+        lex.quotes = '"'
+
+        terms = [s.strip() for s in list(lex) if s.strip() != '']
+
+        matches = matches.filter(
+            eventobj__fullname__iregex=(
+                r"\s".join(r".*{}.*".format(term) for term in terms)
+            )
+        )
     # }}}
 
     # {{{ Statistics
-    matches = display_matches(matches, fix_left=player)
-    base['matches'] = matches
+    disp_matches = display_matches(matches, fix_left=player)
+    base['matches'] = disp_matches
     base.update({
         'sc_my':  sum(m['pla']['score'] for m in base['matches']),
         'sc_op':  sum(m['plb']['score'] for m in base['matches']),
         'msc_my': sum(1 for m in base['matches'] if m['pla']['score'] > m['plb']['score']),
         'msc_op': sum(1 for m in base['matches'] if m['plb']['score'] > m['pla']['score']),
+    })
+
+    recent = matches.filter(date__gte=(date.today() - relativedelta(months=2)))
+    base.update({
+        'total': count_winloss_player(matches, player),
+        'vp': count_matchup_player(matches, player, P),
+        'vt': count_matchup_player(matches, player, T),
+        'vz': count_matchup_player(matches, player, Z),
+        'totalf': count_winloss_player(recent, player),
+        'vpf': count_matchup_player(recent, player, P),
+        'vtf': count_matchup_player(recent, player, T),
+        'vzf': count_matchup_player(recent, player, Z)
     })
     # }}}
 
@@ -578,19 +606,17 @@ def results(request, player_id):
 
         return TL_HISTORY_MATCH_TEMPLATE.format(**d)
 
-    recent_matches = matches[:min(10, len(matches))]
+    recent_matches = disp_matches[:min(10, len(disp_matches))]
 
     recent = "\n".join(format_match(m) for m in recent_matches)
 
     recent_form = " ".join("W" if win(m) else "L"
                            for m in reversed(recent_matches))
-    
+
     # Get the parameters and remove those with None value
     get_params = dict((k, form.cleaned_data[k])
                       for k in form.cleaned_data
                       if form.cleaned_data[k] is not None)
-
-    print(get_params)
 
     country = ""
     if player.country is not None:
@@ -618,6 +644,8 @@ def results(request, player_id):
 
     def calc_percent(s):
         f, a = float(int(tl_params[s+"_my"])), int(tl_params[s+"_op"])
+        if f + a == 0:
+            return "  NaN"
         return round(100 * f / (f+a), 2)
 
     tl_params.update({

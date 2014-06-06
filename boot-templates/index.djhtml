@@ -1,29 +1,100 @@
+{% comment %}
+This template defines both the main site layout and the front page. It's extended by all the other templates.
+Changes here will generally be visible on the whole site.
+{% endcomment %}
+
 {% load ratings_extras %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap 101 Template</title>
-
-        <!-- Bootstrap -->
-        <link href="{{"bootstrap.min"|css}}" rel="stylesheet">
-
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <meta charset="UTF-8">
+        <title>Twitter Bootstrap 3 Fixed Layout Example</title>
+        <link rel="stylesheet" href="{{"bootstrap.min"|css}}">
+        <style type="text/css">body { padding-top: 70px; }</style>
     </head>
     <body>
-        <h1>Hello, world!</h1>
+        <div class="container">
+            <h1>Aligulac</h1>
+        </div>
+        <nav id="myNavbar" class="navbar navbar-default navbar-inverse" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Ranking</a></li>
+                        <li><a href="#">Teams</a></li>
+                        <li><a href="#">Records</a></li>
+                        <li><a href="#">Results</a></li>
+                        <li><a href="#">Inference</a></li>
+                        <li><a href="#">Misc</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Submit</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4">
+                    <h2>HTML</h2>
+                    <p>HTML is a markup language that is used for creating web pages. The HTML tutorial section will help you understand the basics of HTML, so that you can create your own web pages or website.</p>
+                    <p><a href="http://www.tutorialrepublic.com/html-tutorial/" target="_blank" class="btn btn-success">Learn More &raquo;</a></p>
+                </div>
+                <div class="col-xs-4">
+                    <h2>CSS</h2>
+                    <p>CSS is used for describing the presentation of web pages. The CSS tutorial section will help you learn the essentials of CSS, so that you can fine control the style and layout of your HTML document.</p>
+                    <p><a href="http://www.tutorialrepublic.com/css-tutorial/" target="_blank" class="btn btn-success">Learn More &raquo;</a></p>
+                </div>
+                <div class="col-xs-4">
+                    <h2>Bootstrap</h2>
+                    <p>Bootstrap is a powerful front-end framework for faster and easier web development. The Bootstrap tutorial section will help you learn the techniques of Bootstrap so that you can quickly create your own website.</p>
+                    <p><a href="http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/" target="_blank" class="btn btn-success">Learn More &raquo;</a></p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    <footer>
+                        <p>
+                            {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
+                            {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
+                                {% blocktrans %}Find us on {{a1}}Twitter</a>, {{a2}}GitHub</a> and <code>#aligulac</code> on quakenet.{% endblocktrans %}
+                            {% endwith %}{% endwith %}
+                        </p>
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+                        <p>
+                            {% with a1="<a target=\"_blank\" href=\"http://www.djangoproject.com/\">" %}
+                            {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
+                            {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
+                            {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
+                                {% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}
+                            {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+                        </p>
+
+                        <p>
+
+                            {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
+                            {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
+                                {% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}
+                            {% endwith %}{% endwith %}
+                        </p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
         <script src="{{"jquery-1.10.2.min"|js}}"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="{{"bootstrap.min"|js}}"></script>
     </body>
-</html>
+</html>                                		

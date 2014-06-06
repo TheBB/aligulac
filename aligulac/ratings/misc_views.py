@@ -477,24 +477,24 @@ def compare(request, players):
     comparisons.append(MatchComparison(
         clean_players, _("Game +/-"), matches, kind="games", pm=True))
 
-    comparisons.append(_("WCS 2014"))
-    matches = Match.objects.symmetric_filter(
-        pla__in=players,
-        eventobj__uplink__parent=23398
-    )
-    comparisons.append(MatchComparison(
-        clean_players, _("Match wins"), matches))
-    comparisons.append(MatchComparison(
-        clean_players, _("Match win %"), matches, percent=True))
-    comparisons.append(MatchComparison(
-        clean_players, _("Match +/-"), matches, pm=True))
-    comparisons.append(None)
-    comparisons.append(MatchComparison(
-        clean_players, _("Game wins"), matches, kind="games"))
-    comparisons.append(MatchComparison(
-        clean_players, _("Game win %"), matches, kind="games", percent=True))
-    comparisons.append(MatchComparison(
-        clean_players, _("Game +/-"), matches, kind="games", pm=True))
+    # comparisons.append(_("WCS 2014"))
+    # matches = Match.objects.symmetric_filter(
+    #     pla__in=players,
+    #     eventobj__uplink__parent=23398
+    # )
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match wins"), matches))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match win %"), matches, percent=True))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match +/-"), matches, pm=True))
+    # comparisons.append(None)
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game wins"), matches, kind="games"))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game win %"), matches, kind="games", percent=True))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game +/-"), matches, kind="games", pm=True))
 
     comparisons.append(_("Other stats"))
     comparisons.append(EarningsComparison(clean_players, _("Earnings")))

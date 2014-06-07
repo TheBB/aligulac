@@ -1,0 +1,136 @@
+/* Title text ('ALIGULAC') and subheading */
+h1 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 60px;
+    letter-spacing: 0.6em;
+    text-align: center;
+    padding-left: 0.7em; /* Required for centering */
+}
+
+.subheading {
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+/* Major headings are in h2 */
+h2 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 2em;
+    font-weight: 400;
+    border-style: none none solid none;
+    border-width: 0.05em;
+    border-color: #e7e7e7;
+}
+
+/* A blacklink is always black and never underlied. */
+a.blacklink {
+    color: #000000;
+}
+
+a.blacklink:hover {
+    text-decoration: none;
+} 
+
+/* Centered navbar */
+@media (min-width: 768px) {
+    .navbar-nav {
+        margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        float: none;
+    }
+} 
+
+.navbar {
+    border-radius: 0;
+    border-style: solid none solid none;
+}
+    
+
+/* Centered footer */
+footer {
+    text-align: center;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    padding-top: 30px;
+}
+
+/* Change the glow around focused input */
+.form-control:focus {
+    border-color: #000000;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+    box-shadow:         inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+}
+
+/* Autocomplete styles */
+.ui-autocomplete {
+    padding: 0.3em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.ui-menu .ui-menu-item a {
+    border-radius: 0;
+}
+
+.autocomp-team {
+    margin-left: 10em; /* So that the team names don't get too close */
+}
+
+.autocomp-player {
+    margin-left: 0.5em; /* So that the player name isn't too close to the race icon */
+}
+
+.autocomp-header {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: #f8f8f8;
+    border-style: solid;
+    border-width: 1px 0px 1px 0px;
+    border-color: #999999;
+    margin-top: 2px;
+}
+
+/* Right-pointing caret */
+.right-caret {
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left: 5px solid #000000;
+    display: inline-block;
+    height: 0;
+    opacity: 0.3;
+    vertical-align: middle;
+    width: 0;
+}
+
+/* Ratinglist table */
+.rl_number {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.rl_arrow {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_name {
+    width: 18em;
+}
+
+.rl_team {
+    width: 8em;
+}
+
+.rl_rating {
+    width: 7%;
+    text-align: right;
+}

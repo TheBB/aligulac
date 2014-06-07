@@ -54,7 +54,9 @@ footer {
 
 body {
     font-family: 'Roboto', sans-serif;
+    font-size: 14px;
     padding-top: 30px;
+    padding-bottom: 80px;
 }
 
 /* Change the glow around focused input */
@@ -133,4 +135,30 @@ body {
 .rl_rating {
     width: 7%;
     text-align: right;
+}
+
+/* Subelements of h2 headings -- make sure the h2 has position: relative; */
+h2.sub {
+    position: relative;
+}
+
+h2.sub > small.right {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    right: 0;
+}
+
+h2.sub > .left {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    margin-left: 1em;
+}
+
+/* Wrap paragraphs in a div.text to make them justified */
+div.text > p {
+    text-align: justify;
 }

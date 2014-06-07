@@ -91,7 +91,12 @@ Changes here will generally be visible on the whole site.
                         <p>{% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}</p>
                     {% endif %}
                 </div>
+
+                {% comment %}{% include "messages.djhtml" %}{% endcomment %}
+                {% include "blogposts.djhtml" %}
             {% endblock %}
+
+            <!-- Footer -->
             <hr>
             <div class="row">
                 <div class="col-xs-12">

@@ -92,7 +92,7 @@ Changes here will generally be visible on the whole site.
                     {% endif %}
                 </div>
 
-                {% comment %}{% include "messages.djhtml" %}{% endcomment %}
+                {% include "messages.djhtml" %}
                 {% include "blogposts.djhtml" %}
             {% endblock %}
 
@@ -119,7 +119,7 @@ Changes here will generally be visible on the whole site.
                             <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
                         {% endwith %}{% endwith %}
 
-                        <a href="#" onclick="gen_short('{{cur_path}}');" class="btn btn-info" id="gen_short">
+                        <a href="#" onclick="gen_short('{{cur_path}}'); return false;" class="btn btn-info" id="gen_short">
                             {% trans "Generate short URL for this page" %}
                         </a>
                         <span id="disp_short"></span>

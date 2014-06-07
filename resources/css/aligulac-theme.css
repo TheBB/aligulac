@@ -162,3 +162,34 @@ h2.sub > .left {
 div.text > p {
     text-align: justify;
 }
+
+/* Styles for message boxes */
+.message {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0.5em;
+}
+
+.message > img {
+    margin-right: 1em;
+}
+
+.m-success {
+    background: #dff0d8;
+    border-color: #c1e2b3;
+}
+
+.m-warning {
+    background: #fcf8e3;
+    border-color: #f7ecb5;
+}
+
+.m-info {
+    background: #d9edf7;
+    border-color: #afd9ee;
+}
+
+.m-error {
+    background: #f2dede;
+    border-color: #e4b9b9;
+}

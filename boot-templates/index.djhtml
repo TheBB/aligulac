@@ -22,12 +22,16 @@ Changes here will generally be visible on the whole site.
         <div class="container">
             <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
             {% if debug %}
-                <p class="subheading" style="color: red; font-weight: bold;">{% trans "DEVELOPMENT SERVER" %}</p>
+                <p class="subheading" style="color: red; font-weight: bold;">
+                    <span class="visible-lg">{% trans "DEVELOPMENT SERVER" %} (LARGE)</span>
+                    <span class="visible-md">{% trans "DEVELOPMENT SERVER" %} (MEDIUM)</span>
+                    <span class="visible-sm">{% trans "DEVELOPMENT SERVER" %} (SMALL)</span>
+                    <span class="visible-xs">{% trans "DEVELOPMENT SERVER" %} (EXTRA SMALL)</span>
+                </p>
             {% else %}
                 <p class="subheading text-muted">{% trans "StarCraft 2 Progaming Statistics and Predictions" %}</p>
             {% endif %}
         </div>
-
 
         <!-- Navigation bar -->
         <nav class="navbar navbar-default" role="navigaton">
@@ -66,31 +70,34 @@ Changes here will generally be visible on the whole site.
         <div class="container">
             <!-- Language picker and search -->
             <div class="row">
-                <div class="col-xs-4 text-muted">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-muted">
                     {% trans "Language" %}:
                     <a href="/language/"><img src="{{ lang|img:"flags" }}"></a>
                 </div>
-                <div class="col-xs-8 text-right text-muted">
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">
                     <form class="form-inline" role="form" action="/search/" method="get">
-                        <div class="form_group">
-                            <label for="search_box">{% trans "Find player, team or event" %}:</label>
-                            <input class="form-control" type="text" name="q" id="search_box" style="width: 50%">
+                        <div class="form-group">
+                            <input class="form-control input-sm" type="text" name="q" id="search_box" placeholder="{% trans "Find player, team or event" %}" style="width: 30em;">
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- Main content -->
+            {% if title %}
+                <h2>{{ title }}</h2>
+            {% endif %}
             {% block content %}
-                <div class="row">
-                    <h2>{% trans "Current top 10" %}</h2>
+                <h2>{% trans "Current top 10" %}</h2>
+                {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
 
-                    {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
-
-                    {% if curp.is_preview %}
-                        <p>{% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}</p>
-                    {% endif %}
-                </div>
+                {% if curp.is_preview %}
+                    <div class="row">
+                        <p class="pull-right text-muted">
+                            {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}
+                        </p>
+                    </div>
+                {% endif %}
 
                 {% include "messages.djhtml" %}
                 {% include "blogposts.djhtml" %}

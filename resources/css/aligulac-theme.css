@@ -125,16 +125,17 @@ body {
 }
 
 .rl_name {
-    width: 18em;
+    width: 25%;
 }
 
 .rl_team {
-    width: 8em;
+    width: 20%;
 }
 
 .rl_rating {
-    width: 7%;
+    width: 8%;
     text-align: right;
+    padding-left: 1em;
 }
 
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
@@ -168,6 +169,8 @@ div.text > p {
     border-style: solid;
     border-width: 1px;
     padding: 0.5em;
+    border-radius: 1em;
+    margin-bottom: 0.5em;
 }
 
 .message > img {
@@ -179,9 +182,17 @@ div.text > p {
     border-color: #c1e2b3;
 }
 
+.m-success:hover {
+    background-color: #c1e2b3;
+}
+
 .m-warning {
     background: #fcf8e3;
     border-color: #f7ecb5;
+}
+
+.m-warning:hover {
+    background-color: #f7ecb5;
 }
 
 .m-info {
@@ -189,7 +200,32 @@ div.text > p {
     border-color: #afd9ee;
 }
 
+.m-info:hover {
+    background-color: #afd9ee;
+}
+
 .m-error {
     background: #f2dede;
     border-color: #e4b9b9;
+}
+
+.m-error:hover {
+    background-color: #e4b9b9;
+}
+
+/* Class for inline form labels, help spacing */
+.inline-label {
+    margin-left: 1em;
+    margin-right: 0.2em;
+}
+
+/* Infobox tables */
+.ibox-left {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #e7e7e7;
+}
+
+.player img, .ui-corner-all img {
+    padding-right: 0.3em;
 }

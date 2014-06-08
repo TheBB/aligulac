@@ -4,20 +4,20 @@
  */
 
 function toggle_navbar_method() {
-    // 768 pixels is the bootstrap limit for small devices that typically rely on
-    // touchscreens. Only enable hovering on click devices.
-    if ($(window).width() > 768) {
+    // Only enable hovering on click devices.
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            $(window).width() <= 768) {
+        $('.navbar .dropdown').off('mouseover').off('mouseout');
+    } else {
         $('.navbar .dropdown').on('mouseover', function () {
             $('.dropdown-toggle', this).trigger('click');
         }).on('mouseout', function () {
             $('.dropdown-toggle', this).trigger('click').blur();
         });
-    } else {
-        $('.navbar .dropdown').off('mouseover').off('mouseout');
     }
 }
 toggle_navbar_method();
-$(window).resize(toggle_navbar_method);
+//$(window).resize(toggle_navbar_method);
 
 
 /* ======================================================================
@@ -126,6 +126,7 @@ $(document).ready(function () {
             }); 
         },
         minLength: 2,
+        position: { my: "right top", at: "right bottom", collision: "none" },
         select: function (event, ui) {
             $('#search_box').val(ui.item.key)
                             .closest('form')

@@ -14,213 +14,215 @@ arguments:
 {% load ratings_extras %}
 {% load i18n %}
 
-{% comment %}{% include "periodpagenav.html" %}{% endcomment %}
+{% include "periodpagenav.djhtml" %}
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <!-- Rank -->
-                <th class="rl_number">{% trans "#" %}</th>
-
-                <!-- Up/down icon for rank -->
-                <th class="rl_icon"></th>
-
-                <!-- Flag icon -->
-                <th class="rl_icon"></th>
-
-                <!-- Race icon -->
-                <th class="rl_icon"></th>
-
-                <!-- Player name -->
-                <th class="rl_name">{% trans "Name" %}</th>
-
-                <!-- Team -->
-                <th class="rl_team">{% if displayteams %}{% trans "Team" %}{% endif %}</th>
-
-                <!-- Rating -->
-                <th class="rl_rating">
-                    {% if sortable %}
-                        <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}">
-                            {% trans "Rating" %} <span class="caret"></span>
-                        </a>
-                    {% else %}
-                        {% trans "Rating" %}
-                    {% endif %}
-                </th>
-
-                <!-- Up/down icon for rating -->
-                <th class="rl_icon"></th>
-
-                <!-- Rating vP -->
-                <th class="rl_rating">
-                    {% if sortable %}
-                        <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vp">
-                            {% trans "vP" %} <span class="caret"></span>
-                        </a>
-                    {% else %}
-                        {% trans "vP" %}
-                    {% endif %}
-                </th>
-
-                <!-- Up/down icon for rating vP -->
-                <th class="rl_icon"></th>
-
-                <!-- Rating vT -->
-                <th class="rl_rating">
-                    {% if sortable %}
-                        <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vt">
-                            {% trans "vT" %} <span class="caret"></span>
-                        </a>
-                    {% else %}
-                        {% trans "vT" %}
-                    {% endif %}
-                </th>
-
-                <!-- Up/down icon for rating vT -->
-                <th class="rl_icon"></th>
-
-                <!-- Rating vZ -->
-                <th class="rl_rating">
-                    {% if sortable %}
-                        <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vz">
-                            {% trans "vZ" %} <span class="caret"></span>
-                        </a>
-                    {% else %}
-                        {% trans "vZ" %}
-                    {% endif %}
-                </th>
-
-                <!-- Up/down icon for rating vZ -->
-                <th class="rl_icon"></th>
-
-                <!-- Link to adjustments -->
-                <th class="rl_arrow"></th>
-            </tr>
-        </thead>
-        {% if entries %}
-            {% for entry in entries %}
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
                     <!-- Rank -->
-                    <td class="rl_number">
-                        {% if starcount %}
-                            {{ forloop.counter|add:startcount }}
-                        {% else %}
-                            {{ forloop.counter }}
-                        {% endif %}
-                    </td>
+                    <th class="rl_number">{% trans "#" %}</th>
 
                     <!-- Up/down icon for rank -->
-                    <td class="rl_icon">
-                        {% if entry.position and entry.prev.position and rl_pos_arrow %}
-                            {% if entry.prev.position < entry.position %}
-                                <img src="{{"downarrow"|img}}" alt="down"
-                                     title="{{entry.prev.position|sub:entry.position|signify}}">
-                            {% elif entry.prev.position > entry.position %}
-                                <img src="{{"uparrow"|img}}" alt="down"
-                                     title="{{entry.prev.position|sub:entry.position|signify}}">
-                            {% endif %}
-                        {% elif rl_pos_arrow %}
-                            <img src="{{"new"|img}}" alt="new">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon hidden-xs"></th>
 
                     <!-- Flag icon -->
-                    <td class="rl_icon">
-                        {% if entry.player.country %}
-                            <img src="{{entry.player.country|lower|img:"flags"}}" alt="{{entry.player.country}}">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon"></th>
 
                     <!-- Race icon -->
-                    <td class="rl_icon">
-                        <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}">
-                    </td>
+                    <th class="rl_icon"></th>
 
-                    <!-- Player name  -->
-                    <td class="rl_name">
-                        <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/">
-                            {{entry.player.tag}}
-                        </a>
-                    </td>
+                    <!-- Player name -->
+                    <th class="rl_name">{% trans "Name" %}</th>
 
-                    <!-- Team  -->
-                    <td class="rl_team">
-                        {% if displayteams and entry.team %}
-                            <a href="/teams/{{entry.teamid}}-{{entry.teamfull|urlfilter}}/">
-                                {{entry.team}}
-                            </a>
-                        {% endif %}
-                    </td>
+                    <!-- Team -->
+                    <th class="rl_team">{% if displayteams %}{% trans "Team" %}{% endif %}</th>
 
                     <!-- Rating -->
-                    <td class="rl_rating">
-                        {{entry.rating|ratscale}}
-                    </td>
+                    <th class="rl_rating">
+                        {% if sortable %}
+                            <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}">
+                                {% trans "Rating" %} <span class="caret"></span>
+                            </a>
+                        {% else %}
+                            {% trans "Rating" %}
+                        {% endif %}
+                    </th>
 
                     <!-- Up/down icon for rating -->
-                    <td class="rl_icon">
-                        {% if entry.prev %}
-                            <img src="{{entry.rating_diff|makearrows|img}}"
-                                 title="{{entry.rating_diff|ratscalediff|signify}}">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon hidden-xs"></th>
 
                     <!-- Rating vP -->
-                    <td class="rl_rating">
-                        {{entry.rating_vp|addf:entry.rating|ratscale}}
-                    </td>
+                    <th class="rl_rating">
+                        {% if sortable %}
+                            <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vp">
+                                {% trans "vP" %} <span class="caret"></span>
+                            </a>
+                        {% else %}
+                            {% trans "vP" %}
+                        {% endif %}
+                    </th>
 
                     <!-- Up/down icon for rating vP -->
-                    <td class="rl_icon">
-                        {% if entry.prev %}
-                            <img src="{{entry.rating_diff_vp|makearrows|img}}"
-                                 title="{{entry.rating_diff_vp|ratscalediff|signify}}">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon hidden-xs"></th>
 
                     <!-- Rating vT -->
-                    <td class="rl_rating">
-                        {{entry.rating_vt|addf:entry.rating|ratscale}}
-                    </td>
+                    <th class="rl_rating">
+                        {% if sortable %}
+                            <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vt">
+                                {% trans "vT" %} <span class="caret"></span>
+                            </a>
+                        {% else %}
+                            {% trans "vT" %}
+                        {% endif %}
+                    </th>
 
                     <!-- Up/down icon for rating vT -->
-                    <td class="rl_icon">
-                        {% if entry.prev %}
-                            <img src="{{entry.rating_diff_vt|makearrows|img}}"
-                                 title="{{entry.rating_diff_vt|ratscalediff|signify}}">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon hidden-xs"></th>
 
                     <!-- Rating vZ -->
-                    <td class="rl_rating">
-                        {{entry.rating_vz|addf:entry.rating|ratscale}}
-                    </td>
+                    <th class="rl_rating">
+                        {% if sortable %}
+                            <a href="?page={{page}}&amp;race={{race}}&amp;nats={{nats}}&amp;sort=vz">
+                                {% trans "vZ" %} <span class="caret"></span>
+                            </a>
+                        {% else %}
+                            {% trans "vZ" %}
+                        {% endif %}
+                    </th>
 
                     <!-- Up/down icon for rating vZ -->
-                    <td class="rl_icon">
-                        {% if entry.prev %}
-                            <img src="{{entry.rating_diff_vz|makearrows|img}}"
-                                 title="{{entry.rating_diff_vz|ratscalediff|signify}}">
-                        {% endif %}
-                    </td>
+                    <th class="rl_icon hidden-xs"></th>
 
                     <!-- Link to adjustments -->
-                    <td class="rl_arrow">
-                        {% if entry.decay == 0 %}
-                            <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/period/{{entry.period.id}}/">
-                                <span class="right-caret"></span>
-                            </a>
-                        {% endif %}
-                    </td>
+                    <th class="rl_arrow hidden-xs"></th>
                 </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="15">{% trans "No entries found." %}</td>
-            </tr>
-        {% endif %}
-    </table>
+            </thead>
+            {% if entries %}
+                {% for entry in entries %}
+                    <tr>
+                        <!-- Rank -->
+                        <td class="rl_number">
+                            {% if starcount %}
+                                {{ forloop.counter|add:startcount }}
+                            {% else %}
+                                {{ forloop.counter }}
+                            {% endif %}
+                        </td>
+
+                        <!-- Up/down icon for rank -->
+                        <td class="rl_icon hidden-xs">
+                            {% if entry.position and entry.prev.position and rl_pos_arrow %}
+                                {% if entry.prev.position < entry.position %}
+                                    <img src="{{"downarrow"|img}}" alt="down"
+                                         title="{{entry.prev.position|sub:entry.position|signify}}">
+                                {% elif entry.prev.position > entry.position %}
+                                    <img src="{{"uparrow"|img}}" alt="down"
+                                         title="{{entry.prev.position|sub:entry.position|signify}}">
+                                {% endif %}
+                            {% elif rl_pos_arrow %}
+                                <img src="{{"new"|img}}" alt="new">
+                            {% endif %}
+                        </td>
+
+                        <!-- Flag icon -->
+                        <td class="rl_icon">
+                            {% if entry.player.country %}
+                                <img src="{{entry.player.country|lower|img:"flags"}}" alt="{{entry.player.country}}">
+                            {% endif %}
+                        </td>
+
+                        <!-- Race icon -->
+                        <td class="rl_icon">
+                            <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}">
+                        </td>
+
+                        <!-- Player name  -->
+                        <td class="rl_name">
+                            <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/">
+                                {{entry.player.tag}}
+                            </a>
+                        </td>
+
+                        <!-- Team  -->
+                        <td class="rl_team">
+                            {% if displayteams and entry.team %}
+                                <a href="/teams/{{entry.teamid}}-{{entry.teamfull|urlfilter}}/">
+                                    {{entry.team}}
+                                </a>
+                            {% endif %}
+                        </td>
+
+                        <!-- Rating -->
+                        <td class="rl_rating">
+                            {{entry.rating|ratscale}}
+                        </td>
+
+                        <!-- Up/down icon for rating -->
+                        <td class="rl_icon hidden-xs">
+                            {% if entry.prev %}
+                                <img src="{{entry.rating_diff|makearrows|img}}"
+                                     title="{{entry.rating_diff|ratscalediff|signify}}">
+                            {% endif %}
+                        </td>
+
+                        <!-- Rating vP -->
+                        <td class="rl_rating">
+                            {{entry.rating_vp|addf:entry.rating|ratscale}}
+                        </td>
+
+                        <!-- Up/down icon for rating vP -->
+                        <td class="rl_icon hidden-xs">
+                            {% if entry.prev %}
+                                <img src="{{entry.rating_diff_vp|makearrows|img}}"
+                                     title="{{entry.rating_diff_vp|ratscalediff|signify}}">
+                            {% endif %}
+                        </td>
+
+                        <!-- Rating vT -->
+                        <td class="rl_rating">
+                            {{entry.rating_vt|addf:entry.rating|ratscale}}
+                        </td>
+
+                        <!-- Up/down icon for rating vT -->
+                        <td class="rl_icon hidden-xs">
+                            {% if entry.prev %}
+                                <img src="{{entry.rating_diff_vt|makearrows|img}}"
+                                     title="{{entry.rating_diff_vt|ratscalediff|signify}}">
+                            {% endif %}
+                        </td>
+
+                        <!-- Rating vZ -->
+                        <td class="rl_rating">
+                            {{entry.rating_vz|addf:entry.rating|ratscale}}
+                        </td>
+
+                        <!-- Up/down icon for rating vZ -->
+                        <td class="rl_icon hidden-xs">
+                            {% if entry.prev %}
+                                <img src="{{entry.rating_diff_vz|makearrows|img}}"
+                                     title="{{entry.rating_diff_vz|ratscalediff|signify}}">
+                            {% endif %}
+                        </td>
+
+                        <!-- Link to adjustments -->
+                        <td class="rl_arrow hidden-xs">
+                            {% if entry.decay == 0 %}
+                                <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/period/{{ entry.period.id }}/">
+                                    <span class="right-caret"></span>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="15">{% trans "No entries found." %}</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
 </div>
 
-{% comment %}{% include "periodpagenav.html" %}{% endcomment %}
+{% include "periodpagenav.djhtml" %}

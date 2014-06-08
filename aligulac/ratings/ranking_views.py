@@ -124,8 +124,7 @@ def period(request, period_id=None):
         .order_by('diff')
 
     base.update({
-        'gainers': gainers[:5],
-        'losers': losers[:5]
+        'updown': zip(gainers[:5], losers[:5])
     })
     # }}}
 
@@ -189,12 +188,23 @@ def period(request, period_id=None):
     page = min(max(page, 1), npages)
     entries = entries[(page-1)*pagesize : page*pagesize] if page > 0 else []
 
+    pn_start, pn_end = page - 2, page + 2
+    if pn_start < 1:
+        pn_end += 1 - pn_start
+        pn_start = 1
+    if pn_end > npages:
+        pn_start -= pn_end - npages
+        pn_end = npages
+    if pn_start < 1:
+        pn_end = npages
+
     base.update({
         'page':       page,
         'npages':     npages,
         'startcount': (page-1)*pagesize,
         'entries':    populate_teams(entries),
         'nperiods':   Period.objects.filter(computed=True).count(),
+        'pn_range':   range(pn_start, pn_end+1),
     })
     # }}}
 

@@ -19,6 +19,9 @@ Changes here will generally be visible on the whole site.
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     </head>
     <body>
+        <!-- Modals, if any -->
+        {% block modals %}{% endblock %}
+
         <!-- Heading and subheading -->
         <div class="container">
             <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
@@ -85,9 +88,6 @@ Changes here will generally be visible on the whole site.
             </div>
 
             <!-- Main content -->
-            {% if title %}
-                <h2>{{ title }}</h2>
-            {% endif %}
             {% block content %}
                 <h2>{% trans "Current top 10" %}</h2>
                 {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
@@ -127,7 +127,7 @@ Changes here will generally be visible on the whole site.
                             <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
                         {% endwith %}{% endwith %}
 
-                        <a href="#" onclick="gen_short('{{cur_path}}'); return false;" class="btn btn-info" id="gen_short">
+                        <a href="#" onclick="gen_short('{{cur_path}}'); return false;" class="btn btn-default" id="gen_short">
                             {% trans "Generate short URL for this page" %}
                         </a>
                         <span id="disp_short"></span>
@@ -147,6 +147,8 @@ Changes here will generally be visible on the whole site.
              'Players': '{% trans "Players" %}',
              'Teams': '{% trans "Teams" %}',
              'Events': '{% trans "Events" %}',
+             'hide': '{% trans "hide" %}',
+             'show': '{% trans "show" %}',
          };
         </script>
         <script type="text/javascript" src="{{"aligulac"|js}}"></script>

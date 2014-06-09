@@ -12,18 +12,25 @@ ratings.submitviews.add_matches.
 {% block title %}{% trans "Submit results" %}{% endblock %}
 
 {% block content %}
+
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <h2>{% trans "Submit results" %}</h2>
+        </div>
+    </div>
+
     {% include "messages.djhtml" %}
 
     {% if matches %}
-    <p>
-    {% trans "The following entries were successfully submitted" %}{% if adm %}:{% else %}.
-    {% trans "They are pending review before being visible." %}{% endif %}
-    </p>
-    <table class="results">
-        {% comment %}
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" %}
-        {% endcomment %}
-    </table>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+                <p>
+                    {% trans "The following entries were successfully submitted" %}{% if adm %}:{% else %}.
+                    {% trans "They are pending review before being visible." %}{% endif %}
+                </p>
+            </div>
+        </div>
+        {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" %}
     {% endif %}
 
     <div class="row" style="padding-bottom: 2em;">
@@ -171,13 +178,13 @@ Keen-Roro 0-2</pre>
                 {% field "date" form.date style="full-mid" %}
                 {% field "select" form.game style="full-mid" %}
                 {% field "checkbox" form.offline style="full-mid" %}
-                {% field "basic" form.source style="full-mid" %}
-                {% field "basic" form.contact style="full-mid" %}
                 {% if not adm %}
+                    {% field "basic" form.source style="full-mid" %}
+                    {% field "basic" form.contact style="full-mid" %}
                     {% field "textarea" form.notes style="full-mid" rows="5" %}
                 {% endif %}
                 {% field "textarea" form.matches style="full-mid" rows="15" %}
-                <div class="form-group {{"full-mid"|formdiv}}">
+                <div class="form-group text-right {{"full-mid"|formdiv}}">
                     {% trans "Commit" as commit %}
                     {% trans "Commit and close event" as commitclose %}
                     {% use "submit" name="commit" text=commit %}

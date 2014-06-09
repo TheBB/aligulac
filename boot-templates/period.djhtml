@@ -11,6 +11,13 @@ This template shows a rating list for a given period.
 
 {% block content %}
 
+<div class="row">
+    <h2>
+        {% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}:
+        {{period.end|cdate:_('F jS, Y')}}
+    </h2>
+</div>
+
 {% include "messages.djhtml" %}
 
 <div class="row">
@@ -376,7 +383,7 @@ This template shows a rating list for a given period.
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-default input-sm">{% trans "Filter" %}</button>
+        <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
     </form>
 </div>
 

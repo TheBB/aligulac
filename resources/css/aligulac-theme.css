@@ -14,12 +14,20 @@ h1 {
 
 /* Major headings are in h2 */
 h2 {
-    font-family: 'Marcellus SC', Times, serif;
     font-size: 2em;
     font-weight: 400;
     border-style: none none solid none;
     border-width: 0.05em;
     border-color: #e7e7e7;
+    font-variant: small-caps;
+}
+
+/* Subheadings */
+h3 {
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    font-variant: small-caps;
 }
 
 /* A blacklink is always black and never underlied. */
@@ -84,10 +92,6 @@ body {
 
 .autocomp-team {
     margin-left: 10em; /* So that the team names don't get too close */
-}
-
-.autocomp-player {
-    margin-left: 0.5em; /* So that the player name isn't too close to the race icon */
 }
 
 .autocomp-header {
@@ -185,6 +189,51 @@ body {
     width: 15%;
 }
     
+/* Match table */
+.lm_date {
+    width: 17%;
+}
+
+.lm_rta {
+    text-align: right;
+    width: 5em;
+}
+
+.lm_pla {
+    text-align: right;
+    width: 23%;
+}
+
+.lm_score {
+    width: 7em;
+    text-align: center;
+}
+
+.lm_plb {
+    width: 23%;
+}
+
+.lm_rtb {
+    text-align: right;
+    width: 5em;
+}
+
+.lm_right {
+    text-align: right;
+    width: 17%;
+}
+
+.eventheader {
+    background: #f5f5f5;
+}
+
+.eventheader-mid {
+    font-size: 1.1em;
+}
+
+.eventheader-right {
+    font-variant: small-caps;
+}
 
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
 h2.sub {
@@ -197,6 +246,7 @@ h2.sub > small.right {
     position: absolute;
     bottom: 0.2em;
     right: 0;
+    font-variant: normal;
 }
 
 h2.sub > .left {
@@ -278,6 +328,11 @@ div.text > ul > li {
     border-right-color: #e7e7e7;
 }
 
-.player img, .ui-corner-all img {
+/* Keep race and flag icons apart */
+.player img, .ui-corner-all img, .lm_plb img {
     padding-right: 0.3em;
+}
+
+.lm_pla img {
+    padding-left: 0.3em;
 }

@@ -11,6 +11,7 @@ This is the template for the historical overview page, showing all the ranking l
 
 {% block content %}
     <div class="row">
+        <h2>{% trans "Historical overview" %}</h2>
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>

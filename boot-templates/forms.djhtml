@@ -139,7 +139,7 @@
 {% block submit %}
 {% trans "Submit" as submit %}
     <button type="submit"
-            class="btn btn-default"
+            class="btn btn-primary"
             name="{{name|default:"op"}}"
             {% if onclick %}onclick="{{onclick}}"{% endif %}
             {% if id %}id="{{id}}"{% endif %}

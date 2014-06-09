@@ -464,7 +464,8 @@ class APIKeyForm(forms.Form):
         key.generate_key()
         key.save()
 
-        ret.append(Message(_("Your API key is '%s'. Please keep it safe.") % key.key, type=Message.SUCCESS))
+        ret.append(Message(
+            _("Your API key is <code>%s</code>. Please keep it safe.") % key.key, type=Message.SUCCESS))
 
         return ret
     # }}}

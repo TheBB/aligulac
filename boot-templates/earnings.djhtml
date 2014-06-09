@@ -12,6 +12,7 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% block content %}
     <div class="row">
+        <h2>{% trans "Earnings ranking" %}</h2>
         <p>
             {% if not empty %}
                 {% with year=filters.year origpp=totalorigprizepool|add_sep_and_cur:filters.currency %}
@@ -31,6 +32,7 @@ This is the template for the earnings of a player. It's called from ratings.view
             {% endif %}
         </p>
     </div>
+
     <div class="row">
         <form class="form-inline pull-right" role="form" method="get" action="/earnings/">
             <input type="hidden" name="page" value="{{ page }}" />

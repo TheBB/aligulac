@@ -431,6 +431,16 @@ def tomorrow(value):
 def yesterday(value):
     return value - timedelta(1)
 
+# prevweek: Skips one week back.
+@register.filter
+def prevweek(value):
+    return value - relativedelta(weeks=1)
+
+# nextweek: Skips one week forward.
+@register.filter
+def nextweek(value):
+    return value + relativedelta(weeks=1)
+
 # nextmonth: Skips one month forward.
 @register.filter
 def nextmonth(value):

@@ -55,7 +55,7 @@ var autocomp_templates = function (object) {
             team = object.teams[0][0];
             team = '<span class="autocomp-team pull-right">' + team + '</span>';
         }
-        return '<a>{flag}<img src="{race}"><span class="autocomp-player">{name}</span>{team}</a>'
+        return '<a>{flag}<img src="{race}"><span>{name}</span>{team}</a>'
                .replace('{flag}', object.country ?
                     '<img src="' + flags_dir + object.country.toLowerCase() + '.png">' :
                     '<img src="' + races_dir + 'trans.png">')
@@ -141,3 +141,16 @@ $(document).ready(function () {
                              .appendTo(ul);
     };
 });
+
+/* ======================================================================
+ * MATCH LISTS
+ * ======================================================================
+ */
+
+var toggle_block = function (id) {
+    $('#lm-' + id).toggle();
+    $('#lma-' + id).html(
+        $('#lma-' + id).html() == autocomp_strings['hide'] ?
+        autocomp_strings['show'] : autocomp_strings['hide']
+    );
+};

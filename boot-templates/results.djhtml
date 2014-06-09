@@ -1,0 +1,118 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This page shows the results by date. Called from ratings.views.results.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+{% load l10n %}
+
+{% block title %}
+    {% blocktrans with date=td|cdate:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h2>
+            {% blocktrans with date=td|cdate:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
+        </h2>
+    </div>
+    
+    <div class="row">
+        <form class="form-inline pull-right" role="form" method="get">
+            <div class="form-group">
+                <label for="d" class="inline-label">{% trans "Go to date:" %}</label>
+                <input type="text" id="d" name="d" value="{{td|date:"Y-m-d"}}" class="form-control input-sm">
+                <button type="submit" class="btn btn-primary input-sm">{% trans "Go" %}</button>
+            </div>
+        </form>
+        <script type="text/javascript">
+         $(document).ready(function () { $("#d").datepicker(); });
+        </script>
+    </div>
+
+    <div class="row text-center">
+        <ul class="pagination">
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|prevmonth|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "month" %}
+                </a>
+            </li>
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|prevweek|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "week" %}
+                </a>
+            </li>
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "day" %}
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "day" %} &raquo;
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|nextweek|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "week" %} &raquo;
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|nextmonth|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "month" %} &raquo;
+                </a>
+            </li>
+        </ul>
+    </div>
+
+{% if matches %}
+    {% include "matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
+
+    <div class="row text-center">
+        <ul class="pagination">
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|prevmonth|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "month" %}
+                </a>
+            </li>
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|prevweek|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "week" %}
+                </a>
+            </li>
+            <li {% if td == mindate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">
+                    &laquo; {% trans "day" %}
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "day" %} &raquo;
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|nextweek|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "week" %} &raquo;
+                </a>
+            </li>
+            <li {% if td == maxdate %}class="disabled"{% endif %}>
+                <a href="/results/?d={{td|nextmonth|datemin:maxdate|date:"Y-m-d"}}">
+                    {% trans "month" %} &raquo;
+                </a>
+            </li>
+        </ul>
+    </div>
+{% else %}
+    <div class="row text-center">
+        <p>{% blocktrans %}No registered results on this date.{% endblocktrans %}</p>
+    </div>
+{% endif %}
+
+<div class="row text-center">
+    <p>
+        {% blocktrans with a="<a href=\"/add/\">" %}Notice something missing? We're always looking for people to help {{a}}populate our database</a>!{% endblocktrans %}
+    </p>
+</div>
+{% endblock %}

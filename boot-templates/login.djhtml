@@ -6,6 +6,7 @@ ratings.submit_views.)
 {% endcomment %}
 
 {% load i18n %}
+{% load ratings_extras %}
 
 {% block title %}{% trans "Login" %}{% endblock %}
 
@@ -18,28 +19,28 @@ ratings.submit_views.)
     </div>
 
     <div class="row">
-        <form class="form-horizontal" role="form" method="post" action="/add/">
+        <form role="form" method="post" action="/add/">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="username" class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-1 col-sm-2 col-xs-2 control-label">
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <label for="username" class="control-label {{"full-mid"|formlabel}}">
                     {% trans "Username" %}
                 </label>
-                <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10">
+                <div class="{{"full-mid"|forminput}}">
                     <input type="text" name="username" id="username" placeholder="{% trans "Username" %}" class="form-control">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="username" class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-1 col-sm-2 col-xs-2 control-label">
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <label for="username" class="control-label {{"full-mid"|formlabel}}">
                     {% trans "Password" %}
                 </label>
-                <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10">
+                <div class="{{"full-mid"|forminput}}">
                     <input type="password" name="password" id="password" placeholder="{% trans "Password" %}" class="form-control">
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-lg-6 col-lg-offset-4 col-md-8 col-md-offset-3 col-sm-10 col-xs-10">
-                    <button type="submit" class="btn btn-default">{% trans "Login" %}</button>
-                </div>
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <button type="submit" class="btn btn-default">
+                    {% trans "Login" %}
+                </button>
             </div>
         </form>
     </div>

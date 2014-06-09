@@ -138,6 +138,22 @@ body {
     padding-left: 1em;
 }
 
+/* Historical overview table */
+.ho_icon {
+    width: 13%;
+    text-align: right;
+}
+
+.ho_pctg {
+    width: 2em;
+    text-align: right;
+}
+
+.ho_num {
+    width: 13%;
+    text-align: right;
+}
+
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
 h2.sub {
     position: relative;

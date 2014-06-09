@@ -51,7 +51,7 @@ Changes here will generally be visible on the whole site.
             <div class="collapse navbar-collapse" id="main-menu">
                 <ul class="nav navbar-nav">
                     {% for main in menu %}
-                        <li class="dropdown {% if curpage == main.id %}menucur{% endif %}">
+                        <li class="dropdown {% if curpage == main.id %}active{% endif %}">
                             <a href="{{ main.url }}" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ main.name }} <span class="caret"></span>
                             </a>

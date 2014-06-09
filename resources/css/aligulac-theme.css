@@ -154,6 +154,33 @@ body {
     text-align: right;
 }
 
+/* Earnings table */
+.ea_number {
+    width: 2em;
+    text-align: right;
+}
+
+.ea_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.ea_name {
+}
+
+.ea_team {
+}
+
+.ea_earnings {
+    text-align: right;
+    width: 10em;
+}
+
+.ea_flush {
+    width: 15%;
+}
+    
+
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
 h2.sub {
     position: relative;

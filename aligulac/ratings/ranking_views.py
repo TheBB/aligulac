@@ -275,10 +275,21 @@ def earnings(request):
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
 
+    pn_start, pn_end = page - 2, page + 2
+    if pn_start < 1:
+        pn_end += 1 - pn_start
+        pn_start = 1
+    if pn_end > npages:
+        pn_start -= pn_end - npages
+        pn_end = npages
+    if pn_start < 1:
+        pn_end = npages
+
     base.update({
         'page':       page,
         'npages':     npages,
         'startcount': (page-1)*pagesize,
+        'pn_range':   range(pn_start, pn_end+1)
     })
 
     if nitems > 0:

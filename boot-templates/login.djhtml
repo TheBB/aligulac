@@ -1,0 +1,46 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+Login template. Called from any admin-specific page if the user is not logged in. (Mostly in
+ratings.submit_views.)
+{% endcomment %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+{% include "messages.djhtml" %}
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <p>{% blocktrans with email="evfonn(at)gmail(dot)com" %}To submit results, please log in with your submitter account. If you don't have a submitter account, but still want to contribute, please let me know at: {{ email }}.{% endblocktrans %}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <form class="form-horizontal" role="form" method="post" action="/add/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username" class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-1 col-sm-2 col-xs-2 control-label">
+                    {% trans "Username" %}
+                </label>
+                <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10">
+                    <input type="text" name="username" id="username" placeholder="{% trans "Username" %}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username" class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-1 col-sm-2 col-xs-2 control-label">
+                    {% trans "Password" %}
+                </label>
+                <div class="col-lg-6 col-md-8 col-sm-10 col-xs-10">
+                    <input type="password" name="password" id="password" placeholder="{% trans "Password" %}" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6 col-lg-offset-4 col-md-8 col-md-offset-3 col-sm-10 col-xs-10">
+                    <button type="submit" class="btn btn-default">{% trans "Login" %}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

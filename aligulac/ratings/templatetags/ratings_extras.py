@@ -585,3 +585,25 @@ def event(value):
         "</a>").format(id=value.id,
                        name=value.fullname,
                        safename=urlfilter(value.fullname)))
+
+# Creates form classes
+@register.filter
+def formlabel(value):
+    if value == 'full-mid':
+        return ''
+    else: # full
+        return ''
+
+@register.filter
+def forminput(value):
+    if value == 'full-mid':
+        return ''
+    else: # full
+        return ''
+
+@register.filter
+def formdiv(value):
+    if value == 'full-mid':
+        return 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12'
+    else: # full
+        return ''

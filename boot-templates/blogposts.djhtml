@@ -10,9 +10,7 @@ This template prints a list of blog posts. It is included from the front page (i
         <!-- The blog post takes up the middle 8 columns on a large display,
              the middle 10 columns on a medium display,
              or the full display for smaller devices. -->
-        <div class="col-lg-2 col-md-1"></div>
-
-        <div class="col-lg-8 col-md-10 col-sm-12 col-xs-12">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
             <h2 class="sub">
                 {{post.title}}
                 <small class="right">
@@ -24,7 +22,5 @@ This template prints a list of blog posts. It is included from the front page (i
 
             <div class="text">{{post.text|markdown}}</div>
         </div>
-
-        <div class="col-lg-2 col-md-1"></div>
     </div>
 {% endfor %}

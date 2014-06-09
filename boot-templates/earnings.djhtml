@@ -163,5 +163,26 @@ This is the template for the earnings of a player. It's called from ratings.view
                 </table>
             </div>
         </div>
+        <div class="row text-center">
+            <ul class="pagination">
+                <li {% if page == 1 %}class="disabled"{% endif %}>
+                    <a href="?page=1&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+                        &laquo;
+                    </a>
+                </li>
+                {% for p in pn_range %}
+                    <li {% if page == p %}class="active"{% endif %}>
+                        <a href="?page={{p}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+                            {{p}}
+                        </a>
+                    </li>
+                {% endfor %}
+                <li {% if page == npages %}class="disabled"{% endif %}>
+                    <a href="?page={{npages}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </div>
     {% endif %}
 {% endblock %}

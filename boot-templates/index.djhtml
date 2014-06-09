@@ -11,9 +11,10 @@ Changes here will generally be visible on the whole site.
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Aligulac{% endblock %}</title>
-        <link rel="stylesheet" href="{{"bootstrap.min"|css}}">
-        <link rel="stylesheet" href="{{"jquery-ui.min"|css}}">
-        <link rel="stylesheet" href="{{"aligulac-theme"|css}}">
+        <link rel="stylesheet" href="{{"bootstrap.min"|css}}" type="text/css">
+        <link rel="stylesheet" href="{{"jquery-ui.min"|css}}" type="text/css">
+        <link rel="stylesheet" href="{{"aligulac-theme"|css}}" type="text/css">
+        <script type="text/javascript" src="{{"jquery-1.10.2.min"|js}}"></script>
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     </head>
@@ -135,8 +136,9 @@ Changes here will generally be visible on the whole site.
             </div>
         </div>
 
-        <script type="text/javascript" src="{{"jquery-1.10.2.min"|js}}"></script>
         <script type="text/javascript" src="{{"jquery-ui.min"|js}}"></script>
+        <script type="text/javascript" src="{{"jquery.ui.datepicker-"|add:lang|js}}"></script>
+        <script type="text/javascript" src="{{"jquery.tagsInput"|js}}"></script>
         <script type="text/javascript" src="{{"bootstrap.min"|js}}"></script>
         <script type="text/javascript">
          var flags_dir = '{{"flags/"|imgdir}}';

@@ -358,3 +358,20 @@ div.text > ul > li {
     background: #f0fff0;
 }
 
+
+/* Make breadcrumbs in headers look like normal headers */
+h2 .breadcrumb {
+    background: #ffffff;
+    margin-bottom: 0px;
+    padding: 0px 0px;
+}
+
+h2 .breadcrumb li.active {
+    color: #000000;
+}
+
+/* Condense the event header a little, some of the titles can be long */
+h2 .breadcrumb > li + li:before {
+  padding: 0 0;
+  content: "/";
+}

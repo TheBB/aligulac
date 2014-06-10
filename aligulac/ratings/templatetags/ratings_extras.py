@@ -279,6 +279,15 @@ def js(value):
     else:
         return '/js/' + value + '.js'
 
+# fonts: Generates a fonts file URL
+@register.filter
+@stringfilter
+def fonts(value):
+    if not DEBUG:
+        return 'http://fonts.aligulac.com/' + value
+    else:
+        return '/fonts/' + value
+
 # img: Generates a png-image file URL
 @register.filter
 @stringfilter

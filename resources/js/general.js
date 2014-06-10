@@ -299,6 +299,42 @@ $(document).ready(function () {
     };
 });
 
+$(document).ready(function () {
+    if ($('.event-ac').length == 0)
+        return;
+    $('.event-ac').autocomplete({
+        source: function (request, response) {
+
+            $.when(getResults(request.term, 'events')).then(function (result) {
+                    var eventresult = [];
+                    if (result.events != undefined && result.events.length > 0) {
+                        eventresult = [{ label: 'Events' }].concat(result.events);
+                        for (var i = 1; i < eventresult.length; i++)
+                            eventresult[i].type = 'event';
+                    }
+                    response(eventresult);
+                });
+
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $('.event-ac').val(ui.item.key)
+                .closest('form')
+                .submit();
+            return false;
+        },
+        open: function () {
+            $('.ui-menu')
+                .width('auto');
+        }
+    }).data('ui-autocomplete')._renderItem = function (ul, item) {
+        return $('<li></li>')
+            .append(aligulacAutocompleteTemplates(item))
+            .appendTo(ul);
+    };
+
+});
+
 /* ======================================================================
  * AUTOCOMPLETE PREDICTIONS
  * ======================================================================

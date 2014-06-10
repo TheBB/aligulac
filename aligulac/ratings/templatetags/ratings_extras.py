@@ -617,3 +617,11 @@ def formdiv(value):
         return 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12'
     else: # full
         return ''
+
+# For the event manager tree
+@register.filter
+def closedivs(value):
+    s = ''
+    for i in range(0, -int(value)):
+        s += '</div>'
+    return s

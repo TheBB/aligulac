@@ -336,3 +336,25 @@ div.text > ul > li {
 .lm_pla img {
     padding-left: 0.3em;
 }
+
+/* Event manager tree */
+.tree-node {
+    border-radius: 0px !important;
+    margin-top: 1px;
+    border-top: none;
+}
+
+.tree-node-first {
+    border-top: 1px solid #ddd;
+}
+
+.tree-node-category { }
+
+.tree-node-event {
+    background: #fff4f4;
+}
+
+.tree-node-round {
+    background: #f0fff0;
+}
+

@@ -15,6 +15,11 @@
                    value="{{field.value|default:""}}"
                    placeholder="{{field.label}}">
         </div>
+        {% if help %}
+        <span class="help-block">
+            {{help}}
+        </span>
+        {% endif %}
     </div>
     <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
@@ -58,6 +63,11 @@
                 {% endfor %}
             </select>
         </div>
+        {% if help %}
+        <span class="help-block">
+            {{help}}
+        </span>
+        {% endif %}
     </div>
     <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
@@ -149,12 +159,15 @@
 {% endblock %}
 
 {% block text %}
-<tr>
-    <td class="form_left" {% if left_id %}id="{{ left_id }}"{% endif %}>
-        {{ left|default:"" }}
-    </td>
-    <td class="form_right" {% if right_id %}id="{{ right_id }}"{% endif %}>
-        {{ right|default:"" }}
-    </td>
-</tr>
+    <div class="form-group {{style|formdiv}}">
+        <label class="{{style|formlabel}} control-label" {% if left_id %}id="{{ left_id }}"{% endif %}>
+            {{ left|default:"" }}
+        </label>
+        <div class="{{style|forminput}}">
+            <p class="form-control-static" {% if right_id %}id="{{ right_id }}"{% endif %}>
+            {{ right|default:"" }}
+            </p>
+        </div>
+    </div>
+    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}

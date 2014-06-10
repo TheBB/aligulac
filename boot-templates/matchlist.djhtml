@@ -14,6 +14,7 @@ matches. It expects a number of "arguments", all prefixed with lm_, to avoid nam
 - lm_check: If both lm_check and lm_adm are true, a checkbox will also be shown.
 - lm_show_noid: Show match even if one or both players are undefined
 - lm_predict: Use for enabling prediction functionality stuff.
+- lm_id: If given, the div.row enclosing the matchlist will get this ID.
 
 NB! The calling code is responsible for starting and ending the HTML table:
 
@@ -39,7 +40,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
     </script>
 {% endif %}
 
-<div class="row">
+<div class="row" {% if lm_id %}id="{{lm_id}}"{% endif %}>
     <div class="table-responsive">
         <table class="table table-striped table-hover">
 
@@ -173,12 +174,13 @@ In general, if you're trying to figure out how this works, may God have mercy on
         {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
     </td>
     <td class="lm_pla">
-        {% if m.pla.score > m.plb.score and not m.unfixed %}<strong>{% endif %}
         {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
         {% if not m.pla.id and lm_adm %}
             <input type="text" class="player" name="match-{{ m.match_id }}-pla" 
                    style="text-align: right;" value="{{ m.pla.tag }}">
-        {% else %}{{ m.pla.tag }}{% endif %}
+        {% else %}
+            {{ m.pla.tag }}
+        {% endif %}
         {% if m.pla.id %}</a>{% endif %}
         {% if m.pla.country %}
             <img src="{{ m.pla.country|lower|img:"flags" }}" alt="{{ m.pla.country }}">
@@ -186,7 +188,6 @@ In general, if you're trying to figure out how this works, may God have mercy on
         {% if m.pla.race %}
             <img src="{{ m.pla.race|img }}" alt="{{ m.pla.race }}">
         {% endif %}
-        {% if m.pla.score > m.plb.score and not m.unfixed %}</strong>{% endif %}
     </td>
     <td class="lm_score">
         {% if lm_predict %}
@@ -202,11 +203,10 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     value="{{ m.plb.score }}">
             </span>
         {% else %}
-            {{ m.pla.score }}–{{ m.plb.score }}
+            {{m.pla.score}}–{{m.plb.score}}
         {% endif %}
     </td>
     <td class="lm_plb">
-        {% if m.plb.score > m.pla.score %}<strong>{% endif %}
         {% if m.plb.race %}
             <img src="{{ m.plb.race|img }}" alt="{{ m.plb.race }}">
         {% endif %}
@@ -216,9 +216,10 @@ In general, if you're trying to figure out how this works, may God have mercy on
         {% if m.plb.id %} <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{% endif %}
         {% if not m.plb.id and lm_adm %}
             <input type="text" class="player" name="match-{{ m.match_id }}-plb" value="{{ m.plb.tag }}">
-        {% else %}{{ m.plb.tag }}{% endif %}
+        {% else %}
+            {{ m.plb.tag }}
+        {% endif %}
         {% if m.plb.id %}</a>{% endif %}
-        {% if m.plb.score > m.pla.score %}</strong>{% endif %}
     </td>
     <td class="lm_rtb">
         {% if m.plb.rating %}{{ m.plb.rating|ratscale }}{% endif %}

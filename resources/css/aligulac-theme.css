@@ -336,3 +336,21 @@ div.text > ul > li {
 .lm_pla img {
     padding-left: 0.3em;
 }
+
+/* Highlight the winner in a result */
+.winner {
+    background: #bbeebb;
+    /*
+    background: #aaa;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    color: #ffffff;
+    */
+}
+
+.winnersc {
+    background: #aaa;
+    padding: 0.3em;
+    border-radius: 0.3em;
+    color: #ffffff;
+}

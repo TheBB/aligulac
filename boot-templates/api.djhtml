@@ -21,8 +21,8 @@
                     <form role="form" method="post" action="/about/api/">
                         <div class="modal-body">
                             {% csrf_token %}
-                            {% field "basic"        form.organization        class="wideinput" %}
-                            {% field "basic"        form.contact             class="wideinput" %}
+                            {% field "basic" form.organization %}
+                            {% field "basic" form.contact %}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

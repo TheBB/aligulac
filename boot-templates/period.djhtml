@@ -240,7 +240,7 @@ This template shows a rating list for a given period.
                             <td style="border-top: none;">
                                 <div class="progress progress-striped" style="height: 100%;">
                                     {% if pvp_games or tvt_games or zvz_games %}
-                                        {% with p=pvp_games|pctg:tot_mirror t=tvt_games|pctg:tot_mirror z=zvz_games|pctg:tot_mirror %}
+                                        {% with p=pvp_games|pctg_scl:tot_mirror t=tvt_games|pctg_scl:tot_mirror z=zvz_games|pctg_scl:tot_mirror %}
                                             <div class="progress-bar progress-bar-success" style="width: {{p}}%">{{p}}%</div>
                                             <div class="progress-bar progress-bar-primary" style="width: {{t}}%">{{t}}%</div>
                                             <div class="progress-bar progress-bar-danger" style="width: {{z}}%">{{z}}%</div>

@@ -843,6 +843,9 @@ def events(request):
         return redirect('/login/')
     login_message(base)
 
+    base['messages'].append(Message(
+        _("If you haven't used this tool before, ask before you do anything."), type=Message.WARNING))
+
     if request.method == 'POST':
         form = AddEventsForm(request=request)
         base['messages'] += form.commit()
@@ -852,17 +855,53 @@ def events(request):
     base['form'] = form
 
     # Build event list
-    events = (
-        Event.objects.filter(closed=False)
-            .annotate(Max('uplink__distance'))
-            .filter(uplink__distance__max=0)
-            .filter(downlink__child__closed=False)
-            .annotate(Max('downlink__distance'))
-            .order_by('idx')
+    root_events = (
+        Event.objects.filter(downlink__child__closed=False)
+                     .filter(parent__isnull=True)
+                     .order_by('idx')
+                     .distinct()
     )
-    #for e in events:
-        #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
-    base['nodes'] = events
+
+    subtreemap = {
+        e.id: []
+        for e in root_events
+    }
+
+    tree = [{ 
+        'event': e,
+        'subtree': subtreemap[e.id],
+        'inc': 0,
+    } for e in root_events]
+
+    events = root_events
+    while events:
+        events = (
+            Event.objects.filter(downlink__child__closed=False)
+                         .filter(parent__in=events)
+                         .order_by('idx')
+                         .distinct()
+        )
+
+        for e in events:
+            subtreemap[e.id] = []
+            subtreemap[e.parent_id].append({
+                'event': e,
+                'subtree': subtreemap[e.id],
+                'inc': 0,
+            })
+
+    base['tree'] = []
+
+    def do_level(level, indent):
+        for e in level:
+            e['indent'] = indent
+            base['tree'].append(e)
+            if e['subtree']:
+                base['tree'][-1]['inc'] += 1
+                do_level(e['subtree'], indent+1)
+                base['tree'][-1]['inc'] -= 1
+
+    do_level(tree, 0)
 
     base.update({"title": _("Manage events")})
 

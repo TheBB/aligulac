@@ -354,3 +354,42 @@ div.text > ul > li {
     border-radius: 0.3em;
     color: #ffffff;
 }
+
+/* Event manager tree */
+.tree-node {
+    border-radius: 0px !important;
+    margin-top: 1px;
+    border-top: none;
+}
+
+.tree-node-first {
+    border-top: 1px solid #ddd;
+}
+
+.tree-node-category { }
+
+.tree-node-event {
+    background: #fff4f4;
+}
+
+.tree-node-round {
+    background: #f0fff0;
+}
+
+
+/* Make breadcrumbs in headers look like normal headers */
+h2 .breadcrumb {
+    background: #ffffff;
+    margin-bottom: 0px;
+    padding: 0px 0px;
+}
+
+h2 .breadcrumb li.active {
+    color: #000000;
+}
+
+/* Condense the event header a little, some of the titles can be long */
+h2 .breadcrumb > li + li:before {
+  padding: 0 0;
+  content: "/";
+}

@@ -66,24 +66,24 @@ DBTABLES = [{
             ('mcnum', 'integer', _('MC number')),
             ('tlpd_id', 'integer', _('external TLPD ID')),
             ('tlpd_db', 'integer', 
-                _('bit-flag value denoting which TLPD databases this player is in: <br/>'
-                  '1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta')),
+                _('bit-flag value denoting which TLPD databases this player is in ('
+                  '1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)')),
             ('lp_name', 'integer', 
-                _('title of Liquipedia page <br/>'
-                  'the part after http://wiki.teamliquid.net/starcraft2/')),
+                _('title of Liquipedia page ('
+                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
             ('sc2e_id', 'integer', _('external sc2earnings.com ID')),
             ('country', 'character varying(2)', _('ISO-3166-1 alpha-2 country code')),
             ('race', 'character varying(1) not null', 
                 _('P, T or Z for normal races, R for random and S for race switcher')),
             ('dom_val', 'double precision', 
-                _('their PP score <br/>' +
-                  'see <a href="%s">Hall of Fame</a> for explanation') % '/results/hof/'),
-            ('dom_start_id', 'integer', _('foreign key to period <br/> start of PP-period')),
-            ('dom_end_id', 'integer', _('foreign key to period <br/> first period after end of PP-period')),
+                _('their PP score (' +
+                  'see <a href="%s">Hall of Fame</a> for explanation)') % '/results/hof/'),
+            ('dom_start_id', 'integer', _('foreign key to period (start of PP-period)')),
+            ('dom_end_id', 'integer', _('foreign key to period (first period after end of PP-period)')),
             ('current_rating_id', 'integer', 
                 # Translators: rating is a table name and must be in English
-                _('foreign key to rating <br/>'
-                  'should link to the latest published rating of the player')),
+                _('foreign key to rating ('
+                  'should link to the latest published rating of the player)')),
         ]
     }, {
         'name': 'match',
@@ -92,35 +92,35 @@ DBTABLES = [{
             ('id', 'integer not null', _('primary key')),
             ('period_id', 'integer not null',
                 # Translators: period is a table name and must be in English
-                _('foreign key to period <br/> the period this match was played in')),
-            ('date', 'date not null', _('when the match was played <br/> often approximate')),
-            ('pla_id', 'integer not null', _('foreign key to player <br/> player A')),
-            ('plb_id', 'integer not null', _('foreign key to player <br/> player B')),
+                _('foreign key to period (the period this match was played in)')),
+            ('date', 'date not null', _('when the match was played (often approximate)')),
+            ('pla_id', 'integer not null', _('foreign key to player (player A)')),
+            ('plb_id', 'integer not null', _('foreign key to player (player B)')),
             ('sca', 'smallint not null', _('score for player A')),
             ('scb', 'smallint not null', _('score for player B')),
             ('rca', 'character varying(1) not null', 
-                _('race for player A <br/>'
-                  'not necessarily same as pla.race, S is not allowed')),
+                _('race for player A ('
+                  'not necessarily same as pla.race, S is not allowed)')),
             ('rcb', 'character varying(1) not null', 
-                _('race for player B <br/>'
-                  'not necessarily same as plb.race, S is not allowed')),
+                _('race for player B ('
+                  'not necessarily same as plb.race, S is not allowed)')),
             ('treated', 'boolean not null', _('true if the match has been rated')),
             ('event', 'character varying(200) not null', 
-                _('tournament, round, group etc. <br/>'
-                  'superceded by eventobj_id if latter is not null')),
+                _('tournament, round, group etc. ('
+                  'superceded by eventobj_id if latter is not null)')),
             # Translators: event is a table name and must be in English
-            ('eventobj_id', 'integer', _('foreign key to event <br/> supercedes event field')),
+            ('eventobj_id', 'integer', _('foreign key to event (supercedes event field)')),
             ('submitter_id', 'integer', _('foreign key to a table removed from the dump')),
-            ('game', 'character varying(200) not null', _('game version used <br/> WoL, HotS, LotV')),
+            ('game', 'character varying(200) not null', _('game version used (WoL, HotS, LotV)')),
             ('offline', 'boolean not null', _('whether this match was played offline')),
             ('rta_id', 'integer', 
                 # Translators: rating is a table name and must be in English
-                _('foreign key to rating <br/>'
-                  'rating of player A at the time of the match')),
+                _('foreign key to rating ('
+                  'rating of player A at the time of the match)')),
             ('rtb_id', 'integer', 
                 # Translators: rating is a table name and must be in English
-                _('foreign key to rating <br/>'
-                  'rating of player B at the time of the match')),
+                _('foreign key to rating ('
+                  'rating of player B at the time of the match)')),
         ]
     }, {
         'name': 'event',
@@ -142,24 +142,24 @@ DBTABLES = [{
                 _('full name of this event (including names of ancestors)')),
             ('homepage', 'character varying(200)', _('URL of the event website')),
             ('lp_name', 'character varying(200)', 
-                _('title of Liquipedia page <br/>'
-                  'the part after http://wiki.teamliquid.net/starcraft2/')),
+                _('title of Liquipedia page ('
+                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
             ('tlpd_id', 'integer', _('external TLPD ID')),
             ('tlpd_db', 'integer', 
-                _('bit-flag value denoting which TLPD databases this event is in: <br/>'
-                  '1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta')),
+                _('bit-flag value denoting which TLPD databases this event is in: ('
+                  '1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)')),
             ('tl_thread', 'integer', _('TL.net forum thread ID')),
             ('prizepool', 'boolean', _('whether this event has an associated prizepool (NULL if unknown)')),
             ('earliest', 'date', _('date of earliest match')),
             ('latest', 'date', _('date of latest match')),
             ('category', 'character varying(50)',
                 # Translators: These are literals so must be in English, i.e. team (translation)…
-                _('team, individual or frequent <br/> only set for root nodes')),
+                _('team, individual or frequent (only set for root nodes)')),
             ('type', 'character varying(50) not null', 
                 # Translators: These are literals so must be in English, i.e. category (translation)…
-                _('category, event (i.e. tournament) or round <br/>'
+                _('category, event (i.e. tournament) or round ('
                   'you can assume that ancestors of events are always categories and that descendants of '
-                  'events are always rounds')),
+                  'events are always rounds)')),
             ('idx', 'integer not null', _('sorting index')),
         ]
     }, {
@@ -211,8 +211,8 @@ DBTABLES = [{
             ('position_vz', 'integer', _('rank vZ')),
             ('decay', 'integer not null', _('number of periods since last game')),
             ('domination', 'double precision', 
-                _('rating gap to number 7 <br/>'
-                  'used in the <a href="%s">Hall of Fame</a>') % '/recods/hof/'),
+                _('rating gap to number 7 ('
+                  'used in the <a href="%s">Hall of Fame</a>)') % '/recods/hof/'),
             # Translators: rating is a table name and must be in English
             ('prev_id', 'integer', _('foreign key to rating; previous rating for this player')),
         ]
@@ -247,12 +247,12 @@ DBTABLES = [{
             ('active', 'boolean not null', _('whether the group is active')),
             ('homepage', 'character varying (200)', _('URL of team website')),
             ('lp_name', 'character varying (200)', 
-                _('title of Liquipedia page <br/>'
-                  'the part after http://wiki.teamliquid.net/starcraft2/')),
+                _('title of Liquipedia page ('
+                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
             ('is_team', 'boolean not null', _('whether this group is a proper team')),
             ('is_manual', 'boolean not null', 
-                _('whether this group has manually added members or not <br/>'
-                  'currently has no effect, there are no automatic groups')),
+                _('whether this group has manually added members or not ('
+                  'currently has no effect, there are no automatic groups)')),
         ]
     }, {
         'name': 'groupmembership',
@@ -266,11 +266,11 @@ DBTABLES = [{
             ('start', 'date', _('start date of membership')),
             ('end', 'date', _('end date of membership')),
             ('current', 'boolean not null',
-                _('whether the membership is in effect <br/>'
-                  'many end dates are unknown, so this is needed')),
+                _('whether the membership is in effect ('
+                  'many end dates are unknown, so this is needed)')),
             ('playing', 'boolean not null',
-                _('whether the player is a playing member <br/>'
-                  'false for coaches, among others')),
+                _('whether the player is a playing member ('
+                  'false for coaches, among others)')),
         ]
     }, {
         'name': 'earnings',
@@ -468,7 +468,7 @@ class APIKeyForm(forms.Form):
             _("Your API key is <code>%s</code>. Please keep it safe.") % key.key, type=Message.SUCCESS))
 
         return ret
-    # }}}
+# }}}
 
 def api(request):
     base = base_ctx('About', 'API', request)

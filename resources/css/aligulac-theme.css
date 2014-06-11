@@ -258,7 +258,7 @@ h2.sub > .left {
 }
 
 /* Wrap paragraphs in a div.text to make them justified */
-div.text > p {
+div.text, div.text > p, div.text > ul > li {
     text-align: justify;
 }
 
@@ -390,6 +390,11 @@ h2 .breadcrumb li.active {
 
 /* Condense the event header a little, some of the titles can be long */
 h2 .breadcrumb > li + li:before {
-  padding: 0 0;
-  content: "/";
+    padding: 0 0;
+    content: "/";
+}
+
+/* Sortable lists should not have a caret cursor. */
+#sortable li {
+    cursor: pointer;
 }

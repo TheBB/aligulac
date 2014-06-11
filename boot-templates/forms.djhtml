@@ -36,6 +36,11 @@
                       rows="{{rows|default:"15"}}"
                       placeholder="{{field.label}}">{{field.value}}</textarea>
         </div>
+        {% if help %}
+        <span class="help-block">
+            {{help}}
+        </span>
+        {% endif %}
     </div>
     <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
@@ -73,31 +78,43 @@
 {% endblock %}
 
 {% block selectmulti %}
-<tr>
-    <td class="form_left" style="vertical-align: top;">{{ field.label_tag }}</td>
-    <td class="form_right">
-        {% for value, label in field.field.choices %}
-        <label for="{{ field.auto_id }}_{{ forloop.counter0 }}">
-        <input id="{{ field.auto_id }}_{{ forloop.counter0 }}"
-             {% if value|stringformat:"i" in field.value or value in field.value%}checked="checked"{% endif %}
-             name="{{ field.html_name }}"
-             type="checkbox" value="{{ value }}">{{ label }}</label><br />
-        {% endfor %}
-    </td>
-</tr>
+    <div class="form-group {{style|formdiv}}">
+        <label class="{{style|formlabel}} control-label">
+            {{field.label}}
+        </label>
+        <div class="{{style|forminput}}">
+            {% for value, label in field.field.choices %}
+                <label for="{{field.auto_id}}_{{forloop.counter0}}" class="control-label">
+                <input type="checkbox"
+                       {% if value|stringformat:"i" in field.value or value in field.value %}checked="checked"{% endif %}
+                       id="{{field.auto_id}}_{{forloop.counter0}}"
+                       name="{{field.html_name}}"
+                       type="checkbox"
+                       style=""
+                       value="{{value}}">
+                       {{label}}
+                </label><br>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block checkbox %}
-    <div class="checkbox {{style|formdiv}}">
-        <label for="{{field.auto_id}}">
-            <input type="checkbox"
-                   {% if field.value %}checked="checked"{% endif %}
-                   id="{{field.auto_id}}"
-                   name="{{field.html_name}}"
-                   type="checkbox"
-                   style="margin-left: -5px; margin-right: 1em;">
-                   {{ field.label }}
-        </label>
+    <div class="form-group {{style|formdiv}}">
+        {% if inc_label %}
+            <label class="{{style|formlabel}} control-label">&nbsp;</label>
+        {% endif %}
+        <div class="{{style|forminput}}">
+            <label for="{{field.auto_id}}">
+                <input type="checkbox"
+                       {% if field.value %}checked="checked"{% endif %}
+                       id="{{field.auto_id}}"
+                       name="{{field.html_name}}"
+                       type="checkbox"
+                       style="">
+                {{ field.label }}
+            </label>
+        </div>
     </div>
 {% endblock %}
 

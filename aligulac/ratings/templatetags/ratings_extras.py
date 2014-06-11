@@ -627,23 +627,3 @@ def event(value):
         "</a>").format(id=value.id,
                        name=value.fullname,
                        safename=urlfilter(value.fullname)))
-
-
-@register.filter
-def large_race_img(value):
-
-    img_src = ''
-    if value == 'P':
-        img_src = 'protoss'
-    elif value == 'T':
-        img_src = 'terran'
-    elif value == 'Z':
-        img_src = 'zerg'
-    elif value == 'R':
-        img_src = 'random'
-    elif value == 'S':
-        img_src = 'switcher'
-
-    img_src = img(img_src)
-
-    return '<img src="{}" title="{}" />'.format(img_src, racefull(value))

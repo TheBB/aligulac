@@ -507,13 +507,6 @@ def compare(request, players):
 
     base['comparisons'] = comparisons
 
-    # for c in comparisons:
-    #     print(type(c))
-    #     if isinstance(c, Comparison):
-    #         print(c.name)
-    #         for e in c.entries:
-    #             print(e)
-
     return render_to_response('compare.html', base)
 
 # (property chain, label)

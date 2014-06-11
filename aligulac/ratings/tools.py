@@ -254,8 +254,18 @@ def total_ratings(queryset):
 
 # {{{ populate_teams: Adds team information to rows in a queryset (ratings or players) by populating the
 # members team (short name), teamfull (full name) and teamid (team ID).
-def populate_teams(queryset):
-    for e in queryset:
+def populate_teams(queryset, player_set=False):
+    if player_set:
+        q = queryset.prefetch_related(
+            'groupmembership_set',
+            'groupmembership_set__group'
+        )
+    else:
+        q = queryset.prefetch_related(
+            'player__groupmembership_set',
+            'player__groupmembership_set__group'
+        )
+    for e in q:
         if isinstance(e, Player):
             player = e
         else:
@@ -267,7 +277,7 @@ def populate_teams(queryset):
             e.teamfull = membership.group.name
             e.teamid = membership.group.id
 
-    return queryset
+    return q
 # }}}
 
 # {{{ country_list: Creates a list of countries in the given queryset (of Players).

@@ -865,7 +865,8 @@ class Player(models.Model):
     # {{{ get_current_teammembership: Gets the current team membership object of this player, if any.
     def get_current_teammembership(self):
         try:
-            return self.groupmembership_set.filter(current=True, group__is_team=True).first()
+            groups = self.groupmembership_set.all()
+            return next((x for x in groups if x.group.is_team and x.current))
         except:
             return None
     # }}}

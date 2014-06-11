@@ -446,3 +446,8 @@ h2 .breadcrumb > li + li:before {
 .event-panel-frequent:hover {
     background-color: #afd9ee;
 }
+
+/* Disabled select options */
+.option-disabled {
+    background: #e7e7e7;
+}

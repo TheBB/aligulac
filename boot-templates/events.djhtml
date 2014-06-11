@@ -18,6 +18,26 @@ This shows the event overview page. Called from ratings.views.events.
 
 {% include "messages.djhtml" %}
 
+<div class="row" style="padding-top: 2em; padding-bottom: 2em;">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text-center">
+    <form class="form-inline" role="form" method="get" action="/results/events">
+      <div class="form-group">
+        <label for="goto" class="inline-label">{% trans "Go to smaller event:" %}</label>
+        <select name="goto" id="goto" class="form-control input-lg">
+          {% for e in smalls %}
+            {% ifchanged e.category %}
+              {% if not forloop.first %}<option disabled="disabled" class="option-disabled"></option>option>{% endif %}
+            {% endifchanged %}
+            <option value="{{e.id}}">{{e.fullname}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% comment %}Translators: Go as in go to a page.{% endcomment %}
+      <button type="submit" class="btn btn-primary input-lg">{% trans "Go" %}</button>
+    </form>
+  </div>
+</div>
+
 <div class="row">
   {% for e in bigs %}
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">

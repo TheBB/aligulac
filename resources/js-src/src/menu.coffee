@@ -13,30 +13,14 @@ mobile_regex = ///
     | Opera Mini
 ///i
 
-$ ->
-    allMenu = $ '.menu > ul > li > ul'
-    menuHandler = ->
-        menu = $(this).parent().next()
-        if menu.is ':visible'
-            allMenu.hide()
-        else
-            allMenu.hide()
-            menu.show()
-
-        $(document).one 'click', ->
-            menu.hide()
-
-        return false
-    if mobile_regex.test navigator.userAgent
-        $(".actionSelector").removeAttr "style"
-        $('.menu > ul > li > div > a').next().button(
-            text: false
-            icons: primary: 'ui-icon-triangle-1-s'
-        ).click(menuHandler).parent().next().buttonset().hide().menu()
-
-        allMenu.parent().css
-            paddingLeft: "0.1em"
-            paddingRight: "0.1em"
+toggle_navbar_method = ->
+    if mobile_regex.test navigator.userAgent or $(window).width() <= 768
+        $('.navbar .dropdown').off('mouseover').off('mouseout')
     else
-        $('.menu > ul > li > div > a').hover(menuHandler).parent()
-        .next().buttonset().hide().menu()
+        $('.navbar .dropdown').on('mouseover', ->
+            $('.dropdown-toggle', this).trigger('click')
+        ).on('mouseout', ->
+            $('.dropdown-toggle', this).trigger('click').blur()
+        )
+
+toggle_navbar_method()

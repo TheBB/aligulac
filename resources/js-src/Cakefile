@@ -7,6 +7,8 @@ deploy_dir = 'deploy/'
 build_dir = 'build/'
 src_dir = 'src/'
 
+target_file_name = 'aligulac'
+
 js_file_regex = ///.*\.js$///
 get_files = (dir, callback) ->
     fs.readdir dir, (err, files) ->
@@ -34,12 +36,12 @@ deploy = (callback) ->
         if not fs.existsSync deploy_dir
             fs.mkdirSync deploy_dir
         get_files build_dir, (files) ->
-            uglify = spawn 'uglifyjs', ['-m', '-c', '-o', deploy_dir + 'general.min.js'].concat files
+            uglify = spawn 'uglifyjs', ['-m', '-c', '-o', deploy_dir + target_file_name + '.min.js'].concat files
             uglify.stderr.on 'data', (data) ->
                 process.stderr.write data.toString()
             uglify.on 'exit', (code) ->
                 log "Uglyify done."
-                target_file_stream = fs.createWriteStream deploy_dir + 'general.js'
+                target_file_stream = fs.createWriteStream deploy_dir + target_file_name + '.js'
                 cat = spawn 'cat', files
                 cat.stdout.pipe target_file_stream
                 cat.on 'exit', (code) ->

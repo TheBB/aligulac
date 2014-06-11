@@ -4,18 +4,18 @@
 
 aligulacAutocompleteTemplates = (obj) ->
     if not (obj.tag? || obj.name? || obj.fullname?)
-        return "<span class='autocomplete-header'>#{ autocomplete_strings[obj.label] }</span>"
+        return "<span class='autocomplete-header'>#{ autocomp_strings[obj.label] }</span>"
 
     switch obj.type
         when 'player'
             obj.key = obj.tag + ' ' + obj.id;
             flag = (
                 if obj.country?
-                    "<img src='#{ flagsDir + obj.country.toLowerCase() }.png' />"
+                    "<img src='#{ flags_dir + obj.country.toLowerCase() }.png' />"
                 else
                     ""
             )
-            race = "<img src='#{ racesDir + obj.race.toUpperCase() }.png' />"
+            race = "<img src='#{ races_dir + obj.race.toUpperCase() }.png' />"
             name = obj.tag
             return "<a>#{ flag }#{ race }#{ name }</a>"
         when 'team'
@@ -47,10 +47,8 @@ getResults = (term, restrict_to) ->
     deferred
 
 $(document).ready ->
-
-    $('#SearchTextBox').autocomplete(
+    $('#search_box').autocomplete(
         source: (request, response) ->
-
             $.when(getResults request.term).then (result) ->
 
                 prepare_response = (list, type, label) ->
@@ -77,7 +75,7 @@ $(document).ready ->
 
         minLength: 2
         select: (event, ui) ->
-            $('#SearchTextBox').val ui.item.key
+            $('#search_box').val ui.item.key
             false
         open: ->
             $('.ui-menu').width 'auto'

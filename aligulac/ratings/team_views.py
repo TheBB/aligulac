@@ -176,6 +176,8 @@ def team(request, team_id):
             player__groupmembership__playing=True,
             period=base['curp']
         )
+        .select_related('player')
+        .prefetch_related('prev')
     )
 
     base.update({

@@ -354,7 +354,7 @@ This template shows a rating list for a given period.
         <input type="hidden" name="page" value="{{page}}" />
         <input type="hidden" name="sort" value="{{sort}}" />
         <div class="form-group">
-            <label for="race" class="inline-label">{% trans "Show races:" %}</label>
+          <label for="race" class="inline-label">{% trans "Show races:" %}</label>
             <select name="race" id="race" class="form-control input-sm">
                 <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
                 <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
@@ -362,7 +362,6 @@ This template shows a rating list for a given period.
                 <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
                 <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
                 <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
-
                 <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
                 <option value="r" {% if race == "r" %}selected{% endif %}>{% trans "Random" %}</option>
                 <option value="s" {% if race == "s" %}selected{% endif %}>{% trans "Race switchers" %}</option>

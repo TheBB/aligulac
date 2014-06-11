@@ -426,10 +426,20 @@ class Event(models.Model):
             return None
     # }}}
 
-    # {{{ get_ancestors(id=False): Returns a list containing the ancestors
-    # sorted by distance.
-    # If id=True, the list contains the object itself.
+    # {{{ get_ancestors(id=False): Returns a queryset/list containing the
+    # ancestors sorted by distance.
+    # If id=True, the queryset/list contains the object itself.
+    #
+    # get_ancestors_list is preferred if no modifications to the queryset is
+    # needed as it gets a performance boost from prefetch_related
     def get_ancestors(self, id=False):
+        q = Event.objects.filter(downlink__child=self)
+        if not id:
+            q = q.filter(downlink__distance__gt=0)
+
+        return q.order_by('-downlink__distance')
+
+    def get_ancestors_list(self, id=False):
         results = [
             link for link in self.uplink.all()
             if id or link.distance > 0
@@ -440,13 +450,13 @@ class Event(models.Model):
 
     # {{{ get_ancestors_print: Returns a list containing the printable ancestors
     def get_ancestors_print(self, id=True):
-        return [event for event in self.get_ancestors() if not event.noprint]
+        return [event for event in self.get_ancestors_list() if not event.noprint]
     # }}}
 
     # {{{ get_ancestors_event: Returns a list containing printable ancestors of type event or category
     def get_ancestors_event(self):
         return [
-            x for x in self.get_ancestors(id=True)
+            x for x in self.get_ancestors_list(id=True)
             if x.type in (TYPE_CATEGORY, TYPE_EVENT)
         ]
     # }}}

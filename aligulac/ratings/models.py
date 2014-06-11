@@ -463,7 +463,7 @@ class Event(models.Model):
 
     # {{{ get_root: Returns the farthest removed ancestor
     def get_root(self):
-        return self.get_ancestors(id=True)[0]
+        return self.get_ancestors_list(id=True)[0]
     # }}}
 
     # {{{ get_children(types=[category,event,round], id=False): Returns a queryset containing the children

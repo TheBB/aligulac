@@ -40,9 +40,9 @@ This is the basic records page, called from ratings.views.records.
     {% include "recordlist.html" with high=hight rt=tvt race="T" %}
     {% include "recordlist.html" with high=highz rt=tvz race="Z" %}
 {% elif race == "Z" %}
-    {% trans "Rating ZvP" as tvp %}
-    {% trans "Rating ZvT" as tvt %}
-    {% trans "Rating ZvZ" as tvz %}
+    {% trans "Rating ZvP" as zvp %}
+    {% trans "Rating ZvT" as zvt %}
+    {% trans "Rating ZvZ" as zvz %}
     {% include "recordlist.html" with high=highp rt=zvp race="P" %}
     {% include "recordlist.html" with high=hight rt=zvt race="T" %}
     {% include "recordlist.html" with high=highz rt=zvz race="Z" %}

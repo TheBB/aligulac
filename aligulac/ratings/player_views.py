@@ -154,7 +154,7 @@ class PlayerModForm(forms.Form):
         update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   _('SC2Earnings.com ID'))
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
-        if player.set_aliases(self.cleaned_data['akas'].split(',')):
+        if player.set_aliases([x for x in self.cleaned_data['akas'].split(',') if x.strip() != '']):
             ret.append(Message(_('Changed aliases.'), type=Message.SUCCESS))
 
         return ret

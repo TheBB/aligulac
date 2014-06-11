@@ -344,9 +344,9 @@ def home(request):
 
     entries = filter_active(Rating.objects.filter(period=base['curp']))\
               .order_by('-rating')\
-              .select_related('player')[0:10]
+              .select_related('player', 'prev')[0:10]
 
-    populate_teams(entries)
+    entries = populate_teams(entries)
 
     blogs = Post.objects.order_by('-date')[0:3]
 

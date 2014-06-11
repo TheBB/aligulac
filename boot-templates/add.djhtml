@@ -1,0 +1,199 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the admin page for submitting matches. It's called from
+ratings.submitviews.add_matches.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Submit results" %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <h2>{% trans "Submit results" %}</h2>
+        </div>
+    </div>
+
+    {% include "messages.djhtml" %}
+
+    {% if matches %}
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+                <p>
+                    {% trans "The following entries were successfully submitted" %}{% if adm %}:{% else %}.
+                    {% trans "They are pending review before being visible." %}{% endif %}
+                </p>
+            </div>
+        </div>
+        {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" %}
+    {% endif %}
+
+    <div class="row" style="padding-bottom: 2em;">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#guide" data-toggle="tab">{% trans "Guide" %}</a></li>
+                <li><a href="#syntax" data-toggle="tab">{% trans "Match syntax" %}</a></li>
+                <li><a href="#examples" data-toggle="tab">{% trans "Examples" %}</a></li>
+                <li><a href="#problems" data-toggle="tab">{% trans "Common problems" %}</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active text" id="guide" style="padding-top: 1em;">
+                    <ul>
+                        {% if not adm %}
+                            <li><strong>{% trans "Event" %}:</strong>
+                                {% blocktrans %}Anything that can be used to identify the tournament the games were played in.  Please provide as much information as possible. (Rounds, day number, week number, etc.){% endblocktrans %}
+                            </li>
+                        {% endif %}
+                        {% if adm %}
+                            <li><strong>{% trans "Event object" %}:</strong>
+                                {% trans "The event the games were played in." %}
+                                <span style="color: #ff0000;">
+                                    {% blocktrans with a="<a href=\"/add/events/\">" %}If you can't find the correct event object, you have to {{a}}make it</a>. If these are the final games associated with an event object, please close it afterwards.{% endblocktrans %}
+                                </span></li>
+                        {% endif %}
+                        <li><strong>{% trans "Date played" %}:</strong>
+                            {% blocktrans %}The date the games were played (as accurate as possible). This will be used to check for possible duplicates.{% endblocktrans %}
+                        </li>
+                        <li><strong>{% trans "Game version" %}:</strong>
+                            {% blocktrans %}Indicate on which version of SC2 the games were played.{% endblocktrans %}
+                        </li>
+                        <li><strong>{% trans "Type" %}:</strong>
+                            {% blocktrans %}Use <strong>offline</strong> for games that were played at a live tournament, otherwise use <strong>online</strong>.{% endblocktrans %}
+                        </li>
+                        {% if not adm %}
+                            <li><strong>{% trans "Source" %}:</strong>
+                                {% blocktrans %}An URL to a credible source where the results can be double checked (for example: official tournament brackets, Liquipedia page or Team Liquid live report thread).{% endblocktrans %}
+                            </li>
+                            <li><strong>{% trans "Contact" %}:</strong>
+                                {% blocktrans %}(Optional) A way to contact you if we have questions about your submission. E-mail, Team Liquid username, Reddit username etc. are fine.{% endblocktrans %}
+                            </li>
+                            <li><strong>{% trans "Notes" %}:</strong>
+                                {% blocktrans %}(Optional) Any extra information you have that may or may not be of use.{% endblocktrans %}
+                            </li>
+                        {% endif %}
+                        <li><strong>{% trans "Matches" %}:</strong>
+                            {% blocktrans %}A list of the results you want to add. Please see <strong>match syntax</strong> for more information.{% endblocktrans %}
+                        </li>
+                    </ul>
+                    <p>{% blocktrans %}Please see <strong>common problems</strong> if you are unsure about a player.{% endblocktrans %}</p>
+                </div>
+                <div class="tab-pane text" id="syntax" style="padding-top: 1em;">
+                    <p>{% trans "Each line corresponds to a match, and should be entered using this format:" %}</p>
+
+                    {% trans "Player" as plr %}
+                    {% trans "Score" as scr %}
+                    <pre>&lt;{{plr}} A&gt;-&lt;{{plr}} B&gt; &lt;{{scr}} A&gt;-&lt;{{scr}} B&gt;</pre>
+
+                    {% if adm %}
+                        <p>{% blocktrans %}The player information must uniquely identify the player, and should be space-separated list of any of the following:{% endblocktrans %}</p>
+                    {% else %}
+                        <p>{% blocktrans %}The player information does not have to uniquely identify the player, and should be a space-separated list of any of the following:{% endblocktrans %}</p>
+                    {% endif %}
+
+                    <ul>
+                        <li>{% blocktrans %}Player tag, e.g. <code>DongRaeGu</code>.{% endblocktrans %}</li>
+                        <li>{% blocktrans %}Race, i.e. <code>P</code>, <code>T</code>, <code>Z</code>, <code>R</code> (random) or <code>S</code> (race switcher).{% endblocktrans %}</li>
+                        <li>{% blocktrans with a="<a href=\"http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">" %}A two- or three-letter {{a}}ISO 3166-1 alpha-2 country code</a>, e.g. <code>KR</code> or <code>KOR</code>, or the common English name of a country (the latter will only work if the country name does not contain spaces.{% endblocktrans %}</li> 
+                        <li>{% blocktrans %}Team name, e.g. <code>MVP</code>.{% endblocktrans %}</li>
+                        <li>{% blocktrans %}Player or team aliases, e.g. <code>DRG</code>. The most common ones should be recognized by the system{% endblocktrans %}.</li>
+                        <li>{% blocktrans with a="<a href=\"/players/4-DongRaeGu/\">" %}A player ID number, which you can get from the URL of the {{a}}player page</a>, e.g. <code>4</code>.{% endblocktrans %}</li>
+                    </ul>
+
+                    <p>{% blocktrans with clause="r:&lt;race&gt;" %}If you are adding a match by a race switcher you need to tell the system which race the player was playing in that match. Do this by adding a <code>{{clause}}</code> clause at the <strong>end</strong> of the player information. For example, if MorroW plays Protoss, you can do this:{% endblocktrans %}</p>
+
+                    <pre>Morrow r:p-DongRaeGu 0-2</pre>
+
+                    <p>{% blocktrans %}Please also provide race information about random players whenever this is known, though it's not required.{% endblocktrans %}</p>
+
+                    <p>{% blocktrans %}Everything is based on case-insensitive search. There is no recognizable difference between <code>Mvp</code> (the player) and <code>MVP</code> (the team).{% endblocktrans %}</p>
+
+                    {% if adm %}
+                        <p>{% blocktrans %}When submitted, the system will try to add as many of the matches as it can. Some entries might produce warnings, in which case you will be notified about what to do. This happens when:{% endblocktrans %}</p>
+
+                        <ul>
+                            <li>{% blocktrans %}a player is not uniquely identified. In this case, add more information. Use the ID number if necessary.{% endblocktrans %}</li> 
+                            <li>{% blocktrans %}a player can't be found. In this case, add the switch <code>!MAKE</code> to the end of the respective line(s). This will make a player entry if needed. In this case, you <strong>must</strong> provide a player tag and race.  Please also provide a country code if possible, and make sure the player tag is spelled correctly (including capitalisation).{% endblocktrans %}</li>
+                            <li>{% blocktrans %}a duplicate entry was found. If you are certain that the two players in question played more than one match within a single day with the same result (this can happen, but it's rare), add the switch <code>!DUP</code> to the end of the respective line(s). This will force the match to be entered.{% endblocktrans %}</li>
+                        </ul>
+                    {% else %}
+                        <p>{% blocktrans %}When submitted, the system will try to find as many players as it can. If a player can't be found, or if the information provided applies to more than one player, that's fine. We will fix it when reviewing the submission.{% endblocktrans %}</p>
+
+                        <p>{% blocktrans %}The system will also try to avoid duplicates. If your match appears to be a duplicate of another match in the database (same players, score and close in time), you will get a warning. To avoid this, add the switch <code>!DUP</code> to the end of the match description. This will force the match to be entered.{% endblocktrans %}</p>
+                    {% endif %}
+
+                    <p>{% blocktrans %}Most players are uniquely identifiable through their nickname alone. For a list of the most common exceptions, please look at <strong>common problems</strong>.{% endblocktrans %}</p>
+                </div>
+                <div class="tab-pane" id="examples" style="padding-top: 1em;">
+                    <p>{% trans "Here are some real-world examples. From the GSL:" %}</p>
+                    <pre>MarineKing-Roro 2-1
+Keen-IM Mvp 2-1
+MarineKing-Keen 2-0
+Roro-IM Mvp 2-0
+Keen-Roro 0-2</pre>
+                    <p>{% trans "Some players have to be identified by race and/or country, such as Creator:" %}</p>
+                    <pre>Creator P KR-Byul 2-0</pre>
+                    <p>{% trans "Some players have aliases to help entering their names, such as BBoongBBoong:" %}</p>
+                    <pre>Hyun-B4 0-2</pre>
+                    <p>{% trans "Some players are more easily identified by team, such as Mvp and HerO:" %}</p>
+                    <pre>Liquid Hero-IM Mvp 2-0</pre>
+                </div>
+                <div class="tab-pane" id="problems" style="padding-top: 1em;">
+                    <ul>
+                        <li>{% blocktrans %}Liquid HerO, CJ herO, Woongjin ZerO, StarTale Zero, MVP Killer and Clarity KiLLeR should be identified by team.{% endblocktrans %}</li>
+                        <li>{% blocktrans %}Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need to be identified by race and/or country.{% endblocktrans %}</p>
+                    </ul>
+                    <p>
+                        {% trans "Common country codes" %}: 
+                        {% trans "Canada" %} (CA),
+                        {% trans "France" %} (FR),
+                        {% trans "Germany" %} (DE),
+                        {% trans "South Korea" %} (KR),
+                        {% trans "Poland" %} (PL),
+                        {% trans "Russia" %} (RU),
+                        {% trans "Sweden" %} (SE),
+                        {% trans "Ukraine" %} (UA),
+                        {% trans "USA" %} (US).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <form role="form" method="post" action="/add/">
+            {% csrf_token %}
+
+            {% form "forms.djhtml" %}
+                {% use "hidden" name="submit" value="submit" %}
+                {% if adm %}
+                    {% field "select" form.eventobj override=event_override style="full-mid" %}
+                {% else %}
+                    {% field "basic" form.eventtext style="full-mid" %}
+                {% endif %}
+                {% field "date" form.date style="full-mid" %}
+                {% field "select" form.game style="full-mid" %}
+                {% field "checkbox" form.offline style="full-mid" %}
+                {% if not adm %}
+                    {% field "basic" form.source style="full-mid" %}
+                    {% field "basic" form.contact style="full-mid" %}
+                    {% field "textarea" form.notes style="full-mid" rows="5" %}
+                {% endif %}
+                {% field "textarea" form.matches style="full-mid" rows="15" %}
+                <div class="form-group text-right {{"full-mid"|formdiv}}">
+                    {% trans "Commit" as commit %}
+                    {% trans "Commit and close event" as commitclose %}
+                    {% use "submit" name="commit" text=commit %}
+                    {% if adm %}
+                        {% use "submit" name="commit_close" text=commitclose %}
+                    {% endif %}
+                </div>
+                <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+            {% endform %}
+        </form>
+    </div>
+{% endblock %}

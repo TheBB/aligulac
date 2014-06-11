@@ -1,0 +1,26 @@
+{% comment %}
+This template prints a list of blog posts. It is included from the front page (index.html) and the blog page
+(blog.html).
+{% endcomment %}
+
+{% load ratings_extras %}
+
+{% for post in blogposts %}
+    <div class="row">
+        <!-- The blog post takes up the middle 8 columns on a large display,
+             the middle 10 columns on a medium display,
+             or the full display for smaller devices. -->
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <h2 class="sub">
+                {{post.title}}
+                <small class="right">
+                    By {{post.author}}
+                    on {{post.date|date:"F jS, Y, H:i e"}} 
+                    (UTC {{post.date|date:"O"}})
+                </small>
+            </h2>
+
+            <div class="text">{{post.text|markdown}}</div>
+        </div>
+    </div>
+{% endfor %}

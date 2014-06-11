@@ -1,0 +1,44 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the historical overview page, showing all the ranking lists.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Historical overview" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h2>{% trans "Historical overview" %}</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "List date" %}</th>
+                        {% comment %}Translators: Leading race{% endcomment %}
+                        <th class="text-right" colspan="2">{% trans "Leading" %}</th>
+                        {% comment %}Translators: Lagging race{% endcomment %}
+                        <th class="text-right" colspan="2">{% trans "Lagging" %}</th>
+                        <th class="ho_num">{% trans "Active" %}</th>
+                        <th class="ho_num">{% trans "New" %}</th>
+                        <th class="ho_num">{% trans "Games" %}</th>
+                    </tr>
+                </thead>
+                {% for period in periods %}
+                    <tr>
+                        <td><a href="/periods/{{ period.id }}/">{{ period.end|cdate:_('F jS, Y') }}</a></td>
+                        <td class="ho_icon"><img src="{{ period|oprace|img }}" alt="{{ period|oprace }}"></td>
+                        <td class="ho_pctg">{{ period|oppctg }}%</td>
+                        <td class="ho_icon"><img src="{{ period|uprace|img }}" alt="{{ period|uprace }}"></td>
+                        <td class="ho_pctg">{{ period|uppctg }}%</td>
+                        <td class="ho_num">{{period.num_retplayers|add:period.num_newplayers}}</td>
+                        <td class="ho_num">{{period.num_newplayers}}</td>
+                        <td class="ho_num">{{period.num_games}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

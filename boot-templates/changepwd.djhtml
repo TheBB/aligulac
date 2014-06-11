@@ -1,0 +1,65 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+Template for the change password function. Called from aligulac.views.changepwd.
+{% endcomment %}
+
+{% load i18n %}
+{% load ratings_extras %}
+
+{% block title %}{% trans "Change password" %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <h2>{% trans "Change password" %}</h2>
+        </div>
+    </div>
+
+    {% include "messages.djhtml" %}
+
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <p>{% blocktrans %}To change the password for {{ user }}, fill in the form.{% endblocktrans %}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <form role="form" method="post" action="/changepwd/">
+            {% csrf_token %}
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <label for="old" class="control-label {{"full-mid"|formlabel}}">
+                    {% trans "Old password" %}
+                </label>
+                <div class="{{"full-mid"|forminput}}">
+                    <input type="password" name="old" id="old" placeholder="{% trans "Old password" %}"
+                           class="form-control">
+                </div>
+            </div>
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <label for="new" class="control-label {{"full-mid"|formlabel}}">
+                    {% trans "New password" %}
+                </label>
+                <div class="{{"full-mid"|forminput}}">
+                    <input type="password" name="new" id="new" placeholder="{% trans "New password" %}"
+                           class="form-control">
+                </div>
+            </div>
+            <div class="form-group {{"full-mid"|formdiv}}">
+                <label for="newre" class="control-label {{"full-mid"|formlabel}}">
+                    {% trans "New password again" %}
+                </label>
+                <div class="{{"full-mid"|forminput}}">
+                    <input type="password" name="newre" id="newre" placeholder="{% trans "New password again" %}"
+                           class="form-control">
+                </div>
+            </div>
+            <div class="form-group text-right {{"full-mid"|formdiv}}">
+                <button type="submit" class="btn btn-primary">
+                    {% trans "Change password" %}
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

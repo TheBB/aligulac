@@ -20,4 +20,4 @@ def blog(request):
         ))
 
     base['blogposts'] = Post.objects.all()[:10]
-    return render_to_response('blog.html', base)
+    return render_to_response('blog.djhtml', base)

@@ -805,7 +805,7 @@ def add_matches(request):
 
     base.update({"title": _("Submit results")})
 
-    return render_to_response('add.html', base)
+    return render_to_response('add.djhtml', base)
 
 # View for reviewing matches
 def review_matches(request):
@@ -834,7 +834,7 @@ def review_matches(request):
 
     base.update({"title": _("Review results")})
 
-    return render_to_response('review.html', base)
+    return render_to_response('review.djhtml', base)
 
 # View for event manager
 def events(request):
@@ -842,6 +842,9 @@ def events(request):
     if not base['adm']:
         return redirect('/login/')
     login_message(base)
+
+    base['messages'].append(Message(
+        _("If you haven't used this tool before, ask before you do anything."), type=Message.WARNING))
 
     if request.method == 'POST':
         form = AddEventsForm(request=request)
@@ -852,21 +855,57 @@ def events(request):
     base['form'] = form
 
     # Build event list
-    events = (
-        Event.objects.filter(closed=False)
-            .annotate(Max('uplink__distance'))
-            .filter(uplink__distance__max=0)
-            .filter(downlink__child__closed=False)
-            .annotate(Max('downlink__distance'))
-            .order_by('idx')
+    root_events = (
+        Event.objects.filter(downlink__child__closed=False)
+                     .filter(parent__isnull=True)
+                     .order_by('idx')
+                     .distinct()
     )
-    #for e in events:
-        #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
-    base['nodes'] = events
+
+    subtreemap = {
+        e.id: []
+        for e in root_events
+    }
+
+    tree = [{ 
+        'event': e,
+        'subtree': subtreemap[e.id],
+        'inc': 0,
+    } for e in root_events]
+
+    events = root_events
+    while events:
+        events = (
+            Event.objects.filter(downlink__child__closed=False)
+                         .filter(parent__in=events)
+                         .order_by('idx')
+                         .distinct()
+        )
+
+        for e in events:
+            subtreemap[e.id] = []
+            subtreemap[e.parent_id].append({
+                'event': e,
+                'subtree': subtreemap[e.id],
+                'inc': 0,
+            })
+
+    base['tree'] = []
+
+    def do_level(level, indent):
+        for e in level:
+            e['indent'] = indent
+            base['tree'].append(e)
+            if e['subtree']:
+                base['tree'][-1]['inc'] += 1
+                do_level(e['subtree'], indent+1)
+                base['tree'][-1]['inc'] -= 1
+
+    do_level(tree, 0)
 
     base.update({"title": _("Manage events")})
 
-    return render_to_response('eventmgr.html', base)
+    return render_to_response('eventmgr.djhtml', base)
 
 # Auxiliary view called by JS code in the event manager for progressively opening subtrees
 def event_children(request, id):
@@ -952,7 +991,7 @@ def open_events(request):
 
     base.update({"title": _("Open events")})
 
-    return render_to_response('events_open.html', base)
+    return render_to_response('events_open.djhtml', base)
 
 # Misc staff tools
 def misc(request):
@@ -982,4 +1021,4 @@ def misc(request):
         'moveform':   moveform,
     })
 
-    return render_to_response('manage.html', base)
+    return render_to_response('manage.djhtml', base)

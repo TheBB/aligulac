@@ -127,7 +127,7 @@ def teams(request):
 
     base.update({"title": _("Teams")})
 
-    return render_to_response('teams.html', base)
+    return render_to_response('teams.djhtml', base)
 # }}}
 
 # {{{ team view
@@ -195,7 +195,7 @@ def team(request, team_id):
 
     base.update({"title": team.name})
 
-    return render_to_response('team.html', base)
+    return render_to_response('team.djhtml', base)
 # }}}
 
 # {{{ transfers view
@@ -247,5 +247,5 @@ def transfers(request):
 
     base.update({"title": _("Recent player transfers")})
 
-    return render_to_response('player_transfers.html', base)
+    return render_to_response('player_transfers.djhtml', base)
 # }}}

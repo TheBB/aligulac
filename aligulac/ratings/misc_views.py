@@ -50,7 +50,7 @@ def home(request):
 
     ctx["miscpages"] = grouper(2, ctx["miscpages"])
 
-    return render_to_response("misc.html", ctx)
+    return render_to_response("misc.djhtml", ctx)
 
 # {{{ Clocks
 # Format (description, hover_description, queryset, type)
@@ -225,5 +225,5 @@ def clocks(request):
 
     ctx["clocks"].sort(key=lambda c: c.date, reverse=True)
 
-    return render_to_response("clocks.html", ctx)
+    return render_to_response("clocks.djhtml", ctx)
 # }}}

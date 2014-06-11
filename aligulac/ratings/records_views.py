@@ -70,7 +70,7 @@ def history(request):
 
     base.update({"title": _("History")})
 
-    return render_to_response('history.html', base)
+    return render_to_response('history.djhtml', base)
 # }}}
 
 # {{{ hof view
@@ -84,7 +84,7 @@ def hof(request):
     )
 
     base.update({"title": _("Hall of Fame")})
-    return render_to_response('hof.html', base)
+    return render_to_response('hof.djhtml', base)
 # }}}
 
 # {{{ filter stolen from templatetags/ratings_extras.py
@@ -132,5 +132,5 @@ def race(request):
         'race':    race if race != 'all' else '',
     })
 
-    return render_to_response('records.html', base)
+    return render_to_response('records.djhtml', base)
 # }}}

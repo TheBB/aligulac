@@ -279,6 +279,15 @@ def js(value):
     else:
         return '/js/' + value + '.js'
 
+# fonts: Generates a fonts file URL
+@register.filter
+@stringfilter
+def fonts(value):
+    if not DEBUG:
+        return 'http://fonts.aligulac.com/' + value
+    else:
+        return '/fonts/' + value
+
 # img: Generates a png-image file URL
 @register.filter
 @stringfilter
@@ -430,6 +439,16 @@ def tomorrow(value):
 @register.filter
 def yesterday(value):
     return value - timedelta(1)
+
+# prevweek: Skips one week back.
+@register.filter
+def prevweek(value):
+    return value - relativedelta(weeks=1)
+
+# nextweek: Skips one week forward.
+@register.filter
+def nextweek(value):
+    return value + relativedelta(weeks=1)
 
 # nextmonth: Skips one month forward.
 @register.filter
@@ -585,3 +604,33 @@ def event(value):
         "</a>").format(id=value.id,
                        name=value.fullname,
                        safename=urlfilter(value.fullname)))
+
+# Creates form classes
+@register.filter
+def formlabel(value):
+    if value == 'full-mid':
+        return ''
+    else: # full
+        return ''
+
+@register.filter
+def forminput(value):
+    if value == 'full-mid':
+        return ''
+    else: # full
+        return ''
+
+@register.filter
+def formdiv(value):
+    if value == 'full-mid':
+        return 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12'
+    else: # full
+        return ''
+
+# For the event manager tree
+@register.filter
+def closedivs(value):
+    s = ''
+    for i in range(0, -int(value)):
+        s += '</div>'
+    return s

@@ -1,0 +1,526 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This template shows the results for an event. (Not the event overview page.) It's called from
+ratings.views.events.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{{ event }}{% endblock %}
+
+{% block modals %}
+  {% if adm %}
+    <div class="modal fade" id="md-edit" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-edit-label">
+              {% trans "Modify event" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                <div class="alert alert-danger text">{% blocktrans %}<strong>Danger!</strong> Changes to date, game and offline will modify all matches associated with all events in this tree. Changing type will potentially change all children and ancestor events! Make sure you know what you are doing!{% endblocktrans %}</div>
+                {% csrf_token %}
+                {% use "hidden" name="modevent" value="modevent" %}
+                {% field "basic" form.name %}
+                {% field "date" form.date %}
+                {% field "select" form.game %}
+                {% field "select" form.offline %}
+                {% field "select" form.type %}
+                {% field "checkbox" form.same_level %}
+                {% field "basic" form.homepage %}
+                {% field "basic" form.tlpd_id %}
+                {% field "selectmulti" form.tlpd_db %}
+                {% field "basic" form.tl_thread %}
+                {% field "basic" form.lp_name %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+            {% endform %}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="md-add" tabindex="-1" role="dialog" aria-labelledby="md-add-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-add-label">
+              {% trans "Add subevents" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                <div class="alert alert-info text">{% blocktrans %}If you need more options, or if you need to add more than one subevent, use the <a href="/add/events/">event manager</a> tool.{% endblocktrans %}</div>
+                {% csrf_token %}
+                {% use "hidden" name="addevent" value="addevent" %}
+                {% field "basic" addform.name %}
+                {% field "select" addform.type %}
+                {% field "checkbox" addform.noprint %}
+                {% field "checkbox" addform.closed %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+            {% endform %}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="md-pp" tabindex="-1" role="dialog" aria-labelledby="md-pp-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-pp-label">
+              {% trans "Modify prizepool" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                {% csrf_token %}
+                {% use "hidden" name="modpp" value="modpp" %}
+                {% field "select" ppform.currency help=_("The currency in which the prize was paid, usually the official currency in the country the tournament was held.") %}
+                {% field "textarea" ppform.ranked rows=8 help=_("Use this for prizes related to final placement in the event.") placeholder=_("[prize] [player]") %}
+                {% field "textarea" ppform.unranked rows=8 help=_("Use this for prizes unrelated to placement, i.e. public tips.") placeholder=_("[prize] [player]") %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+            {% endform %}
+        </div>
+      </div>
+    </div>
+
+    {% if event.has_children %}
+      <div class="modal fade" id="md-ord" tabindex="-1" role="dialog" aria-labelledby="md-ord-label"
+           aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="md-ord-label">
+                {% trans "Reorder subevents" %}
+              </h4>
+            </div>
+            {% form "forms.djhtml" %}
+              <form role="form" method="post" action="/results/events/{{event.id}}/">
+                <div class="modal-body">
+                  <div class="alert alert-info text">{% blocktrans %}Put the <strong>least significant</strong> events first (the ones played first, or with most players). Finals should be toward the bottom.{% endblocktrans %}</div>
+                  <ol id="sortable">
+                    {% for e in children %}
+                      <li id="{{ e.id }}">{{ e.name }}</li>
+                    {% endfor %}
+                  </ol>
+                  {% csrf_token %}
+                  {% use "hidden" name="modpp" value="modpp" %}
+                  {% use "hidden" name="reorder" value="reorder" %}
+                  {% use "hidden" name="order" value="" id="order" %}
+                </div>
+                <div class="modal-footer">
+                  {% use "submit" onclick="get_order();" %}
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </form>
+              {% endform %}
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+       $(document).ready(function () {
+         $(function() {
+           $("#sortable").sortable();
+           $("#sortable").disableSelection();
+         });
+       });
+       var get_order = function () {
+         var ul = document.getElementById('sortable');
+         var str = '';
+         for (var i = 0; i < ul.children.length; i++) {
+           str += ul.children[i].id + ',';
+         }
+         document.getElementById('order').value = str;
+       }
+      </script>
+    {% endif %}
+
+    {% if not event.has_children and stform %}
+      <div class="modal fade" id="md-st" tabindex="-1" role="dialog" aria-labelledby="md-st-label"
+           aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="md-st-label">
+                {% trans "Add or change stories" %}
+              </h4>
+            </div>
+            {% form "forms.djhtml" %}
+              <form role="form" method="post" action="/results/events/{{event.id}}/">
+                <div class="modal-body">
+                  <div class="form-group {{""|formdiv}}">
+                    <label for="extantstories" class="{{""|formlabel}} control-label">
+                      {% trans "Extant stories" %}
+                    </label>
+                    <div class="{{style|forminput}}">
+                      <select class="form-control" id="extantstories" onchange="changed_story();">
+                        <option value="{% trans "New" %}" selected>{% trans "New" %}
+                          {% for story in event.story_set.all %}
+                            <option value="{{story.id}}">{{story}}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+                  {% csrf_token %}
+                  {% use "hidden" name="modstory" value="yes" %}
+                  {% use "hidden" name="story_id" value="" id="story_id" %}
+                  {% field "date" stform.date %}
+                  {% field "select" stform.player %}
+                  {% field "select" stform.text %}
+                  {% field "textarea" stform.params help=_("For each parameter, a line of the form \"parameter: value\". The parameters needed are in the story text of the form \"%(parameter)s\". This will be replaced by the value you enter.") %}
+                </div>
+                <div class="modal-footer">
+                  {% use "submit" text=_('New')  name="storynew" id="storynewbtn" %}
+                  {% use "submit" text=_('Update') name="storyupd" id="storyupdbtn" disabled=True %}
+                  {% use "submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True %}
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </form>
+              {% endform %}
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript">
+       story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
+       function changed_story()
+       {
+         var sel = document.getElementById('extantstories');
+         var data = story_data[sel.selectedIndex];
+         document.getElementById('story_id').setAttribute('value', data['idx']);
+         document.getElementById('id_player').value = data['player'];
+         document.getElementById('id_date').setAttribute('value', data['dt']);
+         document.getElementById('id_text').selectedIndex = data['text'];
+         document.getElementById('id_params').value = data['params'];
+         document.getElementById('storynewbtn').disabled = (sel.selectedIndex > 0);
+         document.getElementById('storyupdbtn').disabled = (sel.selectedIndex == 0);
+         document.getElementById('storydelbtn').disabled = (sel.selectedIndex == 0);
+       }
+      </script>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <h2>
+      <ol class="breadcrumb">
+        <li><a href="/results/events/">
+          <span class="glyphicon glyphicon-home"></span>
+        </a></li>
+        {% for e in path %}
+          <li {% if forloop.last %}class="active"{% endif %}>
+            {% if forloop.last %}
+              {{e.name}}
+            {% else %}
+              <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </h2>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-7">
+      <ul class="nav nav-tabs">
+        {% if siblings or children %}
+          <li class="active">
+            <a href="#navigation" data-toggle="tab">{% trans "Navigation" %}</a>
+          </li>
+        {% endif %}
+        <li {% if not siblings and not children %}class="active"{% endif %}>
+          <a href="#matchups" data-toggle="tab">{% trans "Matchups" %}</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        {% if siblings or children %}
+          <div class="tab-pane active" id="navigation" style="padding-top: 1em;">
+            {% if siblings %}
+              <h4>Same level</h4>
+              <p>
+                {% for e in siblings %}
+                  <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
+                {% endfor %}
+              </p>
+            {% endif %}
+
+            {% if children %}
+              <h4>Next level</h4>
+              <p>
+                {% for e in children %}
+                  <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
+                {% endfor %}
+              </p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="matchups" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 10%; border-top: none;">{% trans "PvT" %}</th>
+                <td style="width: 90%; border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvt_wins or pvt_loss %}
+                      {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% else %}
+                      <div class="progress-bar" style="width: 0%">&nbsp;</div>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "PvZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvz_wins or pvz_loss %}
+                      {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% else %}
+                      <div class="progress-bar" style="width: 0%">&nbsp;</div>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "TvZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if tvz_wins or tvz_loss %}
+                      {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
+                        <div class="progress-bar progress-bar-primary" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% else %}
+                      <div class="progress-bar" style="width: 0%">&nbsp;</div>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "Mirrors" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvp_games or tvt_games or zvz_games %}
+                      {% with p=pvp_games|pctg_scl:tot_mirror t=tvt_games|pctg_scl:tot_mirror z=zvz_games|pctg_scl:tot_mirror %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p}}%">{{p}}%</div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{t}}%">{{t}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{z}}%">{{z}}%</div>
+                      {% endwith %}
+                    {% else %}
+                      <div class="progress-bar" style="width: 0%">&nbsp;</div>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-5">
+      <div class="table-responsive">
+        <table class="table table-condensed table-striped table-hover">
+          <thead>
+            <tr><th colspan="2" class="text-center">
+              {% trans "Details" %}
+            </th></tr>
+          </thead>
+          <tr class="small">
+            <td class="text-right ibox-left" style="width: 40%;">
+              {% if event.earliest != event.latest %}
+                {% trans "Dates" %}
+              {% else %}
+                {% trans "Date" %}
+              {% endif %}
+            </td>
+            <td style="width: 60%;">
+              {% if event.earliest and event.latest %}
+                {% ifequal event.earliest event.latest %}
+                  {{ event.earliest }}
+              {% else %}
+                  {% with fst=event.earliest snd=event.latest %}
+                    {% comment %}Translators: Date to date.{% endcomment %}
+                    {% blocktrans %}{{ fst }} to {{ snd }}{% endblocktrans %}
+                  {% endwith %}
+                {% endifequal %}
+              {% endif %}
+            </td>
+          </tr>
+          {% if game %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Game version" %}</td>
+              <td>{{ game }}</td>
+            </tr>
+          {% endif %}
+          {% if offline %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "On-/Offline" %}</td>
+              <td>{{ offline }}</td>
+            </tr>
+          {% endif %}
+          {% if prizepoolorig %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Prizepool" %}</td>
+              <td>
+                {% for pp in prizepoolorig %}
+                  {{ pp.pp|add_sep_and_cur:pp.cur }}
+                  {% if not forloop.last or nousdpp %}<br>{% endif %}
+                {% endfor %} 
+                {% if nousdpp %}(= <strong>{{ prizepool|add_sep_and_cur:"USD" }}</strong>){% endif %}
+              </td>
+            </tr>
+          {% endif %}
+          {% if adm %}
+            <tr class="small">
+              {% comment %}Translators: Event type.{% endcomment %}
+              <td class="text-right ibox-left">{% trans "Type" %}</td>
+              <td>{{ event.type|capfirst }}</td>
+            </tr>
+          {% endif %}
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Players" %}</td>
+            <td>{{ nplayers }}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Games" %}</td>
+            <td>{{ ngames }}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Matches" %}</td>
+            <td>{{ nmatches }}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "PvT" %}</td>
+            <td>
+              {{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "PvZ" %}</td>
+            <td>
+              {{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "TvZ" %}</td>
+            <td>
+              {{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Mirrors" %}</td>
+            <td>
+              {{ pvp_games }} {% trans "PvP" %},
+              {{ tvt_games }} {% trans "TvT" %},
+              {{ zvz_games }} {% trans "ZvZ" %}
+            </td>
+          </tr>
+          {% if event.get_homepage or event.tlpd_id or event.get_tl_thread or event.get_lp_name %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "External" %}</td>
+              <td>
+                {% if event.get_homepage %}
+                  <a href="{{ event.get_homepage }}" target="_blank">{% trans "Homepage" %}</a>
+                {% endif %}
+                {% with tlpds=event.get_tlpd_id %}
+                  {% if tlpds.KR %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-korean/leagues/{{ tlpds.KR }}" target="_blank">{% trans "TLPD" %}</a>
+                  {% endif %}
+                  {% if tlpds.IN %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-international/leagues/{{ tlpds.IN }}" target="_blank">{% trans "TLPD" %}</a>
+                  {% endif %}
+                  {% if tlpds.HotS %}
+                    <a href="http://www.teamliquid.net/tlpd/hots/leagues/{{ tlpds.HotS }}" target="_blank">{% trans "TLPD" %}</a>
+                  {% endif %}
+                  {% if tlpds.HotSbeta %}
+                    <a href="http://www.teamliquid.net/tlpd/hots-beta/leagues/{{ tlpds.HotSbeta }}" target="_blank">{% trans "TLPD" %}</a>
+                  {% endif %}
+                  {% if tlpds.WoLbeta %}
+                    <a href="http://www.teamliquid.net/tlpd/sc2-beta/leagues/{{ tlpds.WoLbeta }}" target="_blank">{% trans "TLPD" %}</a>
+                  {% endif %}
+                {% endwith %}
+                {% if event.get_tl_thread %}
+                  <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">{% trans "TL" %}</a>
+                {% endif %}
+                {% if event.get_lp_name %}
+                  <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+          {% if adm %}
+            <tr class="small">
+              <td colspan="2" class="text-center">
+                <a href="#" title="{% trans "Edit info" %}" data-toggle="modal" data-target="#md-edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="/admin/ratings/event/{{event.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
+                <a href="/add/?eventid={{event.id}}" title="{% trans "Add matches" %}"><span class="glyphicon glyphicon-plus"></span> </a>
+                <a href="#" title="{% trans "Add subevents" %}" data-toggle="modal" data-target="#md-add"><span class="glyphicon glyphicon-file"></span></a>
+                {% if event.type == "event" %}
+                  <a href="#" title="{% trans "Prize pool" %}" data-toggle="modal" data-target="#md-pp"><span class="glyphicon glyphicon-usd"></span> </a>
+                {% endif %}
+                {% if not event.has_children and stform %}
+                  <a href="#" title="{% trans "Stories" %}" data-toggle="modal" data-target="#md-st"><span class="glyphicon glyphicon-flag"></span> </a>
+                {% endif %}
+                {% if event.has_children %}
+                  <a href="#" title="{% trans "Reorder subevents" %}" data-toggle="modal" data-target="#md-ord"><span class="glyphicon glyphicon-random"></span> </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% if matches %}
+    {% include "matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
+  {% else %}
+    <div class="row text-center">
+      <p>{% trans "This event has no registered games... yet." %}</p>
+    </div>
+  {% endif %}
+
+  <div class="row text-center">
+    <p>{% blocktrans with uri="/add/" %}Notice something missing? We're always looking for people to help <a href="{{ uri }}">populate our database</a>!{% endblocktrans %}</p>
+  </div>
+{% endblock %}

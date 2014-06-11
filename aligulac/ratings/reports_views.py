@@ -38,5 +38,5 @@ def balance(request):
 
     base.update({"title": _("Balance report")})
 
-    return render_to_response('reports_balance.html', base)
+    return render_to_response('reports_balance.djhtml', base)
 # }}}

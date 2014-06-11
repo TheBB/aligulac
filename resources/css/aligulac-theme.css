@@ -1,0 +1,400 @@
+/* Title text ('ALIGULAC') and subheading */
+h1 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 60px;
+    letter-spacing: 0.6em;
+    text-align: center;
+    padding-left: 0.7em; /* Required for centering */
+}
+
+.subheading {
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+/* Major headings are in h2 */
+h2 {
+    font-size: 2em;
+    font-weight: 400;
+    border-style: none none solid none;
+    border-width: 0.05em;
+    border-color: #e7e7e7;
+    font-variant: small-caps;
+}
+
+/* Subheadings */
+h3 {
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    font-variant: small-caps;
+}
+
+/* A blacklink is always black and never underlied. */
+a.blacklink {
+    color: #000000;
+}
+
+a.blacklink:hover {
+    text-decoration: none;
+} 
+
+/* Centered navbar */
+@media (min-width: 768px) {
+    .navbar-nav {
+        margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        float: none;
+    }
+} 
+
+.navbar {
+    border-radius: 0;
+    border-style: solid none solid none;
+}
+    
+
+/* Centered footer */
+footer {
+    text-align: center;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    padding-top: 30px;
+    padding-bottom: 80px;
+}
+
+/* Change the glow around focused input */
+.form-control:focus {
+    border-color: #000000;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+    box-shadow:         inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+}
+
+/* JQuery datepicker needs to have the same font */
+.ui-widget {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Autocomplete styles */
+.ui-autocomplete {
+    padding: 0.3em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.ui-menu .ui-menu-item a {
+    border-radius: 0;
+}
+
+.autocomp-team {
+    margin-left: 10em; /* So that the team names don't get too close */
+}
+
+.autocomp-header {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: #f8f8f8;
+    border-style: solid;
+    border-width: 1px 0px 1px 0px;
+    border-color: #999999;
+    margin-top: 2px;
+}
+
+/* Right-pointing caret */
+.right-caret {
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left: 5px solid #000000;
+    display: inline-block;
+    height: 0;
+    opacity: 0.3;
+    vertical-align: middle;
+    width: 0;
+}
+
+/* Ratinglist table */
+.rl_number {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.rl_arrow {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_name {
+    width: 25%;
+}
+
+.rl_team {
+    width: 20%;
+}
+
+.rl_rating {
+    width: 8%;
+    text-align: right;
+    padding-left: 1em;
+}
+
+/* Historical overview table */
+.ho_icon {
+    width: 13%;
+    text-align: right;
+}
+
+.ho_pctg {
+    width: 2em;
+    text-align: right;
+}
+
+.ho_num {
+    width: 13%;
+    text-align: right;
+}
+
+/* Earnings table */
+.ea_number {
+    width: 2em;
+    text-align: right;
+}
+
+.ea_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.ea_name {
+}
+
+.ea_team {
+}
+
+.ea_earnings {
+    text-align: right;
+    width: 10em;
+}
+
+.ea_flush {
+    width: 15%;
+}
+    
+/* Match table */
+.lm_date {
+    width: 17%;
+}
+
+.lm_rta {
+    text-align: right;
+    width: 5em;
+}
+
+.lm_pla {
+    text-align: right;
+    width: 23%;
+}
+
+.lm_score {
+    width: 7em;
+    text-align: center;
+}
+
+.lm_plb {
+    width: 23%;
+}
+
+.lm_rtb {
+    text-align: right;
+    width: 5em;
+}
+
+.lm_right {
+    text-align: right;
+    width: 17%;
+}
+
+.eventheader {
+    background: #f5f5f5;
+}
+
+.eventheader-mid {
+    font-size: 1.1em;
+}
+
+.eventheader-right {
+    font-variant: small-caps;
+}
+
+/* Subelements of h2 headings -- make sure the h2 has position: relative; */
+h2.sub {
+    position: relative;
+}
+
+h2.sub > small.right {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    right: 0;
+    font-variant: normal;
+}
+
+h2.sub > .left {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    margin-left: 1em;
+}
+
+/* Wrap paragraphs in a div.text to make them justified */
+div.text, div.text > p, div.text > ul > li {
+    text-align: justify;
+}
+
+div.text > ul > li {
+    text-align: justify;
+}
+
+/* Styles for message boxes */
+.message {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0.5em;
+    border-radius: 1em;
+    margin-bottom: 0.5em;
+}
+
+.message > img {
+    margin-right: 1em;
+}
+
+.m-success {
+    background: #dff0d8;
+    border-color: #c1e2b3;
+}
+
+.m-success:hover {
+    background-color: #c1e2b3;
+}
+
+.m-warning {
+    background: #fcf8e3;
+    border-color: #f7ecb5;
+}
+
+.m-warning:hover {
+    background-color: #f7ecb5;
+}
+
+.m-info {
+    background: #d9edf7;
+    border-color: #afd9ee;
+}
+
+.m-info:hover {
+    background-color: #afd9ee;
+}
+
+.m-error {
+    background: #f2dede;
+    border-color: #e4b9b9;
+}
+
+.m-error:hover {
+    background-color: #e4b9b9;
+}
+
+/* Class for inline form labels, help spacing */
+.inline-label {
+    margin-left: 1em;
+    margin-right: 0.2em;
+}
+
+/* Infobox tables */
+.ibox-left {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #e7e7e7;
+}
+
+/* Keep race and flag icons apart */
+.player img, .ui-corner-all img, .lm_plb img {
+    padding-right: 0.3em;
+}
+
+.lm_pla img {
+    padding-left: 0.3em;
+}
+
+/* Highlight the winner in a result */
+.winner {
+    background: #bbeebb;
+    /*
+    background: #aaa;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    color: #ffffff;
+    */
+}
+
+.winnersc {
+    background: #aaa;
+    padding: 0.3em;
+    border-radius: 0.3em;
+    color: #ffffff;
+}
+
+/* Event manager tree */
+.tree-node {
+    border-radius: 0px !important;
+    margin-top: 1px;
+    border-top: none;
+}
+
+.tree-node-first {
+    border-top: 1px solid #ddd;
+}
+
+.tree-node-category { }
+
+.tree-node-event {
+    background: #fff4f4;
+}
+
+.tree-node-round {
+    background: #f0fff0;
+}
+
+
+/* Make breadcrumbs in headers look like normal headers */
+h2 .breadcrumb {
+    background: #ffffff;
+    margin-bottom: 0px;
+    padding: 0px 0px;
+}
+
+h2 .breadcrumb li.active {
+    color: #000000;
+}
+
+/* Condense the event header a little, some of the titles can be long */
+h2 .breadcrumb > li + li:before {
+    padding: 0 0;
+    content: "/";
+}
+
+/* Sortable lists should not have a caret cursor. */
+#sortable li {
+    cursor: pointer;
+}

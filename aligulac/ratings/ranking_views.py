@@ -50,7 +50,7 @@ def periods(request):
     base['periods'] = Period.objects.filter(computed=True).order_by('-id')
     
     base.update({"title": _("Historical overview")})
-    return render_to_response('periods.html', base)
+    return render_to_response('periods.djhtml', base)
 # }}}
 
 # {{{ period view
@@ -124,8 +124,7 @@ def period(request, period_id=None):
         .order_by('diff')
 
     base.update({
-        'gainers': gainers[:5],
-        'losers': losers[:5]
+        'updown': zip(gainers[:5], losers[:5])
     })
     # }}}
 
@@ -189,12 +188,23 @@ def period(request, period_id=None):
     page = min(max(page, 1), npages)
     entries = entries[(page-1)*pagesize : page*pagesize] if page > 0 else []
 
+    pn_start, pn_end = page - 2, page + 2
+    if pn_start < 1:
+        pn_end += 1 - pn_start
+        pn_start = 1
+    if pn_end > npages:
+        pn_start -= pn_end - npages
+        pn_end = npages
+    if pn_start < 1:
+        pn_end = npages
+
     base.update({
         'page':       page,
         'npages':     npages,
         'startcount': (page-1)*pagesize,
         'entries':    populate_teams(entries),
         'nperiods':   Period.objects.filter(computed=True).count(),
+        'pn_range':   range(pn_start, pn_end+1),
     })
     # }}}
 
@@ -207,7 +217,7 @@ def period(request, period_id=None):
     # Translators: List (number): (date)
     base.update({"title": _("List {num}: {date}").format(num=period.id, date=fmt_date)})
 
-    return render_to_response('period.html', base)
+    return render_to_response('period.djhtml', base)
 # }}}
 
 # {{{ earnings view
@@ -265,10 +275,21 @@ def earnings(request):
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
     page = min(max(page, 1), npages)
 
+    pn_start, pn_end = page - 2, page + 2
+    if pn_start < 1:
+        pn_end += 1 - pn_start
+        pn_start = 1
+    if pn_end > npages:
+        pn_start -= pn_end - npages
+        pn_end = npages
+    if pn_start < 1:
+        pn_end = npages
+
     base.update({
         'page':       page,
         'npages':     npages,
         'startcount': (page-1)*pagesize,
+        'pn_range':   range(pn_start, pn_end+1)
     })
 
     if nitems > 0:
@@ -289,5 +310,5 @@ def earnings(request):
 
     base.update({"title": _("Earnings ranking")})
 
-    return render_to_response('earnings.html', base)
+    return render_to_response('earnings.djhtml', base)
 # }}}

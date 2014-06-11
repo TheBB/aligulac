@@ -154,7 +154,7 @@ class PlayerModForm(forms.Form):
         update(self.cleaned_data['sc2e_id'],   'sc2e_id',   'set_sc2e_id',   _('SC2Earnings.com ID'))
         update(sum([int(a) for a in self.cleaned_data['tlpd_db']]), 'tlpd_db', 'set_tlpd_db', _('TLPD DBs'))
 
-        if player.set_aliases(self.cleaned_data['akas'].split(',')):
+        if player.set_aliases([x for x in self.cleaned_data['akas'].split(',') if x.strip() != '']):
             ret.append(Message(_('Changed aliases.'), type=Message.SUCCESS))
 
         return ret
@@ -369,7 +369,7 @@ def player(request, player_id):
 
     base.update({"title": player.tag})
 
-    return render_to_response('player.html', base)
+    return render_to_response('player.djhtml', base)
 # }}}
 
 # {{{ adjustment view
@@ -397,7 +397,7 @@ def adjustment(request, player_id, period_id):
 
     # If there are no matches, we don't need to continue
     if not matches.exists():
-        return render_to_response('ratingdetails.html', base)
+        return render_to_response('ratingdetails.djhtml', base)
 
     base.update({
         'matches': display_matches(matches, fix_left=player, ratings=True),
@@ -448,7 +448,7 @@ def adjustment(request, player_id, period_id):
     })
     # }}}
 
-    return render_to_response('ratingdetails.html', base)
+    return render_to_response('ratingdetails.djhtml', base)
 # }}}
 
 # {{{ results view
@@ -695,7 +695,7 @@ def results(request, player_id):
 
     base.update({"title": player.tag})
     
-    return render_to_response('player_results.html', base)
+    return render_to_response('player_results.djhtml', base)
 # }}}
 
 # {{{ historical view
@@ -720,7 +720,7 @@ def historical(request, player_id):
     })
 
     base.update({"title": player.tag})
-    return render_to_response('historical.html', base)
+    return render_to_response('historical.djhtml', base)
 # }}}
 
 # {{{ earnings view
@@ -757,7 +757,7 @@ def earnings(request, player_id):
 
     base.update({"title": player.tag})
 
-    return render_to_response('player_earnings.html', base)
+    return render_to_response('player_earnings.djhtml', base)
 # }}}
 
 

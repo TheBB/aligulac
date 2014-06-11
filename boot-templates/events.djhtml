@@ -1,0 +1,48 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This shows the event overview page. Called from ratings.views.events.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Events" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <h2>
+    {% trans "Events" %}
+  </h2>
+</div>
+
+{% include "messages.djhtml" %}
+
+<div class="row">
+  {% for e in bigs %}
+    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+      <div class="well event-panel event-panel-{{e.category}}">
+        <a class="eventname" href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a>
+        <span class="pull-right">
+          <div class="btn-group">
+            <button class="btn btn-xs dropdown-toggle btn-{% if e.category == "individual" %}success{% elif e.category == "team" %}danger{% else %}info{% endif %}" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              {% for c in e.get_immediate_children.all %}
+                <li><a href="/results/events/{{c.id}}-{{c.fullname|urlfilter}}/">{{c.fullname}}</a>
+              {% endfor %}
+            </ul>
+          </div>
+        </span>
+      </div>
+    </div>
+
+    {% if forloop.counter|mod:3 == 0 %}<div class="visible-lg clearfix"></div>{% endif %}
+    {% if forloop.counter|mod:2 == 0 %}<div class="visible-md clearfix"></div>{% endif %}
+    {% if forloop.counter|mod:2 == 0 %}<div class="visible-sm clearfix"></div>{% endif %}
+    <div class="visible-xs clearfix"></div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -634,3 +634,8 @@ def closedivs(value):
     for i in range(0, -int(value)):
         s += '</div>'
     return s
+
+# Modulo
+@register.filter
+def mod(value, arg):
+    return int(value) % int(arg)

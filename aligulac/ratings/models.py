@@ -450,7 +450,7 @@ class Event(models.Model):
 
     # {{{ get_ancestors_print: Returns a list containing the printable ancestors
     def get_ancestors_print(self, id=True):
-        return [event for event in self.get_ancestors_list() if not event.noprint]
+        return [event for event in self.get_ancestors_list(id) if not event.noprint]
     # }}}
 
     # {{{ get_ancestors_event: Returns a list containing printable ancestors of type event or category

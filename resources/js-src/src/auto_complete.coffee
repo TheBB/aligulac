@@ -4,25 +4,31 @@
 
 aligulacAutocompleteTemplates = (obj) ->
     if not (obj.tag? || obj.name? || obj.fullname?)
-        return "<span class='autocomplete-header'>#{ autocomp_strings[obj.label] }</span>"
+        return "<span class='autocomp-header'>#{ autocomp_strings[obj.label] }</span>"
 
     switch obj.type
         when 'player'
-            obj.key = obj.tag + ' ' + obj.id;
+            obj.key = obj.tag + ' ' + obj.id
+            team = (
+                if obj.teams? && obj.teams.length > 0
+                    "<span class='autocomp-team pull-right'>#{ obj.teams[0][0] }</span>"
+                else
+                    ''
+            )
             flag = (
                 if obj.country?
                     "<img src='#{ flags_dir + obj.country.toLowerCase() }.png' />"
                 else
-                    ""
+                    ''
             )
             race = "<img src='#{ races_dir + obj.race.toUpperCase() }.png' />"
-            name = obj.tag
-            return "<a>#{ flag }#{ race }#{ name }</a>"
+            name = "<span>#{ obj.tag }</span>"
+            return "<a>#{ flag }#{ race }#{ name }#{ team }</a>"
         when 'team'
-            obj.key = obj.name;
+            obj.key = obj.name
             return "<a>#{ obj.name }</a>"
         when 'event'
-            obj.key = obj.fullname;
+            obj.key = obj.fullname
             return "<a>#{ obj.fullname }</a>"
 
     "<a>#{ obj.value }</a>";
@@ -67,7 +73,7 @@ $(document).ready ->
                     'team',
                     'Teams'
 
-                eventresult = prepare_response result.event,
+                eventresult = prepare_response result.events,
                     'event',
                     'Events'
 

@@ -1,6 +1,6 @@
 gen_short = (path) ->
     $.get "/m/new/?url=" + encodeURIComponent(path), (data) ->
-        $("#genshort").hide()
-        $("#dispshort").html "<a href=\"/m/" + data + "/\">/m/" +
+        $("#gen_short").hide()
+        $("#disp_short").html "<a href=\"/m/" + data + "/\">/m/" +
                 data + "</a>"
-        $("#dispshort").show()
+        $("#disp_short").show()

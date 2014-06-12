@@ -269,7 +269,7 @@ This template shows a rating list for a given period.
         {% ifchanged %}{% trans "Winners" %} <img src="{{ "uparrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
-        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">+{{ r.diff|ratscalediff }}</a>
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period_id }}/">+{{ r.diff|ratscalediff }}</a>
       </td>
       <td class="expand">
         {{ r.player|player }}
@@ -286,7 +286,7 @@ This template shows a rating list for a given period.
         {% ifchanged %}{% trans "Losers" %} <img src="{{ "downarrow"|img }}" class="btm"/>{% endifchanged %}
       </td>
       <td class="shrink">
-        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period.id }}/">{{ r.diff|ratscalediff }}</a>
+        <a href="/players/{{ r.player.id }}-{{ r.player.tag|urlfilter }}/period/{{ r.period_id }}/">{{ r.diff|ratscalediff }}</a>
       </td>
       <td class="expand">
         {{ r.player|player }}

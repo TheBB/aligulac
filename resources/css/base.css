@@ -291,9 +291,9 @@ div.faqpost {
     text-align: justify;
 }
 
-    div.faqpost img {
-        float: right;
-    }
+div.faqpost img {
+    float: right;
+}
 
 table.results tr.nonheader {
     font-family: Verdana, Geneva, sans-serif;

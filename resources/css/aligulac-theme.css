@@ -451,3 +451,8 @@ h2 .breadcrumb > li + li:before {
 .option-disabled {
     background: #e7e7e7;
 }
+
+/* Float images in FAQ */
+.faqpost p img {
+    float: right;
+}

@@ -866,7 +866,7 @@ class Player(models.Model):
     def get_current_teammembership(self):
         try:
             groups = self.groupmembership_set.all()
-            return next((x for x in groups if x.group.is_team and x.current))
+            return next(x for x in groups if x.group.is_team and x.current)
         except:
             return None
     # }}}

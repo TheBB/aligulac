@@ -146,7 +146,7 @@ var mobile_regex, toggle_navbar_method;
 mobile_regex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
 
 toggle_navbar_method = function() {
-  if (mobile_regex.test(navigator.userAgent || $(window).width() <= 768)) {
+  if (mobile_regex.test(navigator.userAgent) || $(window).width() <= 768) {
     return $('.navbar .dropdown').off('mouseover').off('mouseout');
   } else {
     return $('.navbar .dropdown').on('mouseover', function() {

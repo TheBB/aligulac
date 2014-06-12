@@ -14,7 +14,7 @@ mobile_regex = ///
 ///i
 
 toggle_navbar_method = ->
-    if mobile_regex.test navigator.userAgent or $(window).width() <= 768
+    if mobile_regex.test(navigator.userAgent) or $(window).width() <= 768
         $('.navbar .dropdown').off('mouseover').off('mouseout')
     else
         $('.navbar .dropdown').on('mouseover', ->

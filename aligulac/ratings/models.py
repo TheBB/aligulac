@@ -1584,6 +1584,15 @@ class Match(models.Model):
         return None
     # }}}
 
+    # {{{ get_winner_id
+    def get_winner_id(self):
+        if self.sca > self.scb:
+            return self.pla_id
+        elif self.scb > self.sca:
+            return self.plb_id
+        return None
+    # }}}
+
     # {{{ get_winner_score: Returns the score of the winner.
     def get_winner_score(self):
         return max(self.sca, self.scb)

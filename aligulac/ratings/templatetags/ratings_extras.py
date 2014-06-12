@@ -2,6 +2,10 @@ import hashlib
 import markdown2
 from math import sqrt
 import re
+
+from countries import (
+    transformations,
+)
 from datetime import (
     timedelta,
     date,
@@ -94,8 +98,11 @@ def urlify(value):
 
 # player_url: Generate a player URL.
 @register.filter
-def player_url(value):
-    return "/players/" + str(value.id) + "-" + urlfilter(value.tag) + "/"
+def player_url(value, with_path=True):
+    step1 = "{}-{}".format(value.id, urlfilter(value.tag))
+    if not with_path:
+        return step1
+    return "/players/" + step1 + "/"
 
 # vs_url: Generate a search query for the two players
 @register.filter
@@ -133,6 +140,13 @@ def racefull(value):
         _('Random'),
         _('Race switcher')][['P','T','Z','R','S'].index(value)]
     )
+
+# countryfull: Converts a country code to human readable format.
+@register.filter
+def countryfull(value):
+    if value is not None:
+        return transformations.cc_to_cn(value)
+    return value
 
 # haslogo: Checks whether a team given by ID has a logo file.
 @register.filter
@@ -562,17 +576,45 @@ def player(value):
     if not isinstance(value, Player):
         return value
 
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
     return mark_safe((
         "<span class='player'>"
         "<a href='/players/{id}-{safetag}/'>"
-        "<img src='{flag}' /><img src='{race}' />{tag}"
+        "{flag}<img src='{race}' />{tag}"
         "</a>"
         "</span>"
-        ).format(tag=value.tag,
-                 safetag=urlfilter(value.tag),
-                 id=value.id,
-                 flag=img("flags/" + value.country.lower()),
-                 race=img(value.race)))
+        ).format(
+            tag=value.tag,
+            safetag=urlfilter(value.tag),
+            id=value.id,
+            flag=flag,
+            race=img(value.race)))
+
+@register.filter
+def player_no_race(value):
+    if not isinstance(value, Player):
+        return value
+
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
+    return mark_safe((
+        "<span class='player'>"
+        "<a href='/players/{id}-{safetag}/'>"
+        "{flag}{tag}"
+        "</a>"
+        "</span>"
+        ).format(
+            tag=value.tag,
+            safetag=urlfilter(value.tag),
+            id=value.id,
+            flag=flag))
 
 @register.filter
 def event(value):

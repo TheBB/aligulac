@@ -299,6 +299,10 @@ table.results tr.nonheader {
     font-family: Verdana, Geneva, sans-serif;
 }
 
+table.comp tr.nonheader {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
 tr.row2 {
     background: #eeeeee;
 }
@@ -343,6 +347,11 @@ td.shrink {
 }
 td.expand {
     width: 99%;
+}
+
+tr.hline {
+    background-color: #555555;
+    height: 1px;
 }
 
 /* =====================================================================
@@ -848,4 +857,47 @@ td.tabunsel a {
     border-radius: 0;
     color: black;
     margin: 0;
+}
+
+
+/* Comparisions */
+
+table.comp {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.comp th, td {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin: 1px;
+}
+
+th.comp-head a {
+    color: black;
+}
+
+th.comp-head {
+    text-align: center;
+    vertical-align: middle;
+}
+
+div.comp-player-race {
+    display: inline;
+}
+
+div.comp-player-tag {
+    font-size: larger;
+    display: inline;
+}
+
+td.comp-best {
+    color: darkgreen;
+}
+td.comp-worst {
+    color: red;
+}
+
+td.comp-entry {
+    text-align: right;
 }

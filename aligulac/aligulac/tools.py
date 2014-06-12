@@ -287,6 +287,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
             'submenu': [
                 ('Balance Report', _('Balance Report'), '/misc/balance/'),
                 ('Days Since…', _('Days Since…'), '/misc/days/'),
+                ('Compare', _('Compare'), '/misc/compare/')
         ]}, {
             'id': 'About',
             'name': _('About'),

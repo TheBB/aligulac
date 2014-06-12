@@ -62,6 +62,10 @@ def home(request):
           "title": _("Number of days since…"),
           "desc": _("Page showing the most recent time some things happened.")
         },
+        { "url": "/misc/compare/",
+          "title": _("Compare"),
+          "desc": _("Tool for comparing players.")
+        }
     )
 
     # http://docs.python.org/3.2/library/itertools.html

@@ -8,19 +8,60 @@ This is the template for the main player page, called from ratings.views.player.
 {% load formulation %}
 {% load i18n %}
 
+{% block modals %}
+  {% if adm %}
+    <div class="modal fade" id="md-edit" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-edit-label">
+              {% trans "Modify player" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/players/{{player.id}}-{{player.tag|urlfilter}}/">
+              <div class="modal-body">
+                {% csrf_token %}
+                {% field "basic"        modform.tag        %}
+                {% field "select"       modform.race       %}
+                {% field "select"       modform.country    %}
+                {% field "basic"        modform.name       %}
+                {% field "basic"        modform.akas       %}
+                {% field "date"         modform.birthday   %}
+                {% field "basic"        modform.sc2e_id    %}
+                {% field "basic"        modform.lp_name    %}
+                {% field "basic"        modform.tlpd_id    %}
+                {% field "selectmulti"  modform.tlpd_db    %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" name="modplayer" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+            {% endform %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
 {% block title %}{{ player.tag }}{% endblock %}
 
 {% block content %}
 
   <div class="row">
-    <h2>
-      {{player.tag}}
-      <small>{% trans "Summary" %}</small>
-      <small><a href="#">{% trans "Rating history" %}</a></small>
-      <small><a href="#">{% trans "Match history" %}</a></small>
-      <small><a href="#">{% trans "Earnings" %}</a></small>
-      <small><a href="#">{% trans "Adjustments" %}</a></small>
-    </h2>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {{player.tag}}
+        <small>{% trans "Summary" %}</small>
+        <small><a href="#">{% trans "Rating history" %}</a></small>
+        <small><a href="#">{% trans "Match history" %}</a></small>
+        <small><a href="#">{% trans "Earnings" %}</a></small>
+        <small><a href="#">{% trans "Adjustments" %}</a></small>
+      </h2>
+    </div>
   </div>
 
   {% include "messages.djhtml" %}
@@ -339,11 +380,11 @@ This is the template for the main player page, called from ratings.views.player.
               </thead>
               {% for r,n,v in riv_nem_vic %}
                 <tr>
-                  <td class="text-right"><a href="{{player.id|vs_url:r.id}}">{{r.matches}}</a></td>
+                  <td class="text-right small"><a href="{{player.id|vs_url:r.id}}">{{r.matches}}</a></td>
                   <td>{{r|player}}</td>
-                  <td class="text-right"><a href="{{player.id|vs_url:n.id}}">{{n.pm|signify}}</a></td>
+                  <td class="text-right small"><a href="{{player.id|vs_url:n.id}}">{{n.pm|signify}}</a></td>
                   <td>{{n|player}}</td>
-                  <td class="text-right"><a href="{{player.id|vs_url:v.id}}">{{v.pm|signify}}</a></td>
+                  <td class="text-right small"><a href="{{player.id|vs_url:v.id}}">{{v.pm|signify}}</a></td>
                   <td>{{v|player}}</td>
                 </tr>
               {% endfor %}
@@ -485,238 +526,223 @@ This is the template for the main player page, called from ratings.views.player.
     </div>
   </div>
 
-{% if adm %}
-<div class="hiddenform" style="display: none;" id="modplayer">
-<div class="close-button">
-    <a href="#" onclick="$('#modplayer').hide(); return false;">{% trans "close" %}</a>
-</div>
-<form method="post" action="/players/{{ player.id }}-{{ player.tag|urlfilter }}/">
-<table class="hiddenform bigform">
-{% csrf_token %}
-{% form "forms.djhtml" %}
-    {% field "basic"        modform.tag        class="wideinput" %}
-    {% field "select"       modform.race       class="wideinput" %}
-    {% field "select"       modform.country    class="wideinput" %}
-    {% field "basic"        modform.name       class="wideinput" %}
-    {% field "basic"        modform.akas       class="wideinput" %}
-    {% field "date"         modform.birthday   class="wideinput" %}
-    {% field "basic"        modform.sc2e_id    class="wideinput" %}
-    {% field "basic"        modform.lp_name    class="wideinput" %}
-    {% field "basic"        modform.tlpd_id    class="wideinput" %}
-    {% field "selectmulti"  modform.tlpd_db    class="wideinput" %}
-    {% use "submit" name="modplayer" %}
-{% endform %}
-</table>
-</form>
-</div>
-{% endif %}
-
-{% if charts %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        var chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'chart',
-                type: 'spline',
-                zoomType: 'xy'
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
-            },
-            subtitle: {
-                text: '{% trans "Click and drag to zoom" %}'
-            },
-            xAxis: {
-                type: 'datetime',
-                plotLines: [
-                {% for p in patches %}
-                {
-                    value: {{ p.0|milliseconds }},
-                    color: '#cccccc',
-                    width: 2,
-                    label: {
-                        text: '{{ p.1 }}',
-                        verticalAlign: 'bottom',
-                        textAlign: 'right',
-                        y: -2,
-                        style: {
-                            fontSize: '0.8em',
-                        }
-                    }
-                },
-                {% endfor %}]
-            },
-            yAxis: [{
-                title: {
-                    text: '{% trans "Rating" %}'
-                }
-            }, {
-                opposite: true,
-                title: {
-                    text: '{% trans "Games" %}'
-                }
-            }],
-            tooltip: {
-                xDateFormat: '%B %e, %Y'
-            },
-            plotOptions: {
-                series: {
-                    point: {
-                        events: {
-                            click: function() {
-                                if (this.hasOwnProperty('url'))
-                                    window.location.href = this.url;
-                            }
-                        }
-                    },
-                    marker: {
-                        enabled: false,
-                        symbol: 'circle'
-                    }
-                },
-            },
-            tooltip: {
-                formatter: function () {
-                    return this.point.name;
-                }
-            },
-            series: [{
-                name: '{% trans "Number of games" %}',
-                color: 'rgba(140,140,140,0.4)',
-                lineWidth: 5,
-                borderWidth: 0,
-                enableMouseTracking: false,
-                yAxis: 1,
-                type: 'column',
-                data: [{% for r in ratings %} {
-                          x: {{ r.period.end|milliseconds }},
-                          y: {{ r.ngames }}
-                      },{% endfor %}]
-            }, {
-                name: '{% trans "vs. Protoss" %}',
-                color: '#00dd00',
-                lineWidth: 1,
-                dashStyle: 'Dash',
-                enableMouseTracking: false,
-                yAxis: 0,
-                data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
-                          x: {{ r.period.end|milliseconds }},
-                          y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
-                      },{% endfor %}]
-            }, {
-                name: '{% trans "vs. Terran" %}',
-                color: '#0000dd',
-                lineWidth: 1,
-                dashStyle: 'Dash',
-                enableMouseTracking: false,
-                yAxis: 0,
-                data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
-                          x: {{ r.period.end|milliseconds }},
-                          y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
-                      },{% endfor %}]
-            }, {
-                name: '{% trans "vs. Zerg" %}',
-                color: '#dd0000',
-                lineWidth: 1,
-                dashStyle: 'Dash',
-                enableMouseTracking: false,
-                yAxis: 0,
-                data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
-                          x: {{ r.period.end|milliseconds }},
-                          y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
-                      },{% endfor %}]
-            }, {
-                {% comment %}Translators: General rating{% endcomment %}
-                name: '{% trans "General" %}',
-                color: '#000000',
-                lineWidth: 3,
-                enableMouseTracking: false,
-                yAxis: 0,
-                data: [{% for r in ratings %} {
-                          name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
-                          x: {{ r.period.end|milliseconds }},
-                          y: {{ r.bf_rating|ratscale }}
-                      },{% endfor %}]
-            }, {% if stories %}
-                {
-                {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
-                name: '{% trans "Stories" %}',
-                type: 'scatter',
-                color: '#ffaa00',
-                yAxis: 0,
-                marker: {
-                    enabled: true,
-                    symbol: 'circle',
-                    radius: 5
-                },
-                data: [{% for s in stories %}{% if not s.skip %} {
-                          name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
-                          url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
-                          x: {{ s.date|milliseconds }},
-                          y: {{ s.rating|ratscale }}
-                      },{% endif %}{% endfor %}]
-            }, {% endif %}{% if teampoints %}
-                {
-                name: '{% trans "Team switches" %}',
-                type: 'scatter',
-                color: '#FF0000',
-                yAxis: 0,
-                marker: {
-                    enabled: true,
-                    symbol: 'circle',
-                    radius: 5
-                },
-                data: [{% for t in teampoints %} {
-                          name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
-                          x: {{ t.date|milliseconds }},
-                          y: {{ t.rating|ratscale }}
-                      },{% endfor %}]
-            } {% endif %}]
-        });
-    });
-</script>
-<div id="chart" style="width: 67em; height: 30em; margin-top: 0em;"> </div>
-{% endif %}
-
-{% if matches %}
-<h3>{% trans "Most recent results" %}</h3>
-<table class="results">
-{% include "matchlist.djhtml" with lm_list=matches lm_header="info" %}
-</table>
-{% endif %}
-
-{% if teammems %}
-<h3>{% trans "Team history" %}</h3>
-<div class="table numtable" style="width: 67em;">
-    <div class="rowh">
-        <div class="rowe" style="width: 30em;">{% trans "Team" %}</div>
-        <div class="rowe" style="width: 30em;">{% trans "Joined" %}</div>
-        <div class="rowe" style="width: 30em;">{% trans "Left" %}</div>
-        <div class="rowe" style="width: 7em; text-align: right;">{% trans "Current" %}</div>
+  {% if charts %}
+    <script type="text/javascript">
+     $(document).ready(function() {
+       var chart = new Highcharts.Chart({
+         chart: {
+           renderTo: 'chart',
+           type: 'spline',
+           zoomType: 'xy',
+           style: {
+             fontFamily: 'Roboto, sans-serif'
+           }
+         },
+         credits: {
+           enabled: false
+         },
+         title: {
+           text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
+         },
+         subtitle: {
+           text: '{% trans "Click and drag to zoom" %}'
+         },
+         xAxis: {
+           type: 'datetime',
+           plotLines: [
+             {% for p in patches %}
+             {
+               value: {{ p.0|milliseconds }},
+               color: '#cccccc',
+               width: 2,
+               label: {
+                 text: '{{ p.1 }}',
+                 verticalAlign: 'bottom',
+                 textAlign: 'right',
+                 y: -2,
+                 style: {
+                   fontSize: '0.8em',
+                 }
+               }
+             },
+             {% endfor %}]
+         },
+         yAxis: [{
+           title: {
+             text: '{% trans "Rating" %}'
+           }
+         }, {
+           opposite: true,
+           title: {
+             text: '{% trans "Games" %}'
+           }
+         }],
+         tooltip: {
+           xDateFormat: '%B %e, %Y'
+         },
+         plotOptions: {
+           series: {
+             point: {
+               events: {
+                 click: function() {
+                   if (this.hasOwnProperty('url'))
+                   window.location.href = this.url;
+                 }
+               }
+             },
+             marker: {
+               enabled: false,
+               symbol: 'circle'
+             }
+           },
+         },
+         tooltip: {
+           formatter: function () {
+             return this.point.name;
+           }
+         },
+         series: [{
+           name: '{% trans "Games" %}',
+           color: 'rgba(140,140,140,0.4)',
+           lineWidth: 5,
+           borderWidth: 0,
+           enableMouseTracking: false,
+           yAxis: 1,
+           type: 'column',
+           data: [{% for r in ratings %} {
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.ngames }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Protoss" %}',
+           color: '#00dd00',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Terran" %}',
+           color: '#0000dd',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Zerg" %}',
+           color: '#dd0000',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
+                                },{% endfor %}]
+         }, {
+           {% comment %}Translators: General rating{% endcomment %}
+           name: '{% trans "General" %}',
+           color: '#000000',
+           lineWidth: 3,
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|ratscale }}
+                                },{% endfor %}]
+         }, {% if stories %}
+                  {
+           {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
+           name: '{% trans "Stories" %}',
+           type: 'scatter',
+           color: '#ffaa00',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for s in stories %}{% if not s.skip %} {
+             name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
+             url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
+             x: {{ s.date|milliseconds }},
+             y: {{ s.rating|ratscale }}
+                                },{% endif %}{% endfor %}]
+         }, {% endif %}{% if teampoints %}
+                  {
+           name: '{% trans "Team switches" %}',
+           type: 'scatter',
+           color: '#FF0000',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for t in teampoints %} {
+             name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
+             x: {{ t.date|milliseconds }},
+             y: {{ t.rating|ratscale }}
+                                },{% endfor %}]
+         } {% endif %}]
+       });
+     });
+    </script>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div id="chart"></div>
+      </div>
     </div>
-    {% for tm in teammems %}
-    <div class="row {% cycle 'row2' 'row1' %}">
-        <div class="rowe">
-            <a href="/teams/{{ tm.group.id }}-{{ tm.group.name|urlfilter }}/">{{ tm.group.name }}</a>
+  {% endif %}
+
+  {% if matches %}
+    <h3>{% trans "Most recent results" %}</h3>
+    {% include "matchlist.djhtml" with lm_list=matches lm_header="info" %}
+  {% endif %}
+
+  {% if teammems %}
+    <h3>{% trans "Team history" %}</h3>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-condensed table-striped table-hover">
+            <thead>
+              <tr>
+                <th>{% trans "Team" %}</th>
+                <th>{% trans "Joined" %}</th>
+                <th>{% trans "Left" %}</th>
+                <th class="text-right">{% trans "Current" %}</th>
+              </tr>
+            </thead>
+            {% for tm in teammems %}
+              <tr>
+                <td><a href="/teams/{{tm.group.id}}-{{tm.group.name|urlfilter}}/">{{tm.group.name}}</a></td>
+                <td>{{tm.start|cdate:_('F jS, Y')}}</td>
+                <td>{{tm.end|cdate:_('F jS, Y')}}</td>
+                <td class="text-right">
+                  {% if tm.current %}
+                    <img src="{{ "yes"|img }}" alt="{% trans "yes" %}">
+                  {% else %}
+                    <img src="{{ "no"|img }}" alt="{% trans "no" %}">
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
         </div>
-        <div class="rowe">{{ tm.start|cdate:_('F jS, Y') }}</div>
-        <div class="rowe">{{ tm.end|cdate:_('F jS, Y') }}</div>
-        <div class="rowe" style="text-align: right;">
-            {% if tm.current %}
-                <img src="{{ "yes"|img }}" alt="yes" class="btm" />
-            {% else %}
-                <img src="{{ "no"|img }}" alt="yes" class="btm" />
-            {% endif %}
-        </div>
+      </div>
     </div>
-    {% endfor %}
-</div>
-{% endif %}
+  {% endif %}
 
 {% endblock %}

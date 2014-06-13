@@ -11,180 +11,190 @@ This is the template for the earnings of a player. It's called from ratings.view
 {% block title %}{% trans "Earnings ranking" %}{% endblock %}
 
 {% block content %}
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "Earnings ranking" %}</h2>
+      <p>
+        {% if not empty %}
+          {% with year=filters.year origpp=totalorigprizepool|add_sep_and_cur:filters.currency %}
+            {% with totalpp=totalprizepool|add_sep_and_cur:'USD' %}
+              {% if filters.year != 'all' and filters.currency != 'all' and filters.currency != 'USD' %}
+                {% blocktrans %}In {{year}}, {{origpp}} ({{totalpp}}) was awarded in prize money.{% endblocktrans %}
+              {% elif filters.year == 'all' and filters.currency != 'all' and filters.currency != 'USD' %}
+                {% blocktrans %}In total, {{origpp}} ({{totalpp}}) was awarded in prize money.{% endblocktrans %}
+              {% elif filters.year != 'all' %}
+                {% blocktrans %}In {{year}}, {{totalpp}} was awarded in prize money.{% endblocktrans %}
+              {% else %}
+                {% blocktrans %}In total, {{totalpp}} was awarded in prize money.{% endblocktrans %}
+              {% endif %}
+            {% endwith %}{% endwith %}
+        {% else %}
+            {% trans "The filters came up empty. :(" %}
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <form class="form-inline pull-right" role="form" method="get" action="/earnings/">
+        <input type="hidden" name="page" value="{{ page }}" />
+        <div class="form-group">
+          <label for="year" class="inline-label">{% trans "Filter by year:" %}</label>
+          <select name="year" class="form-control input-sm">
+            <option value="all" {% if filters.year == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+            <option value="2014" {% if filters.year == '2014' %}selected{% endif %}>2014</option>
+            <option value="2013" {% if filters.year == '2013' %}selected{% endif %}>2013</option>
+            <option value="2012" {% if filters.year == '2012' %}selected{% endif %}>2012</option>
+            <option value="2011" {% if filters.year == '2011' %}selected{% endif %}>2011</option>
+            <option value="2010" {% if filters.year == '2010' %}selected{% endif %}>2010</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="country" class="inline-label">{% trans "Country:" %}</label>
+          <select name="country" class="form-control input-sm">
+            <option value="all" {% if filters.country == 'all' %}selected{% endif %}>
+              {% trans "All" %}
+            </option>
+            <option value="KR">{% trans "South Korea" %}</option>
+            <option value="foreigners" {% if filters.country == 'foreigners' %}selected{% endif %}>
+              {% trans "Non-Koreans" %}
+            </option>
+            <option disabled>------------</option>
+            {% for country in countries %}
+              <option value="{{ country.cc }}" {% if filters.country == country.cc %}selected{% endif %}>
+                {{ country.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="currency" class="inline-label">{% trans "Currency:" %}</label>
+          <select name="currency" class="form-control input-sm">
+            <option value="all" {% if filters.currency == 'all' %}selected{% endif %}>
+              {% trans "All" %}
+            </option>
+            {% for currency in currencies %}
+              <option value="{{ currency.code }}" {% if filters.currency == currency.code %}selected{% endif %}>
+                {{ currency.code }} - {{ currency.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        {% comment %}Translators: The verb "to filter".{% endcomment %}
+        <button type="submit" class="btn btn-default input-sm">{% trans "Filter" %}</button>
+      </form>
+    </div>
+  </div>
+
+  {% if not empty %}
+    <div class="row text-center">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <ul class="pagination">
+          <li {% if page == 1 %}class="disabled"{% endif %}>
+            <a href="?page=1&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+              &laquo;
+            </a>
+          </li>
+          {% for p in pn_range %}
+            <li {% if page == p %}class="active"{% endif %}>
+              <a href="?page={{p}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+                {{p}}
+              </a>
+            </li>
+          {% endfor %}
+          <li {% if page == npages %}class="disabled"{% endif %}>
+            <a href="?page={{npages}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+              &raquo;
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="row">
-        <h2>{% trans "Earnings ranking" %}</h2>
-        <p>
-            {% if not empty %}
-                {% with year=filters.year origpp=totalorigprizepool|add_sep_and_cur:filters.currency %}
-                {% with totalpp=totalprizepool|add_sep_and_cur:'USD' %}
-                    {% if filters.year != 'all' and filters.currency != 'all' and filters.currency != 'USD' %}
-                        {% blocktrans %}In {{year}}, {{origpp}} ({{totalpp}}) was awarded in prize money.{% endblocktrans %}
-                    {% elif filters.year == 'all' and filters.currency != 'all' and filters.currency != 'USD' %}
-                        {% blocktrans %}In total, {{origpp}} ({{totalpp}}) was awarded in prize money.{% endblocktrans %}
-                    {% elif filters.year != 'all' %}
-                        {% blocktrans %}In {{year}}, {{totalpp}} was awarded in prize money.{% endblocktrans %}
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th class="ea_flush visible-lg visible-md"></th>
+                <th class="ea_number">{% trans "#" %}</th>
+                <th class="ea_icon"></th>
+                <th class="ea_icon"></th>
+                <th class="ea_name">{% trans "Name" %}</th>
+                <th class="ea_team">{% trans "Team" %}</th>
+                <th class="ea_earnings">{% trans "Total earnings" %}</th>
+                <th class="ea_flush visible-lg visible-md"></th>
+              </tr>
+            </thead>
+            {% for e in ranking %}
+              <tr>
+                <td class="ea_flush visible-lg visible-md"></td>
+                <td class="ea_number">
+                  {% if startcount %}
+                    {{forloop.counter|add:startcount}}.
+                  {% else %}
+                    {{forloop.counter}}.
+                  {% endif %}
+                </td>
+                <td class="ea_icon">
+                  {% if e.playerobj.country %}
+                    <img src="{{ e.playerobj.country|lower|img:"flags" }}" alt="{{ e.playerobj.country }}">
+                  {% endif %}
+                </td>
+                <td class="ea_icon">
+                  <img src="{{ e.playerobj.race|img }}" alt="{{ e.playerobj.race }}">
+                </td>
+                <td class="ea_name">
+                  <a href="/players/{{ e.playerobj.id }}-{{ e.playerobj.tag|urlfilter }}/">
+                    {{ e.playerobj.tag }}
+                  </a>
+                </td>
+                <td class="ea_team">
+                  {% if e.teamobj %}
+                    <a href="/teams/{{ e.teamobj.id }}-{{ e.teamobj.name|urlfilter }}/">
+                      {{ e.teamobj.name }}
+                    </a>
+                  {% endif %}
+                </td>
+                <td class="ea_earnings">
+                  <a href="/players/{{ e.playerobj.id }}-{{ e.playerobj.tag|urlfilter }}/earnings/">
+                    {% if filters.currency != 'all' %}{{ e.totalorigearnings|add_sep_and_cur:filters.currency }}
+                      {% if filters.currency != 'USD' %} ({{ e.totalearnings|add_sep_and_cur:'USD' }}){% endif %}
                     {% else %}
-                        {% blocktrans %}In total, {{totalpp}} was awarded in prize money.{% endblocktrans %}
+                      {{ e.totalearnings|add_sep_and_cur:'USD' }}
                     {% endif %}
-                {% endwith %}{% endwith %}
-            {% else %}
-                {% trans "The filters came up empty. :(" %}
-            {% endif %}
-        </p>
+                  </a>
+                </td>
+                <td class="ea_flush visible-lg visible-md"></td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
     </div>
-
-    <div class="row">
-        <form class="form-inline pull-right" role="form" method="get" action="/earnings/">
-            <input type="hidden" name="page" value="{{ page }}" />
-            <div class="form-group">
-                <label for="year" class="inline-label">{% trans "Filter by year:" %}</label>
-                <select name="year" class="form-control input-sm">
-                    <option value="all" {% if filters.year == 'all' %}selected{% endif %}>{% trans "All" %}</option>
-                    <option value="2014" {% if filters.year == '2014' %}selected{% endif %}>2014</option>
-                    <option value="2013" {% if filters.year == '2013' %}selected{% endif %}>2013</option>
-                    <option value="2012" {% if filters.year == '2012' %}selected{% endif %}>2012</option>
-                    <option value="2011" {% if filters.year == '2011' %}selected{% endif %}>2011</option>
-                    <option value="2010" {% if filters.year == '2010' %}selected{% endif %}>2010</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="country" class="inline-label">{% trans "Country:" %}</label>
-                <select name="country" class="form-control input-sm">
-                    <option value="all" {% if filters.country == 'all' %}selected{% endif %}>
-                        {% trans "All" %}
-                    </option>
-                    <option value="KR">{% trans "South Korea" %}</option>
-                    <option value="foreigners" {% if filters.country == 'foreigners' %}selected{% endif %}>
-                        {% trans "Non-Koreans" %}
-                    </option>
-                    <option disabled>------------</option>
-                    {% for country in countries %}
-                        <option value="{{ country.cc }}" {% if filters.country == country.cc %}selected{% endif %}>
-                            {{ country.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="currency" class="inline-label">{% trans "Currency:" %}</label>
-                <select name="currency" class="form-control input-sm">
-                    <option value="all" {% if filters.currency == 'all' %}selected{% endif %}>
-                        {% trans "All" %}
-                    </option>
-                    {% for currency in currencies %}
-                        <option value="{{ currency.code }}" {% if filters.currency == currency.code %}selected{% endif %}>
-                            {{ currency.code }} - {{ currency.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% comment %}Translators: The verb "to filter".{% endcomment %}
-            <button type="submit" class="btn btn-default input-sm">{% trans "Filter" %}</button>
-        </form>
+    <div class="row text-center">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <ul class="pagination">
+          <li {% if page == 1 %}class="disabled"{% endif %}>
+            <a href="?page=1&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+              &laquo;
+            </a>
+          </li>
+          {% for p in pn_range %}
+            <li {% if page == p %}class="active"{% endif %}>
+              <a href="?page={{p}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+                {{p}}
+              </a>
+            </li>
+          {% endfor %}
+          <li {% if page == npages %}class="disabled"{% endif %}>
+            <a href="?page={{npages}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
+              &raquo;
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    {% if not empty %}
-        <div class="row text-center">
-            <ul class="pagination">
-                <li {% if page == 1 %}class="disabled"{% endif %}>
-                    <a href="?page=1&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                        &laquo;
-                    </a>
-                </li>
-                {% for p in pn_range %}
-                    <li {% if page == p %}class="active"{% endif %}>
-                        <a href="?page={{p}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                            {{p}}
-                        </a>
-                    </li>
-                {% endfor %}
-                <li {% if page == npages %}class="disabled"{% endif %}>
-                    <a href="?page={{npages}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                        &raquo;
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="row">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th class="ea_flush visible-lg visible-md"></th>
-                            <th class="ea_number">{% trans "#" %}</th>
-                            <th class="ea_icon"></th>
-                            <th class="ea_icon"></th>
-                            <th class="ea_name">{% trans "Name" %}</th>
-                            <th class="ea_team">{% trans "Team" %}</th>
-                            <th class="ea_earnings">{% trans "Total earnings" %}</th>
-                            <th class="ea_flush visible-lg visible-md"></th>
-                        </tr>
-                    </thead>
-                    {% for e in ranking %}
-                        <tr>
-                            <td class="ea_flush visible-lg visible-md"></td>
-                            <td class="ea_number">
-                                {% if startcount %}
-                                    {{forloop.counter|add:startcount}}.
-                                {% else %}
-                                    {{forloop.counter}}.
-                                {% endif %}
-                            </td>
-                            <td class="ea_icon">
-                                {% if e.playerobj.country %}
-                                    <img src="{{ e.playerobj.country|lower|img:"flags" }}" alt="{{ e.playerobj.country }}">
-                                {% endif %}
-                            </td>
-                            <td class="ea_icon">
-                                <img src="{{ e.playerobj.race|img }}" alt="{{ e.playerobj.race }}">
-                            </td>
-                            <td class="ea_name">
-                                <a href="/players/{{ e.playerobj.id }}-{{ e.playerobj.tag|urlfilter }}/">
-                                    {{ e.playerobj.tag }}
-                                </a>
-                            </td>
-                            <td class="ea_team">
-                                {% if e.teamobj %}
-                                    <a href="/teams/{{ e.teamobj.id }}-{{ e.teamobj.name|urlfilter }}/">
-                                        {{ e.teamobj.name }}
-                                    </a>
-                                {% endif %}
-                            </td>
-                            <td class="ea_earnings">
-                                <a href="/players/{{ e.playerobj.id }}-{{ e.playerobj.tag|urlfilter }}/earnings/">
-                                    {% if filters.currency != 'all' %}{{ e.totalorigearnings|add_sep_and_cur:filters.currency }}
-                                        {% if filters.currency != 'USD' %} ({{ e.totalearnings|add_sep_and_cur:'USD' }}){% endif %}
-                                    {% else %}
-                                        {{ e.totalearnings|add_sep_and_cur:'USD' }}
-                                    {% endif %}
-                                </a>
-                            </td>
-                            <td class="ea_flush visible-lg visible-md"></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
-        <div class="row text-center">
-            <ul class="pagination">
-                <li {% if page == 1 %}class="disabled"{% endif %}>
-                    <a href="?page=1&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                        &laquo;
-                    </a>
-                </li>
-                {% for p in pn_range %}
-                    <li {% if page == p %}class="active"{% endif %}>
-                        <a href="?page={{p}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                            {{p}}
-                        </a>
-                    </li>
-                {% endfor %}
-                <li {% if page == npages %}class="disabled"{% endif %}>
-                    <a href="?page={{npages}}&amp;year={{filters.year}}&amp;country={{filters.country}}&amp;currency={{filters.currency}}">
-                        &raquo;
-                    </a>
-                </li>
-            </ul>
-        </div>
-    {% endif %}
+  {% endif %}
 {% endblock %}

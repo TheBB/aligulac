@@ -11,383 +11,387 @@ This template shows a rating list for a given period.
 
 {% block content %}
 
-<div class="row">
-    <h2>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
         {% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}:
         {{period.end|cdate:_('F jS, Y')}}
-    </h2>
-</div>
+      </h2>
+    </div>
+  </div>
 
-{% include "messages.djhtml" %}
+  {% include "messages.djhtml" %}
 
-<div class="row">
+  <div class="row">
     <div class="col-lg-8 col-md-8 col-sm-7">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#best" data-toggle="tab">{% trans "Best" %}</a></li>
-            <li><a href="#spec" data-toggle="tab">{% trans "Most specialized" %}</a></li>
-            <li><a href="#matchups" data-toggle="tab">{% trans "Matchups" %}</a></li>
-            <li><a href="#updown" data-toggle="tab">{% trans "Up/Down" %}</a></li>
-        </ul>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#best" data-toggle="tab">{% trans "Best" %}</a></li>
+        <li><a href="#spec" data-toggle="tab">{% trans "Most specialized" %}</a></li>
+        <li><a href="#matchups" data-toggle="tab">{% trans "Matchups" %}</a></li>
+        <li><a href="#updown" data-toggle="tab">{% trans "Up/Down" %}</a></li>
+      </ul>
 
-        <div class="tab-content">
-            <div class="tab-pane active" id="best">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center" style="width: 12%"></th>
-                                <th class="text-center" style="width: 22%">{% trans "All" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Protoss" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Terran" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Zerg" %}</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "All" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{best.player.tag}}</a>
-                                <br/><small class="text-muted">({{ best.rating|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestp.player.id}}-{{bestp.player.tag|urlfilter}}/">{{bestp.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestp.rating|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestt.player.id}}-{{bestt.player.tag|urlfilter}}/">{{bestt.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestt.rating|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestz.player.id}}-{{bestz.player.tag|urlfilter}}/">{{bestz.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestz.rating|ratscale }})</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vP" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{bestvp.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestpvp.player.id}}-{{bestpvp.player.tag|urlfilter}}/">{{bestpvp.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestpvp.rating|addf:bestpvp.rating_vp|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{besttvp.player.id}}-{{besttvp.player.tag|urlfilter}}/">{{besttvp.player.tag}}</a>
-                                <br/><small class="text-muted">({{ besttvp.rating|addf:besttvp.rating_vp|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestzvp.player.id}}-{{bestzvp.player.tag|urlfilter}}/">{{bestzvp.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestzvp.rating|addf:bestzvp.rating_vp|ratscale }})</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vT" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{bestvt.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestpvt.player.id}}-{{bestpvt.player.tag|urlfilter}}/">{{bestpvt.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestpvt.rating|addf:bestpvt.rating_vt|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{besttvt.player.id}}-{{besttvt.player.tag|urlfilter}}/">{{besttvt.player.tag}}</a>
-                                <br/><small class="text-muted">({{ besttvt.rating|addf:besttvt.rating_vt|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestzvt.player.id}}-{{bestzvt.player.tag|urlfilter}}/">{{bestzvt.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestzvt.rating|addf:bestzvt.rating_vt|ratscale }})</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vZ" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{bestvz.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestpvz.player.id}}-{{bestpvz.player.tag|urlfilter}}/">{{bestpvz.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestpvz.rating|addf:bestpvz.rating_vz|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{besttvz.player.id}}-{{besttvz.player.tag|urlfilter}}/">{{besttvz.player.tag}}</a>
-                                <br/><small class="text-muted">({{ besttvz.rating|addf:besttvz.rating_vz|ratscale }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{bestzvz.player.id}}-{{bestzvz.player.tag|urlfilter}}/">{{bestzvz.player.tag}}</a>
-                                <br/><small class="text-muted">({{ bestzvz.rating|addf:bestzvz.rating_vz|ratscale }})</small>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane" id="spec">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center" style="width: 12%"></th>
-                                <th class="text-center" style="width: 22%">{% trans "All" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Protoss" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Terran" %}</th>
-                                <th class="text-center" style="width: 22%">{% trans "Zerg" %}</th>
-                            </tr>
-                        </thead>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vP" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{specvp.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specvp.rating_vp|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{specpvp.player.id}}-{{specpvp.player.tag|urlfilter}}/">{{specpvp.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specpvp.rating_vp|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{spectvp.player.id}}-{{spectvp.player.tag|urlfilter}}/">{{spectvp.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ spectvp.rating_vp|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{speczvp.player.id}}-{{speczvp.player.tag|urlfilter}}/">{{speczvp.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ speczvp.rating_vp|ratscalediff }})</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vT" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{specvt.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specvt.rating_vt|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{specpvt.player.id}}-{{specpvt.player.tag|urlfilter}}/">{{specpvt.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specpvt.rating_vt|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{spectvt.player.id}}-{{spectvt.player.tag|urlfilter}}/">{{spectvt.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ spectvt.rating_vt|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{speczvt.player.id}}-{{speczvt.player.tag|urlfilter}}/">{{speczvt.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ speczvt.rating_vt|ratscalediff }})</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center" style="vertical-align: middle;">{% trans "vZ" %}</th>
-                            <td class="text-center">
-                                <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{specvz.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specvz.rating_vz|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{specpvz.player.id}}-{{specpvz.player.tag|urlfilter}}/">{{specpvz.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ specpvz.rating_vz|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{spectvz.player.id}}-{{spectvz.player.tag|urlfilter}}/">{{spectvz.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ spectvz.rating_vz|ratscalediff }})</small>
-                            </td>
-                            <td class="text-center">
-                                <a href="/players/{{speczvz.player.id}}-{{speczvz.player.tag|urlfilter}}/">{{speczvz.player.tag}}</a>
-                                <br/><small class="text-muted">(+{{ speczvz.rating_vz|ratscalediff }})</small>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane" id="matchups" style="padding-top: 1em;">
-                <div class="table-responsive">
-                    <table class="table">
-                        <tr>
-                            <th class="text-right" style="width: 10%; border-top: none;">{% trans "PvT" %}</th>
-                            <td style="width: 90%; border-top: none;">
-                                <div class="progress progress-striped" style="height: 100%;">
-                                    {% if pvt_wins or pvt_loss %}
-                                        {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
-                                            <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
-                                            <div class="progress-bar progress-bar-primary" style="width: {{p2}}%">{{p2}}%</div>
-                                        {% endwith %}
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-right" style="border-top: none;">{% trans "PvZ" %}</th>
-                            <td style="border-top: none;">
-                                <div class="progress progress-striped" style="height: 100%;">
-                                    {% if pvz_wins or pvz_loss %}
-                                        {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
-                                            <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
-                                            <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
-                                        {% endwith %}
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-right" style="border-top: none;">{% trans "TvZ" %}</th>
-                            <td style="border-top: none;">
-                                <div class="progress progress-striped" style="height: 100%;">
-                                    {% if tvz_wins or tvz_loss %}
-                                        {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
-                                            <div class="progress-bar progress-bar-primary" style="width: {{p1}}%">{{p1}}%</div>
-                                            <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
-                                        {% endwith %}
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-right" style="border-top: none;">{% trans "Mirrors" %}</th>
-                            <td style="border-top: none;">
-                                <div class="progress progress-striped" style="height: 100%;">
-                                    {% if pvp_games or tvt_games or zvz_games %}
-                                        {% with p=pvp_games|pctg_scl:tot_mirror t=tvt_games|pctg_scl:tot_mirror z=zvz_games|pctg_scl:tot_mirror %}
-                                            <div class="progress-bar progress-bar-success" style="width: {{p}}%">{{p}}%</div>
-                                            <div class="progress-bar progress-bar-primary" style="width: {{t}}%">{{t}}%</div>
-                                            <div class="progress-bar progress-bar-danger" style="width: {{z}}%">{{z}}%</div>
-                                        {% endwith %}
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane" id="updown">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th style="width: 3em;"></th>
-                                <th style="width: 35%;">{% trans "Winners" %} <img src="{{"uparrow"|img}}"></th>
-                                <th style="width: 3em;"></th>
-                                <th style="width: 35%;">{% trans "Losers" %} <img src="{{"downarrow"|img}}"></th>
-                            </tr>
-                        </thead>
-                        {% for e in updown %}
-                        <tr>
-                            <td class="small text-right" style="vertical-align: bottom;">
-                                <a href="/players/{{e.0.player.id}}-{{e.0.player.tag|urlfilter}}/period/{{e.0.period.id}}/">
-                                    {{e.0.diff|ratscalediff|signify}}
-                                </a>
-                            </td>
-                            <td>
-                                {{e.0.player|player}}
-                            </td>
-                            <td class="small text-right" style="vertical-align: bottom;">
-                                <a href="/players/{{e.1.player.id}}-{{e.1.player.tag|urlfilter}}/period/{{e.1.period.id}}/">
-                                    {{e.1.diff|ratscalediff|signify}}
-                                </a>
-                            </td>
-                            <td>
-                                {{e.1.player|player}}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-            </div>
+      <div class="tab-content">
+        <div class="tab-pane active" id="best">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 12%"></th>
+                  <th class="text-center" style="width: 22%">{% trans "All" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Protoss" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Terran" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Zerg" %}</th>
+                </tr>
+              </thead>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "All" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{best.player.id}}-{{best.player.tag|urlfilter}}/">{{best.player.tag}}</a>
+                  <br/><small class="text-muted">({{ best.rating|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestp.player.id}}-{{bestp.player.tag|urlfilter}}/">{{bestp.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestp.rating|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestt.player.id}}-{{bestt.player.tag|urlfilter}}/">{{bestt.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestt.rating|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestz.player.id}}-{{bestz.player.tag|urlfilter}}/">{{bestz.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestz.rating|ratscale }})</small>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vP" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{bestvp.player.id}}-{{bestvp.player.tag|urlfilter}}/">{{bestvp.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestvp.rating|addf:bestvp.rating_vp|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestpvp.player.id}}-{{bestpvp.player.tag|urlfilter}}/">{{bestpvp.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestpvp.rating|addf:bestpvp.rating_vp|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{besttvp.player.id}}-{{besttvp.player.tag|urlfilter}}/">{{besttvp.player.tag}}</a>
+                  <br/><small class="text-muted">({{ besttvp.rating|addf:besttvp.rating_vp|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestzvp.player.id}}-{{bestzvp.player.tag|urlfilter}}/">{{bestzvp.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestzvp.rating|addf:bestzvp.rating_vp|ratscale }})</small>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vT" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{bestvt.player.id}}-{{bestvt.player.tag|urlfilter}}/">{{bestvt.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestvt.rating|addf:bestvt.rating_vt|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestpvt.player.id}}-{{bestpvt.player.tag|urlfilter}}/">{{bestpvt.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestpvt.rating|addf:bestpvt.rating_vt|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{besttvt.player.id}}-{{besttvt.player.tag|urlfilter}}/">{{besttvt.player.tag}}</a>
+                  <br/><small class="text-muted">({{ besttvt.rating|addf:besttvt.rating_vt|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestzvt.player.id}}-{{bestzvt.player.tag|urlfilter}}/">{{bestzvt.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestzvt.rating|addf:bestzvt.rating_vt|ratscale }})</small>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vZ" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{bestvz.player.id}}-{{bestvz.player.tag|urlfilter}}/">{{bestvz.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestvz.rating|addf:bestvz.rating_vz|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestpvz.player.id}}-{{bestpvz.player.tag|urlfilter}}/">{{bestpvz.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestpvz.rating|addf:bestpvz.rating_vz|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{besttvz.player.id}}-{{besttvz.player.tag|urlfilter}}/">{{besttvz.player.tag}}</a>
+                  <br/><small class="text-muted">({{ besttvz.rating|addf:besttvz.rating_vz|ratscale }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{bestzvz.player.id}}-{{bestzvz.player.tag|urlfilter}}/">{{bestzvz.player.tag}}</a>
+                  <br/><small class="text-muted">({{ bestzvz.rating|addf:bestzvz.rating_vz|ratscale }})</small>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
+        <div class="tab-pane" id="spec">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 12%"></th>
+                  <th class="text-center" style="width: 22%">{% trans "All" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Protoss" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Terran" %}</th>
+                  <th class="text-center" style="width: 22%">{% trans "Zerg" %}</th>
+                </tr>
+              </thead>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vP" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{specvp.player.id}}-{{specvp.player.tag|urlfilter}}/">{{specvp.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specvp.rating_vp|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{specpvp.player.id}}-{{specpvp.player.tag|urlfilter}}/">{{specpvp.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specpvp.rating_vp|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{spectvp.player.id}}-{{spectvp.player.tag|urlfilter}}/">{{spectvp.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ spectvp.rating_vp|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{speczvp.player.id}}-{{speczvp.player.tag|urlfilter}}/">{{speczvp.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ speczvp.rating_vp|ratscalediff }})</small>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vT" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{specvt.player.id}}-{{specvt.player.tag|urlfilter}}/">{{specvt.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specvt.rating_vt|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{specpvt.player.id}}-{{specpvt.player.tag|urlfilter}}/">{{specpvt.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specpvt.rating_vt|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{spectvt.player.id}}-{{spectvt.player.tag|urlfilter}}/">{{spectvt.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ spectvt.rating_vt|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{speczvt.player.id}}-{{speczvt.player.tag|urlfilter}}/">{{speczvt.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ speczvt.rating_vt|ratscalediff }})</small>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-center" style="vertical-align: middle;">{% trans "vZ" %}</th>
+                <td class="text-center">
+                  <a href="/players/{{specvz.player.id}}-{{specvz.player.tag|urlfilter}}/">{{specvz.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specvz.rating_vz|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{specpvz.player.id}}-{{specpvz.player.tag|urlfilter}}/">{{specpvz.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ specpvz.rating_vz|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{spectvz.player.id}}-{{spectvz.player.tag|urlfilter}}/">{{spectvz.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ spectvz.rating_vz|ratscalediff }})</small>
+                </td>
+                <td class="text-center">
+                  <a href="/players/{{speczvz.player.id}}-{{speczvz.player.tag|urlfilter}}/">{{speczvz.player.tag}}</a>
+                  <br/><small class="text-muted">(+{{ speczvz.rating_vz|ratscalediff }})</small>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="matchups" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 10%; border-top: none;">{% trans "PvT" %}</th>
+                <td style="width: 90%; border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvt_wins or pvt_loss %}
+                      {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "PvZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvz_wins or pvz_loss %}
+                      {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "TvZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if tvz_wins or tvz_loss %}
+                      {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
+                        <div class="progress-bar progress-bar-primary" style="width: {{p1}}%">{{p1}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                      {% endwith %}
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "Mirrors" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% if pvp_games or tvt_games or zvz_games %}
+                      {% with p=pvp_games|pctg_scl:tot_mirror t=tvt_games|pctg_scl:tot_mirror z=zvz_games|pctg_scl:tot_mirror %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p}}%">{{p}}%</div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{t}}%">{{t}}%</div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{z}}%">{{z}}%</div>
+                      {% endwith %}
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="updown">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 3em;"></th>
+                  <th style="width: 35%;">{% trans "Winners" %} <img src="{{"uparrow"|img}}"></th>
+                  <th style="width: 3em;"></th>
+                  <th style="width: 35%;">{% trans "Losers" %} <img src="{{"downarrow"|img}}"></th>
+                </tr>
+              </thead>
+              {% for e in updown %}
+                <tr>
+                  <td class="small text-right" style="vertical-align: bottom;">
+                    <a href="/players/{{e.0.player.id}}-{{e.0.player.tag|urlfilter}}/period/{{e.0.period.id}}/">
+                      {{e.0.diff|ratscalediff|signify}}
+                    </a>
+                  </td>
+                  <td>
+                    {{e.0.player|player}}
+                  </td>
+                  <td class="small text-right" style="vertical-align: bottom;">
+                    <a href="/players/{{e.1.player.id}}-{{e.1.player.tag|urlfilter}}/period/{{e.1.period.id}}/">
+                      {{e.1.diff|ratscalediff|signify}}
+                    </a>
+                  </td>
+                  <td>
+                    {{e.1.player|player}}
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-5">
-        <div class="table-responsive">
-            <table class="table table-condensed table-striped table-hover">
-                <thead>
-                    <tr><th colspan="2" class="text-center">{% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}</th></tr>
-                </thead>
-                <tr class="small">
-                    <td class="text-right ibox-left" style="width: 40%">{% trans "Start" %}</td>
-                    <td style="width: 60%">{{period.start|cdate:_('F jS, Y')}}</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "End" %}</td>
-                    <td>{{period.end|cdate:_('F jS, Y')}}</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "Active players" %}</td>
-                    <td>
-                        {{ period.num_retplayers|add:period.num_newplayers }} 
-                        ({% blocktrans count period.num_newplayers as cnt %}{{cnt}} new{% plural %}{{cnt}} new{% endblocktrans %})
-                    </td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "Leading race" %}</td>
-                    <td>
-                        <img src="{{ period|oprace|img }}" alt="{{ period|oprace|racefull }}" /> 
-                        {{ period|oprace|racefull }} ({{ period|oppctg }}%)
-                    </td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "Lagging race" %}</td>
-                    <td>
-                        <img src="{{ period|uprace|img }}" alt="{{ period|uprace|racefull }}" /> 
-                        {{ period|uprace|racefull }} ({{ period|uppctg }}%)
-                    </td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "Games" %}</td>
-                    <td>{{ period.num_games }}</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "PvT" %}</td>
-                    <td>{{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "PvZ" %}</td>
-                    <td>{{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "TvZ" %}</td>
-                    <td>{{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)</td>
-                </tr>
-                <tr class="small">
-                    <td class="text-right ibox-left">{% trans "Mirrors" %}</td>
-                    <td>{{ pvp_games }} {% trans "PvP" %}, {{ tvt_games }} {% trans "TvT" %}, {{ zvz_games }} {% trans "ZvZ" %}</td>
-                </tr>
-            </table>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-condensed table-striped table-hover">
+          <thead>
+            <tr><th colspan="2" class="text-center">{% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}</th></tr>
+          </thead>
+          <tr class="small">
+            <td class="text-right ibox-left" style="width: 40%">{% trans "Start" %}</td>
+            <td style="width: 60%">{{period.start|cdate:_('F jS, Y')}}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "End" %}</td>
+            <td>{{period.end|cdate:_('F jS, Y')}}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Active players" %}</td>
+            <td>
+              {{ period.num_retplayers|add:period.num_newplayers }} 
+              ({% blocktrans count period.num_newplayers as cnt %}{{cnt}} new{% plural %}{{cnt}} new{% endblocktrans %})
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Leading race" %}</td>
+            <td>
+              <img src="{{ period|oprace|img }}" alt="{{ period|oprace|racefull }}" /> 
+              {{ period|oprace|racefull }} ({{ period|oppctg }}%)
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Lagging race" %}</td>
+            <td>
+              <img src="{{ period|uprace|img }}" alt="{{ period|uprace|racefull }}" /> 
+              {{ period|uprace|racefull }} ({{ period|uppctg }}%)
+            </td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Games" %}</td>
+            <td>{{ period.num_games }}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "PvT" %}</td>
+            <td>{{ pvt_wins }}–{{ pvt_loss }} ({{ pvt_wins|pctg_add:pvt_loss }}%)</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "PvZ" %}</td>
+            <td>{{ pvz_wins }}–{{ pvz_loss }} ({{ pvz_wins|pctg_add:pvz_loss }}%)</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "TvZ" %}</td>
+            <td>{{ tvz_wins }}–{{ tvz_loss }} ({{ tvz_wins|pctg_add:tvz_loss }}%)</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Mirrors" %}</td>
+            <td>{{ pvp_games }} {% trans "PvP" %}, {{ tvt_games }} {% trans "TvT" %}, {{ zvz_games }} {% trans "ZvZ" %}</td>
+          </tr>
+        </table>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="row">
-    <form class="form-inline pull-right" role="form" method="get" action="/periods/{{period.id}}/">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <form class="form-inline pull-right" role="form" method="get" action="/periods/{{period.id}}/">
         <input type="hidden" name="page" value="{{page}}" />
         <input type="hidden" name="sort" value="{{sort}}" />
         <div class="form-group">
           <label for="race" class="inline-label">{% trans "Show races:" %}</label>
-            <select name="race" id="race" class="form-control input-sm">
-                <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
-                <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
-                <option value="t" {% if race == "t" %}selected{% endif %}>{% trans "Terran" %}</option>
-                <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
-                <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
-                <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
-                <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
-                <option value="r" {% if race == "r" %}selected{% endif %}>{% trans "Random" %}</option>
-                <option value="s" {% if race == "s" %}selected{% endif %}>{% trans "Race switchers" %}</option>
-                <option value="rs" {% if race == "rs" %}selected{% endif %}>{% trans "Random and race switchers" %}</option>
-            </select>
+          <select name="race" id="race" class="form-control input-sm">
+            <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
+            <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
+            <option value="t" {% if race == "t" %}selected{% endif %}>{% trans "Terran" %}</option>
+            <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
+            <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
+            <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
+            <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
+            <option value="r" {% if race == "r" %}selected{% endif %}>{% trans "Random" %}</option>
+            <option value="s" {% if race == "s" %}selected{% endif %}>{% trans "Race switchers" %}</option>
+            <option value="rs" {% if race == "rs" %}selected{% endif %}>{% trans "Random and race switchers" %}</option>
+          </select>
         </div>
         <div class="form-group">
-            <label for="nats" class="inline-label">{% trans "Nationalities:" %}</label>
-            <select name="nats" id="nats" class="form-control input-sm">
-                <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
-                <option value="KR">{% trans "South Korea" %}</option>
-                <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>
-                    {% trans "Non-Koreans" %}
-                </option>
-                <option disabled="disabled" class="option-disabled"></option>
-                {% for c in countries %}
-                    <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
-                {% endfor %}
-            </select>
+          <label for="nats" class="inline-label">{% trans "Nationalities:" %}</label>
+          <select name="nats" id="nats" class="form-control input-sm">
+            <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
+            <option value="KR">{% trans "South Korea" %}</option>
+            <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>
+              {% trans "Non-Koreans" %}
+            </option>
+            <option disabled="disabled" class="option-disabled"></option>
+            {% for c in countries %}
+              <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+          </select>
         </div>
         <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
-    </form>
-</div>
+      </form>
+    </div>
+  </div>
 
-<div class="row">
-{% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
-</div>
+  <div class="row">
+    {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
+  </div>
 
 {% endblock %}

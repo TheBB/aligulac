@@ -158,6 +158,60 @@ Changes here will generally be visible on the whole site.
              'show': '{% trans "show" %}',
          };
         </script>
+        {% if charts %}
+          <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+          <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+          <script type="text/javascript">
+           Highcharts.setOptions({
+             lang: {
+               downloadPNG: '{% trans "Download PNG image" %}',
+               downloadJPEG: '{% trans "Download JPEG image" %}',
+               downloadPDF: '{% trans "Download PDF document" %}',
+               downloadSVG: '{% trans "Download SVG vector image" %}',
+               loading: '{% trans "Loading..." %}',
+               printChart: '{% trans "Print chart" %}',
+               resetZoom: '{% trans "Reset zoom" %}',
+               months: [
+                 '{% trans "January" context "Big first letter" %}',
+                 '{% trans "February" context "Big first letter" %}',
+                 '{% trans "March" context "Big first letter" %}',
+                 '{% trans "April" context "Big first letter" %}',
+                 '{% trans "May" context "Big first letter" %}',
+                 '{% trans "June" context "Big first letter" %}',
+                 '{% trans "July" context "Big first letter" %}',
+                 '{% trans "August" context "Big first letter" %}',
+                 '{% trans "September" context "Big first letter" %}',
+                 '{% trans "October" context "Big first letter" %}',
+                 '{% trans "November" context "Big first letter" %}',
+                 '{% trans "December" context "Big first letter" %}',
+               ],
+               shortMonths: [
+                 '{% trans "Jan" context "Big first letter" %}',
+                 '{% trans "Feb" context "Big first letter" %}',
+                 '{% trans "Mar" context "Big first letter" %}',
+                 '{% trans "Apr" context "Big first letter" %}',
+                 '{% trans "May" context "Big first letter" %}',
+                 '{% trans "Jun" context "Big first letter" %}',
+                 '{% trans "Jul" context "Big first letter" %}',
+                 '{% trans "Aug" context "Big first letter" %}',
+                 '{% trans "Sep" context "Big first letter" %}',
+                 '{% trans "Oct" context "Big first letter" %}',
+                 '{% trans "Nov" context "Big first letter" %}',
+                 '{% trans "Dec" context "Big first letter" %}',
+               ],
+               weekdays: [
+                 '{% trans "Sunday" context "Big first letter" %}',
+                 '{% trans "Monday" context "Big first letter" %}',
+                 '{% trans "Tuesday" context "Big first letter" %}',
+                 '{% trans "Wednesday" context "Big first letter" %}',
+                 '{% trans "Thursday" context "Big first letter" %}',
+                 '{% trans "Friday" context "Big first letter" %}',
+                 '{% trans "Saturday" context "Big first letter" %}'
+               ]
+             }
+           });
+          </script>
+        {% endif %}
         <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
     </body>
 </html>

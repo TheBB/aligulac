@@ -11,44 +11,44 @@ ratings.submit_views.)
 {% block title %}{% trans "Login" %}{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
-            <h2>{% trans "Login" %}</h2>
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Login" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <p>{% blocktrans with email="evfonn(at)gmail(dot)com" %}To submit results, please log in with your submitter account. If you don't have a submitter account, but still want to contribute, please let me know at: {{ email }}.{% endblocktrans %}</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <form role="form" method="post" action="/add/">
+      {% csrf_token %}
+      <div class="form-group {{"full-mid"|formdiv}}">
+        <label for="username" class="control-label {{"full-mid"|formlabel}}">
+          {% trans "Username" %}
+        </label>
+        <div class="{{"full-mid"|forminput}}">
+          <input type="text" name="username" id="username" placeholder="{% trans "Username" %}" class="form-control">
         </div>
-    </div>
-
-    {% include "messages.djhtml" %}
-
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
-            <p>{% blocktrans with email="evfonn(at)gmail(dot)com" %}To submit results, please log in with your submitter account. If you don't have a submitter account, but still want to contribute, please let me know at: {{ email }}.{% endblocktrans %}</p>
+      </div>
+      <div class="form-group {{"full-mid"|formdiv}}">
+        <label for="username" class="control-label {{"full-mid"|formlabel}}">
+          {% trans "Password" %}
+        </label>
+        <div class="{{"full-mid"|forminput}}">
+          <input type="password" name="password" id="password" placeholder="{% trans "Password" %}" class="form-control">
         </div>
-    </div>
-
-    <div class="row">
-        <form role="form" method="post" action="/add/">
-            {% csrf_token %}
-            <div class="form-group {{"full-mid"|formdiv}}">
-                <label for="username" class="control-label {{"full-mid"|formlabel}}">
-                    {% trans "Username" %}
-                </label>
-                <div class="{{"full-mid"|forminput}}">
-                    <input type="text" name="username" id="username" placeholder="{% trans "Username" %}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group {{"full-mid"|formdiv}}">
-                <label for="username" class="control-label {{"full-mid"|formlabel}}">
-                    {% trans "Password" %}
-                </label>
-                <div class="{{"full-mid"|forminput}}">
-                    <input type="password" name="password" id="password" placeholder="{% trans "Password" %}" class="form-control">
-                </div>
-            </div>
-            <div class="form-group text-right {{"full-mid"|formdiv}}">
-                <button type="submit" class="btn btn-primary">
-                    {% trans "Login" %}
-                </button>
-            </div>
-        </form>
-    </div>
+      </div>
+      <div class="form-group text-right {{"full-mid"|formdiv}}">
+        <button type="submit" class="btn btn-primary">
+          {% trans "Login" %}
+        </button>
+      </div>
+    </form>
+  </div>
 {% endblock %}

@@ -11,20 +11,20 @@ This is the template for the event manager admin page. It's called from ratings.
 {% block title %}{% trans "Event manager" %}{% endblock %}
 
 {% block modals %}
-{% if adm %}
-<div class="modal fade" id="md-eventmgr" tabindex="-1" role="dialog" aria-labelledby="md-eventmgr-label"
-     aria-hidden="true">
-    <div class="modal-dialog">
+  {% if adm %}
+    <div class="modal fade" id="md-eventmgr" tabindex="-1" role="dialog" aria-labelledby="md-eventmgr-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="md-eventmgr-label">
-                    {% trans "Modify event / add new sub-events" %}
-                </h4>
-            </div>
-            {% form "forms.djhtml" %}
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-eventmgr-label">
+              {% trans "Modify event / add new sub-events" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
             <form role="form" method="post" action="/add/events/">
-            <div class="modal-body">
+              <div class="modal-body">
                 {% csrf_token %}
                 {% use "hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
                 {% use "text" left="Parent" right_id="parent_name" %}
@@ -33,110 +33,110 @@ This is the template for the event manager admin page. It's called from ratings.
                 {% field "select" form.type %}
                 {% field "checkbox" form.big %}
                 {% field "checkbox" form.noprint %}
-            </div>
-            <div class="modal-footer">
+              </div>
+              <div class="modal-footer">
                 {% trans "Commit new sub-events" as commitnew %}
                 {% trans "Close event" as close %}
                 {% use "submit" name="commit" text=commitnew %}
                 {% use "submit" name="close" text=close %}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+              </div>
             </form>
             {% endform %}
         </div>
+      </div>
     </div>
-</div>
-{% endif %}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
 
-<div class="row">
+  <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
-        <h2>{% trans "Event manager" %}</h2>
+      <h2>{% trans "Event manager" %}</h2>
     </div>
-</div>
+  </div>
 
-{% include "messages.djhtml" %}
+  {% include "messages.djhtml" %}
 
-<div class="row">
+  <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
-        <div class="text-center" id="showguide">
-            <button style="margin: 2em;" class="btn btn-info" onclick="$('#guide').collapse(); $('#showguide').hide(); return false;">{% trans "Show guide" %}</button>
-        </div>
+      <div class="text-center" id="showguide">
+        <button style="margin: 2em;" class="btn btn-info" onclick="$('#guide').collapse(); $('#showguide').hide(); return false;">{% trans "Show guide" %}</button>
+      </div>
 
-        <div class="collapse" id="guide">
-            <p>{% blocktrans %}The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so on. There are no hard rules.{% endblocktrans %}</p>
+      <div class="collapse" id="guide">
+        <p>{% blocktrans %}The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so on. There are no hard rules.{% endblocktrans %}</p>
 
-            {% comment %}Translators: The event names have to be in English.{% endcomment %}
-            <p>{% blocktrans %}The name displayed everywhere on the site is the concatenation of the event name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S Ro32 Group A». With this in mind, try to name the events so that the full name flows as well as possible.{% endblocktrans %}</p>
+        {% comment %}Translators: The event names have to be in English.{% endcomment %}
+        <p>{% blocktrans %}The name displayed everywhere on the site is the concatenation of the event name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code S→Ro32→Group A will be shown as «GSL 2013 Season 1 Code S Ro32 Group A». With this in mind, try to name the events so that the full name flows as well as possible.{% endblocktrans %}</p>
 
-            {% comment %}Translators: The event names have to be in English.{% endcomment %}
-            <p>{% blocktrans %}Do not repeat information. If you have an event called «Qualifiers», the subevents should not be called «Korean Qualifiers». Just «Korea» is fine.{% endblocktrans %}</p>
+        {% comment %}Translators: The event names have to be in English.{% endcomment %}
+        <p>{% blocktrans %}Do not repeat information. If you have an event called «Qualifiers», the subevents should not be called «Korean Qualifiers». Just «Korea» is fine.{% endblocktrans %}</p>
 
-            <p>{% blocktrans %}Matches can only be assigned to leaf events (i.e. events with no subevents).{% endblocktrans %}</p>
+        <p>{% blocktrans %}Matches can only be assigned to leaf events (i.e. events with no subevents).{% endblocktrans %}</p>
 
-            <p>{% blocktrans %}Close an event after all the matches has been assigned. This will remove it from the list below and all drop-down boxes on the site, to help readability. If you want to reopen an event, this can be done in the admin interface or on the event page.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Close an event after all the matches has been assigned. This will remove it from the list below and all drop-down boxes on the site, to help readability. If you want to reopen an event, this can be done in the admin interface or on the event page.{% endblocktrans %}</p>
 
-            {% comment %}Translators: The event names and noprint have to be in English.{% endcomment %}
-            <p>{% blocktrans %}You can improve readability by making an event «invisible» (open the admin interface and check the «noprint» option). This will hide the name. This is useful for events called e.g. «Group Stage» to turn «Code S Group Stage Group A» into «Code S Group A», which flows better. This is often used for group stages and playoffs.{% endblocktrans %}</p>
+        {% comment %}Translators: The event names and noprint have to be in English.{% endcomment %}
+        <p>{% blocktrans %}You can improve readability by making an event «invisible» (open the admin interface and check the «noprint» option). This will hide the name. This is useful for events called e.g. «Group Stage» to turn «Code S Group Stage Group A» into «Code S Group A», which flows better. This is often used for group stages and playoffs.{% endblocktrans %}</p>
 
-            <p>{% blocktrans %}Events with many games should also be marked «big». This will cause the list of games to be cut off. If you forget, no big deal, it's done automatically.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Events with many games should also be marked «big». This will cause the list of games to be cut off. If you forget, no big deal, it's done automatically.{% endblocktrans %}</p>
 
-            {% comment %}Translators: The event names have to be in English.{% endcomment %}
-            <p>{% blocktrans %}<strong>Naming conventions:</strong> Ro («round of») with capital R and small o, followed immediately by the number. Third place matches should be named exactly that (not «3rd»).{% endblocktrans %}</p>
-        </div>
+        {% comment %}Translators: The event names have to be in English.{% endcomment %}
+        <p>{% blocktrans %}<strong>Naming conventions:</strong> Ro («round of») with capital R and small o, followed immediately by the number. Third place matches should be named exactly that (not «3rd»).{% endblocktrans %}</p>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="row">
+  <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
-        <ul class="list-group">
-            {% for e in tree %}
-            <li class="list-group-item tree-node tree-node-{{e.event.type}} {% if forloop.first %}tree-node-first{% endif %}" {% if e.inc < 0 %}style="margin-bottom: -1px;"{% endif %}>
-                <span style="margin-left: {{e.indent|add:e.indent}}em;">
-                {% if e.inc > 0 %}
+      <ul class="list-group">
+        {% for e in tree %}
+          <li class="list-group-item tree-node tree-node-{{e.event.type}} {% if forloop.first %}tree-node-first{% endif %}" {% if e.inc < 0 %}style="margin-bottom: -1px;"{% endif %}>
+            <span style="margin-left: {{e.indent|add:e.indent}}em;">
+              {% if e.inc > 0 %}
                 <a href="#" class="tree-toggle">
-                    {{e.event.name}}
+                  {{e.event.name}}
                 </a>
-                {% else %}
+              {% else %}
                 {{e.event.name}}
-                {% endif %}
-                </span>
-                <small class="pull-right">
-                    <a class="btn btn-default btn-xs" 
-                       href="/results/events/{{e.event.id}}-{{e.event.fullname|urlfilter}}/">
-                        {% trans "event" %}
-                    </a>
-                    <a class="btn btn-default btn-xs" 
-                       href="/admin/ratings/event/{{e.event.id}}/">
-                        {% trans "admin" %}
-                    </a>
-                    <button class="btn btn-default btn-xs"
-                        onclick="$('input[id=parent_id_field]').val('{{e.event.id}}'); $('#parent_name').html('{{e.event.fullname}}'); $('#md-eventmgr').modal();">
-                        {% trans "modify" %}
-                    </button>
-                </small>
-            </li>
-            {% if e.inc > 0 %}
+              {% endif %}
+            </span>
+            <small class="pull-right">
+              <a class="btn btn-default btn-xs" 
+                 href="/results/events/{{e.event.id}}-{{e.event.fullname|urlfilter}}/">
+                {% trans "event" %}
+              </a>
+              <a class="btn btn-default btn-xs" 
+                 href="/admin/ratings/event/{{e.event.id}}/">
+                {% trans "admin" %}
+              </a>
+              <button class="btn btn-default btn-xs"
+                      onclick="$('input[id=parent_id_field]').val('{{e.event.id}}'); $('#parent_name').html('{{e.event.fullname}}'); $('#md-eventmgr').modal();">
+                {% trans "modify" %}
+              </button>
+            </small>
+          </li>
+          {% if e.inc > 0 %}
             <div class="subtree" style="display: none;">
-            {% elif e.inc < 0 %}
-            {{ e.inc|closedivs|safe }}
-            {% endif %}
+          {% elif e.inc < 0 %}
+              {{ e.inc|closedivs|safe }}
+          {% endif %}
 
-            {% endfor %}
-        </ul>
+        {% endfor %}
+      </ul>
+            </div>
     </div>
-</div>
 
-<script type="text/javascript">
-$(document).ready(function () {
-    $('.tree-toggle').click(function () { $(this).parent().parent().next('.subtree').toggle(100); return false; });
-});
-</script>
+    <script type="text/javascript">
+     $(document).ready(function () {
+       $('.tree-toggle').click(function () { $(this).parent().parent().next('.subtree').toggle(100); return false; });
+     });
+    </script>
 
-<p>
-    <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">{% trans "Add root event" %}</a>.
-</p>
+    <p>
+      <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">{% trans "Add root event" %}</a>.
+    </p>
 
 {% endblock %}

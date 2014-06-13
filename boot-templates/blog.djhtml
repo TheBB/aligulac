@@ -10,7 +10,7 @@ This is the blog view, called from blog.views.blog.
 {% block title %}{% trans "Blog" %}{% endblock %}
 
 {% block content %}
-    {% include "messages.djhtml" %}
+  {% include "messages.djhtml" %}
 
-    {% include "blogposts.djhtml" %} 
+  {% include "blogposts.djhtml" %} 
 {% endblock %}

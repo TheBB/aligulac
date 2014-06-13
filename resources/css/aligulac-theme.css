@@ -22,6 +22,10 @@ h2 {
     font-variant: small-caps;
 }
 
+h2 small {
+    margin-left: 0.7em;
+}
+
 /* Subheadings */
 h3 {
     font-size: 1.5em;
@@ -455,4 +459,9 @@ h2 .breadcrumb > li + li:before {
 /* Float images in FAQ */
 .faqpost p img {
     float: right;
+}
+
+/* Gray progress bars */
+.progress-bar-default {
+    background-color: #888;
 }

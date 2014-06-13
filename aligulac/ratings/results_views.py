@@ -72,13 +72,6 @@ from ratings.tools import (
 from ratings.templatetags.ratings_extras import cdate
 # }}}
 
-# {{{ collect: Auxiliary function for reducing a list to a list of tuples (reverse concat)
-def collect(lst, n=2):    
-    args = [iter(lst)] * n
-    
-    return list(zip(*args))
-# }}}
-
 # {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
 def earnings_code(queryset):
     if not queryset.exists():
@@ -809,19 +802,30 @@ def events(request, event_id=None):
     if event_id is None:
         root_events = (
             Event.objects
-                .annotate(num_uplinks=Count("uplink"))
-                .filter(num_uplinks=1)
-                .order_by('name')
-                .only('id', 'name', 'big', 'category', 'fullname')
+                  .annotate(num_uplinks=Count("uplink"))
+                  .filter(num_uplinks=1)
+                  .order_by('name')
+                  .only('id', 'name', 'big', 'category', 'fullname')
         )
         base.update({
-            'ind_bigs':    collect(root_events.filter(big=True, category=CAT_INDIVIDUAL), 2),
-            'ind_smalls':  root_events.filter(big=False, category=CAT_INDIVIDUAL).order_by('name'),
-            'team_bigs':   collect(root_events.filter(big=True, category=CAT_TEAM), 2),
-            'team_smalls': root_events.filter(big=False, category=CAT_TEAM).order_by('name'),
-            'freq_bigs':   collect(root_events.filter(big=True, category=CAT_FREQUENT), 2),
-            'freq_smalls': root_events.filter(big=False, category=CAT_FREQUENT).order_by('name'),
+            'bigs': (
+                list(root_events.filter(big=True, category=CAT_INDIVIDUAL)) +
+                list(root_events.filter(big=True, category=CAT_TEAM)) +
+                list(root_events.filter(big=True, category=CAT_FREQUENT))
+            ),
+            'smalls': (
+                list(root_events.filter(big=False, category=CAT_INDIVIDUAL).order_by('name')) +
+                list(root_events.filter(big=False, category=CAT_TEAM).order_by('name')) +
+                list(root_events.filter(big=False, category=CAT_FREQUENT).order_by('name'))
+            )
         })
+
+        base['messages'].append(Message(
+            _('The events are organized in a hierarchical fashion. Thus, all GSL tournaments '
+              'are filed under GSL, all Code S under their respective seasons, all groups under '
+              'their respective Code S event, and so on.'),
+            type=Message.INFO
+        ))
 
         return render_to_response('events.djhtml', base)
     # }}}

@@ -30,7 +30,7 @@ h3 {
     font-variant: small-caps;
 }
 
-/* A blacklink is always black and never underlied. */
+/* A blacklink is always black and never underlined. */
 a.blacklink {
     color: #000000;
 }
@@ -397,4 +397,62 @@ h2 .breadcrumb > li + li:before {
 /* Sortable lists should not have a caret cursor. */
 #sortable li {
     cursor: pointer;
+}
+
+/* Event table */
+.event-panel {
+    box-shadow: none;
+}
+
+.event-panel a.eventname {
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    font-variant: small-caps;
+    color: #000000;
+}
+
+.event-panel span div button {
+}
+
+.event-panel a.eventname:hover {
+    color: #555555;
+    text-decoration: none;
+}
+
+.event-panel-individual {
+    background: #dff0d8;
+    border-color: #c1e2b3;
+}
+
+.event-panel-individual:hover {
+    background-color: #c1e2b3;
+}
+
+.event-panel-team {
+    background: #f2dede;
+    border-color: #e4b9b9;
+}
+
+.event-panel-team:hover {
+    background-color: #e4b9b9;
+}
+
+.event-panel-frequent {
+    background: #d9edf7;
+    border-color: #afd9ee;
+}
+
+.event-panel-frequent:hover {
+    background-color: #afd9ee;
+}
+
+/* Disabled select options */
+.option-disabled {
+    background: #e7e7e7;
+}
+
+/* Float images in FAQ */
+.faqpost p img {
+    float: right;
 }

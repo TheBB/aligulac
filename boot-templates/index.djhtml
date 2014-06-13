@@ -158,6 +158,6 @@ Changes here will generally be visible on the whole site.
              'show': '{% trans "show" %}',
          };
         </script>
-        <script type="text/javascript" src="{{"aligulac"|js}}"></script>
+        <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
     </body>
 </html>

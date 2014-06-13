@@ -258,9 +258,9 @@ This template shows a rating list for a given period.
                         <thead>
                             <tr>
                                 <th style="width: 3em;"></th>
-                                <th style="width: 35%;">Winners <img src="{{"uparrow"|img}}"></th>
+                                <th style="width: 35%;">{% trans "Winners" %} <img src="{{"uparrow"|img}}"></th>
                                 <th style="width: 3em;"></th>
-                                <th style="width: 35%;">Losers <img src="{{"downarrow"|img}}"></th>
+                                <th style="width: 35%;">{% trans "Losers" %} <img src="{{"downarrow"|img}}"></th>
                             </tr>
                         </thead>
                         {% for e in updown %}
@@ -354,15 +354,14 @@ This template shows a rating list for a given period.
         <input type="hidden" name="page" value="{{page}}" />
         <input type="hidden" name="sort" value="{{sort}}" />
         <div class="form-group">
-            <label for="race" class="inline-label">{% trans "Show races:" %}</label>
-            <select name="race" class="form-control input-sm">
+          <label for="race" class="inline-label">{% trans "Show races:" %}</label>
+            <select name="race" id="race" class="form-control input-sm">
                 <option value="ptzrs" {% if race == "ptzrs" %}selected{% endif %}>{% trans "All" %}</option>
                 <option value="p" {% if race == "p" %}selected{% endif %}>{% trans "Protoss" %}</option>
                 <option value="t" {% if race == "t" %}selected{% endif %}>{% trans "Terran" %}</option>
                 <option value="z" {% if race == "z" %}selected{% endif %}>{% trans "Zerg" %}</option>
                 <option value="tzrs" {% if race == "tzrs" %}selected{% endif %}>{% trans "No Protoss" %}</option>
                 <option value="pzrs" {% if race == "pzrs" %}selected{% endif %}>{% trans "No Terran" %}</option>
-
                 <option value="ptrs" {% if race == "ptrs" %}selected{% endif %}>{% trans "No Zerg" %}</option>
                 <option value="r" {% if race == "r" %}selected{% endif %}>{% trans "Random" %}</option>
                 <option value="s" {% if race == "s" %}selected{% endif %}>{% trans "Race switchers" %}</option>
@@ -371,13 +370,13 @@ This template shows a rating list for a given period.
         </div>
         <div class="form-group">
             <label for="nats" class="inline-label">{% trans "Nationalities:" %}</label>
-            <select name="nats" class="form-control input-sm">
+            <select name="nats" id="nats" class="form-control input-sm">
                 <option value="all" {% if nats == "all" %}selected{% endif %}>{% trans "All" %}</option>
                 <option value="KR">{% trans "South Korea" %}</option>
                 <option value="foreigners" {% if nats == "foreigners" %}selected{% endif %}>
                     {% trans "Non-Koreans" %}
                 </option>
-                <option disabled>------------</option>
+                <option disabled="disabled" class="option-disabled"></option>
                 {% for c in countries %}
                     <option value="{{ c.cc }}" {% if nats == c.cc %}selected{% endif %}>{{ c.name }}</option>
                 {% endfor %}

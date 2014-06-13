@@ -11,8 +11,9 @@ import shlex
 
 from django.db.models import (
     Sum,
-    Q,
+    Q
 )
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 import ccy
@@ -253,8 +254,18 @@ def total_ratings(queryset):
 
 # {{{ populate_teams: Adds team information to rows in a queryset (ratings or players) by populating the
 # members team (short name), teamfull (full name) and teamid (team ID).
-def populate_teams(queryset):
-    for e in queryset:
+def populate_teams(queryset, player_set=False):
+    if player_set:
+        q = queryset.prefetch_related(
+            'groupmembership_set',
+            'groupmembership_set__group'
+        )
+    else:
+        q = queryset.prefetch_related(
+            'player__groupmembership_set',
+            'player__groupmembership_set__group'
+        )
+    for e in q:
         if isinstance(e, Player):
             player = e
         else:
@@ -266,7 +277,7 @@ def populate_teams(queryset):
             e.teamfull = membership.group.name
             e.teamid = membership.group.id
 
-    return queryset
+    return q
 # }}}
 
 # {{{ country_list: Creates a list of countries in the given queryset (of Players).
@@ -400,6 +411,9 @@ def add_counts(queryset):
 # - ratings: True to display ratings, false if not.
 # - messages: True to display messages, false if not.
 def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False, add_links=False):
+    if isinstance(matches, QuerySet):
+        matches = matches.prefetch_related('eventobj__uplink', 'eventobj__uplink__parent')
+
     ret = []
     for idx, m in enumerate(matches):
         # {{{ Basic stuff

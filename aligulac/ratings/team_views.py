@@ -176,6 +176,8 @@ def team(request, team_id):
             player__groupmembership__playing=True,
             period=base['curp']
         )
+        .select_related('player')
+        .prefetch_related('prev')
     )
 
     base.update({
@@ -208,7 +210,7 @@ def transfers(request):
         GroupMembership.objects
             .exclude(start__isnull=True, end__isnull=True)
             .filter(group__is_team=True)
-            .select_related('player')
+            .select_related('player', 'group')
             .extra(select={
                 'cdate': (
                     'CASE '

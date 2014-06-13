@@ -426,29 +426,44 @@ class Event(models.Model):
             return None
     # }}}
 
-    # {{{ get_ancestors(id=False): Returns a queryset containing the ancestors
-    # If id=True, the queryset contains the object itself.
+    # {{{ get_ancestors(id=False): Returns a queryset/list containing the
+    # ancestors sorted by distance.
+    # If id=True, the queryset/list contains the object itself.
+    #
+    # get_ancestors_list is preferred if no modifications to the queryset is
+    # needed as it gets a performance boost from prefetch_related
     def get_ancestors(self, id=False):
+        q = Event.objects.filter(downlink__child=self)
         if not id:
-            qset = Event.objects.filter(downlink__child=self, downlink__distance__gt=0)
-        else:
-            qset = Event.objects.filter(downlink__child=self)
-        return qset.order_by('-downlink__distance')
+            q = q.filter(downlink__distance__gt=0)
+
+        return q.order_by('-downlink__distance')
+
+    def get_ancestors_list(self, id=False):
+        results = [
+            link for link in self.uplink.all()
+            if id or link.distance > 0
+        ]
+        results.sort(key=lambda link: -link.distance)
+        return [link.parent for link in results]
     # }}}
 
-    # {{{ get_ancestors_print: Returns a queryset containing the printable ancestors
+    # {{{ get_ancestors_print: Returns a list containing the printable ancestors
     def get_ancestors_print(self, id=True):
-        return self.get_ancestors(id=id).filter(noprint=False)
+        return [event for event in self.get_ancestors_list(id) if not event.noprint]
     # }}}
 
-    # {{{ get_ancestors_event: Returns a queryset containing printable ancestors of type event or category
+    # {{{ get_ancestors_event: Returns a list containing printable ancestors of type event or category
     def get_ancestors_event(self):
-        return self.get_ancestors(id=True).filter(type__in=[TYPE_CATEGORY, TYPE_EVENT])
+        return [
+            x for x in self.get_ancestors_list(id=True)
+            if x.type in (TYPE_CATEGORY, TYPE_EVENT)
+        ]
     # }}}
 
     # {{{ get_root: Returns the farthest removed ancestor
     def get_root(self):
-        return self.get_ancestors(id=True).first()
+        return self.get_ancestors_list(id=True)[0]
     # }}}
 
     # {{{ get_children(types=[category,event,round], id=False): Returns a queryset containing the children
@@ -485,12 +500,12 @@ class Event(models.Model):
     # {{{ get_event_fullname: Returns the fullname of the nearest ancestor of type event or category
     # This is not cached and will query the DB!
     def get_event_fullname(self):
-        return self.get_ancestors_event().last().fullname
+        return self.get_ancestors_event()[-1].fullname
     # }}}
 
     # {{{ get_event: Returns the nearest ancestor of type event or category
     def get_event_event(self):
-        return self.get_ancestors_event().last()
+        return self.get_ancestors_event()[-1]
     # }}}
     
     # {{{ get_homepage: Returns the URL if one can be found, None otherwise
@@ -850,7 +865,8 @@ class Player(models.Model):
     # {{{ get_current_teammembership: Gets the current team membership object of this player, if any.
     def get_current_teammembership(self):
         try:
-            return self.groupmembership_set.filter(current=True, group__is_team=True).first()
+            groups = self.groupmembership_set.all()
+            return next(x for x in groups if x.group.is_team and x.current)
         except:
             return None
     # }}}
@@ -1565,6 +1581,15 @@ class Match(models.Model):
             return self.pla
         elif self.scb > self.sca:
             return self.plb
+        return None
+    # }}}
+
+    # {{{ get_winner_id
+    def get_winner_id(self):
+        if self.sca > self.scb:
+            return self.pla_id
+        elif self.scb > self.sca:
+            return self.plb_id
         return None
     # }}}
 

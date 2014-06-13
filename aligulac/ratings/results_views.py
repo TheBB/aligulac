@@ -611,12 +611,27 @@ class SearchForm(forms.Form):
 
         # {{{ Filter by event
         if self.cleaned_data['event'] != None:
-            queries = [s.strip() for s in shlex.split(self.cleaned_data['event']) if s.strip() != '']
-            for q in queries:
-                matches = matches.filter(
-                    Q(eventobj__isnull=True, event__icontains=q) |\
-                    Q(eventobj__isnull=False, eventobj__fullname__icontains=q)
+            lex = shlex.shlex(self.cleaned_data['event'], posix=True)
+            lex.wordchars += "'"
+            lex.quotes = '"'
+
+            terms = [s.strip() for s in list(lex) if s.strip() != '']
+
+            no_eventobj_q = Q(eventobj__isnull=True)
+
+            for term in terms:
+                no_eventobj_q &= Q(event__icontains=term)
+
+            matches = matches.filter(
+                no_eventobj_q |
+                Q(
+                    eventobj__isnull=False,
+                    eventobj__fullname__iregex=(
+                        r"\s".join(r".*{}.*".format(term) for term in terms)
+                    )
                 )
+            )
+
         # }}}
 
         ret = {'messages': []}

@@ -1,15 +1,31 @@
 # {{{ Imports
-from collections import namedtuple
+import re
+
+from collections import Counter, namedtuple
 from datetime import datetime
 
-from django.core.exceptions import PermissionDenied
-from django.db.models import F, Q
+from django import forms
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import F, Q, Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from itertools import zip_longest
 
+from urllib.parse import quote
+
+from ratings.comparisons import (
+    Comparison,
+    EarningsComparison,
+    FormComparison,
+    MatchComparison,
+    MetaComparison,
+    PercentageComparison,
+    PredictionComparison,
+    RatingComparison,
+    SimpleComparison
+)
 from ratings.models import (
     Event,
     Group,
@@ -17,10 +33,16 @@ from ratings.models import (
     Match,
     Player,
 )
+from ratings.templatetags.ratings_extras import player_url
 from aligulac.cache import cache_page
-from aligulac.tools import base_ctx
-from ratings.tools import display_matches
+from aligulac.tools import (
+    base_ctx,
+    Message,
+    NotUniquePlayerMessage
+)
+from ratings.tools import display_matches, find_player, ntz
 from ratings.templatetags.ratings_extras import (
+    add_sep_and_cur,
     ratscale,
     ratscalediff,
 )
@@ -40,6 +62,10 @@ def home(request):
           "title": _("Number of days since…"),
           "desc": _("Page showing the most recent time some things happened.")
         },
+        { "url": "/misc/compare/",
+          "title": _("Compare"),
+          "desc": _("Tool for comparing players.")
+        }
     )
 
     # http://docs.python.org/3.2/library/itertools.html
@@ -227,3 +253,273 @@ def clocks(request):
 
     return render_to_response("clocks.djhtml", ctx)
 # }}}
+
+
+# {{{ Compare players
+
+class CompareForm(forms.Form):
+    players = forms.CharField(
+        max_length=10000,
+        required=True,
+        label=_('Compare players'),
+        initial='')
+
+    # {{{ Constructor
+    def __init__(self, request=None):
+        if request is not None:
+            super().__init__(request.GET)
+        else:
+            super().__init__()
+        self.messages = []
+    # }}}
+
+    # Copied from inference_views.PredictForm
+    def clean_players(self):
+        lines = self.cleaned_data['players'].splitlines()
+        lineno, ok, players = -1, True, []
+
+        for line in lines:
+            lineno += 1
+            if line.strip() == '':
+                continue
+
+            pls = find_player(query=line, make=False)
+            if not pls.exists():
+                # Translators: Matches as in search matches
+                self.messages.append(Message(_("No matches found: '%s'.") % line.strip(), type=Message.ERROR))
+                ok = False
+            elif pls.count() > 1:
+                self.messages.append(NotUniquePlayerMessage(
+                    line.strip(), pls, update=self['players'].auto_id,
+                    updateline=lineno, type=Message.ERROR
+                ))
+                ok = False
+            else:
+                players.append(pls.first())
+
+        if not ok:
+            raise ValidationError(_('One or more errors found in player list.'))
+
+
+        if len(players) < 2:
+            raise ValidationError(_('Enter at least two players.'))
+        if len(players) > 6:
+            raise ValidationError(_('Enter at most six players.'))
+        return players
+
+    # {{{ get_messages: Returns a list of messages after validation
+    def get_messages(self):
+        if not self.is_valid():
+            ret = []
+            for field, errors in self.errors.items():
+                for error in errors:
+                    if field == '__all__':
+                        ret.append(Message(error, type=Message.ERROR))
+                    else:
+                        ret.append(Message(error=error, field=self.fields[field].label))
+            return self.messages + ret
+
+        return self.messages
+    # }}}
+
+    # {{{ generate_url: Returns an URL to continue to (assumes validation has passed)
+    def generate_url(self):
+        return '/misc/compare/%s/' % (
+            ','.join(
+                player_url(p, with_path=False)
+                for p in self.cleaned_data['players']
+            ),
+        )
+    # }}}
+
+
+@cache_page
+def compare_search(request):
+
+    base = base_ctx('Misc', 'Compare', request)
+    base["title"] = _("Comparison")
+
+    if "op" in request.GET:
+        op = request.GET["op"].lower()
+
+    if "players" not in request.GET:
+        form = CompareForm()
+        validate = False
+    else:
+        form = CompareForm(request=request)
+        if "op" not in request.GET:
+            validate = False
+        elif op == "compare":
+            validate = True
+        else:
+            validate = False
+
+    base["form"] = form
+
+    if not validate:
+        return render_to_response('compare.search.html', base)
+
+    if not form.is_valid():
+        base["messages"] += form.get_messages()
+        return render_to_response('compare.search.html', base)
+
+    return redirect(form.generate_url())
+
+@cache_page
+def compare(request, players):
+    base = base_ctx('Misc', 'Compare', request)
+
+    # {{{ Check that we have enough players
+    if players is None:
+        return redirect('/misc/compare/')
+
+    player_regex = re.compile(r"(\d+)(-[^ /,]*)?")
+
+    try:
+        players = [
+            int(player_regex.match(x).group(1))
+            for x in players.split(',')
+        ]
+    except:
+        return redirect('/misc/compare/')
+
+    fail_url =  (
+        "/misc/compare/?op=edit&players=" +
+        quote('\n'.join(str(x) for x in players))
+    )
+
+    if len(players) < 2 or len(players) > 6:
+        return redirect(fail_url)
+    # }}}
+
+    q = Player.objects.filter(id__in=players)\
+                      .prefetch_related('current_rating')
+
+    # Make sure that they're in the right order
+    clean_players = list(players)
+    for p in q:
+        idx = players.index(p.id)
+        clean_players[idx] = p
+
+
+    def fmt_url_player(x):
+        if isinstance(x, int):
+            return str(x)
+        else:
+            return x.tag + " " + str(x.id)
+
+    edit_url =  (
+        "/misc/compare/?op=edit&players=" +
+        quote('\n').join(quote(fmt_url_player(x)) for x in clean_players)
+    )
+
+    # If a player couldn't be found
+    if any(isinstance(x, int) for x in clean_players):
+        return redirect(edit_url)
+
+    base["title"] = _("Comparison")
+    base["subnav"] = [
+        (_("New"), "/misc/compare/"),
+        (_("Edit"), edit_url)
+    ]
+    base['players'] = clean_players
+
+    comparisons = [_("Rating")]
+
+    comparisons.extend(
+        RatingComparison(clean_players, name, prop)
+        for prop, name in RATING_COMPARISONS
+    )
+
+    comparisons.append(_("Probability of winning..."))
+    if len(clean_players) == 2:
+        comparisons.append(PredictionComparison(
+            clean_players, _("a Bo3"), bo=3, kind='match')
+        )
+
+    if len(clean_players) > 2:
+        comparisons.append(PredictionComparison(
+            clean_players, _("a round robin group"), bo=3, kind='rr')
+        )
+
+    if len(clean_players) == 4:
+        comparisons.append(PredictionComparison(
+            clean_players, _("a dual tournament"), bo=3, kind='dual')
+        )
+
+    if len(clean_players) == 2:
+        comparisons.append(_("Between these players"))
+        matches = Match.objects.filter(
+            pla__in=players,
+            plb__in=players
+        ).prefetch_related('pla', 'plb')
+        comparisons.append(MatchComparison(
+            clean_players, _("Match wins"), matches))
+        comparisons.append(MatchComparison(
+            clean_players, _("Match +/-"), matches, pm=True))
+        comparisons.append(None)
+        comparisons.append(MatchComparison(
+            clean_players, _("Game wins"), matches, kind="games"))
+        comparisons.append(MatchComparison(
+            clean_players, _("Game +/-"), matches, kind="games", pm=True))
+
+    comparisons.append(_("Lifetime"))
+    matches = Match.objects.symmetric_filter(
+        pla__in=players
+    )
+    comparisons.append(MatchComparison(
+        clean_players, _("Match wins"), matches))
+    comparisons.append(MatchComparison(
+        clean_players, _("Match win %"), matches, percent=True))
+    comparisons.append(MatchComparison(
+        clean_players, _("Match +/-"), matches, pm=True))
+    comparisons.append(None)
+    comparisons.append(MatchComparison(
+        clean_players, _("Game wins"), matches, kind="games"))
+    comparisons.append(MatchComparison(
+        clean_players, _("Game win %"), matches, kind="games", percent=True))
+    comparisons.append(MatchComparison(
+        clean_players, _("Game +/-"), matches, kind="games", pm=True))
+
+    # comparisons.append(_("WCS 2014"))
+    # matches = Match.objects.symmetric_filter(
+    #     pla__in=players,
+    #     eventobj__uplink__parent=23398
+    # )
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match wins"), matches))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match win %"), matches, percent=True))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Match +/-"), matches, pm=True))
+    # comparisons.append(None)
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game wins"), matches, kind="games"))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game win %"), matches, kind="games", percent=True))
+    # comparisons.append(MatchComparison(
+    #     clean_players, _("Game +/-"), matches, kind="games", pm=True))
+
+    comparisons.append(_("Other stats"))
+    comparisons.append(EarningsComparison(clean_players, _("Earnings")))
+
+    comparisons.append(FormComparison(clean_players, _("Current Form")))
+
+    comparisons.append(_("Meta"))
+
+    comparisons.append(MetaComparison(clean_players, _("Total"), comparisons))
+
+    base['comparisons'] = comparisons
+
+    return render_to_response('compare.html', base)
+
+# (property chain, label)
+RATING_COMPARISONS = (
+    (('current_rating', 'rating'), _("General")),
+    (('current_rating', lambda x: x.get_totalrating_vp()), _("vP")),
+    (('current_rating', lambda x: x.get_totalrating_vt()), _("vT")),
+    (('current_rating', lambda x: x.get_totalrating_vz()), _("vZ"))
+)
+
+# }}}
+

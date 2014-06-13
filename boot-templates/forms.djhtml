@@ -2,189 +2,189 @@
 {% load i18n %}
 
 {% block basic %}
-    <div class="form-group {{style|formdiv}}">
-        <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-            {{field.label}}
-        </label>
-        <div class="{{style|forminput}}">
-            <input type="{{field_type|default:"text"}}"
-                   name="{{field.html_name}}"
-                   id="{{field.auto_id}}"
-                   class="form-control"
-                   {% if onkeypress %}onkeypress="{{onkeypress}}"{% endif %}
-                   value="{{field.value|default:""}}"
-                   placeholder="{{field.label}}">
-        </div>
-        {% if help %}
-        <span class="help-block">
-            {{help}}
-        </span>
-        {% endif %}
+  <div class="form-group {{style|formdiv}}">
+    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{field.label}}
+    </label>
+    <div class="{{style|forminput}}">
+      <input type="{{field_type|default:"text"}}"
+             name="{{field.html_name}}"
+             id="{{field.auto_id}}"
+             class="form-control"
+             {% if onkeypress %}onkeypress="{{onkeypress}}"{% endif %}
+             value="{{field.value|default:""}}"
+             placeholder="{{field.label}}">
     </div>
-    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+    {% if help %}
+      <span class="help-block">
+        {{help}}
+      </span>
+    {% endif %}
+  </div>
+  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
 {% block textarea %}
-    <div class="form-group {{style|formdiv}}">
-        <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-            {{field.label}}
-        </label>
-        <div class="{{style|forminput}}">
-            <textarea class="form-control"
-                      name="{{field.html_name}}"
-                      id="{{field.auto_id}}"
-                      rows="{{rows|default:"15"}}"
-                      placeholder="{{field.label}}">{{field.value}}</textarea>
-        </div>
-        {% if help %}
-        <span class="help-block">
-            {{help}}
-        </span>
-        {% endif %}
+  <div class="form-group {{style|formdiv}}">
+    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{field.label}}
+    </label>
+    <div class="{{style|forminput}}">
+      <textarea class="form-control"
+                name="{{field.html_name}}"
+                id="{{field.auto_id}}"
+                rows="{{rows|default:"15"}}"
+                placeholder="{{field.label}}">{{field.value}}</textarea>
     </div>
-    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+    {% if help %}
+      <span class="help-block">
+        {{help}}
+      </span>
+    {% endif %}
+  </div>
+  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
 {% block select %}
-    <div class="form-group {{style|formdiv}}">
-        <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-            {{field.label}}
-        </label>
-        <div class="{{style|forminput}}">
-            <select class="form-control"
-                    name="{{field.html_name}}"
-                    id="{{field.auto_id}}"
-                    {% if onchange %}onchange="{{onchange}}"{% endif %}>
-                {% for value, label in field.field.choices %}
-                    {% if not value and not label %}
-                        <option disabled>------------</option>
-                    {% else %}
-                        <option value="{{value}}"
-                                {% if value == override %}selected="selected"
-                                {% elif not override and field.value == value|safe %}selected="selected"{% endif %}>
-                            {{label}}
-                        </option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-        {% if help %}
-        <span class="help-block">
-            {{help}}
-        </span>
-        {% endif %}
+  <div class="form-group {{style|formdiv}}">
+    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{field.label}}
+    </label>
+    <div class="{{style|forminput}}">
+      <select class="form-control"
+              name="{{field.html_name}}"
+              id="{{field.auto_id}}"
+              {% if onchange %}onchange="{{onchange}}"{% endif %}>
+              {% for value, label in field.field.choices %}
+                {% if not value and not label %}
+                  <option disabled>------------</option>
+                {% else %}
+                  <option value="{{value}}"
+                          {% if value == override %}selected="selected"
+                          {% elif not override and field.value == value|safe %}selected="selected"{% endif %}>
+                          {{label}}
+                  </option>
+                {% endif %}
+              {% endfor %}
+      </select>
     </div>
-    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+    {% if help %}
+      <span class="help-block">
+        {{help}}
+      </span>
+    {% endif %}
+  </div>
+  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
 {% block selectmulti %}
-    <div class="form-group {{style|formdiv}}">
-        <label class="{{style|formlabel}} control-label">
-            {{field.label}}
-        </label>
-        <div class="{{style|forminput}}">
-            {% for value, label in field.field.choices %}
-                <label for="{{field.auto_id}}_{{forloop.counter0}}" class="control-label">
-                <input type="checkbox"
-                       {% if value|stringformat:"i" in field.value or value in field.value %}checked="checked"{% endif %}
-                       id="{{field.auto_id}}_{{forloop.counter0}}"
-                       name="{{field.html_name}}"
-                       type="checkbox"
-                       style=""
-                       value="{{value}}">
-                       {{label}}
-                </label><br>
-            {% endfor %}
-        </div>
+  <div class="form-group {{style|formdiv}}">
+    <label class="{{style|formlabel}} control-label">
+      {{field.label}}
+    </label>
+    <div class="{{style|forminput}}">
+      {% for value, label in field.field.choices %}
+        <label for="{{field.auto_id}}_{{forloop.counter0}}" class="control-label">
+          <input type="checkbox"
+                 {% if value|stringformat:"i" in field.value or value in field.value %}checked="checked"{% endif %}
+                 id="{{field.auto_id}}_{{forloop.counter0}}"
+                 name="{{field.html_name}}"
+                 type="checkbox"
+                 style=""
+                 value="{{value}}">
+                 {{label}}
+        </label><br>
+      {% endfor %}
     </div>
+  </div>
 {% endblock %}
 
 {% block checkbox %}
-    <div class="form-group {{style|formdiv}}">
-        {% if inc_label %}
-            <label class="{{style|formlabel}} control-label">&nbsp;</label>
-        {% endif %}
-        <div class="{{style|forminput}}">
-            <label for="{{field.auto_id}}">
-                <input type="checkbox"
-                       {% if field.value %}checked="checked"{% endif %}
-                       id="{{field.auto_id}}"
-                       name="{{field.html_name}}"
-                       type="checkbox"
-                       style="">
-                {{ field.label }}
-            </label>
-        </div>
+  <div class="form-group {{style|formdiv}}">
+    {% if inc_label %}
+      <label class="{{style|formlabel}} control-label">&nbsp;</label>
+    {% endif %}
+    <div class="{{style|forminput}}">
+      <label for="{{field.auto_id}}">
+        <input type="checkbox"
+               {% if field.value %}checked="checked"{% endif %}
+               id="{{field.auto_id}}"
+               name="{{field.html_name}}"
+               type="checkbox"
+               style="">
+               {{ field.label }}
+      </label>
     </div>
+  </div>
 {% endblock %}
 
 {% block date %}
-    <div class="form-group {{style|formdiv}}">
-        <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-            {{field.label}}
-        </label>
-        <div class="{{style|forminput}}">
-            <input type="text"
-                   name="{{field.html_name}}"
-                   id="{{field.auto_id}}"
-                   class="form-control"
-                   value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
-                   placeholder="{{field.label}}">
-        </div>
+  <div class="form-group {{style|formdiv}}">
+    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{field.label}}
+    </label>
+    <div class="{{style|forminput}}">
+      <input type="text"
+             name="{{field.html_name}}"
+             id="{{field.auto_id}}"
+             class="form-control"
+             value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
+             placeholder="{{field.label}}">
     </div>
-    <script type="text/javascript">
-     $(document).ready(function () { $("#{{field.auto_id}}").datepicker(); });
-    </script>
-    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+  </div>
+  <script type="text/javascript">
+   $(document).ready(function () { $("#{{field.auto_id}}").datepicker(); });
+  </script>
+  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
 {% block daterange %}
-<tr>
+  <tr>
     <td class="form_left">{{ label }}</td>
     <td class="form_right">
-        {% trans "between" context "between x and y inclusive" %}
-        <input type="text" class="date" name="{{ after.html_name }}" 
-               id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
-        {% trans "and" context "between x and y inclusive" %}
-        <input type="text" class="date" name="{{ before.html_name }}" 
-               id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
-        {% trans "inclusive" context "between x and y inclusive" %}
-        <script type="text/javascript">
-        // <![CDATA[  
-            $("#after").datepicker();
-            $("#before").datepicker();
-        // ]]>
-        </script>
+      {% trans "between" context "between x and y inclusive" %}
+      <input type="text" class="date" name="{{ after.html_name }}" 
+             id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
+      {% trans "and" context "between x and y inclusive" %}
+      <input type="text" class="date" name="{{ before.html_name }}" 
+             id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
+      {% trans "inclusive" context "between x and y inclusive" %}
+      <script type="text/javascript">
+       // <![CDATA[  
+       $("#after").datepicker();
+       $("#before").datepicker();
+       // ]]>
+      </script>
     </td>
-</tr>
+  </tr>
 {% endblock %}
 
 {% block hidden %}
-<input type="hidden" name="{{ name }}" value="{{ value }}" {% if id %}id="{{ id }}"{% endif %} />
+  <input type="hidden" name="{{ name }}" value="{{ value }}" {% if id %}id="{{ id }}"{% endif %} />
 {% endblock %}
 
 {% block submit %}
-{% trans "Submit" as submit %}
-    <button type="submit"
-            class="btn btn-primary"
-            name="{{name|default:"op"}}"
-            {% if onclick %}onclick="{{onclick}}"{% endif %}
-            {% if id %}id="{{id}}"{% endif %}
-            {% if disabled %}disabled{% endif %}>
-        {{ text|default:submit }}
-    </button>
+  {% trans "Submit" as submit %}
+  <button type="submit"
+          class="btn btn-{{btnstyle|default:"primary"}}"
+          name="{{name|default:"op"}}"
+          {% if onclick %}onclick="{{onclick}}"{% endif %}
+          {% if id %}id="{{id}}"{% endif %}
+          {% if disabled %}disabled{% endif %}>
+          {{ text|default:submit }}
+  </button>
 {% endblock %}
 
 {% block text %}
-    <div class="form-group {{style|formdiv}}">
-        <label class="{{style|formlabel}} control-label" {% if left_id %}id="{{ left_id }}"{% endif %}>
-            {{ left|default:"" }}
-        </label>
-        <div class="{{style|forminput}}">
-            <p class="form-control-static" {% if right_id %}id="{{ right_id }}"{% endif %}>
-            {{ right|default:"" }}
-            </p>
-        </div>
+  <div class="form-group {{style|formdiv}}">
+    <label class="{{style|formlabel}} control-label" {% if left_id %}id="{{ left_id }}"{% endif %}>
+      {{ left|default:"" }}
+    </label>
+    <div class="{{style|forminput}}">
+      <p class="form-control-static" {% if right_id %}id="{{ right_id }}"{% endif %}>
+        {{ right|default:"" }}
+      </p>
     </div>
-    <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+  </div>
+  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}

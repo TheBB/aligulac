@@ -200,9 +200,9 @@ ratings.views.events.
                   {% field "textarea" stform.params help=_("For each parameter, a line of the form \"parameter: value\". The parameters needed are in the story text of the form \"%(parameter)s\". This will be replaced by the value you enter.") %}
                 </div>
                 <div class="modal-footer">
-                  {% use "submit" text=_('New')  name="storynew" id="storynewbtn" %}
+                  {% use "submit" text=_('New') name="storynew" id="storynewbtn" %}
                   {% use "submit" text=_('Update') name="storyupd" id="storyupdbtn" disabled=True %}
-                  {% use "submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True %}
+                  {% use "submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True btnstyle="danger" %}
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
               </form>

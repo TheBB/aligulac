@@ -610,6 +610,8 @@ def event(value):
 def formlabel(value):
     if value == 'full-mid':
         return ''
+    elif value == 'hz-mid':
+        return 'col-lg-2 col-md-2 col-sm-2 col-xs-2'
     else: # full
         return ''
 
@@ -617,6 +619,8 @@ def formlabel(value):
 def forminput(value):
     if value == 'full-mid':
         return ''
+    elif value == 'hz-mid':
+        return 'col-lg-10 col-md-10 col-sm-10 col-xs-10'
     else: # full
         return ''
 

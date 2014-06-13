@@ -1,0 +1,64 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the match history of a player. It's called from ratings.views.player_results.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% blocktrans with tag=player.tag %}{{ tag }} match history{% endblocktrans %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {{player.tag}}
+        {% for t, uri in subnav %}
+          {% if cursubpage == t %}
+            <small>{{t}}</small>
+          {% else %}
+            <small><a href="{{uri}}">{{t}}</a></small>
+          {% endif %}
+        {% endfor %}
+      </h2>
+    </div>
+  </div>
+
+  {% comment %}
+  <form class="horizontal" role="form" action="/players/{{player.id}}/results/" method="get">
+    {% form "forms.djhtml" %}
+      {% field "select" form.race style="hz-mid" %}
+      {% field "select" form.country style="hz-mid" %}
+      {% field "select" form.bestof style="hz-mid" %}
+      {% field "select" form.offline style="hz-mid" %}
+      {% field "select" form.game style="hz-mid" %}
+    {% endform %}
+  </form>
+    {% use "daterange" label=_('Date') after=form.after before=form.before %}
+    {% use "submit" text=_('Filter') %}
+  {% endcomment %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+      <p>
+        {% with tag=player.tag pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op %}
+          {% blocktrans %}In these games, {{tag}} is <strong>{{sc_my}}–{{sc_op}}</strong> <small class="text-muted">({{pctg}}%)</small> in games and <strong>{{msc_my}}–{{msc_op}}</strong> <small class="text-muted">({{mpctg}}%)</small> in matches.{% endblocktrans %}
+        {% endwith %}
+      </p>
+    </div>
+  </div>
+
+{% include "matchlist.djhtml" with lm_list=matches lm_header="partial" %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h3>{% trans "Postable History" %}</h3>
+      <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+      <p class="small">{% blocktrans with a="<a href=\"http://teamliquid.net\" target=\"_blank\">" %}The above is code that can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</p>
+    </div>
+  </div>
+
+{% endblock %}

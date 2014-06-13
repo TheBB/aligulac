@@ -74,7 +74,6 @@
       </span>
     {% endif %}
   </div>
-  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
 {% block selectmulti %}

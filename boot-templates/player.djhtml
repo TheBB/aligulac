@@ -55,11 +55,13 @@ This is the template for the main player page, called from ratings.views.player.
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h2>
         {{player.tag}}
-        <small>{% trans "Summary" %}</small>
-        <small><a href="#">{% trans "Rating history" %}</a></small>
-        <small><a href="#">{% trans "Match history" %}</a></small>
-        <small><a href="#">{% trans "Earnings" %}</a></small>
-        <small><a href="#">{% trans "Adjustments" %}</a></small>
+        {% for t, uri in subnav %}
+          {% if cursubpage == t %}
+            <small>{{t}}</small>
+          {% else %}
+            <small><a href="{{uri}}">{{t}}</a></small>
+          {% endif %}
+        {% endfor %}
       </h2>
     </div>
   </div>

@@ -10,7 +10,7 @@
       <input type="{{field_type|default:"text"}}"
              name="{{field.html_name}}"
              id="{{field.auto_id}}"
-             class="form-control"
+             class="form-control {{extraclasses}}"
              {% if onkeypress %}onkeypress="{{onkeypress}}"{% endif %}
              value="{{field.value|default:""}}"
              placeholder="{{field.label}}">
@@ -138,24 +138,26 @@
 {% endblock %}
 
 {% block daterange %}
-  <tr>
-    <td class="form_left">{{ label }}</td>
-    <td class="form_right">
-      {% trans "between" context "between x and y inclusive" %}
-      <input type="text" class="date" name="{{ after.html_name }}" 
-             id="after" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}" />
-      {% trans "and" context "between x and y inclusive" %}
-      <input type="text" class="date" name="{{ before.html_name }}" 
-             id="before" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}" />
-      {% trans "inclusive" context "between x and y inclusive" %}
-      <script type="text/javascript">
-       // <![CDATA[  
-       $("#after").datepicker();
-       $("#before").datepicker();
-       // ]]>
-      </script>
-    </td>
-  </tr>
+  <div class="form-group {{style|formdiv}}">
+    <label for="{{after.auto_id}}" class="{{style|formlabel}} control-label">
+      {{label}}
+    </label>
+    <div class="{{style|forminput}}">
+      <input type="text" name="{{ after.html_name }}" class="form-control"
+             id="{{after.auto_id}}" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}"
+             style="width: 40%; display: inline; margin-right: 0.2em;">
+      {% trans "to" %}
+      <input type="text" name="{{ before.html_name }}" class="form-control"
+             id="{{before.auto_id}}" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}"
+             style="width: 40%; display: inline; margin-left: 0.2em;">
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#{{after.auto_id}}").datepicker();
+        $("#{{before.auto_id}}").datepicker();
+      });
+    </script>
+  </div>
 {% endblock %}
 
 {% block hidden %}
@@ -170,7 +172,7 @@
           {% if onclick %}onclick="{{onclick}}"{% endif %}
           {% if id %}id="{{id}}"{% endif %}
           {% if disabled %}disabled{% endif %}>
-          {{ text|default:submit }}
+          {{ text|default:_('Submit') }}
   </button>
 {% endblock %}
 

@@ -652,8 +652,8 @@ def event(value):
 def formlabel(value):
     if value == 'full-mid':
         return ''
-    elif value == 'hz-mid':
-        return 'col-lg-2 col-md-2 col-sm-2 col-xs-2'
+    elif value == 'hz-half':
+        return 'col-lg-3 col-md-4 col-sm-3 col-xs-3'
     else: # full
         return ''
 
@@ -661,8 +661,8 @@ def formlabel(value):
 def forminput(value):
     if value == 'full-mid':
         return ''
-    elif value == 'hz-mid':
-        return 'col-lg-10 col-md-10 col-sm-10 col-xs-10'
+    elif value == 'hz-half':
+        return 'col-lg-9 col-md-8 col-sm-9 col-xs-9'
     else: # full
         return ''
 
@@ -685,3 +685,8 @@ def closedivs(value):
 @register.filter
 def mod(value, arg):
     return int(value) % int(arg)
+
+# Tolerance for floats to be zero
+@register.filter
+def tol(value):
+    return abs(float(value)) >= 1e-3

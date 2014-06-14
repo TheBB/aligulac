@@ -722,7 +722,9 @@ def results(request, player_id):
     })
 
     base.update({
-        "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params)
+        # One of the replacement strings contain another string interpolation,
+        # so do it twice.
+        "postable_tl": TL_HISTORY_TEMPLATE.format(**tl_params).format(**tl_params)
     })
     
     # }}}

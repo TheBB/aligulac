@@ -52,6 +52,10 @@ getResults = (term, restrict_to) ->
 
     deferred
 
+# ======================================================================
+# AUTOCOMPLETE SEARCH BOX
+# ======================================================================
+
 $(document).ready ->
     $('#search_box').autocomplete(
         source: (request, response) ->
@@ -89,6 +93,32 @@ $(document).ready ->
             $('<li></li>')
                 .append(aligulacAutocompleteTemplates item)
                 .appendTo ul;
+
+# ======================================================================
+# AUTOCOMPLETE EVENT BOXES
+# ======================================================================
+
+$(document).ready ->
+    $('.event-ac').autocomplete(
+        source: (request, response) ->
+            $.when(getResults(request.term, 'events')).then (result) ->
+
+                if not result? or not result.events? or result.events.length == 0
+                    return []
+
+                for x in result.events
+                    x.type = 'event'
+                response [label: 'Events'].concat result.events
+
+        minLength: 2
+        select: (event, ui) ->
+            $('.event-ac').val ui.item.key
+            false
+        open: ->
+            $('.ui-menu').width 'auto'
+        ).data('ui-autocomplete')._renderItem = (ul, item) ->
+            $('<li></li>').append(aligulacAutocompleteTemplates item)
+                          .appendTo ul;
 
 # ======================================================================
 # AUTOCOMPLETE PREDICTIONS

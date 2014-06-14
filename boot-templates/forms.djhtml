@@ -170,7 +170,7 @@
           {% if onclick %}onclick="{{onclick}}"{% endif %}
           {% if id %}id="{{id}}"{% endif %}
           {% if disabled %}disabled{% endif %}>
-          {{ text|default:submit }}
+          {{ text|default:_('Submit') }}
   </button>
 {% endblock %}
 

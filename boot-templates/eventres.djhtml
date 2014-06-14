@@ -296,8 +296,12 @@ ratings.views.events.
                   <div class="progress progress-striped" style="height: 100%;">
                     {% if pvt_wins or pvt_loss %}
                       {% with p1=pvt_wins|pctg_add:pvt_loss p2=pvt_loss|pctg_add:pvt_wins %}
-                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
-                        <div class="progress-bar progress-bar-primary" style="width: {{p2}}%">{{p2}}%</div>
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">
+                          {% if p1|tol %}{{p1}}%{% else %}&nbsp;{% endif %}
+                        </div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{p2}}%">
+                          {% if p2|tol %}{{p2}}%{% else %}&nbsp;{% endif %}
+                        </div>
                       {% endwith %}
                     {% else %}
                       <div class="progress-bar" style="width: 0%">&nbsp;</div>
@@ -311,8 +315,12 @@ ratings.views.events.
                   <div class="progress progress-striped" style="height: 100%;">
                     {% if pvz_wins or pvz_loss %}
                       {% with p1=pvz_wins|pctg_add:pvz_loss p2=pvz_loss|pctg_add:pvz_wins %}
-                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">{{p1}}%</div>
-                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                        <div class="progress-bar progress-bar-success" style="width: {{p1}}%">
+                          {% if p1|tol %}{{p1}}%{% else %}&nbsp;{% endif %}
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">
+                          {% if p2|tol %}{{p2}}%{% else %}&nbsp;{% endif %}
+                        </div>
                       {% endwith %}
                     {% else %}
                       <div class="progress-bar" style="width: 0%">&nbsp;</div>
@@ -326,8 +334,12 @@ ratings.views.events.
                   <div class="progress progress-striped" style="height: 100%;">
                     {% if tvz_wins or tvz_loss %}
                       {% with p1=tvz_wins|pctg_add:tvz_loss p2=tvz_loss|pctg_add:tvz_wins %}
-                        <div class="progress-bar progress-bar-primary" style="width: {{p1}}%">{{p1}}%</div>
-                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">{{p2}}%</div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{p1}}%">
+                          {% if p1|tol %}{{p1}}%{% else %}&nbsp;{% endif %}
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{p2}}%">
+                          {% if p2|tol %}{{p2}}%{% else %}&nbsp;{% endif %}
+                        </div>
                       {% endwith %}
                     {% else %}
                       <div class="progress-bar" style="width: 0%">&nbsp;</div>
@@ -341,9 +353,15 @@ ratings.views.events.
                   <div class="progress progress-striped" style="height: 100%;">
                     {% if pvp_games or tvt_games or zvz_games %}
                       {% with p=pvp_games|pctg_scl:tot_mirror t=tvt_games|pctg_scl:tot_mirror z=zvz_games|pctg_scl:tot_mirror %}
-                        <div class="progress-bar progress-bar-success" style="width: {{p}}%">{{p}}%</div>
-                        <div class="progress-bar progress-bar-primary" style="width: {{t}}%">{{t}}%</div>
-                        <div class="progress-bar progress-bar-danger" style="width: {{z}}%">{{z}}%</div>
+                        <div class="progress-bar progress-bar-success" style="width: {{p}}%">
+                          {% if p|tol %}{{p}}%{% else %}&nbsp;{% endif %}
+                        </div>
+                        <div class="progress-bar progress-bar-primary" style="width: {{t}}%">
+                          {% if t|tol %}{{t}}%{% else %}&nbsp;{% endif %}
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{z}}%">
+                          {% if z|tol %}{{z}}%{% else %}&nbsp;{% endif %}
+                        </div>
                       {% endwith %}
                     {% else %}
                       <div class="progress-bar" style="width: 0%">&nbsp;</div>

@@ -27,20 +27,150 @@ This is the template for the match history of a player. It's called from ratings
     </div>
   </div>
 
-  {% comment %}
-  <form class="horizontal" role="form" action="/players/{{player.id}}/results/" method="get">
-    {% form "forms.djhtml" %}
-      {% field "select" form.race style="hz-mid" %}
-      {% field "select" form.country style="hz-mid" %}
-      {% field "select" form.bestof style="hz-mid" %}
-      {% field "select" form.offline style="hz-mid" %}
-      {% field "select" form.game style="hz-mid" %}
-    {% endform %}
-  </form>
-    {% use "daterange" label=_('Date') after=form.after before=form.before %}
-    {% use "submit" text=_('Filter') %}
-  {% endcomment %}
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <form class="form-horizontal" role="form" action="/players/{{player.id}}/results/" method="get">
+        {% form "forms.djhtml" %}
+          {% field "select" form.race style="hz-half" %}
+          {% field "select" form.country style="hz-half" %}
+          {% field "select" form.bestof style="hz-half" %}
+          {% field "select" form.offline style="hz-half" %}
+          {% field "select" form.game style="hz-half" %}
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+              {% use "submit" text=_('Filter') %}
+            </div>
+          </div>
+        {% endform %}
+      </form>
+    </div>
 
+    <div class="clearfix visible-sm visible-xs"></div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#winrates" data-toggle="tab">{% trans "Winrates" %}</a></li>
+        {% comment %}Translators: Recent winrates{% endcomment %}
+        <li><a href="#form" data-toggle="tab">{% trans "Form" %}</a></li>
+        <li><a href="#postable" data-toggle="tab">{% trans "Postable" %}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="winrates" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 5em; border-top: none;">{% trans "All" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=total.0|pctg_add:total.1 %}
+                      <div class="progress-bar progress-bar-default" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{total.0}}/{{total.1|add:total.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vP" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vp.0|pctg_add:vp.1 %}
+                      <div class="progress-bar progress-bar-success" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vp.0}}/{{vp.1|add:vp.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vT" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vt.0|pctg_add:vt.1 %}
+                      <div class="progress-bar progress-bar-primary" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vt.0}}/{{vt.1|add:vt.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vz.0|pctg_add:vz.1 %}
+                      <div class="progress-bar progress-bar-danger" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vz.0}}/{{vz.1|add:vz.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="form" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 5em; border-top: none;">{% trans "All" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=totalf.0|pctg_add:totalf.1 %}
+                      <div class="progress-bar progress-bar-default" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{totalf.0}}/{{totalf.1|add:totalf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vP" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vpf.0|pctg_add:vpf.1 %}
+                        <div class="progress-bar progress-bar-success" style="width: {{p}}%">
+                          {% if p|tol %}{{p}}% ({{vpf.0}}/{{vpf.1|add:vpf.0}}){% else %}&nbsp;{% endif %}
+                        </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vT" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vtf.0|pctg_add:vtf.1 %}
+                      <div class="progress-bar progress-bar-primary" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vtf.0}}/{{vtf.1|add:vtf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vzf.0|pctg_add:vzf.1 %}
+                      <div class="progress-bar progress-bar-danger" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vzf.0}}/{{vzf.1|add:vzf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="postable" style="padding-top: 1em;">
+          <textarea class="form-control" style="width: 100%;" rows="7">{{ postable_tl }}</textarea>
+          <p class="small">{% blocktrans with a="<a href=\"http://teamliquid.net\" target=\"_blank\">" %}The above is code that can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
       <p>
@@ -51,14 +181,6 @@ This is the template for the match history of a player. It's called from ratings
     </div>
   </div>
 
-{% include "matchlist.djhtml" with lm_list=matches lm_header="partial" %}
-
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h3>{% trans "Postable History" %}</h3>
-      <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
-      <p class="small">{% blocktrans with a="<a href=\"http://teamliquid.net\" target=\"_blank\">" %}The above is code that can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</p>
-    </div>
-  </div>
+  {% include "matchlist.djhtml" with lm_list=matches lm_header="partial" %}
 
 {% endblock %}

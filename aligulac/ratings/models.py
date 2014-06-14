@@ -1266,6 +1266,10 @@ class Group(models.Model):
             (_("Rating"), self.rating_rank, "rt")
         )
 
+    @property
+    def has_ranks(self):
+        return self.ak_rank or self.pl_rank or self.rating_rank
+
     # }}}
 
 # }}}

@@ -9,6 +9,7 @@ should also be provided.
 example.)
 - displayteams: Display teams.
 - rl_pos_arrow: Show arrows.
+- rl_small: Condensed table (not recommended with displayteams).
 {% endcomment %}
 
 {% load ratings_extras %}
@@ -17,7 +18,9 @@ example.)
 {% include "periodpagenav.djhtml" %}
 
 <div class="row">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div {% if rl_small %}class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12"
+       {% else %}class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+       {% endif %}>
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
@@ -26,7 +29,7 @@ example.)
             <th class="rl_number">{% trans "#" %}</th>
 
             <!-- Up/down icon for rank -->
-            <th class="rl_icon hidden-xs"></th>
+            <th class="rl_icon {% if not rl_small %}hidden-xs{% endif %}"></th>
 
             <!-- Flag icon -->
             <th class="rl_icon"></th>
@@ -52,7 +55,7 @@ example.)
             </th>
 
             <!-- Up/down icon for rating -->
-            <th class="rl_icon hidden-xs"></th>
+            <th class="rl_icon {% if not rl_small %}hidden-xs{% endif %}"></th>
 
             <!-- Rating vP -->
             <th class="rl_rating">
@@ -66,7 +69,7 @@ example.)
             </th>
 
             <!-- Up/down icon for rating vP -->
-            <th class="rl_icon hidden-xs"></th>
+            <th class="rl_icon {% if not rl_small %}hidden-xs{% endif %}"></th>
 
             <!-- Rating vT -->
             <th class="rl_rating">
@@ -80,7 +83,7 @@ example.)
             </th>
 
             <!-- Up/down icon for rating vT -->
-            <th class="rl_icon hidden-xs"></th>
+            <th class="rl_icon {% if not rl_small %}hidden-xs{% endif %}"></th>
 
             <!-- Rating vZ -->
             <th class="rl_rating">
@@ -94,10 +97,10 @@ example.)
             </th>
 
             <!-- Up/down icon for rating vZ -->
-            <th class="rl_icon hidden-xs"></th>
+            <th class="rl_icon {% if not rl_small %}hidden-xs{% endif %}"></th>
 
             <!-- Link to adjustments -->
-            <th class="rl_arrow hidden-xs"></th>
+            <th class="rl_arrow {% if not rl_small %}hidden-xs{% endif %}"></th>
           </tr>
         </thead>
         {% if entries %}
@@ -113,7 +116,7 @@ example.)
               </td>
 
               <!-- Up/down icon for rank -->
-              <td class="rl_icon hidden-xs">
+              <td class="rl_icon {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.position and entry.prev.position and rl_pos_arrow %}
                   {% if entry.prev.position < entry.position %}
                     <img src="{{"downarrow"|img}}" alt="down"
@@ -161,7 +164,7 @@ example.)
               </td>
 
               <!-- Up/down icon for rating -->
-              <td class="rl_icon hidden-xs">
+              <td class="rl_icon {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.prev %}
                   <img src="{{entry.rating_diff|makearrows|img}}"
                        title="{{entry.rating_diff|ratscalediff|signify}}">
@@ -174,7 +177,7 @@ example.)
               </td>
 
               <!-- Up/down icon for rating vP -->
-              <td class="rl_icon hidden-xs">
+              <td class="rl_icon {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.prev %}
                   <img src="{{entry.rating_diff_vp|makearrows|img}}"
                        title="{{entry.rating_diff_vp|ratscalediff|signify}}">
@@ -187,7 +190,7 @@ example.)
               </td>
 
               <!-- Up/down icon for rating vT -->
-              <td class="rl_icon hidden-xs">
+              <td class="rl_icon {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.prev %}
                   <img src="{{entry.rating_diff_vt|makearrows|img}}"
                        title="{{entry.rating_diff_vt|ratscalediff|signify}}">
@@ -200,7 +203,7 @@ example.)
               </td>
 
               <!-- Up/down icon for rating vZ -->
-              <td class="rl_icon hidden-xs">
+              <td class="rl_icon {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.prev %}
                   <img src="{{entry.rating_diff_vz|makearrows|img}}"
                        title="{{entry.rating_diff_vz|ratscalediff|signify}}">
@@ -208,7 +211,7 @@ example.)
               </td>
 
               <!-- Link to adjustments -->
-              <td class="rl_arrow hidden-xs">
+              <td class="rl_arrow {% if not rl_small %}hidden-xs{% endif %}">
                 {% if entry.decay == 0 %}
                   <a href="/players/{{ entry.player.id }}-{{ entry.player.tag|urlfilter }}/period/{{ entry.period.id }}/">
                     <span class="right-caret"></span>

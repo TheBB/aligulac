@@ -23,7 +23,7 @@ This template shows a rating list for a given period.
   {% include "messages.djhtml" %}
 
   <div class="row">
-    <div class="col-lg-8 col-md-8 col-sm-7">
+    <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#best" data-toggle="tab">{% trans "Best" %}</a></li>
         <li><a href="#spec" data-toggle="tab">{% trans "Most specialized" %}</a></li>
@@ -309,7 +309,9 @@ This template shows a rating list for a given period.
       </div>
     </div>
 
-    <div class="col-lg-4 col-md-4 col-sm-5">
+    <div class="clearfix visible-xs"></div>
+
+    <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
       <div class="table-responsive">
         <table class="table table-condensed table-striped table-hover">
           <thead>

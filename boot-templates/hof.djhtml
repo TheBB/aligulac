@@ -1,0 +1,75 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the Hall of Fame template. It's called from ratings.views.records.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Hall of Fame" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Hall of Fame" %}</h2>
+      <p>
+        {% blocktrans %}This list ranks players by <em>periods of domination</em>. The relevant score is called PP (<em>period-points</em>), and is the sum over a range of lists of the signed distance from a player to number seven on the list.{% endblocktrans %}
+      </p>
+      <p>
+        {% blocktrans %}For most players, their PP is equal to the sum of the rating gaps for each list in which they were in the top seven. If a player has been there more than once, the optimal range of lists is chosen, and it can include times when the player was not in the top seven, if these are sufficiently brief and negligible.{% endblocktrans %}
+      </p>
+      <p>
+        {% blocktrans %}In short, this is a list of players who have ever been top seven, rewarding both large rating gaps and long periods of rule. Think of it as a king-of-the-hill hall of fame.{% endblocktrans %}
+      </p>
+      <p>
+        {% blocktrans %}To avoid rating artifacts, these records are only counted after 25 periods (i.e. list 25, on February 9th, 2011).{% endblocktrans %}
+      </p>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="rl_number">{% trans "#" %}</th>
+              <th class="rl_icon"></th>
+              <th class="rl_icon"></th>
+              <th>{% trans "Name" %}</th>
+              {% comment %}Translators: Period-points, see explanation on HoF page.{% endcomment %}
+              <th class="text-right">{% trans "PP" %}</th>
+              <th class="text-right">{% trans "Start" %}</th>
+              <th class="text-right">{% trans "Length" %}</th>
+            </tr>
+          </thead>
+          {% for h in high %}
+            <tr>
+              <td>{{forloop.counter}}.</td>
+              <td class="rl_icon">
+                {% if h.country != "" %}
+                  <img src="{{ h.country|lower|img:"flags" }}" alt="{{ h.country }}">
+                {% endif %}
+              </td>
+              <td class="rl_icon">
+                <img src="{{ h.race|img }}">
+              </td>
+              <td>
+                <a href="/players/{{ h.id }}-{{ h.tag|urlfilter }}/">{{ h.tag }}</a>
+              </td>
+              <td class="text-right">
+                {{h.dom_val|ratscalediff}}
+              </td>
+              <td class="text-right">
+                <a href="/periods/{{ h.dom_start.id }}/">{{ h.dom_start.start|cdate:_('F jS, Y') }}</a>
+              </td>
+              <td class="text-right">
+                {{ h.dom_end.id|sub:h.dom_start.id|add:h.dom_end.id|sub:h.dom_start.id }}
+                {% trans "weeks" %}
+                {% if h.dom_end.id > curp.id %}*{% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

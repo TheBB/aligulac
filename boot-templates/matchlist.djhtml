@@ -4,17 +4,18 @@ matches. It expects a number of "arguments", all prefixed with lm_, to avoid nam
 
 - lm_list: The list of matches to print. Must be prepared with display_matches (in ratings.tools).
 - lm_header: "full" => show headers by event (full path)
-"partial" => show headers by event (partial path)
-"fixed" => show only one fixed header
-"custom" => shows the m.eventtext variable whenever it changes
-"info" => show column headers only
+             "partial" => show headers by event (partial path)
+             "fixed" => show only one fixed header
+             "custom" => shows the m.eventtext variable whenever it changes
+             "info" => show column headers only
 - lm_fixedheader: the header to use for lm_header=fixed (content of a <th>)
 - lm_adm: Set to true to show admin links on the far right. Usually if you want to provide admin
-functionality, set this to the 'adm' variable, to ensure that login is checked.
+          functionality, set this to the 'adm' variable, to ensure that login is checked.
 - lm_check: If both lm_check and lm_adm are true, a checkbox will also be shown.
 - lm_show_noid: Show match even if one or both players are undefined
 - lm_predict: Use for enabling prediction functionality stuff.
 - lm_id: If given, the div.row enclosing the matchlist will get this ID.
+- ln_notable: If given, don't render the table (assume already rendered by caller).
 
 NB! The calling code is responsible for starting and ending the HTML table:
 
@@ -40,21 +41,23 @@ In general, if you're trying to figure out how this works, may God have mercy on
   </script>
 {% endif %}
 
+{% if not lm_notable %}
 <div class="row" {% if lm_id %}id="{{lm_id}}"{% endif %}>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="table-responsive">
       <table class="table table-striped table-hover">
+{% endif %}
 
         {% if lm_header == "info" %}
           <thead>
             <tr>
-              <th class="lm_date">{% if lm_list.0.date %}{% trans "Date" %}{% endif %}</td>
-                <th class="lm_rta">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</td>
-                  <th class="lm_pla">{% trans "Player A" %}</td>
-                    <th class="lm_score">{% trans "Score" %}</td>
-                      <th class="lm_plb">{% trans "Player B" %}</td>
-                        <th class="lm_rtb">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</td>
-                          <th class="lm_right"></td>
+              <th class="lm_date">{% if lm_list.0.date %}{% trans "Date" %}{% endif %}</th>
+              <th class="lm_rta">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
+              <th class="lm_pla">{% trans "Player A" %}</th>
+              <th class="lm_score">{% trans "Score" %}</th>
+              <th class="lm_plb">{% trans "Player B" %}</th>
+              <th class="lm_rtb">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
+              <th class="lm_right"></th>
             </tr>
           </thead>
         {% endif %}
@@ -174,11 +177,13 @@ In general, if you're trying to figure out how this works, may God have mercy on
               <td class="lm_rta">
                 {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
               </td>
-              <td class="lm_pla">
+              <td class="lm_pla" style="vertical-align: middle;">
                 {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
                   {% if not m.pla.id and lm_adm %}
-                    <input type="text" class="player" name="match-{{ m.match_id }}-pla" 
-                           style="text-align: right;" value="{{ m.pla.tag }}">
+                    <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
+                      <input type="text" class="form-control" name="match-{{ m.match_id }}-pla"
+                             style="text-align: right; display: inline-block; width: auto; veritcal-align: middle;" value="{{m.pla.tag}}">
+                    </div>
                   {% else %}
                     {{ m.pla.tag }}
                   {% endif %}
@@ -190,7 +195,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     <img src="{{ m.pla.race|img }}" alt="{{ m.pla.race }}">
                   {% endif %}
               </td>
-              <td class="lm_score">
+              <td class="lm_score" style="vertical-align: middle;">
                 {% if lm_predict %}
                   <span id="fix{{ m.identifier }}">
                     <a href="#" onclick="lm_toggle_visibility('{{ m.identifier }}'); return false;">
@@ -207,7 +212,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   {{m.pla.score}}–{{m.plb.score}}
                 {% endif %}
               </td>
-              <td class="lm_plb">
+              <td class="lm_plb" style="vertical-align: middle;">
                 {% if m.plb.race %}
                   <img src="{{ m.plb.race|img }}" alt="{{ m.plb.race }}">
                 {% endif %}
@@ -215,12 +220,15 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   <img src="{{ m.plb.country|lower|img:"flags" }}" alt="{{ m.plb.country }}">
                 {% endif %}
                 {% if m.plb.id %} <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{% endif %}
-                  {% if not m.plb.id and lm_adm %}
-                    <input type="text" class="player" name="match-{{ m.match_id }}-plb" value="{{ m.plb.tag }}">
-                  {% else %}
+                {% if not m.plb.id and lm_adm %}
+                  <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
+                    <input type="text" class="form-control" name="match-{{ m.match_id }}-plb"
+                           value="{{ m.plb.tag }}" style="display: inline-block; width: auto; vertical-align: middle;">
+                  </div>
+                {% else %}
                     {{ m.plb.tag }}
-                  {% endif %}
-                  {% if m.plb.id %}</a>{% endif %}
+                {% endif %}
+                {% if m.plb.id %}</a>{% endif %}
               </td>
               <td class="lm_rtb">
                 {% if m.plb.rating %}{{ m.plb.rating|ratscale }}{% endif %}
@@ -275,7 +283,9 @@ In general, if you're trying to figure out how this works, may God have mercy on
               </tbody>
         {% endif %}
 
+{% if not lm_notable %}
       </table>
     </div>
   </div>
 </div>
+{% endif %}

@@ -30,7 +30,7 @@ ratings.submitviews.add_matches.
         </p>
       </div>
     </div>
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" %}
+    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" lm_check=0 %}
   {% endif %}
 
   <div class="row" style="padding-bottom: 2em;">

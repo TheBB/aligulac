@@ -136,14 +136,13 @@ def fill_aux_event(qset):
 # Form for reviewing matches.
 class ReviewMatchesForm(forms.Form):
     date = forms.DateField(required=False, label=_('Date'), initial=None)
-    approve = forms.BooleanField(required=False, label=_('Approve'), initial=False)
-    reject = forms.BooleanField(required=False, label=_('Reject'), initial=False)
     dup_flag = forms.BooleanField(required=False, label=_('Ignore duplicates'), initial=False)
 
     def __init__(self, request=None, submitter=None):
         if request is not None:
             super(ReviewMatchesForm, self).__init__(request.POST)
             self.eobj = request.POST['eventobj']
+            self.approve = 'approve' in request.POST
             self.commit(request.POST, submitter)
         else:
             super(ReviewMatchesForm, self).__init__()
@@ -163,9 +162,6 @@ class ReviewMatchesForm(forms.Form):
 
     # Custom validation
     def clean(self):
-        if self.cleaned_data['approve'] == self.cleaned_data['reject']:
-            raise ValidationError(_('You must either approve or reject.'))
-
         try:
             self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
         except:
@@ -195,7 +191,7 @@ class ReviewMatchesForm(forms.Form):
 
         matches = []
         for pm in prematches:
-            if self.cleaned_data['reject']:
+            if not self.approve:
                 group = pm.group
                 pm.delete()
                 if not group.prematch_set.exists():
@@ -254,7 +250,7 @@ class ReviewMatchesForm(forms.Form):
             else:
                 pm.save()
 
-        if self.cleaned_data['approve'] and len(matches) > 0:
+        if self.approve and len(matches) > 0:
             self.messages.append(Message(
                 ungettext_lazy(
                     'Successfully approved %i match.',
@@ -262,7 +258,7 @@ class ReviewMatchesForm(forms.Form):
                     len(matches)) % len(matches),
                 type=Message.SUCCESS
             ))
-        elif self.cleaned_data['reject'] and len(prematches) > 0:
+        elif not self.approve and len(prematches) > 0:
             self.messages.append(Message(
                 ungettext_lazy(
                     'Successfully rejected %i match.',
@@ -831,7 +827,7 @@ def review_matches(request):
     )
 
     for g in base['groups']:
-        g.prematches = display_matches(g.prematch_set.all(), messages=False)
+        g.prematches = display_matches(g.prematch_set.all(), messages=False, no_events=True)
 
     base.update({"title": _("Review results")})
 

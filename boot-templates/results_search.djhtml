@@ -139,8 +139,9 @@ This is the results search function. Called from ratings.views.results_search.
           <div class="form-group text-right {{"full-mid"|formdiv}}">
             {% use "submit" text=_('Modify') %}
           </div>
-          {% endform %}
+        {% endform %}
       </div>
+      </form>
     {% endif %}
   {% endif %}
 

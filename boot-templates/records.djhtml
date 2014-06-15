@@ -1,0 +1,72 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the basic records page, called from ratings.views.records.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}
+  {% if race %}
+    {% blocktrans with rc=race|racefull %}Records for {{rc}}{% endblocktrans %}
+  {% else %}
+    {% trans "Records" %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>
+        {% if race %}
+          {% blocktrans with r=race|racefull %}Records for {{r}}{% endblocktrans %}
+        {% else %}
+          {% trans "Records" %}
+        {% endif %}
+      </h2>
+      <p>{% trans "To avoid rating artifacts, the earliest periods are not counted." %}</p>
+
+      <h3>
+      {% if race %}
+        {% blocktrans with rc=race|racefull%}Highest ratings ever achieved by {{ rc }}.{% endblocktrans %}
+      {% else %}
+        {% blocktrans %}Highest ratings ever achieved{% endblocktrans %}
+      {% endif %}
+      </h3>
+
+      {% include "recordlist.djhtml" with high=hightot rt=_('Rating') race=_('All') %}
+
+      <h3>{% blocktrans %}Highest ratings ever achieved by matchup{% endblocktrans %}</h3>
+      {% if race == "P" %}
+        {% trans "Rating PvP" as pvp %}
+        {% trans "Rating PvT" as pvt %}
+        {% trans "Rating PvZ" as pvz %}
+        {% include "recordlist.djhtml" with high=highp rt=pvp race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=pvt race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=pvz race="Z" %}
+      {% elif race == "T" %}
+        {% trans "Rating TvP" as tvp %}
+        {% trans "Rating TvT" as tvt %}
+        {% trans "Rating TvZ" as tvz %}
+        {% include "recordlist.djhtml" with high=highp rt=tvp race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=tvt race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=tvz race="Z" %}
+      {% elif race == "Z" %}
+        {% trans "Rating ZvP" as zvp %}
+        {% trans "Rating ZvT" as zvt %}
+        {% trans "Rating ZvZ" as zvz %}
+        {% include "recordlist.djhtml" with high=highp rt=zvp race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=zvt race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=zvz race="Z" %}
+      {% else %}
+        {% trans "Rating vP" as vp %}
+        {% trans "Rating vT" as vt %}
+        {% trans "Rating vZ" as vz %}
+        {% include "recordlist.djhtml" with high=highp rt=vp race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=vt race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=vz race="Z" %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

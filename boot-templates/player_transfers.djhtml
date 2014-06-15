@@ -1,0 +1,67 @@
+{% extends "index.djhtml" %}
+   
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Recent player transfers" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Recent player transfers" %}</h2>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="rl_icon"></th>
+              <th class="rl_icon"></th>
+              <th>{% trans "Player" %}</th>
+              <th class="text-right">{% trans "Left" %}</th>
+              <th class="rl_icon"></th>
+              <th>{% trans "Joined" %}</th>
+              <th class="text-right">{% trans "Date" %}</th>
+            </tr>
+          </thead>
+          {% for trade in trades %}
+            <tr>
+              <td class="rl_icon">
+                {% if trade.player.country %}
+                  <img src="{{ trade.player.country|lower|img:"flags" }}" alt="{{ trade.player.country }}">
+                {% endif %}
+              </td>
+              <td class="rl_icon">
+                <img src="{{ trade.player.race|img }}" alt="{{ trade.player.race }}">
+              </td>
+              <td>
+                <a href="/players/{{ trade.player.id }}-{{ trade.player.tag|urlfilter }}/">
+                  {{ trade.player.tag }}
+                </a>
+              </td>
+              <td class="text-right">
+                {% if trade.left %}
+                  <a href="/teams/{{ trade.left.id }}-{{ trade.left.name|urlfilter }}/">
+                    {{ trade.left.name }}
+                  </a>
+                {% endif %}
+              </td>
+              <td class="rl_icon">
+                <span class="right-caret"></span>
+              </td>
+              <td>
+                {% if trade.joined %}
+                  <a href="/teams/{{ trade.joined.id }}-{{ trade.joined.name|urlfilter }}/">
+                    {{ trade.joined.name }}
+                  </a>
+                {% endif %}
+              </td>
+              <td class="text-right">
+                {{trade.date|cdate:_('F jS, Y')}}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

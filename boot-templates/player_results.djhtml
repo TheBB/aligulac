@@ -177,7 +177,7 @@ This is the template for the match history of a player. It's called from ratings
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
       <p>
         {% with tag=player.tag pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op %}
-          {% blocktrans %}In these games, {{tag}} is <strong>{{sc_my}}–{{sc_op}}</strong> <small class="text-muted">({{pctg}}%)</small> in games and <strong>{{msc_my}}–{{msc_op}}</strong> <small class="text-muted">({{mpctg}}%)</small> in matches.{% endblocktrans %}
+          {% blocktrans %}Under these filters, {{tag}} is <strong>{{sc_my}}–{{sc_op}}</strong> <small class="text-muted">({{pctg}}%)</small> in games and <strong>{{msc_my}}–{{msc_op}}</strong> <small class="text-muted">({{mpctg}}%)</small> in matches.{% endblocktrans %}
         {% endwith %}
       </p>
     </div>

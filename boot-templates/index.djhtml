@@ -212,6 +212,6 @@ Changes here will generally be visible on the whole site.
            });
           </script>
         {% endif %}
-        <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
+        <script type="text/javascript" src="{{"aligulac"|js}}"></script>
     </body>
 </html>

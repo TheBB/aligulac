@@ -465,3 +465,61 @@ h2 .breadcrumb > li + li:before {
 .progress-bar-default {
     background-color: #888;
 }
+
+/* Tags input plugin */
+div.tagsinput {
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    background: #FFF;
+    padding: 5px;
+    overflow-y: auto
+}
+
+div.tagsinput span.tag {
+    border: 1px solid #fff;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    display: block;
+    float: left;
+    padding: 5px;
+    text-decoration: none;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-color: #ccc;
+    border-radius: 3px;
+    background: #f8f8f8;
+    color: #787878;
+}
+
+div.tagsinput span.tag a {
+    font-weight: 700;
+    color: #9f9f9f;
+    text-decoration: none;
+}
+
+div.tagsinput input {
+    width: 80px;
+    margin: 0;
+    border: 1px solid transparent;
+    padding: 5px;
+    background: 0 0;
+    color: #000;
+    outline: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+div.tagsinput div {
+    display: block;
+    float: left;
+}
+
+.tags_clear {
+    clear: both;
+    width: 100%;
+    height: 0;
+}

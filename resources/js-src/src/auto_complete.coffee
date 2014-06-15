@@ -1,5 +1,5 @@
 # ======================================================================
-# AUTOCOMPLETE SEARCH TEXTBOX
+# AUTOCOMPLETE VARIA
 # ======================================================================
 
 aligulacAutocompleteTemplates = (obj) ->
@@ -108,7 +108,7 @@ $(document).ready ->
 
                 for x in result.events
                     x.type = 'event'
-                response [label: 'Events'].concat result.events
+                response result.events
 
         minLength: 2
         select: (event, ui) ->
@@ -143,8 +143,10 @@ $(document).ready ->
                         p.type = 'player'
 
                     response result.players
-        defaultText: 'add a player'
+        defaultText: autocomp_strings['Players']
+        placeholderColor: '#9e9e9e'
         delimiter: '\n'
+        width: '100%'
         formatAutocomplete: aligulacAutocompleteTemplates
 
     # Hacking the enter key down to submit the form when the
@@ -153,3 +155,17 @@ $(document).ready ->
         if event.which == 13 and $("#id_players_tag").val() == ""
             $(this).closest("form").submit()
 
+# Make sure the players input is styled like the rest of the form elements
+$(document).ready ->
+    $('input#id_players_tag').focus ->
+        $(this).parent().parent().css(
+            'box-shadow',         'inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0,0,0,.4)'
+        ).css(
+            '-webkit-box-shadow', 'inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0,0,0,.4)'
+        ).css('border-color', '#000000')
+    .focusout ->
+        $(this).parent().parent().css(
+            'box-shadow',         'inset 0 1px 1px rgba(0,0,0,.075)'
+        ).css(
+            '-webkit-box-shadow', 'inset 0 1px 1px rgba(0,0,0,.075)'
+        ).css('border-color', '#cccccc')

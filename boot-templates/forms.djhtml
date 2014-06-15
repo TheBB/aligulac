@@ -128,7 +128,7 @@
              id="{{field.auto_id}}"
              class="form-control"
              value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
-             placeholder="{{field.label}}">
+             placeholder="{{placeholder|default:field.label}}">
     </div>
   </div>
   <script type="text/javascript">
@@ -145,11 +145,13 @@
     <div class="{{style|forminput}}">
       <input type="text" name="{{ after.html_name }}" class="form-control"
              id="{{after.auto_id}}" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}"
-             style="width: 40%; display: inline; margin-right: 0.2em;">
+             style="width: 40%; display: inline; margin-right: 0.2em;"
+             placeholder="{% trans "After date" %}">
       {% trans "to" %}
       <input type="text" name="{{ before.html_name }}" class="form-control"
              id="{{before.auto_id}}" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}"
-             style="width: 40%; display: inline; margin-left: 0.2em;">
+             style="width: 40%; display: inline; margin-left: 0.2em;"
+             placeholder="{% trans "Before date" %}">
     </div>
     <script type="text/javascript">
       $(document).ready(function () {

@@ -717,6 +717,7 @@ class MoveEventForm(forms.Form):
             raise ValidationError(_('No event with ID %i.') % self.cleaned_data['target'])
 
     def clean(self):
+        print(self.cleaned_data)
         if EventAdjacency.objects.filter(
             parent=self.cleaned_data['subject'],
             child=self.cleaned_data['target'],

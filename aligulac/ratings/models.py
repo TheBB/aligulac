@@ -22,7 +22,11 @@ from django.utils.translation import (
     pgettext_lazy
 )
 
-from aligulac.settings import start_rating, INACTIVE_THRESHOLD
+from aligulac.settings import (
+    start_rating, 
+    INACTIVE_THRESHOLD,
+    SHOW_PER_LIST_PAGE
+)
 
 from currency import ExchangeRates
 
@@ -38,8 +42,6 @@ from ratings.model_tools import swap_q_object
 # statically in the country module.
 countries = [(code, transformations.cc_to_cn(code)) for code in data.ccn_to_cca2.values()]
 countries.sort(key=lambda a: a[1])
-
-LIST_PER_PAGE = 40
 
 # {{{ Various enum-types
 TLPD_DB_WOLKOREAN        = 0b00001
@@ -944,7 +946,7 @@ class Player(models.Model):
         return self._ranks[country]
 
     def rank_page(self, rank_type):
-        return int(ceil(getattr(self, rank_type) / SHOW_PER_PAGE))
+        return int(ceil(getattr(self, rank_type) / SHOW_PER_LIST_PAGE))
 
     @property
     def world_rank(self):

@@ -179,21 +179,21 @@ In general, if you're trying to figure out how this works, may God have mercy on
               </td>
               <td class="lm_pla" style="vertical-align: middle;">
                 {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
-                  {% if not m.pla.id and lm_adm %}
-                    <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
-                      <input type="text" class="form-control" name="match-{{ m.match_id }}-pla"
-                             style="text-align: right; display: inline-block; width: auto; veritcal-align: middle;" value="{{m.pla.tag}}">
-                    </div>
-                  {% else %}
-                    {{ m.pla.tag }}
-                  {% endif %}
-                  {% if m.pla.id %}</a>{% endif %}
-                  {% if m.pla.country %}
-                    <img src="{{ m.pla.country|lower|img:"flags" }}" alt="{{ m.pla.country }}">
-                  {% endif %}
-                  {% if m.pla.race %}
-                    <img src="{{ m.pla.race|img }}" alt="{{ m.pla.race }}">
-                  {% endif %}
+                {% if not m.pla.id and lm_adm %}
+                  <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
+                    <input type="text" class="form-control" name="match-{{ m.match_id }}-pla"
+                           style="text-align: right; display: inline-block; width: auto; veritcal-align: middle;" value="{{m.pla.tag}}">
+                  </div>
+                {% else %}
+                  {{ m.pla.tag }}
+                {% endif %}
+                {% if m.pla.id %}</a>{% endif %}
+                {% if m.pla.country %}
+                  <img src="{{ m.pla.country|lower|img:"flags" }}" alt="{{ m.pla.country }}">
+                {% endif %}
+                {% if m.pla.race %}
+                  <img src="{{ m.pla.race|img }}" alt="{{ m.pla.race }}">
+                {% endif %}
               </td>
               <td class="lm_score" style="vertical-align: middle;">
                 {% if lm_predict %}

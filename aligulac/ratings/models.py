@@ -1,7 +1,7 @@
 # {{{ Imports
 import datetime
 from itertools import islice
-from math import sqrt
+from math import sqrt, ceil
 import random
 import re
 import string
@@ -38,6 +38,8 @@ from ratings.model_tools import swap_q_object
 # statically in the country module.
 countries = [(code, transformations.cc_to_cn(code)) for code in data.ccn_to_cca2.values()]
 countries.sort(key=lambda a: a[1])
+
+LIST_PER_PAGE = 40
 
 # {{{ Various enum-types
 TLPD_DB_WOLKOREAN        = 0b00001
@@ -941,9 +943,16 @@ class Player(models.Model):
         self._ranks[country] = c + 1
         return self._ranks[country]
 
+    def rank_page(self, rank_type):
+        return int(ceil(getattr(self, rank_type) / SHOW_PER_PAGE))
+
     @property
     def world_rank(self):
         return self.get_rank()
+
+    @property
+    def world_rank_page(self):
+        return self.rank_page('world_rank')
 
     @property
     def country_rank(self):
@@ -951,8 +960,16 @@ class Player(models.Model):
             return self.get_rank(self.country)
 
     @property
+    def country_rank_page(self):
+        return self.rank_page('country_rank')
+
+    @property
     def foreigner_rank(self):
         return self.get_rank('foreigners')
+
+    @property
+    def foreigner_rank_page(self):
+        return self.rank_page('foreigner_rank')
 
     # }}}
 

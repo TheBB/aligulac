@@ -413,7 +413,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="row infobox">
           <div class="rowel">{% trans "Rank" %}</div>
           <div class="rower">
-            <a href="/periods/{{ pid }}/">
+            <a href="/periods/{{ pid }}/?page={{ player.world_rank_page }}">
                 {% comment %}Translators: World rank.{% endcomment %}
                 {% blocktrans with rank=player.world_rank %}#{{rank}} World{% endblocktrans %}
             </a>
@@ -423,7 +423,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="row infobox">
           <div class="rowel"></div>
           <div class="rower">
-            <a href="/periods/{{ pid }}/?nats=foreigners">
+            <a href="/periods/{{ pid }}/?nats=foreigners&page={{ player.foreigner_rank_page }}">
                 {% comment %}Translators: Rank among non-Koreans.{% endcomment %}
                 {% blocktrans with rank=player.foreigner_rank %}#{{rank}} Non-Korean{% endblocktrans %}
             </a>
@@ -434,7 +434,7 @@ This is the template for the main player page, called from ratings.views.player.
         <div class="row infobox">
           <div class="rowel"></div>
           <div class="rower">
-            <a href="/periods/{{ pid }}/?nats={{ player.country }}">
+            <a href="/periods/{{ pid }}/?nats={{ player.country }}&page={{ player.country_rank_page }}">
                 {% comment %}Translators: Rank in a country.{% endcomment %}
                 {% blocktrans with rank=player.country_rank %}#{{rank}} {{ countryfull }}{% endblocktrans %}
             </a>

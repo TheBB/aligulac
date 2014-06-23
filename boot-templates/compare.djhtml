@@ -1,0 +1,69 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+Player comparison
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Comparing players" %}{% endblock %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "Comparing players" %}</h2>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              {% for p in players %}
+                <th class="text-right">
+                  <a href="{{p|player_url}}" target="_blank">
+                    <img src="{{p.race|img}}"> {{ p.tag }}
+                  </a>
+                  <br>
+                  <a href="/periods/latest/?nats={{ p.country }}" target="_blank">
+                    <img src="{{ p.country|lower|img:'flags' }}">
+                    {{ p.country|countryfull }}
+                  </a>
+                  <br>
+                  {% with team=p.get_current_team %}
+                    {% if team %}
+                      <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/" target="_blank">
+                        {{ team }}
+                      </a>
+                    {% else %}
+                      &nbsp;
+                    {% endif %}
+                  {% endwith %}
+                </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          {% for comp in comparisons %}
+            {% if comp and comp.name %}
+              <tr>
+                <th>{{comp.name}}</th>
+                {% for e in comp.entries %}
+                  <td class="{% if e.is_best %}text-success{% elif e.is_worst %}text-danger{% endif %} text-right" title="{{ e.index }}">
+                    {{ e.value_print }}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% elif comp %}
+              <tr class="compheader">
+                <td colspan="{{players|length|add:1}}">{{comp}}</td>
+              </tr>
+            {% else %}
+              <tr class="hline"><td colspan="{{players|length|add:1}}"></td></tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

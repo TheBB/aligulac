@@ -170,7 +170,7 @@
   {% trans "Submit" as submit %}
   <button type="submit"
           class="btn btn-{{btnstyle|default:"primary"}}"
-          name="{{name|default:"op"}}"
+          {% if not noname %}name="{{name|default:"op"}}"{% endif %}
           {% if onclick %}onclick="{{onclick}}"{% endif %}
           {% if id %}id="{{id}}"{% endif %}
           {% if disabled %}disabled{% endif %}>

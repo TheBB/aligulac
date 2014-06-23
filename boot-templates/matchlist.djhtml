@@ -177,7 +177,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
               <td class="lm_rta">
                 {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
               </td>
-              <td class="lm_pla" style="vertical-align: middle;">
+              <td class="lm_pla {% if m.pla.score >= m.plb.score %}winner{% else %}loser{% endif %}" style="vertical-align: middle;">
                 {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
                 {% if not m.pla.id and lm_adm %}
                   <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
@@ -212,7 +212,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   {{m.pla.score}}–{{m.plb.score}}
                 {% endif %}
               </td>
-              <td class="lm_plb" style="vertical-align: middle;">
+              <td class="lm_plb {% if m.plb.score >= m.pla.score %}winner{% else %}loser{% endif %}" style="vertical-align: middle;">
                 {% if m.plb.race %}
                   <img src="{{ m.plb.race|img }}" alt="{{ m.plb.race }}">
                 {% endif %}

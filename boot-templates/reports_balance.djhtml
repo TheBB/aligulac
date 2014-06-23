@@ -1,0 +1,216 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the main player page, called from ratings.views.player.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Balance report" %}{% endblock %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Balance report" %}</h2>
+
+      <p>{% blocktrans %}The following chart show the historical month-by-month winrates for each non-mirror matchup in the database.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}Note that this yields information about <em>metagame</em> balance near the <em>top of the skill ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout the whole player population.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up, that means Protoss is doing well and Terran poorly.{% endblocktrans %}</p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+   $(document).ready(function() { 
+     var chart1 = new Highcharts.Chart({
+       chart: {
+         renderTo: 'chart-rates',
+         type: 'spline',
+         zoomType: 'xy'
+       },
+       credits: {
+         enabled: false
+       },
+       title: {
+         text: '{% trans "Balance report" %}'
+       },
+       subtitle: {
+         text: '{% trans "Click and drag to zoom" %}'
+       },
+       xAxis: {
+         type: 'datetime',
+         plotLines: [
+           {% for p in patches %}
+           {
+             value: {{ p.0|milliseconds }},
+             color: '#cccccc',
+             width: 2,
+             label: {
+               text: '{{ p.1 }}',
+               verticalAlign: 'bottom',
+               textAlign: 'right',
+               y: -2,
+               style: {
+                 fontSize: '0.8em',
+               }
+             }
+           },
+           {% endfor %}]
+       },
+       yAxis: {
+         title: {
+           text: '{% trans "Winrate [%]" %}'
+         },
+         min: 30,
+         max: 70
+       },
+       tooltip: {
+         formatter: function () {
+           return this.point.name;
+         }
+       },
+       plotOptions: {
+         series: {
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 3
+           },
+         },
+       },
+       series: [{ 
+         name: '{% trans "PvT" %}',
+         color: '#00aaaa',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvT" %}: {{r.pvt_wins|pctg_add:r.pvt_losses}}%<br/>{{r.pvt_wins|add:r.pvt_losses}} {% trans "games" %}',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.pvt_wins|pctg_add_f:r.pvt_losses}} 
+                              },{% endfor %}]
+       }, {
+         name: '{% trans "PvZ" %}',
+         color: '#aaaa00',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "PvZ" %}: {{r.pvz_wins|pctg_add:r.pvz_losses}}%<br/>{{r.pvz_wins|add:r.pvz_losses}} {% trans "games" %}',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.pvz_wins|pctg_add_f:r.pvz_losses}} 
+                              },{% endfor %}]
+       }, {
+         name: '{% trans "TvZ" %}',
+         color: '#aa00aa',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "TvZ" %}: {{r.tvz_wins|pctg_add:r.tvz_losses}}%<br/>{{r.tvz_wins|add:r.tvz_losses}} {% trans "games" %}',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.tvz_wins|pctg_add_f:r.tvz_losses}} 
+                              },{% endfor %}]
+       }] 
+     });
+   });
+  </script>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div id="chart-rates"></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
+      <p>{% blocktrans %}The performance difference chart shows the <em>approximate</em> difference between <em>actual performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if, averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating was equal to 100 less than that of their opponents), but they performed as if they had a mean rating difference of +100 (about 54.5% winrate), then that amounts to a performance difference of <strong>+200</strong>, which is to be interpreted as that Terran players overall performed 200 points better than expected.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the players, this chart will tend toward equilibrium, even if balance never changes.{% endblocktrans %}</p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+   $(document).ready(function() { 
+     var chart1 = new Highcharts.Chart({
+       chart: {
+         renderTo: 'chart-diff',
+         type: 'spline',
+         zoomType: 'xy'
+       },
+       credits: {
+         enabled: false
+       },
+       title: {
+         text: '{% trans "Performance difference" %}'
+       },
+       subtitle: {
+         text: '{% trans "Click and drag to zoom" %}'
+       },
+       xAxis: {
+         type: 'datetime',
+         plotLines: [
+           {% for p in patches %}
+           {
+             value: {{ p.0|milliseconds }},
+             color: '#cccccc',
+             width: 2,
+             label: {
+               text: '{{ p.1 }}',
+               verticalAlign: 'bottom',
+               textAlign: 'right',
+               y: -2,
+               style: {
+                 fontSize: '0.8em',
+               }
+             }
+           },
+           {% endfor %}]
+       },
+       yAxis: {
+         title: {
+           text: '{% trans "Performance difference [points]" %}'
+         },
+       },
+       tooltip: {
+         formatter: function () {
+           return this.point.name;
+         }
+       },
+       plotOptions: {
+         series: {
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 3
+           },
+         },
+       },
+       series: [{ 
+         name: '{% trans "Protoss" %}',
+         color: '#00aa00',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.p_gains > 0 %}+{% endif %}{{r.p_gains|ratscalediff}} points',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.p_gains|ratscalediff}} 
+                              },{% endfor %}]
+       }, {
+         name: '{% trans "Terran" %}',
+         color: '#0000aa',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.t_gains > 0 %}+{% endif %}{{r.t_gains|ratscalediff}} points',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.t_gains|ratscalediff}} 
+                              },{% endfor %}]
+       }, {
+         name: '{% trans "Zerg" %}',
+         color: '#aa0000',
+         data: [{% for r in entries %} { 
+           'name': '{{r.date|cdate:_('F Y')}}<br/>{% trans "Difference" %}: {% if r.z_gains > 0 %}+{% endif %}{{r.z_gains|ratscalediff}} points',
+           'x': {{r.date|milliseconds}},
+           'y': {{r.z_gains|ratscalediff}} 
+                              },{% endfor %}]
+       }] 
+     });
+   });
+  </script>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div id="chart-diff"></div>
+    </div>
+  </div>
+
+{% endblock %}

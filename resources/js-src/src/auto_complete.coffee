@@ -99,23 +99,24 @@ $(document).ready ->
 # ======================================================================
 
 $(document).ready ->
-    $('.event-ac').autocomplete(
-        source: (request, response) ->
-            $.when(getResults(request.term, 'events')).then (result) ->
+    try
+        $('.event-ac').autocomplete(
+            source: (request, response) ->
+                $.when(getResults(request.term, 'events')).then (result) ->
 
-                if not result? or not result.events? or result.events.length == 0
-                    return []
+                    if not result? or not result.events? or result.events.length == 0
+                        return []
 
-                for x in result.events
-                    x.type = 'event'
-                response result.events
+                    for x in result.events
+                        x.type = 'event'
+                    response result.events
 
-        minLength: 2
-        select: (event, ui) ->
-            $('.event-ac').val ui.item.key
-            false
-        open: ->
-            $('.ui-menu').width 'auto'
+            minLength: 2
+            select: (event, ui) ->
+                $('.event-ac').val ui.item.key
+                false
+            open: ->
+                $('.ui-menu').width 'auto'
         ).data('ui-autocomplete')._renderItem = (ul, item) ->
             $('<li></li>').append(aligulacAutocompleteTemplates item)
                           .appendTo ul;
@@ -125,12 +126,12 @@ $(document).ready ->
 # ======================================================================
 
 $(document).ready ->
-    $idPalyersTextArea = $("#id_players")
-    $idPalyersTextArea.tagsInput
+    idPlayersTextArea = $("#id_players")
+    idPlayersTextArea.tagsInput
         autocomplete_opt:
             minLength: 2
             select: (event, ui) ->
-                $idPalyersTextArea.addTag ui.item.key
+                $idPlayersTextArea.addTag ui.item.key
                 $("#id_players_tag").focus();
                 false
             open: ->

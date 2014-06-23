@@ -1,5 +1,6 @@
 # {{{ Imports
 from datetime import datetime
+from itertools import zip_longest
 import os
 
 from django import forms
@@ -509,6 +510,7 @@ def search(request):
     # }}}
 
     base.update({
+        'results':  zip_longest(players, teams, events, fillvalue=None),
         'players':  players,
         'teams':    teams,
         'events':   events,

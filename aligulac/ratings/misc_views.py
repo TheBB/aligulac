@@ -261,7 +261,7 @@ class CompareForm(forms.Form):
     players = forms.CharField(
         max_length=10000,
         required=True,
-        label=_('Compare players'),
+        label=_('Players'),
         initial='')
 
     # {{{ Constructor
@@ -357,11 +357,11 @@ def compare_search(request):
     base["form"] = form
 
     if not validate:
-        return render_to_response('compare.search.html', base)
+        return render_to_response('compare.search.djhtml', base)
 
     if not form.is_valid():
         base["messages"] += form.get_messages()
-        return render_to_response('compare.search.html', base)
+        return render_to_response('compare.search.djhtml', base)
 
     return redirect(form.generate_url())
 
@@ -511,7 +511,7 @@ def compare(request, players):
 
     base['comparisons'] = comparisons
 
-    return render_to_response('compare.html', base)
+    return render_to_response('compare.djhtml', base)
 
 # (property chain, label)
 RATING_COMPARISONS = (

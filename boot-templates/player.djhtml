@@ -382,12 +382,24 @@ This is the template for the main player page, called from ratings.views.player.
               </thead>
               {% for r,n,v in riv_nem_vic %}
                 <tr>
-                  <td class="text-right small"><a href="{{player.id|vs_url:r.id}}">{{r.matches}}</a></td>
-                  <td>{{r|player}}</td>
-                  <td class="text-right small"><a href="{{player.id|vs_url:n.id}}">{{n.pm|signify}}</a></td>
-                  <td>{{n|player}}</td>
-                  <td class="text-right small"><a href="{{player.id|vs_url:v.id}}">{{v.pm|signify}}</a></td>
-                  <td>{{v|player}}</td>
+                  <td class="text-right small">
+                    {% if r %}<a href="{{player.id|vs_url:r.id}}">{{r.matches}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if r %}{{r|player}}{% endif %}
+                  </td>
+                  <td class="text-right small">
+                    {% if n %}<a href="{{player.id|vs_url:n.id}}">{{n.pm|signify}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if n %}{{n|player}}{% endif %}
+                  </td>
+                  <td class="text-right small">
+                    {% if v %}<a href="{{player.id|vs_url:v.id}}">{{v.pm|signify}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if v %}{{v|player}}{% endif %}
+                  </td>
                 </tr>
               {% endfor %}
             </table>

@@ -239,6 +239,16 @@ body {
     font-variant: small-caps;
 }
 
+.winner a {
+    font-weight: 900;
+    color: #2f76b3;
+}
+
+.loser a {
+    font-weight: 100;
+    color: #bfbfbf;
+}
+
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
 h2.sub {
     position: relative;
@@ -341,24 +351,6 @@ div.text > ul > li {
     padding-left: 0.3em;
 }
 
-/* Highlight the winner in a result */
-.winner {
-    background: #bbeebb;
-    /*
-    background: #aaa;
-    padding: 0.3em;
-    border-radius: 0.5em;
-    color: #ffffff;
-    */
-}
-
-.winnersc {
-    background: #aaa;
-    padding: 0.3em;
-    border-radius: 0.3em;
-    color: #ffffff;
-}
-
 /* Event manager tree */
 .tree-node {
     border-radius: 0px !important;
@@ -449,6 +441,16 @@ h2 .breadcrumb > li + li:before {
 
 .event-panel-frequent:hover {
     background-color: #afd9ee;
+}
+
+/* Search result span */
+span.searchres {
+    padding-right: 1em;
+    white-space: nowrap;
+}
+
+p.searchres {
+    line-height: 2em;
 }
 
 /* Disabled select options */

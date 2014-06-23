@@ -87,42 +87,44 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-  return $('.event-ac').autocomplete({
-    source: function(request, response) {
-      return $.when(getResults(request.term, 'events')).then(function(result) {
-        var x, _i, _len, _ref;
-        if ((result == null) || (result.events == null) || result.events.length === 0) {
-          return [];
-        }
-        _ref = result.events;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          x = _ref[_i];
-          x.type = 'event';
-        }
-        return response(result.events);
-      });
-    },
-    minLength: 2,
-    select: function(event, ui) {
-      $('.event-ac').val(ui.item.key);
-      return false;
-    },
-    open: function() {
-      return $('.ui-menu').width('auto');
-    }
-  }).data('ui-autocomplete')._renderItem = function(ul, item) {
-    return $('<li></li>').append(aligulacAutocompleteTemplates(item)).appendTo(ul);
-  };
+  try {
+    return $('.event-ac').autocomplete({
+      source: function(request, response) {
+        return $.when(getResults(request.term, 'events')).then(function(result) {
+          var x, _i, _len, _ref;
+          if ((result == null) || (result.events == null) || result.events.length === 0) {
+            return [];
+          }
+          _ref = result.events;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            x = _ref[_i];
+            x.type = 'event';
+          }
+          return response(result.events);
+        });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+        $('.event-ac').val(ui.item.key);
+        return false;
+      },
+      open: function() {
+        return $('.ui-menu').width('auto');
+      }
+    }).data('ui-autocomplete')._renderItem = function(ul, item) {
+      return $('<li></li>').append(aligulacAutocompleteTemplates(item)).appendTo(ul);
+    };
+  } catch (_error) {}
 });
 
 $(document).ready(function() {
-  var $idPalyersTextArea;
-  $idPalyersTextArea = $("#id_players");
-  $idPalyersTextArea.tagsInput({
+  var idPlayersTextArea;
+  idPlayersTextArea = $("#id_players");
+  idPlayersTextArea.tagsInput({
     autocomplete_opt: {
       minLength: 2,
       select: function(event, ui) {
-        $idPalyersTextArea.addTag(ui.item.key);
+        $idPlayersTextArea.addTag(ui.item.key);
         $("#id_players_tag").focus();
         return false;
       },

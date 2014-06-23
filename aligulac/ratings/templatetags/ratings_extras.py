@@ -591,7 +591,7 @@ def eventlistend(value, N=None):
 # Model display filters
 
 @register.filter
-def player(value):
+def player(value, arg=None):
     if not isinstance(value, Player):
         return value
 
@@ -602,16 +602,16 @@ def player(value):
 
     return mark_safe((
         "<span class='player'>"
-        "<a href='/players/{id}-{safetag}/'>"
+        "<a href='/players/{id}-{safetag}/' class='{cl}'>"
         "{flag}<img src='{race}' />{tag}"
         "</a>"
         "</span>"
-        ).format(
-            tag=value.tag,
-            safetag=urlfilter(value.tag),
-            id=value.id,
-            flag=flag,
-            race=img(value.race)))
+        ).format(tag=value.tag,
+                 safetag=urlfilter(value.tag),
+                 id=value.id,
+                 flag=flag,
+                 race=img(value.race),
+                 cl=arg if arg is not None else ''))
 
 @register.filter
 def player_no_race(value):

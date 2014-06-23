@@ -451,6 +451,16 @@ h2 .breadcrumb > li + li:before {
     background-color: #afd9ee;
 }
 
+/* Search result span */
+span.searchres {
+    padding-right: 1em;
+    white-space: nowrap;
+}
+
+p.searchres {
+    line-height: 2em;
+}
+
 /* Disabled select options */
 .option-disabled {
     background: #e7e7e7;

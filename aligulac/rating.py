@@ -151,190 +151,143 @@ def performance(oppr, opps, oppc, W, L, text='', pr=False):
         ret[0] = PRF_NA
 
     return ret
-
-def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
-    """This function updates the rating of a player according to the ratings of the opponents and the games
-    against them."""
     
-    if len(W) == 0:
-        return(myr, mys)
+def update(my_rating, my_stdev,
+           opp_rating, opp_stdev, opp_category,
+           nwins, nlosses,
+           text='', output=False, ncategories=3):
 
-    if pr:
+    # If there are no games, the rating is unchanged.
+    if sum(nwins) == 0 and sum(nlosses) == 0:
+        return(my_rating, my_stdev)
+
+    if output:
         print(text)
-        print(oppr, len(oppr))
-        print(opps, len(opps))
-        print(oppc, len(oppc))
-        print(W, len(W))
-        print(L, len(L))
+        print(opp_rating, len(opp_rating))
+        print(opp_stdev, len(opp_stdev))
+        print(opp_category, len(opp_category))
+        
+    # Get the categories against which the player played
+    played_categories = sorted(unique(opp_category))
+    played_categories_a = array(played_categories)
+    
+    M = len(nwins)                             # Number of opponents
+    C = len(played_categories)                 # Number of categories
 
-    played_cats = sorted(unique(oppc))          # The categories against which the player played
-    played_cats_p1 = [p+1 for p in played_cats]
-    tot = sum(myr[array(played_cats)+1])        # The sum relative rating against those categories
-                                                # (will be kept constant)
-    M = len(W)                                  # Number of opponents
-    C = len(played_cats)                        # Number of different categories played
-
-    # Convert global categories to local
-    def loc(x):
-        return array([played_cats.index(c) for c in x])
-
-    # Convert local categories to global
-    def glob(x):
-        return array([played_cats[c] for c in x])
-
-    # Extends a M-vector to an M+1-vector according to the restriction given
-    # (that the sum of relative ratings against the played categories is constant)
-    def extend(x):
-        return hstack((x, tot-sum(x[1:])))
-
-    # Ensure that arrays are 1-dimensional
-    def dim(x):
-        if x.ndim == 0:
-            x = array([x])
-        return x
-
-    # Prepare some vectors and other numbers that are needed to form objective functions, derivatives and
-    # Hessians
-    DM = zeros((M,C))
-    DMex = zeros((M,C+1))
-    DM[:,0] = 1
-    DMex[:,0] = 1
-    for j in range(0,M):
-        lc = loc([oppc[j]])[0]
-        if lc < C-1:
-            DM[j,lc+1] = 1
-        else:
-            DM[j,1:] = -1
-        DMex[j,lc+1] = 1
-
-    mbar = oppr
-    sbar = sqrt(opps**2 + 1)
+    # Modified opponent ratings used for calculating the integrals Ijk, see method.pdf.
+    mbar = opp_rating
+    sbar = sqrt(opp_stdev**2 + 1)
+    
+    # Evaluates modified phi (pdf) and Phi (cdf) for all opponents at a given x
     gen_phi = lambda j, x: pdf(x, loc=mbar[j], scale=sbar[j])
     gen_Phi = lambda j, x: max(min(cdf(x, loc=mbar[j], scale=sbar[j]), 1-LOG_CAP), LOG_CAP)
-
+    
+    # Converts global cateogry numbers to local ones
+    def loc(cats):
+        return array([played_categories.index(c) for c in cats])
+        
+    # Current ratings and stdevs against the played categories
+    my_rating_current = my_rating[0] + my_rating[played_categories_a + 1]
+    my_stdev_current = my_stdev[played_categories_a + 1]
     alpha = pi/2/sqrt(3)
-    myrc = myr[[0]+played_cats_p1]
-    mysc = mys[[0]+played_cats_p1]
-
-    # {{{ Objective function
+    
+    # Gradient of M_j, see method.pdf.
+    DM = zeros((M,C))
+    for j in range(0,M):
+        lc = loc([opp_category[j]])[0]
+        DM[j,lc] = 1
+    
+    # Objective function (performance in current period)
     def logL(x):
-        Mv = x[0] + extend(x)[loc(oppc)+1]
-        Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
-        if pr:
+        # Get the rating against the opponents
+        rating = x[loc(opp_category)]
+        # Evaluate the CDF at that rating
+        Phi = array([gen_Phi(i,rating[i]) for i in range(0,M)])
+        if output:
             print(':::', x, Mv, Phi)
-        return sum(W*log(Phi) + L*log(1-Phi))
+        return sum(nwins*log(Phi) + nlosses*log(1-Phi))
 
+    # Objective function (current rating)
     def logE(x):
-        return sum(log(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2))
+        return sum(log(1 - tanh(alpha*(x - my_rating_current)/my_stdev_current)**2))
 
+    # Total objective function
     logF = lambda x: logL(x) + logE(x)
-    # }}}
-
-    # {{{ Derivative
+    
+    # First derivative (performance in current period)
     def DlogL(x):
-        Mv = x[0] + extend(x)[loc(oppc)+1]
-        phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
-        Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
-        vec = (W/Phi - L/(1-Phi)) * phi
+        # Get the rating against the opponents
+        rating = x[loc(opp_category)]
+        # Evaluate the PDF, CDF at that rating
+        phi = array([gen_phi(i,rating[i]) for i in range(0,M)])
+        Phi = array([gen_Phi(i,rating[i]) for i in range(0,M)])
+        vec = (nwins/Phi - nlosses/(1-Phi)) * phi
         return array(vec * matrix(DM))[0]
 
+    # First derivative (current rating)
     def DlogE(x):
-        ret = -2*alpha*tanh(alpha*(extend(x)-myrc)/mysc)/mysc
-        ret = ret[0:-1] - ret[-1]
-        return ret
+        return -2*alpha*tanh(alpha*(x - my_rating_current)/my_stdev_current)/my_stdev_current
 
+    # Total first derivative
     DlogF = lambda x: DlogL(x) + DlogE(x)
-    # }}}
-
-    # {{{ Hessian
-    def D2logL(x, DM, C):
-        Mv = x[0] + extend(x)[loc(oppc)+1]
-        phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
-        Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
+    
+    # Second derivative (performance in current period)
+    def D2logL(x):
+        # Get the rating against the opponents
+        rating = x[loc(opp_category)]
+        # Evaluate the PDF, CDF at that rating
+        phi = array([gen_phi(i,rating[i]) for i in range(0,M)])
+        Phi = array([gen_Phi(i,rating[i]) for i in range(0,M)])
         alpha = phi/Phi
         beta = phi/(1-Phi)
-        Mvbar = pi/sqrt(3)/sbar * tanh(pi/2/sqrt(3)*(Mv-mbar)/sbar)
-        coeff = - W*alpha*(alpha+Mvbar) - L*beta*(beta-Mvbar)
+        Mvbar = pi/sqrt(3)/sbar * tanh(pi/2/sqrt(3)*(rating-mbar)/sbar)
+        coeff = - nwins*alpha*(alpha+Mvbar) - nlosses*beta*(beta-Mvbar)
         ret = zeros((C,C))
         for j in range(0,M):
             ret += coeff[j] * outer(DM[j,:], DM[j,:])
         return ret
 
+    # Second derivative (current rating)
     def D2logE(x):
-        diags = -2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2
-        diags, final = diags[0:-1], diags[-1]
-        return diag(diags) + final
-
-    def D2logEx(x):
-        diags = -2*alpha**2*(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2)/mysc**2
+        diags = -2*alpha**2*(1 - tanh(alpha*(x - my_rating_current)/my_stdev_current)**2)/my_stdev_current**2
         return diag(diags)
 
-    D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
-    # }}}
-
-    # Prepare initial guess in unrestricted format and maximize
-    x = hstack((myr[0], myr[played_cats_p1]))[0:-1]
-    x = maximize(logF, DlogF, D2logF, x, disp=pr)
-    x = dim(x)
-
-    # If maximization failed, return the current rating and print an error message
-    if x == None:
+    # Total second derivative
+    D2logF = lambda x: D2logL(x) + D2logE(x)
+           
+    # Prepare initial guess and maximize
+    x = my_rating[0] + my_rating[played_categories_a + 1]
+    x = maximize(logF, DlogF, D2logF, x, disp=output)
+    
+    if x is None:
         print('Failed to converge for %s' % text)
-        return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
+        return(my_rating, my_stdev)
 
-    # Extend to restricted format
-    D2 = D2logL(x, DMex, C+1) + D2logEx(x)
-    devs = sqrt(-1/diag(D2))
-    rats = extend(x)
+    if x.ndim == 0:
+        x = array([x])
+        
+    if output:
+        print(played_categories)
+        print(x)
+ 
+    # Compute new deviation and rating for the indices that can change
+    new_rating = zeros(len(my_rating))
+    new_stdev = zeros(len(my_rating))
+    new_rating[played_categories_a + 1] = x
+    D2 = D2logL(x)
+    new_stdev[played_categories_a + 1] = sqrt(-1/diag(D2))
+    
+    # Ratings against non-played categories should be kept as before
+    indices = setdiff1d(range(1, len(my_rating)), played_categories_a+1)
+    new_rating[indices] = my_rating[0] + my_rating[indices]
+    new_stdev[indices] = my_stdev[indices]
 
-    if pr:
-        print(devs)
-        print(rats)
+    # Update mean rating
+    new_rating[0] = mean(new_rating[1:])
+    new_rating[1:] -= new_rating[0]
 
-    # Compute new RD and rating for the indices that can change
-    news = zeros(len(myr))
-    newr = zeros(len(myr))
+    # Keep new deviations between MIN_DEV and INIT_DEV
+    new_stdev = minimum(new_stdev, INIT_DEV)
+    new_stdev = maximum(new_stdev, MIN_DEV)
 
-    ind = [0] + [f+1 for f in played_cats]
-    news[ind] = devs
-    newr[ind] = rats
-
-    if pr:
-        print(news)
-        print(newr)
-
-    # Enforce the restriction of sum relative rating against played categories should be constant
-    ind = ind[1:]
-    m = (sum(newr[ind]) - tot)/len(ind)
-    newr[ind] -= m
-    newr[0] += m
-
-    if pr:
-        print(newr)
-
-    # Ratings against non-played categories should be kept as before.
-    ind = setdiff1d(range(0,len(myr)), [0] + ind)
-    news[ind] = mys[ind]
-    newr[ind] = myr[ind]
-
-    if pr:
-        print(news)
-        print(newr)
-
-    # Keep new RDs between MIN_DEV and INIT_DEV
-    news = minimum(news, INIT_DEV)
-    news = maximum(news, MIN_DEV)
-
-    if pr:
-        print(news)
-
-    # Ensure that mean relative rating is zero
-    m = mean(newr[1:])
-    newr[1:] -= m
-    newr[0] += m
-
-    if pr:
-        print(newr)
-        print('------------ Finished')
-
-    return (newr, news)
+    return (new_rating, new_stdev)

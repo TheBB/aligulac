@@ -99,6 +99,9 @@ for p in players.values():
 ngames = 0
 
 for m in Match.objects.filter(period=period).select_related('pla','plb'):
+    if m.sca == 0 and m.scb == 0:
+        continue
+        
     rca = [m.rca] if m.rca in 'PTZ' else 'PTZ'
     rcb = [m.rcb] if m.rcb in 'PTZ' else 'PTZ'
     weight = 1/len(rca)/len(rcb) * (OFFLINE_WEIGHT if m.offline else 1)
@@ -108,18 +111,14 @@ for m in Match.objects.filter(period=period).select_related('pla','plb'):
             players[m.pla_id]['opp_c'].append('PTZ'.index(rb))
             players[m.pla_id]['opp_r'].append(
                 players[m.plb_id]['prev_ratings']['M'] + players[m.plb_id]['prev_ratings'][ra])
-            players[m.pla_id]['opp_d'].append(sqrt(
-                players[m.plb_id]['prev_devs']['M']**2 + players[m.plb_id]['prev_devs'][ra]**2
-            ))
+            players[m.pla_id]['opp_d'].append(players[m.plb_id]['prev_devs'][ra])
             players[m.pla_id]['wins'].append(m.sca * weight)
             players[m.pla_id]['losses'].append(m.scb * weight)
 
             players[m.plb_id]['opp_c'].append('PTZ'.index(ra))
             players[m.plb_id]['opp_r'].append(
                 players[m.pla_id]['prev_ratings']['M'] + players[m.pla_id]['prev_ratings'][rb])
-            players[m.plb_id]['opp_d'].append(sqrt(
-                players[m.pla_id]['prev_devs']['M']**2 + players[m.pla_id]['prev_devs'][rb]**2
-            ))
+            players[m.plb_id]['opp_d'].append(players[m.pla_id]['prev_devs'][rb])
             players[m.plb_id]['wins'].append(m.scb * weight)
             players[m.plb_id]['losses'].append(m.sca * weight)
 

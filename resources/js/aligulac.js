@@ -124,7 +124,7 @@ $(document).ready(function() {
     autocomplete_opt: {
       minLength: 2,
       select: function(event, ui) {
-        $idPlayersTextArea.addTag(ui.item.key);
+        idPlayersTextArea.addTag(ui.item.key);
         $("#id_players_tag").focus();
         return false;
       },

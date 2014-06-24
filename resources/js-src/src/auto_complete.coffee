@@ -131,7 +131,7 @@ $(document).ready ->
         autocomplete_opt:
             minLength: 2
             select: (event, ui) ->
-                $idPlayersTextArea.addTag ui.item.key
+                idPlayersTextArea.addTag ui.item.key
                 $("#id_players_tag").focus();
                 false
             open: ->

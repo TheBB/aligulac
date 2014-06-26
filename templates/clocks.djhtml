@@ -1,0 +1,100 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+Number of days since.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Days since..." %}{% endblock %}
+
+{% block content %}
+
+<script>
+ var clocks_toggle_more = function(e) {
+   $(e).next().toggle();
+   $(e).find(".clock-toggle").toggleClass("right-caret").toggleClass("down-caret");
+ };
+</script>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "Days since..." %}</h2>
+
+      <div class="table-responsive">
+        <table class="table">
+          {% for clock in clocks %}
+            <tr {% if clock.type != "one_time" %}onclick="clocks_toggle_more(this);" style="cursor: pointer;"{% endif %}>
+              <td style="width: 2em;">
+                {% if clock.type != "one_time" %}
+                  <span class="clock-toggle right-caret"></span>
+                {% endif %}
+              </td>
+              <th {% if clock.alt_desc %}title="{{clock.alt_desc}}"{% endif %}>
+                {{clock.desc}}
+              </th>
+              <td class="text-right">
+                {% if clock.years > 0 %}
+                  {{clock.years}}
+                  <span class="text-muted">
+                    {% blocktrans count clock.years as nyears %}year{% plural %}years{% endblocktrans %}
+                  </span>
+                {% endif %}
+                {{clock.days}}
+                <span class="text-muted">
+                  {% blocktrans count clock.days as ndays %}day{% plural %}days{% endblocktrans %}
+                </span>
+              </td>
+            </tr>
+            {% if clock.type == "match" %}
+              <tr style="display: none;">
+                <td colspan="3" style="padding: 0;">
+                  <table class="table table-hover table-striped" style="margin: 0;">
+                    {% include "matchlist.djhtml" with lm_list=clock.extra lm_adm=0 lm_header="partial" lm_notable=1 %}
+                  </table>
+                </td>
+              </tr>
+            {% elif clock.type == "event_winner" %}
+              <tr style="display: none;">
+                <td colspan="3" style="padding: 0;">
+                  <table class="table table-hover table-striped" style="margin: 0;">
+                    <thead>
+                      <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Event" %}</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    {% for e, earn in clock.extra %}
+                      <tr>
+                        <td>{{ e.latest|cdate:_('Y-m-d') }}</td>
+                        <td>{{ e|event }}</td>
+                        <td>{{ earn.0.player|player }}</td>
+                        <td class="text-right">{{ earn.0.earnings|add_sep_and_cur:"USD" }}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>{{ earn.1.player|player }}</td>
+                        <td class="text-right">{{ earn.1.earnings|add_sep_and_cur:"USD" }}</td>
+                      </tr>
+                    {% endfor %}
+                  </table>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+      
+      <p class="small">
+        {% blocktrans %}<b>Major</b> is defined as a tournament where the first place prize money exceeds $2,000.{% endblocktrans %} <br>
+        {% blocktrans %}<b>Premier</b> is defined as an offline tournament where the first place prize money exceeds $10,000{% endblocktrans %} <br>
+        {% blocktrans with a="<a href=\"http://liquipedia.net/\">" %}These differ from the definitions used by {{a}}Liquipedia</a>. The reason for this being that it's hard use their definition when doing a database lookup as theirs aren't exact.{% endblocktrans %}
+      </p>
+    </div>
+  </div>
+
+{% endblock %}

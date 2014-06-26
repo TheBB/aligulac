@@ -15,7 +15,7 @@ matches. It expects a number of "arguments", all prefixed with lm_, to avoid nam
 - lm_show_noid: Show match even if one or both players are undefined
 - lm_predict: Use for enabling prediction functionality stuff.
 - lm_id: If given, the div.row enclosing the matchlist will get this ID.
-- ln_notable: If given, don't render the table (assume already rendered by caller).
+- lm_notable: If given, don't render the table (assume already rendered by caller).
 
 NB! The calling code is responsible for starting and ending the HTML table:
 

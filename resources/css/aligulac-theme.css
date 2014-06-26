@@ -115,10 +115,23 @@ body {
     border-top: 5px solid transparent;
     border-left: 5px solid #000000;
     display: inline-block;
+    width: 0;
     height: 0;
     opacity: 0.3;
     vertical-align: middle;
+}
+
+/* Down-pointing caret
+   Bootstrap comes with a caret class, but this one conforms to right-caret. */
+.down-caret {
+    border-top: 5px solid #000000;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    display: inline-block;
     width: 0;
+    height: 0;
+    opacity: 0.3;
+    vertical-align: middle;
 }
 
 /* Ratinglist table */

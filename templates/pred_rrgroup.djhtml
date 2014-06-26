@@ -39,7 +39,7 @@ This is the prediction page for single elimination brackets. It's called from ra
                 {% endif %}
               </td>
               <td class="rl_icon">
-                <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm" />
+                <img src="{{ p.player.race|img }}" alt="{{ p.player.race }}" class="btm">
               </td>
               <td>
                 <a href="/players/{{p.player.id}}-{{p.player.tag|urlfilter}}/">{{ p.player.tag }}</a>

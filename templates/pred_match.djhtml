@@ -1,0 +1,198 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the prediction page for BoN matches. It's called from ratings.predict.pred_match.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% blocktrans with pla=dbpl.0.tag plb=dbpl.1.tag %}{{pla}} vs. {{plb}}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {% blocktrans with pla=dbpl.0.tag plb=dbpl.1.tag %}{{pla}} vs. {{plb}}{% endblocktrans %}
+      </h2>
+
+      {% with pl=fav|player %}
+        <p class="text-center">
+          {% trans "Verdict:" %}
+          {% if   max <= 0.55 %}{% trans "Even chances." %}
+          {% elif max <= 0.65 %}{% blocktrans %}Slight advantage for {{pl}}.{% endblocktrans %}
+          {% elif max <= 0.75 %}{% blocktrans %}Advantage for {{pl}}.{% endblocktrans %}
+          {% elif max <= 0.90 %}{% blocktrans %}Large advantage for {{pl}}.{% endblocktrans %}
+          {% else %}{% blocktrans %}Overwhelming advantage for {{pl}}.{% endblocktrans %}
+          {% endif %}
+        </p>
+      {% endwith %}
+      </p>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="text-right" style="width: 35%;">
+                ({{ rta|ratscale }}) {{ dbpl.0|playerleft }}
+              </th>
+              <th style="width: 3em;"></th>
+              <th class="text-center" style="width: 6em;">
+                {{ match.get_result.0 }}–{{ match.get_result.1 }}
+              </th>
+              <th style="width: 3em;"></th>
+              <th style="width: 35%;">
+                {{ dbpl.1|player }} ({{ rtb|ratscale }})
+              </th>
+            </tr>
+          </thead>
+          {% for r in res %}
+            {% if r.0 or r.1 %}
+              <tr>
+                <td class="text-right" style="padding-right: 2em;">
+                  {% if r.0 %}{{ r.0.prob|pctg_one }}%{% endif %}
+                </td>
+                <td>
+                  {% if r.0 %}{{ r.0.sca }}–{{ r.0.scb }}{% endif %}
+                </td>
+                <td></td>
+                <td class="text-right">
+                  {% if r.1 %}{{ r.1.sca }}–{{ r.1.scb }}{% endif %}
+                </td>
+                <td style="padding-left: 2em;">
+                  {% if r.1 %}{{ r.1.prob|pctg_one }}%{% endif %}
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+          <thead>
+            <tr>
+              <th class="text-right" style="padding-right: 2em;">
+                {{ proba|pctg_one }}%
+              </th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th style="padding-left: 2em;">
+                {{ probb|pctg_one }}%
+              </th>
+            </tr>
+          </thead>
+          <tr>
+            <td class="text-right {% if tot_w_a|pctg_add_f:tot_l_a > tot_w_b|pctg_add_f:tot_l_b %}winner{% else %}loser{% endif %}" style="padding-right: 2em;">
+              {{ tot_w_a }}–{{ tot_l_a }} ({{ tot_w_a|pctg_add:tot_l_a }}%)
+            </td>
+            <td class="text-center" colspan="3">
+              {% trans "Historical score" %}
+            </td>
+            <td class="{% if tot_w_a|pctg_add_f:tot_l_a > tot_w_b|pctg_add_f:tot_l_b %}loser{% else %}winner{% endif %}" style="padding-left: 2em;">
+              ({{ tot_w_b|pctg_add:tot_l_b }}%) {{ tot_w_b }}–{{ tot_l_b }} 
+            </td>
+          </tr>
+          {% if mu_w_a and mu_w_b %}
+            <tr>
+              <td class="text-right {% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}winner{% else %}loser{% endif %}" style="padding-right: 2em;">
+                {{ mu_w_a }}–{{ mu_l_a }} ({{ mu_w_a|pctg_add:mu_l_a }}%)
+              </td>
+              <td class="text-center" colspan="3">
+                {% comment %}Translators: Opposing race here meaning the race relevant to the match being predicted.{% endcomment %}
+                {% trans "Score vs. opposing race" %}
+              </td>
+              <td class="{% if mu_w_a|pctg_add_f:mu_l_a > mu_w_b|pctg_add_f:mu_l_b %}loser{% else %}winner{% endif %}" style="padding-left: 2em;">
+                {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}<strong>{% endif %}
+                  ({{ mu_w_b|pctg_add:mu_l_b }}%) {{ mu_w_b }}–{{ mu_l_b }} 
+                  {% if mu_w_a|pctg_add_f:mu_l_a < mu_w_b|pctg_add_f:mu_l_b %}</strong>{% endif %}
+              </td>
+            </tr>
+          {% endif %}
+          <tr>
+            <td class="text-right {% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}winner{% else %}loser{% endif %}" style="padding-right: 2em;">
+              {{ frm_w_a }}–{{ frm_l_a }} ({{ frm_w_a|pctg_add:frm_l_a }}%)
+            </td>
+            <td class="text-center" colspan="3">
+              {% comment %}Translators: Form as in the current form of a player.{% endcomment %}
+              {% trans "Form" %}
+            </td>
+            <td class="{% if frm_w_a|pctg_add_f:frm_l_a > frm_w_b|pctg_add_f:frm_l_b %}loser{% else %}winner{% endif %}" style="padding-left: 2em;">
+              ({{ frm_w_b|pctg_add:frm_l_b }}%) {{ frm_w_b }}–{{ frm_l_b }} 
+            </td>
+          </tr>
+          {% if fmu_w_a and fmu_w_b %}
+            <tr>
+              <td class="text-right {% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}winner{% else %}loser{% endif %}" style="padding-right: 2em;">
+                {{ fmu_w_a }}–{{ fmu_l_a }} ({{ fmu_w_a|pctg_add:fmu_l_a }}%)
+              </td>
+              <td class="text-center" colspan="3">
+                {% trans "Form vs. opposing race" %}
+              </td>
+              <td class="{% if fmu_w_a|pctg_add_f:fmu_l_a > fmu_w_b|pctg_add_f:fmu_l_b %}loser{% else %}winner{% endif %}" style="padding-left: 2em;">
+                ({{ fmu_w_b|pctg_add:fmu_l_b }}%) {{ fmu_w_b }}–{{ fmu_l_b }} 
+              </td>
+            </tr>
+          {% endif %}
+          <tr>
+            <td class="text-right {% if vs_a > vs_b %}winner{% else %}loser{% endif %}" style="padding-right: 2em;">
+              {{ vs_a }}–{{ vs_b }} ({{ vs_a|pctg_add:vs_b }}%)
+            </td>
+            <td class="text-center" colspan="3">
+              {% trans "Score vs. each other" %}
+            </td>
+            <td class="{% if vs_a > vs_b %}loser{% else %}winner{% endif %}" style="padding-left: 2em;">
+                ({{ vs_b|pctg_add:vs_a }}%) {{ vs_b }}–{{ vs_a }} 
+            </td>
+          </tr>
+          {% if matches %}
+            <tr>
+              <td colspan="5" style="padding: 0;">
+                <table class="table table-striped table-hover" style="margin: 0;">
+                  {% include "matchlist.djhtml" with lm_list=matches lm_header="fixed" lm_fixedheader=_('Match history') lm_autohide=True lm_notable=1 %}
+                </table>
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+      
+      <form class="form-inline pull-right" role="form" method="get" action="/inference/match/">
+        <input type="hidden" name="bo" value="{{ form.bo.value }}">
+        <input type="hidden" name="ps" value="{{ form.ps.value }}">
+        <div class="form-group">
+          <label for="s1" class="inline-label">
+            {% blocktrans with pl=dbpl.0.tag %}Score for {{pl}}{% endblocktrans %}
+          </label>
+          <input name="s1" type="text" class="form-control" value="{{ match.get_result.0 }}" style="width: 6em;">
+        </div>
+        <div class="form-group">
+          <label for="s1" class="inline-label">
+            {% blocktrans with pl=dbpl.1.tag %}Score for {{pl}}{% endblocktrans %}
+          </label>
+          <input name="s1" type="text" class="form-control" value="{{ match.get_result.1 }}" style="width: 6em;">
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Update match progress" %}</button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h3>{% trans "Postable" %}</h3>
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tl" data-toggle="tab">{% trans "Team Liquid" %}</a></li>
+        <li><a href="#reddit" data-toggle="tab">{% trans "Reddit" %}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tl">
+          <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+          <p class="small">{% blocktrans with a="<a href=\"http://www.teamliquid.net/\">" %}The above code can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</p>
+        </div>
+        <div class="tab-pane" id="reddit">
+          <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+          <p class="small">{% blocktrans with a="<a href=\"http://www.reddit.com/\">" %}The above code can be used in posts on {{a}}Reddit.com</a>.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

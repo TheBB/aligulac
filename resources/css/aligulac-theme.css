@@ -263,9 +263,17 @@ body {
     color: #2f76b3;
 }
 
+td.winner {
+    font-weight: 900;
+}
+
 .loser a {
     font-weight: 100;
-    color: #bfbfbf;
+    color: #aaaaaa;
+}
+
+td.loser {
+    color: #aaaaaa;
 }
 
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
@@ -366,7 +374,7 @@ div.text > ul > li {
     padding-right: 0.3em;
 }
 
-.lm_pla img {
+.playerleft img, .lm_pla img {
     padding-left: 0.3em;
 }
 

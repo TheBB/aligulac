@@ -50,14 +50,14 @@ In general, if you're trying to figure out how this works, may God have mercy on
 
         {% if lm_header == "info" %}
           <thead>
-            <tr>
+            <tr class="eventheader">
               <th class="lm_date">{% if lm_list.0.date %}{% trans "Date" %}{% endif %}</th>
               <th class="lm_rta">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
               <th class="lm_pla">{% trans "Player A" %}</th>
               <th class="lm_score">{% trans "Score" %}</th>
               <th class="lm_plb">{% trans "Player B" %}</th>
               <th class="lm_rtb">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
-              <th class="lm_right"></th>
+              <th class="lm_right eventheader-right"></th>
             </tr>
           </thead>
         {% endif %}
@@ -161,7 +161,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   <th class="eventheader-mid text-center" colspan="5">
                     {{ lm_fixedheader }}
                   </th>
-                  <th class="text-right lm_right eventheader_right">
+                  <th class="text-right lm_right eventheader-right">
                     <a id="lma-{{ m.match_id }}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
                   </th>
                 </tr>

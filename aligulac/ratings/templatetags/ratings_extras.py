@@ -612,6 +612,29 @@ def player(value, arg=None):
                  flag=flag,
                  race=img(value.race),
                  cl=arg if arg is not None else ''))
+    
+@register.filter
+def playerleft(value, arg=None):
+    if not isinstance(value, Player):
+        return value
+
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
+    return mark_safe((
+        "<span class='playerleft'>"
+        "<a href='/players/{id}-{safetag}/' class='{cl}'>"
+        "{tag}<img src='{race}'>{flag}"
+        "</a>"
+        "</span>"
+        ).format(tag=value.tag,
+                 safetag=urlfilter(value.tag),
+                 id=value.id,
+                 flag=flag,
+                 race=img(value.race),
+                 cl=arg if arg is not None else ''))
 
 @register.filter
 def player_no_race(value):

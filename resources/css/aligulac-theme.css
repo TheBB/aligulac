@@ -57,7 +57,13 @@ a.blacklink:hover {
     border-radius: 0;
     border-style: solid none solid none;
 }
-    
+
+/* Menu hovering */
+@media (min-width: 768px) {
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+}
 
 /* Centered footer */
 footer {

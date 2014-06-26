@@ -79,8 +79,8 @@ This is the prediction page for four player Swiss groups. It's called from ratin
       <p>{% blocktrans %}To modify a result, click on the score in the table below. To view detailed predictions for a match, click the arrow.{% endblocktrans %}</p>
 
       <form class="form-inline" role="form" method="get" action="/inference/dual/">
-        <input type="hidden" name="bo" value="{{ form.bo.value }}" />
-        <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+        <input type="hidden" name="bo" value="{{ form.bo.value }}">
+        <input type="hidden" name="ps" value="{{ form.ps.value }}">
         <div class="table-responsive">
           <table class="table table-striped table-hover">
             {% include "matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 %}
@@ -91,8 +91,8 @@ This is the prediction page for four player Swiss groups. It's called from ratin
         </button>
       </form>
       <form class="form-inline" role="form" method="get" action="/inference/dual/">
-        <input type="hidden" name="bo" value="{{ form.bo.value }}" />
-        <input type="hidden" name="ps" value="{{ form.ps.value }}" />
+        <input type="hidden" name="bo" value="{{ form.bo.value }}">
+        <input type="hidden" name="ps" value="{{ form.ps.value }}">
         <button type="submit" class="btn btn-danger pull-right" style="margin: 0.4em;">
           {% trans "Clear results" %}
         </button>

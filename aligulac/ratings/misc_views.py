@@ -59,7 +59,7 @@ def home(request):
           "desc": _("Charts showing balance in StarCraft II over time.")
         },
         { "url": "/misc/days/",
-          "title": _("Number of days since…"),
+          "title": _("Number of days since..."),
           "desc": _("Page showing the most recent time some things happened.")
         },
         { "url": "/misc/compare/",
@@ -67,14 +67,6 @@ def home(request):
           "desc": _("Tool for comparing players.")
         }
     )
-
-    # http://docs.python.org/3.2/library/itertools.html
-    def grouper(n, iterable, fillvalue=None):
-        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
-        args = [iter(iterable)] * n
-        return zip_longest(*args, fillvalue=fillvalue)
-
-    ctx["miscpages"] = grouper(2, ctx["miscpages"])
 
     return render_to_response("misc.djhtml", ctx)
 

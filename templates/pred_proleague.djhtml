@@ -1,0 +1,129 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the prediction page for BoN matches. It's called from ratings.predict.pred_match.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% comment %}Translators: player names, so e.g. Team Jaedong vs. Team Mvp{% endcomment %}
+{% block title %}{% blocktrans with pla=matches.0.pla.tag plb=matches.0.plb.tag %}Team {{pla}} vs. Team {{plb}}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "Round robin group" %}</h2>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th class="text-right" style="width: 35%;">
+                {% comment %}Translators: Team [player], e.g. "Team Jaedong"{% endcomment %}
+                {% blocktrans with p=matches.0.pla.tag %}Team {{p}}{% endblocktrans %}
+              </th>
+              <th style="width: 3em;"></th>
+              <th class="text-center" style="width: 6em;">{{ s1 }}–{{ s2 }}</th>
+              <th style="width: 3em;"></th>
+              <th style="width: 35%;">
+                {% blocktrans with p=matches.0.plb.tag %}Team {{p}}{% endblocktrans %}
+              </th>
+            </tr>
+          </thead>
+          {% for r in outcomes %}
+            {% if r.proba or r.probb %}
+              <tr>
+                <td class="text-right" style="padding-right: 2em;">
+                  {% if r.proba %}{{ r.proba|pctg_one }}%{% endif %}
+                </td>
+                <td>
+                  {% if r.proba %}{{ r.winner }}–{{ r.loser }}{% endif %}
+                </td>
+                <td></td>
+                <td class="text-right">
+                  {% if r.probb %}{{ r.loser }}–{{ r.winner }}{% endif %}
+                </td>
+                <td style="padding-left: 2em;">
+                  {% if r.probb %}{{ r.probb|pctg_one }}%{% endif %}
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+          <thead>
+            <tr>
+              <th class="text-right" style="padding-right: 2em;">
+                {{ proba|pctg_one }}%
+              </th>
+              <th></th>
+              <th class="text-center">
+                {% if prob_draw %}{{ prob_draw|pctg_one }}%{% endif %}
+              </th>
+              <th></th>
+              <th style="padding-left: 2em;">
+                {{ probb|pctg_one }}%
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+      <h3>{% trans "Median outcome" %}</h3>
+
+      <p>{% blocktrans %}This is the median outcome <em>assuming the already entered results</em>.{% endblocktrans %}</p>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          {% include "matchlist.djhtml" with lm_list=meanres lm_header="custom" lm_noright=True lm_notable=1 %}
+        </table>
+      </div>
+
+      <h3>{% trans "Update match progress" %}</h3>
+
+      <p>{% blocktrans %}To modify a result, click on the score in the table below. To view detailed predictions for a match, click the arrow.{% endblocktrans %}</p>
+
+      <form class="form-inline" role="form" method="get" action="/inference/proleague/">
+        <input type="hidden" name="bo" value="{{ form.bo.value }}">
+        <input type="hidden" name="ps" value="{{ form.ps.value }}">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            {% include "matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 %}
+          </table>
+        </div>
+        <button type="submit" class="btn btn-primary pull-right" style="margin: 0.4em;">
+          {% trans "Update results" %}
+        </button>
+      </form>
+      <form class="form-inline" role="form" method="get" action="/inference/proleague/">
+        <input type="hidden" name="bo" value="{{ form.bo.value }}">
+        <input type="hidden" name="ps" value="{{ form.ps.value }}">
+        <button type="submit" class="btn btn-danger pull-right" style="margin: 0.4em;">
+          {% trans "Clear results" %}
+        </button>
+      </form>
+    </div>
+  </div>
+      
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h3>{% trans "Postable" %}</h3>
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tl" data-toggle="tab">{% trans "Team Liquid" %}</a></li>
+        <li><a href="#reddit" data-toggle="tab">{% trans "Reddit" %}</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tl">
+          <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_tl }}</textarea>
+          <p class="small">{% blocktrans with a="<a href=\"http://www.teamliquid.net/\">" %}The above code can be used in posts on {{a}}TeamLiquid.net</a>.{% endblocktrans %}</p>
+        </div>
+        <div class="tab-pane" id="reddit">
+          <textarea class="form-control" style="width: 100%;" rows="10">{{ postable_reddit }}</textarea>
+          <p class="small">{% blocktrans with a="<a href=\"http://www.reddit.com/\">" %}The above code can be used in posts on {{a}}Reddit.com</a>.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}

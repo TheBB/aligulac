@@ -3,6 +3,10 @@
 # ======================================================================
 
 aligulacAutocompleteTemplates = (obj) ->
+    if obj.type == '--'
+        obj.key = '-'
+        return "<a>BYE</a>"
+ 
     if not (obj.tag? || obj.name? || obj.fullname?)
         return "<span class='autocomp-header'>#{ autocomp_strings[obj.label] }</span>"
 
@@ -142,6 +146,8 @@ $(document).ready ->
                 if result.players?
                     for p in result.players
                         p.type = 'player'
+                    if global_player_autocomplete_allow_byes and (request.term == 'bye' or request.term == '--')
+                        result.players = [type: '--'].concat result.players
 
                     response result.players
         defaultText: autocomp_strings['Players']

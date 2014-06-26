@@ -1,0 +1,54 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the main prediction page, showing all available options. It's called from ratings.predict.predict.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Predict" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Predict" %}</h2>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+   var global_player_autocomplete_allow_byes = true;
+  </script>
+  
+  {% include "messages.djhtml" %}
+  
+  <div class="row" style="margin-top: 2em;">
+    <form role="form" method="get" action="/inference/">
+      {% form "forms.djhtml" %}
+        {% use "hidden" name="submitted" value="" %}
+        {% field "select" form.format style="full-mid" %}
+        {% field "basic" form.bestof style="full-mid" %}
+        {% field "textarea" form.players rows="6" style="full-mid" %}
+        <div class="form-group text-right {{"full-mid"|formdiv}}">
+          {% use "submit" text=_('Show me the future!') noname=1 %}
+        </div>
+      {% endform %}
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <p>{% blocktrans %}For <b>single elimination brackets</b> the following is possible:{% endblocktrans %}</p>
+
+      <ul>
+        <li>{% blocktrans %}Use a different match format for each round. For example, "5,5,7" means best-of-5 for the first two rounds, and best-of-7 for the final. You can still enter a single number to apply to all rounds.{% endblocktrans %}</li>
+        <li>{% blocktrans %}To indicate a BYE, enter "bye" or two hyphens.{% endblocktrans %}</li>
+      </ul>
+
+      <p>{% blocktrans %}For <b>proleague matches</b> enter first all the player of one team, and then all the players of the other team. There must be an equal number of each, but it doesn't have to be odd.{% endblocktrans %}</p>
+    </div>
+  </div>
+
+{% endblock %}

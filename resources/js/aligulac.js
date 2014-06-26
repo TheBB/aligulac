@@ -3,6 +3,10 @@ var aligulacAutocompleteTemplates, getResults;
 
 aligulacAutocompleteTemplates = function(obj) {
   var flag, name, race, team;
+  if (obj.type === '--') {
+    obj.key = '-';
+    return "<a>BYE</a>";
+  }
   if (!((obj.tag != null) || (obj.name != null) || (obj.fullname != null))) {
     return "<span class='autocomp-header'>" + autocomp_strings[obj.label] + "</span>";
   }
@@ -140,6 +144,13 @@ $(document).ready(function() {
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             p = _ref[_i];
             p.type = 'player';
+          }
+          if (global_player_autocomplete_allow_byes && (request.term === 'bye' || request.term === '--')) {
+            result.players = [
+              {
+                type: '--'
+              }
+            ].concat(result.players);
           }
           return response(result.players);
         }

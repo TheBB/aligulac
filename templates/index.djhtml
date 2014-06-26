@@ -18,11 +18,14 @@ Changes here will generally be visible on the whole site.
         <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
         <script type="text/css">
-        @font-face {
-            font-family: 'Glyphicons Halflings';
-            src: url('{{"glyphicons-halflings-regular.eot"|fonts}}');
-            src: url('{{"glyphicons-halflings-regular.eot?#iefix"|fonts}}') format('embedded-opentype'), url('{{"glyphicons-halflings-regular.woff"|fonts}}') format('woff'), url('{{"glyphicons-halflings-regular.ttf"|fonts}}') format('truetype'), url('{{"glyphicons-halflings-regular.svg#glyphicons_halflingsregular"|fonts}}') format('svg');
-        }
+         @font-face {
+           font-family: 'Glyphicons Halflings';
+           src: url('{{"glyphicons-halflings-regular.eot"|fonts}}');
+           src: url('{{"glyphicons-halflings-regular.eot?#iefix"|fonts}}') format('embedded-opentype'), url('{{"glyphicons-halflings-regular.woff"|fonts}}') format('woff'), url('{{"glyphicons-halflings-regular.ttf"|fonts}}') format('truetype'), url('{{"glyphicons-halflings-regular.svg#glyphicons_halflingsregular"|fonts}}') format('svg');
+         }
+        </script>
+        <script type="text/javascript">
+         var global_player_autocomplete_allow_byes = false;
         </script>
     </head>
     <body>

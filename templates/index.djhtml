@@ -46,36 +46,36 @@ Changes here will generally be visible on the whole site.
 
         <!-- Navigation bar -->
         <nav class="navbar navbar-default" role="navigaton">
-            <!-- For accessibility purposes: screen readers and small devices -->
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-menu">
-                        <span class="sr-only">Toggle navigaton</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
+          <!-- For accessibility purposes: screen readers and small devices -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-menu">
+                <span class="sr-only">Toggle navigaton</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
             </div>
+          </div>
 
-            <!-- Actual navigation bar -->
-            <div class="collapse navbar-collapse" id="main-menu">
-                <ul class="nav navbar-nav">
-                    {% for main in menu %}
-                        <li class="dropdown {% if curpage == main.id %}active{% endif %}">
-                            <a href="{{ main.url }}" class="dropdown-toggle" data-toggle="dropdown">
-                                {{ main.name }} <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                {% for subid, subname, suburl in main.submenu %}
-                                    <li {% if cursubpage == subid and curpage == main.id %}class="active"{% endif %}>
-                                        <a href="{{ suburl }}">{{ subname }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+          <!-- Actual navigation bar -->
+          <div class="collapse navbar-collapse" id="main-menu">
+            <ul class="nav navbar-nav">
+              {% for main in menu %}
+                <li class="dropdown {% if curpage == main.id %}active{% endif %}">
+                  <a href="{{ main.url }}" class="dropdown-toggle" data-toggle="dropdown">
+                    {{ main.name }} <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% for subid, subname, suburl in main.submenu %}
+                      <li {% if cursubpage == subid and curpage == main.id %}class="active"{% endif %}>
+                        <a href="{{ suburl }}">{{ subname }}</a>
+                      </li>
                     {% endfor %}
-                </ul>
-            </div>
+                  </ul>
+              {% endfor %}
+            </ul>
+          </div>
         </nav>
 
         <div class="container">

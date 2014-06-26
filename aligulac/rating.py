@@ -170,7 +170,7 @@ def update(my_rating, my_stdev,
     # Get the categories against which the player played
     played_categories = sorted(unique(opp_category))
     played_categories_a = array(played_categories)
-    
+ 
     M = len(nwins)                             # Number of opponents
     C = len(played_categories)                 # Number of categories
 

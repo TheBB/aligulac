@@ -31,13 +31,11 @@ In general, if you're trying to figure out how this works, may God have mercy on
 
 {% if lm_predict %}
   <script type="text/javascript">
-   <!--
-   function lm_toggle_visibility(id)
-   {
-     document.getElementById("fix" + id).style.display = 'none';
-     document.getElementById("inp" + id).style.display = 'inline';
+   function lm_toggle_visibility(id) {
+     $("#fix" + id).toggle();
+     $("#inp" + id).toggle();
+     $("#" + id + "_1").focus();
    }
-   //-->
   </script>
 {% endif %}
 
@@ -203,10 +201,12 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     </a>
                   </span>
                   <span id="inp{{ m.identifier }}" style="display: none;">
-                    <input type="text" name="{{ m.identifier }}_1" style="text-align: right; width: 1.5em;"
-                           value="{{ m.pla.score }}">
-                    <input type="text" name="{{ m.identifier }}_2" style="width: 1.5em;" 
-                           value="{{ m.plb.score }}">
+                    <input type="text" name="{{ m.identifier }}_1" id="{{ m.identifier }}_1"
+                           style="text-align: right; width: 1.8em; padding: 0.2em;"
+                           value="{{ m.pla.score }}" class="form-control input-sm">
+                    <input type="text" name="{{ m.identifier }}_2" id="{{ m.identifier }}_2"
+                           style="width: 1.8em; padding: 0.2em;" 
+                           value="{{ m.plb.score }}" class="form-control input-sm">
                   </span>
                 {% else %}
                   {{m.pla.score}}–{{m.plb.score}}

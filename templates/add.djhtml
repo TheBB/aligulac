@@ -131,10 +131,10 @@ ratings.submitviews.add_matches.
         <div class="tab-pane" id="examples" style="padding-top: 1em;">
           <p>{% trans "Here are some real-world examples. From the GSL:" %}</p>
           <pre>MarineKing-Roro 2-1
-            Keen-IM Mvp 2-1
-            MarineKing-Keen 2-0
-            Roro-IM Mvp 2-0
-            Keen-Roro 0-2</pre>
+Keen-IM Mvp 2-1
+MarineKing-Keen 2-0
+Roro-IM Mvp 2-0
+Keen-Roro 0-2</pre>
           <p>{% trans "Some players have to be identified by race and/or country, such as Creator:" %}</p>
           <pre>Creator P KR-Byul 2-0</pre>
           <p>{% trans "Some players have aliases to help entering their names, such as BBoongBBoong:" %}</p>

@@ -130,7 +130,7 @@ To use, you should define the following blocks:
       <hr>
       <div class="row">
         <div class="col-xs-12">
-          <footer class="text-muted">
+          <footer class="text-muted small">
             {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
             {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
             {% with a3="<a target=\"_blank\" href=\"http://www.teamliquid.net/forum/starcraft-2/404035-aligulaccom-changelog-and-feedback-thread\">" %}
@@ -149,9 +149,10 @@ To use, you should define the following blocks:
               <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
             {% endwith %}{% endwith %}
 
-            <a href="#" onclick="gen_short('{{cur_path}}'); return false;" class="btn btn-default" id="gen_short">
-              {% trans "Generate short URL for this page" %}
-            </a>
+            <button onclick="gen_short('{{cur_path}}');" class="btn btn-default" id="gen_short">
+              <span class="small text-muted">{% trans "Generate short URL for this page" %}</span>
+            </button>
+
             <span id="disp_short"></span>
           </footer>
         </div>

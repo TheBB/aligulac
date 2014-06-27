@@ -16,7 +16,10 @@ This is the Hall of Fame template. It's called from ratings.views.records.
        chart: {
          renderTo: 'chart-alltime',
          type: 'spline',
-         zoomType: 'xy'
+         zoomType: 'xy',
+         style: {
+           fontFamily: 'Roboto, sans-serif'
+         }
        },
        credits: {
          enabled: false

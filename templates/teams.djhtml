@@ -40,9 +40,11 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
 
       {% if inactive %}
         <h2>{% trans "Disbanded teams" %}</h2>
-        <p>
+        <p class="searchres">
           {% for team in inactive %}
-            <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}
+            <span class="searchres">
+              <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}
+            </span>
           {% endfor %}
         </p>
       {% endif %}

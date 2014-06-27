@@ -74,14 +74,14 @@ This is the page showing the details of a rating adjustment. It's called from ra
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <td style="width: 5%;"></td>
-                  <td class="text-right" style="width: 10%;">{% trans "Old rtg." %}</td>
-                  <td class="text-right" style="width: 10%;">{% trans "Opposition" %}</td>
-                  <td colspan="3" class="text-center">{% trans "Expected score" %}</td>
-                  <td colspan="3" class="text-center">{% trans "Actual score" %}</td>
-                  <td class="text-right" style="width: 10%;">{% trans "Performance" %}</td>
-                  <td class="text-right" style="width: 10%;">{% trans "New rtg." %}</td>
-                  <td class="text-right" style="width: 10%;">{% trans "Adjustment" %}</td>
+                  <th style="width: 5%;"></th>
+                  <th class="text-right" style="width: 10%;">{% trans "Old rtg." %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Opposition" %}</th>
+                  <th colspan="3" class="text-center">{% trans "Expected score" %}</th>
+                  <th colspan="3" class="text-center">{% trans "Actual score" %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Performance" %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "New rtg." %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Adjustment" %}</th>
                 </tr>
               </thead>
               <tr>

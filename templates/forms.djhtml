@@ -126,14 +126,11 @@
       <input type="text"
              name="{{field.html_name}}"
              id="{{field.auto_id}}"
-             class="form-control"
+             class="form-control datepicker"
              value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
              placeholder="{{placeholder|default:field.label}}">
     </div>
   </div>
-  <script type="text/javascript">
-   $(document).ready(function () { $("#{{field.auto_id}}").datepicker(); });
-  </script>
   <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
 {% endblock %}
 
@@ -143,22 +140,16 @@
       {{label}}
     </label>
     <div class="{{style|forminput}}">
-      <input type="text" name="{{ after.html_name }}" class="form-control"
+      <input type="text" name="{{ after.html_name }}" class="form-control datepicker"
              id="{{after.auto_id}}" value="{{ after.value|makedate|date:"Y-m-d"|default:"" }}"
              style="width: 40%; display: inline; margin-right: 0.2em;"
              placeholder="{% trans "After date" %}">
       {% trans "to" %}
-      <input type="text" name="{{ before.html_name }}" class="form-control"
+      <input type="text" name="{{ before.html_name }}" class="form-control datepicker"
              id="{{before.auto_id}}" value="{{ before.value|makedate|date:"Y-m-d"|default:"" }}"
              style="width: 40%; display: inline; margin-left: 0.2em;"
              placeholder="{% trans "Before date" %}">
     </div>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $("#{{after.auto_id}}").datepicker();
-        $("#{{before.auto_id}}").datepicker();
-      });
-    </script>
   </div>
 {% endblock %}
 

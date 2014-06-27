@@ -26,13 +26,10 @@ This page shows the results by date. Called from ratings.views.results.
       <form class="form-inline pull-right" role="form" method="get">
         <div class="form-group">
           <label for="d" class="inline-label">{% trans "Go to date:" %}</label>
-          <input type="text" id="d" name="d" value="{{td|date:"Y-m-d"}}" class="form-control input-sm">
+          <input type="text" id="d" name="d" value="{{td|date:"Y-m-d"}}" class="form-control input-sm datepicker">
           <button type="submit" class="btn btn-primary input-sm">{% trans "Go" %}</button>
         </div>
       </form>
-      <script type="text/javascript">
-       $(document).ready(function () { $("#d").datepicker(); });
-      </script>
     </div>
   </div>
 

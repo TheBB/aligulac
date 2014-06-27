@@ -258,4 +258,5 @@ This shows a team page. Called from ratings.teamviews.team.
       </div>
     </div>
   {% endif %}
+  
 {% endblock %}

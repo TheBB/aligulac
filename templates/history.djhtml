@@ -9,70 +9,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
 
 {% block title %}{% trans "History" %}{% endblock %}
 
-{% block content %}
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h2>{% trans "History" %}</h2>
-      <form class="form-inline pull-right" role="form" method="get" action="/records/history/">
-        <div class="form-group">
-          <label for="nplayers" class="inline-label">{% trans "Number of players:" %}</label>
-          <select name="nplayers" id="nplayers" class="form-control input-sm">
-            <option value="5" {% if nplayers == 5 %}selected="selected"{% endif %}>5</option>
-            <option value="10" {% if nplayers == 10 %}selected="selected"{% endif %}>10</option>
-            <option value="20" {% if nplayers == 20 %}selected="selected"{% endif %}>20</option>
-            <option value="50" {% if nplayers == 50 %}selected="selected"{% endif %}>50</option>
-            <option value="100" {% if nplayers == 100 %}selected="selected"{% endif %}>100</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="race" class="inline-label">{% trans "Races:" %}</label>
-          <select name="race" id="race" class="form-control input-sm">
-            <option value="ptzrs" {% if race == "ptzrs" %}selected="selected"{% endif %}>
-              {% trans "All" %}
-            </option>
-            <option value="p" {% if race == "p" %}selected="selected"{% endif %}>
-              {% trans "Protoss" %}
-            </option>
-            <option value="t" {% if race == "t" %}selected="selected"{% endif %}>
-              {% trans "Terran" %}
-            </option>
-            <option value="z" {% if race == "z" %}selected="selected"{% endif %}>
-              {% trans "Zerg" %}
-            </option>
-            <option value="tzrs" {% if race == "tzrs" %}selected="selected"{% endif %}>
-              {% trans "No Protoss" %}
-            </option>
-            <option value="pzrs" {% if race == "pzrs" %}selected="selected"{% endif %}>
-              {% trans "No Terran" %}
-            </option>
-            <option value="ptrs" {% if race == "ptrs" %}selected="selected"{% endif %}>
-              {% trans "No Zerg" %}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="nats" class="inline-label">{% trans "Nationalities:" %}</label>
-          <select name="nats" id="nats" class="form-control input-sm">
-            <option value="all" {% if nats == "all" %}selected="selected"{% endif %}>
-              {% trans "All" %}
-            </option>
-            <option value="KR">{% trans "South Korea" %}</option>
-            <option value="foreigners" {% if nats == "foreigners" %}selected="selected"{% endif %}>
-              {% trans "Non-Koreans" %}
-            </option>
-            <option disabled="disabled" class="option-disabled"></option>
-            {% for c in countries %}
-              <option value="{{ c.cc }}" {% if nats == c.cc %}selected="selected"{% endif %}>
-                {{ c.name }}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
-      </form>
-    </div>
-  </div>
-
+{% block postscript %}
   <script type="text/javascript">
    $(document).ready(function() { 
      var chart1 = new Highcharts.Chart({
@@ -188,6 +125,72 @@ This is the Hall of Fame template. It's called from ratings.views.records.
      });
    });
   </script>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "History" %}</h2>
+      <form class="form-inline pull-right" role="form" method="get" action="/records/history/">
+        <div class="form-group">
+          <label for="nplayers" class="inline-label">{% trans "Number of players:" %}</label>
+          <select name="nplayers" id="nplayers" class="form-control input-sm">
+            <option value="5" {% if nplayers == 5 %}selected="selected"{% endif %}>5</option>
+            <option value="10" {% if nplayers == 10 %}selected="selected"{% endif %}>10</option>
+            <option value="20" {% if nplayers == 20 %}selected="selected"{% endif %}>20</option>
+            <option value="50" {% if nplayers == 50 %}selected="selected"{% endif %}>50</option>
+            <option value="100" {% if nplayers == 100 %}selected="selected"{% endif %}>100</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="race" class="inline-label">{% trans "Races:" %}</label>
+          <select name="race" id="race" class="form-control input-sm">
+            <option value="ptzrs" {% if race == "ptzrs" %}selected="selected"{% endif %}>
+              {% trans "All" %}
+            </option>
+            <option value="p" {% if race == "p" %}selected="selected"{% endif %}>
+              {% trans "Protoss" %}
+            </option>
+            <option value="t" {% if race == "t" %}selected="selected"{% endif %}>
+              {% trans "Terran" %}
+            </option>
+            <option value="z" {% if race == "z" %}selected="selected"{% endif %}>
+              {% trans "Zerg" %}
+            </option>
+            <option value="tzrs" {% if race == "tzrs" %}selected="selected"{% endif %}>
+              {% trans "No Protoss" %}
+            </option>
+            <option value="pzrs" {% if race == "pzrs" %}selected="selected"{% endif %}>
+              {% trans "No Terran" %}
+            </option>
+            <option value="ptrs" {% if race == "ptrs" %}selected="selected"{% endif %}>
+              {% trans "No Zerg" %}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nats" class="inline-label">{% trans "Nationalities:" %}</label>
+          <select name="nats" id="nats" class="form-control input-sm">
+            <option value="all" {% if nats == "all" %}selected="selected"{% endif %}>
+              {% trans "All" %}
+            </option>
+            <option value="KR">{% trans "South Korea" %}</option>
+            <option value="foreigners" {% if nats == "foreigners" %}selected="selected"{% endif %}>
+              {% trans "Non-Koreans" %}
+            </option>
+            <option disabled="disabled" class="option-disabled"></option>
+            {% for c in countries %}
+              <option value="{{ c.cc }}" {% if nats == c.cc %}selected="selected"{% endif %}>
+                {{ c.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
+      </form>
+    </div>
+  </div>
+  
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div id="chart-alltime"></div>

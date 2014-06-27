@@ -11,6 +11,48 @@ ratings.views.events.
 
 {% block title %}{{ event }}{% endblock %}
 
+{% block postscript %}
+  {% if adm %}
+    {% if event.has_children %}
+      <script type="text/javascript">
+       $(document).ready(function () {
+         $(function() {
+           $("#sortable").sortable();
+           $("#sortable").disableSelection();
+         });
+       });
+       var get_order = function () {
+         var ul = document.getElementById('sortable');
+         var str = '';
+         for (var i = 0; i < ul.children.length; i++) {
+           str += ul.children[i].id + ',';
+         }
+         document.getElementById('order').value = str;
+       }
+      </script>
+    {% endif %}
+    
+    {% if not event.has_children and stform %}
+      <script type="text/javascript">
+       var story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
+       var changed_story = function () {
+         var sel = document.getElementById('extantstories');
+         var data = story_data[sel.selectedIndex];
+         document.getElementById('story_id').setAttribute('value', data['idx']);
+         document.getElementById('id_player').value = data['player'];
+         document.getElementById('id_date').setAttribute('value', data['dt']);
+         document.getElementById('id_text').selectedIndex = data['text'];
+         document.getElementById('id_params').value = data['params'];
+         document.getElementById('storynewbtn').disabled = (sel.selectedIndex > 0);
+         document.getElementById('storyupdbtn').disabled = (sel.selectedIndex == 0);
+         document.getElementById('storydelbtn').disabled = (sel.selectedIndex == 0);
+       };
+      </script>
+    {% endif %}
+    
+  {% endif %}
+{% endblock %}
+
 {% block modals %}
   {% if adm %}
     <div class="modal fade" id="md-edit" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
@@ -145,22 +187,6 @@ ratings.views.events.
           </div>
         </div>
       </div>
-      <script type="text/javascript">
-       $(document).ready(function () {
-         $(function() {
-           $("#sortable").sortable();
-           $("#sortable").disableSelection();
-         });
-       });
-       var get_order = function () {
-         var ul = document.getElementById('sortable');
-         var str = '';
-         for (var i = 0; i < ul.children.length; i++) {
-           str += ul.children[i].id + ',';
-         }
-         document.getElementById('order').value = str;
-       }
-      </script>
     {% endif %}
 
     {% if not event.has_children and stform %}
@@ -210,22 +236,6 @@ ratings.views.events.
           </div>
         </div>
       </div>
-      <script type="text/javascript">
-       story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
-       function changed_story()
-       {
-         var sel = document.getElementById('extantstories');
-         var data = story_data[sel.selectedIndex];
-         document.getElementById('story_id').setAttribute('value', data['idx']);
-         document.getElementById('id_player').value = data['player'];
-         document.getElementById('id_date').setAttribute('value', data['dt']);
-         document.getElementById('id_text').selectedIndex = data['text'];
-         document.getElementById('id_params').value = data['params'];
-         document.getElementById('storynewbtn').disabled = (sel.selectedIndex > 0);
-         document.getElementById('storyupdbtn').disabled = (sel.selectedIndex == 0);
-         document.getElementById('storydelbtn').disabled = (sel.selectedIndex == 0);
-       }
-      </script>
     {% endif %}
   {% endif %}
 {% endblock %}

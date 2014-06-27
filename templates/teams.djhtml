@@ -48,4 +48,5 @@ This shows the list of all teams and their AK/PL scores. Called from ratings.tea
       {% endif %}
     </div>
   </div>
+  
 {% endblock %}

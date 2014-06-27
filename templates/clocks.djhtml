@@ -52,7 +52,7 @@ Number of days since.
             {% if clock.type == "match" %}
               <tr style="display: none;">
                 <td colspan="3" style="padding: 0;">
-                  <table class="table table-hover table-striped" style="margin: 0;">
+                  <table class="table table-hover" style="margin: 0;">
                     {% include "matchlist.djhtml" with lm_list=clock.extra lm_adm=0 lm_header="partial" lm_notable=1 %}
                   </table>
                 </td>

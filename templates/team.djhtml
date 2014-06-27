@@ -209,7 +209,7 @@ This shows a team page. Called from ratings.teamviews.team.
           <p>{% blocktrans %}Assigned to {{ teamname }} in a non-playing capacity:{% endblocktrans %}</p>
           <ul>
             {% for p in nonplaying %}
-              <li>{{p|player}}</li>
+              <li>{{p.player|player}}</li>
             {% endfor %}
           </ul>
         </div>

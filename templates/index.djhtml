@@ -229,7 +229,7 @@ To use, you should define the following blocks:
        });
       </script>
     {% endif %}
-    <script type="text/javascript" src="{{"aligulac"|js}}"></script>
+    <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
     
     <!-- Put special scripts here that should be loaded after the rest of the document -->
     {% block postscript %}{% endblock %}

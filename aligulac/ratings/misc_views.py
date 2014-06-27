@@ -52,7 +52,6 @@ from ratings.templatetags.ratings_extras import (
 def home(request):
     ctx = base_ctx('Misc', request=request)
 
-    ctx["title"] = _("Miscellaneous Pages")
     ctx["miscpages"] = (
         { "url": "/misc/balance/",
           "title": _("Balance Report"),
@@ -199,7 +198,6 @@ CLOCKS = [
 def clocks(request):
     ctx = base_ctx('Misc', 'Days Since…', request)
 
-    ctx["title"] = _("Number of days since…")
     ctx["clocks"] = list()
     for desc, alt_desc, q, t in CLOCKS:
         obj = None
@@ -329,7 +327,6 @@ class CompareForm(forms.Form):
 def compare_search(request):
 
     base = base_ctx('Misc', 'Compare', request)
-    base["title"] = _("Comparison")
 
     if "op" in request.GET:
         op = request.GET["op"].lower()
@@ -409,7 +406,6 @@ def compare(request, players):
     if any(isinstance(x, int) for x in clean_players):
         return redirect(edit_url)
 
-    base["title"] = _("Comparison")
     base["subnav"] = [
         (_("New"), "/misc/compare/"),
         (_("Edit"), edit_url)

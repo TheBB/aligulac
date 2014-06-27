@@ -20,5 +20,4 @@ def faq(request):
         ))
 
     base['posts'] = Post.objects.all()
-    base.update({"title": _("Frequently asked questions")})
     return render_to_response('faq.djhtml', base)

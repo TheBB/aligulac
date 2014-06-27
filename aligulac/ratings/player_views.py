@@ -376,8 +376,6 @@ def player(request, player_id):
         base['messages'].append(Message(msg_nochart % player.tag, type=Message.INFO))
     # }}}
 
-    base.update({"title": player.tag})
-
     return render_to_response('player.djhtml', base)
 # }}}
 
@@ -401,8 +399,6 @@ def adjustment(request, player_id, period_id):
 
     # {{{ Matches
     matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj']).filter(period=period)
-
-    base.update({"title": player.tag})
 
     # If there are no matches, we don't need to continue
     if not matches.exists():
@@ -729,8 +725,6 @@ def results(request, player_id):
     
     # }}}
 
-    base.update({"title": player.tag})
-    
     return render_to_response('player_results.djhtml', base)
 # }}}
 
@@ -755,7 +749,6 @@ def historical(request, player_id):
         'historical': historical,
     })
 
-    base.update({"title": player.tag})
     return render_to_response('historical.djhtml', base)
 # }}}
 
@@ -790,8 +783,6 @@ def earnings(request, player_id):
         'totalearnings': totalearnings,
         'by_currency': by_currency,
     })
-
-    base.update({"title": player.tag})
 
     return render_to_response('player_earnings.djhtml', base)
 # }}}

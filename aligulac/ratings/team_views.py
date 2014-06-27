@@ -125,8 +125,6 @@ def teams(request):
         'inactive': inactive,
     })
 
-    base.update({"title": _("Teams")})
-
     return render_to_response('teams.djhtml', base)
 # }}}
 
@@ -195,8 +193,6 @@ def team(request, team_id):
     })
     # }}}
 
-    base.update({"title": team.name})
-
     return render_to_response('team.djhtml', base)
 # }}}
 
@@ -246,8 +242,6 @@ def transfers(request):
     # }}}
 
     base['trades'] = pretrades[0:25]
-
-    base.update({"title": _("Recent player transfers")})
 
     return render_to_response('player_transfers.djhtml', base)
 # }}}

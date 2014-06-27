@@ -800,8 +800,6 @@ def add_matches(request):
 
     base['form'] = form
 
-    base.update({"title": _("Submit results")})
-
     return render_to_response('add.djhtml', base)
 
 # View for reviewing matches
@@ -828,8 +826,6 @@ def review_matches(request):
 
     for g in base['groups']:
         g.prematches = display_matches(g.prematch_set.all(), messages=False, no_events=True)
-
-    base.update({"title": _("Review results")})
 
     return render_to_response('review.djhtml', base)
 
@@ -899,8 +895,6 @@ def events(request):
                 base['tree'][-1]['inc'] -= 1
 
     do_level(tree, 0)
-
-    base.update({"title": _("Manage events")})
 
     return render_to_response('eventmgr.djhtml', base)
 
@@ -985,8 +979,6 @@ def open_events(request):
     fill_aux_event(base['open_games'])
     fill_aux_event(base['open_nogames'])
     fill_aux_event(base['pp_events'])
-
-    base.update({"title": _("Open events")})
 
     return render_to_response('events_open.djhtml', base)
 

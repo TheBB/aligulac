@@ -38,7 +38,7 @@ from aligulac.tools import (
     base_ctx,
     get_param,
 )
-from aligulac.settings import INACTIVE_THRESHOLD
+from aligulac.settings import INACTIVE_THRESHOLD, SHOW_PER_LIST_PAGE
 # }}}
 
 msg_preview = _('This is a <em>preview</em> of the next rating list. It will not be finalized until %s.')
@@ -181,7 +181,7 @@ def period(request, period_id=None):
     # }}}
 
     # {{{ Pages etc.
-    pagesize = 40
+    pagesize = SHOW_PER_LIST_PAGE
     page = int(get_param(request, 'page', 1))
     nitems = entries.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)
@@ -269,7 +269,7 @@ def earnings(request):
     # }}}
 
     # {{{ Pages, etc.
-    pagesize = 40
+    pagesize = SHOW_PER_LIST_PAGE
     page = int(get_param(request, 'page', 1))
     nitems = ranking.count()
     npages = nitems//pagesize + (1 if nitems % pagesize > 0 else 0)

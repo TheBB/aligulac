@@ -591,7 +591,7 @@ This is the template for the main player page, called from ratings.views.player.
       <div class="table-responsive">
         <table class="table table-condensed table-striped table-hover">
           <thead>
-            <tr><th colspan="2" class="text-center">{{player.tag}}</th></tr>
+            <tr><th colspan="2" class="text-center ibox-header">{{player.tag}}</th></tr>
           </thead>
           <tr class="small">
             <td class="text-right ibox-left" style="width: 40%">{% trans "Race" %}</td>

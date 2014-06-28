@@ -389,7 +389,7 @@ ratings.views.events.
       <div class="table-responsive">
         <table class="table table-condensed table-striped table-hover">
           <thead>
-            <tr><th colspan="2" class="text-center">
+            <tr><th colspan="2" class="text-center ibox-header">
               {% trans "Details" %}
             </th></tr>
           </thead>

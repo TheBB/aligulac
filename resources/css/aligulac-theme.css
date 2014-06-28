@@ -577,3 +577,9 @@ div.tagsinput div {
 p, li, ul {
     max-height: 999999px;
 }
+
+/* Align infobox headers with tab panes */
+.ibox-header {
+    border: none !important;
+    height: 42px;
+}

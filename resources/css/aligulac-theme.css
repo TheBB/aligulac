@@ -260,7 +260,6 @@ body {
 
 .winner a {
     font-weight: 900;
-    color: #2f76b3;
 }
 
 td.winner {
@@ -269,7 +268,11 @@ td.winner {
 
 .loser a {
     font-weight: 100;
-    color: #aaaaaa;
+    color: #999999;
+}
+
+.loser a:hover {
+    color: #777777;
 }
 
 td.loser {

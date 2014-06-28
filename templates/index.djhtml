@@ -230,7 +230,12 @@ To use, you should define the following blocks:
        });
       </script>
     {% endif %}
-    <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
+ 
+    {% if debug %}
+      <script type="text/javascript" src="{{"aligulac"|js}}"></script>
+    {% else %}
+      <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
+    {% endif %}
     
     <!-- Put special scripts here that should be loaded after the rest of the document -->
     {% block postscript %}{% endblock %}

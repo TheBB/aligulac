@@ -89,7 +89,7 @@ $(document).ready ->
 
         minLength: 2
         select: (event, ui) ->
-            $('#search_box').val ui.item.key
+            $('#search_box').val(ui.item.key).closest('form').submit()
             false
         open: ->
             $('.ui-menu').width 'auto'

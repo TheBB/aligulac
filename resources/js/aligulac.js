@@ -79,7 +79,7 @@ $(document).ready(function() {
     },
     minLength: 2,
     select: function(event, ui) {
-      $('#search_box').val(ui.item.key);
+      $('#search_box').val(ui.item.key).closest('form').submit();
       return false;
     },
     open: function() {

@@ -72,7 +72,7 @@ footer {
 
 body {
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
+    font-size: 1.5em;
     padding-top: 30px;
     padding-bottom: 80px;
 }
@@ -557,7 +557,6 @@ div.tagsinput div {
 }
 
 /* Comparisons */
-
 .compheader {
     font-variant: small-caps;
     font-size: 1.3em;
@@ -572,4 +571,9 @@ div.tagsinput div {
 
 .hline td {
     padding: 0 !important;
+}
+
+/* Prevent Chrome mobile from upscaling fonts */
+p, li, ul {
+    max-height: 999999px;
 }

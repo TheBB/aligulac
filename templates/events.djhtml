@@ -22,7 +22,7 @@ This shows the event overview page. Called from ratings.views.events.
 
 <div class="row" style="padding-top: 2em; padding-bottom: 2em;">
   <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text-center">
-    <form class="form-inline" role="form" method="get" action="/results/events">
+    <form class="form-inline" role="form" method="get" action="/results/events/">
       <div class="form-group">
         <label for="goto" class="inline-label">{% trans "Go to smaller event:" %}</label>
         <select name="goto" id="goto" class="form-control input-lg">

@@ -279,20 +279,52 @@ ratings.views.events.
           <div class="tab-pane active" id="navigation" style="padding-top: 1em;">
             {% if siblings %}
               <h4>Same level</h4>
-              <p>
-                {% for e in siblings %}
-                  <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
-                {% endfor %}
-              </p>
+              {% if siblings.count < 30 %}
+                <p class="searchres">
+                  {% for e in siblings %}
+                    <span class="searchres">
+                      <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
+                    </span>
+                  {% endfor %}
+                </p>
+              {% else %}
+                <form class="form-inline" role="form" method="get" action="/results/events/">
+                  <div class="form-group">
+                    <select name="goto" class="form-control">
+                      {% for e in siblings %}
+                        <option value="{{e.id}}">{{e.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  {% comment %}Translators: Go as in go to a page.{% endcomment %}
+                  <button type="submit" class="btn btn-primary">{% trans "Go" %}</button>
+                </form>
+              {% endif %}
             {% endif %}
 
             {% if children %}
               <h4>Next level</h4>
-              <p>
-                {% for e in children %}
-                  <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
-                {% endfor %}
-              </p>
+              {% if children.count < 30 %}
+                <p class="searchres">
+                  {% for e in children %}
+                    <span class="searchres">
+                      <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.name}}</a>{% if not forloop.last %},{% endif %}
+                    </span>
+                  {% endfor %}
+                </p>
+              {% else %}
+                <form class="form-inline" role="form" method="get" action="/results/events/">
+                  <div class="form-group">
+                    <select name="goto" class="form-control">
+                      {% for e in children %}
+                        <option value="{{e.id}}">{{e.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  {% comment %}Translators: Go as in go to a page.{% endcomment %}
+                  <button type="submit" class="btn btn-primary">{% trans "Go" %}</button>
+                </form>
+              {% endif %}
             {% endif %}
           </div>
         {% endif %}

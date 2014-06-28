@@ -12,7 +12,7 @@ This is the template for the earnings of a player. It's called from ratings.view
 
 {% block content %}
   <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
       <h2>{% trans "Earnings ranking" %}</h2>
       <p>
         {% if not empty %}
@@ -36,11 +36,11 @@ This is the template for the earnings of a player. It's called from ratings.view
   </div>
 
   <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
       <form class="form-inline pull-right" role="form" method="get" action="/earnings/">
         <input type="hidden" name="page" value="{{ page }}" />
         <div class="form-group">
-          <label for="year" class="inline-label">{% trans "Filter by year:" %}</label>
+          <label for="year" class="inline-label">{% trans "Year:" %}</label>
           <select name="year" class="form-control input-sm">
             <option value="all" {% if filters.year == 'all' %}selected{% endif %}>{% trans "All" %}</option>
             <option value="2014" {% if filters.year == '2014' %}selected{% endif %}>2014</option>
@@ -82,7 +82,7 @@ This is the template for the earnings of a player. It's called from ratings.view
           </select>
         </div>
         {% comment %}Translators: The verb "to filter".{% endcomment %}
-        <button type="submit" class="btn btn-default input-sm">{% trans "Filter" %}</button>
+        <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
       </form>
     </div>
   </div>

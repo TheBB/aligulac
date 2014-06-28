@@ -361,7 +361,7 @@ div.text > ul > li {
 
 /* Class for inline form labels, help spacing */
 .inline-label {
-    margin-left: 1em;
+    margin-left: 0.7em;
     margin-right: 0.2em;
 }
 

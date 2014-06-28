@@ -103,6 +103,8 @@ class PredictForm(forms.Form):
 
     # {{{ Constructor
     def __init__(self, request=None):
+        self.messages = []
+ 
         if request is not None:
             super(PredictForm, self).__init__(request.GET)
         else:

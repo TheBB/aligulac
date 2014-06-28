@@ -10,6 +10,14 @@ This is the template for the event manager admin page. It's called from ratings.
 
 {% block title %}{% trans "Event manager" %}{% endblock %}
 
+{% block postscript %}
+  <script type="text/javascript">
+   $(document).ready(function () {
+     $('.tree-toggle').click(function () { $(this).parent().parent().next('.subtree').toggle(100); return false; });
+   });
+  </script>
+{% endblock %}
+
 {% block modals %}
   {% if adm %}
     <div class="modal fade" id="md-eventmgr" tabindex="-1" role="dialog" aria-labelledby="md-eventmgr-label"
@@ -61,10 +69,6 @@ This is the template for the event manager admin page. It's called from ratings.
 
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
-      <div class="text-center" id="showguide">
-        <button style="margin: 2em;" class="btn btn-info" onclick="$('#guide').collapse(); $('#showguide').hide(); return false;">{% trans "Show guide" %}</button>
-      </div>
-
       <div class="collapse" id="guide">
         <p>{% blocktrans %}The events are organized in a tree, loosely hierarchical with organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so on. There are no hard rules.{% endblocktrans %}</p>
 
@@ -90,6 +94,18 @@ This is the template for the event manager admin page. It's called from ratings.
   </div>
 
   <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <p>
+        <button class="btn btn-primary pull-right" style="margin: 0.4em;"
+                onclick="$('input[id=paremt_id_field]').val('-1'); $('#parent_name').html('Root (N/a)'); $('#md-eventmgr').modal();">
+          {% trans "Add root event" %}
+        </button>
+        <button style="margin: 0.4em;" class="btn btn-info pull-right" id="showguide"
+                onclick="$('#guide').collapse(); $('#showguide').toggle();">
+          {% trans "Show guide" %}
+        </button
+      </p>
+    </div>
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
       <ul class="list-group">
         {% for e in tree %}
@@ -123,20 +139,10 @@ This is the template for the event manager admin page. It's called from ratings.
           {% elif e.inc < 0 %}
               {{ e.inc|closedivs|safe }}
           {% endif %}
-
         {% endfor %}
       </ul>
-            </div>
     </div>
+  </div>
 
-    <script type="text/javascript">
-     $(document).ready(function () {
-       $('.tree-toggle').click(function () { $(this).parent().parent().next('.subtree').toggle(100); return false; });
-     });
-    </script>
-
-    <p>
-      <a href="#" onclick="$('#parent_name').html('Root (N/A)'); $('#parent_id_field')[0].value = '-1'; $('#id_type')[0].selectedIndex = 0; $('#addevent').show(); return false;">{% trans "Add root event" %}</a>.
-    </p>
 
 {% endblock %}

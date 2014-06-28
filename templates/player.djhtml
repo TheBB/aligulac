@@ -49,6 +49,183 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% block title %}{{ player.tag }}{% endblock %}
 
+{% block postscript %}
+  {% if charts %}
+    <script type="text/javascript">
+     $(document).ready(function() {
+       var chart = new Highcharts.Chart({
+         chart: {
+           renderTo: 'chart',
+           type: 'spline',
+           zoomType: 'xy',
+           style: {
+             fontFamily: 'Roboto, sans-serif'
+           }
+         },
+         credits: {
+           enabled: false
+         },
+         title: {
+           text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
+         },
+         subtitle: {
+           text: '{% trans "Click and drag to zoom" %}'
+         },
+         xAxis: {
+           type: 'datetime',
+           plotLines: [
+             {% for p in patches %}
+             {
+               value: {{ p.0|milliseconds }},
+               color: '#cccccc',
+               width: 2,
+               label: {
+                 text: '{{ p.1 }}',
+                 verticalAlign: 'bottom',
+                 textAlign: 'right',
+                 y: -2,
+                 style: {
+                   fontSize: '0.8em',
+                 }
+               }
+             },
+             {% endfor %}]
+         },
+         yAxis: [{
+           title: {
+             text: '{% trans "Rating" %}'
+           }
+         }, {
+           opposite: true,
+           title: {
+             text: '{% trans "Games" %}'
+           }
+         }],
+         tooltip: {
+           xDateFormat: '%B %e, %Y'
+         },
+         plotOptions: {
+           series: {
+             point: {
+               events: {
+                 click: function() {
+                   if (this.hasOwnProperty('url'))
+                   window.location.href = this.url;
+                 }
+               }
+             },
+             marker: {
+               enabled: false,
+               symbol: 'circle'
+             }
+           },
+         },
+         tooltip: {
+           formatter: function () {
+             return this.point.name;
+           }
+         },
+         series: [{
+           name: '{% trans "Games" %}',
+           color: 'rgba(140,140,140,0.4)',
+           lineWidth: 5,
+           borderWidth: 0,
+           enableMouseTracking: false,
+           yAxis: 1,
+           type: 'column',
+           data: [{% for r in ratings %} {
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.ngames }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Protoss" %}',
+           color: '#00dd00',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Terran" %}',
+           color: '#0000dd',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Zerg" %}',
+           color: '#dd0000',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
+                                },{% endfor %}]
+         }, {
+           {% comment %}Translators: General rating{% endcomment %}
+           name: '{% trans "General" %}',
+           color: '#000000',
+           lineWidth: 3,
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|ratscale }}
+                                },{% endfor %}]
+         }, {% if stories %}
+                  {
+           {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
+           name: '{% trans "Stories" %}',
+           type: 'scatter',
+           color: '#ffaa00',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for s in stories %}{% if not s.skip %} {
+             name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
+             url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
+             x: {{ s.date|milliseconds }},
+             y: {{ s.rating|ratscale }}
+                                },{% endif %}{% endfor %}]
+         }, {% endif %}{% if teampoints %}
+                  {
+           name: '{% trans "Team switches" %}',
+           type: 'scatter',
+           color: '#FF0000',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for t in teampoints %} {
+             name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
+             x: {{ t.date|milliseconds }},
+             y: {{ t.rating|ratscale }}
+                                },{% endfor %}]
+         } {% endif %}]
+       });
+     });
+    </script>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 
   <div class="row">
@@ -433,18 +610,18 @@ This is the template for the main player page, called from ratings.views.player.
               <tr class="small">
                 <td class="text-right ibox-left">{% trans "Rank" %}</td>
                 <td>
-                  <a href="/periods/{{ pid }}/">
+                  <a href="/periods/{{ pid }}/?page={{ player.world_rank_page }}">
                     {% comment %}Translators: World rank.{% endcomment %}
                     {% blocktrans with rank=player.world_rank %}#{{rank}} World{% endblocktrans %}
                   </a>
                   {% if player.country != "KR" %}
-                    <br><a href="/periods/{{ pid }}/?nats=foreigners">
+                    <br><a href="/periods/{{ pid }}/?nats=foreigners&page={{ player.foreigner_rank_page }}">
                       {% comment %}Translators: Rank among non-Koreans.{% endcomment %}
                       {% blocktrans with rank=player.foreigner_rank %}#{{rank}} Non-Korean{% endblocktrans %}
                     </a>
                   {% endif %}
                   {% if player.country %}
-                    <br><a href="/periods/{{ pid }}/?nats={{ player.country }}">
+                    <br><a href="/periods/{{ pid }}/?nats={{ player.country }}&page={{ player.country_rank_page }}">
                       {% comment %}Translators: Rank in a country.{% endcomment %}
                       {% blocktrans with rank=player.country_rank %}#{{rank}} {{ countryfull }}{% endblocktrans %}
                     </a>
@@ -541,178 +718,6 @@ This is the template for the main player page, called from ratings.views.player.
   </div>
 
   {% if charts %}
-    <script type="text/javascript">
-     $(document).ready(function() {
-       var chart = new Highcharts.Chart({
-         chart: {
-           renderTo: 'chart',
-           type: 'spline',
-           zoomType: 'xy',
-           style: {
-             fontFamily: 'Roboto, sans-serif'
-           }
-         },
-         credits: {
-           enabled: false
-         },
-         title: {
-           text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
-         },
-         subtitle: {
-           text: '{% trans "Click and drag to zoom" %}'
-         },
-         xAxis: {
-           type: 'datetime',
-           plotLines: [
-             {% for p in patches %}
-             {
-               value: {{ p.0|milliseconds }},
-               color: '#cccccc',
-               width: 2,
-               label: {
-                 text: '{{ p.1 }}',
-                 verticalAlign: 'bottom',
-                 textAlign: 'right',
-                 y: -2,
-                 style: {
-                   fontSize: '0.8em',
-                 }
-               }
-             },
-             {% endfor %}]
-         },
-         yAxis: [{
-           title: {
-             text: '{% trans "Rating" %}'
-           }
-         }, {
-           opposite: true,
-           title: {
-             text: '{% trans "Games" %}'
-           }
-         }],
-         tooltip: {
-           xDateFormat: '%B %e, %Y'
-         },
-         plotOptions: {
-           series: {
-             point: {
-               events: {
-                 click: function() {
-                   if (this.hasOwnProperty('url'))
-                   window.location.href = this.url;
-                 }
-               }
-             },
-             marker: {
-               enabled: false,
-               symbol: 'circle'
-             }
-           },
-         },
-         tooltip: {
-           formatter: function () {
-             return this.point.name;
-           }
-         },
-         series: [{
-           name: '{% trans "Games" %}',
-           color: 'rgba(140,140,140,0.4)',
-           lineWidth: 5,
-           borderWidth: 0,
-           enableMouseTracking: false,
-           yAxis: 1,
-           type: 'column',
-           data: [{% for r in ratings %} {
-             x: {{ r.period.end|milliseconds }},
-             y: {{ r.ngames }}
-                                },{% endfor %}]
-         }, {
-           name: '{% trans "vs. Protoss" %}',
-           color: '#00dd00',
-           lineWidth: 1,
-           dashStyle: 'Dash',
-           enableMouseTracking: false,
-           yAxis: 0,
-           data: [{% for r in ratings %} {
-             name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
-             x: {{ r.period.end|milliseconds }},
-             y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
-                                },{% endfor %}]
-         }, {
-           name: '{% trans "vs. Terran" %}',
-           color: '#0000dd',
-           lineWidth: 1,
-           dashStyle: 'Dash',
-           enableMouseTracking: false,
-           yAxis: 0,
-           data: [{% for r in ratings %} {
-             name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
-             x: {{ r.period.end|milliseconds }},
-             y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
-                                },{% endfor %}]
-         }, {
-           name: '{% trans "vs. Zerg" %}',
-           color: '#dd0000',
-           lineWidth: 1,
-           dashStyle: 'Dash',
-           enableMouseTracking: false,
-           yAxis: 0,
-           data: [{% for r in ratings %} {
-             name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
-             x: {{ r.period.end|milliseconds }},
-             y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
-                                },{% endfor %}]
-         }, {
-           {% comment %}Translators: General rating{% endcomment %}
-           name: '{% trans "General" %}',
-           color: '#000000',
-           lineWidth: 3,
-           enableMouseTracking: false,
-           yAxis: 0,
-           data: [{% for r in ratings %} {
-             name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
-             x: {{ r.period.end|milliseconds }},
-             y: {{ r.bf_rating|ratscale }}
-                                },{% endfor %}]
-         }, {% if stories %}
-                  {
-           {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
-           name: '{% trans "Stories" %}',
-           type: 'scatter',
-           color: '#ffaa00',
-           yAxis: 0,
-           marker: {
-             enabled: true,
-             symbol: 'circle',
-             radius: 5
-           },
-           data: [{% for s in stories %}{% if not s.skip %} {
-             name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
-             url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
-             x: {{ s.date|milliseconds }},
-             y: {{ s.rating|ratscale }}
-                                },{% endif %}{% endfor %}]
-         }, {% endif %}{% if teampoints %}
-                  {
-           name: '{% trans "Team switches" %}',
-           type: 'scatter',
-           color: '#FF0000',
-           yAxis: 0,
-           marker: {
-             enabled: true,
-             symbol: 'circle',
-             radius: 5
-           },
-           data: [{% for t in teampoints %} {
-             name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
-             x: {{ t.date|milliseconds }},
-             y: {{ t.rating|ratscale }}
-                                },{% endfor %}]
-         } {% endif %}]
-       });
-     });
-    </script>
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div id="chart"></div>

@@ -31,11 +31,11 @@ In general, if you're trying to figure out how this works, may God have mercy on
 
 {% if lm_predict %}
   <script type="text/javascript">
-   function lm_toggle_visibility(id) {
+   var lm_toggle_visibility = function (id) {
      $("#fix" + id).toggle();
      $("#inp" + id).toggle();
      $("#" + id + "_1").focus();
-   }
+   };
   </script>
 {% endif %}
 
@@ -43,7 +43,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
 <div class="row" {% if lm_id %}id="{{lm_id}}"{% endif %}>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="table-responsive">
-      <table class="table table-striped table-hover">
+      <table class="table table-hover">
 {% endif %}
 
         {% if lm_header == "info" %}
@@ -96,7 +96,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                       <a href="#" onclick="$('.match-{{m.match.event_fullpath|smallhash}}').prop('checked', false); return false;">{% trans "unchk" %}</a>
                     {% endif %}
 
-                    <span class="text-muted">{% if m.eventcount %}({{ m.eventcount }}){% endif %}</span>
+                    <span class="text-muted small">{% if m.eventcount %}({{ m.eventcount }}){% endif %}</span>
                   </th>
                 </tr>
               </thead>

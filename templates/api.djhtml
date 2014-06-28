@@ -65,15 +65,15 @@
       <p>{% blocktrans with uri="/api/v1/" %}The API is for the most part self-documenting. The root URI is <code>{{uri}}</code>. Requests to this URI will return a JSON object describing the available resources and their root URIs, e.g.{% endblocktrans %}</p>
 
       <pre>{
-        "period": {
+    "period": {
         "list_endpoint": "/api/v1/period/",
         "schema": "/api/v1/period/schema/"
-        },
-        "player" : {
+    },
+    "player" : {
         "list_endpoint": "/api/v1/player/",
         "schema": "/api/v1/player/schema/"
-        }
-        }</pre>
+    }
+}</pre>
 
       <p>{% blocktrans with json="<code>?format=json</code>" %}<strong>NOTE:</strong> For making requests in the browser, please append {{json}} to the URI.{% endblocktrans %}</p>
 
@@ -200,22 +200,22 @@
       <p>{% trans "Current ratings are delivered together with player objects, so this will suffice:" %}</p>
 
       <pre>/api/v1/player/?current_rating__isnull=false
-        &amp;current_rating__decay__lt=4
-        &amp;order_by=-current_rating__rating
-        &amp;limit=10</pre>
+               &amp;current_rating__decay__lt=4
+               &amp;order_by=-current_rating__rating
+               &amp;limit=10</pre>
 
       <p>{% blocktrans %}Null values come before non-null values, so we must filter out the null ratings first. The filter on <code>decay</code> is to only select active players. Alternatively, for a cleaner method, just request for ratings directly.{% endblocktrans %}</p>
 
       <pre>/api/v1/rating/?period=95
-        &amp;decay__lt=4
-        &amp;order_by=-rating
-        &amp;limit=10</pre>
+               &amp;decay__lt=4
+               &amp;order_by=-rating
+               &amp;limit=10</pre>
 
       <p>{% blocktrans %}Note that in this case you have to query for the period you want. There is an alias for <code>rating</code> called <code>activerating</code> which automatically filters away inactive ratings, but otherwise works the same way. So you could use:{% endblocktrans %}</p>
 
       <pre>/api/v1/activerating/?period=95
-        &amp;order_by=-rating
-        &amp;limit=10</pre>
+                     &amp;order_by=-rating
+                     &amp;limit=10</pre>
 
       <h3>{% trans "Filtering by event" %}</h3>
 
@@ -236,7 +236,7 @@
       <p>{% blocktrans %}This is also available for event objects, so to get all children and grandchildren of WCS 2014 you can use:{% endblocktrans %}</p>
 
       <pre>/api/v1/event/?uplink__parent=23398
-        &amp;distance__range=1,2</pre>
+              &amp;distance__range=1,2</pre>
 
       <p>{% blocktrans %}For these meta-relations you can use the following filters:{% endblocktrans %}</p>
 

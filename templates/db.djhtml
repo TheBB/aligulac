@@ -145,10 +145,10 @@ dump. Called from aligulac.views.db.
       {% else %}
         <p>
           {% with dump="aligulac.sql"|static dumpmb=megabytes|floatformat:1 %}
-            {% with gzdump="aligulac.sql.gz"|static gzdumpmb=gz_megabytes|floatformat:1 %}
-              {% with datetime=modified|cdate:_('F jS, Y, H:i e') tz=modified|date:"O" %}
-                {% blocktrans %}You can download a PostgreSQL dump <a href="{{dump}}">here</a> ({{dumpmb}} MiB) or <a href="{{gzdump}}">here</a> ({{gzdumpmb}} MiB gzipped), current as of {{datetime}} (UTC {{tz}}). It is free to use for non-commercial purposes if you credit this website when doing so.{% endblocktrans %}
-              {% endwith %} {% endwith %} {% endwith %}
+          {% with gzdump="aligulac.sql.gz"|static gzdumpmb=gz_megabytes|floatformat:1 %}
+          {% with datetime=modified|cdate:_('F jS, Y, H:i e') tz=modified|date:"O" %}
+            {% blocktrans %}You can download a PostgreSQL dump <a href="{{dump}}">here</a> ({{dumpmb}} MiB) or <a href="{{gzdump}}">here</a> ({{gzdumpmb}} MiB gzipped), current as of {{datetime}} (UTC {{tz}}). It is free to use for non-commercial purposes if you credit this website when doing so.{% endblocktrans %}
+          {% endwith %} {% endwith %} {% endwith %}
         </p> 
 
         <p>{% blocktrans %}The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump (primarily involving user accounts). Everything given below is in terms of <strong>PostgreSQL standards</strong>.{% endblocktrans %}</p>
@@ -176,8 +176,8 @@ dump. Called from aligulac.views.db.
             </table>
           </div>
         {% endfor %}
+      {% endif %}
     </div>
   </div>
 
-      {% endif %}
 {% endblock %}

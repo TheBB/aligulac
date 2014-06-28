@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Django settings for aligulac project.
 
@@ -196,3 +198,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = local.TEMPLATE_DIRS
+
+SHOW_PER_LIST_PAGE = 40

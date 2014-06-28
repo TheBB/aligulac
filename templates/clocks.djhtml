@@ -9,14 +9,16 @@ Number of days since.
 
 {% block title %}{% trans "Days since..." %}{% endblock %}
 
-{% block content %}
+{% block postscript %}
+  <script type="text/javascript">
+   var clocks_toggle_more = function(e) {
+     $(e).next().toggle();
+     $(e).find(".clock-toggle").toggleClass("right-caret").toggleClass("down-caret");
+   };
+  </script>
+{% endblock %}
 
-<script>
- var clocks_toggle_more = function(e) {
-   $(e).next().toggle();
-   $(e).find(".clock-toggle").toggleClass("right-caret").toggleClass("down-caret");
- };
-</script>
+{% block content %}
 
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -50,7 +52,7 @@ Number of days since.
             {% if clock.type == "match" %}
               <tr style="display: none;">
                 <td colspan="3" style="padding: 0;">
-                  <table class="table table-hover table-striped" style="margin: 0;">
+                  <table class="table table-hover" style="margin: 0;">
                     {% include "matchlist.djhtml" with lm_list=clock.extra lm_adm=0 lm_header="partial" lm_notable=1 %}
                   </table>
                 </td>

@@ -1,6 +1,16 @@
 {% comment %}
 This template defines both the main site layout and the front page. It's extended by all the other templates.
 Changes here will generally be visible on the whole site.
+
+To use, you should define the following blocks:
+
+- title: Goes in the head -> title tag.
+- content: Main content block. You have to make <div class="row"> in the extending template.
+- modals: Modal windows go here, to prevent them being styled by parent elements.
+- prescript: Javascript that should be executed before the page content. This is executed BEFORE jquery
+             loads, so you cannot use it, not even $(document).ready(...). If you think you need to use
+             prescript instead of postscript, think again.
+- postscript: Javascript that should be executed after the page content and all other scripts.
 {% endcomment %}
 
 {% load ratings_extras %}
@@ -8,213 +18,221 @@ Changes here will generally be visible on the whole site.
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Aligulac{% endblock %}</title>
-        <link rel="stylesheet" href="{{"bootstrap.min"|css}}" type="text/css">
-        <link rel="stylesheet" href="{{"jquery-ui.min"|css}}" type="text/css">
-        <link rel="stylesheet" href="{{"aligulac-theme"|css}}" type="text/css">
-        <script type="text/javascript" src="{{"jquery-1.10.2.min"|js}}"></script>
-        <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-        <script type="text/css">
-         @font-face {
-           font-family: 'Glyphicons Halflings';
-           src: url('{{"glyphicons-halflings-regular.eot"|fonts}}');
-           src: url('{{"glyphicons-halflings-regular.eot?#iefix"|fonts}}') format('embedded-opentype'), url('{{"glyphicons-halflings-regular.woff"|fonts}}') format('woff'), url('{{"glyphicons-halflings-regular.ttf"|fonts}}') format('truetype'), url('{{"glyphicons-halflings-regular.svg#glyphicons_halflingsregular"|fonts}}') format('svg');
-         }
-        </script>
-        <script type="text/javascript">
-         var global_player_autocomplete_allow_byes = false;
-        </script>
-    </head>
-    <body>
-        <!-- Modals, if any -->
-        {% block modals %}{% endblock %}
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Aligulac{% endblock %}</title>
+    <link rel="stylesheet" href="{{"bootstrap.min"|css}}" type="text/css">
+    <link rel="stylesheet" href="{{"jquery-ui.min"|css}}" type="text/css">
+    <link rel="stylesheet" href="{{"aligulac-theme"|css}}" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <script type="text/css">
+     @font-face {
+       font-family: 'Glyphicons Halflings';
+       src: url('{{"glyphicons-halflings-regular.eot"|fonts}}');
+       src: url('{{"glyphicons-halflings-regular.eot?#iefix"|fonts}}') format('embedded-opentype'), url('{{"glyphicons-halflings-regular.woff"|fonts}}') format('woff'), url('{{"glyphicons-halflings-regular.ttf"|fonts}}') format('truetype'), url('{{"glyphicons-halflings-regular.svg#glyphicons_halflingsregular"|fonts}}') format('svg');
+     }
+    </script>
+    <script type="text/javascript">
+     var global_player_autocomplete_allow_byes = false;
+    </script>
 
-        <!-- Heading and subheading -->
-        <div class="container">
-            <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
-            {% if debug %}
-                <p class="subheading" style="color: red; font-weight: bold;">
-                    <span class="visible-lg">{% trans "DEVELOPMENT SERVER" %} (LARGE)</span>
-                    <span class="visible-md">{% trans "DEVELOPMENT SERVER" %} (MEDIUM)</span>
-                    <span class="visible-sm">{% trans "DEVELOPMENT SERVER" %} (SMALL)</span>
-                    <span class="visible-xs">{% trans "DEVELOPMENT SERVER" %} (EXTRA SMALL)</span>
-                </p>
-            {% else %}
-                <p class="subheading text-muted">{% trans "StarCraft 2 Progaming Statistics and Predictions" %}</p>
-            {% endif %}
+    <!-- Put special scripts here that should be loaded before the rest of the document -->
+    {% block prescript %}{% endblock %}
+  </head>
+  <body>
+    <!-- Modals, if any -->
+    {% block modals %}{% endblock %}
+
+    <!-- Heading and subheading -->
+    <div class="container">
+      <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
+      {% if debug %}
+        <p class="subheading" style="color: red; font-weight: bold;">
+          <span class="visible-lg">{% trans "DEVELOPMENT SERVER" %} (LARGE)</span>
+          <span class="visible-md">{% trans "DEVELOPMENT SERVER" %} (MEDIUM)</span>
+          <span class="visible-sm">{% trans "DEVELOPMENT SERVER" %} (SMALL)</span>
+          <span class="visible-xs">{% trans "DEVELOPMENT SERVER" %} (EXTRA SMALL)</span>
+        </p>
+      {% else %}
+        <p class="subheading text-muted">{% trans "StarCraft 2 Progaming Statistics and Predictions" %}</p>
+      {% endif %}
+    </div>
+
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-default" role="navigaton">
+      <!-- For accessibility purposes: screen readers and small devices -->
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-menu">
+            <span class="sr-only">Toggle navigaton</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
         </div>
+      </div>
 
-        <!-- Navigation bar -->
-        <nav class="navbar navbar-default" role="navigaton">
-          <!-- For accessibility purposes: screen readers and small devices -->
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-menu">
-                <span class="sr-only">Toggle navigaton</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
-          </div>
+      <!-- Actual navigation bar -->
+      <div class="collapse navbar-collapse" id="main-menu">
+        <ul class="nav navbar-nav">
+          {% for main in menu %}
+            <li class="dropdown {% if curpage == main.id %}active{% endif %}">
+              <a href="{{ main.url }}" class="dropdown-toggle" data-toggle="dropdown">
+                {{ main.name }} <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                {% for subid, subname, suburl in main.submenu %}
+                  <li {% if cursubpage == subid and curpage == main.id %}class="active"{% endif %}>
+                    <a href="{{ suburl }}">{{ subname }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
 
-          <!-- Actual navigation bar -->
-          <div class="collapse navbar-collapse" id="main-menu">
-            <ul class="nav navbar-nav">
-              {% for main in menu %}
-                <li class="dropdown {% if curpage == main.id %}active{% endif %}">
-                  <a href="{{ main.url }}" class="dropdown-toggle" data-toggle="dropdown">
-                    {{ main.name }} <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    {% for subid, subname, suburl in main.submenu %}
-                      <li {% if cursubpage == subid and curpage == main.id %}class="active"{% endif %}>
-                        <a href="{{ suburl }}">{{ subname }}</a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-              {% endfor %}
-            </ul>
-          </div>
-        </nav>
-
-        <div class="container">
-            <!-- Language picker and search -->
-            <div class="row">
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-muted">
-                    {% trans "Language" %}:
-                    <a href="/language/"><img src="{{ lang|img:"flags" }}"></a>
-                </div>
-                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">
-                    <form class="form-inline" role="form" action="/search/" method="get">
-                        <div class="form-group">
-                            <input class="form-control input-sm" type="text" name="q" id="search_box" placeholder="{% trans "Find player, team or event" %}" style="width: 30em;">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Main content -->
-            {% block content %}
-                <h2>{% trans "Current top 10" %}</h2>
-                {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
-
-                {% if curp.is_preview %}
-                    <div class="row">
-                        <p class="pull-right text-muted">
-                            {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}
-                        </p>
-                    </div>
-                {% endif %}
-
-                {% include "messages.djhtml" %}
-                {% include "blogposts.djhtml" %}
-            {% endblock %}
-
-            <!-- Footer -->
-            <hr>
-            <div class="row">
-                <div class="col-xs-12">
-                    <footer class="text-muted">
-                        {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
-                        {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
-                        {% with a3="<a target=\"_blank\" href=\"http://www.teamliquid.net/forum/starcraft-2/404035-aligulaccom-changelog-and-feedback-thread\">" %}
-                            <p>{% blocktrans %}Find us on {{a1}}Twitter</a>, {{a2}}GitHub</a> and {{a3}}Team Liquid</a>.{% endblocktrans %}</p>
-                        {% endwith %}{% endwith %}{% endwith %}
-
-                        {% with a1="<a target=\"_blank\" href=\"http://www.djangoproject.com/\">" %}
-                        {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
-                        {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
-                        {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
-                            <p>{% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}</p>
-                        {% endwith %}{% endwith %}{% endwith %}{% endwith %}
-
-                        {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
-                        {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
-                            <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
-                        {% endwith %}{% endwith %}
-
-                        <a href="#" onclick="gen_short('{{cur_path}}'); return false;" class="btn btn-default" id="gen_short">
-                            {% trans "Generate short URL for this page" %}
-                        </a>
-                        <span id="disp_short"></span>
-                    </footer>
-                </div>
-            </div>
+    <div class="container">
+      <!-- Language picker and search -->
+      <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-muted">
+          {% trans "Language" %}:
+          <a href="/language/"><img src="{{ lang|img:"flags" }}"></a>
         </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">
+          <form class="form-inline" role="form" action="/search/" method="get">
+            <div class="form-group">
+              <input class="form-control input-sm" type="text" name="q" id="search_box" placeholder="{% trans "Find player, team or event" %}" style="width: 30em;">
+            </div>
+          </form>
+        </div>
+      </div>
 
-        <script type="text/javascript" src="{{"jquery-ui.min"|js}}"></script>
-        <script type="text/javascript" src="{{"jquery.ui.datepicker-"|add:lang|js}}"></script>
-        <script type="text/javascript" src="{{"jquery.tagsInput"|js}}"></script>
-        <script type="text/javascript" src="{{"bootstrap.min"|js}}"></script>
-        <script type="text/javascript">
-         var flags_dir = '{{"flags/"|imgdir}}';
-         var races_dir = '{{"/"|imgdir}}';
-         var autocomp_strings = {
-             'Players': '{% trans "Players" %}',
-             'Teams': '{% trans "Teams" %}',
-             'Events': '{% trans "Events" %}',
-             'hide': '{% trans "hide" %}',
-             'show': '{% trans "show" %}',
-         };
-        </script>
-        {% if charts %}
-          <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-          <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
-          <script type="text/javascript">
-           Highcharts.setOptions({
-             lang: {
-               downloadPNG: '{% trans "Download PNG image" %}',
-               downloadJPEG: '{% trans "Download JPEG image" %}',
-               downloadPDF: '{% trans "Download PDF document" %}',
-               downloadSVG: '{% trans "Download SVG vector image" %}',
-               loading: '{% trans "Loading..." %}',
-               printChart: '{% trans "Print chart" %}',
-               resetZoom: '{% trans "Reset zoom" %}',
-               months: [
-                 '{% trans "January" context "Big first letter" %}',
-                 '{% trans "February" context "Big first letter" %}',
-                 '{% trans "March" context "Big first letter" %}',
-                 '{% trans "April" context "Big first letter" %}',
-                 '{% trans "May" context "Big first letter" %}',
-                 '{% trans "June" context "Big first letter" %}',
-                 '{% trans "July" context "Big first letter" %}',
-                 '{% trans "August" context "Big first letter" %}',
-                 '{% trans "September" context "Big first letter" %}',
-                 '{% trans "October" context "Big first letter" %}',
-                 '{% trans "November" context "Big first letter" %}',
-                 '{% trans "December" context "Big first letter" %}',
-               ],
-               shortMonths: [
-                 '{% trans "Jan" context "Big first letter" %}',
-                 '{% trans "Feb" context "Big first letter" %}',
-                 '{% trans "Mar" context "Big first letter" %}',
-                 '{% trans "Apr" context "Big first letter" %}',
-                 '{% trans "May" context "Big first letter" %}',
-                 '{% trans "Jun" context "Big first letter" %}',
-                 '{% trans "Jul" context "Big first letter" %}',
-                 '{% trans "Aug" context "Big first letter" %}',
-                 '{% trans "Sep" context "Big first letter" %}',
-                 '{% trans "Oct" context "Big first letter" %}',
-                 '{% trans "Nov" context "Big first letter" %}',
-                 '{% trans "Dec" context "Big first letter" %}',
-               ],
-               weekdays: [
-                 '{% trans "Sunday" context "Big first letter" %}',
-                 '{% trans "Monday" context "Big first letter" %}',
-                 '{% trans "Tuesday" context "Big first letter" %}',
-                 '{% trans "Wednesday" context "Big first letter" %}',
-                 '{% trans "Thursday" context "Big first letter" %}',
-                 '{% trans "Friday" context "Big first letter" %}',
-                 '{% trans "Saturday" context "Big first letter" %}'
-               ]
-             }
-           });
-          </script>
+      <!-- Main content -->
+      {% block content %}
+        <h2>{% trans "Current top 10" %}</h2>
+        {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
+        
+        {% if curp.is_preview %}
+          <div class="row">
+            <p class="pull-right text-muted">
+              {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}
+            </p>
+          </div>
         {% endif %}
-        <script type="text/javascript" src="{{"aligulac"|js}}"></script>
-    </body>
+
+        {% include "messages.djhtml" %}
+        {% include "blogposts.djhtml" %}
+      {% endblock %}
+
+      <!-- Footer -->
+      <hr>
+      <div class="row">
+        <div class="col-xs-12">
+          <footer class="text-muted small">
+            {% with a1="<a target=\"_blank\" href=\"http://twitter.com/Sc2Aligulac\">" %}
+            {% with a2="<a target=\"_blank\" href=\"http://github.com/TheBB/aligulac\">" %}
+            {% with a3="<a target=\"_blank\" href=\"http://www.teamliquid.net/forum/starcraft-2/404035-aligulaccom-changelog-and-feedback-thread\">" %}
+              <p>{% blocktrans %}Find us on {{a1}}Twitter</a>, {{a2}}GitHub</a> and {{a3}}Team Liquid</a>.{% endblocktrans %}</p>
+            {% endwith %}{% endwith %}{% endwith %}
+
+            {% with a1="<a target=\"_blank\" href=\"http://www.djangoproject.com/\">" %}
+            {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
+            {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
+            {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
+              <p>{% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}</p>
+            {% endwith %}{% endwith %}{% endwith %}{% endwith %}
+
+            {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}
+            {% with a3="<a target=\"_blank\" href=\"http://highcharts.com/\">" %}
+              <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
+            {% endwith %}{% endwith %}
+
+            <button onclick="gen_short('{{cur_path}}');" class="btn btn-default" id="gen_short">
+              <span class="small text-muted">{% trans "Generate short URL for this page" %}</span>
+            </button>
+
+            <span id="disp_short"></span>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="{{"jquery-1.10.2.min"|js}}"></script>
+    <script type="text/javascript" src="{{"jquery-ui.min"|js}}"></script>
+    <script type="text/javascript" src="{{"jquery.ui.datepicker-"|add:lang|js}}"></script>
+    <script type="text/javascript" src="{{"jquery.tagsInput"|js}}"></script>
+    <script type="text/javascript" src="{{"bootstrap.min"|js}}"></script>
+    <script type="text/javascript">
+     var flags_dir = '{{"flags/"|imgdir}}';
+     var races_dir = '{{"/"|imgdir}}';
+     var autocomp_strings = {
+       'Players': '{% trans "Players" %}',
+       'Teams': '{% trans "Teams" %}',
+       'Events': '{% trans "Events" %}',
+       'hide': '{% trans "hide" %}',
+       'show': '{% trans "show" %}',
+     };
+     $(document).ready(function () { $(".datepicker").datepicker(); });
+    </script>
+    {% if charts %}
+      <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+      <script type="text/javascript" src="http://code.highcharts.com/modules/exporting.js"></script>
+      <script type="text/javascript">
+       Highcharts.setOptions({
+         lang: {
+           downloadPNG: '{% trans "Download PNG image" %}',
+           downloadJPEG: '{% trans "Download JPEG image" %}',
+           downloadPDF: '{% trans "Download PDF document" %}',
+           downloadSVG: '{% trans "Download SVG vector image" %}',
+           loading: '{% trans "Loading..." %}',
+           printChart: '{% trans "Print chart" %}',
+           resetZoom: '{% trans "Reset zoom" %}',
+           months: [
+             '{% trans "January" context "Big first letter" %}',
+             '{% trans "February" context "Big first letter" %}',
+             '{% trans "March" context "Big first letter" %}',
+             '{% trans "April" context "Big first letter" %}',
+             '{% trans "May" context "Big first letter" %}',
+             '{% trans "June" context "Big first letter" %}',
+             '{% trans "July" context "Big first letter" %}',
+             '{% trans "August" context "Big first letter" %}',
+             '{% trans "September" context "Big first letter" %}',
+             '{% trans "October" context "Big first letter" %}',
+             '{% trans "November" context "Big first letter" %}',
+             '{% trans "December" context "Big first letter" %}',
+           ],
+           shortMonths: [
+             '{% trans "Jan" context "Big first letter" %}',
+             '{% trans "Feb" context "Big first letter" %}',
+             '{% trans "Mar" context "Big first letter" %}',
+             '{% trans "Apr" context "Big first letter" %}',
+             '{% trans "May" context "Big first letter" %}',
+             '{% trans "Jun" context "Big first letter" %}',
+             '{% trans "Jul" context "Big first letter" %}',
+             '{% trans "Aug" context "Big first letter" %}',
+             '{% trans "Sep" context "Big first letter" %}',
+             '{% trans "Oct" context "Big first letter" %}',
+             '{% trans "Nov" context "Big first letter" %}',
+             '{% trans "Dec" context "Big first letter" %}',
+           ],
+           weekdays: [
+             '{% trans "Sunday" context "Big first letter" %}',
+             '{% trans "Monday" context "Big first letter" %}',
+             '{% trans "Tuesday" context "Big first letter" %}',
+             '{% trans "Wednesday" context "Big first letter" %}',
+             '{% trans "Thursday" context "Big first letter" %}',
+             '{% trans "Friday" context "Big first letter" %}',
+             '{% trans "Saturday" context "Big first letter" %}'
+           ]
+         }
+       });
+      </script>
+    {% endif %}
+    <script type="text/javascript" src="{{"aligulac.min"|js}}"></script>
+    
+    <!-- Put special scripts here that should be loaded after the rest of the document -->
+    {% block postscript %}{% endblock %}
+  </body>
 </html>

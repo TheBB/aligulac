@@ -1,7 +1,7 @@
 # {{{ Imports
 import datetime
 from itertools import islice
-from math import sqrt
+from math import sqrt, ceil
 import random
 import re
 import string
@@ -22,7 +22,11 @@ from django.utils.translation import (
     pgettext_lazy
 )
 
-from aligulac.settings import start_rating, INACTIVE_THRESHOLD
+from aligulac.settings import (
+    start_rating, 
+    INACTIVE_THRESHOLD,
+    SHOW_PER_LIST_PAGE
+)
 
 from currency import ExchangeRates
 
@@ -941,9 +945,16 @@ class Player(models.Model):
         self._ranks[country] = c + 1
         return self._ranks[country]
 
+    def rank_page(self, rank_type):
+        return int(ceil(getattr(self, rank_type) / SHOW_PER_LIST_PAGE))
+
     @property
     def world_rank(self):
         return self.get_rank()
+
+    @property
+    def world_rank_page(self):
+        return self.rank_page('world_rank')
 
     @property
     def country_rank(self):
@@ -951,8 +962,16 @@ class Player(models.Model):
             return self.get_rank(self.country)
 
     @property
+    def country_rank_page(self):
+        return self.rank_page('country_rank')
+
+    @property
     def foreigner_rank(self):
         return self.get_rank('foreigners')
+
+    @property
+    def foreigner_rank_page(self):
+        return self.rank_page('foreigner_rank')
 
     # }}}
 

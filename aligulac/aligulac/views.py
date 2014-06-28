@@ -425,8 +425,6 @@ def db(request):
             'gz_megabytes':  stat.st_size / 1048576
         })
 
-    base.update({'title': _('Database status')})
-
     return render_to_response('db.djhtml', base)
 # }}}
 
@@ -480,10 +478,7 @@ def api(request):
     else:
         form = APIKeyForm()
 
-    base.update({
-        'title': _('API documentation'),
-        'form': form,
-    })
+    base.update({'form': form})
 
     return render_to_response('api.djhtml', base)
 # }}}
@@ -516,8 +511,6 @@ def search(request):
         'events':   events,
         'query':    query,
     })
-
-    base.update({'title': _('Search results')})
 
     return render_to_response('search.djhtml', base)
 # }}}
@@ -585,7 +578,6 @@ def login_view(request):
     base = base_ctx(request=request)
     login_message(base)
 
-    base.update({"title": _("Login")})
     return render_to_response('login.djhtml', base)
 
 def logout_view(request):
@@ -620,8 +612,6 @@ def changepwd(request):
         Message(_('The password for %s was successfully changed.') % request.user.username, type=Message.SUCCESS)
     )
 
-    base.update({"title": _("Change password")})
-
     return render_to_response('changepwd.djhtml', base)
 # }}}
 
@@ -629,12 +619,10 @@ def changepwd(request):
 @cache_page
 def h404(request):
     base = base_ctx(request=request)
-    base.update({"title": _("404: Not found")})
     return HttpResponseNotFound(render_to_string('404.djhtml', base))
 
 @cache_page
 def h500(request):
     base = base_ctx(request=request)
-    base.update({"title": _("500: Internal Server Error")})
     return HttpResponseNotFound(render_to_string('500.djhtml', base))
 # }}}

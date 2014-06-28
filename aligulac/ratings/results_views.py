@@ -798,8 +798,6 @@ def results(request):
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True,
                                       eventcount=True, add_links=add_links)
 
-    base.update({"title": cdate(day, _("F jS, Y"))})
-
     return render_to_response('results.djhtml', base)
 # }}}
 
@@ -931,8 +929,6 @@ def events(request, event_id=None):
     base['tot_mirror'] = base['pvp_games'] + base['tvt_games'] + base['zvz_games']
     # }}}
 
-    base.update({"title": event})
-
     return render_to_response('eventres.djhtml', base)
 # }}}
 
@@ -962,8 +958,6 @@ def search(request):
         searchform = SearchForm()
     base['searchform'] = searchform
     # }}}
-
-    base.update({"title": _("Search results")})
 
     return render_to_response('results_search.djhtml', base, context_instance=RequestContext(request))
 # }}}

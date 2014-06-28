@@ -9,27 +9,17 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% block title %}{% trans "Balance report" %}{% endblock %}
 
-{% block content %}
-  
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
-      <h2>{% trans "Balance report" %}</h2>
-
-      <p>{% blocktrans %}The following chart show the historical month-by-month winrates for each non-mirror matchup in the database.{% endblocktrans %}</p>
-
-      <p>{% blocktrans %}Note that this yields information about <em>metagame</em> balance near the <em>top of the skill ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout the whole player population.{% endblocktrans %}</p>
-
-      <p>{% blocktrans %}The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up, that means Protoss is doing well and Terran poorly.{% endblocktrans %}</p>
-    </div>
-  </div>
-
+{% block postscript %}
   <script type="text/javascript">
    $(document).ready(function() { 
      var chart1 = new Highcharts.Chart({
        chart: {
          renderTo: 'chart-rates',
          type: 'spline',
-         zoomType: 'xy'
+         zoomType: 'xy',
+         style: {
+           fontFamily: 'Roboto, sans-serif'
+         }
        },
        credits: {
          enabled: false
@@ -109,20 +99,6 @@ This is the template for the main player page, called from ratings.views.player.
      });
    });
   </script>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <div id="chart-rates"></div>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
-      <p>{% blocktrans %}The performance difference chart shows the <em>approximate</em> difference between <em>actual performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if, averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating was equal to 100 less than that of their opponents), but they performed as if they had a mean rating difference of +100 (about 54.5% winrate), then that amounts to a performance difference of <strong>+200</strong>, which is to be interpreted as that Terran players overall performed 200 points better than expected.{% endblocktrans %}</p>
-
-      <p>{% blocktrans %}This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the players, this chart will tend toward equilibrium, even if balance never changes.{% endblocktrans %}</p>
-    </div>
-  </div>
-
   <script type="text/javascript">
    $(document).ready(function() { 
      var chart1 = new Highcharts.Chart({
@@ -207,6 +183,36 @@ This is the template for the main player page, called from ratings.views.player.
      });
    });
   </script>
+{% endblock %}
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Balance report" %}</h2>
+
+      <p>{% blocktrans %}The following chart show the historical month-by-month winrates for each non-mirror matchup in the database.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}Note that this yields information about <em>metagame</em> balance near the <em>top of the skill ladder</em>, and is not to be confused with (although likely correlated to) actual game balance throughout the whole player population.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}The winrate is shown with respect to the race listed first, so if the Protoss vs. Terran graph shoots up, that means Protoss is doing well and Terran poorly.{% endblocktrans %}</p>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div id="chart-rates"></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
+      <p>{% blocktrans %}The performance difference chart shows the <em>approximate</em> difference between <em>actual performance</em> as evidenced by results and <em>predicted performance</em> by rating. For example, if, averaged over a whole month, all Terrans had mean rating difference -100 (which is to say, their mean rating was equal to 100 less than that of their opponents), but they performed as if they had a mean rating difference of +100 (about 54.5% winrate), then that amounts to a performance difference of <strong>+200</strong>, which is to be interpreted as that Terran players overall performed 200 points better than expected.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}This chart can avoid some of the problems with the above, which can potentially be influenced by incredibly hot streaks from one or two singularly great players. However, as ratings catch up to the performances of the players, this chart will tend toward equilibrium, even if balance never changes.{% endblocktrans %}</p>
+    </div>
+  </div>
+  
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div id="chart-diff"></div>

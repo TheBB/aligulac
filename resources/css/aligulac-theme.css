@@ -583,3 +583,8 @@ p, li, ul {
     border: none !important;
     height: 42px;
 }
+
+/* Prevent progress bars from linebreaking if too small */
+.progress {
+    white-space: nowrap;
+}

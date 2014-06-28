@@ -111,14 +111,21 @@ To use, you should define the following blocks:
 
       <!-- Main content -->
       {% block content %}
-        <h2>{% trans "Current top 10" %}</h2>
-        {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=1 %}
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+            <h2>{% trans "Current top 10" %}</h2>
+          </div>
+        </div>
+
+        {% include "ratinglist.djhtml" with rl_pos_arrow=1 displayteams=0 rl_small=1 %}
         
         {% if curp.is_preview %}
           <div class="row">
-            <p class="pull-right text-muted">
-              {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}.{% endblocktrans %}
-            </p>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+              <p class="pull-right text-muted">
+                {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
+              </p>
+            </div>
           </div>
         {% endif %}
 

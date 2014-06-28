@@ -19,5 +19,5 @@ def blog(request):
             type=Message.INFO,
         ))
 
-    base['blogposts'] = Post.objects.all()[:10]
+    base['blogposts'] = Post.objects.all()
     return render_to_response('blog.djhtml', base)

@@ -100,7 +100,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endifchanged %}
           {% elif lm_header == "partial" %}
             {% ifchanged m.match.event_partpath %}
@@ -121,9 +121,9 @@ In general, if you're trying to figure out how this works, may God have mercy on
                       {% trans "Unknown event(s)" %}
                     {% endif %}
                   </th>
-                  <th class="text-right lm_right eventheader-right"> 
+                  <th class="text-right lm_right eventheader-right">
                     <a id="lma-{{ m.match_id }}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
-                    
+
                     {% if lm_adm and lm_check %}
                       {% comment %}Translators: Check{% endcomment %}
                       <a href="#" onclick="$('.match-{{m.match.event_partpath|smallhash}}').prop('checked', true); return false;">{% trans "chk" %}</a>
@@ -133,7 +133,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}> 
+              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endifchanged %}
           {% elif lm_header == "custom" %}
             {% ifchanged m.eventtext %}
@@ -176,16 +176,15 @@ In general, if you're trying to figure out how this works, may God have mercy on
                 {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
               </td>
               <td class="lm_pla {% if m.pla.score >= m.plb.score %}winner{% else %}loser{% endif %}" style="vertical-align: middle;">
-                {% if m.pla.id %}<a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{% endif %}
+                {% if m.pla.id %}
+                  <a href="/players/{{ m.pla.id }}-{{ m.pla.tag|urlfilter }}/">{{m.pla.tag}}</a>
+                {% endif %}
                 {% if not m.pla.id and lm_adm %}
                   <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
                     <input type="text" class="form-control" name="match-{{ m.match_id }}-pla"
                            style="text-align: right; display: inline-block; width: auto; veritcal-align: middle;" value="{{m.pla.tag}}">
                   </div>
-                {% else %}
-                  {{ m.pla.tag }}
                 {% endif %}
-                {% if m.pla.id %}</a>{% endif %}
                 {% if m.pla.country %}
                   <img src="{{ m.pla.country|lower|img:"flags" }}" alt="{{ m.pla.country }}">
                 {% endif %}
@@ -219,16 +218,15 @@ In general, if you're trying to figure out how this works, may God have mercy on
                 {% if m.plb.country %}
                   <img src="{{ m.plb.country|lower|img:"flags" }}" alt="{{ m.plb.country }}">
                 {% endif %}
-                {% if m.plb.id %} <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{% endif %}
+                {% if m.plb.id %}
+                  <a href="/players/{{ m.plb.id }}-{{ m.plb.tag|urlfilter }}/">{{m.plb.tag}}</a>
+                {% endif %}
                 {% if not m.plb.id and lm_adm %}
                   <div class="form-group" style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
                     <input type="text" class="form-control" name="match-{{ m.match_id }}-plb"
                            value="{{ m.plb.tag }}" style="display: inline-block; width: auto; vertical-align: middle;">
                   </div>
-                {% else %}
-                    {{ m.plb.tag }}
                 {% endif %}
-                {% if m.plb.id %}</a>{% endif %}
               </td>
               <td class="lm_rtb">
                 {% if m.plb.rating %}{{ m.plb.rating|ratscale }}{% endif %}

@@ -41,7 +41,7 @@ a.blacklink {
 
 a.blacklink:hover {
     text-decoration: none;
-} 
+}
 
 /* Centered navbar */
 @media (min-width: 768px) {
@@ -51,7 +51,7 @@ a.blacklink:hover {
         table-layout: fixed;
         float: none;
     }
-} 
+}
 
 .navbar {
     border-radius: 0;
@@ -251,7 +251,6 @@ body {
 }
 
 .eventheader-mid {
-    font-size: 1.1em;
 }
 
 .eventheader-right {

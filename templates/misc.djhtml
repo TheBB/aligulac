@@ -1,0 +1,19 @@
+{% extends "index.djhtml" %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Miscellaneous statistics" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Miscellaneous statistics" %}</h2>
+
+      {% for page in miscpages %}
+        <h3><a href="{{ page.url }}">{{ page.title }}</a></h3>
+        <p>{{ page.desc }}</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

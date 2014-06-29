@@ -1,0 +1,161 @@
+{% extends "index.djhtml" %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Open events" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+    <h2>{% trans "Open events" %}</h2>
+  </div>
+</div>
+
+{% include "messages.djhtml" %}
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+
+    <p style="margin-top: 2em;">{% blocktrans %}These events have games, which means that they are currently active and have not yet finished.  If the event has finished, please make sure that all matches have been added before closing the event.{% endblocktrans %}</p> 
+
+    <div class="table-responsive">
+      <form method="post" action="/add/open_events/">
+        {% csrf_token %}
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>{% trans "Open events with games" %}</th>
+              <th>{% trans "Last added game" %}</th>
+              <th>{% trans "External links" %}</th>
+              <th class="rl_icon"></th>
+            </tr>
+          </thead>
+          {% for e in open_games %}
+            <tr>
+              <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+              <td>{{e.latest}}</td>
+              <td>
+                {% if e.up_homepage %}
+                  <a href="{{ e.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
+                {% endif %}
+                {% if e.up_tl_thread %}
+                  <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
+                {% endif %}
+                {% if e.up_lp_name %}
+                  <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                {% endif %}
+                {% if e.up_tlpd_id %}
+                  {% for tl, human in e.up_tlpd_db|get_tlpd_list %}
+                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/leagues/{{ e.up_tlpd_id }}" target="_blank">{{ human }}</a>
+                  {% endfor %}
+                {% endif %}
+              </td>
+              <td class="rl_icon"><input type="checkbox" name="open_games_ids" value="{{ event.id }}"></td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="4" class="text-right">
+              <button type="submit" class="btn btn-primary" name="open_games">{% trans "Close events" %}</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+
+    <p style="marign-top: 2em;">{% blocktrans %}These events have no games yet, which means that they are either future events or finished events that are not yet in the database.  In the latter case, feel free to use the external links provided to add the matches to the database and close the event when you are done.{% endblocktrans %}</p>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>{% trans "Open events without games" %}</th>
+            <th>{% trans "External links" %}</th>
+          </tr>
+        </thead>
+        {% for e in open_nogames %}
+          <tr>
+            <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+            <td>
+              {% if e.up_homepage %}
+                <a href="{{ e.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
+              {% endif %}
+              {% if e.up_tl_thread %}
+                <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
+              {% endif %}
+              {% if e.up_lp_name %}
+                <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+              {% endif %}
+              {% if e.up_tlpd_id %}
+                {% for tl, human in e.up_tlpd_db|get_tlpd_list %}
+                  <a href="http://www.teamliquid.net/tlpd/{{ tl }}/leagues/{{ e.up_tlpd_id }}" target="_blank">{{ human }}</a>
+                {% endfor %}
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+
+    <p style="margin-top: 2em">{% trans "These events are closed and have no information on their prize pools yet." %}</p>
+    <ul>
+      <li>{% blocktrans %}If you know the prize pool, visit the event page and add the prize pool information there.{% endblocktrans %}</li>
+      <li>{% blocktrans %}If you know the event has no prize pool, you can mark the event as having no prize pool. Don't just assume that an event has no prize pool just because it is a qualifier, however. Some do!{% endblocktrans %}</li>
+      <li>{% blocktrans %}If you are not sure whether the event has a prize pool or do not have the exact sums, do nothing{% endblocktrans %}</li>
+    </ul>
+
+    <div class="table-responsive">
+      <form method="post" action="/add/open_events/">
+        {% csrf_token %}
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>{% trans "Events with no prize pool" %}</th>
+              <th>{% trans "External links" %}</th>
+              <th class="rl_icon"></th>
+            </tr>
+          </thead>
+          {% for e in pp_events %}
+            <tr>
+              <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+              <td>
+                {% if e.up_homepage %}
+                  <a href="{{ e.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
+                {% endif %}
+                {% if e.up_tl_thread %}
+                  <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
+                {% endif %}
+                {% if e.up_lp_name %}
+                  <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                {% endif %}
+                {% if e.up_tlpd_id %}
+                  {% for tl, human in e.up_tlpd_db|get_tlpd_list %}
+                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/leagues/{{ e.up_tlpd_id }}" target="_blank">{{ human }}</a>
+                  {% endfor %}
+                {% endif %}
+              </td>
+              <td class="rl_icon"><input type="checkbox" name="pp_events_ids" value="{{ event.id }}"></td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="4" class="text-right">
+              <button type="submit" class="btn btn-primary" name="pp_events">{% trans "Marked events have no prize pool" %}</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

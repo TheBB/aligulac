@@ -410,8 +410,9 @@ def add_counts(queryset):
 # - fix_left: Set to a player object if you want that player to be always listed on the left.
 # - ratings: True to display ratings, false if not.
 # - messages: True to display messages, false if not.
-def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True, eventcount=False, add_links=False):
-    if isinstance(matches, QuerySet):
+def display_matches(matches, date=True, fix_left=None, ratings=False, messages=True,
+                    eventcount=False, add_links=False, no_events=False):
+    if isinstance(matches, QuerySet) and not no_events:
         matches = matches.prefetch_related('eventobj__uplink', 'eventobj__uplink__parent')
 
     ret = []
@@ -426,20 +427,20 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             'pla': {
                 'id': m.pla_id,
                 'tag': m.pla.tag if m.pla is not None else m.pla_string,
-                'race': m.rca,
+                'race': m.rca or (m.pla.race if m.pla else None),
                 'country': m.pla.country if m.pla else None,
                 'score': m.sca,
             },
             'plb': {
                 'id': m.plb_id,
                 'tag': m.plb.tag if m.plb is not None else m.plb_string,
-                'race': m.rcb,
+                'race': m.rcb or (m.plb.race if m.plb else None),
                 'country': m.plb.country if m.plb else None,
                 'score': m.scb,
             },
         }
 
-        if eventcount:
+        if eventcount and isinstance(m, Match):
             r['eventcount'] = m.eventobj__match__count
 
         if isinstance(m, Match):

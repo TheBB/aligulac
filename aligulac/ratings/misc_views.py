@@ -52,14 +52,13 @@ from ratings.templatetags.ratings_extras import (
 def home(request):
     ctx = base_ctx('Misc', request=request)
 
-    ctx["title"] = _("Miscellaneous Pages")
     ctx["miscpages"] = (
         { "url": "/misc/balance/",
           "title": _("Balance Report"),
           "desc": _("Charts showing balance in StarCraft II over time.")
         },
         { "url": "/misc/days/",
-          "title": _("Number of days since…"),
+          "title": _("Number of days since..."),
           "desc": _("Page showing the most recent time some things happened.")
         },
         { "url": "/misc/compare/",
@@ -68,15 +67,7 @@ def home(request):
         }
     )
 
-    # http://docs.python.org/3.2/library/itertools.html
-    def grouper(n, iterable, fillvalue=None):
-        "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
-        args = [iter(iterable)] * n
-        return zip_longest(*args, fillvalue=fillvalue)
-
-    ctx["miscpages"] = grouper(2, ctx["miscpages"])
-
-    return render_to_response("misc.html", ctx)
+    return render_to_response("misc.djhtml", ctx)
 
 # {{{ Clocks
 # Format (description, hover_description, queryset, type)
@@ -207,7 +198,6 @@ CLOCKS = [
 def clocks(request):
     ctx = base_ctx('Misc', 'Days Since…', request)
 
-    ctx["title"] = _("Number of days since…")
     ctx["clocks"] = list()
     for desc, alt_desc, q, t in CLOCKS:
         obj = None
@@ -251,7 +241,7 @@ def clocks(request):
 
     ctx["clocks"].sort(key=lambda c: c.date, reverse=True)
 
-    return render_to_response("clocks.html", ctx)
+    return render_to_response("clocks.djhtml", ctx)
 # }}}
 
 
@@ -261,7 +251,7 @@ class CompareForm(forms.Form):
     players = forms.CharField(
         max_length=10000,
         required=True,
-        label=_('Compare players'),
+        label=_('Players'),
         initial='')
 
     # {{{ Constructor
@@ -337,7 +327,6 @@ class CompareForm(forms.Form):
 def compare_search(request):
 
     base = base_ctx('Misc', 'Compare', request)
-    base["title"] = _("Comparison")
 
     if "op" in request.GET:
         op = request.GET["op"].lower()
@@ -357,11 +346,11 @@ def compare_search(request):
     base["form"] = form
 
     if not validate:
-        return render_to_response('compare.search.html', base)
+        return render_to_response('compare.search.djhtml', base)
 
     if not form.is_valid():
         base["messages"] += form.get_messages()
-        return render_to_response('compare.search.html', base)
+        return render_to_response('compare.search.djhtml', base)
 
     return redirect(form.generate_url())
 
@@ -417,7 +406,6 @@ def compare(request, players):
     if any(isinstance(x, int) for x in clean_players):
         return redirect(edit_url)
 
-    base["title"] = _("Comparison")
     base["subnav"] = [
         (_("New"), "/misc/compare/"),
         (_("Edit"), edit_url)
@@ -511,7 +499,7 @@ def compare(request, players):
 
     base['comparisons'] = comparisons
 
-    return render_to_response('compare.html', base)
+    return render_to_response('compare.djhtml', base)
 
 # (property chain, label)
 RATING_COMPARISONS = (

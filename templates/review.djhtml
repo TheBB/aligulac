@@ -1,0 +1,117 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for reviewing publicly submitted matches. It's called from
+ratings.submitviews.review.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Review results" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Review results" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  {% if success %}
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+        <p>{% trans "The following matches were successfully approved:" %}</p>
+      </div>
+    </div>
+    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" lm_check=0 %}
+  {% endif %}
+
+  {% if groups %}
+    <form role="form" method="post" action="/add/review/">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+          {% csrf_token %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              {% for g in groups %}
+                <thead>
+                  <tr class="eventheader">
+                    <th colspan="5">{{g.event}}</th>
+                    <th colspan="2" class="text-right eventheader-right">
+                      <a id="lma-{{g.id}}" href="#" onclick="toggle_block('{{g.id}}'); return false;">
+                        {% trans "show" %}
+                      </a>
+                      <a href="#" onclick="$('#lm-{{g.id}}').find('input[type=&quot;checkbox&quot;]').prop('checked',true); return false;">
+                        {% comment %}Translators: Check, as in the verb, to make a checkmark.{% endcomment %}
+                        {% trans "chk" %}
+                      </a>
+                      <a href="#" onclick="$('#lm-{{g.id}}').find('input[type=&quot;checkbox&quot;]').prop('checked',false); return false;">
+                        {% comment %}Translators: Uncheck, as in the verb, to remove a checkmark.{% endcomment %}
+                        {% trans "unchk" %}
+                      </a>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="lm-{{g.id}}" style="display: none;">
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Date" %}</th>
+                    <td colspan="6">{{g.date|cdate:_('F jS, Y')}}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Game" %}</th>
+                    <td colspan="6">{{g.game}}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Type" %}</th>
+                    <td colspan="6">{{ lm_list.0.group.offline|yesno:"Offline,Online" }}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Source" %}</th>
+                    <td colspan="6">{{ g.source|urlify }}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Contact" %}</th>
+                    <td colspan="6">{% if g.contact %}{{ g.contact }}{% endif %}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="1" class="text-right">{% trans "Notes" %}</th>
+                    <td colspan="6">{{ g.notes|markdown }}</td>
+                  </tr>
+                  {% include "matchlist.djhtml" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True lm_notable=True lm_autohide=True %}
+                </tbody>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+          <p>{% trans "To all checked submissions, do the following:" %}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        {% form "forms.djhtml" %}
+          {% field "select" form.eventobj style="full-mid" %}
+          {% field "date" form.date style="full-mid" placeholder=_('No change') %}
+          {% field "checkbox" form.dup_flag style="full-mid" %}
+          <div class="form-group text-right {{"full-mid"|formdiv}}">
+            {% use "submit" text=_('Approve') name='approve' btnstyle='success' %}
+            {% use "submit" text=_('Reject') name='reject' btnstyle='danger' %}
+          </div>
+          {% endform %}
+      </div>
+    </form>
+  {% else %}
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text-center">
+        <p>{% trans "There are no results awaiting review." %}</p>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock %}

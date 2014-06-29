@@ -1,0 +1,265 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the page showing the details of a rating adjustment. It's called from ratings.views.rating_details.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% comment %}Translators: Rating adjustments for [tag] on list number [listn].{% endcomment %}
+{% block title %}{% blocktrans with tag=player.tag listn=period.id %}{{ tag }} list {{ listn }}{% endblocktrans %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {{player.tag}}
+        {% for t, uri in subnav %}
+          {% if cursubpage == t %}
+            <small>{{t}}</small>
+          {% else %}
+            <small><a href="{{uri}}">{{t}}</a></small>
+          {% endif %}
+        {% endfor %}
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+      <ul class="pagination">
+        <li {% if not prevlink %}class="disabled"{% endif %}>
+          {% if prevlink %}
+            <a href="/players/{{player.id}}-{{player.tag|urlfilter}}/period/{{prevlink.period.id}}/">
+              &laquo; {% trans "List" %} {{prevlink.period.id}}
+            </a>
+          {% else %}
+            <a href="#">&laquo;</a>
+          {% endif %}
+        </li>
+        <li class="disabled">
+          <a href="#">{% trans "List" %} {{period.id}}</a>
+        </li>
+        <li {% if not nextlink %}class="disabled"{% endif %}>
+          {% if nextlink %}
+            <a href="/players/{{player.id}}-{{player.tag|urlfilter}}/period/{{nextlink.period.id}}/">
+              {% trans "List" %} {{nextlink.period.id}} &raquo;
+            </a>
+          {% else %}
+            <a href="#">&raquo;</a>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {% if matches %}
+    {% if has_treated %}
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+          {% with start=period.start|cdate:_('F jS, Y') end=period.end|cdate:_('F jS, Y') %}
+            {% if period.is_preview %}
+              <p>{% blocktrans %}This period started on {{ start }} and will end on {{ end }}. The numbers given below are projected adjustments and can change before then.{% endblocktrans %}</p>
+            {% else %}
+              <p>{% blocktrans %}This period started on {{ start }} and ended on {{ end }}.{% endblocktrans %}</p>
+            {% endif %}
+          {% endwith %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 5%;"></th>
+                  <th class="text-right" style="width: 10%;">{% trans "Old rtg." %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Opposition" %}</th>
+                  <th colspan="3" class="text-center">{% trans "Expected score" %}</th>
+                  <th colspan="3" class="text-center">{% trans "Actual score" %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Performance" %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "New rtg." %}</th>
+                  <th class="text-right" style="width: 10%;">{% trans "Adjustment" %}</th>
+                </tr>
+              </thead>
+              <tr>
+                <th class="text-right">{% trans "vP" %}</th>
+                <td class="text-right">
+                  {% if rating.prev %}
+                    {{ rating.prev.rating|addf:rating.prev.rating_vp|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.P > 0 %}
+                    {{ tot_rating.P|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.P > 0 %}{{ expwins.P|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.P > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.P > 0 %}{{ ngames.P|subf:expwins.P|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.P > 0 %}{{ nwins.P|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.P > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.P > 0 %}{{ ngames.P|subf:nwins.P|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.P > 0 %}
+                    {{ rating.comp_rat_vp|ratscaleplus }}
+                  {% endif %}
+                </td>
+                <td class="text-right">{{ rating.rating|addf:rating.rating_vp|ratscale }}</td>
+                <td class="text-right">
+                  {% if rating.rating_diff_vp < 0 %}
+                    <span style="color: #aa0000;">{{rating.rating_diff_vp|ratscalediff|signify}}</span>
+                  {% else %}
+                    <span style="color: #00aa00;">{{rating.rating_diff_vp|ratscalediff|signify}}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "vT" %}</th>
+                <td class="text-right">
+                  {% if rating.prev %}
+                    {{ rating.prev.rating|addf:rating.prev.rating_vt|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.T > 0 %}
+                    {{ tot_rating.T|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.T > 0 %}{{ expwins.T|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.T > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.T > 0 %}{{ ngames.T|subf:expwins.T|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.T > 0 %}{{ nwins.T|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.T > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.T > 0 %}{{ ngames.T|subf:nwins.T|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.T > 0 %}
+                    {{ rating.comp_rat_vt|ratscaleplus }}
+                  {% endif %}
+                </td>
+                <td class="text-right">{{ rating.rating|addf:rating.rating_vt|ratscale }}</td>
+                <td class="text-right">
+                  {% if rating.rating_diff_vt < 0 %}
+                    <span style="color: #aa0000;">{{rating.rating_diff_vt|ratscalediff|signify}}</span>
+                  {% else %}
+                    <span style="color: #00aa00;">{{rating.rating_diff_vt|ratscalediff|signify}}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "vZ" %}</th>
+                <td class="text-right">
+                  {% if rating.prev %}
+                    {{ rating.prev.rating|addf:rating.prev.rating_vz|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.Z > 0 %}
+                    {{ tot_rating.Z|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.Z > 0 %}{{ expwins.Z|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.Z > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.Z > 0 %}{{ ngames.Z|subf:expwins.Z|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.Z > 0 %}{{ nwins.Z|floatformat:1 }}{% endif %}
+                </td>
+                <td style="width: 1em;">{% if ngames.Z > 0 %}–{% endif %}</td>
+                <td>
+                  {% if ngames.Z > 0 %}{{ ngames.Z|subf:nwins.Z|floatformat:1 }}{% endif %}
+                </td>
+                <td class="text-right">
+                  {% if ngames.Z > 0 %}
+                    {{ rating.comp_rat_vz|ratscaleplus }}
+                  {% endif %}
+                </td>
+                <td class="text-right">{{ rating.rating|addf:rating.rating_vz|ratscale }}</td>
+                <td class="text-right">
+                  {% if rating.rating_diff_vz < 0 %}
+                    <span style="color: #aa0000;">{{rating.rating_diff_vz|ratscalediff|signify}}</span>
+                  {% else %}
+                    <span style="color: #00aa00;">{{rating.rating_diff_vz|ratscalediff|signify}}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "All" %}</th>
+                <td class="text-right">
+                  {% if rating.prev %}
+                    {{ rating.prev.rating|ratscale }}
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {{ tot_rating.M|ratscale }}
+                </td>
+                <td class="text-right">
+                  {{ expwins.M|floatformat:1 }}
+                </td>
+                <td style="width: 1em;">–</td>
+                <td>
+                  {{ ngames.M|subf:expwins.M|floatformat:1 }}
+                </td>
+                <td class="text-right">
+                  {{ nwins.M|floatformat:1 }}
+                </td>
+                <td style="width: 1em;">–</td>
+                <td>
+                  {{ ngames.M|subf:nwins.M|floatformat:1 }}
+                </td>
+                <td class="text-right">
+                  {{ rating.comp_rat|ratscaleplus }}
+                </td>
+                <td class="text-right">{{ rating.rating|addf:rating.rating_vz|ratscale }}</td>
+                <td class="text-right">
+                  {% if rating.rating_diff < 0 %}
+                    <span style="color: #aa0000;">{{rating.rating_diff|ratscalediff|signify}}</span>
+                  {% else %}
+                    <span style="color: #00aa00;">{{rating.rating_diff|ratscalediff|signify}}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% include "matchlist.djhtml" with lm_list=matches lm_header="info" %}
+
+    {% if has_nontreated %} 
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <p>{% blocktrans with a="<a href=\"/db/\">" %}<strong>Note:</strong> Some games have not been included in the rating calculations because they were just recently submitted or modified. They will be included in the next update. This happens every six hours. The time of the last update can be found {{a}}here</a>.{% endblocktrans %}</p>
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+          <p>{% blocktrans with plr=player.tag %}{{ plr }} played no games in this period.{% endblocktrans %}</p>
+        </div>
+      </div>
+  {% endif %}
+{% endblock %}

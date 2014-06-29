@@ -138,6 +138,8 @@ urlpatterns = patterns('',
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
 if settings.DEBUG:
     urlpatterns += patterns('',
+        url(r'^fonts/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.PROJECT_PATH + '../resources/fonts'}),
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': settings.PROJECT_PATH + '../resources/css'}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',

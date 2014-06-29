@@ -1,0 +1,125 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This shows the rating history of a player. It's called from ratings.views.player_historical.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% blocktrans with pl=player.tag %}{{ pl }} rating history{% endblocktrans %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {{player.tag}}
+        {% for t, uri in subnav %}
+          {% if cursubpage == t %}
+            <small>{{t}}</small>
+          {% else %}
+            <small><a href="{{uri}}">{{t}}</a></small>
+          {% endif %}
+        {% endfor %}
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>{% trans "List" %}</th>
+              <th class="rl_rating">{% trans "Rating" %}</th>
+              <th class="rl_icon hidden-xs"></th>
+              <th class="rl_rating">{% trans "vP" %}</th>
+              <th class="rl_icon hidden-xs"></th>
+              <th class="rl_rating">{% trans "vT" %}</th>
+              <th class="rl_icon hidden-xs"></th>
+              <th class="rl_rating">{% trans "vZ" %}</th>
+              <th class="rl_icon hidden-xs"></th>
+              <th class="text-right">{% trans "Matches" %}</th>
+              <th class="text-right">{% trans "Games" %}</th>
+              <th class="text-right hidden-xs"></th>
+            </tr>
+          </thead>
+          {% for rating in historical %}
+            {% if rating %}
+              <tr>
+                <td>
+                  <a href="/periods/{{ rating.period.id }}/">{{ rating.period.end }}</a>
+                  {% if rating.period.is_preview %}*{% endif %}
+                </td>
+                <td class="rl_rating">{{ rating.rating|ratscale }}</td>
+                <td class="rl_icon hidden-xs">
+                  {% if rating.prev %}
+                    <img src="{{ rating.rating_diff|makearrows|img }}" style="vertical-align: text-bottom;"
+                         title="{{ rating.rating_diff|ratscalediff|signify }}" />
+                  {% endif %}
+                </td>
+                <td class="rl_rating">
+                  {{ rating.rating|addf:rating.rating_vp|ratscale }}
+                </td>
+                <td class="rl_icon hidden-xs">
+                  {% if rating.prev %}
+                    <img src="{{ rating.rating_diff_vp|makearrows|img }}" style="vertical-align: text-bottom;"
+                         title="{{ rating.rating_diff_vp|ratscalediff|signify }}" />
+                  {% endif %}
+                </td>
+                <td class="rl_rating">
+                  {{ rating.rating|addf:rating.rating_vt|ratscale }}
+                </td>
+                <td class="rl_icon hidden-xs">
+                  {% if rating.prev %}
+                    <img src="{{ rating.rating_diff_vt|makearrows|img }}" style="vertical-align: text-bottom;"
+                         title="{{ rating.rating_diff_vt|ratscalediff|signify }}" />
+                  {% endif %}
+                </td>
+                <td class="rl_rating">
+                  {{ rating.rating|addf:rating.rating_vz|ratscale }}
+                </td>
+                <td class="rl_icon hidden-xs">
+                  {% if rating.prev %}
+                    <img src="{{ rating.rating_diff_vz|makearrows|img }}" style="vertical-align: text-bottom;"
+                         title="{{ rating.rating_diff_vz|ratscalediff|signify }}" />
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  {{ rating.nmatches }}
+                </td>
+                <td class="text-right">
+                  {{ rating.ngames }}
+                </td>
+                <td class="text-right hidden-xs">
+                  {% if rating.decay == 0 %}
+                    <a href="{{ player|player_url }}period/{{ rating.period.id }}/">
+                      <span class="right-caret"></span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

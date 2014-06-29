@@ -1,0 +1,95 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the page for miscellaneous administrative functions. Called from ratings.submitviews.manage.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Miscellaneous" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Miscellaneous administration" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h3>{% trans "Merge players" %}</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <form method="post" action="/add/misc/">
+      {% if mergeform.is_bound and mergeform.is_valid and not mergeform.cleaned_data.confirm %}
+        <div class="form-group {{"full-mid"|formdiv}}">
+          <p class="help-block">
+            {% blocktrans with src=mergeform.cleaned_data.source|player tgt=mergeform.cleaned_data.target|player %}This will merge {{src}} into {{tgt}}. Are you sure?{% endblocktrans %}
+          </p>
+        </div>
+        {% form "forms.djhtml" %}
+          {% csrf_token %}
+          {% use "hidden" name=mergeform.source.html_name value=mergeform.cleaned_data.source.id %}
+          {% use "hidden" name=mergeform.target.html_name value=mergeform.cleaned_data.target.id %}
+          {% use "hidden" name=mergeform.confirm.html_name value="1" %}
+          <div class="form-group {{"full-mid"|formdiv}}">
+            {% use "submit" text=_('Merge') name="merge" btnstyle="danger" %}
+            <a href="/add/misc/" class="btn btn-primary active" role="button">{% trans "Abort" %}</a>
+          </div>
+        {% endform %}
+      {% else %}
+        {% form "forms.djhtml" %}
+          {% csrf_token %}
+          {% field "basic" mergeform.source style="full-mid" %}
+          {% field "basic" mergeform.target style="full-mid" help=_('Only IDs are accepted. This is to prevent mistakes. You will be asked for confirmation before the merge.') %}
+          <div class="form-group {{"full-mid"|formdiv}} text-right">
+            {% use "submit" text=_('Merge') name="merge" btnstyle="primary" %}
+          </div>
+        {% endform %}
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h3>{% trans "Move events" %}</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <form method="post" action="/add/misc/">
+      {% if moveform.is_bound and moveform.is_valid and not moveform.cleaned_data.confirm %}
+        <div class="form-group {{"full-mid"|formdiv}}">
+          <p class="help-block">
+            {% blocktrans with src=moveform.cleaned_data.subject|event cnt=moveform.cleaned_data.subject.get_children.count trg=moveform.cleaned_data.target|event %}This will move {{src}} and all events under it ({{cnt}}) to {{trg}}. Are you sure?{% endblocktrans %}
+          </p>
+        </div>
+        {% form "forms.djhtml" %}
+          {% csrf_token %}
+          {% use "hidden" name=moveform.subject.html_name value=moveform.cleaned_data.subject.id %}
+          {% use "hidden" name=moveform.target.html_name value=moveform.cleaned_data.target.id %}
+          {% use "hidden" name=moveform.confirm.html_name value="1" %}
+          <div class="form-group {{"full-mid"|formdiv}}">
+            {% use "submit" text=_('Move') name="move" btnstyle="danger" %}
+            <a href="/add/misc/" class="btn btn-primary active" role="button">{% trans "Abort" %}</a>
+          </div>
+        {% endform %}
+      {% else %}
+        {% form "forms.djhtml" %}
+          {% csrf_token %}
+          {% field "basic" moveform.subject style="full-mid" %}
+          {% field "basic" moveform.target style="full-mid" help=_('Only IDs are accepted. This is to prevent mistakes. You will be asked for confirmation before the move.') %}
+          <div class="form-group {{"full-mid"|formdiv}} text-right">
+            {% use "submit" text=_('Move') name="move" btnstyle="primary" %}
+          </div>
+        {% endform %}
+      {% endif %}
+    </form>
+  </div>
+{% endblock %}

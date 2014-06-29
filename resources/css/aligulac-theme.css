@@ -1,0 +1,589 @@
+/* Title text ('ALIGULAC') and subheading */
+h1 {
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 60px;
+    letter-spacing: 0.6em;
+    text-align: center;
+    padding-left: 0.7em; /* Required for centering */
+}
+
+.subheading {
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+/* Major headings are in h2 */
+h2 {
+    font-size: 2em;
+    font-weight: 400;
+    border-style: none none solid none;
+    border-width: 0.05em;
+    border-color: #e7e7e7;
+    font-variant: small-caps;
+}
+
+h2 small {
+    margin-left: 0.7em;
+}
+
+/* Subheadings */
+h3 {
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    font-variant: small-caps;
+}
+
+/* A blacklink is always black and never underlined. */
+a.blacklink {
+    color: #000000;
+}
+
+a.blacklink:hover {
+    text-decoration: none;
+}
+
+/* Centered navbar */
+@media (min-width: 768px) {
+    .navbar-nav {
+        margin: 0 auto;
+        display: table;
+        table-layout: fixed;
+        float: none;
+    }
+}
+
+.navbar {
+    border-radius: 0;
+    border-style: solid none solid none;
+}
+
+/* Menu hovering */
+@media (min-width: 768px) {
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+}
+
+/* Centered footer */
+footer {
+    text-align: center;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em;
+    padding-top: 30px;
+    padding-bottom: 80px;
+}
+
+/* Change the glow around focused input */
+.form-control:focus {
+    border-color: #000000;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+    box-shadow:         inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0, 0, 0, .4);
+}
+
+/* JQuery datepicker needs to have the same font */
+.ui-widget {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Autocomplete styles */
+.ui-autocomplete {
+    padding: 0.3em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.ui-menu .ui-menu-item a {
+    border-radius: 0;
+}
+
+.autocomp-team {
+    margin-left: 10em; /* So that the team names don't get too close */
+}
+
+.autocomp-header {
+    display: block;
+    text-align: center;
+    width: 100%;
+    background: #f8f8f8;
+    border-style: solid;
+    border-width: 1px 0px 1px 0px;
+    border-color: #999999;
+    margin-top: 2px;
+}
+
+/* Right-pointing caret */
+.right-caret {
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left: 5px solid #000000;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    opacity: 0.3;
+    vertical-align: middle;
+}
+
+/* Down-pointing caret
+   Bootstrap comes with a caret class, but this one conforms to right-caret. */
+.down-caret {
+    border-top: 5px solid #000000;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    opacity: 0.3;
+    vertical-align: middle;
+}
+
+/* Ratinglist table */
+.rl_number {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.rl_arrow {
+    width: 2em;
+    text-align: right;
+}
+
+.rl_name {
+    width: 25%;
+}
+
+.rl_team {
+    width: 20%;
+}
+
+.rl_rating {
+    width: 8%;
+    text-align: right;
+    padding-left: 1em;
+}
+
+/* Historical overview table */
+.ho_icon {
+    width: 13%;
+    text-align: right;
+}
+
+.ho_pctg {
+    width: 2em;
+    text-align: right;
+}
+
+.ho_num {
+    width: 13%;
+    text-align: right;
+}
+
+/* Earnings table */
+.ea_number {
+    width: 2em;
+    text-align: right;
+}
+
+.ea_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.ea_name {
+}
+
+.ea_team {
+}
+
+.ea_earnings {
+    text-align: right;
+    width: 10em;
+}
+
+.ea_flush {
+    width: 15%;
+}
+
+/* Match table */
+.lm_date {
+    width: 17%;
+}
+
+.lm_rta {
+    text-align: right;
+    width: 3.5em;
+}
+
+.lm_pla {
+    text-align: right;
+    width: 23%;
+}
+
+.lm_score {
+    width: 7em;
+    text-align: center;
+}
+
+.lm_plb {
+    width: 23%;
+}
+
+.lm_rtb {
+    text-align: right;
+    width: 3.5em;
+}
+
+.lm_right {
+    text-align: right;
+    width: 17%;
+}
+
+.eventheader {
+    background: #f5f5f5;
+}
+
+.eventheader-mid {
+}
+
+.eventheader-right {
+    font-variant: small-caps;
+}
+
+.winner a {
+    font-weight: 900;
+}
+
+td.winner {
+    font-weight: 900;
+}
+
+.loser a {
+    font-weight: 100;
+    color: #999999;
+}
+
+.loser a:hover {
+    color: #777777;
+}
+
+td.loser {
+    color: #aaaaaa;
+}
+
+/* Subelements of h2 headings -- make sure the h2 has position: relative; */
+h2.sub {
+    position: relative;
+}
+
+h2.sub > small.right {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    right: 0;
+    font-variant: normal;
+}
+
+h2.sub > .left {
+    font-family: 'Roboto', sans-serif;
+    font-size: small;
+    position: absolute;
+    bottom: 0.2em;
+    margin-left: 1em;
+}
+
+/* Wrap paragraphs in a div.text to make them justified */
+div.text, div.text > p, div.text > ul > li {
+    text-align: justify;
+}
+
+div.text > ul > li {
+    text-align: justify;
+}
+
+/* Styles for message boxes */
+.message {
+    border-style: solid;
+    border-width: 1px;
+    padding: 0.5em;
+    border-radius: 1em;
+    margin-bottom: 0.5em;
+}
+
+.message > img {
+    margin-right: 1em;
+}
+
+.m-success {
+    background: #dff0d8;
+    border-color: #c1e2b3;
+}
+
+.m-success:hover {
+    background-color: #c1e2b3;
+}
+
+.m-warning {
+    background: #fcf8e3;
+    border-color: #f7ecb5;
+}
+
+.m-warning:hover {
+    background-color: #f7ecb5;
+}
+
+.m-info {
+    background: #d9edf7;
+    border-color: #afd9ee;
+}
+
+.m-info:hover {
+    background-color: #afd9ee;
+}
+
+.m-error {
+    background: #f2dede;
+    border-color: #e4b9b9;
+}
+
+.m-error:hover {
+    background-color: #e4b9b9;
+}
+
+/* Class for inline form labels, help spacing */
+.inline-label {
+    margin-left: 0.7em;
+    margin-right: 0.2em;
+}
+
+/* Infobox tables */
+.ibox-left {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #e7e7e7;
+}
+
+/* Keep race and flag icons apart */
+.player img, .ui-corner-all img, .lm_plb img {
+    padding-right: 0.3em;
+}
+
+.playerleft img, .lm_pla img {
+    padding-left: 0.3em;
+}
+
+/* Event manager tree */
+.tree-node {
+    border-radius: 0px !important;
+    margin-top: 1px;
+    border-top: none;
+}
+
+.tree-node-first {
+    border-top: 1px solid #ddd;
+}
+
+.tree-node-category { }
+
+.tree-node-event {
+    background: #fff4f4;
+}
+
+.tree-node-round {
+    background: #f0fff0;
+}
+
+
+/* Make breadcrumbs in headers look like normal headers */
+h2 .breadcrumb {
+    background: #ffffff;
+    margin-bottom: 0px;
+    padding: 0px 0px;
+}
+
+h2 .breadcrumb li.active {
+    color: #000000;
+}
+
+/* Condense the event header a little, some of the titles can be long */
+h2 .breadcrumb > li + li:before {
+    padding: 0 0;
+    content: "/";
+}
+
+/* Sortable lists should not have a caret cursor. */
+#sortable li {
+    cursor: pointer;
+}
+
+/* Event table */
+.event-panel {
+    box-shadow: none;
+}
+
+.event-panel a.eventname {
+    font-size: 1.5em;
+    font-weight: 400;
+    border-style: none;
+    font-variant: small-caps;
+    color: #000000;
+}
+
+.event-panel span div button {
+}
+
+.event-panel a.eventname:hover {
+    color: #555555;
+    text-decoration: none;
+}
+
+.event-panel-individual {
+    background: #dff0d8;
+    border-color: #c1e2b3;
+}
+
+.event-panel-individual:hover {
+    background-color: #c1e2b3;
+}
+
+.event-panel-team {
+    background: #f2dede;
+    border-color: #e4b9b9;
+}
+
+.event-panel-team:hover {
+    background-color: #e4b9b9;
+}
+
+.event-panel-frequent {
+    background: #d9edf7;
+    border-color: #afd9ee;
+}
+
+.event-panel-frequent:hover {
+    background-color: #afd9ee;
+}
+
+/* Search result span */
+span.searchres {
+    padding-right: 1em;
+    white-space: nowrap;
+}
+
+p.searchres {
+    line-height: 2em;
+}
+
+/* Disabled select options */
+.option-disabled {
+    background: #e7e7e7;
+}
+
+/* Float images in FAQ */
+.faqpost p img {
+    float: right;
+}
+
+/* Gray progress bars */
+.progress-bar-default {
+    background-color: #888;
+}
+
+/* Tags input plugin */
+div.tagsinput {
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    background: #FFF;
+    padding: 5px;
+    overflow-y: auto
+}
+
+div.tagsinput span.tag {
+    border: 1px solid #fff;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    display: block;
+    float: left;
+    padding: 5px;
+    text-decoration: none;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-color: #ccc;
+    border-radius: 3px;
+    background: #f8f8f8;
+    color: #787878;
+}
+
+div.tagsinput span.tag a {
+    font-weight: 700;
+    color: #9f9f9f;
+    text-decoration: none;
+}
+
+div.tagsinput input {
+    width: 80px;
+    margin: 0;
+    border: 1px solid transparent;
+    padding: 5px;
+    background: 0 0;
+    color: #000;
+    outline: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+div.tagsinput div {
+    display: block;
+    float: left;
+}
+
+.tags_clear {
+    clear: both;
+    width: 100%;
+    height: 0;
+}
+
+/* Comparisons */
+.compheader {
+    font-variant: small-caps;
+    font-size: 1.3em;
+    font-weight: bold;
+    background: #e7e7e7;
+}
+
+.hline {
+    background: #e7e7e7;
+    height: 4px;
+}
+
+.hline td {
+    padding: 0 !important;
+}
+
+/* Prevent Chrome mobile from upscaling fonts */
+p, li, ul {
+    max-height: 999999px;
+}
+
+/* Align infobox headers with tab panes */
+.ibox-header {
+    border: none !important;
+    height: 42px;
+}
+
+/* Prevent progress bars from linebreaking if too small */
+.progress {
+    white-space: nowrap;
+}

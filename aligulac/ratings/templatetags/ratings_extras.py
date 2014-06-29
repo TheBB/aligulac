@@ -293,6 +293,15 @@ def js(value):
     else:
         return '/js/' + value + '.js'
 
+# fonts: Generates a fonts file URL
+@register.filter
+@stringfilter
+def fonts(value):
+    if not DEBUG:
+        return 'http://fonts.aligulac.com/' + value
+    else:
+        return '/fonts/' + value
+
 # img: Generates a png-image file URL
 @register.filter
 @stringfilter
@@ -445,6 +454,16 @@ def tomorrow(value):
 def yesterday(value):
     return value - timedelta(1)
 
+# prevweek: Skips one week back.
+@register.filter
+def prevweek(value):
+    return value - relativedelta(weeks=1)
+
+# nextweek: Skips one week forward.
+@register.filter
+def nextweek(value):
+    return value + relativedelta(weeks=1)
+
 # nextmonth: Skips one month forward.
 @register.filter
 def nextmonth(value):
@@ -572,7 +591,7 @@ def eventlistend(value, N=None):
 # Model display filters
 
 @register.filter
-def player(value):
+def player(value, arg=None):
     if not isinstance(value, Player):
         return value
 
@@ -583,16 +602,39 @@ def player(value):
 
     return mark_safe((
         "<span class='player'>"
-        "<a href='/players/{id}-{safetag}/'>"
+        "<a href='/players/{id}-{safetag}/' class='{cl}'>"
         "{flag}<img src='{race}' />{tag}"
         "</a>"
         "</span>"
-        ).format(
-            tag=value.tag,
-            safetag=urlfilter(value.tag),
-            id=value.id,
-            flag=flag,
-            race=img(value.race)))
+        ).format(tag=value.tag,
+                 safetag=urlfilter(value.tag),
+                 id=value.id,
+                 flag=flag,
+                 race=img(value.race),
+                 cl=arg if arg is not None else ''))
+    
+@register.filter
+def playerleft(value, arg=None):
+    if not isinstance(value, Player):
+        return value
+
+    flag = ""
+    if value.country is not None:
+        flag = "<img src='{flag}' />".format(
+            flag=img("flags/" + value.country.lower()))
+
+    return mark_safe((
+        "<span class='playerleft'>"
+        "<a href='/players/{id}-{safetag}/' class='{cl}'>"
+        "{tag}<img src='{race}'>{flag}"
+        "</a>"
+        "</span>"
+        ).format(tag=value.tag,
+                 safetag=urlfilter(value.tag),
+                 id=value.id,
+                 flag=flag,
+                 race=img(value.race),
+                 cl=arg if arg is not None else ''))
 
 @register.filter
 def player_no_race(value):
@@ -627,3 +669,47 @@ def event(value):
         "</a>").format(id=value.id,
                        name=value.fullname,
                        safename=urlfilter(value.fullname)))
+
+# Creates form classes
+@register.filter
+def formlabel(value):
+    if value == 'full-mid':
+        return ''
+    elif value == 'hz-half':
+        return 'col-lg-3 col-md-4 col-sm-3 col-xs-3'
+    else: # full
+        return ''
+
+@register.filter
+def forminput(value):
+    if value == 'full-mid':
+        return ''
+    elif value == 'hz-half':
+        return 'col-lg-9 col-md-8 col-sm-9 col-xs-9'
+    else: # full
+        return ''
+
+@register.filter
+def formdiv(value):
+    if value == 'full-mid':
+        return 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12'
+    else: # full
+        return ''
+
+# For the event manager tree
+@register.filter
+def closedivs(value):
+    s = ''
+    for i in range(0, -int(value)):
+        s += '</div>'
+    return s
+
+# Modulo
+@register.filter
+def mod(value, arg):
+    return int(value) % int(arg)
+
+# Tolerance for floats to be zero
+@register.filter
+def tol(value):
+    return abs(float(value)) >= 1e-3

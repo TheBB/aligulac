@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-29 15:50+0200\n"
+"POT-Creation-Date: 2014-06-30 18:00+0200\n"
 "PO-Revision-Date: 2014-06-29 16:12+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Eivind Fonn <evfonn@gmail.com>\n"
@@ -91,7 +91,7 @@ msgid "Earnings"
 msgstr "Inntekt"
 
 #: aligulac/aligulac/tools.py:252 templates/db.djhtml:104
-#: templates/index.djhtml:179 templates/search.djhtml:31
+#: templates/index.djhtml:190 templates/search.djhtml:31
 #: templates/teams.djhtml:10
 msgid "Teams"
 msgstr "Lag"
@@ -235,7 +235,7 @@ msgid "Review"
 msgstr "Må gjennomgås"
 
 #: aligulac/aligulac/tools.py:308 templates/events.djhtml:10
-#: templates/events.djhtml.py:16 templates/index.djhtml:180
+#: templates/events.djhtml.py:16 templates/index.djhtml:191
 #: templates/search.djhtml:41
 msgid "Events"
 msgstr "Turneringer"
@@ -1965,7 +1965,7 @@ msgstr "Best av"
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:254
 #: templates/db.djhtml:95 templates/eventres.djhtml:481
-#: templates/index.djhtml:178 templates/search.djhtml:21
+#: templates/index.djhtml:189 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
 msgstr "Spillere"
@@ -3168,7 +3168,7 @@ msgstr ""
 "Dette er en <em>forsmak</em> på den neste ratinglisten. Den er ikke endelig "
 "før %s."
 
-#: aligulac/ratings/ranking_views.py:67 templates/index.djhtml:126
+#: aligulac/ratings/ranking_views.py:67 templates/index.djhtml:137
 msgid "F jS"
 msgstr "j. F"
 
@@ -5893,29 +5893,29 @@ msgstr "j. F Y"
 msgid "weeks"
 msgstr "uker"
 
-#: templates/index.djhtml:52 templates/index.djhtml.py:53
-#: templates/index.djhtml:54 templates/index.djhtml.py:55
+#: templates/index.djhtml:63 templates/index.djhtml.py:64
+#: templates/index.djhtml:65 templates/index.djhtml.py:66
 msgid "DEVELOPMENT SERVER"
 msgstr "UTVIKLINGSSERVER"
 
-#: templates/index.djhtml:58
+#: templates/index.djhtml:69
 msgid "StarCraft 2 Progaming Statistics and Predictions"
 msgstr "StarCraft 2 e-sportstatistikk og prognoser"
 
-#: templates/index.djhtml:100 templates/language.djhtml:11
+#: templates/index.djhtml:111 templates/language.djhtml:11
 #: templates/language.djhtml.py:17
 msgid "Language"
 msgstr "Språk"
 
-#: templates/index.djhtml:106
+#: templates/index.djhtml:117
 msgid "Find player, team or event"
 msgstr "Finn spiller, lag eller turnering"
 
-#: templates/index.djhtml:116
+#: templates/index.djhtml:127
 msgid "Current top 10"
 msgstr "Dagens topp ti"
 
-#: templates/index.djhtml:126
+#: templates/index.djhtml:137
 #, python-format
 msgid ""
 "The above list is a preview of the next rating list, which will be finalized "
@@ -5924,14 +5924,14 @@ msgstr ""
 "Dette er en forsmak på den neste ratinglisten. Den er ikke endelig før "
 "%(dt)s. <a href=\"/periods/latest\">Full liste</a>."
 
-#: templates/index.djhtml:144
+#: templates/index.djhtml:155
 #, python-format
 msgid ""
 "Find us on %(a1)sTwitter</a>, %(a2)sGitHub</a> and %(a3)sTeam Liquid</a>."
 msgstr ""
 "Finn oss på %(a1)sTwitter</a>, %(a2)sGitHub</a> og %(a3)sTeam Liquid</a>."
 
-#: templates/index.djhtml:151
+#: templates/index.djhtml:162
 #, python-format
 msgid ""
 "Powered by %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> "
@@ -5940,7 +5940,7 @@ msgstr ""
 "Kjører på %(a1)sDjango 1.6</a>, %(a2)sPython 3.2</a>, %(a3)sApache 2</a> og "
 "%(a4)sDebian GNU/Linux 6</a>."
 
-#: templates/index.djhtml:156
+#: templates/index.djhtml:167
 #, python-format
 msgid ""
 "Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Charts by "
@@ -5949,196 +5949,196 @@ msgstr ""
 "Ikoner av Mark James. Raseikoner av %(a1)sLiquipedia</a>. Grafer av "
 "%(a3)sHighcharts</a>."
 
-#: templates/index.djhtml:160
+#: templates/index.djhtml:171
 msgid "Generate short URL for this page"
 msgstr "Lag kort addresse for denne siden"
 
-#: templates/index.djhtml:181 templates/matchlist.djhtml:91
+#: templates/index.djhtml:192 templates/matchlist.djhtml:91
 #: templates/matchlist.djhtml.py:126 templates/matchlist.djhtml:149
 #: templates/matchlist.djhtml.py:164
 msgid "hide"
 msgstr "gjem"
 
-#: templates/index.djhtml:182 templates/matchlist.djhtml:91
+#: templates/index.djhtml:193 templates/matchlist.djhtml:91
 #: templates/matchlist.djhtml.py:126 templates/matchlist.djhtml:149
 #: templates/matchlist.djhtml.py:164 templates/review.djhtml:46
 msgid "show"
 msgstr "vis"
 
-#: templates/index.djhtml:192
+#: templates/index.djhtml:203
 msgid "Download PNG image"
 msgstr "Last ned PNG-bilde"
 
-#: templates/index.djhtml:193
+#: templates/index.djhtml:204
 msgid "Download JPEG image"
 msgstr "Last ned JPEG-bilde"
 
-#: templates/index.djhtml:194
+#: templates/index.djhtml:205
 msgid "Download PDF document"
 msgstr "Last ned PDF-dokument"
 
-#: templates/index.djhtml:195
+#: templates/index.djhtml:206
 msgid "Download SVG vector image"
 msgstr "Last ned SVG-vektorgrafikk"
 
-#: templates/index.djhtml:196
+#: templates/index.djhtml:207
 msgid "Loading..."
 msgstr "Laster..."
 
-#: templates/index.djhtml:197
+#: templates/index.djhtml:208
 msgid "Print chart"
 msgstr "Skriv ut"
 
-#: templates/index.djhtml:198
+#: templates/index.djhtml:209
 msgid "Reset zoom"
 msgstr "Gjenopprett zoom"
 
-#: templates/index.djhtml:200
+#: templates/index.djhtml:211
 msgctxt "Big first letter"
 msgid "January"
 msgstr "Januar"
 
-#: templates/index.djhtml:201
+#: templates/index.djhtml:212
 msgctxt "Big first letter"
 msgid "February"
 msgstr "Februar"
 
-#: templates/index.djhtml:202
+#: templates/index.djhtml:213
 msgctxt "Big first letter"
 msgid "March"
 msgstr "Mars"
 
-#: templates/index.djhtml:203
+#: templates/index.djhtml:214
 msgctxt "Big first letter"
 msgid "April"
 msgstr "April"
 
-#: templates/index.djhtml:204 templates/index.djhtml.py:218
+#: templates/index.djhtml:215 templates/index.djhtml.py:229
 msgctxt "Big first letter"
 msgid "May"
 msgstr "Mai"
 
-#: templates/index.djhtml:205
+#: templates/index.djhtml:216
 msgctxt "Big first letter"
 msgid "June"
 msgstr "Juni"
 
-#: templates/index.djhtml:206
+#: templates/index.djhtml:217
 msgctxt "Big first letter"
 msgid "July"
 msgstr "Juli"
 
-#: templates/index.djhtml:207
+#: templates/index.djhtml:218
 msgctxt "Big first letter"
 msgid "August"
 msgstr "August"
 
-#: templates/index.djhtml:208
+#: templates/index.djhtml:219
 msgctxt "Big first letter"
 msgid "September"
 msgstr "September"
 
-#: templates/index.djhtml:209
+#: templates/index.djhtml:220
 msgctxt "Big first letter"
 msgid "October"
 msgstr "Oktober"
 
-#: templates/index.djhtml:210
+#: templates/index.djhtml:221
 msgctxt "Big first letter"
 msgid "November"
 msgstr "November"
 
-#: templates/index.djhtml:211
+#: templates/index.djhtml:222
 msgctxt "Big first letter"
 msgid "December"
 msgstr "Desember"
 
-#: templates/index.djhtml:214
+#: templates/index.djhtml:225
 msgctxt "Big first letter"
 msgid "Jan"
 msgstr "Jan"
 
-#: templates/index.djhtml:215
+#: templates/index.djhtml:226
 msgctxt "Big first letter"
 msgid "Feb"
 msgstr "Feb"
 
-#: templates/index.djhtml:216
+#: templates/index.djhtml:227
 msgctxt "Big first letter"
 msgid "Mar"
 msgstr "Mar"
 
-#: templates/index.djhtml:217
+#: templates/index.djhtml:228
 msgctxt "Big first letter"
 msgid "Apr"
 msgstr "Apr"
 
-#: templates/index.djhtml:219
+#: templates/index.djhtml:230
 msgctxt "Big first letter"
 msgid "Jun"
 msgstr "Jun"
 
-#: templates/index.djhtml:220
+#: templates/index.djhtml:231
 msgctxt "Big first letter"
 msgid "Jul"
 msgstr "Jul"
 
-#: templates/index.djhtml:221
+#: templates/index.djhtml:232
 msgctxt "Big first letter"
 msgid "Aug"
 msgstr "Aug"
 
-#: templates/index.djhtml:222
+#: templates/index.djhtml:233
 msgctxt "Big first letter"
 msgid "Sep"
 msgstr "Sep"
 
-#: templates/index.djhtml:223
+#: templates/index.djhtml:234
 msgctxt "Big first letter"
 msgid "Oct"
 msgstr "Ckt"
 
-#: templates/index.djhtml:224
+#: templates/index.djhtml:235
 msgctxt "Big first letter"
 msgid "Nov"
 msgstr "Nov"
 
-#: templates/index.djhtml:225
+#: templates/index.djhtml:236
 msgctxt "Big first letter"
 msgid "Dec"
 msgstr "Des"
 
-#: templates/index.djhtml:228
+#: templates/index.djhtml:239
 msgctxt "Big first letter"
 msgid "Sunday"
 msgstr "Søndag"
 
-#: templates/index.djhtml:229
+#: templates/index.djhtml:240
 msgctxt "Big first letter"
 msgid "Monday"
 msgstr "Mandag"
 
-#: templates/index.djhtml:230
+#: templates/index.djhtml:241
 msgctxt "Big first letter"
 msgid "Tuesday"
 msgstr "Tirsdag"
 
-#: templates/index.djhtml:231
+#: templates/index.djhtml:242
 msgctxt "Big first letter"
 msgid "Wednesday"
 msgstr "Onsdag"
 
-#: templates/index.djhtml:232
+#: templates/index.djhtml:243
 msgctxt "Big first letter"
 msgid "Thursday"
 msgstr "Torsdag"
 
-#: templates/index.djhtml:233
+#: templates/index.djhtml:244
 msgctxt "Big first letter"
 msgid "Friday"
 msgstr "Fredag"
 
-#: templates/index.djhtml:234
+#: templates/index.djhtml:245
 msgctxt "Big first letter"
 msgid "Saturday"
 msgstr "Lørdag"

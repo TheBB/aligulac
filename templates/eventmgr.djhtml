@@ -129,7 +129,7 @@ This is the template for the event manager admin page. It's called from ratings.
                 {% trans "admin" %}
               </a>
               <button class="btn btn-default btn-xs"
-                      onclick="$('input[id=parent_id_field]').val('{{e.event.id}}'); $('#parent_name').html('{{e.event.fullname}}'); $('#md-eventmgr').modal();">
+                      onclick="$('input[id=parent_id_field]').val('{{e.event.id}}'); $('#parent_name').html('{{e.event.fullname|jsescape}}'); $('#md-eventmgr').modal();">
                 {% trans "modify" %}
               </button>
             </small>

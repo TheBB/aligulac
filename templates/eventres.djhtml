@@ -31,7 +31,7 @@ ratings.views.events.
        }
       </script>
     {% endif %}
-    
+
     {% if not event.has_children and stform %}
       <script type="text/javascript">
        var story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
@@ -49,7 +49,7 @@ ratings.views.events.
        };
       </script>
     {% endif %}
-    
+
   {% endif %}
 {% endblock %}
 
@@ -556,13 +556,13 @@ ratings.views.events.
                 <a href="/add/?eventid={{event.id}}" title="{% trans "Add matches" %}"><span class="glyphicon glyphicon-plus"></span> </a>
                 <a href="#" title="{% trans "Add subevents" %}" data-toggle="modal" data-target="#md-add"><span class="glyphicon glyphicon-file"></span></a>
                 {% if event.type == "event" %}
-                  <a href="#" title="{% trans "Prize pool" %}" data-toggle="modal" data-target="#md-pp"><span class="glyphicon glyphicon-usd"></span> </a>
+                  <a href="#" title="{% trans "Prize pool" %}" data-toggle="modal" data-target="#md-pp"><span class="glyphicon glyphicon-usd"></span></a>
                 {% endif %}
                 {% if not event.has_children and stform %}
-                  <a href="#" title="{% trans "Stories" %}" data-toggle="modal" data-target="#md-st"><span class="glyphicon glyphicon-flag"></span> </a>
+                  <a href="#" title="{% trans "Stories" %}" data-toggle="modal" data-target="#md-st"><span class="glyphicon glyphicon-flag"></span></a>
                 {% endif %}
                 {% if event.has_children %}
-                  <a href="#" title="{% trans "Reorder subevents" %}" data-toggle="modal" data-target="#md-ord"><span class="glyphicon glyphicon-random"></span> </a>
+                  <a href="#" title="{% trans "Reorder subevents" %}" data-toggle="modal" data-target="#md-ord"><span class="glyphicon glyphicon-random"></span></a>
                 {% endif %}
               </td>
             </tr>

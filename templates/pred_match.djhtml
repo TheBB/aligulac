@@ -164,10 +164,10 @@ This is the prediction page for BoN matches. It's called from ratings.predict.pr
           <input name="s1" type="text" class="form-control" value="{{ match.get_result.0 }}" style="width: 6em;">
         </div>
         <div class="form-group">
-          <label for="s1" class="inline-label">
+          <label for="s2" class="inline-label">
             {% blocktrans with pl=dbpl.1.tag %}Score for {{pl}}{% endblocktrans %}
           </label>
-          <input name="s1" type="text" class="form-control" value="{{ match.get_result.1 }}" style="width: 6em;">
+          <input name="s2" type="text" class="form-control" value="{{ match.get_result.1 }}" style="width: 6em;">
         </div>
         <button type="submit" class="btn btn-primary">{% trans "Update match progress" %}</button>
       </form>

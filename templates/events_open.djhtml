@@ -34,7 +34,7 @@
           </thead>
           {% for e in open_games %}
             <tr>
-              <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+              <td><a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
               <td>{{e.latest}}</td>
               <td>
                 {% if e.up_homepage %}
@@ -81,7 +81,7 @@
         </thead>
         {% for e in open_nogames %}
           <tr>
-            <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+            <td><a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
             <td>
               {% if e.up_homepage %}
                 <a href="{{ e.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>
@@ -128,7 +128,7 @@
           </thead>
           {% for e in pp_events %}
             <tr>
-              <td><a href="/reuslts/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
+              <td><a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a></td>
               <td>
                 {% if e.up_homepage %}
                   <a href="{{ e.up_homepage }}" target="_blank">{% trans "Homepage" %}</a>

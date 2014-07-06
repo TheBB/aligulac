@@ -36,33 +36,33 @@ This page shows the results by date. Called from ratings.views.results.
   <div class="row text-center">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <ul class="pagination">
-        <li {% if td == mindate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|prevmonth|datemax:mindate|date:"Y-m-d"}}">
+        <li {% if td == mindate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|prevmonth|datemax:mindate|date:"Y-m-d"}}">{% endif %}
             &laquo; {% trans "month" %}
           </a>
         </li>
-        <li {% if td == mindate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|prevweek|datemax:mindate|date:"Y-m-d"}}">
+        <li {% if td == mindate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|prevweek|datemax:mindate|date:"Y-m-d"}}">{% endif %}
             &laquo; {% trans "week" %}
           </a>
         </li>
-        <li {% if td == mindate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">
+        <li {% if td == mindate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">{% endif %}
             &laquo; {% trans "day" %}
           </a>
         </li>
-        <li {% if td == maxdate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">
+        <li {% if td == maxdate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">{% endif %}
             {% trans "day" %} &raquo;
           </a>
         </li>
-        <li {% if td == maxdate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|nextweek|datemin:maxdate|date:"Y-m-d"}}">
+        <li {% if td == maxdate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|nextweek|datemin:maxdate|date:"Y-m-d"}}">{% endif %}
             {% trans "week" %} &raquo;
           </a>
         </li>
-        <li {% if td == maxdate %}class="disabled"{% endif %}>
-          <a href="/results/?d={{td|nextmonth|datemin:maxdate|date:"Y-m-d"}}">
+        <li {% if td == maxdate %}class="disabled">{% else %}>
+          <a href="/results/?d={{td|nextmonth|datemin:maxdate|date:"Y-m-d"}}">{% endif %}
             {% trans "month" %} &raquo;
           </a>
         </li>

@@ -108,8 +108,8 @@ example.)
             <tr>
               <!-- Rank -->
               <td class="rl_number">
-                {% if starcount %}
-                  {{ page|sub:1|mul:40|add:forloop.counter }}
+                {% if startcount %}
+                  {{ forloop.counter|add:startcount }}
                 {% else %}
                   {{ forloop.counter }}
                 {% endif %}

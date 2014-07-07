@@ -193,6 +193,11 @@ To use, you should define the following blocks:
        'show': '{% trans "show" %}',
      };
      $(document).ready(function () { $(".datepicker").datepicker(); });
+     $(document).ready(function () {
+       $(".pagination .disabled a, .pagination .active a").on('click', function (e) {
+         e.preventDefault();
+       });
+     });
     </script>
     {% if charts %}
       <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>

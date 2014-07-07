@@ -195,7 +195,7 @@ def period(request, period_id=None):
         pn_start -= pn_end - npages
         pn_end = npages
     if pn_start < 1:
-        pn_end = npages
+        pn_start = 1
 
     base.update({
         'page':       page,
@@ -280,7 +280,7 @@ def earnings(request):
         pn_start -= pn_end - npages
         pn_end = npages
     if pn_start < 1:
-        pn_end = npages
+        pn_start = 1
 
     base.update({
         'page':       page,

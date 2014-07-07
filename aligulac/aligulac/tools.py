@@ -391,7 +391,8 @@ ntz = lambda k: k if k is not None else 0
 def search(query, search_for=['players', 'teams', 'events'], strict=False):
     # {{{ Split query
     lex = shlex.shlex(query, posix=True)
-    lex.wordchars += "'"
+    lex.wordchars += "'#-"
+    lex.commenters = ''
     lex.quotes = '"'
 
     terms = [s.strip() for s in list(lex) if s.strip() != '']

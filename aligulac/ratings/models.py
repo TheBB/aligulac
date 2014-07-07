@@ -558,17 +558,18 @@ class Event(models.Model):
     # }}}
 
     # {{{ change_type(type): Modifies the type of this event, and possibly all ancestors and events
-    def change_type(self, type):
-        self.type = type
-        self.save()
-
+    @transaction.atomic
+    def change_type(self, tp):
         # If EVENT or ROUND, children must be ROUND
-        if type == TYPE_EVENT or type == TYPE_ROUND:
+        if tp == TYPE_EVENT or tp == TYPE_ROUND:
             self.get_children(id=False).update(type=TYPE_ROUND)
 
         # If EVENT or CATEGORY, parents must be CATEGORY
-        if type == TYPE_EVENT or type == TYPE_CATEGORY:
+        if tp == TYPE_EVENT or tp == TYPE_CATEGORY:
             self.get_ancestors(id=False).update(type=TYPE_CATEGORY)
+
+        self.type = tp
+        self.save()
     # }}}
 
     # {{{ Standard setters

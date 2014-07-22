@@ -9,9 +9,9 @@ from django.db import connection, transaction
 from django.db.models import F
 
 from aligulac.settings import (
-    DECAY_DEV,
-    INIT_DEV,
-    MIN_DEV,
+    initdev,
+    mindev,
+    decaydev,
 )
 
 from ratings.models import (
@@ -54,7 +54,7 @@ for period_id in range(last.id-1, 0, -1):
                WHERE p.player_id = m.player_id AND p.period_id = {pid} AND m.period_id = {mid}
           ) i
          WHERE rating.id = i.id'''
-        .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
+        .format(dec=decaydev(period_id), pid=period_id+1, mid=period_id)
     )
     transaction.commit_unless_managed()
     # }}}
@@ -77,7 +77,7 @@ for period_id in range(last.id-1, 0, -1):
                WHERE p.player_id = m.player_id AND p.period_id = {pid} AND m.period_id = {mid}
           ) i
          WHERE rating.id = i.id'''
-        .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
+        .format(dec=decaydev(period_id), pid=period_id+1, mid=period_id)
     )
     transaction.commit_unless_managed()
     # }}}
@@ -96,7 +96,7 @@ for period_id in range(last.id-1, 0, -1):
                WHERE m.period_id = {mid}
           ) i
          WHERE rating.id = i.id'''
-        .format(min=MIN_DEV, init=INIT_DEV, mid=period_id)
+        .format(min=mindev(period_id), init=initdev(period_id), mid=period_id)
     )
     transaction.commit_unless_managed()
     # }}}

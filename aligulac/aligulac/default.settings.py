@@ -15,6 +15,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from django.utils.translation import ugettext_lazy as _
+from numpy import exp
 
 import aligulac.local as local
 
@@ -93,16 +94,23 @@ CACHE_TIMES = {
 # RATINGS
 
 INACTIVE_THRESHOLD = 4
-INIT_DEV = 0.16
-DECAY_DEV = 0.065
-MIN_DEV = 0.04
+INIT_DEV = 0.12 # Used only as a best guess value for predictions
 OFFLINE_WEIGHT = 1.5
 PRF_NA = -1000
 PRF_INF = -2000
 PRF_MININF = -3000
 
 def start_rating(country, period):
-    return 0.2 if country == 'KR' else 0.0
+    return 0.4 - 0.25 * exp(-period / 40) if country == 'KR' else 0.0
+
+def initdev(period):
+    return 1.10 * (0.13 + 0.07 * exp(-period / 80))
+
+def mindev(period):
+    return 1.10 * (0.040 + 0.020 * exp(-period / 80))
+
+def decaydev(period):
+    return 1.10 * (0.052 + 0.028 * exp(-period / 80))
 
 
 # Application definition

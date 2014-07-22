@@ -5,8 +5,6 @@ This is where the rating magic happens. Imported by period.py.
 from numpy import *
 
 from aligulac.settings import (
-    INIT_DEV,
-    MIN_DEV,
     PRF_INF,
     PRF_MININF,
     PRF_NA,
@@ -155,6 +153,7 @@ def performance(oppr, opps, oppc, W, L, text='', pr=False):
 def update(my_rating, my_stdev,
            opp_rating, opp_stdev, opp_category,
            nwins, nlosses,
+           MIN_DEV, INIT_DEV,
            text='', output=False, ncategories=3):
 
     # If there are no games, the rating is unchanged.

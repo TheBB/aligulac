@@ -15,10 +15,11 @@ from django.db.models import Q
 
 from aligulac.tools import etn
 from aligulac.settings import (
-    DECAY_DEV,
     INACTIVE_THRESHOLD,
-    INIT_DEV,
     OFFLINE_WEIGHT,
+    initdev,
+    mindev,
+    decaydev,
     start_rating,
 )
 
@@ -59,6 +60,10 @@ print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.i
     #sys.exit(1)
 
 prev = etn(lambda: Period.objects.get(id=period.id-1))
+
+INIT_DEV = initdev(period.id)
+DECAY_DEV = decaydev(period.id)
+MIN_DEV = mindev(period.id)
 # }}}
 
 # {{{ Get players
@@ -136,7 +141,9 @@ for p in players.values():
         ),
         array([p['prev_devs']['M'], p['prev_devs']['P'], p['prev_devs']['T'], p['prev_devs']['Z']]),
         array(p['opp_r']), array(p['opp_d']), array(p['opp_c']), 
-        array(p['wins']), array(p['losses']), p['player'].tag, False
+        array(p['wins']), array(p['losses']),
+        MIN_DEV, INIT_DEV,
+        p['player'].tag, False
     )
 
     perfs = performance(

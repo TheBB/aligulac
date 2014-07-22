@@ -27,8 +27,8 @@ from countries.transformations import (
 import aligulac
 from aligulac.settings import (
     INACTIVE_THRESHOLD,
-    INIT_DEV,
     start_rating,
+    initdev,
 )
 
 from ratings.models import (
@@ -466,13 +466,13 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             r['pla'].update({
                 'rating':  m.rta.get_totalrating(m.rcb) if m.rta
                            else start_rating(r['pla']['country'], m.period_id),
-                'dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*INIT_DEV,
+                'dev':     m.rta.get_totaldev(m.rcb) if m.rta else sqrt(2)*initdev(m.period_id),
             })
 
             r['plb'].update({
                 'rating':  m.rtb.get_totalrating(m.rca) if m.rtb
                            else start_rating(r['plb']['country'], m.period_id),
-                'dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*INIT_DEV,
+                'dev':     m.rtb.get_totaldev(m.rca) if m.rtb else sqrt(2)*initdev(m.period_id),
             })
         # }}}
 

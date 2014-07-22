@@ -1,0 +1,767 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the main player page, called from ratings.views.player.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block modals %}
+  {% if adm %}
+    <div class="modal fade" id="md-edit" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-edit-label">
+              {% trans "Modify player" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/players/{{player.id}}-{{player.tag|urlfilter}}/">
+              <div class="modal-body">
+                {% csrf_token %}
+                {% field "basic"        modform.tag        %}
+                {% field "select"       modform.race       %}
+                {% field "select"       modform.country    %}
+                {% field "basic"        modform.name       %}
+                {% field "basic"        modform.akas       %}
+                {% field "date"         modform.birthday   %}
+                {% field "basic"        modform.sc2e_id    %}
+                {% field "basic"        modform.lp_name    %}
+                {% field "basic"        modform.tlpd_id    %}
+                {% field "selectmulti"  modform.tlpd_db    %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" name="modplayer" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+            {% endform %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block title %}{{ player.tag }}{% endblock %}
+
+{% block postscript %}
+  {% if charts %}
+    <script type="text/javascript">
+     $(document).ready(function() {
+       var chart = new Highcharts.Chart({
+         chart: {
+           renderTo: 'chart',
+           type: 'spline',
+           zoomType: 'xy',
+           style: {
+             fontFamily: 'Roboto, sans-serif'
+           }
+         },
+         credits: {
+           enabled: false
+         },
+         title: {
+           text: '{% blocktrans with tag=player.tag %}Rating history for {{ tag }}{% endblocktrans %}'
+         },
+         subtitle: {
+           text: '{% trans "Click and drag to zoom" %}'
+         },
+         xAxis: {
+           type: 'datetime',
+           plotLines: [
+             {% for p in patches %}
+             {
+               value: {{ p.0|milliseconds }},
+               color: '#cccccc',
+               width: 2,
+               label: {
+                 text: '{{ p.1 }}',
+                 verticalAlign: 'bottom',
+                 textAlign: 'right',
+                 y: -2,
+                 style: {
+                   fontSize: '0.8em',
+                 }
+               }
+             },
+             {% endfor %}]
+         },
+         yAxis: [{
+           title: {
+             text: '{% trans "Rating" %}'
+           }
+         }, {
+           opposite: true,
+           title: {
+             text: '{% trans "Games" %}'
+           }
+         }],
+         tooltip: {
+           xDateFormat: '%B %e, %Y'
+         },
+         plotOptions: {
+           series: {
+             point: {
+               events: {
+                 click: function() {
+                   if (this.hasOwnProperty('url'))
+                   window.location.href = this.url;
+                 }
+               }
+             },
+             marker: {
+               enabled: false,
+               symbol: 'circle'
+             }
+           },
+         },
+         tooltip: {
+           formatter: function () {
+             return this.point.name;
+           }
+         },
+         series: [{
+           name: '{% trans "Games" %}',
+           color: 'rgba(140,140,140,0.4)',
+           lineWidth: 5,
+           borderWidth: 0,
+           enableMouseTracking: false,
+           yAxis: 1,
+           type: 'column',
+           data: [{% for r in ratings %} {
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.ngames }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Protoss" %}',
+           color: '#00dd00',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vP: {{r.bf_rating|addf:r.bf_rating_vp|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vp|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Terran" %}',
+           color: '#0000dd',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vT: {{r.bf_rating|addf:r.bf_rating_vt|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vt|ratscale }}
+                                },{% endfor %}]
+         }, {
+           name: '{% trans "vs. Zerg" %}',
+           color: '#dd0000',
+           lineWidth: 1,
+           dashStyle: 'Dash',
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }} vZ: {{r.bf_rating|addf:r.bf_rating_vz|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|addf:r.bf_rating_vz|ratscale }}
+                                },{% endfor %}]
+         }, {
+           {% comment %}Translators: General rating{% endcomment %}
+           name: '{% trans "General" %}',
+           color: '#000000',
+           lineWidth: 3,
+           enableMouseTracking: false,
+           yAxis: 0,
+           data: [{% for r in ratings %} {
+             name: '{{ r.period.end }}: {{r.bf_rating|ratscale }}',
+             x: {{ r.period.end|milliseconds }},
+             y: {{ r.bf_rating|ratscale }}
+                                },{% endfor %}]
+         }, {% if stories %}
+                  {
+           {% comment %}Translators: Stories are the dots on a player's rating chart.{% endcomment %}
+           name: '{% trans "Stories" %}',
+           type: 'scatter',
+           color: '#ffaa00',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for s in stories %}{% if not s.skip %} {
+             name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
+             url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
+             x: {{ s.date|milliseconds }},
+             y: {{ s.rating|ratscale }}
+                                },{% endif %}{% endfor %}]
+         }, {% endif %}{% if teampoints %}
+                  {
+           name: '{% trans "Team switches" %}',
+           type: 'scatter',
+           color: '#FF0000',
+           yAxis: 0,
+           marker: {
+             enabled: true,
+             symbol: 'circle',
+             radius: 5
+           },
+           data: [{% for t in teampoints %} {
+             name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
+             x: {{ t.date|milliseconds }},
+             y: {{ t.rating|ratscale }}
+                                },{% endfor %}]
+         } {% endif %}]
+       });
+     });
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>
+        {{player.tag}}
+        {% for t, uri in subnav %}
+          {% if cursubpage == t %}
+            <small>{{t}}</small>
+          {% else %}
+            <small><a href="{{uri}}">{{t}}</a></small>
+          {% endif %}
+        {% endfor %}
+      </h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+      <ul class="nav nav-tabs">
+        {% comment %}Translators: All-time winrates{% endcomment %}
+        <li class="active"><a href="#alltime" data-toggle="tab">{% trans "All-time" %}</a></li>
+        {% comment %}Translators: Recent winrates{% endcomment %}
+        <li><a href="#form" data-toggle="tab">{% trans "Form" %}</a></li>
+        {% comment %}Translators: Highest ratings{% endcomment %}
+        <li><a href="#highest" data-toggle="tab">{% trans "Highest" %}</a></li>
+        <li><a href="#rivalries" data-toggle="tab">{% trans "Rivalries" %}</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="alltime" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 5em; border-top: none;">{% trans "All" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=total.0|pctg_add:total.1 %}
+                      <div class="progress-bar progress-bar-default" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{total.0}}/{{total.1|add:total.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none; width: 9em;">
+                  {% if rating %}
+                    {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
+                    {% if rating.position %}
+                      <small class="text-muted">(#{{ rating.position }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vP" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vp.0|pctg_add:vp.1 %}
+                      <div class="progress-bar progress-bar-success" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vp.0}}/{{vp.1|add:vp.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
+                    {% if rating.position_vp %}
+                      <small class="text-muted">(#{{ rating.position_vp }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vT" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vt.0|pctg_add:vt.1 %}
+                      <div class="progress-bar progress-bar-primary" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vt.0}}/{{vt.1|add:vt.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
+                    {% if rating.position_vt %}
+                      <small class="text-muted">(#{{ rating.position_vt }})</small>
+                    {% endif %}
+                  {% endif %}
+
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vz.0|pctg_add:vz.1 %}
+                      <div class="progress-bar progress-bar-danger" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vz.0}}/{{vz.1|add:vz.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
+                    {% if rating.position_vz %}
+                      <small class="text-muted">(#{{ rating.position_vz }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="form" style="padding-top: 1em;">
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th class="text-right" style="width: 5em; border-top: none;">{% trans "All" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=totalf.0|pctg_add:totalf.1 %}
+                      <div class="progress-bar progress-bar-default" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{totalf.0}}/{{totalf.1|add:totalf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none; width: 9em;">
+                  {% if rating %}
+                    {{ rating.rating|ratscale }} ± {{ rating.dev|ratscalediff }}
+                    {% if rating.position %}
+                      <small class="text-muted">(#{{ rating.position }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vP" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vpf.0|pctg_add:vpf.1 %}
+                      <div class="progress-bar progress-bar-success" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vpf.0}}/{{vpf.1|add:vpf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vp|ratscale }} ± {{ rating|ratingdev:"P"|ratscalediff }}
+                    {% if rating.position_vp %}
+                      <small class="text-muted">(#{{ rating.position_vp }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vT" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vtf.0|pctg_add:vtf.1 %}
+                      <div class="progress-bar progress-bar-primary" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vtf.0}}/{{vtf.1|add:vtf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vt|ratscale }} ± {{ rating|ratingdev:"T"|ratscalediff }}
+                    {% if rating.position_vt %}
+                      <small class="text-muted">(#{{ rating.position_vt }})</small>
+                    {% endif %}
+                  {% endif %}
+
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "vZ" %}</th>
+                <td style="border-top: none;">
+                  <div class="progress progress-striped" style="height: 100%;">
+                    {% with p=vzf.0|pctg_add:vzf.1 %}
+                      <div class="progress-bar progress-bar-danger" style="width: {{p}}%">
+                        {% if p|tol %}{{p}}% ({{vzf.0}}/{{vzf.1|add:vzf.0}}){% else %}&nbsp;{% endif %}
+                      </div>
+                    {% endwith %}
+                  </div>
+                </td>
+                <td style="border-top: none;">
+                  {% if rating %}
+                    {{ rating.rating|addf:rating.rating_vz|ratscale }} ± {{ rating|ratingdev:"Z"|ratscalediff }}
+                    {% if rating.position_vz %}
+                      <small class="text-muted">(#{{ rating.position_vz }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="highest">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <tr>
+                <th class="text-right" style="border-top: none;">{% trans "All" %}</th>
+                <td style="width: 9em; border-top: none;">
+                  {% if highs %}
+                    {{ highs.0.rating|ratscale }} 
+                    ± {{ highs.0.dev|ratscalediff }}
+                    {% if highs.0.position %}
+                      <small class="text-muted">(#{{ highs.0.position }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+                <td style="width: 18em; border-top: none;">
+                  {% if highs %}
+                    {% trans "on" context "on date" %}
+                    <a href="/periods/{{ highs.0.period.id }}/">{{ highs.0.period.end|cdate:_('F jS, Y') }}</a>
+                  {% endif %}
+                </td>
+                <td style="border-top: none;">
+                  {% if highs %}
+                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.0.period.id }}/">
+                      <span class="right-caret"></span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "vP" %}</th>
+                <td>
+                  {% if highs %}
+                    {{ highs.1.rating|addf:highs.1.rating_vp|ratscale }} 
+                    ± {{ highs.1|ratingdev:"P"|ratscalediff }}
+                    {% if highs.1.position_vp %}
+                      <small class="text-muted">(#{{ highs.2.position_vp }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    {% trans "on" context "on date" %}
+                    <a href="/periods/{{ highs.1.period.id }}/">{{ highs.1.period.end|cdate:_('F jS, Y') }}</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.1.period.id }}/">
+                      <span class="right-caret"></span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "vT" %}</th>
+                <td>
+                  {% if highs %}
+                    {{ highs.2.rating|addf:highs.2.rating_vt|ratscale }} 
+                    ± {{ highs.2|ratingdev:"T"|ratscalediff }}
+                    {% if highs.2.position_vt %}
+                      <small class="text-muted">(#{{ highs.2.position_vt }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    {% trans "on" context "on date" %}
+                    <a href="/periods/{{ highs.2.period.id }}/">{{ highs.2.period.end|cdate:_('F jS, Y') }}</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.2.period.id }}/">
+                      <span class="right-caret"></span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right">{% trans "vZ" %}</th>
+                <td>
+                  {% if highs %}
+                    {{ highs.3.rating|addf:highs.3.rating_vz|ratscale }} 
+                    ± {{ highs.3|ratingdev:"Z"|ratscalediff }}
+                    {% if highs.3.position_vz %}
+                      <small class="text-muted">(#{{ highs.3.position_vz }})</small>
+                    {% endif %}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    {% trans "on" context "on date" %}
+                    <a href="/periods/{{ highs.3.period.id }}/">{{ highs.3.period.end|cdate:_('F jS, Y') }}</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if highs %}
+                    <a href="/players/{{ player.id }}-{{player.tag|urlfilter}}/period/{{ highs.3.period.id }}/">
+                      <span class="right-caret"></span>
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane" id="rivalries">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 3em;"></th>
+                  <th>
+                    {% blocktrans count player.rivals|length as cnt %}Rival{% plural %}Rivals{% endblocktrans %}
+                  </th>
+                  <th style="width: 3em;"></th>
+                  <th>
+                    {% blocktrans count player.nemesis|length as cnt %}Nemesis{% plural %}Nemeses{% endblocktrans %}
+                  </th>
+                  <th style="width: 3em;"></th>
+                  <th>
+                    {% blocktrans count player.victim|length as cnt %}Victim{% plural %}Victims{% endblocktrans %}
+                  </th>
+                </tr>
+              </thead>
+              {% for r,n,v in riv_nem_vic %}
+                <tr>
+                  <td class="text-right small">
+                    {% if r %}<a href="{{player.id|vs_url:r.id}}">{{r.matches}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if r %}{{r|player}}{% endif %}
+                  </td>
+                  <td class="text-right small">
+                    {% if n %}<a href="{{player.id|vs_url:n.id}}">{{n.pm|signify}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if n %}{{n|player}}{% endif %}
+                  </td>
+                  <td class="text-right small">
+                    {% if v %}<a href="{{player.id|vs_url:v.id}}">{{v.pm|signify}}</a>{% endif %}
+                  </td>
+                  <td>
+                    {% if v %}{{v|player}}{% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix visible-sm visible-xs"></div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+      <div class="table-responsive">
+        <table class="table table-condensed table-striped table-hover">
+          <thead>
+            <tr><th colspan="2" class="text-center ibox-header">{{player.tag}}</th></tr>
+          </thead>
+          <tr class="small">
+            <td class="text-right ibox-left" style="width: 40%">{% trans "Race" %}</td>
+            <td><img src="{{ player.race|img }}"> {{ player.race|racefull }}</td>
+          </tr>
+          <tr class="small">
+            <td class="text-right ibox-left">{% trans "Country" %}</td>
+            <td>
+              {% if player.country %}
+                <img src="{{ player.country|lower|img:"flags" }}"> {{countryfull}}
+              {% endif %}
+            </td>
+          </tr>
+          {% if player.current_rating and player.current_rating.decay < 4 %}
+            {% with pid=player.current_rating.period.id %}
+              <tr class="small">
+                <td class="text-right ibox-left">{% trans "Rank" %}</td>
+                <td>
+                  <a href="/periods/{{ pid }}/?page={{ player.world_rank_page }}">
+                    {% comment %}Translators: World rank.{% endcomment %}
+                    {% blocktrans with rank=player.world_rank %}#{{rank}} World{% endblocktrans %}
+                  </a>
+                  {% if player.country != "KR" %}
+                    <br><a href="/periods/{{ pid }}/?nats=foreigners&page={{ player.foreigner_rank_page }}">
+                      {% comment %}Translators: Rank among non-Koreans.{% endcomment %}
+                      {% blocktrans with rank=player.foreigner_rank %}#{{rank}} Non-Korean{% endblocktrans %}
+                    </a>
+                  {% endif %}
+                  {% if player.country %}
+                    <br><a href="/periods/{{ pid }}/?nats={{ player.country }}&page={{ player.country_rank_page }}">
+                      {% comment %}Translators: Rank in a country.{% endcomment %}
+                      {% blocktrans with rank=player.country_rank %}#{{rank}} {{ countryfull }}{% endblocktrans %}
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endwith %}
+          {% endif %}
+          {% if player.name %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Full name" %}</td>
+              <td>{{player.name}}</td>
+            </tr>
+          {% endif %}
+          {% if aliases %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "AKA" %}</td>
+              <td>{% for alias in aliases %}{{ alias.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            </tr>
+          {% endif %}
+          {% if player.birthday %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Birthday" %}</td>
+              <td>{{player.birthday|cdate:_('F jS, Y')}}</td>
+            </tr>
+          {% endif %}
+          {% if team %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Team" %}</td>
+              <td><a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a></td>
+            </tr>
+          {% endif %}
+          {% if first %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "First match" %}</td>
+              <td>{{first.date|cdate:_('F jS, Y')}}</td>
+            </tr>
+          {% endif %}
+          {% if last %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Last match" %}</td>
+              <td>{{last.date|cdate:_('F jS, Y')}}</td>
+            </tr>
+          {% endif %}
+          {% if earnings %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Total earnings" %}</td>
+              <td>${{earnings|add_separator}}</td>
+            </tr>
+          {% endif %}
+          {% if earnings %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Matches played" %}</td>
+              <td>{{totalmatches}} ({{offlinematches|pctg:totalmatches}}% {% trans "offline" %})</td>
+            </tr>
+          {% endif %}
+          {% if player.mcnum or player.mcnum == 0 %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "MC number" %}</td>
+              <td>{{player.mcnum}}</td>
+            </tr>
+          {% endif %}
+          {% if player.tlpd_id or player.lp_name or player.sc2e_id %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "External" %}</td>
+              <td>
+                {% if player.tlpd_id %}
+                  {% for tl, human in player.tlpd_db|get_tlpd_list %}
+                    <a href="http://www.teamliquid.net/tlpd/{{ tl }}/players/{{ player.tlpd_id }}" target="_blank">{{ human }}</a>
+                  {% endfor %}
+                {% endif %}
+                {% if player.sc2e_id %}
+                  {% comment %}Translators: SC2E = sc2earnings.com{% endcomment %}
+                  <a href="http://sc2earnings.com/player/{{ player.sc2e_id }}" target="_blank">{% trans "SC2E" %}</a>
+                {% endif %}
+                {% if player.lp_name %}
+                  {% comment %}Translators: LP = Liquipedia{% endcomment %}
+                  <a href="http://wiki.teamliquid.net/starcraft2/{{ player.lp_name }}" target="_blank">{% trans "LP" %}</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endif %}
+          {% if adm %}
+            <tr>
+              <td colspan="2" class="text-center">
+                <a href="#" title="{% trans "Edit info" %}" data-toggle="modal" data-target="#md-edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="/admin/ratings/player/{{player.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% if charts %}
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div id="chart"></div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if matches %}
+    <h3>{% trans "Most recent results" %}</h3>
+    {% include "matchlist.djhtml" with lm_list=matches lm_header="info" %}
+  {% endif %}
+
+  {% if teammems %}
+    <h3>{% trans "Team history" %}</h3>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="table-responsive">
+          <table class="table table-condensed table-striped table-hover">
+            <thead>
+              <tr>
+                <th>{% trans "Team" %}</th>
+                <th>{% trans "Joined" %}</th>
+                <th>{% trans "Left" %}</th>
+                <th class="text-right">{% trans "Current" %}</th>
+              </tr>
+            </thead>
+            {% for tm in teammems %}
+              <tr>
+                <td><a href="/teams/{{tm.group.id}}-{{tm.group.name|urlfilter}}/">{{tm.group.name}}</a></td>
+                <td>{{tm.start|cdate:_('F jS, Y')}}</td>
+                <td>{{tm.end|cdate:_('F jS, Y')}}</td>
+                <td class="text-right">
+                  {% if tm.current %}
+                    <img src="{{ "yes"|img }}" alt="{% trans "yes" %}">
+                  {% else %}
+                    <img src="{{ "no"|img }}" alt="{% trans "no" %}">
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+Login template. Called from any admin-specific page if the user is not logged in. (Mostly in
+ratings.submitviews.)
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Language" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Language" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <p>
+        {% comment %}Translators: I would like to use Aligulac in [a certain language]{% endcomment %}
+        {% trans "I would like to use Aligulac in..." %}
+      </p>
+      <div class="text-center">
+        {% for l in languages %}
+          <form method="post" action="/i18n/setlang/">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/">
+            <input type="hidden" name="language" value="{{l.0}}">
+            <button type="submit" class="btn btn-{% if l.0 == lang %}info{% else %}default{% endif %}"
+                    style="width: 20em; margin-bottom: 1em;">
+              {{l.1}}
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+
+      <p>{% blocktrans with a="<a href=\"mailto:evfonn(at)gmail(dot)com\">" %}You could always {{a}}help us</a> translate Aligulac into your language.{% endblocktrans %}</p>
+
+      <p>{% blocktrans %}For reasons of convenience, the following will not be translated:{% endblocktrans %}</p>
+
+      <ul>
+        <li>{% trans "News" %}</li>
+        <li>{% trans "Frequently asked questions" %}</li>
+        <li>{% trans "Event names" %}</li>
+        <li>{% trans "Team names" %}</li>
+        <li>{% trans "Player nicknames" %}</li>
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 # {{{ Imports
+from itertools import chain
 import json
 import random
 import shlex
@@ -82,7 +83,8 @@ class NotUniquePlayerMessage(Message):
         id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
 
         lst = []
-        for p in players:
+        for p in chain(players.filter(current_rating__isnull=False).order_by('-current_rating__rating'),
+                       players.filter(current_rating__isnull=True).order_by('tag')):
             s = ''
             if p.country is not None and p.country != '':
                 s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
@@ -90,16 +92,11 @@ class NotUniquePlayerMessage(Message):
 
             if update is None:
                 s += '<a href="/players/%i-%s/">%s</a>' % (p.id, p.tag, p.tag)
-            elif updateline is None:
-                s += ((
-                    '<a href="#" onclick="set_textbox(\'%s\',\'%s %i\'); '
-                    'togvis(\'%s\',\'none\'); return false;">%s</a>'
-                ) % (update, p.tag, p.id, id, p.tag))
             else:
                 s += ((
-                    '<a href="#" onclick="set_textarea_line(\'%s\',\'%s %i\',%i); '
-                    'togvis(\'%s\',\'none\'); return false;">%s</a>'
-                ) % (update, p.tag, p.id, updateline, id, p.tag))
+                    '<a href="#" onclick="$(\'#%s_tagsinput span:nth-child(%i) span\').html(\'%s %i&nbsp;&nbsp\'); '
+                    '$(\'#%s\').toggle(); return false;">%s</a>'
+                ) % (update, updateline+1, p.tag, p.id, id, p.tag))
 
             lst.append(s)
 
@@ -125,8 +122,8 @@ class NotUniquePlayerMessage(Message):
                 _('%(commalist)s and %(number)s more') % {
                     'commalist': '<span id="%s-a">' % rand + ', '.join(lst[:num-1]),
                     'number': 
-                        ' <a href="#" onclick="togvis(\'%s-a\',\'none\'); ' % rand +
-                        'togvis(\'%s-b\',\'inline\'); return false;">' % rand +
+                        ' <a href="#" onclick="$(\'#%s-a\').toggle(); ' % rand +
+                        '$(\'#%s-b\').toggle(); return false;">' % rand +
                         '%i' % (len(lst) - num + 1)
                 } +
                 '</a></span><span id="%s-b" style="display: none;">%s</span>' % (
@@ -394,7 +391,8 @@ ntz = lambda k: k if k is not None else 0
 def search(query, search_for=['players', 'teams', 'events'], strict=False):
     # {{{ Split query
     lex = shlex.shlex(query, posix=True)
-    lex.wordchars += "'"
+    lex.wordchars += "'#-"
+    lex.commenters = ''
     lex.quotes = '"'
 
     terms = [s.strip() for s in list(lex) if s.strip() != '']

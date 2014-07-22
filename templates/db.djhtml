@@ -1,0 +1,183 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the template for the database status page. It displays a bunch of numbers and a link to the latest SQL
+dump. Called from aligulac.views.db.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Database status" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Database status" %}</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+          <tr>
+            <td class="text-right ibox-left" style="width: 40%">
+              {% trans "Last ratings update" %}
+            </td>
+            <td style="width: 60%">
+              {{ updated|cdate:_('F jS, Y, H:i e') }} (UTC {{ updated|date:"O" }})
+              (<a href="{{ "update.txt"|static }}">{% trans "log" %}</a>)
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Game data" %}
+            </td>
+            <td>
+              {{ ngames }} {% trans "games" %}, {{ nmatches }} {% trans "matches" %}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Wings of Liberty" %}
+            </td>
+            <td>
+              {{ nwolgames }} {% trans "games" %} <small class="text-muted">({{ nwolgames|pctg:ngames }}%)</small>,
+              {{ nwol }} {% trans "matches" %} <small class="text-muted">({{ nwol|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left" style="border-top: none;">
+              {% trans "Heart of the Swarm" %}
+            </td>
+            <td style="border-top: none;">
+              {{ nhotsgames }} {% trans "games" %} <small class="text-muted">({{ nhotsgames|pctg:ngames }}%)</small>,
+              {{ nhots }} {% trans "matches" %} <small class="text-muted">({{ nhots|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Online" %}
+            </td>
+            <td>
+              {{ nonlinegames }} {% trans "games" %} <small class="text-muted">({{ nonlinegames|pctg:ngames}}%)</small>,
+              {{ nonline }} {% trans "matches" %} <small class="text-muted">({{ nonline|pctg:nmatches}}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left" style="border-top: none;">
+              {% trans "Offline" %}
+            </td>
+            <td style="border-top: none;">
+              {{ nofflinegames }} {% trans "games" %} <small class="text-muted">({{ nofflinegames|pctg:ngames}}%)</small>,
+              {{ noffline }} {% trans "matches" %} <small class="text-muted">({{ noffline|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Matches with event info" %}
+            </td>
+            <td>
+              {{ npartial }} <small class="text-muted">({{ npartial|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left" style="border-top: none;">
+              {% trans "Uncatalogued matches" %}
+            </td>
+            <td style="border-top: none;">
+              {{ nuncatalogued }} <small class="text-muted">({{ nuncatalogued|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Players" %}
+            </td>
+            <td>
+              {% blocktrans %}{{ nplayers }}, of which {{ nkoreans }} Koreans{% endblocktrans %}
+              <small class="text-muted">({{ nkoreans|pctg:nplayers }}%)</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right ibox-left">
+              {% trans "Teams" %}
+            </td>
+            <td>
+              {% blocktrans %}{{ nteams }}, of which {{ nactive }} active{% endblocktrans %}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>Top submitters</h2>
+      <ul class="list-group">
+        {% for s in submitters %}
+          <li class="list-group-item">
+            {{ forloop.counter }}.
+            {{ s.username }}
+            <span class="pull-right text-muted">{{ s.nmatches}}</span>
+          </li>
+          {% if forloop.counter == 5 %}
+            <li class="list-group-item text-center" id="submlink">
+              <a href="#" onclick="$('#submitters').collapse(); $('#submlink').hide(); return false;">
+                {% trans "more" %}
+              </a>
+            </li>
+            <div class="collapse" id="submitters">
+          {% endif %}
+        {% endfor %}
+            </div>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>Database dump</h2>
+
+      {% if not dump %}
+        <p>{% blocktrans with span="<span style=\"color: #dd0000;\">" %}The database dump file is currently {{span}}offline</span> for reasons unknown.{% endblocktrans %}</p>
+      {% else %}
+        <p>
+          {% with dump="aligulac.sql"|static dumpmb=megabytes|floatformat:1 %}
+          {% with gzdump="aligulac.sql.gz"|static gzdumpmb=gz_megabytes|floatformat:1 %}
+          {% with datetime=modified|cdate:_('F jS, Y, H:i e') tz=modified|date:"O" %}
+            {% blocktrans %}You can download a PostgreSQL dump <a href="{{dump}}">here</a> ({{dumpmb}} MiB) or <a href="{{gzdump}}">here</a> ({{gzdumpmb}} MiB gzipped), current as of {{datetime}} (UTC {{tz}}). It is free to use for non-commercial purposes if you credit this website when doing so.{% endblocktrans %}
+          {% endwith %} {% endwith %} {% endwith %}
+        </p> 
+
+        <p>{% blocktrans %}The dump contains 11 tables. Some columns are foreign keys to tables that have been removed from the dump (primarily involving user accounts). Everything given below is in terms of <strong>PostgreSQL standards</strong>.{% endblocktrans %}</p>
+
+        {% for table in dbtables %}
+          <h3>{{ table.name }}</h3>
+          <p>{{ table.desc|safe }}</p>
+
+          <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Name</th>
+                  <th style="width: 30%;">Definition</th>
+                  <th style="width: 50%;">Description</th>
+                </tr>
+              </thead>
+              {% for col in table.cols %}
+                <tr>
+                  <td>{{ col.0 }}</td>
+                  <td>{{ col.1 }}</td>
+                  <td>{{ col.2|safe }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

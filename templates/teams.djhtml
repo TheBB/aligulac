@@ -1,0 +1,54 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This shows the list of all teams and their AK/PL scores. Called from ratings.teamviews.teams.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Teams" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Active teams" %}</h2>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <th class="text-right">{% trans "#" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th class="text-right">{% trans "All-kill score" %}</th>
+            <th class="text-right">{% trans "Proleague score" %}</th>
+            <th class="text-right">{% trans "Top 5 rating" %}</th>
+            <th class="text-right">{% trans "Players" %}</th>
+          </thead>
+          {% for team in active %}
+            <tr>
+              <td class="text-right">{{forloop.counter}}.</td>
+              <td><a href="/teams/{{team.id}}-{{team.name|urlfilter}}">{{team.name}}</a></td>
+              <td class="text-right">{% if team.scoreak|tol %}{{team.scoreak|pctg_one}}%{% endif %}</td>
+              <td class="text-right">{% if team.scorepl|tol %}{{team.scorepl|pctg_one}}%{% endif %}</td>
+              <td class="text-right">{% if team.meanrating > -10 %}{{team.meanrating|ratscale}}{% endif %}</td>
+              <td class="text-right">{{team.nplayers}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      {% if inactive %}
+        <h2>{% trans "Disbanded teams" %}</h2>
+        <p class="searchres">
+          {% for team in inactive %}
+            <span class="searchres">
+              <a href="/teams/{{ team.id }}-{{ team.name|urlfilter }}/">{{ team.name }}</a>{% if not forloop.last %}, {% endif %}
+            </span>
+          {% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+  
+{% endblock %}

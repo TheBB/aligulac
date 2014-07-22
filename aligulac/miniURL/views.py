@@ -10,14 +10,6 @@ from aligulac.tools import base_ctx
 
 from miniURL.models import MiniURL
 
-@cache_page
-def list(request):
-    base = base_ctx(request=request)
-    base['minis'] = MiniURL.objects.order_by('-nb_access')
-    
-    base.update({"title": _("List of short URLs")})
-    return render(request, 'miniURL/list.html', base)
-
 @csrf_protect
 def new(request):
     h = html.parser.HTMLParser()

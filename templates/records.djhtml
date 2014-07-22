@@ -1,0 +1,60 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the basic records page, called from ratings.views.records.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}
+  {% if race %}
+    {% blocktrans with rc=race|racefull %}Records for {{rc}}{% endblocktrans %}
+  {% else %}
+    {% trans "Records" %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>
+        {% if race %}
+          {% blocktrans with r=race|racefull %}Records for {{r}}{% endblocktrans %}
+        {% else %}
+          {% trans "Records" %}
+        {% endif %}
+      </h2>
+      <p>{% trans "To avoid rating artifacts, the earliest periods are not counted." %}</p>
+
+      <h3>
+      {% if race %}
+        {% blocktrans with rc=race|racefull%}Highest ratings ever achieved by {{ rc }}.{% endblocktrans %}
+      {% else %}
+        {% blocktrans %}Highest ratings ever achieved{% endblocktrans %}
+      {% endif %}
+      </h3>
+
+      {% include "recordlist.djhtml" with high=hightot rt=_('Rating') race=_('All') %}
+
+      <h3>{% blocktrans %}Highest ratings ever achieved by matchup{% endblocktrans %}</h3>
+      {% if race == "P" %}
+        {% include "recordlist.djhtml" with high=highp rt=_('Rating PvP') race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=_('Rating PvT') race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=_('Rating PvZ') race="Z" %}
+      {% elif race == "T" %}
+        {% include "recordlist.djhtml" with high=highp rt=_('Rating TvP') race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=_('Rating TvT') race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=_('Rating TvZ') race="Z" %}
+      {% elif race == "Z" %}
+        {% include "recordlist.djhtml" with high=highp rt=_('Rating ZvP') race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=_('Rating ZvT') race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=_('Rating ZvZ') race="Z" %}
+      {% else %}
+        {% include "recordlist.djhtml" with high=highp rt=_('Rating vP') race="P" %}
+        {% include "recordlist.djhtml" with high=hight rt=_('Rating vT') race="T" %}
+        {% include "recordlist.djhtml" with high=highz rt=_('Rating vZ') race="Z" %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -68,9 +68,7 @@ def history(request):
         'patches': PATCHES,
     })
 
-    base.update({"title": _("History")})
-
-    return render_to_response('history.html', base)
+    return render_to_response('history.djhtml', base)
 # }}}
 
 # {{{ hof view
@@ -83,8 +81,7 @@ def hof(request):
         ).order_by('-dom_val')
     )
 
-    base.update({"title": _("Hall of Fame")})
-    return render_to_response('hof.html', base)
+    return render_to_response('hof.djhtml', base)
 # }}}
 
 # {{{ filter stolen from templatetags/ratings_extras.py
@@ -116,13 +113,9 @@ def race(request):
         filter_active(total_ratings(Rating.objects.all()))
             .filter(period__id__gt=16).select_related('player', 'period')
     )
+    
     if race != 'all':
         high = high.filter(player__race=race)
-        
-        # Translators: Records for (race)
-        base.update({"title": _("Records for") + " {}".format(racefull(race))})
-    else:
-        base.update({"title": _("Records")})
 
     base.update({
         'hightot': sift(high.order_by('-rating')[:200]),
@@ -132,5 +125,5 @@ def race(request):
         'race':    race if race != 'all' else '',
     })
 
-    return render_to_response('records.html', base)
+    return render_to_response('records.djhtml', base)
 # }}}

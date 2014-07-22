@@ -1,0 +1,53 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the search results page (from the search box in the top right corner). Called from
+aligulac.views.search.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Search" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+      <h2>{% trans "Search results" %}</h2>
+      {% if players.count == 0 and teams.count == 0 and events.count == 0 %}
+        {% blocktrans %}No such player, team or event '{{ query }}' found.{% endblocktrans %}
+      {% else %}
+        {% if players %}
+          <h3>{% trans "Players" %} ({{ players.count }})</h3>
+          <p class="searchres">
+            {% for p in players %}
+              <span class="searchres">
+                {{p|player}} {% if not forloop.last %},{% endif %}
+              </span>
+            {% endfor %}
+          </p>
+        {% endif %}
+        {% if teams %}
+          <h3>{% trans "Teams" %} ({{ teams.count }})</h3>
+          <p class="searchres">
+            {% for t in teams %}
+              <span class="searchres">
+                <a href="/teams/{{ t.id }}-{{ t.name|urlfilter }}/">{{ t.name }}</a>{% if not forloop.last %},{% endif %}
+              </span>
+            {% endfor %}
+          </p>
+        {% endif %}
+        {% if events %}
+          <h3>{% trans "Events" %} ({{ events.count }})</h3>
+          <p class="searchres">
+            {% for e in events %}
+              <span class="searchres">
+                <a href="/results/events/{{e.id}}-{{e.fullname|urlfilter}}/">{{e.fullname}}</a>{% if not forloop.last %},{% endif %}
+              </span>
+            {% endfor %}
+          </p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

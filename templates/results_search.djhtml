@@ -1,0 +1,148 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the results search function. Called from ratings.views.results_search.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Search" %}{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2>{% trans "Search" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  <div class="row">
+    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 text">
+      <p>
+        {% blocktrans %}Enter players. The player information does not have to uniquely identify the player, and should be a space-separated list of any of the following:{% endblocktrans %}
+      </p>
+      <ul>
+        <li>{% blocktrans %}Player tag, e.g. "DongRaeGu"{% endblocktrans %}</li>
+        <li>{% blocktrans %}Race, i.e. "P", "T", "Z", "R" or "S"{% endblocktrans %}</li>
+        <li>
+          {% blocktrans with uri="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" %}A two- or three-letter <a href="{{uri}}">ISO 3166-1 alpha-2</a> country code. e.g. "KR", or the common English name of a country{% endblocktrans %}
+        </li>
+        <li>{% blocktrans %}Team name, e.g. "MVP"{% endblocktrans %}</li>
+        <li>
+          {% blocktrans %}Player or team aliases (we add these to the database when we feel like they're needed), e.g. "DRG"{% endblocktrans %}
+        </li>
+        <li>
+          {% blocktrans %}A player ID number, which you can get from the URL of the player page, e.g. "4"{% endblocktrans %}
+        </li>
+      </ul>
+      <p>{% trans "Note that everything is case insensitive." %}</p>
+    </div>
+    <div class="clearfix visible-sm visible-xs"></div>
+    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+      <form class="form-horizontal" role="form" method="get" action="/results/search/">
+        {% form "forms.djhtml" %}
+          {% use "hidden" name="search" value="" %}
+          {% use "daterange" label=_('Date range') after=searchform.after before=searchform.before style="hz-half"%}
+          {% field "textarea" searchform.players style="hz-half" rows="6" %}
+          {% field "basic" searchform.event style="hz-half" extraclasses="event-ac" %}
+          {% if adm %}
+            {% field "checkbox" searchform.unassigned style="hz-half" inc_label=1 %}
+          {% endif %}
+          {% field "select" searchform.bestof style="hz-half" %}
+          {% field "select" searchform.offline style="hz-half" %}
+          {% field "select" searchform.game style="hz-half" %}
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+              {% use "submit" text=_('Search') %}
+            </div>
+          </div>
+        {% endform %}
+      </form>
+    </div>
+  </div>
+
+  {% if matches %}
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 text-center">
+        <p>
+          {% blocktrans count count as cnt %}Found {{ cnt }} match.{% plural %}Found {{ cnt }} matches.{% endblocktrans %}
+        </p>
+
+        {% if sc_my or sc_op %}
+          {% with pla=left|player pctg=sc_my|pctg_add:sc_op mpctg=msc_my|pctg_add:msc_op %}
+            {% if not right %}
+              <p>
+                {% blocktrans %}Under these filters, {{pla}} is <strong>{{sc_my}}–{{sc_op}}</strong> <small class="text-muted">({{pctg}}%)</small> in games and <strong>{{msc_my}}–{{msc_op}}</strong> <small class="text-muted">({{mpctg}}%)</small> in matches.{% endblocktrans %}
+              </p>
+            {% else %}
+              {% with ruri="/players/"|add:right.id|add:"/" rtag=right.tag plb=right|player %}
+                <p>
+                  {% blocktrans %}Under these filters, {{pla}} is <strong>{{sc_my}}–{{sc_op}}</strong> <small class="text-muted">({{pctg}}%)</small> in games and <strong>{{msc_my}}–{{msc_op}}</strong> <small class="text-muted">({{mpctg}}%)</small> in matches against {{plb}}.{% endblocktrans %}
+                </p>
+              {% endwith %}
+            {% endif %}
+          {% endwith %}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if adm %}
+      <div class="row" style="padding-bottom: 1em;">
+        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 text-right">
+          <button type="button" class="btn btn-default btn-sm"
+                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',true);">
+            {% trans "Check all" %}
+          </button>
+          <button type="button" class="btn btn-default btn-sm"
+                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',false);">
+            {% trans "Uncheck all" %}
+          </button>
+        </div>
+      </div>
+      <form role="form" method="post" action="{{ request.get_full_path|escape }}">
+        {% csrf_token %}
+    {% endif %}
+
+    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_check=1 lm_header="full" %}
+
+    {% if adm %}
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 text-right">
+          <button type="button" class="btn btn-default btn-sm"
+                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',true);">
+            {% trans "Check all" %}
+          </button>
+          <button type="button" class="btn btn-default btn-sm"
+                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',false);">
+            {% trans "Uncheck all" %}
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-1 col-xs-12 col-sm-12">
+          <p>{% trans "The following modifications will be made to all checked matches:" %}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        {% form "forms.djhtml" %}
+          {% use "hidden" name="search" value="" %}
+          {% field "select" modform.event style="full-mid" %}
+          {% field "date" modform.date style="full-mid" placeholder=_('No change') %}
+          {% field "select" modform.offline style="full-mid" %}
+          {% field "select" modform.game style="full-mid" %}
+          <div class="form-group text-right {{"full-mid"|formdiv}}">
+            {% use "submit" text=_('Modify') %}
+          </div>
+        {% endform %}
+      </div>
+      </form>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

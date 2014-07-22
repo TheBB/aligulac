@@ -103,6 +103,8 @@ class PredictForm(forms.Form):
 
     # {{{ Constructor
     def __init__(self, request=None):
+        self.messages = []
+ 
         if request is not None:
             super(PredictForm, self).__init__(request.GET)
         else:
@@ -226,17 +228,15 @@ def group_by(lst, key):
 def predict(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    base.update({"title": _("Predict")})
-
     if 'submitted' not in request.GET:
         base['form'] = PredictForm()
-        return render_to_response('predict.html', base)
+        return render_to_response('predict.djhtml', base)
 
     base['form'] = PredictForm(request=request)
     base['messages'] += base['form'].get_messages()
 
     if not base['form'].is_valid():
-        return render_to_response('predict.html', base)
+        return render_to_response('predict.djhtml', base)
     return redirect(base['form'].generate_url())
 # }}}
 
@@ -357,9 +357,7 @@ def match(request):
 
     postable_match(base, request)
 
-    base.update({"title": _("%(pla)s vs. %(plb)s") % {'pla': dbpl[0].tag, 'plb': dbpl[1].tag}})
-
-    return render_to_response('pred_match.html', base)
+    return render_to_response('pred_match.djhtml', base)
 # }}}
 
 # }}}
@@ -522,9 +520,7 @@ def dual(request):
 
     postable_dual(base, request)
 
-    base.update({"title": _("Dual tournament")})
-
-    return render_to_response('pred_4pswiss.html', base)
+    return render_to_response('pred_4pswiss.djhtml', base)
 # }}}
 
 # }}}
@@ -601,9 +597,7 @@ def sebracket(request):
 
     postable_sebracket(base, request, group_by(base['meanres'], key=lambda a: a['eventtext']))
 
-    base.update({"title": _("Single elimination bracket")})
-
-    return render_to_response('pred_sebracket.html', base)
+    return render_to_response('pred_sebracket.djhtml', base)
 # }}}
 
 # }}}
@@ -690,9 +684,7 @@ def rrgroup(request):
 
     postable_rrgroup(base, request)
 
-    base.update({"title": _("Round robin group")})
-
-    return render_to_response('pred_rrgroup.html', base)
+    return render_to_response('pred_rrgroup.djhtml', base)
 # }}}
 
 # }}}
@@ -779,9 +771,7 @@ def proleague(request):
 
     postable_proleague(base, request)
 
-    base.update({"title": _("Proleague team match")})
-
-    return render_to_response('pred_proleague.html', base)
+    return render_to_response('pred_proleague.djhtml', base)
 # }}}
 
 # }}}

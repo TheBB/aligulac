@@ -1,0 +1,16 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+This is the blog view, called from blog.views.blog.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Blog" %}{% endblock %}
+
+{% block content %}
+  {% include "messages.djhtml" %}
+
+  {% include "blogposts.djhtml" %} 
+{% endblock %}

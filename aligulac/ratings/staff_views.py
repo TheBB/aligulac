@@ -136,14 +136,13 @@ def fill_aux_event(qset):
 # Form for reviewing matches.
 class ReviewMatchesForm(forms.Form):
     date = forms.DateField(required=False, label=_('Date'), initial=None)
-    approve = forms.BooleanField(required=False, label=_('Approve'), initial=False)
-    reject = forms.BooleanField(required=False, label=_('Reject'), initial=False)
     dup_flag = forms.BooleanField(required=False, label=_('Ignore duplicates'), initial=False)
 
     def __init__(self, request=None, submitter=None):
         if request is not None:
             super(ReviewMatchesForm, self).__init__(request.POST)
             self.eobj = request.POST['eventobj']
+            self.approve = 'approve' in request.POST
             self.commit(request.POST, submitter)
         else:
             super(ReviewMatchesForm, self).__init__()
@@ -163,9 +162,6 @@ class ReviewMatchesForm(forms.Form):
 
     # Custom validation
     def clean(self):
-        if self.cleaned_data['approve'] == self.cleaned_data['reject']:
-            raise ValidationError(_('You must either approve or reject.'))
-
         try:
             self.cleaned_data['eventobj'] = Event.objects.get(id=int(self.eobj))
         except:
@@ -195,7 +191,7 @@ class ReviewMatchesForm(forms.Form):
 
         matches = []
         for pm in prematches:
-            if self.cleaned_data['reject']:
+            if not self.approve:
                 group = pm.group
                 pm.delete()
                 if not group.prematch_set.exists():
@@ -254,7 +250,7 @@ class ReviewMatchesForm(forms.Form):
             else:
                 pm.save()
 
-        if self.cleaned_data['approve'] and len(matches) > 0:
+        if self.approve and len(matches) > 0:
             self.messages.append(Message(
                 ungettext_lazy(
                     'Successfully approved %i match.',
@@ -262,7 +258,7 @@ class ReviewMatchesForm(forms.Form):
                     len(matches)) % len(matches),
                 type=Message.SUCCESS
             ))
-        elif self.cleaned_data['reject'] and len(prematches) > 0:
+        elif not self.approve and len(prematches) > 0:
             self.messages.append(Message(
                 ungettext_lazy(
                     'Successfully rejected %i match.',
@@ -717,6 +713,7 @@ class MoveEventForm(forms.Form):
             raise ValidationError(_('No event with ID %i.') % self.cleaned_data['target'])
 
     def clean(self):
+        print(self.cleaned_data)
         if EventAdjacency.objects.filter(
             parent=self.cleaned_data['subject'],
             child=self.cleaned_data['target'],
@@ -803,9 +800,7 @@ def add_matches(request):
 
     base['form'] = form
 
-    base.update({"title": _("Submit results")})
-
-    return render_to_response('add.html', base)
+    return render_to_response('add.djhtml', base)
 
 # View for reviewing matches
 def review_matches(request):
@@ -830,11 +825,9 @@ def review_matches(request):
     )
 
     for g in base['groups']:
-        g.prematches = display_matches(g.prematch_set.all(), messages=False)
+        g.prematches = display_matches(g.prematch_set.all(), messages=False, no_events=True)
 
-    base.update({"title": _("Review results")})
-
-    return render_to_response('review.html', base)
+    return render_to_response('review.djhtml', base)
 
 # View for event manager
 def events(request):
@@ -842,6 +835,9 @@ def events(request):
     if not base['adm']:
         return redirect('/login/')
     login_message(base)
+
+    base['messages'].append(Message(
+        _("If you haven't used this tool before, ask before you do anything."), type=Message.WARNING))
 
     if request.method == 'POST':
         form = AddEventsForm(request=request)
@@ -852,21 +848,55 @@ def events(request):
     base['form'] = form
 
     # Build event list
-    events = (
-        Event.objects.filter(closed=False)
-            .annotate(Max('uplink__distance'))
-            .filter(uplink__distance__max=0)
-            .filter(downlink__child__closed=False)
-            .annotate(Max('downlink__distance'))
-            .order_by('idx')
+    root_events = (
+        Event.objects.filter(downlink__child__closed=False)
+                     .filter(parent__isnull=True)
+                     .order_by('idx')
+                     .distinct()
     )
-    #for e in events:
-        #e.has_subtree = e.get_immediate_children().filter(closed=False).exists()
-    base['nodes'] = events
 
-    base.update({"title": _("Manage events")})
+    subtreemap = {
+        e.id: []
+        for e in root_events
+    }
 
-    return render_to_response('eventmgr.html', base)
+    tree = [{ 
+        'event': e,
+        'subtree': subtreemap[e.id],
+        'inc': 0,
+    } for e in root_events]
+
+    events = root_events
+    while events:
+        events = (
+            Event.objects.filter(downlink__child__closed=False)
+                         .filter(parent__in=events)
+                         .order_by('idx')
+                         .distinct()
+        )
+
+        for e in events:
+            subtreemap[e.id] = []
+            subtreemap[e.parent_id].append({
+                'event': e,
+                'subtree': subtreemap[e.id],
+                'inc': 0,
+            })
+
+    base['tree'] = []
+
+    def do_level(level, indent):
+        for e in level:
+            e['indent'] = indent
+            base['tree'].append(e)
+            if e['subtree']:
+                base['tree'][-1]['inc'] += 1
+                do_level(e['subtree'], indent+1)
+                base['tree'][-1]['inc'] -= 1
+
+    do_level(tree, 0)
+
+    return render_to_response('eventmgr.djhtml', base)
 
 # Auxiliary view called by JS code in the event manager for progressively opening subtrees
 def event_children(request, id):
@@ -950,9 +980,7 @@ def open_events(request):
     fill_aux_event(base['open_nogames'])
     fill_aux_event(base['pp_events'])
 
-    base.update({"title": _("Open events")})
-
-    return render_to_response('events_open.html', base)
+    return render_to_response('events_open.djhtml', base)
 
 # Misc staff tools
 def misc(request):
@@ -982,4 +1010,4 @@ def misc(request):
         'moveform':   moveform,
     })
 
-    return render_to_response('manage.html', base)
+    return render_to_response('manage.djhtml', base)

@@ -1,0 +1,29 @@
+{% extends "index.djhtml" %}
+
+{% comment %}
+The FAQ template, called from faq.views.faq.
+{% endcomment %}
+
+{% load ratings_extras %}
+{% load i18n %}
+
+{% block title %}{% trans "Frequently Asked Questions" %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
+      <h2>{% trans "Frequently Asked Questions" %}</h2>
+    </div>
+  </div>
+
+  {% include "messages.djhtml" %}
+
+  {% for post in posts %}
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text faqpost">
+        <h3>{{post.title}}</h3>
+        <p>{{post.text|markdown}}</p>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

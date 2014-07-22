@@ -1,0 +1,70 @@
+fs = require 'fs'
+
+{spawn} = require 'child_process'
+
+target_dir = '../js/'
+deploy_dir = 'deploy/'
+build_dir = 'build/'
+src_dir = 'src/'
+
+target_file_name = 'aligulac'
+
+js_file_regex = ///.*\.js$///
+get_files = (dir, callback) ->
+    fs.readdir dir, (err, files) ->
+        callback (dir + file for file in files when file.match(js_file_regex)?)
+
+log = (msg) ->
+    console.log msg
+
+build = (callback) ->
+    log "Building..."
+    coffee = spawn 'coffee', ['-b', '-c', '-o', build_dir, src_dir]
+    coffee.stderr.on 'data', (data) ->
+        process.stderr.write data.toString()
+    coffee.on 'exit', (code) ->
+        get_files src_dir, (files) ->
+            copy = spawn 'cp', files.concat [build_dir]
+            copy.on 'exit', (code) ->
+                log "Build complete."
+                if callback?
+                    callback()
+
+deploy = (callback) ->
+    build ->
+        "Deploying..."
+        if not fs.existsSync deploy_dir
+            fs.mkdirSync deploy_dir
+        get_files build_dir, (files) ->
+            uglify = spawn 'uglifyjs', ['-m', '-c', '-o', deploy_dir + target_file_name + '.min.js'].concat files
+            uglify.stderr.on 'data', (data) ->
+                process.stderr.write data.toString()
+            uglify.on 'exit', (code) ->
+                log "Uglyify done."
+                target_file_stream = fs.createWriteStream deploy_dir + target_file_name + '.js'
+                cat = spawn 'cat', files
+                cat.stdout.pipe target_file_stream
+                cat.on 'exit', (code) ->
+                    log "cat done."
+                    log "Deploy complete."
+                    if callback?
+                        callback()
+
+copy = () ->
+    "Copying..."
+    get_files deploy_dir, (files) ->
+        cp = spawn 'cp', files.concat [target_dir]
+        cp.stderr.on 'data', (data) ->
+            process.stderr.write data.toString()
+        cp.stdout.on 'data', (data) ->
+            log data.toString()
+        log "Copy complete."
+
+task 'build', 'build all coffee files', (options) ->
+    build()
+
+task 'deploy', 'build and combine all coffee files', (options) ->
+    deploy copy
+
+task 'clean', 'remove all compiled files', (options) ->
+    rm = spawn 'rm', ['-r', deploy_dir, build_dir]

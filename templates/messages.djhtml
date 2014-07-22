@@ -1,0 +1,18 @@
+{% load ratings_extras %}
+
+{% if messages %}
+  {% for m in messages %}
+    <div id="{{m.id}}" class="row">
+      <!-- The message takes up the middle 8 columns on a large display,
+      the middle 10 columns on a medium display,
+      or the full display for smaller devices. -->
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 message m-{{m.type}}">
+        <img class="pull-left" src="{{ m.type|img }}">
+        <p>
+          <strong>{% if m.title %}{{m.title}}{% else %}{{m.type|capfirst}}{% endif %}</strong><br>
+          {{ m.text|safe }}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}

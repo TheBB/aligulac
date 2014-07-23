@@ -1,0 +1,116 @@
+{% extends "index.djhtml" %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Player Info" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+    <h2>
+      {% trans "Player information" %}
+    </h2>
+  </div>
+</div>
+
+{% include "messages.djhtml" %}
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+    {% if players %}
+    <a href="/add/player_info">← Return to progress list</a>
+    <table class="table table-striped table-hover" style="width: 100%">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Race</th>
+          <th>Tag</th>
+          <th>Name</th>
+          <th>Romanized Name</th>
+          <th>Birthday</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in players %}
+        <tr data-id="{{ p.id }}">
+          <td class="rl_icon">
+            {% if p.country %}
+            <img src="{{ p.country|lower|img:"flags"}}" alt="{{p.country}}" />
+            {% else %}
+            <span class="badge">
+              None
+            </span>
+            {% endif %}
+          </td>
+
+          <td class="rl_icon">
+            <img src="{{p.race|img}}" alt="{{p.race}}" />
+          </td>
+
+          <td>
+            <a href="{{ p|player_url }}">{{ p.tag }}</a>
+          </td>
+          <td>
+            {% if not p.name %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.name }}
+            {% endif %}
+          </td>
+          <td>
+            {% if not p.romanized_name %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.romanized_name }}
+            {% endif %}
+          </td>
+          <td>
+            {% if not p.birthday %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.birthday }}
+            {% endif %}
+          </td>
+          <td>
+            <a href="#" onclick="return show_player_info_form({{ p.id }});" title="{% trans "Edit info" %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="/admin/ratings/player/{{p.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-center">
+      <ul class="pagination">
+        {% if page > 1 %}
+        <li><a href="?page={{ page|sub:1 }}">«</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">«</a></li>
+        {% endif %}
+        <li><a href="?page={{ page|add:1 }}">»</a></li>
+      </ul>
+    </div>
+    {% else %}
+    {% for k, v in values.items %}
+    <div class="row">
+      <h3>{{ v.title }}</h3>
+      <small>{{ v.count }}/{{ all_count }} ({{ v.pctg }}%)</small>
+      <div class="progress progress-striped" style="width: 100%">
+        <div class="progress-bar progress-bar-default" style="width: {{ v.pctg }}%">
+        </div>
+      </div>
+      <a href="/add/player_info/{{ k }}" class="btn btn-default">Show</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

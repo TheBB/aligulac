@@ -20,6 +20,7 @@ from django.shortcuts import (
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
+from aligulac.views import EXTRA_NULL_SELECT
 from aligulac.tools import (
     base_ctx,
     etn,
@@ -981,6 +982,56 @@ def open_events(request):
     fill_aux_event(base['pp_events'])
 
     return render_to_response('events_open.djhtml', base)
+
+def player_info(request, choice=None):
+    base = base_ctx('Submit', 'Player Info', request)
+    if not base['adm']:
+        return redirect('/login/')
+    login_message(base)
+
+    # if request.method == 'POST' and 'modplayer' in request.POST and base['adm']:
+    #     modform = PlayerModForm(request)
+    #     base['messages'] += modform.update_player(player)
+    # else:
+    #     modform = PlayerModForm(player=player)
+
+
+    page = 1 if 'page' not in request.GET else int(request.GET['page'])
+
+    all_count = Player.objects.count()
+    base["all_count"] = all_count
+    q = Player.objects.all()
+
+    queries = {
+        'birthday': q.filter(birthday__isnull=True),
+        'name': q.filter(name__isnull=True),
+        'country': q.filter(country__isnull=True)
+    }
+
+    base["subnav"] = [('Progress', '/add/player_info/')]
+
+    if choice is not None and choice in ('birthday', 'name', 'country'):
+        q = queries[choice].extra(select=EXTRA_NULL_SELECT)\
+                           .order_by("-null_curr", "-current_rating__rating")
+
+        base["players"] = []
+        for p in q[(page-1)*50:page*50]:
+            
+        base["page"] = page
+    else:
+        base["values"] = dict()
+        for k, v in queries.items():
+            c = v.count()
+            base["values"][k] = {
+                'count': c,
+                'pctg': '%.2f' % (100*float(c)/float(all_count))
+            }
+
+        base["values"]["birthday"]["title"] = "Players missing birthday"
+        base["values"]["name"]["title"] = "Players missing name"
+        base["values"]["country"]["title"] = "Players missing country"
+
+    return render_to_response('player_info.djhtml', base)
 
 # Misc staff tools
 def misc(request):

@@ -304,6 +304,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
                 ('Review', _('Review'), '/add/review/'),
                 ('Events', _('Events'), '/add/events/'),
                 ('Open events', _('Open events'), '/add/open_events/'),
+                ('Player info', _('Player info'), '/add/player_info/'),
                 ('Misc', _('Misc'), '/add/misc/'),
         ]}]
     }

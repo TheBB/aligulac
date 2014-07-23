@@ -1,3 +1,6 @@
+create_tag = (tag_name) ->
+    $(document.createElement(tag_name))
+
 toggle_block = (id) ->
     $('#lm-' + id).toggle()
     $('#lma-' + id).html(

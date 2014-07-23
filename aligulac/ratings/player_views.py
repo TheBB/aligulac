@@ -95,19 +95,20 @@ def interp_rating(date, ratings):
 
 # {{{ PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
-    tag      = StrippedCharField(max_length=30, required=True, label=_('Tag'))
-    race     = forms.ChoiceField(choices=RACES, required=True, label=_('Race'))
-    name     = StrippedCharField(max_length=100, required=False, label=_('Name'))
-    akas     = forms.CharField(max_length=200, required=False, label=_('AKAs'))
-    birthday = forms.DateField(required=False, label=_('Birthday'))
+    tag            = StrippedCharField(max_length=30, required=True, label=_('Tag'))
+    race           = forms.ChoiceField(choices=RACES, required=True, label=_('Race'))
+    name           = StrippedCharField(max_length=100, required=False, label=_('Name'))
+    romanized_name = StrippedCharField(max_length=100, required=False, label=_('Romanized Name'))
+    akas           = forms.CharField(max_length=200, required=False, label=_('AKAs'))
+    birthday       = forms.DateField(required=False, label=_('Birthday'))
 
-    tlpd_id  = forms.IntegerField(required=False, label=_('TLPD ID'))
-    tlpd_db  = forms.MultipleChoiceField(
+    tlpd_id        = forms.IntegerField(required=False, label=_('TLPD ID'))
+    tlpd_db        = forms.MultipleChoiceField(
         required=False, choices=TLPD_DBS, label=_('TLPD DB'), widget=forms.CheckboxSelectMultiple)
-    lp_name  = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
-    sc2e_id  = forms.IntegerField(required=False, label=_('SC2Earnings.com ID'))
+    lp_name        = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
+    sc2e_id        = forms.IntegerField(required=False, label=_('SC2Earnings.com ID'))
 
-    country = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
+    country       = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
 
     # {{{ Constructor
     def __init__(self, request=None, player=None):
@@ -119,6 +120,7 @@ class PlayerModForm(forms.Form):
                 'race':      player.race,
                 'country':   player.country,
                 'name':      player.name,
+                'romanized_name': player.romanized_name,
                 'akas':      ', '.join(player.get_aliases()),
                 'birthday':  player.birthday,
                 'sc2e_id':   player.sc2e_id,
@@ -151,6 +153,7 @@ class PlayerModForm(forms.Form):
         update(self.cleaned_data['race'],      'race',      'set_race',      _('race'))
         update(self.cleaned_data['country'],   'country',   'set_country',   _('country'))
         update(self.cleaned_data['name'],      'name',      'set_name',      _('name'))
+        update(self.cleaned_data['romanized_name'], 'romanized_name', 'set_romanized_name', _('romanized name'))
         update(self.cleaned_data['birthday'],  'birthday',  'set_birthday',  _('birthday'))
         update(self.cleaned_data['tlpd_id'],   'tlpd_id',   'set_tlpd_id',   _('TLPD ID'))
         update(self.cleaned_data['lp_name'],   'lp_name',   'set_lp_name',   _('Liquipedia title'))

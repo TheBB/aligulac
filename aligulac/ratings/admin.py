@@ -111,7 +111,7 @@ class StoriesInline(admin.StackedInline):
 class PlayerAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,          {'fields': ['tag','race']}),
-        ('Optional',    {'fields': ['name','birthday','country']}),
+        ('Optional',    {'fields': ['name','romanized_name','birthday','country']}),
         ('External',    {'fields': ['tlpd_id','lp_name','sc2e_id']})
     ]
     inlines = [MembersInline, AliasesInline, StoriesInline, MessagesInline]

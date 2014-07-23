@@ -710,6 +710,10 @@ class Player(models.Model):
         'Full name', max_length=100, blank=True, null=True,
         help_text='Full name'
     )
+    romanized_name = models.CharField(
+        'Romanized name', max_length=100, blank=True, null=True,
+        help_text='Full romanized version of name'
+    )
     birthday = models.DateField(
         'Birthday', blank=True, null=True,
         help_text='Birthday'
@@ -794,6 +798,10 @@ class Player(models.Model):
     
     def set_name(self, name):
         self.name = None if name == '' else name
+        self.save()
+
+    def set_romanized_name(self, name):
+        self.romanized_name = None if name == '' else name
         self.save()
     
     def set_birthday(self, birthday):

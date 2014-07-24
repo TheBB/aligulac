@@ -24,16 +24,17 @@ This is the template for the main player page, called from ratings.views.player.
             <form role="form" method="post" action="/players/{{player.id}}-{{player.tag|urlfilter}}/">
               <div class="modal-body">
                 {% csrf_token %}
-                {% field "basic"        modform.tag        %}
-                {% field "select"       modform.race       %}
-                {% field "select"       modform.country    %}
-                {% field "basic"        modform.name       %}
-                {% field "basic"        modform.akas       %}
-                {% field "date"         modform.birthday   %}
-                {% field "basic"        modform.sc2e_id    %}
-                {% field "basic"        modform.lp_name    %}
-                {% field "basic"        modform.tlpd_id    %}
-                {% field "selectmulti"  modform.tlpd_db    %}
+                {% field "basic"        modform.tag            %}
+                {% field "select"       modform.race           %}
+                {% field "select"       modform.country        %}
+                {% field "basic"        modform.name           %}
+                {% field "basic"        modform.romanized_name %}
+                {% field "basic"        modform.akas           %}
+                {% field "date"         modform.birthday       %}
+                {% field "basic"        modform.sc2e_id        %}
+                {% field "basic"        modform.lp_name        %}
+                {% field "basic"        modform.tlpd_id        %}
+                {% field "selectmulti"  modform.tlpd_db        %}
               </div>
               <div class="modal-footer">
                 {% use "submit" name="modplayer" %}
@@ -634,6 +635,12 @@ This is the template for the main player page, called from ratings.views.player.
             <tr class="small">
               <td class="text-right ibox-left">{% trans "Full name" %}</td>
               <td>{{player.name}}</td>
+            </tr>
+          {% endif %}
+          {% if player.romanized_name %}
+            <tr class="small">
+              <td class="text-right ibox-left">{% trans "Romanized name" %}</td>
+              <td>{{player.romanized_name}}</td>
             </tr>
           {% endif %}
           {% if aliases %}

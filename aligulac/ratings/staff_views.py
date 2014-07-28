@@ -959,9 +959,9 @@ def open_events(request):
     # Open events without games
     base['open_nogames'] = (
         Event.objects.filter(type=TYPE_EVENT, closed=False)
-            .exclude(downlink__child__match__isnull=False)
-            .exclude(id=2)
+            .exclude(id__in=Event.objects.filter(downlink__child__match__isnull=False).distinct())
             .distinct()
+            .exclude(id=2)
             .prefetch_related('uplink__parent')
             .order_by('fullname')
     )

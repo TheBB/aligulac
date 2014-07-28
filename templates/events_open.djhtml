@@ -52,7 +52,7 @@
                   {% endfor %}
                 {% endif %}
               </td>
-              <td class="rl_icon"><input type="checkbox" name="open_games_ids" value="{{ event.id }}"></td>
+              <td class="rl_icon"><input type="checkbox" name="open_games_ids" value="{{ e.id }}"></td>
             </tr>
           {% endfor %}
           <tr>

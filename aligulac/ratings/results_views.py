@@ -4,6 +4,7 @@ from datetime import (
     date,
 )
 from decimal import Decimal
+from itertools import groupby
 import operator
 import shlex
 
@@ -68,6 +69,7 @@ from ratings.tools import (
     display_matches,
     filter_flags,
     find_player,
+    get_placements
 )
 from ratings.templatetags.ratings_extras import cdate
 # }}}
@@ -882,6 +884,28 @@ def events(request, event_id=None):
 
     # {{{ Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__uplink__parent=event)
+
+    local_earnings = Earnings.objects.filter(event=event)
+
+    ranked_prize = local_earnings.exclude(placement=0)\
+                                 .order_by('-earnings', 'placement')
+    unranked_prize = list(local_earnings.filter(placement=0))
+
+    placements = get_placements(event)
+    prize_pool_table = list()
+    for k, g in groupby(ranked_prize, key=lambda x: x.earnings):
+        gl = list(g)
+        prize_pool_table.append((k, placements[k], gl, len(gl)))
+
+    has_pp = False
+    if len(prize_pool_table) > 0:
+        base['ranked_prize'] = prize_pool_table
+        has_pp = True
+    if len(unranked_prize) > 0:
+        base['unranked_prize'] = unranked_prize
+        has_pp = True
+    base['has_prize'] = has_pp
+
     currencies = list({r['currency'] for r in total_earnings.values('currency').distinct()})
     base.update({
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],

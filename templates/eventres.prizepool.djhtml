@@ -3,15 +3,16 @@
 {% load formulation %}
 {% load i18n %}
 
+{% if ranked_prize %}
 <div class="tab-pane" id="prizepool" style="padding-top: 1em;">
   <table class="table table-hover">
     <thead>
       <tr>
         <th class="text-right">#</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th>{% trans "Name" %}</th>
+        <th class="text-right shrink">$$$</th>
+        <th colspan="3">
+          {% trans "Player" %}
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -46,8 +47,8 @@
           {% if l > 2 %}
             style="display:none;"
           {% endif %}>
-          <td class="text-right shrink">
-            <span class="label
+        <td class="text-right shrink">
+          <span class="label
               {% ifchanged %}
               {% if l <= 2 %}
               {% if p.0 == 1 %}
@@ -70,32 +71,68 @@
               {% endif %}
               {% endifchanged %}
               {% endif %}
-            </span>
-          </td>
-          <td class="text-right shrink">
-            {% if l <= 2 %}
-            {{ entry.origearnings|add_sep_and_cur:entry.currency }}
-            {% endif %}
-          </td>
-
-          <td class="rl_icon">
-            {% if entry.player.country %}
-            <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
-            {% endif %}
-          </td>
-
-          <td class="rl_icon">
-            <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}"/>
-          </td>
-
-          <td>
-            <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/">
-              {{entry.player.tag}}
-            </a>
-          </td>
-          {% endfor %}
-          {% endfor %}
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          </span>
+        </td>
+        <td class="text-right shrink">
+          {% if l <= 2 %}
+          {{ entry.origearnings|add_sep_and_cur:entry.currency }}
+          {% endif %}
+        </td>
+        <td class="rl_icon">
+          {% if entry.player.country %}
+          <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
+          {% endif %}
+        </td>
+        <td class="rl_icon">
+          <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}"/>
+        </td>
+        <td>
+          <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/">
+            {{entry.player.tag}}
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% if unranked_prize %}
+<div class="tab-pane" id="prizepool_unranked" style="padding-top: 1em;">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="text-right shrink">&nbsp;</th>
+        <th class="text-right shrink">$$$</th>
+        <th colspan="3">
+          {% trans "Player" %}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in unranked_prize %}
+      <tr>
+        <td></td>
+        <td class="text-right shrink">
+          {{ entry.origearnings|add_sep_and_cur:entry.currency }}
+        </td>
+        <td class="rl_icon">
+          {% if entry.player.country %}
+          <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
+          {% endif %}
+        </td>
+        <td class="rl_icon">
+          <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}"/>
+        </td>
+        <td>
+          <a href="/players/{{entry.player.id}}-{{entry.player.tag|urlfilter}}/">
+            {{entry.player.tag}}
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}

@@ -6,6 +6,7 @@ ratings.views.events.
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load humanize %}
 {% load formulation %}
 {% load i18n %}
 
@@ -273,6 +274,20 @@ ratings.views.events.
         <li {% if not siblings and not children %}class="active"{% endif %}>
           <a href="#matchups" data-toggle="tab">{% trans "Matchups" %}</a>
         </li>
+        {% if ranked_prize %}
+        <li>
+          <a href="#prizepool" data-toggle="tab">
+            {% trans "Prize Pool" %}
+          </a>
+        </li>
+        {% endif %}
+        {% if unranked_prize %}
+        <li>
+          <a href="#prizepool_unranked" data-toggle="tab">
+            {% trans "Other Prizes" %}
+          </a>
+        </li>
+        {% endif %}
       </ul>
       <div class="tab-content">
         {% if siblings or children %}
@@ -414,6 +429,9 @@ ratings.views.events.
             </table>
           </div>
         </div>
+        {% if ranked_prize or unranked_prize %}
+          {% include "eventres.prizepool.djhtml" %}
+        {% endif %}
       </div>
     </div>
 

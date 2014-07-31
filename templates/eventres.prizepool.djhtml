@@ -1,9 +1,14 @@
+{% comment %}
+This file is a part of eventres.djhtml
+{% endcomment %}
+
 {% load ratings_extras %}
 {% load humanize %}
 {% load formulation %}
 {% load i18n %}
 
 {% if ranked_prize %}
+<!-- Prize Pool tab -->
 <div class="tab-pane" id="prizepool" style="padding-top: 1em;">
   <table class="table table-hover">
     <thead>
@@ -43,47 +48,40 @@
       </tr>
       {% endif %}
       {% for entry in g %}
-      <tr data-placement="{{ p.0 }}-{{ p.1 }}"
-          {% if l > 2 %}
-            style="display:none;"
-          {% endif %}>
+      <tr data-placement="{{ p.0 }}-{{ p.1 }}" {% if l > 2 %}style="display:none;"{% endif %}>
         <td class="text-right shrink">
           <span class="label
               {% ifchanged %}
-              {% if l <= 2 %}
-              {% if p.0 == 1 %}
-              pp_1
-              {% elif p.0 == 2 %}
-              pp_2
-              {% elif p.0 == 3 %}
-              pp_3
-              {% else %}
-              label-default
-              {% endif %}
-              {% endif %}
+                {% if l <= 2 %}
+                  {% if p.0 < 4 %}
+                    pp_{{ p.0 }}
+                  {% else %}
+                    label-default
+                  {% endif %}
+                {% endif %}
               {% endifchanged %}">
               {% if l <= 2 %}
-              {% ifchanged %}
-              {% if l == 1 %}
-              {{ p.0|ordinal }}
-              {% else %}
-              {{ p.0|ordinal }}&ndash;{{ p.1|ordinal }}
-              {% endif %}
-              {% endifchanged %}
+                {% ifchanged %}
+                  {% if l == 1 %}
+                    {{ p.0|ordinal }}
+                  {% else %}
+                    {{ p.0|ordinal }}&ndash;{{ p.1|ordinal }}
+                  {% endif %}
+                {% endifchanged %}
               {% endif %}
           </span>
         </td>
         <td class="text-right shrink">
           {% if l <= 2 %}
-          {{ entry.origearnings|add_sep_and_cur:entry.currency }}
+            {{ entry.origearnings|add_sep_and_cur:entry.currency }}
           {% endif %}
         </td>
-        <td class="rl_icon">
+        <td class="pp_icon">
           {% if entry.player.country %}
-          <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
+            <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
           {% endif %}
         </td>
-        <td class="rl_icon">
+        <td class="pp_icon">
           <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}"/>
         </td>
         <td>
@@ -99,6 +97,7 @@
 </div>
 {% endif %}
 {% if unranked_prize %}
+<!-- Other Prizes tab -->
 <div class="tab-pane" id="prizepool_unranked" style="padding-top: 1em;">
   <table class="table table-hover">
     <thead>
@@ -117,12 +116,12 @@
         <td class="text-right shrink">
           {{ entry.origearnings|add_sep_and_cur:entry.currency }}
         </td>
-        <td class="rl_icon">
+        <td class="pp_icon">
           {% if entry.player.country %}
           <img src="{{ entry.player.country|lower|img:"flags" }}" alt="{{ entry.player.country }}"/>
           {% endif %}
         </td>
-        <td class="rl_icon">
+        <td class="pp_icon">
           <img src="{{entry.player.race|img}}" alt="{{entry.player.race}}"/>
         </td>
         <td>

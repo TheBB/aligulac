@@ -213,13 +213,17 @@ body {
 }
 
 /* Prize pool table */
-
 .pp_header {
     background-color: #f5f5f5;
 }
 
 .pp_showbtn {
     font-variant: small-caps;
+}
+
+.pp_icon {
+    width: 1em;
+    text-align: center;
 }
 
 .pp_1 {
@@ -231,7 +235,7 @@ body {
 }
 
 .pp_3 {
-    background-color: #bb8644;
+    background-color: #cd7f32;
 }
 
 /* Match table */

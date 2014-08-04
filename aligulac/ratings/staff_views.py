@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 # Misc staff tools
+import json
 import shlex
-import simplejson
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -915,7 +915,7 @@ def event_children(request, id):
         )
         q['uplink__distance__max'] = depth + 1
 
-    return HttpResponse(simplejson.dumps(ret))
+    return HttpResponse(json.dumps(ret))
 
 # Event overview
 def open_events(request):

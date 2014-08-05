@@ -36,8 +36,8 @@ This is the template for the event manager admin page. It's called from ratings.
                 {% csrf_token %}
                 {% use "hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
                 {% use "text" left="Parent" right_id="parent_name" %}
-                {% field "select" form.predef_names onchange="if ($('#id_predef_names').prop('selectedIndex') > 0) $('#id_custom_names').val('');" help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
-                {% field "basic" form.custom_names onkeypress="if ($('#id_custom_names').val() != '') $('#id_predef_names').prop('selectedIndex', 0);" help=_("Use this for custom names. Separate each new subevent by a comma.") %}
+                {% field "select" form.predef_names onchange="eventmgr_predef_change();" help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
+                {% field "basic" form.custom_names onkeypress="eventmgr_custom_keypress();" help=_("Use this for custom names. Separate each new subevent by a comma.") %}
                 {% field "select" form.type %}
                 {% field "checkbox" form.big %}
                 {% field "checkbox" form.noprint %}
@@ -129,7 +129,7 @@ This is the template for the event manager admin page. It's called from ratings.
                 {% trans "admin" %}
               </a>
               <button class="btn btn-default btn-xs"
-                      onclick="$('input[id=parent_id_field]').val('{{e.event.id}}'); $('#parent_name').html('{{e.event.fullname|jsescape}}'); $('#md-eventmgr').modal();">
+                      onclick="eventmgr_modify({{ e.event.id }}, '{{ e.event.fullname|jsescape}}', '{{ e.event.type }}');">
                 {% trans "modify" %}
               </button>
             </small>

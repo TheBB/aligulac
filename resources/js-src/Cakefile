@@ -1,6 +1,11 @@
+# Requires
+#   uglifyjs (installed and in PATH)
+#   ncp      (npm install ncp)
+
 fs = require 'fs'
 
 {spawn} = require 'child_process'
+{ncp} = require 'ncp'
 
 target_dir = '../js/'
 deploy_dir = 'deploy/'
@@ -23,12 +28,8 @@ build = (callback) ->
     coffee.stderr.on 'data', (data) ->
         process.stderr.write data.toString()
     coffee.on 'exit', (code) ->
-        get_files src_dir, (files) ->
-            copy = spawn 'cp', files.concat [build_dir]
-            copy.on 'exit', (code) ->
-                log "Build complete."
-                if callback?
-                    callback()
+        if callback?
+            callback()
 
 deploy = (callback) ->
     build ->
@@ -51,14 +52,12 @@ deploy = (callback) ->
                         callback()
 
 copy = () ->
-    "Copying..."
-    get_files deploy_dir, (files) ->
-        cp = spawn 'cp', files.concat [target_dir]
-        cp.stderr.on 'data', (data) ->
-            process.stderr.write data.toString()
-        cp.stdout.on 'data', (data) ->
-            log data.toString()
-        log "Copy complete."
+    log "Copying..."
+    ncp deploy_dir, target_dir, (err) ->
+        if err?
+            log err
+        else
+            log "Done!"
 
 task 'build', 'build all coffee files', (options) ->
     build()

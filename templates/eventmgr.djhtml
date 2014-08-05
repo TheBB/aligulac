@@ -10,13 +10,7 @@ This is the template for the event manager admin page. It's called from ratings.
 
 {% block title %}{% trans "Event manager" %}{% endblock %}
 
-{% block postscript %}
-  <script type="text/javascript">
-   $(document).ready(function () {
-     $('.tree-toggle').click(function () { $(this).parent().parent().next('.subtree').toggle(100); return false; });
-   });
-  </script>
-{% endblock %}
+{% block jsapps %}eventmgr{% endblock %}
 
 {% block modals %}
   {% if adm %}
@@ -36,8 +30,8 @@ This is the template for the event manager admin page. It's called from ratings.
                 {% csrf_token %}
                 {% use "hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
                 {% use "text" left="Parent" right_id="parent_name" %}
-                {% field "select" form.predef_names onchange="eventmgr_predef_change();" help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
-                {% field "basic" form.custom_names onkeypress="eventmgr_custom_keypress();" help=_("Use this for custom names. Separate each new subevent by a comma.") %}
+                {% field "select" form.predef_names help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
+                {% field "basic" form.custom_names help=_("Use this for custom names. Separate each new subevent by a comma.") %}
                 {% field "select" form.type %}
                 {% field "checkbox" form.big %}
                 {% field "checkbox" form.noprint %}
@@ -97,11 +91,10 @@ This is the template for the event manager admin page. It's called from ratings.
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
       <p>
         <button class="btn btn-primary pull-right" style="margin: 0.4em;"
-                onclick="$('input[id=parent_id_field]').val('-1'); $('#parent_name').html('Root (N/A)'); $('#md-eventmgr').modal();">
+                id="root_btn">
           {% trans "Add root event" %}
         </button>
-        <button style="margin: 0.4em;" class="btn btn-info pull-right" id="showguide"
-                onclick="$('#guide').collapse(); $('#showguide').toggle();">
+        <button style="margin: 0.4em;" class="btn btn-info pull-right" id="showguide">
           {% trans "Show guide" %}
         </button
       </p>
@@ -128,8 +121,10 @@ This is the template for the event manager admin page. It's called from ratings.
                  href="/admin/ratings/event/{{e.event.id}}/">
                 {% trans "admin" %}
               </a>
-              <button class="btn btn-default btn-xs"
-                      onclick="eventmgr_modify({{ e.event.id }}, '{{ e.event.fullname|jsescape}}', '{{ e.event.type }}');">
+              <button class="btn btn-default btn-xs event-modify-button"
+                      data-event-id="{{ e.event.id }}"
+                      data-event-fullname="{{ e.event.fullname }}"
+                      data-event-type="{{ e.event.type }}">
                 {% trans "modify" %}
               </button>
             </small>

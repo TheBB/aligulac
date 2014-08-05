@@ -304,6 +304,11 @@ td.loser {
     color: #aaaaaa;
 }
 
+/* Days since styles */
+.clock-expandable {
+    cursor: pointer;
+}
+
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
 h2.sub {
     position: relative;

@@ -33,12 +33,12 @@ This file is a part of eventres.djhtml
           {{ g.0.origearnings|add_sep_and_cur:g.0.currency }}
         </td>
         <th colspan="3" class="text-right">
-          <a href="#" onclick="return toggle_pp_players('{{ p.0 }}-{{ p.1 }}');"
+          <a href="#"
              data-placement="{{ p.0 }}-{{ p.1 }}"
              class="pp_showbtn">
             {% trans "show" %}
           </a>
-          <a href="#" onclick="return toggle_pp_players('{{ p.0 }}-{{ p.1 }}');"
+          <a href="#"
              data-placement="{{ p.0 }}-{{ p.1 }}"
              class="pp_showbtn"
              style="display: none;">

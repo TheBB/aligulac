@@ -167,7 +167,7 @@ To use, you should define the following blocks:
               <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
             {% endwith %}{% endwith %}
 
-            <button onclick="gen_short('{{cur_path}}');" class="btn btn-default" id="gen_short">
+            <button class="btn btn-default" id="gen_short">
               <span class="small text-muted">{% trans "Generate short URL for this page" %}</span>
             </button>
 
@@ -262,5 +262,15 @@ To use, you should define the following blocks:
     
     <!-- Put special scripts here that should be loaded after the rest of the document -->
     {% block postscript %}{% endblock %}
+    <script type="text/javascript">
+      var apps = "{% block jsapps %}{% endblock %}";
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+      var Aligulac = require('aligulac').Aligulac;
+      Aligulac.init();
+      Aligulac.init_extra(apps);
+      });
+    </script>
   </body>
 </html>

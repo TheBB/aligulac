@@ -12,6 +12,7 @@ ratings.views.events.
 
 {% block title %}{{ event }}{% endblock %}
 
+{% block jsapps %}eventres{% endblock %}
 {% block postscript %}
   {% if adm %}
     {% if event.has_children %}

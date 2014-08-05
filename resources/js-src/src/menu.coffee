@@ -21,5 +21,7 @@ toggle_navbar_method = ->
             window.location.href = this.href
         )
 
-$(document).ready toggle_navbar_method
-$(window).resize toggle_navbar_method
+module.exports.Menu = Menu =
+    init: () ->
+        $(document).ready toggle_navbar_method
+        $(window).resize toggle_navbar_method

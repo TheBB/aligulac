@@ -167,6 +167,10 @@ To use, you should define the following blocks:
               <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
             {% endwith %}{% endwith %}
 
+            {% with btc="1Ew7FPorb5u3EpqgUtz9s8wFPRDPbYcbMo" %}
+              <p>{% blocktrans %}Bitcoin donations (if you insist) on address: <br>{{btc}}{% endblocktrans %}</p>
+            {% endwith %}
+
             <button onclick="gen_short('{{cur_path}}');" class="btn btn-default" id="gen_short">
               <span class="small text-muted">{% trans "Generate short URL for this page" %}</span>
             </button>

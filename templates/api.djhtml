@@ -48,7 +48,7 @@
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
       <h3>{% trans "API access key" %}</h3>
 
-      <p>{% blocktrans with a="<a href=\"#\" onclick=\"toggle_form('apikey'); return false;\">" %}To use the Aligulac API you first need an API access key. To generate one, please use the button below. You will have to provide your name (or the name of the organization), and a contact e-mail address.{% endblocktrans %}</p>
+      <p>{% blocktrans %}To use the Aligulac API you first need an API access key. To generate one, please use the button below. You will have to provide your name (or the name of the organization), and a contact e-mail address.{% endblocktrans %}</p>
 
       <p>{% blocktrans %}If the request is successful, you will be provided with a 20-character random string. This string will have to be passed with every API request you make as a parameter named <code>apikey</code>. In the rest of this document, this parameter will be implied.{% endblocktrans %}</p>
 

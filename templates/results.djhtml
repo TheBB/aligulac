@@ -48,12 +48,16 @@ This page shows the results by date. Called from ratings.views.results.
         </li>
         <li {% if td == mindate %}class="disabled"{% endif %}>
           <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">
-            &laquo; {% trans "day" %}
+            &laquo;
+            {% comment %}Hack to get translation to work.{% endcomment %}
+            {% blocktrans count 1 as cnt %}day{% plural %}days{% endblocktrans %}
           </a>
         </li>
         <li {% if td == maxdate %}class="disabled"{% endif %}>
           <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">
-            {% trans "day" %} &raquo;
+            {% comment %}Hack to get translation to work.{% endcomment %}
+            {% blocktrans count 1 as cnt %}day{% plural %}days{% endblocktrans %}
+            &raquo;
           </a>
         </li>
         <li {% if td == maxdate %}class="disabled"{% endif %}>

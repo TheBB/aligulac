@@ -15,43 +15,39 @@ ratings.views.events.
 {% block jsapps %}eventres{% endblock %}
 {% block postscript %}
   {% if adm %}
-    {% if event.has_children %}
-      <script type="text/javascript">
-       $(document).ready(function () {
-         $(function() {
-           $("#sortable").sortable();
-           $("#sortable").disableSelection();
-         });
-       });
-       var get_order = function () {
-         var ul = document.getElementById('sortable');
-         var str = '';
-         for (var i = 0; i < ul.children.length; i++) {
-           str += ul.children[i].id + ',';
-         }
-         document.getElementById('order').value = str;
-       }
-      </script>
-    {% endif %}
+    <script type="text/javascript">
+      var admin = true;
+      {% if event.has_children %}
+      var has_children = true;
+      {% else %}
+      var has_children = false;
+      {% endif %}
+    </script>
 
     {% if not event.has_children and stform %}
       <script type="text/javascript">
-       var story_data = [{idx: -1, player: '{{event.story_set.all.0.player_id}}', dt: '{{ event.latest|date:"Y-m-d" }}', text: 0, params: ''}, {% for story in event.story_set.all %}{idx: {{story.id}}, player: {{story.player_id}}, dt: '{{ story.date|date:"Y-m-d" }}', text: {{ story.get_text_index }}, params: '{{story.get_esc_params|safe}}'},{% endfor %}];
-       var changed_story = function () {
-         var sel = document.getElementById('extantstories');
-         var data = story_data[sel.selectedIndex];
-         document.getElementById('story_id').setAttribute('value', data['idx']);
-         document.getElementById('id_player').value = data['player'];
-         document.getElementById('id_date').setAttribute('value', data['dt']);
-         document.getElementById('id_text').selectedIndex = data['text'];
-         document.getElementById('id_params').value = data['params'];
-         document.getElementById('storynewbtn').disabled = (sel.selectedIndex > 0);
-         document.getElementById('storyupdbtn').disabled = (sel.selectedIndex == 0);
-         document.getElementById('storydelbtn').disabled = (sel.selectedIndex == 0);
-       };
+       var story_data = [{
+       idx: -1,
+       player: '{{event.story_set.all.0.player_id}}',
+       dt: '{{ event.latest|date:"Y-m-d" }}',
+       text: 0,
+       params: ''},
+       {% for story in event.story_set.all %}
+         {
+           idx: {{story.id}},
+           player: {{story.player_id}},
+           dt: '{{ story.date|date:"Y-m-d" }}',
+           text: {{ story.get_text_index }},
+           params: '{{story.get_esc_params|safe}}'},
+       {% endfor %}
+       ];
       </script>
     {% endif %}
 
+  {% else %}
+  <script type="text/javascript">
+    var admin = false;
+  </script>
   {% endif %}
 {% endblock %}
 
@@ -181,7 +177,7 @@ ratings.views.events.
                   {% use "hidden" name="order" value="" id="order" %}
                 </div>
                 <div class="modal-footer">
-                  {% use "submit" onclick="get_order();" %}
+                  {% use "submit" id="submit-order"%}
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
               </form>
@@ -210,7 +206,7 @@ ratings.views.events.
                       {% trans "Extant stories" %}
                     </label>
                     <div class="{{style|forminput}}">
-                      <select class="form-control" id="extantstories" onchange="changed_story();">
+                      <select class="form-control" id="extantstories">
                         <option value="{% trans "New" %}" selected>{% trans "New" %}
                           {% for story in event.story_set.all %}
                             <option value="{{story.id}}">{{story}}</option>
@@ -222,7 +218,7 @@ ratings.views.events.
                   {% csrf_token %}
                   {% use "hidden" name="modstory" value="yes" %}
                   {% use "hidden" name="story_id" value="" id="story_id" %}
-                  {% field "date" stform.date %}
+                  {% field "date" stform.date id="st_date" %}
                   {% field "select" stform.player %}
                   {% field "select" stform.text %}
                   {% field "textarea" stform.params help=_("For each parameter, a line of the form \"parameter: value\". The parameters needed are in the story text of the form \"%(parameter)s\". This will be replaced by the value you enter.") %}

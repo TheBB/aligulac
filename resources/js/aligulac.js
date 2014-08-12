@@ -422,7 +422,7 @@
   get_order = function() {
     var list;
     list = $("#sortable").sortable("toArray");
-    return document.getElementById('order').value = list.join(',');
+    return $('#order').prop('value', list.join(','));
   };
 
   toggle_pp_players = function(id) {

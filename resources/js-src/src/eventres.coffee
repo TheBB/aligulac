@@ -12,7 +12,7 @@ changed_story = ->
 
 get_order = ->
     list = $("#sortable").sortable("toArray")
-    document.getElementById('order').value = list.join ','
+    $('#order').prop('value', list.join(','))
 
 toggle_pp_players = (id) ->
     $("[data-placement=#{ id }]").toggle()

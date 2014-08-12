@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac Danish\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-12 18:53+0200\n"
-"PO-Revision-Date: 2014-08-12 19:37+0100\n"
+"POT-Creation-Date: 2014-08-12 21:27+0200\n"
+"PO-Revision-Date: 2014-08-12 21:29+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
-"Language-Team: Morten Bo <LL@li.org>\n"
+"Language-Team: Morten <LL@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -74,7 +74,7 @@ msgstr "Påkrævet felt"
 #: aligulac/aligulac/tools.py:241 aligulac/aligulac/tools.py:252
 #: templates/history.djhtml:55
 msgid "Ranking"
-msgstr "Rangering"
+msgstr "Rangliste"
 
 #: aligulac/aligulac/tools.py:244 templates/player.djhtml:751
 msgid "Current"
@@ -232,7 +232,7 @@ msgstr "Kampe"
 
 #: aligulac/aligulac/tools.py:304
 msgid "Review"
-msgstr "Vurder"
+msgstr "Gennemgå"
 
 #: aligulac/aligulac/tools.py:305 templates/events.djhtml:10
 #: templates/events.djhtml.py:16 templates/index.djhtml:195
@@ -894,7 +894,7 @@ msgstr "Din API nøgle er '%s'. Opbevar den et sikkert sted."
 
 #: aligulac/aligulac/views.py:477
 msgid "The API documentation is only in English, sorry."
-msgstr "API dokumentationen er kun tilgængelig på engelsk, beklager."
+msgstr "API sektionen er kun tilgængelig på engelsk, beklager."
 
 #: aligulac/aligulac/views.py:605
 msgid "The old password didn't match. Your password was not changed."
@@ -2135,7 +2135,7 @@ msgstr "En foreigner vandt i GSL Code S"
 
 #: aligulac/ratings/misc_views.py:130
 msgid "A CIS player won a major event"
-msgstr "En CIS spiller vandt et mellem event"
+msgstr "En CIS spiller vandt et major event"
 
 #: aligulac/ratings/misc_views.py:131
 msgid "Player from BY, RU, UA or KZ with 1st place prize money >= $2000"
@@ -2145,7 +2145,7 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:139
 msgid "A Nordic player won a major event"
-msgstr "En nordisk spiller vandt et mellem event"
+msgstr "En nordisk spiller vandt et major event"
 
 #: aligulac/ratings/misc_views.py:140
 msgid "Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"
@@ -2155,7 +2155,7 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:148
 msgid "A North American player won a major event"
-msgstr "En nordamerikansk spiller vandt et mellem event"
+msgstr "En nordamerikansk spiller vandt et major event"
 
 #: aligulac/ratings/misc_views.py:149
 msgid "Player from US or CA with 1st place prize money >= $2000"
@@ -3323,7 +3323,7 @@ msgstr "Fejl skete, ingen ændringer gemt."
 #. Translators: New prizepools added to the database.
 #: aligulac/ratings/results_views.py:384
 msgid "New prizes committed."
-msgstr "Ny præmiepulje tilføjet."
+msgstr "Ny præmiesum tilføjet."
 
 #: aligulac/ratings/results_views.py:394
 msgid "Text"
@@ -4495,7 +4495,7 @@ msgstr "Skift kodeord"
 #: templates/changepwd.djhtml:24
 #, python-format
 msgid "To change the password for %(user)s, fill in the form."
-msgstr "For at skifte kodeord for %(user)s, udfyld formularen. "
+msgstr "For at skifte kodeord for %(user)s, udfyld formularen."
 
 #: templates/changepwd.djhtml:33 templates/changepwd.djhtml.py:36
 msgid "Old password"
@@ -4519,9 +4519,9 @@ msgid_plural "years"
 msgstr[0] "år"
 msgstr[1] "år"
 
-#: templates/clocks.djhtml:48 templates/results.djhtml:51
-#: templates/results.djhtml.py:56 templates/results.djhtml:91
-#: templates/results.djhtml.py:96
+#: templates/clocks.djhtml:48 templates/results.djhtml:54
+#: templates/results.djhtml.py:61 templates/results.djhtml:97
+#: templates/results.djhtml.py:102
 msgid "day"
 msgid_plural "days"
 msgstr[0] "dag"
@@ -4529,7 +4529,7 @@ msgstr[1] "dage"
 
 #: templates/clocks.djhtml:74 templates/matchlist.djhtml:174
 msgid "Y-m-d"
-msgstr "Å-m-d"
+msgstr "Y-m-d"
 
 #: templates/clocks.djhtml:95
 msgid ""
@@ -4609,7 +4609,7 @@ msgstr "Ikke-katalogiserede kampe"
 #: templates/db.djhtml:98
 #, python-format
 msgid "%(nplayers)s, of which %(nkoreans)s Koreans"
-msgstr "%(nplayers)s, hvor%(nkoreans)s er koreanere"
+msgstr "%(nplayers)s, hvor %(nkoreans)s er koreanere"
 
 #: templates/db.djhtml:107
 #, python-format
@@ -6158,7 +6158,7 @@ msgstr "Vis mig fremtiden!"
 
 #: templates/predict.djhtml:43
 msgid "For <b>single elimination brackets</b> the following is possible:"
-msgstr "Ved <b>single eliminations brackets</b> følgende er muligt:"
+msgstr "Ved <b>single eliminations brackets</b> er følgende muligt:"
 
 #: templates/predict.djhtml:46
 msgid ""
@@ -6166,8 +6166,8 @@ msgid ""
 "best-of-5 for the first two rounds, and best-of-7 for the final. You can "
 "still enter a single number to apply to all rounds."
 msgstr ""
-"Brug et andet kamp format for hver runde. Fx \"5,5,7\" betyder best-af-5 i "
-"de første to runder og best-af-7 i finalen. Du kan stadig taste et enkelt "
+"Brug et andet kamp format for hver runde. Fx \"5,5,7\" betyder bedst-af-5 i "
+"de første to runder og bedst-af-7 i finalen. Du kan stadig taste et enkelt "
 "nummer som gælder for alle runder."
 
 #: templates/predict.djhtml:47
@@ -6431,21 +6431,21 @@ msgstr "Resultater for %(date)s"
 msgid "Go to date:"
 msgstr "Gå til dato:"
 
-#: templates/results.djhtml:41 templates/results.djhtml.py:66
-#: templates/results.djhtml:81 templates/results.djhtml.py:106
+#: templates/results.djhtml:41 templates/results.djhtml.py:72
+#: templates/results.djhtml:87 templates/results.djhtml.py:112
 msgid "month"
 msgstr "måned"
 
-#: templates/results.djhtml:46 templates/results.djhtml.py:61
-#: templates/results.djhtml:86 templates/results.djhtml.py:101
+#: templates/results.djhtml:46 templates/results.djhtml.py:67
+#: templates/results.djhtml:92 templates/results.djhtml.py:107
 msgid "week"
 msgstr "uge"
 
-#: templates/results.djhtml:115
+#: templates/results.djhtml:121
 msgid "No registered results on this date."
 msgstr "Ingen registrerede resultater på denne dato."
 
-#: templates/results.djhtml:123
+#: templates/results.djhtml:129
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help "

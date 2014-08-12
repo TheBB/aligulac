@@ -9,14 +9,7 @@ Number of days since.
 
 {% block title %}{% trans "Days since..." %}{% endblock %}
 
-{% block postscript %}
-  <script type="text/javascript">
-   var clocks_toggle_more = function(e) {
-     $(e).next().toggle();
-     $(e).find(".clock-toggle").toggleClass("right-caret").toggleClass("down-caret");
-   };
-  </script>
-{% endblock %}
+{% block jsapps %}clocks{% endblock %}
 
 {% block content %}
 
@@ -27,7 +20,7 @@ Number of days since.
       <div class="table-responsive">
         <table class="table">
           {% for clock in clocks %}
-            <tr {% if clock.type != "one_time" %}onclick="clocks_toggle_more(this);" style="cursor: pointer;"{% endif %}>
+            <tr {% if clock.type != "one_time" %}class="clock-expandable" {% endif %}>
               <td style="width: 2em;">
                 {% if clock.type != "one_time" %}
                   <span class="clock-toggle right-caret"></span>

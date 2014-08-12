@@ -125,7 +125,11 @@
     <div class="{{style|forminput}}">
       <input type="text"
              name="{{field.html_name}}"
+             {% if id %}
+             id="{{ id }}"
+             {% else %}
              id="{{field.auto_id}}"
+             {% endif %}
              class="form-control datepicker"
              value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
              placeholder="{{placeholder|default:field.label}}">

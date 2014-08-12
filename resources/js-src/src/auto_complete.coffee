@@ -6,7 +6,7 @@ aligulacAutocompleteTemplates = (obj) ->
     if obj.type == '--'
         obj.key = '-'
         return "<a>BYE</a>"
- 
+
     if not (obj.tag? || obj.name? || obj.fullname?)
         return "<span class='autocomp-header'>#{ autocomp_strings[obj.label] }</span>"
 
@@ -60,7 +60,7 @@ getResults = (term, restrict_to) ->
 # AUTOCOMPLETE SEARCH BOX
 # ======================================================================
 
-$(document).ready ->
+init_search_box = () ->
     $('#search_box').autocomplete(
         source: (request, response) ->
             $.when(getResults request.term).then (result) ->
@@ -102,7 +102,7 @@ $(document).ready ->
 # AUTOCOMPLETE EVENT BOXES
 # ======================================================================
 
-$(document).ready ->
+init_event_boxes = () ->
     try
         $('.event-ac').autocomplete(
             source: (request, response) ->
@@ -129,7 +129,7 @@ $(document).ready ->
 # AUTOCOMPLETE PREDICTIONS
 # ======================================================================
 
-$(document).ready ->
+init_predictions = () ->
     idPlayersTextArea = $("#id_players")
     idPlayersTextArea.tagsInput
         autocomplete_opt:
@@ -163,7 +163,7 @@ $(document).ready ->
             $(this).closest("form").submit()
 
 # Make sure the players input is styled like the rest of the form elements
-$(document).ready ->
+init_other = () ->
     $('input#id_players_tag').focus ->
         $(this).parent().parent().css(
             'box-shadow',         'inset 0 1px 1px rgba(0,0,0,.075), 0 0 4px rgba(0,0,0,.4)'
@@ -176,3 +176,10 @@ $(document).ready ->
         ).css(
             '-webkit-box-shadow', 'inset 0 1px 1px rgba(0,0,0,.075)'
         ).css('border-color', '#cccccc')
+
+exports.AutoComplete = AutoComplete =
+    init: () ->
+        init_search_box()
+        init_event_boxes()
+        init_predictions()
+        init_other()

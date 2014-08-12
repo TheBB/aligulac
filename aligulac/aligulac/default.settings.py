@@ -45,6 +45,9 @@ if DEBUG:
         ('es', 'Español'),
         ('de', 'Deutsch'),
         ('fr', 'Français'),
+        ('se', 'Svenska'),
+        ('pl', 'Polish'),
+        ('pt', 'Portuguese'),
     ]
 
 # CUSTOM

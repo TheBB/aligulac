@@ -472,6 +472,12 @@ class APIKeyForm(forms.Form):
 def api(request):
     base = base_ctx('About', 'API', request)
 
+    if request.LANGUAGE_CODE != 'en':
+        base['messages'].append(Message(
+            _('The API documentation is only in English, sorry.'),
+            type=Message.INFO,
+        ))
+
     if request.method == 'POST':
         form = APIKeyForm(request)
         base['messages'] += form.add_key()

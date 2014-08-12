@@ -34,6 +34,7 @@ LANGUAGE_CODE = 'en_US'
 
 LANGUAGES = [
     ('en', 'English'),
+    ('dk', 'Dansk'),
     ('no', 'Norsk'),
 ]
 

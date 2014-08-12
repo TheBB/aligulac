@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-30 21:06+0200\n"
+"POT-Creation-Date: 2014-08-12 18:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,109 +23,109 @@ msgid "Exchange rate not found for currency %(code)s on %(date)s"
 msgstr ""
 
 #. Translators: matches as in search matches, not SC2 matches
-#: aligulac/aligulac/tools.py:110 aligulac/aligulac/tools.py:123
+#: aligulac/aligulac/tools.py:107 aligulac/aligulac/tools.py:120
 msgid "Possible matches:"
 msgstr ""
 
 #. Translators: E.g. "John, Lisa, Darren and Mike"
-#: aligulac/aligulac/tools.py:112 aligulac/aligulac/tools.py:134
+#: aligulac/aligulac/tools.py:109 aligulac/aligulac/tools.py:131
 #, python-format
 msgid "%(commalist)s and %(final)s"
 msgstr ""
 
 #. Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
-#: aligulac/aligulac/tools.py:125
+#: aligulac/aligulac/tools.py:122
 #, python-format
 msgid "%(commalist)s and %(number)s more"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:141
+#: aligulac/aligulac/tools.py:138
 #, python-format
 msgid "'%s' not unique"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:153
+#: aligulac/aligulac/tools.py:150
 msgid "You are not logged in."
 msgstr ""
 
-#: aligulac/aligulac/tools.py:153
+#: aligulac/aligulac/tools.py:150
 msgid "login"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:156
+#: aligulac/aligulac/tools.py:153
 #, python-format
 msgid "You are logged in as %s"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:158
+#: aligulac/aligulac/tools.py:155
 msgid "logout"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:159
+#: aligulac/aligulac/tools.py:156
 msgid "change password"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:172 aligulac/ratings/staff_views.py:311
+#: aligulac/aligulac/tools.py:169 aligulac/ratings/staff_views.py:311
 #: aligulac/ratings/staff_views.py:318
 msgid "This field is required."
 msgstr ""
 
-#: aligulac/aligulac/tools.py:244 aligulac/aligulac/tools.py:255
+#: aligulac/aligulac/tools.py:241 aligulac/aligulac/tools.py:252
 #: templates/history.djhtml:55
 msgid "Ranking"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:247 templates/player.djhtml:744
+#: aligulac/aligulac/tools.py:244 templates/player.djhtml:751
 msgid "Current"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:248 aligulac/aligulac/tools.py:262
+#: aligulac/aligulac/tools.py:245 aligulac/aligulac/tools.py:259
 #: templates/history.djhtml:10 templates/history.djhtml.py:136
 msgid "History"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:249 aligulac/aligulac/tools.py:356
+#: aligulac/aligulac/tools.py:246 aligulac/aligulac/tools.py:353
 #: aligulac/ratings/misc_views.py:492 templates/player_earnings.djhtml:54
 msgid "Earnings"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:252 templates/db.djhtml:104
-#: templates/index.djhtml:190 templates/search.djhtml:31
+#: aligulac/aligulac/tools.py:249 templates/db.djhtml:104
+#: templates/index.djhtml:194 templates/search.djhtml:31
 #: templates/teams.djhtml:10
 msgid "Teams"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:256
+#: aligulac/aligulac/tools.py:253
 msgid "Transfers"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:259 templates/records.djhtml:14
+#: aligulac/aligulac/tools.py:256 templates/records.djhtml:14
 #: templates/records.djhtml.py:25
 msgid "Records"
 msgstr ""
 
 #. Translators: Hall of fame
-#: aligulac/aligulac/tools.py:264
+#: aligulac/aligulac/tools.py:261
 msgid "HoF"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:265 aligulac/ratings/player_views.py:174
-#: aligulac/ratings/player_views.py:185 aligulac/ratings/player_views.py:191
-#: aligulac/ratings/results_views.py:545 aligulac/ratings/results_views.py:560
+#: aligulac/aligulac/tools.py:262 aligulac/ratings/player_views.py:177
+#: aligulac/ratings/player_views.py:188 aligulac/ratings/player_views.py:194
+#: aligulac/ratings/results_views.py:547 aligulac/ratings/results_views.py:562
 #: templates/earnings.djhtml:45 templates/earnings.djhtml.py:57
 #: templates/earnings.djhtml:75 templates/history.djhtml:152
 #: templates/history.djhtml.py:178 templates/period.djhtml:41
 #: templates/period.djhtml.py:48 templates/period.djhtml:132
 #: templates/period.djhtml.py:382 templates/period.djhtml:397
-#: templates/player.djhtml:265 templates/player.djhtml.py:352
-#: templates/player.djhtml:439 templates/player_results.djhtml:64
+#: templates/player.djhtml:266 templates/player.djhtml.py:353
+#: templates/player.djhtml:440 templates/player_results.djhtml:64
 #: templates/player_results.djhtml:118 templates/ratingdetails.djhtml:208
 #: templates/records.djhtml:38
 msgid "All"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:266 aligulac/ratings/models.py:91
-#: aligulac/ratings/player_views.py:175 aligulac/ratings/player_views.py:671
+#: aligulac/aligulac/tools.py:263 aligulac/ratings/models.py:91
+#: aligulac/ratings/player_views.py:178 aligulac/ratings/player_views.py:674
 #: aligulac/ratings/templatetags/ratings_extras.py:137
 #: templates/history.djhtml:155 templates/period.djhtml:42
 #: templates/period.djhtml.py:133 templates/period.djhtml:383
@@ -133,8 +133,8 @@ msgstr ""
 msgid "Protoss"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:267 aligulac/ratings/models.py:92
-#: aligulac/ratings/player_views.py:176 aligulac/ratings/player_views.py:672
+#: aligulac/aligulac/tools.py:264 aligulac/ratings/models.py:92
+#: aligulac/ratings/player_views.py:179 aligulac/ratings/player_views.py:675
 #: aligulac/ratings/templatetags/ratings_extras.py:138
 #: templates/history.djhtml:158 templates/period.djhtml:43
 #: templates/period.djhtml.py:134 templates/period.djhtml:384
@@ -142,8 +142,8 @@ msgstr ""
 msgid "Terran"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:268 aligulac/ratings/models.py:93
-#: aligulac/ratings/player_views.py:177 aligulac/ratings/player_views.py:673
+#: aligulac/aligulac/tools.py:265 aligulac/ratings/models.py:93
+#: aligulac/ratings/player_views.py:180 aligulac/ratings/player_views.py:676
 #: aligulac/ratings/templatetags/ratings_extras.py:139
 #: templates/history.djhtml:161 templates/period.djhtml:44
 #: templates/period.djhtml.py:135 templates/period.djhtml:385
@@ -151,112 +151,112 @@ msgstr ""
 msgid "Zerg"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:271
+#: aligulac/aligulac/tools.py:268
 msgid "Results"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:274
+#: aligulac/aligulac/tools.py:271
 msgid "By Date"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:275
+#: aligulac/aligulac/tools.py:272
 msgid "By Event"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:276 templates/results_search.djhtml:11
+#: aligulac/aligulac/tools.py:273 templates/results_search.djhtml:11
 #: templates/results_search.djhtml.py:17 templates/results_search.djhtml:60
 #: templates/search.djhtml:11
 msgid "Search"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:279
+#: aligulac/aligulac/tools.py:276
 msgid "Inference"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:282 templates/predict.djhtml:11
+#: aligulac/aligulac/tools.py:279 templates/predict.djhtml:11
 #: templates/predict.djhtml.py:17
 msgid "Predict"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:285 aligulac/aligulac/tools.py:310
+#: aligulac/aligulac/tools.py:282 aligulac/aligulac/tools.py:307
 msgid "Misc"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:288 aligulac/ratings/misc_views.py:57
+#: aligulac/aligulac/tools.py:285 aligulac/ratings/misc_views.py:57
 msgid "Balance Report"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:289
+#: aligulac/aligulac/tools.py:286
 msgid "Days Since…"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:290 aligulac/ratings/misc_views.py:65
+#: aligulac/aligulac/tools.py:287 aligulac/ratings/misc_views.py:65
 #: templates/compare.search.djhtml:25
 msgid "Compare"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:293
+#: aligulac/aligulac/tools.py:290
 msgid "About"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:296
+#: aligulac/aligulac/tools.py:293
 msgid "FAQ"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:297 templates/blog.djhtml:10
+#: aligulac/aligulac/tools.py:294 templates/blog.djhtml:10
 msgid "Blog"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:298
+#: aligulac/aligulac/tools.py:295
 msgid "Database"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:299
+#: aligulac/aligulac/tools.py:296
 msgid "API"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:302 templates/forms.djhtml:161
+#: aligulac/aligulac/tools.py:299 templates/forms.djhtml:161
 #: templates/forms.djhtml.py:168
 msgid "Submit"
 msgstr ""
 
 #. Translators: Matches as in SC2-matches, not search matches.
-#: aligulac/aligulac/tools.py:306 aligulac/ratings/inference_views.py:717
+#: aligulac/aligulac/tools.py:303 aligulac/ratings/inference_views.py:717
 #: aligulac/ratings/inference_views.py:738
-#: aligulac/ratings/player_views.py:701 aligulac/ratings/staff_views.py:279
-#: templates/add.djhtml:79 templates/eventres.djhtml:489
+#: aligulac/ratings/player_views.py:704 aligulac/ratings/staff_views.py:279
+#: templates/add.djhtml:79 templates/eventres.djhtml:507
 #: templates/historical.djhtml:44 templates/pred_rrgroup.djhtml:73
 msgid "Matches"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:307
+#: aligulac/aligulac/tools.py:304
 msgid "Review"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:308 templates/events.djhtml:10
-#: templates/events.djhtml.py:16 templates/index.djhtml:191
+#: aligulac/aligulac/tools.py:305 templates/events.djhtml:10
+#: templates/events.djhtml.py:16 templates/index.djhtml:195
 #: templates/search.djhtml:41
 msgid "Events"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:309 templates/events_open.djhtml:6
+#: aligulac/aligulac/tools.py:306 templates/events_open.djhtml:6
 #: templates/events_open.djhtml.py:12
 msgid "Open events"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:348
+#: aligulac/aligulac/tools.py:345
 msgid "Summary"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:351
+#: aligulac/aligulac/tools.py:348
 msgid "Rating history"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:353 templates/pred_match.djhtml:149
+#: aligulac/aligulac/tools.py:350 templates/pred_match.djhtml:149
 msgid "Match history"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:359
+#: aligulac/aligulac/tools.py:356
 msgid "Adjustments"
 msgstr ""
 
@@ -281,11 +281,11 @@ msgstr ""
 msgid "real name"
 msgstr ""
 
-#: aligulac/aligulac/views.py:66 aligulac/ratings/player_views.py:154
+#: aligulac/aligulac/views.py:66 aligulac/ratings/player_views.py:157
 msgid "birthday"
 msgstr ""
 
-#: aligulac/aligulac/views.py:67 templates/player.djhtml:683
+#: aligulac/aligulac/views.py:67 templates/player.djhtml:690
 msgid "MC number"
 msgstr ""
 
@@ -850,15 +850,19 @@ msgstr ""
 msgid "Your API key is <code>%s</code>. Please keep it safe."
 msgstr ""
 
-#: aligulac/aligulac/views.py:599
-msgid "The old password didn't match. Your password was not changed."
+#: aligulac/aligulac/views.py:477
+msgid "The API documentation is only in English, sorry."
 msgstr ""
 
 #: aligulac/aligulac/views.py:605
+msgid "The old password didn't match. Your password was not changed."
+msgstr ""
+
+#: aligulac/aligulac/views.py:611
 msgid "The new passwords didn't match. Your password was not changed."
 msgstr ""
 
-#: aligulac/aligulac/views.py:612
+#: aligulac/aligulac/views.py:618
 #, python-format
 msgid "The password for %s was successfully changed."
 msgstr ""
@@ -1347,7 +1351,7 @@ msgstr ""
 msgid "North Korea"
 msgstr ""
 
-#: aligulac/countries/data.py:630 aligulac/ratings/player_views.py:185
+#: aligulac/countries/data.py:630 aligulac/ratings/player_views.py:188
 #: templates/add.djhtml:155 templates/earnings.djhtml:59
 #: templates/history.djhtml:180 templates/period.djhtml:398
 msgid "South Korea"
@@ -1924,8 +1928,8 @@ msgid "Best of"
 msgstr ""
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:254
-#: templates/db.djhtml:95 templates/eventres.djhtml:481
-#: templates/index.djhtml:189 templates/search.djhtml:21
+#: templates/db.djhtml:95 templates/eventres.djhtml:499
+#: templates/index.djhtml:193 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
 msgstr ""
@@ -1938,7 +1942,7 @@ msgstr ""
 #. Translators: Matches as in search matches
 #. Translators: Matches here as in search matches.
 #: aligulac/ratings/inference_views.py:144 aligulac/ratings/misc_views.py:279
-#: aligulac/ratings/results_views.py:651
+#: aligulac/ratings/results_views.py:653
 #, python-format
 msgid "No matches found: '%s'."
 msgstr ""
@@ -2139,8 +2143,8 @@ msgstr ""
 msgid "Enter at most six players."
 msgstr ""
 
-#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:212
-#: templates/eventres.djhtml.py:229 templates/periods.djhtml:26
+#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:213
+#: templates/eventres.djhtml.py:230 templates/periods.djhtml:26
 msgid "New"
 msgstr ""
 
@@ -2148,9 +2152,9 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: aligulac/ratings/misc_views.py:415 aligulac/ratings/models.py:1285
+#: aligulac/ratings/misc_views.py:415 aligulac/ratings/models.py:1294
 #: templates/historical.djhtml:36 templates/matchlist.djhtml:53
-#: templates/matchlist.djhtml.py:57 templates/player.djhtml:96
+#: templates/matchlist.djhtml.py:57 templates/player.djhtml:97
 #: templates/ratinglist.djhtml:50 templates/ratinglist.djhtml.py:53
 #: templates/records.djhtml:38
 msgid "Rating"
@@ -2221,14 +2225,14 @@ msgid "Total"
 msgstr ""
 
 #. Translators: General rating
-#: aligulac/ratings/misc_views.py:506 templates/player.djhtml:178
+#: aligulac/ratings/misc_views.py:506 templates/player.djhtml:179
 msgid "General"
 msgstr ""
 
 #: aligulac/ratings/misc_views.py:507 templates/historical.djhtml:38
 #: templates/period.djhtml:67 templates/period.djhtml.py:139
-#: templates/player.djhtml:285 templates/player.djhtml.py:372
-#: templates/player.djhtml:464 templates/player_results.djhtml:76
+#: templates/player.djhtml:286 templates/player.djhtml.py:373
+#: templates/player.djhtml:465 templates/player_results.djhtml:76
 #: templates/player_results.djhtml:130 templates/ratingdetails.djhtml:88
 #: templates/ratinglist.djhtml:64 templates/ratinglist.djhtml.py:67
 msgid "vP"
@@ -2236,8 +2240,8 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:508 templates/historical.djhtml:40
 #: templates/period.djhtml:86 templates/period.djhtml.py:158
-#: templates/player.djhtml:305 templates/player.djhtml.py:392
-#: templates/player.djhtml:489 templates/player_results.djhtml:88
+#: templates/player.djhtml:306 templates/player.djhtml.py:393
+#: templates/player.djhtml:490 templates/player_results.djhtml:88
 #: templates/player_results.djhtml:142 templates/ratingdetails.djhtml:128
 #: templates/ratinglist.djhtml:78 templates/ratinglist.djhtml.py:81
 msgid "vT"
@@ -2245,8 +2249,8 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:509 templates/historical.djhtml:42
 #: templates/period.djhtml:105 templates/period.djhtml.py:177
-#: templates/player.djhtml:326 templates/player.djhtml.py:413
-#: templates/player.djhtml:514 templates/player_results.djhtml:100
+#: templates/player.djhtml:327 templates/player.djhtml.py:414
+#: templates/player.djhtml:515 templates/player_results.djhtml:100
 #: templates/player_results.djhtml:154 templates/ratingdetails.djhtml:168
 #: templates/ratinglist.djhtml:92 templates/ratinglist.djhtml.py:95
 msgid "vZ"
@@ -2284,7 +2288,7 @@ msgstr ""
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:72 templates/earnings.djhtml:124
-#: templates/player.djhtml:653 templates/player.djhtml.py:741
+#: templates/player.djhtml:660 templates/player.djhtml.py:748
 #: templates/ratinglist.djhtml:44
 msgid "Team"
 msgstr ""
@@ -2300,8 +2304,8 @@ msgid "Category"
 msgstr ""
 
 #. Translators: Event type
-#: aligulac/ratings/models.py:84 aligulac/ratings/player_views.py:171
-#: aligulac/ratings/results_views.py:540 aligulac/ratings/results_views.py:709
+#: aligulac/ratings/models.py:84 aligulac/ratings/player_views.py:174
+#: aligulac/ratings/results_views.py:542 aligulac/ratings/results_views.py:711
 #: aligulac/ratings/staff_views.py:160 aligulac/ratings/staff_views.py:272
 #: aligulac/ratings/staff_views.py:303 templates/add.djhtml:48
 #: templates/clocks.djhtml:67
@@ -2787,15 +2791,15 @@ msgstr ""
 msgid "%(player)s fails to qualify for %(event)s after %(num)s appearances"
 msgstr ""
 
-#: aligulac/ratings/models.py:1283
+#: aligulac/ratings/models.py:1292
 msgid "All-Kill"
 msgstr ""
 
-#: aligulac/ratings/models.py:1284
+#: aligulac/ratings/models.py:1293
 msgid "Proleague"
 msgstr ""
 
-#: aligulac/ratings/models.py:1663
+#: aligulac/ratings/models.py:1672
 msgid "Error"
 msgstr ""
 
@@ -2818,11 +2822,11 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:99 templates/player.djhtml:597
+#: aligulac/ratings/player_views.py:99 templates/player.djhtml:598
 msgid "Race"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:100 aligulac/ratings/results_views.py:438
+#: aligulac/ratings/player_views.py:100 aligulac/ratings/results_views.py:440
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
 #: templates/earnings.djhtml:123 templates/hof.djhtml:36
 #: templates/ratinglist.djhtml:41 templates/recordlist.djhtml:15
@@ -2830,43 +2834,47 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:101 aligulac/ratings/team_views.py:48
+#: aligulac/ratings/player_views.py:101
+msgid "Romanized Name"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:102 aligulac/ratings/team_views.py:48
 msgid "AKAs"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:102 templates/player.djhtml:647
+#: aligulac/ratings/player_views.py:103 templates/player.djhtml:654
 msgid "Birthday"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:104 aligulac/ratings/player_views.py:155
-#: aligulac/ratings/results_views.py:107 aligulac/ratings/results_views.py:197
+#: aligulac/ratings/player_views.py:105 aligulac/ratings/player_views.py:158
+#: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:199
 msgid "TLPD ID"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:106 aligulac/ratings/results_views.py:109
+#: aligulac/ratings/player_views.py:107 aligulac/ratings/results_views.py:111
 msgid "TLPD DB"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:107 aligulac/ratings/player_views.py:156
-#: aligulac/ratings/results_views.py:111 aligulac/ratings/results_views.py:198
+#: aligulac/ratings/player_views.py:108 aligulac/ratings/player_views.py:159
+#: aligulac/ratings/results_views.py:113 aligulac/ratings/results_views.py:200
 #: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
 msgid "Liquipedia title"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:108 aligulac/ratings/player_views.py:157
+#: aligulac/ratings/player_views.py:109 aligulac/ratings/player_views.py:160
 msgid "SC2Earnings.com ID"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:110 aligulac/ratings/player_views.py:187
-#: templates/player.djhtml:601
+#: aligulac/ratings/player_views.py:111 aligulac/ratings/player_views.py:190
+#: templates/player.djhtml:602
 msgid "Country"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:138 aligulac/ratings/results_views.py:140
-#: aligulac/ratings/results_views.py:236 aligulac/ratings/results_views.py:330
-#: aligulac/ratings/results_views.py:415 aligulac/ratings/results_views.py:462
-#: aligulac/ratings/results_views.py:509 aligulac/ratings/results_views.py:577
-#: aligulac/ratings/results_views.py:741 aligulac/ratings/staff_views.py:177
+#: aligulac/ratings/player_views.py:140 aligulac/ratings/results_views.py:142
+#: aligulac/ratings/results_views.py:238 aligulac/ratings/results_views.py:332
+#: aligulac/ratings/results_views.py:417 aligulac/ratings/results_views.py:464
+#: aligulac/ratings/results_views.py:511 aligulac/ratings/results_views.py:579
+#: aligulac/ratings/results_views.py:743 aligulac/ratings/staff_views.py:177
 #: aligulac/ratings/staff_views.py:334 aligulac/ratings/staff_views.py:583
 #: aligulac/ratings/staff_views.py:649 aligulac/ratings/staff_views.py:729
 #: aligulac/ratings/team_views.py:74
@@ -2874,215 +2882,219 @@ msgid "Entered data was invalid, no changes made."
 msgstr ""
 
 #. Translators: Changed something (a noun).
-#: aligulac/ratings/player_views.py:148 aligulac/ratings/results_views.py:194
+#: aligulac/ratings/player_views.py:150 aligulac/ratings/results_views.py:196
 #: aligulac/ratings/team_views.py:83
 #, python-format
 msgid "Changed %s."
 msgstr ""
 
-#: aligulac/ratings/player_views.py:150
+#: aligulac/ratings/player_views.py:152
 msgid "tag"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:151
+#: aligulac/ratings/player_views.py:153
 msgid "race"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:152
+#: aligulac/ratings/player_views.py:154
 msgid "country"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:153 aligulac/ratings/team_views.py:85
+#: aligulac/ratings/player_views.py:155 aligulac/ratings/team_views.py:85
 msgid "name"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:158 aligulac/ratings/results_views.py:200
+#: aligulac/ratings/player_views.py:156
+msgid "romanized name"
+msgstr ""
+
+#: aligulac/ratings/player_views.py:161 aligulac/ratings/results_views.py:202
 msgid "TLPD DBs"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:161 aligulac/ratings/team_views.py:91
+#: aligulac/ratings/player_views.py:164 aligulac/ratings/team_views.py:91
 msgid "Changed aliases."
 msgstr ""
 
-#: aligulac/ratings/player_views.py:169 aligulac/ratings/results_views.py:537
+#: aligulac/ratings/player_views.py:172 aligulac/ratings/results_views.py:539
 msgid "After"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:170 aligulac/ratings/results_views.py:538
+#: aligulac/ratings/player_views.py:173 aligulac/ratings/results_views.py:540
 msgid "Before"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:178 aligulac/ratings/player_views.py:676
+#: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:679
 #: templates/history.djhtml:164 templates/period.djhtml:386
 msgid "No Protoss"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:179 aligulac/ratings/player_views.py:675
+#: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:678
 #: templates/history.djhtml:167 templates/period.djhtml:387
 msgid "No Terran"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:180 aligulac/ratings/player_views.py:674
+#: aligulac/ratings/player_views.py:183 aligulac/ratings/player_views.py:677
 #: templates/history.djhtml:170 templates/period.djhtml:388
 msgid "No Zerg"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:182
+#: aligulac/ratings/player_views.py:185
 msgid "Opponent race"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:185 templates/earnings.djhtml:61
+#: aligulac/ratings/player_views.py:188 templates/earnings.djhtml:61
 #: templates/history.djhtml:182 templates/period.djhtml:400
 msgid "Non-Koreans"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:192 aligulac/ratings/results_views.py:546
+#: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:548
 msgid "Best of 3+"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:193 aligulac/ratings/results_views.py:547
+#: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:549
 msgid "Best of 5+"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:549
+#: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:551
 msgid "Match format"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:199 aligulac/ratings/results_views.py:553
-#: aligulac/ratings/results_views.py:922
+#: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:555
+#: aligulac/ratings/results_views.py:944
 msgid "Both"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:200 aligulac/ratings/results_views.py:96
-#: aligulac/ratings/results_views.py:554 aligulac/ratings/results_views.py:712
-#: aligulac/ratings/results_views.py:924 aligulac/ratings/staff_views.py:275
+#: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:98
+#: aligulac/ratings/results_views.py:556 aligulac/ratings/results_views.py:714
+#: aligulac/ratings/results_views.py:946 aligulac/ratings/staff_views.py:275
 #: templates/db.djhtml:70
 msgid "Offline"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:201 aligulac/ratings/results_views.py:96
-#: aligulac/ratings/results_views.py:555 aligulac/ratings/results_views.py:712
-#: aligulac/ratings/results_views.py:924 templates/db.djhtml:61
+#: aligulac/ratings/player_views.py:204 aligulac/ratings/results_views.py:98
+#: aligulac/ratings/results_views.py:557 aligulac/ratings/results_views.py:714
+#: aligulac/ratings/results_views.py:946 templates/db.djhtml:61
 msgid "Online"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:97
-#: aligulac/ratings/results_views.py:557 aligulac/ratings/results_views.py:713
+#: aligulac/ratings/player_views.py:206 aligulac/ratings/results_views.py:99
+#: aligulac/ratings/results_views.py:559 aligulac/ratings/results_views.py:715
 msgid "On/offline"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:206 aligulac/ratings/results_views.py:93
-#: aligulac/ratings/results_views.py:560 aligulac/ratings/results_views.py:717
+#: aligulac/ratings/player_views.py:209 aligulac/ratings/results_views.py:95
+#: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:719
 #: aligulac/ratings/staff_views.py:274 templates/add.djhtml:62
-#: templates/eventres.djhtml:451
+#: templates/eventres.djhtml:469
 msgid "Game version"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:312
+#: aligulac/ratings/player_views.py:315
 #, python-format
 msgid "%s has no rating yet."
 msgstr ""
 
-#: aligulac/ratings/player_views.py:336
+#: aligulac/ratings/player_views.py:339
 msgid "joins"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:342
+#: aligulac/ratings/player_views.py:345
 msgid "leaves"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:551
+#: aligulac/ratings/player_views.py:554
 msgid " before {}"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:553
+#: aligulac/ratings/player_views.py:556
 msgid " after {}"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:555
+#: aligulac/ratings/player_views.py:558
 msgid " between {} and {}"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:663
+#: aligulac/ratings/player_views.py:666
 msgid "best of"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:665 aligulac/ratings/player_views.py:668
-#: aligulac/ratings/player_views.py:681 aligulac/ratings/player_views.py:694
+#: aligulac/ratings/player_views.py:668 aligulac/ratings/player_views.py:671
+#: aligulac/ratings/player_views.py:684 aligulac/ratings/player_views.py:697
 msgid "all"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:682
+#: aligulac/ratings/player_views.py:685
 msgid "foreigners"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:688 templates/player.djhtml:678
+#: aligulac/ratings/player_views.py:691 templates/player.djhtml:685
 msgid "offline"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:689
+#: aligulac/ratings/player_views.py:692
 msgid "online"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:690
+#: aligulac/ratings/player_views.py:693
 msgid "both"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:699
+#: aligulac/ratings/player_views.py:702
 msgid "Results for"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:700 templates/eventres.djhtml:485
+#: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:503
 #: templates/historical.djhtml:45 templates/period.djhtml:350
-#: templates/periods.djhtml:27 templates/player.djhtml:101
-#: templates/player.djhtml.py:129 templates/pred_rrgroup.djhtml:74
+#: templates/periods.djhtml:27 templates/player.djhtml:102
+#: templates/player.djhtml.py:130 templates/pred_rrgroup.djhtml:74
 msgid "Games"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:702
+#: aligulac/ratings/player_views.py:705
 msgid "Current form"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:703
+#: aligulac/ratings/player_views.py:706
 msgid "Recent matches"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:704
+#: aligulac/ratings/player_views.py:707
 msgid "Filters"
 msgstr ""
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:706
+#: aligulac/ratings/player_views.py:709
 msgid "Opponent Race:    "
 msgstr ""
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:708
+#: aligulac/ratings/player_views.py:711
 msgid "Opponent Country: "
 msgstr ""
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:710
+#: aligulac/ratings/player_views.py:713
 msgid "Match Format:     "
 msgstr ""
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:712
+#: aligulac/ratings/player_views.py:715
 msgid "On/offline:       "
 msgstr ""
 
 #. Translators: These have to line up on the right!
-#: aligulac/ratings/player_views.py:714
+#: aligulac/ratings/player_views.py:717
 msgid "Game Version:     "
 msgstr ""
 
-#: aligulac/ratings/player_views.py:715
+#: aligulac/ratings/player_views.py:718
 #, python-brace-format
 msgid "Stats by [url={url}]Aligulac[/url]"
 msgstr ""
 
 #. Translators: Link in the sense of a HTTP hyperlink.
-#: aligulac/ratings/player_views.py:717
+#: aligulac/ratings/player_views.py:720
 msgid "Link"
 msgstr ""
 
@@ -3097,211 +3109,213 @@ msgstr ""
 msgid "F jS"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:92 aligulac/ratings/results_views.py:96
-#: aligulac/ratings/results_views.py:100 aligulac/ratings/results_views.py:712
-#: aligulac/ratings/results_views.py:716 aligulac/ratings/results_views.py:727
+#: aligulac/ratings/results_views.py:94 aligulac/ratings/results_views.py:98
+#: aligulac/ratings/results_views.py:102 aligulac/ratings/results_views.py:714
+#: aligulac/ratings/results_views.py:718 aligulac/ratings/results_views.py:729
 #: templates/results_search.djhtml:136 templates/review.djhtml:100
 msgid "No change"
 msgstr ""
 
 #. Translators: Type as in event type
 #. Translators: Event type.
-#: aligulac/ratings/results_views.py:102 aligulac/ratings/results_views.py:439
+#: aligulac/ratings/results_views.py:104 aligulac/ratings/results_views.py:441
 #: aligulac/ratings/staff_views.py:535 templates/add.djhtml:65
-#: templates/eventres.djhtml:476 templates/review.djhtml:69
+#: templates/eventres.djhtml:494 templates/review.djhtml:69
 msgid "Type"
 msgstr ""
 
 #. Translators: Apply (changes) to…
-#: aligulac/ratings/results_views.py:105
+#: aligulac/ratings/results_views.py:107
 msgid "Apply to all events on the same level"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:106 aligulac/ratings/team_views.py:50
-#: templates/eventres.djhtml:523 templates/events_open.djhtml:41
+#: aligulac/ratings/results_views.py:108 aligulac/ratings/team_views.py:50
+#: templates/eventres.djhtml:541 templates/events_open.djhtml:41
 #: templates/events_open.djhtml.py:87 templates/events_open.djhtml:134
 #: templates/team.djhtml:157
 msgid "Homepage"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:110 aligulac/ratings/results_views.py:199
+#: aligulac/ratings/results_views.py:112 aligulac/ratings/results_views.py:201
 msgid "TL thread"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:150
+#: aligulac/ratings/results_views.py:152
 msgid "Changed event name."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:155
+#: aligulac/ratings/results_views.py:157
 #, python-format
 msgid "Changed date for %i match."
 msgid_plural "Changed date for %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/results_views.py:163
+#: aligulac/ratings/results_views.py:165
 #, python-format
 msgid "Changed game version for %i match."
 msgid_plural "Changed game version for %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/results_views.py:173
+#: aligulac/ratings/results_views.py:175
 #, python-format
 msgid "Changed on/offline for %i match."
 msgid_plural "Changed on/offline for %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/results_views.py:187
+#: aligulac/ratings/results_views.py:189
 #, python-format
 msgid "Changed type for %i event."
 msgid_plural "Changed type for %i events."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/results_views.py:196 aligulac/ratings/team_views.py:88
+#: aligulac/ratings/results_views.py:198 aligulac/ratings/team_views.py:88
 msgid "homepage"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:208 aligulac/ratings/results_views.py:390
-#: templates/add.djhtml:88 templates/player_transfers.djhtml:19
-#: templates/pred_4pswiss.djhtml:25 templates/pred_rrgroup.djhtml:26
-#: templates/pred_rrgroup.djhtml.py:72 templates/pred_sebracket.djhtml:25
+#: aligulac/ratings/results_views.py:210 aligulac/ratings/results_views.py:392
+#: templates/add.djhtml:88 templates/eventres.prizepool.djhtml:19
+#: templates/eventres.prizepool.djhtml:108
+#: templates/player_transfers.djhtml:19 templates/pred_4pswiss.djhtml:25
+#: templates/pred_rrgroup.djhtml:26 templates/pred_rrgroup.djhtml.py:72
+#: templates/pred_sebracket.djhtml:25
 msgid "Player"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:209 aligulac/ratings/results_views.py:391
-#: aligulac/ratings/results_views.py:710 aligulac/ratings/staff_views.py:138
+#: aligulac/ratings/results_views.py:211 aligulac/ratings/results_views.py:393
+#: aligulac/ratings/results_views.py:712 aligulac/ratings/staff_views.py:138
 #: aligulac/ratings/staff_views.py:273 templates/clocks.djhtml:66
-#: templates/eventres.djhtml:433 templates/matchlist.djhtml:52
+#: templates/eventres.djhtml:451 templates/matchlist.djhtml:52
 #: templates/player_transfers.djhtml:23 templates/review.djhtml:61
 msgid "Date"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:210
+#: aligulac/ratings/results_views.py:212
 msgid "Story text"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:211
+#: aligulac/ratings/results_views.py:213
 msgid "Parameters"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:247
+#: aligulac/ratings/results_views.py:249
 msgid "Story could not be found."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:259
+#: aligulac/ratings/results_views.py:261
 msgid "Story was successfully changed."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:261 aligulac/ratings/results_views.py:279
+#: aligulac/ratings/results_views.py:263 aligulac/ratings/results_views.py:281
 msgid "Parameter verification failed."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:265
+#: aligulac/ratings/results_views.py:267
 msgid "Story was successfully deleted."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:277
+#: aligulac/ratings/results_views.py:279
 msgid "Story was successfully created."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:287
+#: aligulac/ratings/results_views.py:289
 msgid "Currency"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:288
+#: aligulac/ratings/results_views.py:290
 msgid "Ranked"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:289
+#: aligulac/ratings/results_views.py:291
 msgid "Unranked"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:318
+#: aligulac/ratings/results_views.py:320
 #, python-format
 msgid "No such player: '%s'."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:320 aligulac/ratings/staff_views.py:106
+#: aligulac/ratings/results_views.py:322 aligulac/ratings/staff_views.py:106
 #: aligulac/ratings/staff_views.py:116 aligulac/ratings/staff_views.py:439
 #, python-format
 msgid "Ambiguous player: '%s'."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:360
+#: aligulac/ratings/results_views.py:362
 msgid "Errors occured, no changes made."
 msgstr ""
 
 #. Translators: New prizepools added to the database.
-#: aligulac/ratings/results_views.py:382
+#: aligulac/ratings/results_views.py:384
 msgid "New prizes committed."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:392
+#: aligulac/ratings/results_views.py:394
 msgid "Text"
 msgstr ""
 
 #. Translators: Stories are the dots on a player's rating chart
-#: aligulac/ratings/results_views.py:430
+#: aligulac/ratings/results_views.py:432
 msgid "Added a story."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:440
+#: aligulac/ratings/results_views.py:442
 msgid "No Print"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:441
+#: aligulac/ratings/results_views.py:443
 msgid "Closed"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:475
+#: aligulac/ratings/results_views.py:477
 msgid "Added a subevent."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:499
+#: aligulac/ratings/results_views.py:501
 msgid "Unable to get these events."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:517
+#: aligulac/ratings/results_views.py:519
 msgid "Order invalid, try again?"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:521
+#: aligulac/ratings/results_views.py:523
 msgid "Non-child event found. This should never happen."
 msgstr ""
 
 #. Translators: Children as in sub-events.
-#: aligulac/ratings/results_views.py:529
+#: aligulac/ratings/results_views.py:531
 #, python-format
 msgid ""
 "Successfully reordered %i children. Any inconsistencies will be fixed next "
 "update (no more than six hours away)."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:539
+#: aligulac/ratings/results_views.py:541
 msgid "Involving players"
 msgstr ""
 
 #. Translators: Unassigned as in not assigned to an event.
-#: aligulac/ratings/results_views.py:542
+#: aligulac/ratings/results_views.py:544
 msgid "Only show unassigned matches"
 msgstr ""
 
-#: aligulac/ratings/results_views.py:680
+#: aligulac/ratings/results_views.py:682
 #, python-format
 msgid "Too many results (%i). Please add restrictions."
 msgstr ""
 
-#: aligulac/ratings/results_views.py:766
+#: aligulac/ratings/results_views.py:768
 #, python-format
 msgid "Updated %i match."
 msgid_plural "Updated %i matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: aligulac/ratings/results_views.py:837
+#: aligulac/ratings/results_views.py:839
 msgid ""
 "The events are organized in a hierarchical fashion. Thus, all GSL "
 "tournaments are filed under GSL, all Code S under their respective seasons, "
@@ -4315,501 +4329,8 @@ msgstr ""
 msgid "Commit and close event"
 msgstr ""
 
-#: templates/api.djhtml:7 templates/api.djhtml.py:41
-msgid "API documentation"
-msgstr ""
-
-#: templates/api.djhtml:17
-msgid "Generate API key"
-msgstr ""
-
-#: templates/api.djhtml:49
-msgid "API access key"
-msgstr ""
-
-#: templates/api.djhtml:51
-msgid ""
-"To use the Aligulac API you first need an API access key. To generate one, "
-"please use the button below. You will have to provide your name (or the name "
-"of the organization), and a contact e-mail address."
-msgstr ""
-
-#: templates/api.djhtml:53
-msgid ""
-"If the request is successful, you will be provided with a 20-character "
-"random string. This string will have to be passed with every API request you "
-"make as a parameter named <code>apikey</code>. In the rest of this document, "
-"this parameter will be implied."
-msgstr ""
-
-#: templates/api.djhtml:63
-msgid "API overview"
-msgstr ""
-
-#: templates/api.djhtml:65
-#, python-format
-msgid ""
-"The API is for the most part self-documenting. The root URI is <code>"
-"%(uri)s</code>. Requests to this URI will return a JSON object describing "
-"the available resources and their root URIs, e.g."
-msgstr ""
-
-#: templates/api.djhtml:78
-#, python-format
-msgid ""
-"<strong>NOTE:</strong> For making requests in the browser, please append "
-"%(json)s to the URI."
-msgstr ""
-
-#: templates/api.djhtml:80
-#, python-format
-msgid ""
-"The resources available correspond for the most part to the tables in the "
-"database, which are described %(a)shere</a>. In addition to these, we have "
-"API access to predictions as well, described below."
-msgstr ""
-
-#: templates/api.djhtml:82
-#, python-format
-msgid ""
-"Requests for player objects thus need to go to %(uri)s. For a detailed "
-"description of each resource, go to the schema URI. This will return a JSON "
-"object with the following fields:"
-msgstr ""
-
-#: templates/api.djhtml:85
-msgid "and"
-msgstr ""
-
-#: templates/api.djhtml:85
-#, python-format
-msgid "list of accepted HTTP methods (should always be %(get)s and %(post)s)."
-msgstr ""
-
-#: templates/api.djhtml:86
-#, python-format
-msgid "default reply format (should always be %(json)s)."
-msgstr ""
-
-#: templates/api.djhtml:87
-msgid "default page limit when grabbing many objects at once."
-msgstr ""
-
-#: templates/api.djhtml:88
-msgid ""
-"A dictionary describing each field of the given resource, with the following "
-"information:"
-msgstr ""
-
-#: templates/api.djhtml:90
-#, python-format
-msgid " %(true)s if the field can be %(null)s, %(false)s otherwise."
-msgstr ""
-
-#: templates/api.djhtml:91
-#, python-format
-msgid ""
-"Field type (e.g. %(c)s%(string)s%(d)s, %(c)s%(integer)s%(d)s, %(c)s%(float)s"
-"%(d)s, %(c)s%(datetime)s%(d)s, etc.). For related objects of another type, "
-"this field will read %(c)s%(related)s%(d)s."
-msgstr ""
-
-#: templates/api.djhtml:92
-msgid "Default value, if any (usually not)."
-msgstr ""
-
-#: templates/api.djhtml:93
-msgid "Additional human-readable information."
-msgstr ""
-
 #: templates/api.djhtml:95
 msgid "The other fields are not of interest."
-msgstr ""
-
-#: templates/api.djhtml:96
-#, python-format
-msgid ""
-"A dictionary describing the filters available on each field. For each field, "
-"this is either a list of filters, the integer %(one)s (all filters "
-"available), or the integer %(two)s (all filters available, including related "
-"objects). With very few exceptions, all kinds of filters are allowed."
-msgstr ""
-
-#: templates/api.djhtml:97
-msgid ""
-"A list of fields that allow sorting. With very few exceptions, this will be "
-"all fields."
-msgstr ""
-
-#: templates/api.djhtml:100
-msgid "Getting all objects"
-msgstr ""
-
-#: templates/api.djhtml:102
-#, python-format
-msgid ""
-"To obtain all objects of a given resource, just make a request to the base "
-"resource URI, e.g.  <code>%(uri)s</code>. This will return a JSON object "
-"with two fields: <strong>meta</strong>, giving paging information, and "
-"<strong>objects</strong>, which is a list of objects. By default, this will "
-"return a limited number of objects per page (normally 20). To control the "
-"page size and offset, give the <code>limit</code> and <code>offset</code> "
-"arguments, e.g."
-msgstr ""
-
-#: templates/api.djhtml:106
-msgid ""
-"will return objects number 100-149. In addition, the <strong>meta</strong> "
-"field gives you the URIs for the next and previous pages, as well as the "
-"total count of objects."
-msgstr ""
-
-#: templates/api.djhtml:108
-msgid ""
-"You can get all objects at once by giving <code>limit=0</code>, but this is "
-"disallowed on some resources and otherwise not encouraged."
-msgstr ""
-
-#: templates/api.djhtml:110
-msgid "Getting a single object by ID"
-msgstr ""
-
-#: templates/api.djhtml:112
-#, python-format
-msgid ""
-"If you know the id of the object you are interested in, you can get it "
-"directly. For example, to get Leenock's player information, go to <code>"
-"%(uri)s</code>, since Leenock's id is %(id)s."
-msgstr ""
-
-#: templates/api.djhtml:114
-msgid ""
-"This will return just the object directly, with no metadata and no "
-"surrounding list."
-msgstr ""
-
-#: templates/api.djhtml:116
-msgid "Getting several objects by ID"
-msgstr ""
-
-#: templates/api.djhtml:118
-#, python-format
-msgid ""
-"If you want to access more than one object, you can request them as a "
-"<strong>set</strong> to save both us and yourself from extra work. If you "
-"are interested in Leenock, Creator and Life (ids %(commalist)s and "
-"%(final)s), you can make a request to"
-msgstr ""
-
-#: templates/api.djhtml:122
-msgid "Related objects"
-msgstr ""
-
-#: templates/api.djhtml:124
-msgid ""
-"Fields that point to related objects will usually be given by resource URIs "
-"in the returned objects. For frequently useful information (e.g. players' "
-"current rating), the related object(s) will be given as well, although they "
-"are often stripped-down versions without detailed information."
-msgstr ""
-
-#: templates/api.djhtml:126
-msgid "Filtering"
-msgstr ""
-
-#: templates/api.djhtml:128
-msgid ""
-"You can apply filters to the base URI. They are applied in the following "
-"manner:"
-msgstr ""
-
-#: templates/api.djhtml:132
-msgid ""
-"If filtering on related objects is available, this can be done as follows:"
-msgstr ""
-
-#: templates/api.djhtml:136
-#, python-format
-msgid ""
-"In principle, these chains can be arbitrarily long. The available filters "
-"correspond to those found in <a href=\"%(uri)s\">Django</a>. Here is a brief "
-"overview:"
-msgstr ""
-
-#: templates/api.djhtml:140
-msgid ""
-"Exact lookup (can also be done just as <code>fieldname=value</code>) or case-"
-"insensitive matching for strings."
-msgstr ""
-
-#: templates/api.djhtml:142
-msgid "Case sensitive or insensitive string containment."
-msgstr ""
-
-#: templates/api.djhtml:144
-msgid "Case sensitive or insensitive string prefix or postfix matching."
-msgstr ""
-
-#: templates/api.djhtml:146
-msgid ""
-"Case sensitive or insensitive regular expression matching. The regular "
-"expression syntax is defined by Python's <code>re</code> module."
-msgstr ""
-
-#: templates/api.djhtml:148
-msgid ""
-"The given field value must be an element of the provided comma-separated "
-"list."
-msgstr ""
-
-#: templates/api.djhtml:150
-msgid "Numerical orderings &gt;, ≥, &lt; and ≤."
-msgstr ""
-
-#: templates/api.djhtml:152
-msgid ""
-"The given field value must lie between the given values (separated by a "
-"comma). Useful for dates."
-msgstr ""
-
-#: templates/api.djhtml:154
-msgid ""
-"Applies to date fields, matches only on the specified integer value. Months "
-"and week days are numbered from 1, and the week is assumed to start on "
-"Sunday."
-msgstr ""
-
-#: templates/api.djhtml:156
-msgid ""
-"Takes a boolean, will only match objects where the given field is or is not "
-"null."
-msgstr ""
-
-#: templates/api.djhtml:159
-msgid ""
-"<strong>NOTE:</strong> Filtering by events works differently. See <a href="
-"\"#common\">common use cases</a>."
-msgstr ""
-
-#: templates/api.djhtml:161
-msgid "Ordering"
-msgstr ""
-
-#: templates/api.djhtml:163
-msgid ""
-"To sort by a field, add the parameter <code>order_by=fieldname</code> for "
-"ascending order, and <code>order_by=-fieldname</code> for descending order."
-msgstr ""
-
-#: templates/api.djhtml:165
-msgid "Prediction requests"
-msgstr ""
-
-#: templates/api.djhtml:167
-#, python-format
-msgid ""
-"Requests for predictions do not correspond to the database, and work a "
-"little differently, but corresponds more or less exactly to the way the <a "
-"href=\"%(uri)s\">prediction page</a> works. We currently support five "
-"different formats:"
-msgstr ""
-
-#: templates/api.djhtml:170
-msgid "Single best-of-N matches"
-msgstr ""
-
-#: templates/api.djhtml:171
-msgid "Dual tournaments"
-msgstr ""
-
-#: templates/api.djhtml:172
-msgid "also called GSL-style groups"
-msgstr ""
-
-#: templates/api.djhtml:173
-msgid "Single-elimination brackets"
-msgstr ""
-
-#: templates/api.djhtml:174
-msgid "Round-robin groups"
-msgstr ""
-
-#: templates/api.djhtml:175
-msgid "Proleague-style team matches"
-msgstr ""
-
-#: templates/api.djhtml:178
-#, python-format
-msgid ""
-"The URI for match prediction is then <code>%(uri)s</code>, where <code>"
-"%(a)s</code> and <code>%(b)s</code> are the ids for the two players. You "
-"also have to supply a <code>%(bo)s</code> parameter denoting the match "
-"length, and this has to be a positive odd integer. The following conditions "
-"apply."
-msgstr ""
-
-#: templates/api.djhtml:181
-msgid "For single matches, you must provide exactly two players."
-msgstr ""
-
-#: templates/api.djhtml:182
-msgid "For dual tournaments, you must provide exactly four players."
-msgstr ""
-
-#: templates/api.djhtml:183
-msgid ""
-"For single elimination brackets, you must provide a number of players that "
-"is a power of two."
-msgstr ""
-
-#: templates/api.djhtml:184
-msgid ""
-"For proleague matches, you must provide an even number of players, one full "
-"team before the other (there does not have to be an odd number of players "
-"per team)."
-msgstr ""
-
-#: templates/api.djhtml:185
-msgid ""
-"For single elimination, and only for this format, you can give different "
-"match lengths for different rounds, just make a comma-separated list with "
-"the first round first and the final last."
-msgstr ""
-
-#: templates/api.djhtml:188
-msgid ""
-"You can give id 0 to denote a BYE, and there is no restriction on duplicate "
-"players (which can be useful for proleague style to simulate ace matches)."
-msgstr ""
-
-#: templates/api.djhtml:190
-msgid ""
-"Requests will return a JSON object containing various information, which you "
-"can look through by querying the schema URI. For the last four formats "
-"(excluding the single match), the two most important fields are "
-"<code>matches</code> and <code>meanres</code>. The former describes the "
-"already entered results, and the latter describes the median outcome "
-"<em>given the former</em>. Each match has a unique identifier which you can "
-"use to prescribe results and update the predictions. E.g. to set match "
-"identifier <code>abc</code> to result in 1–3, pass the arguments "
-"<code>abc_1=1</code> and <code>abc_2=3</code> with the request."
-msgstr ""
-
-#: templates/api.djhtml:192
-msgid ""
-"It may be difficult to predict in advance which matches will have which "
-"identifiers. If you're unsure, make an empty request with no preset results. "
-"The returned object will then give identifiers for as many matches as it "
-"can. As you fill in results, new matches may become available."
-msgstr ""
-
-#: templates/api.djhtml:194
-msgid ""
-"Unlike the <code>matches</code> list, the <code>meanres</code> always "
-"contains predictions to the end of the tournament. For example, with a 16-"
-"player single elimination bracket, the <code>meanres</code> list will always "
-"contain the full 15 matches, trying to predict who will be in the final. As "
-"you enter results, this may disagree with the prediction, and the players in "
-"the final may change. Thus, <strong>only the <code>matches</code> list "
-"contains “sure” information</strong>."
-msgstr ""
-
-#: templates/api.djhtml:196
-msgid "Common use cases"
-msgstr ""
-
-#: templates/api.djhtml:198
-msgid "Get the current top ten rating list"
-msgstr ""
-
-#: templates/api.djhtml:200
-msgid ""
-"Current ratings are delivered together with player objects, so this will "
-"suffice:"
-msgstr ""
-
-#: templates/api.djhtml:207
-msgid ""
-"Null values come before non-null values, so we must filter out the null "
-"ratings first. The filter on <code>decay</code> is to only select active "
-"players. Alternatively, for a cleaner method, just request for ratings "
-"directly."
-msgstr ""
-
-#: templates/api.djhtml:214
-msgid ""
-"Note that in this case you have to query for the period you want. There is "
-"an alias for <code>rating</code> called <code>activerating</code> which "
-"automatically filters away inactive ratings, but otherwise works the same "
-"way. So you could use:"
-msgstr ""
-
-#: templates/api.djhtml:220
-msgid "Filtering by event"
-msgstr ""
-
-#: templates/api.djhtml:222
-msgid ""
-"You could use the <code>eventobj</code> relation to filter matches by "
-"events, but since matches are only assigned to the lowest level event "
-"objects, you can't use this to get, say, all WCS matches in 2014. That's "
-"because no matches are assigned to event object 23398 (which is WCS 2014), "
-"rather they are assigned to subevents."
-msgstr ""
-
-#: templates/api.djhtml:224
-msgid ""
-"For event objects, two meta-relations are available called <code>uplink</"
-"code> (which links to higher-level events), and <code>downlink</code> (which "
-"links to lower-level events)."
-msgstr ""
-
-#: templates/api.djhtml:227
-msgid "<code>uplink__parent</code> is the ancestor event."
-msgstr ""
-
-#: templates/api.djhtml:228
-msgid "<code>downlink__child</code> is the descendant event."
-msgstr ""
-
-#: templates/api.djhtml:229
-msgid ""
-"<code>uplink__distance</code> and <code>downlink__distance</code> is the "
-"distance between them."
-msgstr ""
-
-#: templates/api.djhtml:232
-msgid ""
-"So to get all WCS matches in 2014 (matches assigned to subevents of the WCS "
-"2014 event), you can use:"
-msgstr ""
-
-#: templates/api.djhtml:236
-msgid ""
-"This is also available for event objects, so to get all children and "
-"grandchildren of WCS 2014 you can use:"
-msgstr ""
-
-#: templates/api.djhtml:241
-msgid "For these meta-relations you can use the following filters:"
-msgstr ""
-
-#: templates/api.djhtml:244
-msgid "Direct lookup"
-msgstr ""
-
-#: templates/api.djhtml:250
-msgid "Searching by name"
-msgstr ""
-
-#: templates/api.djhtml:252
-msgid ""
-"To facilitate easier searching by name (aliases, etc.) we have a different "
-"URL endpoint: <code>/search/json/?q=query</code>. This is the endpoint used "
-"by Aligulac's own autocompletion feature, and so it obeys the same rules (e."
-"g. it will search for teams, events and players, and it will be sensitive to "
-"things like country names and races). This feature is strictly speaking not "
-"part of the API, and so its use does not require an access key."
 msgstr ""
 
 #: templates/changepwd.djhtml:10 templates/changepwd.djhtml.py:16
@@ -5018,7 +4539,7 @@ msgstr ""
 msgid "#"
 msgstr ""
 
-#: templates/earnings.djhtml:125 templates/player.djhtml:671
+#: templates/earnings.djhtml:125 templates/player.djhtml:678
 #: templates/team.djhtml:142
 msgid "Total earnings"
 msgstr ""
@@ -5130,11 +4651,11 @@ msgstr ""
 msgid "modify"
 msgstr ""
 
-#: templates/eventres.djhtml:65
+#: templates/eventres.djhtml:66
 msgid "Modify event"
 msgstr ""
 
-#: templates/eventres.djhtml:71
+#: templates/eventres.djhtml:72
 msgid ""
 "<strong>Danger!</strong> Changes to date, game and offline will modify all "
 "matches associated with all events in this tree. Changing type will "
@@ -5142,57 +4663,57 @@ msgid ""
 "you are doing!"
 msgstr ""
 
-#: templates/eventres.djhtml:103 templates/eventres.djhtml.py:557
+#: templates/eventres.djhtml:104 templates/eventres.djhtml.py:575
 msgid "Add subevents"
 msgstr ""
 
-#: templates/eventres.djhtml:109
+#: templates/eventres.djhtml:110
 msgid ""
 "If you need more options, or if you need to add more than one subevent, use "
 "the <a href=\"/add/events/\">event manager</a> tool."
 msgstr ""
 
-#: templates/eventres.djhtml:134
+#: templates/eventres.djhtml:135
 msgid "Modify prizepool"
 msgstr ""
 
-#: templates/eventres.djhtml:142
+#: templates/eventres.djhtml:143
 msgid ""
 "The currency in which the prize was paid, usually the official currency in "
 "the country the tournament was held."
 msgstr ""
 
-#: templates/eventres.djhtml:143
+#: templates/eventres.djhtml:144
 msgid "Use this for prizes related to final placement in the event."
 msgstr ""
 
-#: templates/eventres.djhtml:143 templates/eventres.djhtml.py:144
+#: templates/eventres.djhtml:144 templates/eventres.djhtml.py:145
 msgid "[prize] [player]"
 msgstr ""
 
-#: templates/eventres.djhtml:144
+#: templates/eventres.djhtml:145
 msgid "Use this for prizes unrelated to placement, i.e. public tips."
 msgstr ""
 
-#: templates/eventres.djhtml:164 templates/eventres.djhtml.py:565
+#: templates/eventres.djhtml:165 templates/eventres.djhtml.py:583
 msgid "Reorder subevents"
 msgstr ""
 
-#: templates/eventres.djhtml:170
+#: templates/eventres.djhtml:171
 msgid ""
 "Put the <strong>least significant</strong> events first (the ones played "
 "first, or with most players). Finals should be toward the bottom."
 msgstr ""
 
-#: templates/eventres.djhtml:200
+#: templates/eventres.djhtml:201
 msgid "Add or change stories"
 msgstr ""
 
-#: templates/eventres.djhtml:208
+#: templates/eventres.djhtml:209
 msgid "Extant stories"
 msgstr ""
 
-#: templates/eventres.djhtml:226
+#: templates/eventres.djhtml:227
 #, python-format
 msgid ""
 "For each parameter, a line of the form \"parameter: value\". The parameters "
@@ -5200,141 +4721,162 @@ msgid ""
 "replaced by the value you enter."
 msgstr ""
 
-#: templates/eventres.djhtml:230
+#: templates/eventres.djhtml:231
 msgid "Update"
 msgstr ""
 
-#: templates/eventres.djhtml:231
+#: templates/eventres.djhtml:232
 msgid "Delete"
 msgstr ""
 
-#: templates/eventres.djhtml:270
+#: templates/eventres.djhtml:271
 msgid "Navigation"
 msgstr ""
 
-#: templates/eventres.djhtml:274 templates/period.djhtml:30
+#: templates/eventres.djhtml:275 templates/period.djhtml:30
 msgid "Matchups"
+msgstr ""
+
+#: templates/eventres.djhtml:280
+msgid "Prize Pool"
+msgstr ""
+
+#: templates/eventres.djhtml:287
+msgid "Other Prizes"
 msgstr ""
 
 #. Translators: Go as in go to a page.
 #. Translators: Go as in go to a page.
-#: templates/eventres.djhtml:300 templates/eventres.djhtml.py:325
+#: templates/eventres.djhtml:315 templates/eventres.djhtml.py:340
 #: templates/events.djhtml:38 templates/results.djhtml:30
 msgid "Go"
 msgstr ""
 
-#: templates/eventres.djhtml:336 templates/eventres.djhtml.py:493
+#: templates/eventres.djhtml:351 templates/eventres.djhtml.py:511
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
 #: templates/reports_balance.djhtml:75 templates/reports_balance.djhtml:78
 msgid "PvT"
 msgstr ""
 
-#: templates/eventres.djhtml:355 templates/eventres.djhtml.py:499
+#: templates/eventres.djhtml:370 templates/eventres.djhtml.py:517
 #: templates/period.djhtml:219 templates/period.djhtml.py:358
 #: templates/reports_balance.djhtml:83 templates/reports_balance.djhtml:86
 msgid "PvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:374 templates/eventres.djhtml.py:505
+#: templates/eventres.djhtml:389 templates/eventres.djhtml.py:523
 #: templates/period.djhtml:236 templates/period.djhtml.py:362
 #: templates/reports_balance.djhtml:91 templates/reports_balance.djhtml:94
 msgid "TvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:393 templates/eventres.djhtml.py:511
+#: templates/eventres.djhtml:408 templates/eventres.djhtml.py:529
 #: templates/period.djhtml:253 templates/period.djhtml.py:366
 msgid "Mirrors"
 msgstr ""
 
-#: templates/eventres.djhtml:425
+#: templates/eventres.djhtml:443
 msgid "Details"
 msgstr ""
 
-#: templates/eventres.djhtml:431 templates/player_earnings.djhtml:55
+#: templates/eventres.djhtml:449 templates/player_earnings.djhtml:55
 msgid "Dates"
 msgstr ""
 
 #. Translators: Date to date.
-#: templates/eventres.djhtml:443
+#: templates/eventres.djhtml:461
 #, python-format
 msgid "%(fst)s to %(snd)s"
 msgstr ""
 
-#: templates/eventres.djhtml:457
+#: templates/eventres.djhtml:475
 msgid "On-/Offline"
 msgstr ""
 
-#: templates/eventres.djhtml:463
+#: templates/eventres.djhtml:481
 msgid "Prizepool"
 msgstr ""
 
-#: templates/eventres.djhtml:513 templates/period.djhtml:367
+#: templates/eventres.djhtml:531 templates/period.djhtml:367
 msgid "PvP"
 msgstr ""
 
-#: templates/eventres.djhtml:514 templates/period.djhtml:367
+#: templates/eventres.djhtml:532 templates/period.djhtml:367
 msgid "TvT"
 msgstr ""
 
-#: templates/eventres.djhtml:515 templates/period.djhtml:367
+#: templates/eventres.djhtml:533 templates/period.djhtml:367
 msgid "ZvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:520 templates/player.djhtml:689
+#: templates/eventres.djhtml:538 templates/player.djhtml:696
 #: templates/team.djhtml:154
 msgid "External"
 msgstr ""
 
-#: templates/eventres.djhtml:527 templates/eventres.djhtml.py:530
-#: templates/eventres.djhtml:533 templates/eventres.djhtml.py:536
-#: templates/eventres.djhtml:539
+#: templates/eventres.djhtml:545 templates/eventres.djhtml.py:548
+#: templates/eventres.djhtml:551 templates/eventres.djhtml.py:554
+#: templates/eventres.djhtml:557
 msgid "TLPD"
 msgstr ""
 
-#: templates/eventres.djhtml:543 templates/events_open.djhtml:44
+#: templates/eventres.djhtml:561 templates/events_open.djhtml:44
 #: templates/events_open.djhtml.py:90 templates/events_open.djhtml:137
 msgid "TL"
 msgstr ""
 
 #. Translators: LP = Liquipedia
-#: templates/eventres.djhtml:546 templates/events_open.djhtml:47
+#: templates/eventres.djhtml:564 templates/events_open.djhtml:47
 #: templates/events_open.djhtml.py:93 templates/events_open.djhtml:140
-#: templates/player.djhtml:702 templates/team.djhtml:160
+#: templates/player.djhtml:709 templates/team.djhtml:160
 msgid "LP"
 msgstr ""
 
-#: templates/eventres.djhtml:554 templates/player.djhtml:710
+#: templates/eventres.djhtml:572 templates/player.djhtml:717
 #: templates/team.djhtml:168
 msgid "Edit info"
 msgstr ""
 
-#: templates/eventres.djhtml:555 templates/player.djhtml:711
+#: templates/eventres.djhtml:573 templates/player.djhtml:718
 #: templates/team.djhtml:169
 msgid "Admin interface"
 msgstr ""
 
-#: templates/eventres.djhtml:556
+#: templates/eventres.djhtml:574
 msgid "Add matches"
 msgstr ""
 
-#: templates/eventres.djhtml:559
+#: templates/eventres.djhtml:577
 msgid "Prize pool"
 msgstr ""
 
 #. Translators: Stories are the dots on a player's rating chart.
-#: templates/eventres.djhtml:562 templates/player.djhtml:191
+#: templates/eventres.djhtml:580 templates/player.djhtml:192
 msgid "Stories"
 msgstr ""
 
-#: templates/eventres.djhtml:579
+#: templates/eventres.djhtml:597
 msgid "This event has no registered games... yet."
 msgstr ""
 
-#: templates/eventres.djhtml:584
+#: templates/eventres.djhtml:602
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help <a href="
 "\"%(uri)s\">populate our database</a>!"
+msgstr ""
+
+#: templates/eventres.prizepool.djhtml:39 templates/index.djhtml:197
+#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
+#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
+#: templates/review.djhtml:46
+msgid "show"
+msgstr ""
+
+#: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:196
+#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
+#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
+msgid "hide"
 msgstr ""
 
 #: templates/events.djhtml:27
@@ -5436,7 +4978,7 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: templates/history.djhtml:31 templates/player.djhtml:72
+#: templates/history.djhtml:31 templates/player.djhtml:73
 #: templates/reports_balance.djhtml:31 templates/reports_balance.djhtml:117
 msgid "Click and drag to zoom"
 msgstr ""
@@ -5501,12 +5043,12 @@ msgstr ""
 
 #: templates/hof.djhtml:61 templates/period.djhtml:18
 #: templates/period.djhtml.py:322 templates/period.djhtml:326
-#: templates/periods.djhtml:32 templates/player.djhtml:201
-#: templates/player.djhtml.py:218 templates/player.djhtml:452
-#: templates/player.djhtml.py:477 templates/player.djhtml:502
-#: templates/player.djhtml.py:527 templates/player.djhtml:648
-#: templates/player.djhtml.py:660 templates/player.djhtml:666
-#: templates/player.djhtml.py:750 templates/player.djhtml:751
+#: templates/periods.djhtml:32 templates/player.djhtml:202
+#: templates/player.djhtml.py:219 templates/player.djhtml:453
+#: templates/player.djhtml.py:478 templates/player.djhtml:503
+#: templates/player.djhtml.py:528 templates/player.djhtml:655
+#: templates/player.djhtml.py:667 templates/player.djhtml:673
+#: templates/player.djhtml.py:757 templates/player.djhtml:758
 #: templates/player_transfers.djhtml:59 templates/ratingdetails.djhtml:61
 #: templates/recordlist.djhtml:47 templates/results.djhtml:12
 #: templates/results.djhtml.py:19 templates/review.djhtml:62
@@ -5571,195 +5113,191 @@ msgid ""
 msgstr ""
 
 #: templates/index.djhtml:171
+#, python-format
+msgid "Bitcoin donations (if you insist) on address: <br>%(btc)s"
+msgstr ""
+
+#: templates/index.djhtml:175
 msgid "Generate short URL for this page"
 msgstr ""
 
-#: templates/index.djhtml:192 templates/matchlist.djhtml:91
-#: templates/matchlist.djhtml.py:126 templates/matchlist.djhtml:149
-#: templates/matchlist.djhtml.py:164
-msgid "hide"
-msgstr ""
-
-#: templates/index.djhtml:193 templates/matchlist.djhtml:91
-#: templates/matchlist.djhtml.py:126 templates/matchlist.djhtml:149
-#: templates/matchlist.djhtml.py:164 templates/review.djhtml:46
-msgid "show"
-msgstr ""
-
-#: templates/index.djhtml:203
+#: templates/index.djhtml:212
 msgid "Download PNG image"
 msgstr ""
 
-#: templates/index.djhtml:204
+#: templates/index.djhtml:213
 msgid "Download JPEG image"
 msgstr ""
 
-#: templates/index.djhtml:205
+#: templates/index.djhtml:214
 msgid "Download PDF document"
 msgstr ""
 
-#: templates/index.djhtml:206
+#: templates/index.djhtml:215
 msgid "Download SVG vector image"
 msgstr ""
 
-#: templates/index.djhtml:207
+#: templates/index.djhtml:216
 msgid "Loading..."
 msgstr ""
 
-#: templates/index.djhtml:208
+#: templates/index.djhtml:217
 msgid "Print chart"
 msgstr ""
 
-#: templates/index.djhtml:209
-msgid "Reset zoom"
-msgstr ""
-
-#: templates/index.djhtml:211
-msgctxt "Big first letter"
-msgid "January"
-msgstr ""
-
-#: templates/index.djhtml:212
-msgctxt "Big first letter"
-msgid "February"
-msgstr ""
-
-#: templates/index.djhtml:213
-msgctxt "Big first letter"
-msgid "March"
-msgstr ""
-
-#: templates/index.djhtml:214
-msgctxt "Big first letter"
-msgid "April"
-msgstr ""
-
-#: templates/index.djhtml:215 templates/index.djhtml.py:229
-msgctxt "Big first letter"
-msgid "May"
-msgstr ""
-
-#: templates/index.djhtml:216
-msgctxt "Big first letter"
-msgid "June"
-msgstr ""
-
-#: templates/index.djhtml:217
-msgctxt "Big first letter"
-msgid "July"
-msgstr ""
-
 #: templates/index.djhtml:218
-msgctxt "Big first letter"
-msgid "August"
-msgstr ""
-
-#: templates/index.djhtml:219
-msgctxt "Big first letter"
-msgid "September"
+msgid "Reset zoom"
 msgstr ""
 
 #: templates/index.djhtml:220
 msgctxt "Big first letter"
-msgid "October"
+msgid "January"
 msgstr ""
 
 #: templates/index.djhtml:221
 msgctxt "Big first letter"
-msgid "November"
+msgid "February"
 msgstr ""
 
 #: templates/index.djhtml:222
 msgctxt "Big first letter"
-msgid "December"
+msgid "March"
 msgstr ""
+
+#: templates/index.djhtml:223
+msgctxt "Big first letter"
+msgid "April"
+msgstr ""
+
+#: templates/index.djhtml:224 templates/index.djhtml.py:238
+#, fuzzy
+msgctxt "Big first letter"
+msgid "May"
+msgstr ""
+"#-#-#-#-#  django.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  django.pot (PACKAGE VERSION)  #-#-#-#-#\n"
 
 #: templates/index.djhtml:225
 msgctxt "Big first letter"
-msgid "Jan"
+msgid "June"
 msgstr ""
 
 #: templates/index.djhtml:226
 msgctxt "Big first letter"
-msgid "Feb"
+msgid "July"
 msgstr ""
 
 #: templates/index.djhtml:227
 msgctxt "Big first letter"
-msgid "Mar"
+msgid "August"
 msgstr ""
 
 #: templates/index.djhtml:228
 msgctxt "Big first letter"
-msgid "Apr"
+msgid "September"
+msgstr ""
+
+#: templates/index.djhtml:229
+msgctxt "Big first letter"
+msgid "October"
 msgstr ""
 
 #: templates/index.djhtml:230
 msgctxt "Big first letter"
-msgid "Jun"
+msgid "November"
 msgstr ""
 
 #: templates/index.djhtml:231
 msgctxt "Big first letter"
-msgid "Jul"
-msgstr ""
-
-#: templates/index.djhtml:232
-msgctxt "Big first letter"
-msgid "Aug"
-msgstr ""
-
-#: templates/index.djhtml:233
-msgctxt "Big first letter"
-msgid "Sep"
+msgid "December"
 msgstr ""
 
 #: templates/index.djhtml:234
 msgctxt "Big first letter"
-msgid "Oct"
+msgid "Jan"
 msgstr ""
 
 #: templates/index.djhtml:235
 msgctxt "Big first letter"
-msgid "Nov"
+msgid "Feb"
 msgstr ""
 
 #: templates/index.djhtml:236
 msgctxt "Big first letter"
-msgid "Dec"
+msgid "Mar"
+msgstr ""
+
+#: templates/index.djhtml:237
+msgctxt "Big first letter"
+msgid "Apr"
 msgstr ""
 
 #: templates/index.djhtml:239
 msgctxt "Big first letter"
-msgid "Sunday"
+msgid "Jun"
 msgstr ""
 
 #: templates/index.djhtml:240
 msgctxt "Big first letter"
-msgid "Monday"
+msgid "Jul"
 msgstr ""
 
 #: templates/index.djhtml:241
 msgctxt "Big first letter"
-msgid "Tuesday"
+msgid "Aug"
 msgstr ""
 
 #: templates/index.djhtml:242
 msgctxt "Big first letter"
-msgid "Wednesday"
+msgid "Sep"
 msgstr ""
 
 #: templates/index.djhtml:243
 msgctxt "Big first letter"
-msgid "Thursday"
+msgid "Oct"
 msgstr ""
 
 #: templates/index.djhtml:244
 msgctxt "Big first letter"
-msgid "Friday"
+msgid "Nov"
 msgstr ""
 
 #: templates/index.djhtml:245
+msgctxt "Big first letter"
+msgid "Dec"
+msgstr ""
+
+#: templates/index.djhtml:248
+msgctxt "Big first letter"
+msgid "Sunday"
+msgstr ""
+
+#: templates/index.djhtml:249
+msgctxt "Big first letter"
+msgid "Monday"
+msgstr ""
+
+#: templates/index.djhtml:250
+msgctxt "Big first letter"
+msgid "Tuesday"
+msgstr ""
+
+#: templates/index.djhtml:251
+msgctxt "Big first letter"
+msgid "Wednesday"
+msgstr ""
+
+#: templates/index.djhtml:252
+msgctxt "Big first letter"
+msgid "Thursday"
+msgstr ""
+
+#: templates/index.djhtml:253
+msgctxt "Big first letter"
+msgid "Friday"
+msgstr ""
+
+#: templates/index.djhtml:254
 msgctxt "Big first letter"
 msgid "Saturday"
 msgstr ""
@@ -6010,143 +5548,147 @@ msgstr ""
 msgid "Modify player"
 msgstr ""
 
-#: templates/player.djhtml:69
+#: templates/player.djhtml:70
 #, python-format
 msgid "Rating history for %(tag)s"
 msgstr ""
 
-#: templates/player.djhtml:141
+#: templates/player.djhtml:142
 msgid "vs. Protoss"
 msgstr ""
 
-#: templates/player.djhtml:153
+#: templates/player.djhtml:154
 msgid "vs. Terran"
 msgstr ""
 
-#: templates/player.djhtml:165
+#: templates/player.djhtml:166
 msgid "vs. Zerg"
 msgstr ""
 
-#: templates/player.djhtml:208
+#: templates/player.djhtml:209
 msgid "Team switches"
 msgstr ""
 
 #. Translators: All-time winrates
-#: templates/player.djhtml:252
+#: templates/player.djhtml:253
 msgid "All-time"
 msgstr ""
 
 #. Translators: Recent winrates
 #. Translators: Recent winrates
 #. Translators: Form as in the current form of a player.
-#: templates/player.djhtml:254 templates/player_results.djhtml:56
+#: templates/player.djhtml:255 templates/player_results.djhtml:56
 #: templates/pred_match.djhtml:115
 msgid "Form"
 msgstr ""
 
 #. Translators: Highest ratings
-#: templates/player.djhtml:256
+#: templates/player.djhtml:257
 msgid "Highest"
 msgstr ""
 
-#: templates/player.djhtml:257
+#: templates/player.djhtml:258
 msgid "Rivalries"
 msgstr ""
 
-#: templates/player.djhtml:451 templates/player.djhtml.py:476
-#: templates/player.djhtml:501 templates/player.djhtml.py:526
+#: templates/player.djhtml:452 templates/player.djhtml.py:477
+#: templates/player.djhtml:502 templates/player.djhtml.py:527
 msgctxt "on date"
 msgid "on"
 msgstr ""
 
-#: templates/player.djhtml:548
+#: templates/player.djhtml:549
 msgid "Rival"
 msgid_plural "Rivals"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/player.djhtml:552
+#: templates/player.djhtml:553
 msgid "Nemesis"
 msgid_plural "Nemeses"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/player.djhtml:556
+#: templates/player.djhtml:557
 msgid "Victim"
 msgid_plural "Victims"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/player.djhtml:611 templates/team.djhtml:127
+#: templates/player.djhtml:612 templates/team.djhtml:127
 msgid "Rank"
 msgstr ""
 
 #. Translators: World rank.
-#: templates/player.djhtml:615
+#: templates/player.djhtml:616
 #, python-format
 msgid "#%(rank)s World"
 msgstr ""
 
 #. Translators: Rank among non-Koreans.
-#: templates/player.djhtml:620
+#: templates/player.djhtml:621
 #, python-format
 msgid "#%(rank)s Non-Korean"
 msgstr ""
 
 #. Translators: Rank in a country.
-#: templates/player.djhtml:626
+#: templates/player.djhtml:627
 #, python-format
 msgid "#%(rank)s %(countryfull)s"
 msgstr ""
 
-#: templates/player.djhtml:635
+#: templates/player.djhtml:636
 msgid "Full name"
 msgstr ""
 
-#: templates/player.djhtml:641 templates/team.djhtml:84
+#: templates/player.djhtml:642
+msgid "Romanized name"
+msgstr ""
+
+#: templates/player.djhtml:648 templates/team.djhtml:84
 msgid "AKA"
 msgstr ""
 
-#: templates/player.djhtml:659
+#: templates/player.djhtml:666
 msgid "First match"
 msgstr ""
 
-#: templates/player.djhtml:665
+#: templates/player.djhtml:672
 msgid "Last match"
 msgstr ""
 
-#: templates/player.djhtml:677
+#: templates/player.djhtml:684
 msgid "Matches played"
 msgstr ""
 
 #. Translators: SC2E = sc2earnings.com
-#: templates/player.djhtml:698
+#: templates/player.djhtml:705
 msgid "SC2E"
 msgstr ""
 
-#: templates/player.djhtml:729
+#: templates/player.djhtml:736
 msgid "Most recent results"
 msgstr ""
 
-#: templates/player.djhtml:734
+#: templates/player.djhtml:741
 msgid "Team history"
 msgstr ""
 
-#: templates/player.djhtml:742 templates/player_transfers.djhtml:22
+#: templates/player.djhtml:749 templates/player_transfers.djhtml:22
 #: templates/team.djhtml:231
 msgid "Joined"
 msgstr ""
 
-#: templates/player.djhtml:743 templates/player_transfers.djhtml:20
+#: templates/player.djhtml:750 templates/player_transfers.djhtml:20
 #: templates/team.djhtml:232
 msgid "Left"
 msgstr ""
 
-#: templates/player.djhtml:754
+#: templates/player.djhtml:761
 msgid "yes"
 msgstr ""
 
-#: templates/player.djhtml:756
+#: templates/player.djhtml:763
 msgid "no"
 msgstr ""
 

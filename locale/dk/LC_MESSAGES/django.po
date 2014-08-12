@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Aligulac Danish\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-12 18:53+0200\n"
-"PO-Revision-Date: 2014-08-12 19:02+0100\n"
+"PO-Revision-Date: 2014-08-12 19:37+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Morten Bo <LL@li.org>\n"
 "Language: da\n"
@@ -5358,7 +5358,7 @@ msgstr ""
 #: templates/index.djhtml:171
 #, python-format
 msgid "Bitcoin donations (if you insist) on address: <br>%(btc)s"
-msgstr "Bitcoin donationer (hvis du insisterer) til adresse: <br>%(btc)s"
+msgstr "Bitcoin donationer (hvis I insisterer) til adresse: <br>%(btc)s"
 
 #: templates/index.djhtml:175
 msgid "Generate short URL for this page"

@@ -93,12 +93,10 @@ This is the results search function. Called from ratings.views.results_search.
     {% if adm %}
       <div class="row" style="padding-bottom: 1em;">
         <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 text-right">
-          <button type="button" class="btn btn-default btn-sm"
-                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',true);">
+          <button type="button" class="btn btn-default btn-sm check-all-btn">
             {% trans "Check all" %}
           </button>
-          <button type="button" class="btn btn-default btn-sm"
-                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',false);">
+          <button type="button" class="btn btn-default btn-sm uncheck-all-btn">
             {% trans "Uncheck all" %}
           </button>
         </div>
@@ -112,12 +110,10 @@ This is the results search function. Called from ratings.views.results_search.
     {% if adm %}
       <div class="row">
         <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 text-right">
-          <button type="button" class="btn btn-default btn-sm"
-                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',true);">
+          <button type="button" class="btn btn-default btn-sm check-all-btn">
             {% trans "Check all" %}
           </button>
-          <button type="button" class="btn btn-default btn-sm"
-                  onclick="$('input[name|=&quot;match&quot;]').prop('checked',false);">
+          <button type="button" class="btn btn-default btn-sm uncheck-all-btn">
             {% trans "Uncheck all" %}
           </button>
         </div>

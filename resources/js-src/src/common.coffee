@@ -14,6 +14,14 @@ lm_toggle_visibility = (id) ->
      $("#" + id + "_1").focus()
      false
 
+check_all_boxes = () ->
+    $('input[name|="match"]').prop('checked', true)
+    false
+
+uncheck_all_boxes = () ->
+    $('input[name|="match"]').prop('checked', false);
+    false
+
 check_boxes = (id) ->
     $("input[data-match=#{id}]").prop('checked', true)
     false
@@ -34,3 +42,6 @@ module.exports.Common = Common =
 
         $('.uncheck-boxes-btn').click ->
             uncheck_boxes $(this).data('match')
+
+        $('.check-all-btn').click check_all_boxes
+        $('.uncheck-all-btn').click uncheck_all_boxes

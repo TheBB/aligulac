@@ -290,7 +290,7 @@
 
 }).call(this);
 }, "common": function(exports, require, module) {(function() {
-  var Common, check_boxes, lm_toggle_visibility, toggle_block, uncheck_boxes;
+  var Common, check_all_boxes, check_boxes, lm_toggle_visibility, toggle_block, uncheck_all_boxes, uncheck_boxes;
 
   toggle_block = function(id) {
     $(".lm[data-id=" + id + "]").toggle();
@@ -302,6 +302,16 @@
     $("#fix" + id).toggle();
     $("#inp" + id).toggle();
     $("#" + id + "_1").focus();
+    return false;
+  };
+
+  check_all_boxes = function() {
+    $('input[name|="match"]').prop('checked', true);
+    return false;
+  };
+
+  uncheck_all_boxes = function() {
+    $('input[name|="match"]').prop('checked', false);
     return false;
   };
 
@@ -326,9 +336,11 @@
       $('.check-boxes-btn').click(function() {
         return check_boxes($(this).data('match'));
       });
-      return $('.uncheck-boxes-btn').click(function() {
+      $('.uncheck-boxes-btn').click(function() {
         return uncheck_boxes($(this).data('match'));
       });
+      $('.check-all-btn').click(check_all_boxes);
+      return $('.uncheck-all-btn').click(uncheck_all_boxes);
     }
   };
 

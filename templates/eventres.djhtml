@@ -172,7 +172,6 @@ ratings.views.events.
                     {% endfor %}
                   </ol>
                   {% csrf_token %}
-                  {% use "hidden" name="modpp" value="modpp" %}
                   {% use "hidden" name="reorder" value="reorder" %}
                   {% use "hidden" name="order" value="" id="order" %}
                 </div>

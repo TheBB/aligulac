@@ -340,7 +340,23 @@
         return uncheck_boxes($(this).data('match'));
       });
       $('.check-all-btn').click(check_all_boxes);
-      return $('.uncheck-all-btn').click(uncheck_all_boxes);
+      $('.uncheck-all-btn').click(uncheck_all_boxes);
+      $('.not-unique-more').click(function() {
+        $(this).toggle();
+        $(this).parent().find('.not-unique-hidden-names').toggle();
+        return false;
+      });
+      return $('.not-unique-update-player').click(function() {
+        var id, tag, update, updateline, _this;
+        _this = $(this);
+        update = _this.data('update');
+        updateline = _this.data('updateline');
+        tag = _this.data('tag');
+        id = _this.data('id');
+        $("#" + update + "_tagsinput span:nth-child(" + updateline + ") span").html("" + tag + " " + id + " &nbsp;&nbsp");
+        _this.closest('.message').toggle();
+        return false;
+      });
     }
   };
 

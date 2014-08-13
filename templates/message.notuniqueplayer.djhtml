@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load ratings_extras %}
+
+{% comment %}Translators: matches as in search matches, not SC2 matches{% endcomment %}
+{% trans "Possible matches:" %}
+{% for p in players %}
+    {% if forloop.counter == 5 %}
+    <a href="#" class="not-unique-more">
+      {% blocktrans with extra=extra_players %}and {{ extra }} more{% endblocktrans%}
+    </a>
+    <span class="not-unique-hidden-names" style="display:none;">
+  {% endif %}
+
+  {% if not forloop.first and not forloop.last %}
+    ,
+  {% elif forloop.last %}
+    {% trans "and" %}
+  {% endif %}
+
+  {% if p.country %}
+    <img src="{{ p.country|lower|img:"flags" }}" />
+  {% endif %}
+  <img src="{{ p.race|img }}" />
+
+  {% if not update %}
+    <a href="{{ p|player_url }}" target="_blank">{{ p.tag }}</a>
+  {% else %}
+    <a href="#" class="not-unique-update-player" data-update="{{ update }}"
+       data-updateline="{{ updateline }}" data-id="{{ p.id }}"
+       data-tag="{{ p.tag }}">
+      {{ p.tag }}
+    </a>
+  {% endif %}
+
+  {% if forloop.last and forloop.counter >= 5 %}
+    </span>
+  {% endif %}
+{% endfor %}

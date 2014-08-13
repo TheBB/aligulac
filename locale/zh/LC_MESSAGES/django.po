@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-12 18:53+0200\n"
+"POT-Creation-Date: 2014-08-13 21:12+0200\n"
 "PO-Revision-Date: 2014-04-02 10:28+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,7 +92,7 @@ msgid "Earnings"
 msgstr ""
 
 #: aligulac/aligulac/tools.py:249 templates/db.djhtml:104
-#: templates/index.djhtml:194 templates/search.djhtml:31
+#: templates/index.djhtml:193 templates/search.djhtml:31
 #: templates/teams.djhtml:10
 msgid "Teams"
 msgstr ""
@@ -217,8 +217,8 @@ msgstr "数据库"
 msgid "API"
 msgstr ""
 
-#: aligulac/aligulac/tools.py:299 templates/forms.djhtml:161
-#: templates/forms.djhtml.py:168
+#: aligulac/aligulac/tools.py:299 templates/forms.djhtml:165
+#: templates/forms.djhtml.py:172
 msgid "Submit"
 msgstr "提交"
 
@@ -226,7 +226,7 @@ msgstr "提交"
 #: aligulac/aligulac/tools.py:303 aligulac/ratings/inference_views.py:717
 #: aligulac/ratings/inference_views.py:738
 #: aligulac/ratings/player_views.py:704 aligulac/ratings/staff_views.py:279
-#: templates/add.djhtml:79 templates/eventres.djhtml:507
+#: templates/add.djhtml:79 templates/eventres.djhtml:503
 #: templates/historical.djhtml:44 templates/pred_rrgroup.djhtml:73
 msgid "Matches"
 msgstr ""
@@ -236,7 +236,7 @@ msgid "Review"
 msgstr ""
 
 #: aligulac/aligulac/tools.py:305 templates/events.djhtml:10
-#: templates/events.djhtml.py:16 templates/index.djhtml:195
+#: templates/events.djhtml.py:16 templates/index.djhtml:194
 #: templates/search.djhtml:41
 msgid "Events"
 msgstr ""
@@ -1933,8 +1933,8 @@ msgid "Best of"
 msgstr ""
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:254
-#: templates/db.djhtml:95 templates/eventres.djhtml:499
-#: templates/index.djhtml:193 templates/search.djhtml:21
+#: templates/db.djhtml:95 templates/eventres.djhtml:495
+#: templates/index.djhtml:192 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
 msgstr ""
@@ -1996,7 +1996,7 @@ msgstr ""
 #: aligulac/ratings/inference_views.py:1080
 #: aligulac/ratings/inference_views.py:1118
 #: aligulac/ratings/inference_views.py:1128
-#: templates/results_search.djhtml:140
+#: templates/results_search.djhtml:136
 msgid "Modify"
 msgstr "修改"
 
@@ -2148,8 +2148,8 @@ msgstr ""
 msgid "Enter at most six players."
 msgstr ""
 
-#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:213
-#: templates/eventres.djhtml.py:230 templates/periods.djhtml:26
+#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:209
+#: templates/eventres.djhtml.py:226 templates/periods.djhtml:26
 msgid "New"
 msgstr ""
 
@@ -2158,8 +2158,8 @@ msgid "Edit"
 msgstr ""
 
 #: aligulac/ratings/misc_views.py:415 aligulac/ratings/models.py:1294
-#: templates/historical.djhtml:36 templates/matchlist.djhtml:53
-#: templates/matchlist.djhtml.py:57 templates/player.djhtml:97
+#: templates/historical.djhtml:36 templates/matchlist.djhtml:43
+#: templates/matchlist.djhtml.py:47 templates/player.djhtml:97
 #: templates/ratinglist.djhtml:50 templates/ratinglist.djhtml.py:53
 #: templates/records.djhtml:38
 msgid "Rating"
@@ -2313,7 +2313,7 @@ msgstr ""
 #: aligulac/ratings/results_views.py:542 aligulac/ratings/results_views.py:711
 #: aligulac/ratings/staff_views.py:160 aligulac/ratings/staff_views.py:272
 #: aligulac/ratings/staff_views.py:303 templates/add.djhtml:48
-#: templates/clocks.djhtml:67
+#: templates/clocks.djhtml:60
 msgid "Event"
 msgstr ""
 
@@ -2833,9 +2833,10 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:100 aligulac/ratings/results_views.py:440
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
-#: templates/earnings.djhtml:123 templates/hof.djhtml:36
-#: templates/ratinglist.djhtml:41 templates/recordlist.djhtml:15
-#: templates/team.djhtml:230 templates/teams.djhtml:22
+#: templates/db.djhtml:164 templates/earnings.djhtml:123
+#: templates/hof.djhtml:36 templates/ratinglist.djhtml:41
+#: templates/recordlist.djhtml:15 templates/team.djhtml:230
+#: templates/teams.djhtml:22
 msgid "Name"
 msgstr ""
 
@@ -2993,7 +2994,7 @@ msgstr ""
 #: aligulac/ratings/player_views.py:209 aligulac/ratings/results_views.py:95
 #: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:719
 #: aligulac/ratings/staff_views.py:274 templates/add.djhtml:62
-#: templates/eventres.djhtml:469
+#: templates/eventres.djhtml:465
 msgid "Game version"
 msgstr ""
 
@@ -3051,7 +3052,7 @@ msgstr ""
 msgid "Results for"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:503
+#: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:499
 #: templates/historical.djhtml:45 templates/period.djhtml:350
 #: templates/periods.djhtml:27 templates/player.djhtml:102
 #: templates/player.djhtml.py:130 templates/pred_rrgroup.djhtml:74
@@ -3119,7 +3120,7 @@ msgstr ""
 #: aligulac/ratings/results_views.py:94 aligulac/ratings/results_views.py:98
 #: aligulac/ratings/results_views.py:102 aligulac/ratings/results_views.py:714
 #: aligulac/ratings/results_views.py:718 aligulac/ratings/results_views.py:729
-#: templates/results_search.djhtml:136 templates/review.djhtml:100
+#: templates/results_search.djhtml:132 templates/review.djhtml:100
 msgid "No change"
 msgstr ""
 
@@ -3127,7 +3128,7 @@ msgstr ""
 #. Translators: Event type.
 #: aligulac/ratings/results_views.py:104 aligulac/ratings/results_views.py:441
 #: aligulac/ratings/staff_views.py:535 templates/add.djhtml:65
-#: templates/eventres.djhtml:494 templates/review.djhtml:69
+#: templates/eventres.djhtml:490 templates/review.djhtml:69
 msgid "Type"
 msgstr ""
 
@@ -3137,7 +3138,7 @@ msgid "Apply to all events on the same level"
 msgstr ""
 
 #: aligulac/ratings/results_views.py:108 aligulac/ratings/team_views.py:50
-#: templates/eventres.djhtml:541 templates/events_open.djhtml:41
+#: templates/eventres.djhtml:537 templates/events_open.djhtml:41
 #: templates/events_open.djhtml.py:87 templates/events_open.djhtml:134
 #: templates/team.djhtml:157
 msgid "Homepage"
@@ -3194,8 +3195,8 @@ msgstr "玩家"
 
 #: aligulac/ratings/results_views.py:211 aligulac/ratings/results_views.py:393
 #: aligulac/ratings/results_views.py:712 aligulac/ratings/staff_views.py:138
-#: aligulac/ratings/staff_views.py:273 templates/clocks.djhtml:66
-#: templates/eventres.djhtml:451 templates/matchlist.djhtml:52
+#: aligulac/ratings/staff_views.py:273 templates/clocks.djhtml:59
+#: templates/eventres.djhtml:447 templates/matchlist.djhtml:42
 #: templates/player_transfers.djhtml:23 templates/review.djhtml:61
 msgid "Date"
 msgstr "日期"
@@ -4169,7 +4170,7 @@ msgid ""
 "Each line corresponds to a match, and should be entered using this format:"
 msgstr ""
 
-#: templates/add.djhtml:89 templates/matchlist.djhtml:55
+#: templates/add.djhtml:89 templates/matchlist.djhtml:45
 msgid "Score"
 msgstr ""
 
@@ -4367,39 +4368,39 @@ msgstr "请输入新密码"
 msgid "New password again"
 msgstr "请再次输入新密码"
 
-#: templates/clocks.djhtml:10 templates/clocks.djhtml.py:25
+#: templates/clocks.djhtml:10 templates/clocks.djhtml.py:18
 msgid "Days since..."
 msgstr ""
 
-#: templates/clocks.djhtml:43
+#: templates/clocks.djhtml:36
 msgid "year"
 msgid_plural "years"
 msgstr[0] "年"
 
-#: templates/clocks.djhtml:48 templates/results.djhtml:51
-#: templates/results.djhtml.py:56 templates/results.djhtml:91
-#: templates/results.djhtml.py:96
+#: templates/clocks.djhtml:41 templates/results.djhtml:54
+#: templates/results.djhtml.py:61 templates/results.djhtml:97
+#: templates/results.djhtml.py:102
 msgid "day"
 msgid_plural "days"
 msgstr[0] "日"
 
-#: templates/clocks.djhtml:74 templates/matchlist.djhtml:174
+#: templates/clocks.djhtml:67 templates/matchlist.djhtml:180
 msgid "Y-m-d"
 msgstr "年-月-日"
 
-#: templates/clocks.djhtml:95
+#: templates/clocks.djhtml:88
 msgid ""
 "<b>Major</b> is defined as a tournament where the first place prize money "
 "exceeds $2,000."
 msgstr ""
 
-#: templates/clocks.djhtml:96
+#: templates/clocks.djhtml:89
 msgid ""
 "<b>Premier</b> is defined as an offline tournament where the first place "
 "prize money exceeds $10,000"
 msgstr ""
 
-#: templates/clocks.djhtml:97
+#: templates/clocks.djhtml:90
 #, python-format
 msgid ""
 "These differ from the definitions used by %(a)sLiquipedia</a>. The reason "
@@ -4469,6 +4470,10 @@ msgstr ""
 msgid "%(nteams)s, of which %(nactive)s active"
 msgstr ""
 
+#: templates/db.djhtml:117
+msgid "Top submitters"
+msgstr ""
+
 #: templates/db.djhtml:128
 msgid "more"
 msgstr ""
@@ -4494,6 +4499,14 @@ msgid ""
 "The dump contains 11 tables. Some columns are foreign keys to tables that "
 "have been removed from the dump (primarily involving user accounts). "
 "Everything given below is in terms of <strong>PostgreSQL standards</strong>."
+msgstr ""
+
+#: templates/db.djhtml:165
+msgid "Definition"
+msgstr ""
+
+#: templates/db.djhtml:166
+msgid "Description"
 msgstr ""
 
 #: templates/earnings.djhtml:11 templates/earnings.djhtml.py:16
@@ -4556,35 +4569,35 @@ msgstr ""
 msgid "Total earnings"
 msgstr "总收入"
 
-#: templates/eventmgr.djhtml:11 templates/eventmgr.djhtml.py:64
+#: templates/eventmgr.djhtml:11 templates/eventmgr.djhtml.py:58
 #, fuzzy
 msgid "Event manager"
 msgstr "玩家真实姓名"
 
-#: templates/eventmgr.djhtml:30
+#: templates/eventmgr.djhtml:24
 msgid "Modify event / add new sub-events"
 msgstr ""
 
-#: templates/eventmgr.djhtml:39
+#: templates/eventmgr.djhtml:33
 msgid ""
 "Use this if you want to add several events at once using a predefined naming "
 "pattern."
 msgstr ""
 
-#: templates/eventmgr.djhtml:40
+#: templates/eventmgr.djhtml:34
 msgid "Use this for custom names. Separate each new subevent by a comma."
 msgstr ""
 
-#: templates/eventmgr.djhtml:46
+#: templates/eventmgr.djhtml:40
 msgid "Commit new sub-events"
 msgstr ""
 
-#: templates/eventmgr.djhtml:47
+#: templates/eventmgr.djhtml:41
 #, fuzzy
 msgid "Close event"
 msgstr "根据赛事"
 
-#: templates/eventmgr.djhtml:73
+#: templates/eventmgr.djhtml:67
 msgid ""
 "The events are organized in a tree, loosely hierarchical with "
 "organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so "
@@ -4592,7 +4605,7 @@ msgid ""
 msgstr ""
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:76
+#: templates/eventmgr.djhtml:70
 msgid ""
 "The name displayed everywhere on the site is the concatenation of the event "
 "name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code "
@@ -4602,18 +4615,18 @@ msgid ""
 msgstr ""
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:79
+#: templates/eventmgr.djhtml:73
 msgid ""
 "Do not repeat information. If you have an event called «Qualifiers», the "
 "subevents should not be called «Korean Qualifiers». Just «Korea» is fine."
 msgstr ""
 
-#: templates/eventmgr.djhtml:81
+#: templates/eventmgr.djhtml:75
 msgid ""
 "Matches can only be assigned to leaf events (i.e. events with no subevents)."
 msgstr ""
 
-#: templates/eventmgr.djhtml:83
+#: templates/eventmgr.djhtml:77
 msgid ""
 "Close an event after all the matches has been assigned. This will remove it "
 "from the list below and all drop-down boxes on the site, to help "
@@ -4622,7 +4635,7 @@ msgid ""
 msgstr ""
 
 #. Translators: The event names and noprint have to be in English.
-#: templates/eventmgr.djhtml:86
+#: templates/eventmgr.djhtml:80
 msgid ""
 "You can improve readability by making an event «invisible» (open the admin "
 "interface and check the «noprint» option). This will hide the name. This is "
@@ -4631,47 +4644,47 @@ msgid ""
 "group stages and playoffs."
 msgstr ""
 
-#: templates/eventmgr.djhtml:88
+#: templates/eventmgr.djhtml:82
 msgid ""
 "Events with many games should also be marked «big». This will cause the list "
 "of games to be cut off. If you forget, no big deal, it's done automatically."
 msgstr ""
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:91
+#: templates/eventmgr.djhtml:85
 msgid ""
 "<strong>Naming conventions:</strong> Ro («round of») with capital R and "
 "small o, followed immediately by the number. Third place matches should be "
 "named exactly that (not «3rd»)."
 msgstr ""
 
-#: templates/eventmgr.djhtml:101
+#: templates/eventmgr.djhtml:95
 msgid "Add root event"
 msgstr ""
 
-#: templates/eventmgr.djhtml:105
+#: templates/eventmgr.djhtml:98
 msgid "Show guide"
 msgstr ""
 
-#: templates/eventmgr.djhtml:125
+#: templates/eventmgr.djhtml:118
 #, fuzzy
 msgid "event"
 msgstr "根据赛事"
 
-#: templates/eventmgr.djhtml:129
+#: templates/eventmgr.djhtml:122
 msgid "admin"
 msgstr ""
 
-#: templates/eventmgr.djhtml:133
+#: templates/eventmgr.djhtml:128
 msgid "modify"
 msgstr "修改"
 
-#: templates/eventres.djhtml:66
+#: templates/eventres.djhtml:63
 #, fuzzy
 msgid "Modify event"
 msgstr "修改"
 
-#: templates/eventres.djhtml:72
+#: templates/eventres.djhtml:69
 msgid ""
 "<strong>Danger!</strong> Changes to date, game and offline will modify all "
 "matches associated with all events in this tree. Changing type will "
@@ -4679,59 +4692,59 @@ msgid ""
 "you are doing!"
 msgstr ""
 
-#: templates/eventres.djhtml:104 templates/eventres.djhtml.py:575
+#: templates/eventres.djhtml:101 templates/eventres.djhtml.py:571
 msgid "Add subevents"
 msgstr ""
 
-#: templates/eventres.djhtml:110
+#: templates/eventres.djhtml:107
 msgid ""
 "If you need more options, or if you need to add more than one subevent, use "
 "the <a href=\"/add/events/\">event manager</a> tool."
 msgstr ""
 
-#: templates/eventres.djhtml:135
+#: templates/eventres.djhtml:132
 #, fuzzy
 msgid "Modify prizepool"
 msgstr "修改"
 
-#: templates/eventres.djhtml:143
+#: templates/eventres.djhtml:140
 msgid ""
 "The currency in which the prize was paid, usually the official currency in "
 "the country the tournament was held."
 msgstr ""
 
-#: templates/eventres.djhtml:144
+#: templates/eventres.djhtml:141
 msgid "Use this for prizes related to final placement in the event."
 msgstr ""
 
-#: templates/eventres.djhtml:144 templates/eventres.djhtml.py:145
+#: templates/eventres.djhtml:141 templates/eventres.djhtml.py:142
 #, fuzzy
 msgid "[prize] [player]"
 msgstr "玩家A分数"
 
-#: templates/eventres.djhtml:145
+#: templates/eventres.djhtml:142
 msgid "Use this for prizes unrelated to placement, i.e. public tips."
 msgstr ""
 
-#: templates/eventres.djhtml:165 templates/eventres.djhtml.py:583
+#: templates/eventres.djhtml:162 templates/eventres.djhtml.py:579
 msgid "Reorder subevents"
 msgstr ""
 
-#: templates/eventres.djhtml:171
+#: templates/eventres.djhtml:168
 msgid ""
 "Put the <strong>least significant</strong> events first (the ones played "
 "first, or with most players). Finals should be toward the bottom."
 msgstr ""
 
-#: templates/eventres.djhtml:201
+#: templates/eventres.djhtml:197
 msgid "Add or change stories"
 msgstr ""
 
-#: templates/eventres.djhtml:209
+#: templates/eventres.djhtml:205
 msgid "Extant stories"
 msgstr ""
 
-#: templates/eventres.djhtml:227
+#: templates/eventres.djhtml:223
 #, python-format
 msgid ""
 "For each parameter, a line of the form \"parameter: value\". The parameters "
@@ -4739,162 +4752,162 @@ msgid ""
 "replaced by the value you enter."
 msgstr ""
 
-#: templates/eventres.djhtml:231
+#: templates/eventres.djhtml:227
 msgid "Update"
 msgstr ""
 
-#: templates/eventres.djhtml:232
+#: templates/eventres.djhtml:228
 msgid "Delete"
 msgstr ""
 
-#: templates/eventres.djhtml:271
+#: templates/eventres.djhtml:267
 msgid "Navigation"
 msgstr ""
 
-#: templates/eventres.djhtml:275 templates/period.djhtml:30
+#: templates/eventres.djhtml:271 templates/period.djhtml:30
 msgid "Matchups"
 msgstr ""
 
-#: templates/eventres.djhtml:280
+#: templates/eventres.djhtml:276
 msgid "Prize Pool"
 msgstr ""
 
-#: templates/eventres.djhtml:287
+#: templates/eventres.djhtml:283
 msgid "Other Prizes"
 msgstr ""
 
 #. Translators: Go as in go to a page.
 #. Translators: Go as in go to a page.
-#: templates/eventres.djhtml:315 templates/eventres.djhtml.py:340
+#: templates/eventres.djhtml:311 templates/eventres.djhtml.py:336
 #: templates/events.djhtml:38 templates/results.djhtml:30
 msgid "Go"
 msgstr ""
 
-#: templates/eventres.djhtml:351 templates/eventres.djhtml.py:511
+#: templates/eventres.djhtml:347 templates/eventres.djhtml.py:507
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
 #: templates/reports_balance.djhtml:75 templates/reports_balance.djhtml:78
 msgid "PvT"
 msgstr ""
 
-#: templates/eventres.djhtml:370 templates/eventres.djhtml.py:517
+#: templates/eventres.djhtml:366 templates/eventres.djhtml.py:513
 #: templates/period.djhtml:219 templates/period.djhtml.py:358
 #: templates/reports_balance.djhtml:83 templates/reports_balance.djhtml:86
 msgid "PvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:389 templates/eventres.djhtml.py:523
+#: templates/eventres.djhtml:385 templates/eventres.djhtml.py:519
 #: templates/period.djhtml:236 templates/period.djhtml.py:362
 #: templates/reports_balance.djhtml:91 templates/reports_balance.djhtml:94
 msgid "TvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:408 templates/eventres.djhtml.py:529
+#: templates/eventres.djhtml:404 templates/eventres.djhtml.py:525
 #: templates/period.djhtml:253 templates/period.djhtml.py:366
 msgid "Mirrors"
 msgstr ""
 
-#: templates/eventres.djhtml:443
+#: templates/eventres.djhtml:439
 msgid "Details"
 msgstr "细节"
 
-#: templates/eventres.djhtml:449 templates/player_earnings.djhtml:55
+#: templates/eventres.djhtml:445 templates/player_earnings.djhtml:55
 #, fuzzy
 msgid "Dates"
 msgstr "日期"
 
 #. Translators: Date to date.
-#: templates/eventres.djhtml:461
+#: templates/eventres.djhtml:457
 #, python-format
 msgid "%(fst)s to %(snd)s"
 msgstr ""
 
-#: templates/eventres.djhtml:475
+#: templates/eventres.djhtml:471
 msgid "On-/Offline"
 msgstr ""
 
-#: templates/eventres.djhtml:481
+#: templates/eventres.djhtml:477
 msgid "Prizepool"
 msgstr ""
 
-#: templates/eventres.djhtml:531 templates/period.djhtml:367
+#: templates/eventres.djhtml:527 templates/period.djhtml:367
 msgid "PvP"
 msgstr ""
 
-#: templates/eventres.djhtml:532 templates/period.djhtml:367
+#: templates/eventres.djhtml:528 templates/period.djhtml:367
 msgid "TvT"
 msgstr ""
 
-#: templates/eventres.djhtml:533 templates/period.djhtml:367
+#: templates/eventres.djhtml:529 templates/period.djhtml:367
 msgid "ZvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:538 templates/player.djhtml:696
+#: templates/eventres.djhtml:534 templates/player.djhtml:696
 #: templates/team.djhtml:154
 msgid "External"
 msgstr ""
 
-#: templates/eventres.djhtml:545 templates/eventres.djhtml.py:548
-#: templates/eventres.djhtml:551 templates/eventres.djhtml.py:554
-#: templates/eventres.djhtml:557
+#: templates/eventres.djhtml:541 templates/eventres.djhtml.py:544
+#: templates/eventres.djhtml:547 templates/eventres.djhtml.py:550
+#: templates/eventres.djhtml:553
 msgid "TLPD"
 msgstr ""
 
-#: templates/eventres.djhtml:561 templates/events_open.djhtml:44
+#: templates/eventres.djhtml:557 templates/events_open.djhtml:44
 #: templates/events_open.djhtml.py:90 templates/events_open.djhtml:137
 msgid "TL"
 msgstr ""
 
 #. Translators: LP = Liquipedia
-#: templates/eventres.djhtml:564 templates/events_open.djhtml:47
+#: templates/eventres.djhtml:560 templates/events_open.djhtml:47
 #: templates/events_open.djhtml.py:93 templates/events_open.djhtml:140
 #: templates/player.djhtml:709 templates/team.djhtml:160
 msgid "LP"
 msgstr ""
 
-#: templates/eventres.djhtml:572 templates/player.djhtml:717
+#: templates/eventres.djhtml:568 templates/player.djhtml:717
 #: templates/team.djhtml:168
 msgid "Edit info"
 msgstr ""
 
-#: templates/eventres.djhtml:573 templates/player.djhtml:718
+#: templates/eventres.djhtml:569 templates/player.djhtml:718
 #: templates/team.djhtml:169
 msgid "Admin interface"
 msgstr ""
 
-#: templates/eventres.djhtml:574
+#: templates/eventres.djhtml:570
 msgid "Add matches"
 msgstr ""
 
-#: templates/eventres.djhtml:577
+#: templates/eventres.djhtml:573
 msgid "Prize pool"
 msgstr ""
 
 #. Translators: Stories are the dots on a player's rating chart.
-#: templates/eventres.djhtml:580 templates/player.djhtml:192
+#: templates/eventres.djhtml:576 templates/player.djhtml:192
 msgid "Stories"
 msgstr ""
 
-#: templates/eventres.djhtml:597
+#: templates/eventres.djhtml:593
 msgid "This event has no registered games... yet."
 msgstr ""
 
-#: templates/eventres.djhtml:602
+#: templates/eventres.djhtml:598
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help <a href="
 "\"%(uri)s\">populate our database</a>!"
 msgstr ""
 
-#: templates/eventres.prizepool.djhtml:39 templates/index.djhtml:197
-#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
-#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
+#: templates/eventres.prizepool.djhtml:39 templates/index.djhtml:196
+#: templates/matchlist.djhtml:81 templates/matchlist.djhtml.py:124
+#: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
 #: templates/review.djhtml:46
 msgid "show"
 msgstr ""
 
-#: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:196
-#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
-#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
+#: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:195
+#: templates/matchlist.djhtml:81 templates/matchlist.djhtml.py:124
+#: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
 msgid "hide"
 msgstr ""
 
@@ -4975,16 +4988,16 @@ msgstr ""
 msgid "Frequently Asked Questions"
 msgstr "常见问题"
 
-#: templates/forms.djhtml:146
+#: templates/forms.djhtml:150
 #, fuzzy
 msgid "After date"
 msgstr "之后"
 
-#: templates/forms.djhtml:147
+#: templates/forms.djhtml:151
 msgid "to"
 msgstr ""
 
-#: templates/forms.djhtml:151
+#: templates/forms.djhtml:155
 #, fuzzy
 msgid "Before date"
 msgstr "之前"
@@ -5140,184 +5153,184 @@ msgstr ""
 msgid "Bitcoin donations (if you insist) on address: <br>%(btc)s"
 msgstr ""
 
-#: templates/index.djhtml:175
+#: templates/index.djhtml:174
 msgid "Generate short URL for this page"
 msgstr ""
 
-#: templates/index.djhtml:212
+#: templates/index.djhtml:211
 msgid "Download PNG image"
 msgstr "下载PNG图片"
 
-#: templates/index.djhtml:213
+#: templates/index.djhtml:212
 msgid "Download JPEG image"
 msgstr "下载JPEG图片"
 
-#: templates/index.djhtml:214
+#: templates/index.djhtml:213
 msgid "Download PDF document"
 msgstr "下载PDF文件"
 
-#: templates/index.djhtml:215
+#: templates/index.djhtml:214
 msgid "Download SVG vector image"
 msgstr "下载SVG矢量图片"
 
-#: templates/index.djhtml:216
+#: templates/index.djhtml:215
 msgid "Loading..."
 msgstr "载入中..."
 
-#: templates/index.djhtml:217
+#: templates/index.djhtml:216
 msgid "Print chart"
 msgstr "打印图表"
 
-#: templates/index.djhtml:218
+#: templates/index.djhtml:217
 msgid "Reset zoom"
 msgstr ""
 
-#: templates/index.djhtml:220
+#: templates/index.djhtml:219
 msgctxt "Big first letter"
 msgid "January"
 msgstr "一月"
 
-#: templates/index.djhtml:221
+#: templates/index.djhtml:220
 msgctxt "Big first letter"
 msgid "February"
 msgstr "二月"
 
-#: templates/index.djhtml:222
+#: templates/index.djhtml:221
 msgctxt "Big first letter"
 msgid "March"
 msgstr "三月"
 
-#: templates/index.djhtml:223
+#: templates/index.djhtml:222
 msgctxt "Big first letter"
 msgid "April"
 msgstr "四月"
 
-#: templates/index.djhtml:224 templates/index.djhtml.py:238
+#: templates/index.djhtml:223 templates/index.djhtml.py:237
 msgctxt "Big first letter"
 msgid "May"
 msgstr "五月"
 
-#: templates/index.djhtml:225
+#: templates/index.djhtml:224
 msgctxt "Big first letter"
 msgid "June"
 msgstr "六月"
 
-#: templates/index.djhtml:226
+#: templates/index.djhtml:225
 msgctxt "Big first letter"
 msgid "July"
 msgstr "七月"
 
-#: templates/index.djhtml:227
+#: templates/index.djhtml:226
 msgctxt "Big first letter"
 msgid "August"
 msgstr "八月"
 
-#: templates/index.djhtml:228
+#: templates/index.djhtml:227
 msgctxt "Big first letter"
 msgid "September"
 msgstr "九月"
 
-#: templates/index.djhtml:229
+#: templates/index.djhtml:228
 msgctxt "Big first letter"
 msgid "October"
 msgstr "十月"
 
-#: templates/index.djhtml:230
+#: templates/index.djhtml:229
 msgctxt "Big first letter"
 msgid "November"
 msgstr "十一月"
 
-#: templates/index.djhtml:231
+#: templates/index.djhtml:230
 msgctxt "Big first letter"
 msgid "December"
 msgstr "十二月"
 
-#: templates/index.djhtml:234
+#: templates/index.djhtml:233
 msgctxt "Big first letter"
 msgid "Jan"
 msgstr "一月"
 
-#: templates/index.djhtml:235
+#: templates/index.djhtml:234
 msgctxt "Big first letter"
 msgid "Feb"
 msgstr "二月"
 
-#: templates/index.djhtml:236
+#: templates/index.djhtml:235
 msgctxt "Big first letter"
 msgid "Mar"
 msgstr "三月"
 
-#: templates/index.djhtml:237
+#: templates/index.djhtml:236
 msgctxt "Big first letter"
 msgid "Apr"
 msgstr "四月"
 
-#: templates/index.djhtml:239
+#: templates/index.djhtml:238
 msgctxt "Big first letter"
 msgid "Jun"
 msgstr "六月"
 
-#: templates/index.djhtml:240
+#: templates/index.djhtml:239
 msgctxt "Big first letter"
 msgid "Jul"
 msgstr "七月"
 
-#: templates/index.djhtml:241
+#: templates/index.djhtml:240
 msgctxt "Big first letter"
 msgid "Aug"
 msgstr "八月"
 
-#: templates/index.djhtml:242
+#: templates/index.djhtml:241
 msgctxt "Big first letter"
 msgid "Sep"
 msgstr "九月"
 
-#: templates/index.djhtml:243
+#: templates/index.djhtml:242
 msgctxt "Big first letter"
 msgid "Oct"
 msgstr "十月"
 
-#: templates/index.djhtml:244
+#: templates/index.djhtml:243
 msgctxt "Big first letter"
 msgid "Nov"
 msgstr "十一月"
 
-#: templates/index.djhtml:245
+#: templates/index.djhtml:244
 msgctxt "Big first letter"
 msgid "Dec"
 msgstr "十二月"
 
-#: templates/index.djhtml:248
+#: templates/index.djhtml:247
 msgctxt "Big first letter"
 msgid "Sunday"
 msgstr "周日"
 
-#: templates/index.djhtml:249
+#: templates/index.djhtml:248
 msgctxt "Big first letter"
 msgid "Monday"
 msgstr "周一"
 
-#: templates/index.djhtml:250
+#: templates/index.djhtml:249
 msgctxt "Big first letter"
 msgid "Tuesday"
 msgstr "周二"
 
-#: templates/index.djhtml:251
+#: templates/index.djhtml:250
 msgctxt "Big first letter"
 msgid "Wednesday"
 msgstr "周三"
 
-#: templates/index.djhtml:252
+#: templates/index.djhtml:251
 msgctxt "Big first letter"
 msgid "Thursday"
 msgstr "周四"
 
-#: templates/index.djhtml:253
+#: templates/index.djhtml:252
 msgctxt "Big first letter"
 msgid "Friday"
 msgstr "周五"
 
-#: templates/index.djhtml:254
+#: templates/index.djhtml:253
 msgctxt "Big first letter"
 msgid "Saturday"
 msgstr "周六"
@@ -5439,44 +5452,42 @@ msgid ""
 "confirmation before the move."
 msgstr ""
 
-#: templates/matchlist.djhtml:54
+#: templates/matchlist.djhtml:44
 #, fuzzy
 msgid "Player A"
 msgstr "玩家"
 
-#: templates/matchlist.djhtml:56
+#: templates/matchlist.djhtml:46
 #, fuzzy
 msgid "Player B"
 msgstr "玩家"
 
-#: templates/matchlist.djhtml:83 templates/matchlist.djhtml.py:122
+#: templates/matchlist.djhtml:73 templates/matchlist.djhtml.py:120
 msgid "Unknown event(s)"
 msgstr ""
 
-#: templates/matchlist.djhtml:88
+#: templates/matchlist.djhtml:78
 msgid "add"
 msgstr "添加"
 
-#. Translators: Check
 #. Translators: Check, as in the verb, to make a checkmark.
-#: templates/matchlist.djhtml:95 templates/matchlist.djhtml.py:130
+#: templates/matchlist.djhtml:88 templates/matchlist.djhtml.py:131
 #: templates/review.djhtml:50
 msgid "chk"
 msgstr ""
 
-#. Translators: Uncheck
 #. Translators: Uncheck, as in the verb, to remove a checkmark.
-#: templates/matchlist.djhtml:97 templates/matchlist.djhtml.py:132
+#: templates/matchlist.djhtml:94 templates/matchlist.djhtml.py:137
 #: templates/review.djhtml:54
 msgid "unchk"
 msgstr ""
 
-#: templates/matchlist.djhtml:267
+#: templates/matchlist.djhtml:273
 msgid "unrated"
 msgstr ""
 
 #. Translators: No spaces
-#: templates/matchlist.djhtml:271
+#: templates/matchlist.djhtml:277
 msgid "offline,online"
 msgstr ""
 
@@ -6192,21 +6203,21 @@ msgstr ""
 msgid "Go to date:"
 msgstr ""
 
-#: templates/results.djhtml:41 templates/results.djhtml.py:66
-#: templates/results.djhtml:81 templates/results.djhtml.py:106
+#: templates/results.djhtml:41 templates/results.djhtml.py:72
+#: templates/results.djhtml:87 templates/results.djhtml.py:112
 msgid "month"
 msgstr ""
 
-#: templates/results.djhtml:46 templates/results.djhtml.py:61
-#: templates/results.djhtml:86 templates/results.djhtml.py:101
+#: templates/results.djhtml:46 templates/results.djhtml.py:67
+#: templates/results.djhtml:92 templates/results.djhtml.py:107
 msgid "week"
 msgstr ""
 
-#: templates/results.djhtml:115
+#: templates/results.djhtml:121
 msgid "No registered results on this date."
 msgstr ""
 
-#: templates/results.djhtml:123
+#: templates/results.djhtml:129
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help "
@@ -6278,15 +6289,15 @@ msgid ""
 "matches against %(plb)s."
 msgstr ""
 
-#: templates/results_search.djhtml:98 templates/results_search.djhtml:117
+#: templates/results_search.djhtml:97 templates/results_search.djhtml:114
 msgid "Check all"
 msgstr ""
 
-#: templates/results_search.djhtml:102 templates/results_search.djhtml:121
+#: templates/results_search.djhtml:100 templates/results_search.djhtml:117
 msgid "Uncheck all"
 msgstr ""
 
-#: templates/results_search.djhtml:128
+#: templates/results_search.djhtml:124
 msgid "The following modifications will be made to all checked matches:"
 msgstr ""
 

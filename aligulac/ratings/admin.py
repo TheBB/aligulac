@@ -50,6 +50,7 @@ player_team.short_description = 'Team'
 
 class MembersInline(admin.TabularInline):
     model = Group.members.through
+    extra = 1
 
 class AliasesInline(admin.TabularInline):
     model = Alias

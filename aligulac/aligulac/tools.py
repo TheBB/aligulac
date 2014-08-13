@@ -97,7 +97,7 @@ class NotUniquePlayerMessage(Message):
         if len(player_list) >= 5:
             ctx['extra_players'] = len(player_list) - 5
         ctx['update'] = update
-        ctx['updateline'] = updateline + 1
+        ctx['updateline'] = updateline
 
         s = render_to_string("message.notuniqueplayer.djhtml", ctx)
 

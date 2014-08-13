@@ -58,6 +58,11 @@ module.exports.Common = Common =
             updateline = _this.data('updateline')
             tag = _this.data('tag')
             id = _this.data('id')
-            $("##{ update }_tagsinput span:nth-child(#{ updateline }) span").html("#{ tag } #{ id } &nbsp;&nbsp")
+            input = $("##{ update }")
+
+            taglist = input.getTags()
+            taglist[updateline] = tag + " " + id
+            input.importTags(taglist.join '\n')
+
             _this.closest('.message').toggle()
             false

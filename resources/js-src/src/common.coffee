@@ -45,3 +45,24 @@ module.exports.Common = Common =
 
         $('.check-all-btn').click check_all_boxes
         $('.uncheck-all-btn').click uncheck_all_boxes
+
+        # Ambiguity resolver for tagsinput
+        $('.not-unique-more').click ->
+            $(this).toggle()
+            $(this).parent().find('.not-unique-hidden-names').toggle()
+            false
+
+        $('.not-unique-update-player').click ->
+            _this = $(this)
+            update = _this.data('update')
+            updateline = _this.data('updateline')
+            tag = _this.data('tag')
+            id = _this.data('id')
+            input = $("##{ update }")
+
+            taglist = input.getTags()
+            taglist[updateline] = tag + " " + id
+            input.importTags(taglist.join '\n')
+
+            _this.closest('.message').toggle()
+            false

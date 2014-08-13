@@ -129,6 +129,15 @@ init_event_boxes = () ->
 # AUTOCOMPLETE PREDICTIONS
 # ======================================================================
 
+# Ugly hacking
+add_extra_functions = () ->
+    $.fn.getTags =  ->
+        tagslist = $(this).val().split('\n')
+        if tagslist[0] == ''
+            tagslist = []
+
+        tagslist
+
 init_predictions = () ->
     idPlayersTextArea = $("#id_players")
     idPlayersTextArea.tagsInput
@@ -155,12 +164,24 @@ init_predictions = () ->
         delimiter: '\n'
         width: '100%'
         formatAutocomplete: aligulacAutocompleteTemplates
+        removeWithBackspace: true
 
     # Hacking the enter key down to submit the form when the
     # current input is empty
+    # ... and the backspace, which works in the non-minified version of
+    # jquery.tagsInput. We should switch away from it. It's a piece of crap.
     $("#id_players_addTag").keydown (event) ->
         if event.which == 13 and $("#id_players_tag").val() == ""
             $(this).closest("form").submit()
+    $("#id_players_tag").keydown (event) ->
+        if event.which == 8 and $(this).val() == ""
+            event.preventDefault()
+            id = $(this).attr('id').replace(/_tag$/, '')
+            input = $("##{ id }")
+            taglist = input.getTags()
+            taglist.pop()
+            input.importTags(taglist.join '\n')
+            $(this).trigger('focus')
 
 # Make sure the players input is styled like the rest of the form elements
 init_other = () ->
@@ -179,6 +200,7 @@ init_other = () ->
 
 exports.AutoComplete = AutoComplete =
     init: () ->
+        add_extra_functions()
         init_search_box()
         init_event_boxes()
         init_predictions()

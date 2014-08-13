@@ -84,7 +84,7 @@
 
 }).call(this);
 }, "auto_complete": function(exports, require, module) {(function() {
-  var AutoComplete, aligulacAutocompleteTemplates, getResults, init_event_boxes, init_other, init_predictions, init_search_box;
+  var AutoComplete, add_extra_functions, aligulacAutocompleteTemplates, getResults, init_event_boxes, init_other, init_predictions, init_search_box;
 
   aligulacAutocompleteTemplates = function(obj) {
     var flag, name, race, team;
@@ -206,6 +206,17 @@
     } catch (_error) {}
   };
 
+  add_extra_functions = function() {
+    return $.fn.getTags = function() {
+      var tagslist;
+      tagslist = $(this).val().split('\n');
+      if (tagslist[0] === '') {
+        tagslist = [];
+      }
+      return tagslist;
+    };
+  };
+
   init_predictions = function() {
     var idPlayersTextArea;
     idPlayersTextArea = $("#id_players");
@@ -245,11 +256,24 @@
       placeholderColor: '#9e9e9e',
       delimiter: '\n',
       width: '100%',
-      formatAutocomplete: aligulacAutocompleteTemplates
+      formatAutocomplete: aligulacAutocompleteTemplates,
+      removeWithBackspace: true
     });
-    return $("#id_players_addTag").keydown(function(event) {
+    $("#id_players_addTag").keydown(function(event) {
       if (event.which === 13 && $("#id_players_tag").val() === "") {
         return $(this).closest("form").submit();
+      }
+    });
+    return $("#id_players_tag").keydown(function(event) {
+      var id, input, taglist;
+      if (event.which === 8 && $(this).val() === "") {
+        event.preventDefault();
+        id = $(this).attr('id').replace(/_tag$/, '');
+        input = $("#" + id);
+        taglist = input.getTags();
+        taglist.pop();
+        input.importTags(taglist.join('\n'));
+        return $(this).trigger('focus');
       }
     });
   };
@@ -264,6 +288,7 @@
 
   exports.AutoComplete = AutoComplete = {
     init: function() {
+      add_extra_functions();
       init_search_box();
       init_event_boxes();
       init_predictions();
@@ -340,7 +365,26 @@
         return uncheck_boxes($(this).data('match'));
       });
       $('.check-all-btn').click(check_all_boxes);
-      return $('.uncheck-all-btn').click(uncheck_all_boxes);
+      $('.uncheck-all-btn').click(uncheck_all_boxes);
+      $('.not-unique-more').click(function() {
+        $(this).toggle();
+        $(this).parent().find('.not-unique-hidden-names').toggle();
+        return false;
+      });
+      return $('.not-unique-update-player').click(function() {
+        var id, input, tag, taglist, update, updateline, _this;
+        _this = $(this);
+        update = _this.data('update');
+        updateline = _this.data('updateline');
+        tag = _this.data('tag');
+        id = _this.data('id');
+        input = $("#" + update);
+        taglist = input.getTags();
+        taglist[updateline] = tag + " " + id;
+        input.importTags(taglist.join('\n'));
+        _this.closest('.message').toggle();
+        return false;
+      });
     }
   };
 

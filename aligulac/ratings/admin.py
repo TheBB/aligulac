@@ -166,6 +166,7 @@ class MatchAdmin(admin.ModelAdmin):
         ('date', DateFieldListFilter),
         ('game', AllValuesFieldListFilter),
     ]
+    raw_id_fields = ('pla', 'plb')
     form = MatchForm
 
     def get_actions(self, request):

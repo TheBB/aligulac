@@ -1,6 +1,7 @@
 # {{{ Imports
 import re
 
+from countries.data import cca2_to_ccn
 from collections import Counter, namedtuple
 from datetime import datetime
 
@@ -72,6 +73,9 @@ def home(request):
 # {{{ Clocks
 # Format (description, hover_description, queryset, type)
 Clock = namedtuple('Clock', ['desc', 'alt_desc', 'object', 'type', 'date', 'years', 'days', 'extra'])
+
+# Needed because of django doing a bad mapping to SQL
+NON_KR_COUNTRIES = (x for x in cca2_to_ccn.keys() if x != "KR")
 CLOCKS = [
     (
         _("MMA and DongRaeGu played a Bo5+"),
@@ -160,7 +164,7 @@ CLOCKS = [
             Event.objects
             .filter(type="event")
             .filter(downlink__child__match__offline=True)
-            .filter(~Q(earnings__player__country="KR"),
+            .filter(earnings__player__country__in=NON_KR_COUNTRIES,
                     earnings__placement=1,
                     earnings__earnings__gte=10000)
             .distinct()

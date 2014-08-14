@@ -761,9 +761,19 @@ def earnings(request, player_id):
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Earnings', request, context=player)
 
+    year = get_param(request, 'year', 'all')
+
     # {{{ Gather data
-    earnings = player.earnings_set.prefetch_related('event__earnings_set').order_by('-event__latest')
+    earnings = player.earnings_set
+    if year != 'all':
+        earnings = earnings.filter(event__latest__year=year)
+    earnings = earnings.prefetch_related('event__earnings_set').order_by('-event__latest')
     totalearnings = earnings.aggregate(Sum('earnings'))['earnings__sum']
+
+    years = range(2010, datetime.now().year + 1)
+    def year_is_valid(y):
+        return player.earnings_set.filter(event__latest__year=y).exists()
+    valid_years = filter(year_is_valid, years)
 
     # Get placement range for each prize
     for e in earnings:
@@ -785,6 +795,8 @@ def earnings(request, player_id):
         'earnings': earnings,
         'totalearnings': totalearnings,
         'by_currency': by_currency,
+        'year': year,
+        'valid_years': reversed(list(valid_years))
     })
 
     return render_to_response('player_earnings.djhtml', base)

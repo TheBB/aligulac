@@ -209,13 +209,12 @@ def clocks(request):
         date = None
 
         if t == "match":
-            q = q.prefetch_related("pla", "plb", "eventobj")
-            matches = list(q[:10])
+            q = q.prefetch_related("pla", "plb", "eventobj", "message_set")
+            matches = q[:10]
 
             extra = display_matches(matches)
 
-            obj = matches[0]
-            date = obj.date
+            date = extra[0]["date"]
 
         elif t == "event_winner":
             q = q.prefetch_related("earnings_set")

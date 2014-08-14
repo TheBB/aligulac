@@ -139,7 +139,7 @@ CLOCKS = [
         _("A Nordic player won a major event"),
         _("Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"),
         Event.objects.filter(earnings__placement=1,
-                             earnings__player__country__in=["SE", "NO", "FI"],
+                             earnings__player__country__in=["SE", "NO", "FI", "DK", "IS"],
                              earnings__earnings__gte=2000)
         .order_by("-latest"),
         "event_winner"

@@ -84,32 +84,42 @@
 
 }).call(this);
 }, "auto_complete": function(exports, require, module) {(function() {
-  var AutoComplete, add_extra_functions, aligulac_autocomplete_templates, getResults, init_event_boxes, init_other, init_predictions, init_search_box, load_recent_results_from_cache, save_autocomplete_object_to_cache, save_result_to_cache;
+  var AutoComplete, add_extra_functions, aligulac_autocomplete_templates, getResults, init_event_boxes, init_other, init_predictions, init_search_box, load_recent_results_from_cache, save_autocomplete_object_to_cache;
 
   save_autocomplete_object_to_cache = function(obj) {
-    if (obj.type !== 'cache') {
-      save_result_to_cache({
-        key: obj.key,
-        html: aligulac_autocomplete_templates(obj),
-        type: obj.type
-      });
-    }
-  };
-
-  save_result_to_cache = function(obj) {
-    var recent_result;
+    var cache_obj, idx, keys, recent_result, x;
     if (obj && window.localStorage) {
       recent_result = load_recent_results_from_cache();
       if (!recent_result) {
         recent_result = [];
       }
-      recent_result.shift;
-      recent_result.push({
-        html: obj.html,
-        key: obj.key,
-        type: 'cache',
-        'origin-type': "" + obj.type + "s"
-      });
+      if (obj.type === 'cache') {
+        cache_obj = obj;
+      } else {
+        cache_obj = {
+          html: aligulac_autocomplete_templates(obj),
+          key: obj.key,
+          type: 'cache',
+          'origin-type': "" + obj.type + "s"
+        };
+      }
+      keys = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = recent_result.length; _i < _len; _i++) {
+          x = recent_result[_i];
+          _results.push(x.key);
+        }
+        return _results;
+      })();
+      idx = $.inArray(obj.key, keys);
+      if (idx > -1) {
+        recent_result.splice(idx, 1);
+      }
+      while (recent_result.length >= 10) {
+        recent_result.pop();
+      }
+      recent_result.unshift(cache_obj);
       window.localStorage.setItem('aligulac.autocomplete.caching', JSON.stringify(recent_result));
     }
   };

@@ -1,17 +1,31 @@
 # ======================================================================
 # AUTOCOMPLETE CACHE FUNCTIONS
 # ======================================================================
+
 save_autocomplete_object_to_cache = (obj) ->
-    if obj.type isnt 'cache'
-        save_result_to_cache key: obj.key, html: aligulac_autocomplete_templates(obj), type: obj.type
-    return
-save_result_to_cache = (obj) ->
     if obj and window.localStorage
         recent_result = load_recent_results_from_cache()
-        if (not recent_result) 
-            recent_result = [];
-        recent_result.shift
-        recent_result.push html: obj.html, key: obj.key, type: 'cache', 'origin-type': "#{obj.type}s"
+        if not recent_result
+            recent_result = []
+
+        if obj.type is 'cache'
+            cache_obj = obj
+        else
+            cache_obj =
+                html: aligulac_autocomplete_templates(obj)
+                key: obj.key
+                type: 'cache'
+                'origin-type': "#{obj.type}s"
+
+        keys = (x.key for x in recent_result)
+        idx = $.inArray obj.key, keys
+        if idx > -1
+            recent_result.splice(idx, 1)
+
+        while recent_result.length >= 10
+            recent_result.pop()
+
+        recent_result.unshift cache_obj
         window.localStorage.setItem 'aligulac.autocomplete.caching', JSON.stringify(recent_result)
         return
 

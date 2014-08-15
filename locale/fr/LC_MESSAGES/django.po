@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-13 21:12+0200\n"
-"PO-Revision-Date: 2014-06-30 20:45+0100\n"
+"POT-Creation-Date: 2014-08-12 18:53+0200\n"
+"PO-Revision-Date: 2014-08-13 16:51+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
@@ -91,7 +91,7 @@ msgid "Earnings"
 msgstr "Gains"
 
 #: aligulac/aligulac/tools.py:249 templates/db.djhtml:104
-#: templates/index.djhtml:193 templates/search.djhtml:31
+#: templates/index.djhtml:194 templates/search.djhtml:31
 #: templates/teams.djhtml:10
 msgid "Teams"
 msgstr "Équipes"
@@ -194,7 +194,7 @@ msgstr "Jours depuis que..."
 #: aligulac/aligulac/tools.py:287 aligulac/ratings/misc_views.py:65
 #: templates/compare.search.djhtml:25
 msgid "Compare"
-msgstr ""
+msgstr "Comparer"
 
 #: aligulac/aligulac/tools.py:290
 msgid "About"
@@ -216,8 +216,8 @@ msgstr "Base de données"
 msgid "API"
 msgstr "API"
 
-#: aligulac/aligulac/tools.py:299 templates/forms.djhtml:165
-#: templates/forms.djhtml.py:172
+#: aligulac/aligulac/tools.py:299 templates/forms.djhtml:161
+#: templates/forms.djhtml.py:168
 msgid "Submit"
 msgstr "Soumettre"
 
@@ -225,7 +225,7 @@ msgstr "Soumettre"
 #: aligulac/aligulac/tools.py:303 aligulac/ratings/inference_views.py:717
 #: aligulac/ratings/inference_views.py:738
 #: aligulac/ratings/player_views.py:704 aligulac/ratings/staff_views.py:279
-#: templates/add.djhtml:79 templates/eventres.djhtml:503
+#: templates/add.djhtml:79 templates/eventres.djhtml:507
 #: templates/historical.djhtml:44 templates/pred_rrgroup.djhtml:73
 msgid "Matches"
 msgstr "Matchs"
@@ -235,7 +235,7 @@ msgid "Review"
 msgstr "Validation"
 
 #: aligulac/aligulac/tools.py:305 templates/events.djhtml:10
-#: templates/events.djhtml.py:16 templates/index.djhtml:194
+#: templates/events.djhtml.py:16 templates/index.djhtml:195
 #: templates/search.djhtml:41
 msgid "Events"
 msgstr "Événements"
@@ -295,23 +295,21 @@ msgid "external TLPD ID"
 msgstr "ID TLPD externe"
 
 #: aligulac/aligulac/views.py:70
-#, fuzzy
 msgid ""
 "bit-flag value denoting which TLPD databases this player is in (1 = KR WoL, "
 "2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)"
 msgstr ""
 "valeur drapeau indiquant dans quelle base de données TLPD figure le joueur : "
-"<br/>1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta"
+"(1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)"
 
 #: aligulac/aligulac/views.py:73 aligulac/aligulac/views.py:146
 #: aligulac/aligulac/views.py:251
-#, fuzzy
 msgid ""
 "title of Liquipedia page (the part after http://wiki.teamliquid.net/"
 "starcraft2/)"
 msgstr ""
-"titre de la page Liquipedia <br/>la partie après http://wiki.teamliquid.net/"
-"starcraft2/"
+"titre de la page Liquipedia (la partie après http://wiki.teamliquid.net/"
+"starcraft2/)"
 
 #: aligulac/aligulac/views.py:75
 msgid "external sc2earnings.com ID"
@@ -328,29 +326,28 @@ msgstr ""
 "joueur changeant de race"
 
 #: aligulac/aligulac/views.py:80
-#, fuzzy, python-format
+#, python-format
 msgid "their PP score (see <a href=\"%s\">Hall of Fame</a> for explanation)"
-msgstr "son score PP <br/>voir le <a href=\"%s\">Hall of Fame</a>"
+msgstr ""
+"son score PP (voir le <a href=\"%s\">Hall of Fame</a> pour plus "
+"d'explications)"
 
 #: aligulac/aligulac/views.py:82
-#, fuzzy
 msgid "foreign key to period (start of PP-period)"
-msgstr "clé étrangère de period <br/> début de la période PP"
+msgstr "clé étrangère de period (début de la période PP)"
 
 #: aligulac/aligulac/views.py:83
-#, fuzzy
 msgid "foreign key to period (first period after end of PP-period)"
-msgstr "clé étrangère de period <br/> début de la période PP"
+msgstr "clé étrangère de period (début de la période PP)"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:86
-#, fuzzy
 msgid ""
 "foreign key to rating (should link to the latest published rating of the "
 "player)"
 msgstr ""
-"clé étrangère de rating <br/>doit rediriger vers la dernière évaluation du "
-"joueur publiée "
+"clé étrangère de rating (doit rediriger vers la dernière évaluation du "
+"joueur publiée)"
 
 #: aligulac/aligulac/views.py:91
 msgid "Contains game information."
@@ -358,25 +355,21 @@ msgstr "Contient les informations du match."
 
 #. Translators: period is a table name and must be in English
 #: aligulac/aligulac/views.py:96
-#, fuzzy
 msgid "foreign key to period (the period this match was played in)"
 msgstr ""
-"clé étrangère de period <br/> la période durant laquelle ce match a été joué"
+"clé étrangère de period (la période durant laquelle ce match a été joué)"
 
 #: aligulac/aligulac/views.py:97
-#, fuzzy
 msgid "when the match was played (often approximate)"
-msgstr "quand le match a été joué <br/> souvent approximatif"
+msgstr "quand le match a été joué (souvent approximatif)"
 
 #: aligulac/aligulac/views.py:98
-#, fuzzy
 msgid "foreign key to player (player A)"
-msgstr "clé étrangère de player <br/> joueur A"
+msgstr "clé étrangère de player (joueur A)"
 
 #: aligulac/aligulac/views.py:99
-#, fuzzy
 msgid "foreign key to player (player B)"
-msgstr "clé étrangère de player <br/> joueur B"
+msgstr "clé étrangère de player (joueur B)"
 
 #: aligulac/aligulac/views.py:100
 msgid "score for player A"
@@ -387,46 +380,41 @@ msgid "score for player B"
 msgstr "score pour le joueur B"
 
 #: aligulac/aligulac/views.py:103
-#, fuzzy
 msgid "race for player A (not necessarily same as pla.race, S is not allowed)"
 msgstr ""
-"race du joueur A <br/>pas nécessairement la même que pla.race, S n'est pas "
-"autorisé"
+"race du joueur A (pas nécessairement la même que pla.race, S n'est pas "
+"autorisé)"
 
 #: aligulac/aligulac/views.py:106
-#, fuzzy
 msgid "race for player B (not necessarily same as plb.race, S is not allowed)"
 msgstr ""
-"race du joueur B <br/>pas nécessairement la même que plb.race, S n'est pas "
-"autorisé"
+"race du joueur B (pas nécessairement la même que plb.race, S n'est pas "
+"autorisé)"
 
 #: aligulac/aligulac/views.py:108
 msgid "true if the match has been rated"
 msgstr "true si le match a été évalué"
 
 #: aligulac/aligulac/views.py:110
-#, fuzzy
 msgid ""
 "tournament, round, group etc. (superceded by eventobj_id if latter is not "
 "null)"
 msgstr ""
-"tournoi, tour, groupe, etc. <br/>remplacé par eventobj_id si le dernier "
-"n'est pas nul"
+"tournoi, tour, groupe, etc. (remplacé par eventobj_id si le dernier n'est "
+"pas nul)"
 
 #. Translators: event is a table name and must be in English
 #: aligulac/aligulac/views.py:113
-#, fuzzy
 msgid "foreign key to event (supercedes event field)"
-msgstr "clé étrangère de event <br/> remplace le champ event"
+msgstr "clé étrangère de event (remplace le champ event)"
 
 #: aligulac/aligulac/views.py:114
 msgid "foreign key to a table removed from the dump"
 msgstr "clé étrangère d'une table retirée du dump"
 
 #: aligulac/aligulac/views.py:115
-#, fuzzy
 msgid "game version used (WoL, HotS, LotV)"
-msgstr "version du jeu utilisée <br/> WoL, HotS, LotV"
+msgstr "version du jeu utilisée (WoL, HotS, LotV)"
 
 #: aligulac/aligulac/views.py:116
 msgid "whether this match was played offline"
@@ -434,15 +422,13 @@ msgstr "si le match a été joué offline"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:119
-#, fuzzy
 msgid "foreign key to rating (rating of player A at the time of the match)"
-msgstr "clé étrangère de rating <br/>évaluation du joueur A au moment du match"
+msgstr "clé étrangère de rating (évaluation du joueur A au moment du match)"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:123
-#, fuzzy
 msgid "foreign key to rating (rating of player B at the time of the match)"
-msgstr "clé étrangère de rating <br/>évaluation du joueur B au moment du match"
+msgstr "clé étrangère de rating (évaluation du joueur B au moment du match)"
 
 #: aligulac/aligulac/views.py:129
 msgid ""
@@ -490,14 +476,13 @@ msgid "URL of the event website"
 msgstr "URL du site du tournoi"
 
 #: aligulac/aligulac/views.py:150
-#, fuzzy
 msgid ""
 "bit-flag value denoting which TLPD databases this event is in: (1 = KR WoL, "
 "2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)"
 msgstr ""
 "valeur drapeau indiquant dans quelle base de données TLPD figure "
-"l'événement : <br/>1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL "
-"beta"
+"l'événement : (1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL "
+"beta)"
 
 #: aligulac/aligulac/views.py:152
 msgid "TL.net forum thread ID"
@@ -517,21 +502,19 @@ msgstr "date du dernier match"
 
 #. Translators: These are literals so must be in English, i.e. team (translation)…
 #: aligulac/aligulac/views.py:158
-#, fuzzy
 msgid "team, individual or frequent (only set for root nodes)"
-msgstr "team, individual ou frequent <br/> uniquement pour les noeuds racines"
+msgstr "team, individual ou frequent (uniquement pour les noeuds racines)"
 
 #. Translators: These are literals so must be in English, i.e. category (translation)…
 #: aligulac/aligulac/views.py:161
-#, fuzzy
 msgid ""
 "category, event (i.e. tournament) or round (you can assume that ancestors of "
 "events are always categories and that descendants of events are always "
 "rounds)"
 msgstr ""
-"category, event (tournoi) ou round <br/>vous pouvez partir du fait que les "
+"category, event (ex : tournoi) ou round (vous pouvez partir du fait que les "
 "ancêtres des événements sont toujours des catégories et que les descendants "
-"des événements sont toujours des rounds"
+"des événements sont toujours des rounds)"
 
 #: aligulac/aligulac/views.py:164
 msgid "sorting index"
@@ -675,11 +658,11 @@ msgid "number of periods since last game"
 msgstr "nombre de période depuis la dernière partie"
 
 #: aligulac/aligulac/views.py:215
-#, fuzzy, python-format
+#, python-format
 msgid "rating gap to number 7 (used in the <a href=\"%s\">Hall of Fame</a>)"
 msgstr ""
-"écart de niveau jusqu'au nombre 7 <br/>utilisé dans le <a href=\"%s\">Hall "
-"of Fame</a>"
+"écart de niveau jusqu'au nombre 7 (utilisé dans le <a href=\"%s\">Hall of "
+"Fame</a>)"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:218
@@ -777,13 +760,12 @@ msgid "whether this group is a proper team"
 msgstr "si ce groupe est une équipe"
 
 #: aligulac/aligulac/views.py:255
-#, fuzzy
 msgid ""
 "whether this group has manually added members or not (currently has no "
 "effect, there are no automatic groups)"
 msgstr ""
-"so ce groupe a été créé manuellement par les membre ou non <br/>pour le "
-"moment n'a aucun effet, il n'y a pas de création automatique de groupes"
+"si ce groupe ait été créé manuellement par les membre ou non (pour le moment "
+"n'a aucun effet, il n'y a pas de création automatique de groupes)"
 
 #: aligulac/aligulac/views.py:260
 msgid "Links teams and players together in a many-to-many relationship."
@@ -806,20 +788,18 @@ msgid "end date of membership"
 msgstr "date de départ de l'équipe"
 
 #: aligulac/aligulac/views.py:270
-#, fuzzy
 msgid ""
 "whether the membership is in effect (many end dates are unknown, so this is "
 "needed)"
 msgstr ""
-"si l'appartenance à l'équipe est actif <br/>de nimbreuses date de fin de "
-"contrat sont inconnu, aussi c'est nécessaire"
+"si l'appartenance à l'équipe est active (de nimbreuses date de fin de "
+"contrat sont inconnu, aussi c'est nécessaire)"
 
 #: aligulac/aligulac/views.py:273
-#, fuzzy
 msgid ""
 "whether the player is a playing member (false for coaches, among others)"
 msgstr ""
-"si le joueur est un joueur membre <br/>faux pour les entraineurs par exemple"
+"si le joueur est un joueur membre (faux pour les entraineurs par exemple)"
 
 #: aligulac/aligulac/views.py:278
 msgid ""
@@ -919,14 +899,13 @@ msgid "Entered data was invalid."
 msgstr "Les données entrées étaient invalides"
 
 #: aligulac/aligulac/views.py:467
-#, fuzzy, python-format
+#, python-format
 msgid "Your API key is <code>%s</code>. Please keep it safe."
-msgstr "Votre clef API est '%s'. Conservez la précieusement."
+msgstr "Votre clef API est <code>%s</code>. Conservez la précieusement."
 
 #: aligulac/aligulac/views.py:477
-#, fuzzy
 msgid "The API documentation is only in English, sorry."
-msgstr "La section FAQ est en anglais seulement, désolé."
+msgstr "La documentation de l'API est en anglais seulement, désolé."
 
 #: aligulac/aligulac/views.py:605
 msgid "The old password didn't match. Your password was not changed."
@@ -2006,8 +1985,8 @@ msgid "Best of"
 msgstr "Meilleur des "
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:254
-#: templates/db.djhtml:95 templates/eventres.djhtml:495
-#: templates/index.djhtml:192 templates/search.djhtml:21
+#: templates/db.djhtml:95 templates/eventres.djhtml:499
+#: templates/index.djhtml:193 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
 msgstr "Joueurs"
@@ -2071,7 +2050,7 @@ msgstr "Résultat médian"
 #: aligulac/ratings/inference_views.py:1080
 #: aligulac/ratings/inference_views.py:1118
 #: aligulac/ratings/inference_views.py:1128
-#: templates/results_search.djhtml:136
+#: templates/results_search.djhtml:140
 msgid "Modify"
 msgstr "Modifier"
 
@@ -2136,7 +2115,6 @@ msgid "Charts showing balance in StarCraft II over time."
 msgstr "Graphique montrant l'équilibrage de StarCraft II dans le temps"
 
 #: aligulac/ratings/misc_views.py:61
-#, fuzzy
 msgid "Number of days since..."
 msgstr "Nombre de jours depuis..."
 
@@ -2146,7 +2124,7 @@ msgstr "Page montrant la dernière fois que des choses se sont produites"
 
 #: aligulac/ratings/misc_views.py:66
 msgid "Tool for comparing players."
-msgstr ""
+msgstr "Outils pour comparer plusieurs joueurs"
 
 #: aligulac/ratings/misc_views.py:77
 msgid "MMA and DongRaeGu played a Bo5+"
@@ -2228,28 +2206,25 @@ msgid "HasuObs joined mousesports"
 msgstr "Que HasuObs a rejoint mousesports"
 
 #: aligulac/ratings/misc_views.py:295
-#, fuzzy
 msgid "Enter at least two players."
-msgstr "Au moins trois joueurs attendus"
+msgstr "Au moins deux joueurs attendus"
 
 #: aligulac/ratings/misc_views.py:297
-#, fuzzy
 msgid "Enter at most six players."
-msgstr "Au moins trois joueurs attendus"
+msgstr "Au moins six joueurs attendus"
 
-#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:209
-#: templates/eventres.djhtml.py:226 templates/periods.djhtml:26
+#: aligulac/ratings/misc_views.py:410 templates/eventres.djhtml:213
+#: templates/eventres.djhtml.py:230 templates/periods.djhtml:26
 msgid "New"
 msgstr "Créer"
 
 #: aligulac/ratings/misc_views.py:411
-#, fuzzy
 msgid "Edit"
 msgstr "Modifier"
 
 #: aligulac/ratings/misc_views.py:415 aligulac/ratings/models.py:1294
-#: templates/historical.djhtml:36 templates/matchlist.djhtml:43
-#: templates/matchlist.djhtml.py:47 templates/player.djhtml:97
+#: templates/historical.djhtml:36 templates/matchlist.djhtml:53
+#: templates/matchlist.djhtml.py:57 templates/player.djhtml:97
 #: templates/ratinglist.djhtml:50 templates/ratinglist.djhtml.py:53
 #: templates/records.djhtml:38
 msgid "Rating"
@@ -2257,77 +2232,67 @@ msgstr "Niveau"
 
 #: aligulac/ratings/misc_views.py:422
 msgid "Probability of winning..."
-msgstr ""
+msgstr "Probabilité de gagner..."
 
 #: aligulac/ratings/misc_views.py:425
 msgid "a Bo3"
-msgstr ""
+msgstr "un Bo3"
 
 #: aligulac/ratings/misc_views.py:430
-#, fuzzy
 msgid "a round robin group"
 msgstr "Groupe à la ronde (round-robin)"
 
 #: aligulac/ratings/misc_views.py:435
-#, fuzzy
 msgid "a dual tournament"
 msgstr "Tournoi à double élimination"
 
 #: aligulac/ratings/misc_views.py:439
-#, fuzzy
 msgid "Between these players"
-msgstr "Au moins trois joueurs attendus"
+msgstr "Entre ces joueurs"
 
 #: aligulac/ratings/misc_views.py:445 aligulac/ratings/misc_views.py:459
-#, fuzzy
 msgid "Match wins"
-msgstr "Matchs"
+msgstr "Matchs remportés"
 
 #: aligulac/ratings/misc_views.py:447 aligulac/ratings/misc_views.py:463
-#, fuzzy
 msgid "Match +/-"
-msgstr "Matchs"
+msgstr "Match +/-"
 
 #: aligulac/ratings/misc_views.py:450 aligulac/ratings/misc_views.py:466
-#, fuzzy
 msgid "Game wins"
-msgstr "manches"
+msgstr "Manches remportés"
 
 #: aligulac/ratings/misc_views.py:452 aligulac/ratings/misc_views.py:470
-#, fuzzy
 msgid "Game +/-"
-msgstr "manches"
+msgstr "Manches +/-"
 
 #: aligulac/ratings/misc_views.py:454
 msgid "Lifetime"
-msgstr ""
+msgstr "Durée de vie"
 
 #: aligulac/ratings/misc_views.py:461
 msgid "Match win %"
-msgstr ""
+msgstr "% de victoire"
 
 #: aligulac/ratings/misc_views.py:468
-#, fuzzy
 msgid "Game win %"
-msgstr "Version du jeu"
+msgstr "% de victoire"
 
 #: aligulac/ratings/misc_views.py:491
-#, fuzzy
 msgid "Other stats"
-msgstr "Autre"
+msgstr "Autre stats"
 
 #: aligulac/ratings/misc_views.py:494
-#, fuzzy
 msgid "Current Form"
 msgstr "Forme actuelle"
 
 #: aligulac/ratings/misc_views.py:496
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: aligulac/ratings/misc_views.py:498
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #. Translators: General rating
 #: aligulac/ratings/misc_views.py:506 templates/player.djhtml:179
@@ -2413,7 +2378,7 @@ msgstr "Catégorie"
 #: aligulac/ratings/results_views.py:542 aligulac/ratings/results_views.py:711
 #: aligulac/ratings/staff_views.py:160 aligulac/ratings/staff_views.py:272
 #: aligulac/ratings/staff_views.py:303 templates/add.djhtml:48
-#: templates/clocks.djhtml:60
+#: templates/clocks.djhtml:67
 msgid "Event"
 msgstr "Evènement"
 
@@ -2680,11 +2645,9 @@ msgid "Irregular match"
 msgstr "match irrégulier"
 
 #: aligulac/ratings/models.py:191
-#, fuzzy, python-format
+#, python-format
 msgid "Coming from the loser's bracket, %(player)s had to win two Bo%(num)ss."
-msgstr ""
-"Provenant du Winner Bracket, %(player)s a commencé le match avec un avantage "
-"de %(na)s-%(nb)s."
+msgstr "Provenant du Loser Bracket, %(player)s a du gagner deux Bo%(num)ss."
 
 #: aligulac/ratings/models.py:194
 #, python-format
@@ -2968,17 +2931,15 @@ msgstr "Race"
 
 #: aligulac/ratings/player_views.py:100 aligulac/ratings/results_views.py:440
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
-#: templates/db.djhtml:164 templates/earnings.djhtml:123
-#: templates/hof.djhtml:36 templates/ratinglist.djhtml:41
-#: templates/recordlist.djhtml:15 templates/team.djhtml:230
-#: templates/teams.djhtml:22
+#: templates/earnings.djhtml:123 templates/hof.djhtml:36
+#: templates/ratinglist.djhtml:41 templates/recordlist.djhtml:15
+#: templates/team.djhtml:230 templates/teams.djhtml:22
 msgid "Name"
 msgstr "Nom"
 
 #: aligulac/ratings/player_views.py:101
-#, fuzzy
 msgid "Romanized Name"
-msgstr "Roumanie"
+msgstr "Nom romanisé"
 
 #: aligulac/ratings/player_views.py:102 aligulac/ratings/team_views.py:48
 msgid "AKAs"
@@ -3047,9 +3008,8 @@ msgid "name"
 msgstr "nom"
 
 #: aligulac/ratings/player_views.py:156
-#, fuzzy
 msgid "romanized name"
-msgstr "nom complet"
+msgstr "nom romanisé"
 
 #: aligulac/ratings/player_views.py:161 aligulac/ratings/results_views.py:202
 msgid "TLPD DBs"
@@ -3129,7 +3089,7 @@ msgstr "On/offline"
 #: aligulac/ratings/player_views.py:209 aligulac/ratings/results_views.py:95
 #: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:719
 #: aligulac/ratings/staff_views.py:274 templates/add.djhtml:62
-#: templates/eventres.djhtml:465
+#: templates/eventres.djhtml:469
 msgid "Game version"
 msgstr "Version du jeu"
 
@@ -3187,7 +3147,7 @@ msgstr "tous les deux"
 msgid "Results for"
 msgstr "Résultats pour"
 
-#: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:499
+#: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:503
 #: templates/historical.djhtml:45 templates/period.djhtml:350
 #: templates/periods.djhtml:27 templates/player.djhtml:102
 #: templates/player.djhtml.py:130 templates/pred_rrgroup.djhtml:74
@@ -3257,7 +3217,7 @@ msgstr "F jS"
 #: aligulac/ratings/results_views.py:94 aligulac/ratings/results_views.py:98
 #: aligulac/ratings/results_views.py:102 aligulac/ratings/results_views.py:714
 #: aligulac/ratings/results_views.py:718 aligulac/ratings/results_views.py:729
-#: templates/results_search.djhtml:132 templates/review.djhtml:100
+#: templates/results_search.djhtml:136 templates/review.djhtml:100
 msgid "No change"
 msgstr "Pas de modification"
 
@@ -3265,7 +3225,7 @@ msgstr "Pas de modification"
 #. Translators: Event type.
 #: aligulac/ratings/results_views.py:104 aligulac/ratings/results_views.py:441
 #: aligulac/ratings/staff_views.py:535 templates/add.djhtml:65
-#: templates/eventres.djhtml:490 templates/review.djhtml:69
+#: templates/eventres.djhtml:494 templates/review.djhtml:69
 msgid "Type"
 msgstr "Type"
 
@@ -3275,7 +3235,7 @@ msgid "Apply to all events on the same level"
 msgstr "S'applique à tous les évènements du même niveau"
 
 #: aligulac/ratings/results_views.py:108 aligulac/ratings/team_views.py:50
-#: templates/eventres.djhtml:537 templates/events_open.djhtml:41
+#: templates/eventres.djhtml:541 templates/events_open.djhtml:41
 #: templates/events_open.djhtml.py:87 templates/events_open.djhtml:134
 #: templates/team.djhtml:157
 msgid "Homepage"
@@ -3332,8 +3292,8 @@ msgstr "Joueur"
 
 #: aligulac/ratings/results_views.py:211 aligulac/ratings/results_views.py:393
 #: aligulac/ratings/results_views.py:712 aligulac/ratings/staff_views.py:138
-#: aligulac/ratings/staff_views.py:273 templates/clocks.djhtml:59
-#: templates/eventres.djhtml:447 templates/matchlist.djhtml:42
+#: aligulac/ratings/staff_views.py:273 templates/clocks.djhtml:66
+#: templates/eventres.djhtml:451 templates/matchlist.djhtml:52
 #: templates/player_transfers.djhtml:23 templates/review.djhtml:61
 msgid "Date"
 msgstr "Date"
@@ -3493,10 +3453,10 @@ msgstr ""
 "Impossible de créer le match %(pla)s vs %(plb)s : possible doublon trouvé."
 
 #: aligulac/ratings/staff_views.py:235 aligulac/ratings/staff_views.py:491
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown race in %(pla)s vs %(plb)s: set to random."
 msgstr ""
-"Impossible de créer le match %(pla)s vs %(plb)s : possible doublon trouvé."
+"Impossible de définir la race pour %(pla)s vs %(plb)s: défini en aléatoire."
 
 #: aligulac/ratings/staff_views.py:256
 #, python-format
@@ -3768,6 +3728,8 @@ msgstr "Réouverture '%s'."
 #: aligulac/ratings/staff_views.py:840
 msgid "If you haven't used this tool before, ask before you do anything."
 msgstr ""
+"Si vous n'avez pas déjà utilisé cet outil auparavant, demandez avant de "
+"faire quoi que ce soit."
 
 #: aligulac/ratings/staff_views.py:934
 #, python-format
@@ -4222,24 +4184,20 @@ msgid "They are pending review before being visible."
 msgstr "Ils ont en cours de vérification avant d'être publié."
 
 #: templates/add.djhtml:39
-#, fuzzy
 msgid "Guide"
-msgstr "guide"
+msgstr "Guide"
 
 #: templates/add.djhtml:40
-#, fuzzy
 msgid "Match syntax"
 msgstr "syntaxe des parties"
 
 #: templates/add.djhtml:41
-#, fuzzy
 msgid "Examples"
-msgstr "exemples"
+msgstr "Exemples"
 
 #: templates/add.djhtml:42
-#, fuzzy
 msgid "Common problems"
-msgstr "problèmes courants"
+msgstr "Problèmes courants"
 
 #: templates/add.djhtml:49
 msgid ""
@@ -4283,7 +4241,6 @@ msgstr ""
 "Ceci sera utilisé pour vérifier de potentiels doublons."
 
 #: templates/add.djhtml:63
-#, fuzzy
 msgid "Indicate on which version of SC2 the games were played."
 msgstr "Indique sur quelle version de SC2 les parties ont été jouées."
 
@@ -4322,21 +4279,19 @@ msgstr ""
 "utiles"
 
 #: templates/add.djhtml:80
-#, fuzzy
 msgid ""
 "A list of the results you want to add. Please see <strong>match syntax</"
 "strong> for more information."
 msgstr ""
 "Une liste de résultats que vous voulez ajouter. Veuillez consulter la "
-"%(a)ssyntaxe des parties</a> pour plus d'information."
+"<strong>syntaxe des parties<strong> pour plus d'information."
 
 #: templates/add.djhtml:83
-#, fuzzy
 msgid ""
 "Please see <strong>common problems</strong> if you are unsure about a player."
 msgstr ""
-"Veuillez consulter les %(tag)sproblèmes courants</a> si vous n'êtes pas sûr "
-"à propos d'un joueur."
+"Veuillez consulter les <strong>problèmes courants<strong> si vous n'êtes pas "
+"sûr à propos d'un joueur."
 
 #: templates/add.djhtml:86
 msgid ""
@@ -4345,7 +4300,7 @@ msgstr ""
 "Chaque ligne correspond à un match et doit être remplie en respectant ce "
 "format :"
 
-#: templates/add.djhtml:89 templates/matchlist.djhtml:45
+#: templates/add.djhtml:89 templates/matchlist.djhtml:55
 msgid "Score"
 msgstr "Score"
 
@@ -4367,52 +4322,52 @@ msgstr ""
 "éléments suivants :"
 
 #: templates/add.djhtml:99
-#, fuzzy
 msgid "Player tag, e.g. <code>DongRaeGu</code>."
-msgstr "Nom du joueur, e.g. \"DongRaeGu\"."
+msgstr "Nom du joueur, par ex :  <code>DongRaeGu</code>."
 
 #: templates/add.djhtml:100
 msgid ""
 "Race, i.e. <code>P</code>, <code>T</code>, <code>Z</code>, <code>R</code> "
 "(random) or <code>S</code> (race switcher)."
 msgstr ""
+"Race, par exemple <code>P</code>, <code>T</code>, <code>Z</code>, <code>R</"
+"code> (random) or <code>S</code> (changeur de race)."
 
+# The code will reconized french country name ? I don't think so... So I will put it as "common English Name"
 #: templates/add.djhtml:101
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "A two- or three-letter %(a)sISO 3166-1 alpha-2 country code</a>, e.g. "
 "<code>KR</code> or <code>KOR</code>, or the common English name of a country "
 "(the latter will only work if the country name does not contain spaces."
 msgstr ""
-" %(a)sCode ISO 3166-1 alpha-2 du pays</a>en deux ou trois lettres, e.g. \"KR"
-"\" ou \"KOR\", ou nom usuel en Français du pays (ce dernier ne fonctionnera "
-"que si le nom du pays ne contient pas d'espace)."
+" %(a)sCode ISO 3166-1 alpha-2 du pays</a>en deux ou trois lettres, par ex "
+"<code>KR</code> ou <code>KOR</code>, ou nom usuel en Anglais du pays (ce "
+"dernier ne fonctionnera que si le nom du pays ne contient pas d'espace)."
 
 #: templates/add.djhtml:102
-#, fuzzy
 msgid "Team name, e.g. <code>MVP</code>."
-msgstr "Nom d'équipe, e.g. \"MVP\"."
+msgstr "Nom d'équipe, par ex <code>MVP</code>."
 
 #: templates/add.djhtml:103
-#, fuzzy
 msgid ""
 "Player or team aliases, e.g. <code>DRG</code>. The most common ones should "
 "be recognized by the system"
 msgstr ""
-"Alias du joueur ou de l'équipe, e.g. \"DRG\". Les plus communs devraient "
+"Alias du joueur ou de l'équipe,<code>DRG</code>. Les plus communs devraient "
 "être reconnus par le système."
 
 #: templates/add.djhtml:104
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "A player ID number, which you can get from the URL of the %(a)splayer page</"
 "a>, e.g. <code>4</code>."
 msgstr ""
 "Un numéro ID du joueur, que vous pouvez récupérer depuis l'URL de %(a)sla "
-"page du joueur</a>, e.g. \"4\"."
+"page du joueur</a>, par ex <code>4</code>."
 
 #: templates/add.djhtml:107
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "If you are adding a match by a race switcher you need to tell the system "
 "which race the player was playing in that match. Do this by adding a <code>"
@@ -4420,9 +4375,9 @@ msgid ""
 "information. For example, if MorroW plays Protoss, you can do this:"
 msgstr ""
 "Si vous ajoutez un match d'un race switcher, vous devez indiquer au système "
-"quelle race le joueur jouait dans ce match. Pour ce faire ajoutez une "
-"%(clause)s clause à la <strong>fin</strong> des informations du joueur. Par "
-"exemple, si MorroW joue Protoss, vous pouvez faire ceci :"
+"quelle race le joueur jouait dans ce match. Pour ce faire ajoutez une <code>"
+"%(clause)s</code> clause à la <strong>fin</strong> des informations du "
+"joueur. Par exemple, si MorroW joue Protoss, vous pouvez faire ceci :"
 
 #: templates/add.djhtml:111
 msgid ""
@@ -4433,14 +4388,14 @@ msgstr ""
 "elle est connue bien que ce ne soit pas obligatoire."
 
 #: templates/add.djhtml:113
-#, fuzzy
 msgid ""
 "Everything is based on case-insensitive search. There is no recognizable "
 "difference between <code>Mvp</code> (the player) and <code>MVP</code> (the "
 "team)."
 msgstr ""
 "Tout est basé sur une recherche sensible à la casse. Il n'y a pas de "
-"distinction notable entre \"Mvp\" (le joueur) and \"MVP\" (l'équipe)."
+"distinction notable entre <code>Mvp</code> (le joueur) and <code>Mvp</code> "
+"(l'équipe)."
 
 #: templates/add.djhtml:116
 msgid ""
@@ -4461,7 +4416,6 @@ msgstr ""
 "d'informations. Utilisez le numéro ID si nécessaire."
 
 #: templates/add.djhtml:120
-#, fuzzy
 msgid ""
 "a player can't be found. In this case, add the switch <code>!MAKE</code> to "
 "the end of the respective line(s). This will make a player entry if needed. "
@@ -4469,15 +4423,14 @@ msgid ""
 "Please also provide a country code if possible, and make sure the player tag "
 "is spelled correctly (including capitalisation)."
 msgstr ""
-"un joueur ne peut pas être trouvé. Dans ce cas, ajoutez le switch \"<strong>!"
-"MAKE</strong>\" à la fin des ligne(s) respective(s). Cela créera une entrée "
-"pour le joueur si nécessaire. Dans ce cas, vous <strong>devez</strong> "
-"fournir un nom de joueur et sa race.  Veuillez aussi indiquer un code de "
-"pays si possible, et vous assurer que le nom du joueur est correct écrit (y "
-"compris les majuscules)."
+"un joueur ne peut pas être trouvé. Dans ce cas, ajoutez le switch <code>!"
+"MAKE</code> à la fin des ligne(s) respective(s). Cela créera une entrée pour "
+"le joueur si nécessaire. Dans ce cas, vous <strong>devez</strong> fournir un "
+"nom de joueur et sa race.  Veuillez aussi indiquer un code de pays si "
+"possible, et vous assurer que le nom du joueur est correct écrit (y compris "
+"les majuscules)."
 
 #: templates/add.djhtml:121
-#, fuzzy
 msgid ""
 "a duplicate entry was found. If you are certain that the two players in "
 "question played more than one match within a single day with the same result "
@@ -4486,9 +4439,8 @@ msgid ""
 msgstr ""
 "un doublon a été trouvé. Si vous êtes sûr que les deux joueurs en question "
 "ont joué plus d'un match dans la même journée avec le même résultat (cela "
-"peut arriver bien que rare), ajoutez le switch \"<strong>!DUP</strong>\" à "
-"la fin des ligne(s) respective(s). Cela forcera le match a été pris en "
-"compte."
+"peut arriver bien que rare), ajoutez le switch <code>!DUP</code> à la fin "
+"des ligne(s) respective(s). Cela forcera le match a été pris en compte."
 
 #: templates/add.djhtml:124
 msgid ""
@@ -4502,7 +4454,6 @@ msgstr ""
 "corrigerons lors de la revue des soumissions."
 
 #: templates/add.djhtml:126
-#, fuzzy
 msgid ""
 "The system will also try to avoid duplicates. If your match appears to be a "
 "duplicate of another match in the database (same players, score and close in "
@@ -4513,11 +4464,10 @@ msgstr ""
 "Le système va aussi essayer d'éviter les doublons. Si le match semble être "
 "un doublon d'un autre match dans la base de données (mêmes joueurs, mêmes "
 "résultats et proche dans le temps), vous recevrez un avertissement. Pour "
-"éviter cela, ajoutez le switch \"<strong>!DUP</strong>\" à la fin de la "
-"description du match. Cela forcera le match à être pris en compte."
+"éviter cela, ajoutez le switch <code>!DUP</code> à la fin de la description "
+"du match. Cela forcera le match à être pris en compte."
 
 #: templates/add.djhtml:129
-#, fuzzy
 msgid ""
 "Most players are uniquely identifiable through their nickname alone. For a "
 "list of the most common exceptions, please look at <strong>common problems</"
@@ -4525,7 +4475,7 @@ msgid ""
 msgstr ""
 "La plupart des joueurs sont identifiables de manière unique par leur "
 "pseudonyme seul. Pour une liste des exceptions les plus courantes, veuillez "
-"vous référer aux %(a)sproblèmes courants</a>."
+"vous référer aux <strong>problèmes courants</strong>."
 
 #: templates/add.djhtml:132
 msgid "Here are some real-world examples. From the GSL:"
@@ -4609,49 +4559,46 @@ msgstr "Nouveau mot de passe"
 msgid "New password again"
 msgstr "Répétez le nouveau mot de passe"
 
-#: templates/clocks.djhtml:10 templates/clocks.djhtml.py:18
-#, fuzzy
+#: templates/clocks.djhtml:10 templates/clocks.djhtml.py:25
 msgid "Days since..."
-msgstr "Jours écoulés…"
+msgstr "Jours écoulés depuis…"
 
-#: templates/clocks.djhtml:36
+#: templates/clocks.djhtml:43
 msgid "year"
 msgid_plural "years"
 msgstr[0] "an"
 msgstr[1] "ans"
 
-#: templates/clocks.djhtml:41 templates/results.djhtml:54
-#: templates/results.djhtml.py:61 templates/results.djhtml:97
-#: templates/results.djhtml.py:102
+#: templates/clocks.djhtml:48 templates/results.djhtml:51
+#: templates/results.djhtml.py:56 templates/results.djhtml:91
+#: templates/results.djhtml.py:96
 msgid "day"
 msgid_plural "days"
 msgstr[0] "jour"
 msgstr[1] "jours"
 
-#: templates/clocks.djhtml:67 templates/matchlist.djhtml:180
+#: templates/clocks.djhtml:74 templates/matchlist.djhtml:174
 msgid "Y-m-d"
 msgstr "A-m-j"
 
-#: templates/clocks.djhtml:88
-#, fuzzy
+#: templates/clocks.djhtml:95
 msgid ""
 "<b>Major</b> is defined as a tournament where the first place prize money "
 "exceeds $2,000."
 msgstr ""
-"On considère comme <b>Majeur</b> un tournoi dont le premier prix dépasse "
-"$2000."
+"On considère comme <b>Majeur</b> un tournoi dont le premier prix dépasse 2 "
+"000$."
 
-#: templates/clocks.djhtml:89
-#, fuzzy
+#: templates/clocks.djhtml:96
 msgid ""
 "<b>Premier</b> is defined as an offline tournament where the first place "
 "prize money exceeds $10,000"
 msgstr ""
 "On considère comme tournoi <b>Principal</b> un tournoi offline dont le "
-"premier prix dépasse $10 000."
+"premier prix dépasse 10 000$."
 
-#: templates/clocks.djhtml:90
-#, fuzzy, python-format
+#: templates/clocks.djhtml:97
+#, python-format
 msgid ""
 "These differ from the definitions used by %(a)sLiquipedia</a>. The reason "
 "for this being that it's hard use their definition when doing a database "
@@ -4662,14 +4609,12 @@ msgstr ""
 "des bases de données."
 
 #: templates/compare.djhtml:10 templates/compare.djhtml.py:16
-#, fuzzy
 msgid "Comparing players"
-msgstr "Impliquant les joueurs"
+msgstr "Comparaison des joueurs"
 
 #: templates/compare.search.djhtml:7 templates/compare.search.djhtml.py:13
-#, fuzzy
 msgid "Compare players"
-msgstr "Fusion de joueurs"
+msgstr "Comparaison des joueurs"
 
 #: templates/db.djhtml:11 templates/db.djhtml.py:16
 msgid "Database status"
@@ -4688,9 +4633,8 @@ msgid "log"
 msgstr "log"
 
 #: templates/db.djhtml:35
-#, fuzzy
 msgid "Game data"
-msgstr "manches"
+msgstr "Données du match"
 
 #: templates/db.djhtml:38 templates/db.djhtml.py:46 templates/db.djhtml:55
 #: templates/db.djhtml.py:64 templates/db.djhtml:73
@@ -4722,13 +4666,9 @@ msgstr "%(nplayers)s, dont %(nkoreans)s coréens"
 msgid "%(nteams)s, of which %(nactive)s active"
 msgstr "%(nteams)s, dont %(nactive)s actifs"
 
-#: templates/db.djhtml:117
-msgid "Top submitters"
-msgstr ""
-
 #: templates/db.djhtml:128
 msgid "more"
-msgstr ""
+msgstr "Plus"
 
 #: templates/db.djhtml:144
 #, python-format
@@ -4754,7 +4694,6 @@ msgstr ""
 "créditer le présent site."
 
 #: templates/db.djhtml:154
-#, fuzzy
 msgid ""
 "The dump contains 11 tables. Some columns are foreign keys to tables that "
 "have been removed from the dump (primarily involving user accounts). "
@@ -4762,15 +4701,8 @@ msgid ""
 msgstr ""
 "Le dump contient 11 tables. Certaines colonnes sont des clés étrangères pour "
 "des tables qui ont été retirées du dump (essentiellement les tables liées à "
-"des comptes utilisateur)."
-
-#: templates/db.djhtml:165
-msgid "Definition"
-msgstr ""
-
-#: templates/db.djhtml:166
-msgid "Description"
-msgstr ""
+"des comptes utilisateur).. Tout ce qui suit ci-dessous sont dans les formats "
+"<strong>standars de PostgreSQL</strong>."
 
 #: templates/earnings.djhtml:11 templates/earnings.djhtml.py:16
 msgid "Earnings ranking"
@@ -4802,17 +4734,15 @@ msgstr "Les filtres n'ont rien retourné :("
 
 #: templates/earnings.djhtml:43
 msgid "Year:"
-msgstr ""
+msgstr "Année : "
 
 #: templates/earnings.djhtml:54
-#, fuzzy
 msgid "Country:"
-msgstr "Nationalité"
+msgstr "Nationalité :"
 
 #: templates/earnings.djhtml:72
-#, fuzzy
 msgid "Currency:"
-msgstr "Devise"
+msgstr "Devise :"
 
 #. Translators: The verb "to filter".
 #: templates/earnings.djhtml:85 templates/history.djhtml:192
@@ -4833,35 +4763,37 @@ msgstr "#"
 msgid "Total earnings"
 msgstr "Total des gains"
 
-#: templates/eventmgr.djhtml:11 templates/eventmgr.djhtml.py:58
-#, fuzzy
+#: templates/eventmgr.djhtml:11 templates/eventmgr.djhtml.py:64
 msgid "Event manager"
-msgstr "Noms d'événements"
+msgstr "Outil de gestion d'évènement"
 
-#: templates/eventmgr.djhtml:24
-#, fuzzy
+#: templates/eventmgr.djhtml:30
 msgid "Modify event / add new sub-events"
-msgstr "Ajouter des sous-éléments"
+msgstr "Modifier un évènement / Ajouter des sous-éléments"
 
-#: templates/eventmgr.djhtml:33
+#: templates/eventmgr.djhtml:39
 msgid ""
 "Use this if you want to add several events at once using a predefined naming "
 "pattern."
 msgstr ""
-
-#: templates/eventmgr.djhtml:34
-msgid "Use this for custom names. Separate each new subevent by a comma."
-msgstr ""
+"Utilisez ceci si vous voulez ajouter plusieurs évènements d'un coup en "
+"utiliser un paterne de nommage."
 
 #: templates/eventmgr.djhtml:40
+msgid "Use this for custom names. Separate each new subevent by a comma."
+msgstr ""
+"Utilisez ceci pour des noms personalisés. Séparez chaque nouveeau sous-"
+"évènement par une virgule."
+
+#: templates/eventmgr.djhtml:46
 msgid "Commit new sub-events"
 msgstr "Ajouter des sous-éléments"
 
-#: templates/eventmgr.djhtml:41
+#: templates/eventmgr.djhtml:47
 msgid "Close event"
 msgstr "Fermer l'événement"
 
-#: templates/eventmgr.djhtml:67
+#: templates/eventmgr.djhtml:73
 msgid ""
 "The events are organized in a tree, loosely hierarchical with "
 "organizer→season→tournament→stage (qualifiers/groups/playoffs)→round and so "
@@ -4872,7 +4804,7 @@ msgstr ""
 "éliminatoire)→tour et ainsi de suite. Il n'y a pas de règles strictes."
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:70
+#: templates/eventmgr.djhtml:76
 msgid ""
 "The name displayed everywhere on the site is the concatenation of the event "
 "name and <strong>all its parents</strong>. Thus GSL→2013 Season 1→Code "
@@ -4887,7 +4819,7 @@ msgstr ""
 "le nom complet soit aussi naturel que possible."
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:73
+#: templates/eventmgr.djhtml:79
 msgid ""
 "Do not repeat information. If you have an event called «Qualifiers», the "
 "subevents should not be called «Korean Qualifiers». Just «Korea» is fine."
@@ -4896,14 +4828,14 @@ msgstr ""
 "«Qualification», le sous-événement ne devrait pas s'appeler «Corée "
 "Qualification». «Corée» suffit."
 
-#: templates/eventmgr.djhtml:75
+#: templates/eventmgr.djhtml:81
 msgid ""
 "Matches can only be assigned to leaf events (i.e. events with no subevents)."
 msgstr ""
 "On ne peut associer des matches qu'aux feuilles de l'arbre (les événements "
 "qui n'ont pas de sous-ensembles)."
 
-#: templates/eventmgr.djhtml:77
+#: templates/eventmgr.djhtml:83
 msgid ""
 "Close an event after all the matches has been assigned. This will remove it "
 "from the list below and all drop-down boxes on the site, to help "
@@ -4916,7 +4848,7 @@ msgstr ""
 "événement depuis l'interface de gestion, ou depuis la page de l'événement."
 
 #. Translators: The event names and noprint have to be in English.
-#: templates/eventmgr.djhtml:80
+#: templates/eventmgr.djhtml:86
 msgid ""
 "You can improve readability by making an event «invisible» (open the admin "
 "interface and check the «noprint» option). This will hide the name. This is "
@@ -4931,7 +4863,7 @@ msgstr ""
 "obtenez plus simplement «Code S Group A», qui est plus lisible ! Ce procédé "
 "est souvent utilisé pour les phases de groupe et les playoffs."
 
-#: templates/eventmgr.djhtml:82
+#: templates/eventmgr.djhtml:88
 msgid ""
 "Events with many games should also be marked «big». This will cause the list "
 "of games to be cut off. If you forget, no big deal, it's done automatically."
@@ -4941,7 +4873,7 @@ msgstr ""
 "problème si vous l'oubliez - ça sera fait automatiquement."
 
 #. Translators: The event names have to be in English.
-#: templates/eventmgr.djhtml:85
+#: templates/eventmgr.djhtml:91
 msgid ""
 "<strong>Naming conventions:</strong> Ro («round of») with capital R and "
 "small o, followed immediately by the number. Third place matches should be "
@@ -4951,35 +4883,31 @@ msgstr ""
 "majuscule et un o minuscule, immédiatement suivi du nombre. Le match pour la "
 "3ème place doit être nommé «Third place matches» (et non «3rd»)."
 
-#: templates/eventmgr.djhtml:95
+#: templates/eventmgr.djhtml:101
 msgid "Add root event"
 msgstr "Ajouter un événement racine"
 
-#: templates/eventmgr.djhtml:98
-#, fuzzy
+#: templates/eventmgr.djhtml:105
 msgid "Show guide"
-msgstr "guide"
+msgstr "Afficher le guide"
 
-#: templates/eventmgr.djhtml:118
-#, fuzzy
+#: templates/eventmgr.djhtml:125
 msgid "event"
-msgstr "Evènement"
+msgstr "évènement"
 
-#: templates/eventmgr.djhtml:122
+#: templates/eventmgr.djhtml:129
 msgid "admin"
 msgstr "admin"
 
-#: templates/eventmgr.djhtml:128
+#: templates/eventmgr.djhtml:133
 msgid "modify"
 msgstr "modifier"
 
-#: templates/eventres.djhtml:63
-#, fuzzy
+#: templates/eventres.djhtml:66
 msgid "Modify event"
-msgstr "Déplacer des événements"
+msgstr "Modifier un événement"
 
-#: templates/eventres.djhtml:69
-#, fuzzy
+#: templates/eventres.djhtml:72
 msgid ""
 "<strong>Danger!</strong> Changes to date, game and offline will modify all "
 "matches associated with all events in this tree. Changing type will "
@@ -4989,49 +4917,56 @@ msgstr ""
 "<strong>Attention :</strong> tout changement concernant la date, les parties "
 "et le statut offline sera appliqué à tous les matchs associés à chaque "
 "événement de cet arbre. Un changement de type sera le cas échéant appliqué à "
-"tous les événements enfants et parents ! Regardez-y à deux fois !"
+"tous les événements enfants et parents ! Assurez vous que vous savez ce que "
+"vous faites !"
 
-#: templates/eventres.djhtml:101 templates/eventres.djhtml.py:571
-#, fuzzy
+#: templates/eventres.djhtml:104 templates/eventres.djhtml.py:575
 msgid "Add subevents"
-msgstr "Ajout d'un sous-évènement."
+msgstr "Ajouter des sous-évènements"
 
-#: templates/eventres.djhtml:107
+#: templates/eventres.djhtml:110
 msgid ""
 "If you need more options, or if you need to add more than one subevent, use "
 "the <a href=\"/add/events/\">event manager</a> tool."
 msgstr ""
+"Si vous avez besoin de plus d'option, ou si vous avez besoin d'ajouter plus "
+"d'un sous-évènement, utilisez le <a href=\"/add/events/\">gestionnaire "
+"d'évènements</a> tool."
 
-#: templates/eventres.djhtml:132
-#, fuzzy
+#: templates/eventres.djhtml:135
 msgid "Modify prizepool"
-msgstr "Gains"
+msgstr "Modifier les gains"
 
-#: templates/eventres.djhtml:140
+#: templates/eventres.djhtml:143
 msgid ""
 "The currency in which the prize was paid, usually the official currency in "
 "the country the tournament was held."
 msgstr ""
+"La devise dans laquelle ont été payés les récompenses, sont généralement la "
+"devise du pays dans lequel s'est déroulé le tournoi."
 
-#: templates/eventres.djhtml:141
+#: templates/eventres.djhtml:144
 msgid "Use this for prizes related to final placement in the event."
 msgstr ""
+"Utilisez ceci pour les gains associées à la position finale lors d'un "
+"évènement."
 
-#: templates/eventres.djhtml:141 templates/eventres.djhtml.py:142
-#, fuzzy
+# Do we have to translate that or is it some code ?
+#: templates/eventres.djhtml:144 templates/eventres.djhtml.py:145
 msgid "[prize] [player]"
-msgstr "Fusion de joueurs"
+msgstr "[prize] [player]"
 
-#: templates/eventres.djhtml:142
+#: templates/eventres.djhtml:145
 msgid "Use this for prizes unrelated to placement, i.e. public tips."
 msgstr ""
+"Utilisez ceci pour les gains qui ne sont pas liées à un positionnement comme "
+"par exemple les dons publiques."
 
-#: templates/eventres.djhtml:162 templates/eventres.djhtml.py:579
-#, fuzzy
+#: templates/eventres.djhtml:165 templates/eventres.djhtml.py:583
 msgid "Reorder subevents"
-msgstr "Ajout d'un sous-évènement."
+msgstr "Réaranger les sous-évènement."
 
-#: templates/eventres.djhtml:168
+#: templates/eventres.djhtml:171
 msgid ""
 "Put the <strong>least significant</strong> events first (the ones played "
 "first, or with most players). Finals should be toward the bottom."
@@ -5040,167 +4975,164 @@ msgstr ""
 "joués en premier, ou réunissant le plus de joueurs). Les finales doivent "
 "être placées en bas."
 
-#: templates/eventres.djhtml:197
+#: templates/eventres.djhtml:201
 msgid "Add or change stories"
-msgstr ""
+msgstr "Ajouter ou modifier l'histoire"
 
-#: templates/eventres.djhtml:205
+#: templates/eventres.djhtml:209
 msgid "Extant stories"
 msgstr "Extant stories"
 
-#: templates/eventres.djhtml:223
+#: templates/eventres.djhtml:227
 #, python-format
 msgid ""
 "For each parameter, a line of the form \"parameter: value\". The parameters "
 "needed are in the story text of the form \"%(parameter)s\". This will be "
 "replaced by the value you enter."
 msgstr ""
+"Pour chaque paramètre, une ligne de la forme \"parameter: value\". Les "
+"paramètres requis sont dans le texte historique de la forme \"%(parameter)s"
+"\". Cela sera emplacé par la valeur que vous allez entrer."
 
-#: templates/eventres.djhtml:227
+#: templates/eventres.djhtml:231
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/eventres.djhtml:228
+#: templates/eventres.djhtml:232
 msgid "Delete"
 msgstr "Supprimer"
 
-#: templates/eventres.djhtml:267
-#, fuzzy
+#: templates/eventres.djhtml:271
 msgid "Navigation"
-msgstr "Qualification"
+msgstr "Navigation"
 
-#: templates/eventres.djhtml:271 templates/period.djhtml:30
-#, fuzzy
+#: templates/eventres.djhtml:275 templates/period.djhtml:30
 msgid "Matchups"
-msgstr "matchups"
+msgstr "Matchups"
 
-#: templates/eventres.djhtml:276
-#, fuzzy
+#: templates/eventres.djhtml:280
 msgid "Prize Pool"
 msgstr "Gains"
 
-#: templates/eventres.djhtml:283
-#, fuzzy
+#: templates/eventres.djhtml:287
 msgid "Other Prizes"
-msgstr "Autre"
+msgstr "Autre gains"
 
 #. Translators: Go as in go to a page.
 #. Translators: Go as in go to a page.
-#: templates/eventres.djhtml:311 templates/eventres.djhtml.py:336
+#: templates/eventres.djhtml:315 templates/eventres.djhtml.py:340
 #: templates/events.djhtml:38 templates/results.djhtml:30
 msgid "Go"
 msgstr "Go"
 
-#: templates/eventres.djhtml:347 templates/eventres.djhtml.py:507
+#: templates/eventres.djhtml:351 templates/eventres.djhtml.py:511
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
 #: templates/reports_balance.djhtml:75 templates/reports_balance.djhtml:78
 msgid "PvT"
 msgstr "PvT"
 
-#: templates/eventres.djhtml:366 templates/eventres.djhtml.py:513
+#: templates/eventres.djhtml:370 templates/eventres.djhtml.py:517
 #: templates/period.djhtml:219 templates/period.djhtml.py:358
 #: templates/reports_balance.djhtml:83 templates/reports_balance.djhtml:86
 msgid "PvZ"
 msgstr "PvZ"
 
-#: templates/eventres.djhtml:385 templates/eventres.djhtml.py:519
+#: templates/eventres.djhtml:389 templates/eventres.djhtml.py:523
 #: templates/period.djhtml:236 templates/period.djhtml.py:362
 #: templates/reports_balance.djhtml:91 templates/reports_balance.djhtml:94
 msgid "TvZ"
 msgstr "TvZ"
 
-#: templates/eventres.djhtml:404 templates/eventres.djhtml.py:525
+#: templates/eventres.djhtml:408 templates/eventres.djhtml.py:529
 #: templates/period.djhtml:253 templates/period.djhtml.py:366
 msgid "Mirrors"
 msgstr "Matchs miroir"
 
-#: templates/eventres.djhtml:439
+#: templates/eventres.djhtml:443
 msgid "Details"
 msgstr "Détails"
 
-#: templates/eventres.djhtml:445 templates/player_earnings.djhtml:55
+#: templates/eventres.djhtml:449 templates/player_earnings.djhtml:55
 msgid "Dates"
 msgstr "Dates"
 
 #. Translators: Date to date.
-#: templates/eventres.djhtml:457
+#: templates/eventres.djhtml:461
 #, python-format
 msgid "%(fst)s to %(snd)s"
 msgstr "De %(fst)s à %(snd)s"
 
-#: templates/eventres.djhtml:471
+#: templates/eventres.djhtml:475
 msgid "On-/Offline"
 msgstr "Online/off"
 
-#: templates/eventres.djhtml:477
-#, fuzzy
+#: templates/eventres.djhtml:481
 msgid "Prizepool"
 msgstr "Gains"
 
-#: templates/eventres.djhtml:527 templates/period.djhtml:367
+#: templates/eventres.djhtml:531 templates/period.djhtml:367
 msgid "PvP"
 msgstr "PvP"
 
-#: templates/eventres.djhtml:528 templates/period.djhtml:367
+#: templates/eventres.djhtml:532 templates/period.djhtml:367
 msgid "TvT"
 msgstr "TvT"
 
-#: templates/eventres.djhtml:529 templates/period.djhtml:367
+#: templates/eventres.djhtml:533 templates/period.djhtml:367
 msgid "ZvZ"
 msgstr "ZvZ"
 
-#: templates/eventres.djhtml:534 templates/player.djhtml:696
+#: templates/eventres.djhtml:538 templates/player.djhtml:696
 #: templates/team.djhtml:154
 msgid "External"
 msgstr "Externe"
 
-#: templates/eventres.djhtml:541 templates/eventres.djhtml.py:544
-#: templates/eventres.djhtml:547 templates/eventres.djhtml.py:550
-#: templates/eventres.djhtml:553
+#: templates/eventres.djhtml:545 templates/eventres.djhtml.py:548
+#: templates/eventres.djhtml:551 templates/eventres.djhtml.py:554
+#: templates/eventres.djhtml:557
 msgid "TLPD"
 msgstr "TLPD"
 
-#: templates/eventres.djhtml:557 templates/events_open.djhtml:44
+#: templates/eventres.djhtml:561 templates/events_open.djhtml:44
 #: templates/events_open.djhtml.py:90 templates/events_open.djhtml:137
 msgid "TL"
 msgstr "TL"
 
 #. Translators: LP = Liquipedia
-#: templates/eventres.djhtml:560 templates/events_open.djhtml:47
+#: templates/eventres.djhtml:564 templates/events_open.djhtml:47
 #: templates/events_open.djhtml.py:93 templates/events_open.djhtml:140
 #: templates/player.djhtml:709 templates/team.djhtml:160
 msgid "LP"
 msgstr "LP"
 
-#: templates/eventres.djhtml:568 templates/player.djhtml:717
+#: templates/eventres.djhtml:572 templates/player.djhtml:717
 #: templates/team.djhtml:168
 msgid "Edit info"
 msgstr "Modifier"
 
-#: templates/eventres.djhtml:569 templates/player.djhtml:718
+#: templates/eventres.djhtml:573 templates/player.djhtml:718
 #: templates/team.djhtml:169
 msgid "Admin interface"
 msgstr "Interface admin"
 
-#: templates/eventres.djhtml:570
-#, fuzzy
+#: templates/eventres.djhtml:574
 msgid "Add matches"
-msgstr "matchs"
+msgstr "Ajouter des matchs"
 
-#: templates/eventres.djhtml:573
+#: templates/eventres.djhtml:577
 msgid "Prize pool"
 msgstr "Gains"
 
 #. Translators: Stories are the dots on a player's rating chart.
-#: templates/eventres.djhtml:576 templates/player.djhtml:192
+#: templates/eventres.djhtml:580 templates/player.djhtml:192
 msgid "Stories"
 msgstr "Infos"
 
-#: templates/eventres.djhtml:593
+#: templates/eventres.djhtml:597
 msgid "This event has no registered games... yet."
 msgstr "Aucune partie enregistrée pour cet événement... pour l'instant."
 
-#: templates/eventres.djhtml:598
+#: templates/eventres.djhtml:602
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help <a href="
@@ -5209,23 +5141,22 @@ msgstr ""
 "Avez-vous noté un oubli ? Vous êtes bienvenu(e) pour <a href=\"%(uri)s"
 "\">enrichir la base de données</a> !"
 
-#: templates/eventres.prizepool.djhtml:39 templates/index.djhtml:196
-#: templates/matchlist.djhtml:81 templates/matchlist.djhtml.py:124
-#: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
+#: templates/eventres.prizepool.djhtml:39 templates/index.djhtml:197
+#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
+#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
 #: templates/review.djhtml:46
 msgid "show"
 msgstr "afficher"
 
-#: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:195
-#: templates/matchlist.djhtml:81 templates/matchlist.djhtml.py:124
-#: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
+#: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:196
+#: templates/matchlist.djhtml:91 templates/matchlist.djhtml.py:126
+#: templates/matchlist.djhtml:149 templates/matchlist.djhtml.py:164
 msgid "hide"
 msgstr "masquer"
 
 #: templates/events.djhtml:27
-#, fuzzy
 msgid "Go to smaller event:"
-msgstr "Petits événements :"
+msgstr "Aller à des plus petits événements :"
 
 #: templates/events_open.djhtml:21
 msgid ""
@@ -5306,33 +5237,29 @@ msgstr ""
 "événement, ou si vous ignorez les sommes exactes, ne changez rien."
 
 #: templates/events_open.djhtml:124
-#, fuzzy
 msgid "Events with no prize pool"
-msgstr "Evénements sans informations sur les sommes en jeu"
+msgstr "Evénements sans gains"
 
 #: templates/events_open.djhtml:153
 msgid "Marked events have no prize pool"
 msgstr "Les événements mis en évidence n'ont pas de sommes en jeu"
 
 #: templates/faq.djhtml:10 templates/faq.djhtml.py:15
-#, fuzzy
 msgid "Frequently Asked Questions"
 msgstr "Questions fréquemment posées (FAQ)"
 
-#: templates/forms.djhtml:150
-#, fuzzy
+#: templates/forms.djhtml:146
 msgid "After date"
-msgstr "Après"
+msgstr "Après cette date"
 
-#: templates/forms.djhtml:151
-#, fuzzy
+# Need context to translate properly
+#: templates/forms.djhtml:147
 msgid "to"
 msgstr "dans"
 
-#: templates/forms.djhtml:155
-#, fuzzy
+#: templates/forms.djhtml:151
 msgid "Before date"
-msgstr "Avant"
+msgstr "Avant cette date"
 
 #: templates/historical.djhtml:10
 #, python-format
@@ -5367,7 +5294,6 @@ msgid "Hall of Fame"
 msgstr "Hall of Fame"
 
 #: templates/hof.djhtml:17
-#, fuzzy
 msgid ""
 "This list ranks players by <em>periods of domination</em>. The relevant "
 "score is called PP (<em>period-points</em>), and is the sum over a range of "
@@ -5375,10 +5301,9 @@ msgid ""
 msgstr ""
 "Cette liste présente les joueurs par <em>période de domination</em>. Le "
 "score utilisé est appelé PP (<em>points sur la période</em>). Il représente "
-"la somme sur plusieurs listes de la distance du joueur au 10ème de la liste."
+"la somme sur plusieurs listes de la distance du joueur au 7ème de la liste."
 
 #: templates/hof.djhtml:20
-#, fuzzy
 msgid ""
 "For most players, their PP is equal to the sum of the rating gaps for each "
 "list in which they were in the top seven. If a player has been there more "
@@ -5387,19 +5312,18 @@ msgid ""
 "and negligible."
 msgstr ""
 "Pour la plupart des joueurs, leur PP est la somme des écarts pour chaque "
-"liste où ils figuraient dans les 10 premiers. Si un joueur y a figuré à "
+"liste où ils figuraient dans les 7 premiers. Si un joueur y a figuré à "
 "plusieurs période, c'est sa meilleure liste qui est retenue - elle peut "
 "aussi inclure des cas où le joueur n'a pas figuré dans les 10 premiers, s'il "
 "s'agit de cas isolés sur une brève période de temps."
 
 #: templates/hof.djhtml:23
-#, fuzzy
 msgid ""
 "In short, this is a list of players who have ever been top seven, rewarding "
 "both large rating gaps and long periods of rule. Think of it as a king-of-"
 "the-hill hall of fame."
 msgstr ""
-"En résumé, ceci est la liste des joueurs qui ont été constamment dans les 10 "
+"En résumé, ceci est la liste des joueurs qui ont été constamment dans les 7 "
 "premiers, avec de bons classements et une longue présence au top. Une sorte "
 "de Hall of Fame d'un King-of-the-hill global."
 
@@ -5413,9 +5337,8 @@ msgstr ""
 
 #. Translators: Period-points, see explanation on HoF page.
 #: templates/hof.djhtml:38
-#, fuzzy
 msgid "PP"
-msgstr "PvP"
+msgstr "PP"
 
 #: templates/hof.djhtml:39 templates/period.djhtml:321
 msgid "Start"
@@ -5462,30 +5385,29 @@ msgid "Language"
 msgstr "Langue"
 
 #: templates/index.djhtml:117
-#, fuzzy
 msgid "Find player, team or event"
-msgstr "Rechercher un joueur, une équipe ou un événement :"
+msgstr "Rechercher un joueur, une équipe ou un événement"
 
 #: templates/index.djhtml:127
 msgid "Current top 10"
 msgstr "Top 10 actuel"
 
 #: templates/index.djhtml:137
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The above list is a preview of the next rating list, which will be finalized "
 "on %(dt)s. <a href=\"/periods/latest\">Full list</a>."
 msgstr ""
 "Le classement ci-dessus est une ébauche du prochain classement, qui sera "
-"publié le %(dt)s."
+"publié le %(dt)s. <a href=\"/periods/latest\">Full list</a>."
 
 #: templates/index.djhtml:155
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Find us on %(a1)sTwitter</a>, %(a2)sGitHub</a> and %(a3)sTeam Liquid</a>."
 msgstr ""
-"Rejoignez-nous sur %(a1)sTwitter</a>, %(a2)sGitHub</a> et #aligulac sur "
-"quakenet."
+"Rejoignez-nous sur %(a1)sTwitter</a>, %(a2)sGitHub</a> et %(a3)sTeam Liquid</"
+"a>."
 
 #: templates/index.djhtml:162
 #, python-format
@@ -5508,193 +5430,192 @@ msgstr ""
 #: templates/index.djhtml:171
 #, python-format
 msgid "Bitcoin donations (if you insist) on address: <br>%(btc)s"
-msgstr ""
+msgstr "Don en Bitcoin (si vous insistez) à l'adresse : <br>%(btc)s"
 
-#: templates/index.djhtml:174
+#: templates/index.djhtml:175
 msgid "Generate short URL for this page"
 msgstr "Générer une URL raccourcie pour cette page"
 
-#: templates/index.djhtml:211
+#: templates/index.djhtml:212
 msgid "Download PNG image"
 msgstr "Enregistrer au format PNG"
 
-#: templates/index.djhtml:212
+#: templates/index.djhtml:213
 msgid "Download JPEG image"
 msgstr "Enregistrer au format JPEG"
 
-#: templates/index.djhtml:213
+#: templates/index.djhtml:214
 msgid "Download PDF document"
 msgstr "Enregistrer au format PDF"
 
-#: templates/index.djhtml:214
+#: templates/index.djhtml:215
 msgid "Download SVG vector image"
 msgstr "Enregistrer au format SVG"
 
-#: templates/index.djhtml:215
+#: templates/index.djhtml:216
 msgid "Loading..."
 msgstr "CHargement en cours..."
 
-#: templates/index.djhtml:216
+#: templates/index.djhtml:217
 msgid "Print chart"
 msgstr "Imprimer le graphique"
 
-#: templates/index.djhtml:217
+#: templates/index.djhtml:218
 msgid "Reset zoom"
 msgstr "Réinitialiser le zoom"
 
-#: templates/index.djhtml:219
+#: templates/index.djhtml:220
 msgctxt "Big first letter"
 msgid "January"
 msgstr "Janvier"
 
-#: templates/index.djhtml:220
+#: templates/index.djhtml:221
 msgctxt "Big first letter"
 msgid "February"
 msgstr "Février"
 
-#: templates/index.djhtml:221
+#: templates/index.djhtml:222
 msgctxt "Big first letter"
 msgid "March"
 msgstr "Mars"
 
-#: templates/index.djhtml:222
+#: templates/index.djhtml:223
 msgctxt "Big first letter"
 msgid "April"
 msgstr "Avril"
 
-#: templates/index.djhtml:223 templates/index.djhtml.py:237
+#: templates/index.djhtml:224 templates/index.djhtml.py:238
 msgctxt "Big first letter"
 msgid "May"
 msgstr "Mai"
 
-#: templates/index.djhtml:224
+#: templates/index.djhtml:225
 msgctxt "Big first letter"
 msgid "June"
 msgstr "Juin"
 
-#: templates/index.djhtml:225
+#: templates/index.djhtml:226
 msgctxt "Big first letter"
 msgid "July"
 msgstr "Juillet"
 
-#: templates/index.djhtml:226
+#: templates/index.djhtml:227
 msgctxt "Big first letter"
 msgid "August"
 msgstr "Août"
 
-#: templates/index.djhtml:227
+#: templates/index.djhtml:228
 msgctxt "Big first letter"
 msgid "September"
 msgstr "Septembre"
 
-#: templates/index.djhtml:228
+#: templates/index.djhtml:229
 msgctxt "Big first letter"
 msgid "October"
 msgstr "Octobre"
 
-#: templates/index.djhtml:229
+#: templates/index.djhtml:230
 msgctxt "Big first letter"
 msgid "November"
 msgstr "Novembre"
 
-#: templates/index.djhtml:230
+#: templates/index.djhtml:231
 msgctxt "Big first letter"
 msgid "December"
 msgstr "Décembre"
 
-#: templates/index.djhtml:233
+#: templates/index.djhtml:234
 msgctxt "Big first letter"
 msgid "Jan"
 msgstr "Jan"
 
-#: templates/index.djhtml:234
+#: templates/index.djhtml:235
 msgctxt "Big first letter"
 msgid "Feb"
 msgstr "Fév"
 
-#: templates/index.djhtml:235
+#: templates/index.djhtml:236
 msgctxt "Big first letter"
 msgid "Mar"
 msgstr "Mar"
 
-#: templates/index.djhtml:236
+#: templates/index.djhtml:237
 msgctxt "Big first letter"
 msgid "Apr"
 msgstr "Avr"
 
-#: templates/index.djhtml:238
+#: templates/index.djhtml:239
 msgctxt "Big first letter"
 msgid "Jun"
 msgstr "Jun"
 
-#: templates/index.djhtml:239
+#: templates/index.djhtml:240
 msgctxt "Big first letter"
 msgid "Jul"
 msgstr "Jul"
 
-#: templates/index.djhtml:240
+#: templates/index.djhtml:241
 msgctxt "Big first letter"
 msgid "Aug"
 msgstr "Aoû"
 
-#: templates/index.djhtml:241
+#: templates/index.djhtml:242
 msgctxt "Big first letter"
 msgid "Sep"
 msgstr "Sep"
 
-#: templates/index.djhtml:242
+#: templates/index.djhtml:243
 msgctxt "Big first letter"
 msgid "Oct"
 msgstr "Oct"
 
-#: templates/index.djhtml:243
+#: templates/index.djhtml:244
 msgctxt "Big first letter"
 msgid "Nov"
 msgstr "Nov"
 
-#: templates/index.djhtml:244
+#: templates/index.djhtml:245
 msgctxt "Big first letter"
 msgid "Dec"
 msgstr "Dec"
 
-#: templates/index.djhtml:247
+#: templates/index.djhtml:248
 msgctxt "Big first letter"
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: templates/index.djhtml:248
+#: templates/index.djhtml:249
 msgctxt "Big first letter"
 msgid "Monday"
 msgstr "Lundi"
 
-#: templates/index.djhtml:249
+#: templates/index.djhtml:250
 msgctxt "Big first letter"
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: templates/index.djhtml:250
+#: templates/index.djhtml:251
 msgctxt "Big first letter"
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: templates/index.djhtml:251
+#: templates/index.djhtml:252
 msgctxt "Big first letter"
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: templates/index.djhtml:252
+#: templates/index.djhtml:253
 msgctxt "Big first letter"
 msgid "Friday"
 msgstr "Vendredi"
 
-#: templates/index.djhtml:253
+#: templates/index.djhtml:254
 msgctxt "Big first letter"
 msgid "Saturday"
 msgstr "Samedi"
 
 #. Translators: I would like to use Aligulac in [a certain language]
 #: templates/language.djhtml:27
-#, fuzzy
 msgid "I would like to use Aligulac in..."
 msgstr "Je souhaite utiliser Aligulac en…"
 
@@ -5745,14 +5666,12 @@ msgstr ""
 "moi à l'adresse suivante : %(email)s."
 
 #: templates/login.djhtml:33 templates/login.djhtml.py:36
-#, fuzzy
 msgid "Username"
-msgstr "Compte :"
+msgstr "Compte"
 
 #: templates/login.djhtml:41 templates/login.djhtml.py:44
-#, fuzzy
 msgid "Password"
-msgstr "Mot de passe :"
+msgstr "Mot de passe"
 
 #: templates/manage.djhtml:11
 msgid "Miscellaneous"
@@ -5767,11 +5686,9 @@ msgid "Merge players"
 msgstr "Fusion de joueurs"
 
 #: templates/manage.djhtml:33
-#, fuzzy, python-format
+#, python-format
 msgid "This will merge %(src)s into %(tgt)s. Are you sure?"
-msgstr ""
-"Vous allez déplacer %(src)s et tous les événements qui en dépendent "
-"(%(cnt)s) vers %(trg)s."
+msgstr "Cela va fusioner %(src)s dans %(tgt)s. Etes-vous sûr ?"
 
 #: templates/manage.djhtml:42 templates/manage.djhtml.py:52
 msgid "Merge"
@@ -5779,26 +5696,28 @@ msgstr "Fusionner"
 
 #: templates/manage.djhtml:43 templates/manage.djhtml.py:80
 msgid "Abort"
-msgstr ""
+msgstr "Annuler"
 
 #: templates/manage.djhtml:50
 msgid ""
 "Only IDs are accepted. This is to prevent mistakes. You will be asked for "
 "confirmation before the merge."
 msgstr ""
+"Seuls les IDs sont acceptées afin d'éviter les erreurs. Une demande de "
+"confirmation sera demandé avant la fusion."
 
 #: templates/manage.djhtml:61
 msgid "Move events"
 msgstr "Déplacer des événements"
 
 #: templates/manage.djhtml:70
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This will move %(src)s and all events under it (%(cnt)s) to %(trg)s. Are you "
 "sure?"
 msgstr ""
 "Vous allez déplacer %(src)s et tous les événements qui en dépendent "
-"(%(cnt)s) vers %(trg)s."
+"(%(cnt)s) vers %(trg)s. Etes-vous sûr ?"
 
 #: templates/manage.djhtml:79 templates/manage.djhtml.py:89
 msgid "Move"
@@ -5809,48 +5728,51 @@ msgid ""
 "Only IDs are accepted. This is to prevent mistakes. You will be asked for "
 "confirmation before the move."
 msgstr ""
+"Seuls les IDs sont acceptés afin d'éviter les erreurs. Une demande de "
+"confirmation sera demandé avant le déplacement"
 
-#: templates/matchlist.djhtml:44
+#: templates/matchlist.djhtml:54
 msgid "Player A"
 msgstr "Joueur A"
 
-#: templates/matchlist.djhtml:46
+#: templates/matchlist.djhtml:56
 msgid "Player B"
 msgstr "Joueur B"
 
-#: templates/matchlist.djhtml:73 templates/matchlist.djhtml.py:120
+#: templates/matchlist.djhtml:83 templates/matchlist.djhtml.py:122
 msgid "Unknown event(s)"
 msgstr "Evénement(s) inconnu(s)"
 
-#: templates/matchlist.djhtml:78
+#: templates/matchlist.djhtml:88
 msgid "add"
 msgstr "ajouter"
 
+#. Translators: Check
 #. Translators: Check, as in the verb, to make a checkmark.
-#: templates/matchlist.djhtml:88 templates/matchlist.djhtml.py:131
+#: templates/matchlist.djhtml:95 templates/matchlist.djhtml.py:130
 #: templates/review.djhtml:50
 msgid "chk"
 msgstr "valid"
 
+#. Translators: Uncheck
 #. Translators: Uncheck, as in the verb, to remove a checkmark.
-#: templates/matchlist.djhtml:94 templates/matchlist.djhtml.py:137
+#: templates/matchlist.djhtml:97 templates/matchlist.djhtml.py:132
 #: templates/review.djhtml:54
 msgid "unchk"
 msgstr "invalid"
 
-#: templates/matchlist.djhtml:273
+#: templates/matchlist.djhtml:267
 msgid "unrated"
 msgstr "nonclassé"
 
 #. Translators: No spaces
-#: templates/matchlist.djhtml:277
+#: templates/matchlist.djhtml:271
 msgid "offline,online"
 msgstr "offline,online"
 
 #: templates/misc.djhtml:6 templates/misc.djhtml.py:11
-#, fuzzy
 msgid "Miscellaneous statistics"
-msgstr "Pages divers"
+msgstr "Statistiques diverses"
 
 #: templates/period.djhtml:10 templates/period.djhtml.py:17
 #: templates/period.djhtml:318
@@ -5859,14 +5781,12 @@ msgid "List %(n)s"
 msgstr "Lister les %(n)s"
 
 #: templates/period.djhtml:28
-#, fuzzy
 msgid "Best"
-msgstr "Meilleur des "
+msgstr "Meilleur"
 
 #: templates/period.djhtml:29
-#, fuzzy
 msgid "Most specialized"
-msgstr "plus spécialisés"
+msgstr "Plus spécialisés"
 
 #: templates/period.djhtml:31
 msgid "Up/Down"
@@ -5933,24 +5853,21 @@ msgstr "Date"
 
 #. Translators: Leading race
 #: templates/periods.djhtml:22
-#, fuzzy
 msgid "Leading"
-msgstr "Race favorisée"
+msgstr "Dominant"
 
 #. Translators: Lagging race
 #: templates/periods.djhtml:24
-#, fuzzy
 msgid "Lagging"
-msgstr "Race défavorisée"
+msgstr "Dominé"
 
 #: templates/periods.djhtml:25
 msgid "Active"
 msgstr "Actif"
 
 #: templates/player.djhtml:20
-#, fuzzy
 msgid "Modify player"
-msgstr "Modifier"
+msgstr "Modifier le joueur"
 
 #: templates/player.djhtml:70
 #, python-format
@@ -5975,7 +5892,6 @@ msgstr "Changements d'équipe"
 
 #. Translators: All-time winrates
 #: templates/player.djhtml:253
-#, fuzzy
 msgid "All-time"
 msgstr "toutes périodes confondues"
 
@@ -5989,12 +5905,10 @@ msgstr "Forme"
 
 #. Translators: Highest ratings
 #: templates/player.djhtml:257
-#, fuzzy
 msgid "Highest"
-msgstr "supérieurs"
+msgstr "Maximum"
 
 #: templates/player.djhtml:258
-#, fuzzy
 msgid "Rivalries"
 msgstr "rivalités"
 
@@ -6005,11 +5919,10 @@ msgid "on"
 msgstr "au"
 
 #: templates/player.djhtml:549
-#, fuzzy
 msgid "Rival"
 msgid_plural "Rivals"
-msgstr[0] "rivalités"
-msgstr[1] "rivalités"
+msgstr[0] "Rival"
+msgstr[1] "Rivaux"
 
 #: templates/player.djhtml:553
 msgid "Nemesis"
@@ -6050,9 +5963,8 @@ msgid "Full name"
 msgstr "Nom"
 
 #: templates/player.djhtml:642
-#, fuzzy
 msgid "Romanized name"
-msgstr "nom complet"
+msgstr "Nom romanisé"
 
 #: templates/player.djhtml:648 templates/team.djhtml:84
 msgid "AKA"
@@ -6094,14 +6006,12 @@ msgid "Left"
 msgstr "Quitte"
 
 #: templates/player.djhtml:761
-#, fuzzy
 msgid "yes"
-msgstr "Joueurs"
+msgstr "oui"
 
 #: templates/player.djhtml:763
-#, fuzzy
 msgid "no"
-msgstr "nov"
+msgstr "Non"
 
 #. Translators: Earnings for [someone]
 #: templates/player_earnings.djhtml:12
@@ -6115,9 +6025,8 @@ msgid "In total, %(tag)s has earned $%(money)s."
 msgstr "Au total, %(tag)s a gagné $%(money)s."
 
 #: templates/player_earnings.djhtml:34
-#, fuzzy
 msgid "Broken down by currency, that is..."
-msgstr "Détaillé par monnaie, cela donne…"
+msgstr "Détaillé par devise, cela donne…"
 
 #: templates/player_earnings.djhtml:52
 msgid "Placement"
@@ -6133,14 +6042,12 @@ msgid "%(tag)s match history"
 msgstr "Historique des matchs de %(tag)s"
 
 #: templates/player_results.djhtml:34 templates/results_search.djhtml:49
-#, fuzzy
 msgid "Date range"
-msgstr "Date de jeu"
+msgstr "Période"
 
 #: templates/player_results.djhtml:54
-#, fuzzy
 msgid "Winrates"
-msgstr "Winrate [%%]"
+msgstr "Winrate"
 
 #: templates/player_results.djhtml:57 templates/pred_4pswiss.djhtml:105
 #: templates/pred_match.djhtml:179 templates/pred_proleague.djhtml:110
@@ -6156,15 +6063,17 @@ msgstr ""
 "a>."
 
 #: templates/player_results.djhtml:180
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Under these filters, %(tag)s is <strong>%(sc_my)s–%(sc_op)s</strong> <small "
 "class=\"text-muted\">(%(pctg)s%%)</small> in games and <strong>%(msc_my)s–"
 "%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</small> in "
 "matches."
 msgstr ""
-"Sur ces parties, %(tag)s a un score de %(sc_my)s–%(sc_op)s (%(pctg)s%%) en "
-"parties et %(msc_my)s–%(msc_op)s (%(mpctg)s%%) en matchs."
+"Avec ces filtres, %(tag)s a un score de <strong>%(sc_my)s–%(sc_op)s</strong> "
+"<small class=\"text-muted\">(%(pctg)s%%)</small> en parties et de <strong>"
+"%(msc_my)s–%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</"
+"small> en matchs."
 
 #: templates/player_transfers.djhtml:6 templates/player_transfers.djhtml:11
 msgid "Recent player transfers"
@@ -6213,20 +6122,18 @@ msgstr "Reddit"
 #: templates/pred_4pswiss.djhtml:114 templates/pred_match.djhtml:188
 #: templates/pred_proleague.djhtml:119 templates/pred_rrgroup.djhtml:151
 #: templates/pred_sebracket.djhtml:111
-#, fuzzy, python-format
+#, python-format
 msgid "The above code can be used in posts on %(a)sTeamLiquid.net</a>."
 msgstr ""
-"La version ci-dessus convient aux messages publiés sur %(a)sTeamLiquid.net</"
-"a>."
+"Le code ci-dessus convient aux messages publiés sur %(a)sTeamLiquid.net</a>."
 
 #: templates/pred_4pswiss.djhtml:118 templates/pred_match.djhtml:192
 #: templates/pred_proleague.djhtml:123 templates/pred_rrgroup.djhtml:155
 #: templates/pred_sebracket.djhtml:115 templates/pred_sebracket.djhtml:119
-#, fuzzy, python-format
+#, python-format
 msgid "The above code can be used in posts on %(a)sReddit.com</a>."
 msgstr ""
-"La version ci-dessus convient aux messages publiés sur %(a)sTeamLiquid.net</"
-"a>."
+"Le code ci-dessus convient aux messages publiés sur %(a)sReddit.com</a>."
 
 #: templates/pred_match.djhtml:10 templates/pred_match.djhtml.py:17
 #, python-format
@@ -6317,9 +6224,8 @@ msgid "Reddit (table)"
 msgstr "Reddit (tableau)"
 
 #: templates/pred_sebracket.djhtml:106
-#, fuzzy
 msgid "Reddit (bracket)"
-msgstr "Reddit (arbre médian)"
+msgstr "Reddit (arbre)"
 
 #: templates/predict.djhtml:35
 msgid "Show me the future!"
@@ -6343,9 +6249,8 @@ msgstr ""
 "nombre unique pour l'appliquer à tous les tours."
 
 #: templates/predict.djhtml:47
-#, fuzzy
 msgid "To indicate a BYE, enter \"bye\" or two hyphens."
-msgstr "Pour indiquer un exempt, entrez \"bye\" ou un simple tiret."
+msgstr "Pour indiquer un exempt, entrez \"bye\" ou deux tirets."
 
 #: templates/predict.djhtml:50
 msgid ""
@@ -6429,14 +6334,14 @@ msgid "No entries found."
 msgstr "Pas d'entrées trouvées."
 
 #: templates/records.djhtml:12
-#, fuzzy, python-format
+#, python-format
 msgid "Records for %(rc)s"
-msgstr "Enregistrement pour"
+msgstr "Enregistrement pour %(rc)s"
 
 #: templates/records.djhtml:23
-#, fuzzy, python-format
+#, python-format
 msgid "Records for %(r)s"
-msgstr "Enregistrement pour"
+msgstr "Enregistrement pour %(r)s."
 
 #: templates/records.djhtml:28
 msgid "To avoid rating artifacts, the earliest periods are not counted."
@@ -6612,23 +6517,21 @@ msgstr "Résultats pour %(date)s"
 msgid "Go to date:"
 msgstr "Aller au:"
 
-#: templates/results.djhtml:41 templates/results.djhtml.py:72
-#: templates/results.djhtml:87 templates/results.djhtml.py:112
-#, fuzzy
+#: templates/results.djhtml:41 templates/results.djhtml.py:66
+#: templates/results.djhtml:81 templates/results.djhtml.py:106
 msgid "month"
-msgstr "mois suivant"
+msgstr "mois"
 
-#: templates/results.djhtml:46 templates/results.djhtml.py:67
-#: templates/results.djhtml:92 templates/results.djhtml.py:107
-#, fuzzy
+#: templates/results.djhtml:46 templates/results.djhtml.py:61
+#: templates/results.djhtml:86 templates/results.djhtml.py:101
 msgid "week"
-msgstr "semaines"
+msgstr "semaine"
 
-#: templates/results.djhtml:121
+#: templates/results.djhtml:115
 msgid "No registered results on this date."
 msgstr "Pas de résultats enregistrés pour cette date."
 
-#: templates/results.djhtml:129
+#: templates/results.djhtml:123
 #, python-format
 msgid ""
 "Notice something missing? We're always looking for people to help "
@@ -6696,36 +6599,40 @@ msgstr[0] "Trouvé %(cnt)s match."
 msgstr[1] "Trouvé %(cnt)s matchs."
 
 #: templates/results_search.djhtml:79
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Under these filters, %(pla)s is <strong>%(sc_my)s–%(sc_op)s</strong> <small "
 "class=\"text-muted\">(%(pctg)s%%)</small> in games and <strong>%(msc_my)s–"
 "%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</small> in "
 "matches."
 msgstr ""
-"Sur ces parties, %(tag)s a un score de %(sc_my)s–%(sc_op)s (%(pctg)s%%) en "
-"parties et %(msc_my)s–%(msc_op)s (%(mpctg)s%%) en matchs."
+"Avec ces filtres, %(pla)s a un score de <strong>%(sc_my)s–%(sc_op)s</strong> "
+"<small class=\"text-muted\">(%(pctg)s%%)</small> en parties et de <strong>"
+"%(msc_my)s–%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</"
+"small> en matchs."
 
 #: templates/results_search.djhtml:84
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Under these filters, %(pla)s is <strong>%(sc_my)s–%(sc_op)s</strong> <small "
 "class=\"text-muted\">(%(pctg)s%%)</small> in games and <strong>%(msc_my)s–"
 "%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</small> in "
 "matches against %(plb)s."
 msgstr ""
-"Sur ces parties, %(tag)s a un score de %(sc_my)s–%(sc_op)s (%(pctg)s%%) en "
-"parties et %(msc_my)s–%(msc_op)s (%(mpctg)s%%) en matchs."
+"Avec ces filtres, %(pla)s a un score de <strong>%(sc_my)s–%(sc_op)s</strong> "
+"<small class=\"text-muted\">(%(pctg)s%%)</small> en parties et de <strong>"
+"%(msc_my)s–%(msc_op)s</strong> <small class=\"text-muted\">(%(mpctg)s%%)</"
+"small> en matchs contre %(plb)s."
 
-#: templates/results_search.djhtml:97 templates/results_search.djhtml:114
+#: templates/results_search.djhtml:98 templates/results_search.djhtml:117
 msgid "Check all"
 msgstr "Cocher tout"
 
-#: templates/results_search.djhtml:100 templates/results_search.djhtml:117
+#: templates/results_search.djhtml:102 templates/results_search.djhtml:121
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: templates/results_search.djhtml:124
+#: templates/results_search.djhtml:128
 msgid "The following modifications will be made to all checked matches:"
 msgstr ""
 "Les modifications suivantes vont être effectuées pour tous les matchs "
@@ -6740,9 +6647,8 @@ msgid "The following matches were successfully approved:"
 msgstr "Les matchs suivants ont été approuvés:"
 
 #: templates/review.djhtml:65
-#, fuzzy
 msgid "Game"
-msgstr "manches"
+msgstr "Match"
 
 #: templates/review.djhtml:93
 msgid "To all checked submissions, do the following:"
@@ -6770,9 +6676,8 @@ msgid "No such player, team or event '%(query)s' found."
 msgstr "Aucun joueur, équipe ou événement '%(query)s' trouvé."
 
 #: templates/team.djhtml:20
-#, fuzzy
 msgid "Modify team"
-msgstr "Modifier"
+msgstr "Modifier l'équipe"
 
 #: templates/team.djhtml:61
 #, python-format
@@ -6820,7 +6725,7 @@ msgid "Active roster"
 msgstr "Membres actifs"
 
 #: templates/team.djhtml:184
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(teamname)s has %(cnt)s player who has played a rated game within the last "
 "two months."
@@ -6863,9 +6768,8 @@ msgid "Past members"
 msgstr "Anciens membres"
 
 #: templates/teams.djhtml:16
-#, fuzzy
 msgid "Active teams"
-msgstr "Membres actifs"
+msgstr "Equipes actives"
 
 #: templates/teams.djhtml:23
 msgid "All-kill score"

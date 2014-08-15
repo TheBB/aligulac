@@ -2,8 +2,8 @@
 # AUTOCOMPLETE CACHE FUNCTIONS
 # ======================================================================
 save_autocomplete_object_to_cache = (obj) ->
-    if autocomplete_ui_object.type isnt 'cache'
-        save_result_to_cache key: autocomplete_ui_object.key, html: aligulac_autocomplete_templates(autocomplete_ui_object), type: autocomplete_ui_object.type
+    if obj.type isnt 'cache'
+        save_result_to_cache key: obj.key, html: aligulac_autocomplete_templates(obj), type: obj.type
     return
 save_result_to_cache = (obj) ->
     if obj and window.localStorage
@@ -14,7 +14,7 @@ save_result_to_cache = (obj) ->
         recent_result.push html: obj.html, key: obj.key, type: 'cache', 'origin-type': "#{obj.type}s"
         window.localStorage.setItem 'aligulac.autocomplete.caching', JSON.stringify(recent_result)
         return
-        
+
 load_recent_results_from_cache = (restrict_to) ->
     result = []
     if window.localStorage
@@ -24,7 +24,7 @@ load_recent_results_from_cache = (restrict_to) ->
         for i in items
             for j in restrict_to
                 result.push i if i['origin-type'] is j
-    JSON.parse result
+    result
 # ======================================================================
 # AUTOCOMPLETE VARIA
 # ======================================================================
@@ -33,10 +33,9 @@ aligulac_autocomplete_templates = (obj) ->
         obj.key = '-'
         return "<a>BYE</a>"
 
-    if (obj.tag? and obj.name? and obj.fullname?)
-        return "<span class='autocomp-header'>#{autocomp_strings[obj.label]}</span>"
-
     switch obj.type
+        when 'header'
+            return "<span class='autocomp-header'>#{autocomp_strings[obj.label]}</span>"
         when 'player'
             obj.key = "#{obj.tag} #{obj.id}"
             team = (
@@ -62,8 +61,7 @@ aligulac_autocomplete_templates = (obj) ->
             return "<a>#{obj.fullname}</a>"
         when 'cache'
             return obj.html
-    "<a>#{ obj.value }</a>";
-        
+
 getResults = (term, restrict_to) ->
     if not restrict_to?
         restrict_to = ['players', 'teams', 'events']
@@ -93,7 +91,7 @@ init_search_box = () ->
                         return []
                     for x in list
                         x.type = type
-                    [label: label].concat list
+                    [{label: label, type: 'header'}].concat list
                 playerresult = prepare_response result.players,
                     'player',
                     'Players'
@@ -105,7 +103,7 @@ init_search_box = () ->
                     'Events'
                 cacheresult = prepare_response result.cache,
                     'cache',
-                    autocomp_strings['Your_recent_searches']
+                    'Your recent searches'
                 response playerresult.concat teamresult.concat eventresult.concat cacheresult
 
         minLength: 0

@@ -84,22 +84,83 @@
 
 }).call(this);
 }, "auto_complete": function(exports, require, module) {(function() {
-  var AutoComplete, add_extra_functions, aligulacAutocompleteTemplates, getResults, init_event_boxes, init_other, init_predictions, init_search_box;
+  var AutoComplete, add_extra_functions, aligulac_autocomplete_templates, getResults, init_event_boxes, init_other, init_predictions, init_search_box, load_recent_results_from_cache, save_autocomplete_object_to_cache;
 
-  aligulacAutocompleteTemplates = function(obj) {
+  save_autocomplete_object_to_cache = function(obj) {
+    var cache_obj, idx, keys, recent_result, x;
+    if (obj && window.localStorage) {
+      recent_result = load_recent_results_from_cache();
+      if (!recent_result) {
+        recent_result = [];
+      }
+      if (obj.type === 'cache') {
+        cache_obj = obj;
+      } else {
+        cache_obj = {
+          html: aligulac_autocomplete_templates(obj),
+          key: obj.key,
+          type: 'cache',
+          'origin-type': "" + obj.type + "s"
+        };
+      }
+      keys = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = recent_result.length; _i < _len; _i++) {
+          x = recent_result[_i];
+          _results.push(x.key);
+        }
+        return _results;
+      })();
+      idx = $.inArray(obj.key, keys);
+      if (idx > -1) {
+        recent_result.splice(idx, 1);
+      }
+      while (recent_result.length >= 10) {
+        recent_result.pop();
+      }
+      recent_result.unshift(cache_obj);
+      window.localStorage.setItem('aligulac.autocomplete.caching', JSON.stringify(recent_result));
+    }
+  };
+
+  load_recent_results_from_cache = function(restrict_to) {
+    var i, items, j, result, _i, _j, _len, _len1;
+    result = [];
+    if (window.localStorage) {
+      items = JSON.parse(localStorage.getItem('aligulac.autocomplete.caching'));
+      if (!items) {
+        return [];
+      }
+      if (!restrict_to) {
+        return items;
+      }
+      for (_i = 0, _len = items.length; _i < _len; _i++) {
+        i = items[_i];
+        for (_j = 0, _len1 = restrict_to.length; _j < _len1; _j++) {
+          j = restrict_to[_j];
+          if (i['origin-type'] === j) {
+            result.push(i);
+          }
+        }
+      }
+    }
+    return result;
+  };
+
+  aligulac_autocomplete_templates = function(obj) {
     var flag, name, race, team;
     if (obj.type === '--') {
       obj.key = '-';
       return "<a>BYE</a>";
     }
-    if (!((obj.tag != null) || (obj.name != null) || (obj.fullname != null))) {
-      return "<span class='autocomp-header'>" + autocomp_strings[obj.label] + "</span>";
-    }
     switch (obj.type) {
+      case 'header':
+        return "<span class='autocomp-header'>" + autocomp_strings[obj.label] + "</span>";
       case 'player':
-        obj.key = obj.tag + ' ' + obj.id;
-        team = ((obj.teams != null) && obj.teams.length > 0 ? "<span class='autocomp-team pull-right'>" + obj.teams[0][0] + "</span>" : '');
-        flag = (obj.country != null ? "<img src='" + (flags_dir + obj.country.toLowerCase()) + ".png' />" : '');
+        obj.key = "" + obj.tag + " " + obj.id;
+        team = (obj.teams && obj.teams.length > 0 ? "<span class='autocomp-team pull-right'>" + obj.teams[0][0] + "</span>" : '');
+        flag = (obj.country ? "<img src='" + (flags_dir + obj.country.toLowerCase()) + ".png' />" : '');
         race = "<img src='" + (races_dir + obj.race.toUpperCase()) + ".png' />";
         name = "<span>" + obj.tag + "</span>";
         return "<a>" + flag + race + name + team + "</a>";
@@ -109,41 +170,50 @@
       case 'event':
         obj.key = obj.fullname;
         return "<a>" + obj.fullname + "</a>";
+      case 'cache':
+        return obj.html;
     }
-    return "<a>" + obj.value + "</a>";
   };
 
   getResults = function(term, restrict_to) {
-    var deferred, url;
+    var deferred, recent_results;
     if (restrict_to == null) {
       restrict_to = ['players', 'teams', 'events'];
     } else if (typeof restrict_to === 'string') {
       restrict_to = [restrict_to];
     }
     deferred = $.Deferred();
-    url = '/search/json/';
-    $.ajax({
-      type: 'GET',
-      url: url,
-      dataType: 'json',
-      data: {
-        q: term,
-        search_for: restrict_to.join(',')
-      }
+    recent_results = load_recent_results_from_cache(restrict_to);
+    if (((!term) || (term.length < 2)) && recent_results) {
+      return deferred.resolve({
+        cache: recent_results
+      });
+    }
+    $.get('/search/json/', {
+      q: term,
+      search_for: restrict_to.join(',')
     }).success(function(ajaxData) {
+      if (recent_results) {
+        ajaxData.cache = recent_results;
+      }
       return deferred.resolve(ajaxData);
     });
     return deferred;
   };
 
   init_search_box = function() {
-    return $('#search_box').autocomplete({
+    var $searchbox;
+    $searchbox = $('#search_box');
+    $searchbox.bind('focus', function() {
+      return $(this).autocomplete('search');
+    });
+    return $searchbox.autocomplete({
       source: function(request, response) {
         return $.when(getResults(request.term)).then(function(result) {
-          var eventresult, playerresult, prepare_response, teamresult;
+          var cacheresult, eventresult, playerresult, prepare_response, teamresult;
           prepare_response = function(list, type, label) {
             var x, _i, _len;
-            if ((list == null) || list.length === 0) {
+            if (!list || list.length === 0) {
               return [];
             }
             for (_i = 0, _len = list.length; _i < _len; _i++) {
@@ -152,26 +222,29 @@
             }
             return [
               {
-                label: label
+                label: label,
+                type: 'header'
               }
             ].concat(list);
           };
           playerresult = prepare_response(result.players, 'player', 'Players');
           teamresult = prepare_response(result.teams, 'team', 'Teams');
           eventresult = prepare_response(result.events, 'event', 'Events');
-          return response(playerresult.concat(teamresult.concat(eventresult)));
+          cacheresult = prepare_response(result.cache, 'cache', 'Your recent searches');
+          return response(playerresult.concat(teamresult.concat(eventresult.concat(cacheresult))));
         });
       },
-      minLength: 2,
+      minLength: 0,
       select: function(event, ui) {
-        $('#search_box').val(ui.item.key).closest('form').submit();
+        save_autocomplete_object_to_cache(ui.item);
+        $searchbox.val(ui.item.key).closest('form').submit();
         return false;
       },
       open: function() {
         return $('.ui-menu').width('auto');
       }
     }).data('ui-autocomplete')._renderItem = function(ul, item) {
-      return $('<li></li>').append(aligulacAutocompleteTemplates(item)).appendTo(ul);
+      return $('<li></li>').append(aligulac_autocomplete_templates(item)).appendTo(ul);
     };
   };
 
@@ -201,7 +274,7 @@
           return $('.ui-menu').width('auto');
         }
       }).data('ui-autocomplete')._renderItem = function(ul, item) {
-        return $('<li></li>').append(aligulacAutocompleteTemplates(item)).appendTo(ul);
+        return $('<li></li>').append(aligulac_autocomplete_templates(item)).appendTo(ul);
       };
     } catch (_error) {}
   };
@@ -211,7 +284,7 @@
       var tagslist;
       tagslist = $(this).val().split('\n');
       if (tagslist[0] === '') {
-        tagslist = [];
+        return [];
       }
       return tagslist;
     };
@@ -222,8 +295,9 @@
     idPlayersTextArea = $("#id_players");
     idPlayersTextArea.tagsInput({
       autocomplete_opt: {
-        minLength: 2,
+        minLength: 0,
         select: function(event, ui) {
+          save_autocomplete_object_to_cache(ui.item);
           idPlayersTextArea.addTag(ui.item.key);
           $("#id_players_tag").focus();
           return false;
@@ -235,7 +309,7 @@
       autocomplete_url: function(request, response) {
         return $.when(getResults(request.term, 'players')).then(function(result) {
           var p, _i, _len, _ref;
-          if (result.players != null) {
+          if (result.players) {
             _ref = result.players;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               p = _ref[_i];
@@ -248,25 +322,30 @@
                 }
               ].concat(result.players);
             }
-            return response(result.players);
+          } else {
+            result.players = [];
           }
+          result.cache.unshift({
+            value: autocomp_strings['Your_recent_searches']
+          });
+          return response(result.players.concat(result.cache));
         });
       },
       defaultText: autocomp_strings['Players'],
       placeholderColor: '#9e9e9e',
       delimiter: '\n',
       width: '100%',
-      formatAutocomplete: aligulacAutocompleteTemplates,
+      formatAutocomplete: aligulac_autocomplete_templates,
       removeWithBackspace: true
     });
-    $("#id_players_addTag").keydown(function(event) {
-      if (event.which === 13 && $("#id_players_tag").val() === "") {
+    $('#id_players_addTag').keydown(function(event) {
+      if (event.which === 13 && $('#id_players_tag').val() === '') {
         return $(this).closest("form").submit();
       }
     });
-    return $("#id_players_tag").keydown(function(event) {
+    return $('#id_players_tag').keydown(function(event) {
       var id, input, taglist;
-      if (event.which === 8 && $(this).val() === "") {
+      if (event.which === 8 && $(this).val() === '') {
         event.preventDefault();
         id = $(this).attr('id').replace(/_tag$/, '');
         input = $("#" + id);

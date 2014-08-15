@@ -2,13 +2,13 @@
 # AUTOCOMPLETE CACHE FUNCTIONS
 # ======================================================================
 save_autocomplete_object_to_cache = (obj) ->
-    if autocomplete_ui_object.type != 'cache'
-        save_result_to_cache key: autocomplete_ui_object.key, html: aligulacAutocompleteTemplates(autocomplete_ui_object), type: autocomplete_ui_object.type
+    if autocomplete_ui_object.type isnt 'cache'
+        save_result_to_cache key: autocomplete_ui_object.key, html: aligulac_autocomplete_templates(autocomplete_ui_object), type: autocomplete_ui_object.type
     return
 save_result_to_cache = (obj) ->
     if obj and window.localStorage
         recent_result = load_recent_results_from_cache()
-        if (!recent_result) 
+        if (not recent_result) 
             recent_result = [];
         recent_result.shift
         recent_result.push html: obj.html, key: obj.key, type: 'cache', 'origin-type': "#{obj.type}s"
@@ -18,25 +18,22 @@ save_result_to_cache = (obj) ->
 load_recent_results_from_cache = (restrict_to) ->
     result = []
     if window.localStorage
-        result = JSON.parse localStorage.getItem 'aligulac.autocomplete.caching'
-        if not items
-            return []
-        if not restrict_to
-            return items
+        items = JSON.parse localStorage.getItem 'aligulac.autocomplete.caching'
+        return [] if not items
+        return items if not restrict_to
         for i in items
             for j in restrict_to
-                if i['origin-type'] == j
-                    result.push i;
+                result.push i if i['origin-type'] is j
     JSON.parse result
 # ======================================================================
 # AUTOCOMPLETE VARIA
 # ======================================================================
-aligulacAutocompleteTemplates = (obj) ->
-    if obj.type == '--'
+aligulac_autocomplete_templates = (obj) ->
+    if obj.type is '--'
         obj.key = '-'
         return "<a>BYE</a>"
 
-    if (obj.tag and obj.name and obj.fullname)
+    if (obj.tag? and obj.name? and obj.fullname?)
         return "<span class='autocomp-header'>#{autocomp_strings[obj.label]}</span>"
 
     switch obj.type
@@ -68,18 +65,16 @@ aligulacAutocompleteTemplates = (obj) ->
     "<a>#{ obj.value }</a>";
         
 getResults = (term, restrict_to) ->
-    if not restrict_to
+    if not restrict_to?
         restrict_to = ['players', 'teams', 'events']
-    else if typeof(restrict_to) == 'string'
+    else if typeof(restrict_to) is 'string'
         restrict_to = [restrict_to]
     deferred = $.Deferred()
     recent_results = load_recent_results_from_cache(restrict_to);
     if (((not term) or (term.length < 2)) and recent_results)
         return deferred.resolve cache: recent_results
-    $.get('/search/json/', { q: term, search_for: restrict_to.join ','
-    }).success (ajaxData) ->
-        if recent_results
-            ajaxData.cache = recent_results
+    $.get('/search/json/', q: term, search_for: restrict_to.join ',').success (ajaxData) ->
+        ajaxData.cache = recent_results if recent_results
         deferred.resolve ajaxData
     deferred
 
@@ -94,7 +89,7 @@ init_search_box = () ->
         source: (request, response) ->
             $.when(getResults request.term).then (result) ->
                 prepare_response = (list, type, label) ->
-                    if not list or list.length == 0
+                    if not list or list.length is 0
                         return []
                     for x in list
                         x.type = type
@@ -122,7 +117,7 @@ init_search_box = () ->
             $('.ui-menu').width 'auto'
         ).data('ui-autocomplete')._renderItem = (ul, item) ->
             $('<li></li>')
-                .append(aligulacAutocompleteTemplates item)
+                .append(aligulac_autocomplete_templates item)
                 .appendTo ul;
 
 # ======================================================================
@@ -134,8 +129,7 @@ init_event_boxes = () ->
         $('.event-ac').autocomplete(
             source: (request, response) ->
                 $.when(getResults(request.term, 'events')).then (result) ->
-
-                    if not result? or not result.events? or result.events.length == 0
+                    if not result? or not result.events? or result.events.length is 0
                         return []
 
                     for x in result.events
@@ -149,7 +143,7 @@ init_event_boxes = () ->
             open: ->
                 $('.ui-menu').width 'auto'
         ).data('ui-autocomplete')._renderItem = (ul, item) ->
-            $('<li></li>').append(aligulacAutocompleteTemplates item)
+            $('<li></li>').append(aligulac_autocomplete_templates item)
                           .appendTo ul;
 # ======================================================================
 # AUTOCOMPLETE PREDICTIONS
@@ -159,8 +153,7 @@ init_event_boxes = () ->
 add_extra_functions = () ->
     $.fn.getTags =  ->
         tagslist = $(this).val().split('\n')
-        if tagslist[0] == ''
-            tagslist = []
+        return [] if tagslist[0] is ''
         tagslist
 
 init_predictions = () ->
@@ -181,7 +174,7 @@ init_predictions = () ->
                 if result.players
                     for p in result.players
                         p.type = 'player'
-                    if global_player_autocomplete_allow_byes and (request.term == 'bye' or request.term == '--')
+                    if global_player_autocomplete_allow_byes and (request.term is 'bye' or request.term is '--')
                         result.players = [type: '--'].concat result.players
                 else
                     result.players = []
@@ -191,7 +184,7 @@ init_predictions = () ->
         placeholderColor: '#9e9e9e'
         delimiter: '\n'
         width: '100%'
-        formatAutocomplete: aligulacAutocompleteTemplates
+        formatAutocomplete: aligulac_autocomplete_templates
         removeWithBackspace: true
 
     # Hacking the enter key down to submit the form when the
@@ -199,10 +192,10 @@ init_predictions = () ->
     # ... and the backspace, which works in the non-minified version of
     # jquery.tagsInput. We should switch away from it. It's a piece of crap.
     $('#id_players_addTag').keydown (event) ->
-        if event.which == 13 and $('#id_players_tag').val() == ''
+        if event.which is 13 and $('#id_players_tag').val() is ''
             $(this).closest("form").submit()
     $('#id_players_tag').keydown (event) ->
-        if event.which == 8 and $(this).val() == ''
+        if event.which is 8 and $(this).val() is ''
             event.preventDefault()
             id = $(this).attr('id').replace(/_tag$/, '')
             input = $("##{ id }")

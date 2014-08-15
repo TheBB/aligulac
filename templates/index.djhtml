@@ -194,6 +194,7 @@ To use, you should define the following blocks:
        'Events': '{% trans "Events" %}',
        'hide': '{% trans "hide" %}',
        'show': '{% trans "show" %}',
+       'Your_recent_searches': '{% trans "Your recent searches" %}',
      };
      $(document).ready(function () { $(".datepicker").datepicker(); });
      $(document).ready(function () {

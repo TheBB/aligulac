@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 09:18+0000\n"
+"POT-Creation-Date: 2014-08-17 09:33+0000\n"
 "PO-Revision-Date: 2014-08-13 16:51+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5439,180 +5439,185 @@ msgstr "Don en Bitcoin (si vous insistez) à l'adresse : <br>%(btc)s"
 msgid "Generate short URL for this page"
 msgstr "Générer une URL raccourcie pour cette page"
 
-#: templates/index.djhtml:211
+#: templates/index.djhtml:197
+#, fuzzy
+msgid "Your recent searches"
+msgstr "Matchs récents"
+
+#: templates/index.djhtml:212
 msgid "Download PNG image"
 msgstr "Enregistrer au format PNG"
 
-#: templates/index.djhtml:212
+#: templates/index.djhtml:213
 msgid "Download JPEG image"
 msgstr "Enregistrer au format JPEG"
 
-#: templates/index.djhtml:213
+#: templates/index.djhtml:214
 msgid "Download PDF document"
 msgstr "Enregistrer au format PDF"
 
-#: templates/index.djhtml:214
+#: templates/index.djhtml:215
 msgid "Download SVG vector image"
 msgstr "Enregistrer au format SVG"
 
-#: templates/index.djhtml:215
+#: templates/index.djhtml:216
 msgid "Loading..."
 msgstr "CHargement en cours..."
 
-#: templates/index.djhtml:216
+#: templates/index.djhtml:217
 msgid "Print chart"
 msgstr "Imprimer le graphique"
 
-#: templates/index.djhtml:217
+#: templates/index.djhtml:218
 msgid "Reset zoom"
 msgstr "Réinitialiser le zoom"
 
-#: templates/index.djhtml:219
+#: templates/index.djhtml:220
 msgctxt "Big first letter"
 msgid "January"
 msgstr "Janvier"
 
-#: templates/index.djhtml:220
+#: templates/index.djhtml:221
 msgctxt "Big first letter"
 msgid "February"
 msgstr "Février"
 
-#: templates/index.djhtml:221
+#: templates/index.djhtml:222
 msgctxt "Big first letter"
 msgid "March"
 msgstr "Mars"
 
-#: templates/index.djhtml:222
+#: templates/index.djhtml:223
 msgctxt "Big first letter"
 msgid "April"
 msgstr "Avril"
 
-#: templates/index.djhtml:223 templates/index.djhtml.py:237
+#: templates/index.djhtml:224 templates/index.djhtml.py:238
 msgctxt "Big first letter"
 msgid "May"
 msgstr "Mai"
 
-#: templates/index.djhtml:224
+#: templates/index.djhtml:225
 msgctxt "Big first letter"
 msgid "June"
 msgstr "Juin"
 
-#: templates/index.djhtml:225
+#: templates/index.djhtml:226
 msgctxt "Big first letter"
 msgid "July"
 msgstr "Juillet"
 
-#: templates/index.djhtml:226
+#: templates/index.djhtml:227
 msgctxt "Big first letter"
 msgid "August"
 msgstr "Août"
 
-#: templates/index.djhtml:227
+#: templates/index.djhtml:228
 msgctxt "Big first letter"
 msgid "September"
 msgstr "Septembre"
 
-#: templates/index.djhtml:228
+#: templates/index.djhtml:229
 msgctxt "Big first letter"
 msgid "October"
 msgstr "Octobre"
 
-#: templates/index.djhtml:229
+#: templates/index.djhtml:230
 msgctxt "Big first letter"
 msgid "November"
 msgstr "Novembre"
 
-#: templates/index.djhtml:230
+#: templates/index.djhtml:231
 msgctxt "Big first letter"
 msgid "December"
 msgstr "Décembre"
 
-#: templates/index.djhtml:233
+#: templates/index.djhtml:234
 msgctxt "Big first letter"
 msgid "Jan"
 msgstr "Jan"
 
-#: templates/index.djhtml:234
+#: templates/index.djhtml:235
 msgctxt "Big first letter"
 msgid "Feb"
 msgstr "Fév"
 
-#: templates/index.djhtml:235
+#: templates/index.djhtml:236
 msgctxt "Big first letter"
 msgid "Mar"
 msgstr "Mar"
 
-#: templates/index.djhtml:236
+#: templates/index.djhtml:237
 msgctxt "Big first letter"
 msgid "Apr"
 msgstr "Avr"
 
-#: templates/index.djhtml:238
+#: templates/index.djhtml:239
 msgctxt "Big first letter"
 msgid "Jun"
 msgstr "Jun"
 
-#: templates/index.djhtml:239
+#: templates/index.djhtml:240
 msgctxt "Big first letter"
 msgid "Jul"
 msgstr "Jul"
 
-#: templates/index.djhtml:240
+#: templates/index.djhtml:241
 msgctxt "Big first letter"
 msgid "Aug"
 msgstr "Aoû"
 
-#: templates/index.djhtml:241
+#: templates/index.djhtml:242
 msgctxt "Big first letter"
 msgid "Sep"
 msgstr "Sep"
 
-#: templates/index.djhtml:242
+#: templates/index.djhtml:243
 msgctxt "Big first letter"
 msgid "Oct"
 msgstr "Oct"
 
-#: templates/index.djhtml:243
+#: templates/index.djhtml:244
 msgctxt "Big first letter"
 msgid "Nov"
 msgstr "Nov"
 
-#: templates/index.djhtml:244
+#: templates/index.djhtml:245
 msgctxt "Big first letter"
 msgid "Dec"
 msgstr "Dec"
 
-#: templates/index.djhtml:247
+#: templates/index.djhtml:248
 msgctxt "Big first letter"
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: templates/index.djhtml:248
+#: templates/index.djhtml:249
 msgctxt "Big first letter"
 msgid "Monday"
 msgstr "Lundi"
 
-#: templates/index.djhtml:249
+#: templates/index.djhtml:250
 msgctxt "Big first letter"
 msgid "Tuesday"
 msgstr "Mardi"
 
-#: templates/index.djhtml:250
+#: templates/index.djhtml:251
 msgctxt "Big first letter"
 msgid "Wednesday"
 msgstr "Mercredi"
 
-#: templates/index.djhtml:251
+#: templates/index.djhtml:252
 msgctxt "Big first letter"
 msgid "Thursday"
 msgstr "Jeudi"
 
-#: templates/index.djhtml:252
+#: templates/index.djhtml:253
 msgctxt "Big first letter"
 msgid "Friday"
 msgstr "Vendredi"
 
-#: templates/index.djhtml:253
+#: templates/index.djhtml:254
 msgctxt "Big first letter"
 msgid "Saturday"
 msgstr "Samedi"

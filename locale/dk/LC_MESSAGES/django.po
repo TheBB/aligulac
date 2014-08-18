@@ -233,7 +233,7 @@ msgstr "Opsummering"
 
 #: aligulac/aligulac/tools.py:314
 msgid "Rating history"
-msgstr "Rating historik"
+msgstr "Ratinghistorik"
 
 #: aligulac/aligulac/tools.py:316 templates/pred_match.djhtml:149
 msgid "Match history"

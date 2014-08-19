@@ -2106,7 +2106,7 @@ msgstr "MMA og DongRaeGu spillede en Ba5+"
 
 #: aligulac/ratings/misc_views.py:92
 msgid "Mvp won a premier event"
-msgstr "Mvp vandt en stor turnering"
+msgstr "Mvp vandt en premier turnering"
 
 #: aligulac/ratings/misc_views.py:102
 msgid "A Korean terran won against a Korean protoss in a Bo5+ (offline)"
@@ -2154,7 +2154,7 @@ msgstr "Spiller fra USA eller Canada med 1. præmiepulje >= $2000"
 
 #: aligulac/ratings/misc_views.py:161
 msgid "A foreigner won a premier event"
-msgstr "En foreigner vandt et stort event"
+msgstr "En foreigner vandt et premier event"
 
 #: aligulac/ratings/misc_views.py:162
 msgid ""

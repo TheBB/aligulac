@@ -46,8 +46,8 @@ if DEBUG:
         ('de', 'Deutsch'),
         ('fr', 'Français'),
         ('se', 'Svenska'),
-        ('pl', 'Polish'),
-        ('pt', 'Portuguese'),
+        ('pl', 'Polski'),
+        ('pt', 'Português'),
     ]
 
 # CUSTOM

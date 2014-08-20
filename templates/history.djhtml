@@ -6,10 +6,12 @@ This is the Hall of Fame template. It's called from ratings.views.records.
 
 {% load ratings_extras %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %}{% trans "History" %}{% endblock %}
 
 {% block postscript %}
+  {% localize off %}
   <script type="text/javascript">
    $(document).ready(function() { 
      var chart1 = new Highcharts.Chart({
@@ -128,6 +130,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
      });
    });
   </script>
+  {% endlocalize %}
 {% endblock %}
 
 {% block content %}

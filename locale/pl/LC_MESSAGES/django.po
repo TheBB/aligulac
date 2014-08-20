@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Polish Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-20 11:26+0000\n"
-"PO-Revision-Date: 2014-08-20 12:10-0000\n"
+"PO-Revision-Date: 2014-08-20 23:46-0000\n"
 "Last-Translator: Krzysztof Krasuski <zythus12@live.com>\n"
 "Language-Team: Zythus <zythus12@live.com>\n"
 "Language: pl\n"
@@ -92,7 +92,7 @@ msgstr "Rekordy"
 #. Translators: Hall of fame
 #: aligulac/aligulac/tools.py:227
 msgid "HoF"
-msgstr "SS"
+msgstr "Sala Sław"
 
 #: aligulac/aligulac/tools.py:228 aligulac/ratings/player_views.py:177
 #: aligulac/ratings/player_views.py:188 aligulac/ratings/player_views.py:194
@@ -152,7 +152,7 @@ msgstr "Przez wydarzenie"
 #: templates/results_search.djhtml.py:17 templates/results_search.djhtml:60
 #: templates/search.djhtml:11
 msgid "Search"
-msgstr "Wyszukiwanie"
+msgstr "Szukaj"
 
 #: aligulac/aligulac/tools.py:242
 msgid "Inference"
@@ -161,7 +161,7 @@ msgstr "Wnioskowanie"
 #: aligulac/aligulac/tools.py:245 templates/predict.djhtml:11
 #: templates/predict.djhtml.py:17
 msgid "Predict"
-msgstr "Przewidywanie"
+msgstr "Przewiduj"
 
 #: aligulac/aligulac/tools.py:248 aligulac/aligulac/tools.py:273
 msgid "Misc"
@@ -169,16 +169,16 @@ msgstr "Różne"
 
 #: aligulac/aligulac/tools.py:251 aligulac/ratings/misc_views.py:58
 msgid "Balance Report"
-msgstr "Raport z balansu"
+msgstr "Raport o balansie"
 
 #: aligulac/aligulac/tools.py:252
 msgid "Days Since…"
-msgstr "Dni od"
+msgstr "Dni od kiedy..."
 
 #: aligulac/aligulac/tools.py:253 aligulac/ratings/misc_views.py:66
 #: templates/compare.search.djhtml:25
 msgid "Compare"
-msgstr "Porównanie"
+msgstr "Porównaj"
 
 #: aligulac/aligulac/tools.py:256
 msgid "About"
@@ -709,7 +709,7 @@ msgstr "wynik all-kill (jeśli drużyny)"
 
 #: aligulac/aligulac/views.py:245
 msgid "proleague score (if team)"
-msgstr "wynik proligi (jeżeli drużyny)"
+msgstr "wynik proligi (jeżeli drużyna)"
 
 #: aligulac/aligulac/views.py:246
 msgid "date founded"
@@ -871,7 +871,7 @@ msgstr "Twój kod API to <code>%s</code>. Proszę, zachowaj go dla siebie."
 
 #: aligulac/aligulac/views.py:477
 msgid "The API documentation is only in English, sorry."
-msgstr "Dokumentacja API jest tylko w po angielsku, przepraszamy."
+msgstr "Dokumentacja API jest tylko po angielsku, przepraszamy."
 
 #: aligulac/aligulac/views.py:605
 msgid "The old password didn't match. Your password was not changed."
@@ -1882,7 +1882,7 @@ msgstr "Zambia"
 
 #: aligulac/faq/views.py:18
 msgid "The FAQ section is only in English, sorry."
-msgstr "Dział FAQ jest tylko po angielsku, sorry."
+msgstr "Dział FAQ jest tylko po angielsku, przepraszamy."
 
 #: aligulac/ratings/inference_views.py:56
 msgid "Best-of-N match"
@@ -1951,7 +1951,7 @@ msgstr "Best of"
 #: templates/index.djhtml:192 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
-msgstr "Gracze"
+msgstr "Graczy"
 
 #: aligulac/ratings/inference_views.py:125
 msgid "Must be a comma-separated list of positive odd integers (1,3,5,…)."
@@ -2100,7 +2100,7 @@ msgstr "Koreański terran wygrał z koreańskim protossem w Bo5+ (offline)"
 
 #: aligulac/ratings/misc_views.py:110
 msgid "A foreign terran won against a Korean protoss (offline)"
-msgstr "Foreign terran wygrał z koreańskim protossem (offline)"
+msgstr "Foreigner grający rasą Terran wygrał z koreańskim protossem (offline)"
 
 #: aligulac/ratings/misc_views.py:118
 msgid "A foreigner won in Proleague"
@@ -2166,7 +2166,7 @@ msgstr "Dodaj najwyżej 6 graczy."
 #: aligulac/ratings/misc_views.py:413 templates/eventres.djhtml:209
 #: templates/eventres.djhtml.py:226 templates/periods.djhtml:26
 msgid "New"
-msgstr "Nowy"
+msgstr "Nowych"
 
 #: aligulac/ratings/misc_views.py:414
 msgid "Edit"
@@ -2304,14 +2304,14 @@ msgstr "HotS"
 #. Translators: Event category
 #: aligulac/ratings/models.py:70
 msgid "Individual"
-msgstr "Indywidualny"
+msgstr "Indywidualnie"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:72 templates/earnings.djhtml:124
 #: templates/player.djhtml:660 templates/player.djhtml.py:748
 #: templates/ratinglist.djhtml:44
 msgid "Team"
-msgstr "Drużynowy"
+msgstr "Drużyna"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:74
@@ -3097,7 +3097,7 @@ msgstr "Wyniki dla"
 #: templates/periods.djhtml:27 templates/player.djhtml:102
 #: templates/player.djhtml.py:130 templates/pred_rrgroup.djhtml:74
 msgid "Games"
-msgstr "Gry"
+msgstr "Gier"
 
 #: aligulac/ratings/player_views.py:705
 msgid "Current form"
@@ -3152,12 +3152,12 @@ msgid ""
 "This is a <em>preview</em> of the next rating list. It will not be finalized "
 "until %s."
 msgstr ""
-"To jest <em>podgląd</em> kolejnej listy ocen. Nie zostanie sfinalizowana "
-"dopóki %s."
+"To jest <em>podgląd</em> kolejnej listy ocen. Nie zostanie sfinalizowana do "
+"%s."
 
 #: aligulac/ratings/ranking_views.py:67 templates/index.djhtml:137
 msgid "F jS"
-msgstr "F jS"
+msgstr "j. E"
 
 #: aligulac/ratings/results_views.py:94 aligulac/ratings/results_views.py:98
 #: aligulac/ratings/results_views.py:102 aligulac/ratings/results_views.py:714
@@ -3378,7 +3378,7 @@ msgid ""
 "tournaments are filed under GSL, all Code S under their respective seasons, "
 "all groups under their respective Code S event, and so on."
 msgstr ""
-"Zdarzenia są zorganizowane w stylu hierarchii. Na przykład wszystkie "
+"Zdarzenia są zorganizowane w stylu hierarchii. Na przykład, wszystkie "
 "turnieje GSL są wpisane pod GSL, wszystkie Code S pod odpowiednimi sezonami, "
 "wszystkie grupy pod odpowiednimi zdarzeniami Code S, itd."
 
@@ -4295,7 +4295,7 @@ msgid ""
 "<code>KR</code> or <code>KOR</code>, or the common English name of a country "
 "(the latter will only work if the country name does not contain spaces."
 msgstr ""
-"Dwuliterowe lub trzyliterowe %(a)s ISO 3166-1 alpha-2 kod kraju</a>, np., "
+"Dwuliterowe lub trzyliterowe %(a)sISO 3166-1 alpha-2 kod kraju</a>, np., "
 "<code>KR</code> albo </code>KOR</code>, albo popularna angielska nazwa kraju "
 "(to ostatnie będzie działać tylko, jeżeli nazwa kraju nie zawiera spacji)."
 
@@ -4509,7 +4509,7 @@ msgstr "Nowe hasło ponownie"
 
 #: templates/clocks.djhtml:10 templates/clocks.djhtml.py:18
 msgid "Days since..."
-msgstr "Dni od..."
+msgstr "Dni od kiedy..."
 
 #: templates/clocks.djhtml:36
 msgid "year"
@@ -4536,16 +4536,16 @@ msgid ""
 "<b>Major</b> is defined as a tournament where the first place prize money "
 "exceeds $2,000."
 msgstr ""
-"<b>Major</b> jest zdefiniowany jako turniej, gdzie nagroda za pierwsze "
-"miejsce przekracza $2,000."
+"<b>Major</b> jest turniejem, gdzie nagroda za pierwsze miejsce przekracza "
+"$2,000."
 
 #: templates/clocks.djhtml:89
 msgid ""
 "<b>Premier</b> is defined as an offline tournament where the first place "
 "prize money exceeds $10,000"
 msgstr ""
-"<b>Premier</b> jest zdefiniowany jako turniej offline, gdzie nagroda za "
-"pierwsze miejsce przekracza $10,000"
+"<b>Premier</b> jest turniejem offline, gdzie nagroda za pierwsze miejsce "
+"przekracza $10,000"
 
 #: templates/clocks.djhtml:90
 #, python-format
@@ -4576,7 +4576,7 @@ msgstr "Ostatnia aktualizacja ocen"
 
 #: templates/db.djhtml:29 templates/db.djhtml.py:149
 msgid "F jS, Y, H:i e"
-msgstr "F jS, Y, H:i e"
+msgstr "j. E, Y, H:i e"
 
 #: templates/db.djhtml:30
 msgid "log"
@@ -4618,16 +4618,15 @@ msgstr "%(nteams)s, z czego %(nactive)s aktywnych"
 
 #: templates/db.djhtml:117
 msgid "Top submitters"
-msgstr ""
+msgstr "Główni współautorzy"
 
 #: templates/db.djhtml:128
 msgid "more"
 msgstr "więcej"
 
 #: templates/db.djhtml:141
-#, fuzzy
 msgid "Database dump"
-msgstr "Baza danych"
+msgstr "Stos bazy danych"
 
 #: templates/db.djhtml:144
 #, python-format
@@ -4664,11 +4663,11 @@ msgstr ""
 
 #: templates/db.djhtml:165
 msgid "Definition"
-msgstr ""
+msgstr "Definicja"
 
 #: templates/db.djhtml:166
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: templates/earnings.djhtml:11 templates/earnings.djhtml.py:16
 msgid "Earnings ranking"
@@ -4684,7 +4683,7 @@ msgstr ""
 #: templates/earnings.djhtml:24
 #, python-format
 msgid "In total, %(origpp)s (%(totalpp)s) was awarded in prize money."
-msgstr "Podliczając, %(origpp)s (%(totalpp)s) zostało przyznane w pieniądzach."
+msgstr "Podliczając, gracze zarobili %(origpp)s (%(totalpp)s) w nagrodach."
 
 #: templates/earnings.djhtml:26
 #, python-format
@@ -4718,7 +4717,7 @@ msgstr "Waluta:"
 #: templates/period.djhtml:408 templates/player_earnings.djhtml:60
 #: templates/player_results.djhtml:43
 msgid "Filter"
-msgstr "Filtruj:"
+msgstr "Filtruj"
 
 #: templates/earnings.djhtml:120 templates/hof.djhtml:33
 #: templates/pred_4pswiss.djhtml:22 templates/pred_rrgroup.djhtml:23
@@ -5205,19 +5204,19 @@ msgstr "Oznaczone zdarzenia nie mają nagród"
 
 #: templates/faq.djhtml:10 templates/faq.djhtml.py:15
 msgid "Frequently Asked Questions"
-msgstr "Często Zadawane Pytania"
+msgstr "Frequently Asked Questions"
 
 #: templates/forms.djhtml:150
 msgid "After date"
-msgstr "Po dacie"
+msgstr "Początek"
 
 #: templates/forms.djhtml:151
 msgid "to"
-msgstr "doto"
+msgstr "do"
 
 #: templates/forms.djhtml:155
 msgid "Before date"
-msgstr "Przed datą"
+msgstr "Koniec"
 
 #: templates/historical.djhtml:10
 #, python-format
@@ -5289,8 +5288,8 @@ msgid ""
 "To avoid rating artifacts, these records are only counted after 25 periods "
 "(i.e. list 25, on February 9th, 2011)."
 msgstr ""
-"Aby zapobiec artefaktom ocen, te zapisy są liczone dopiero po 25 okresach "
-"(tj. liście 25, z 9 lutego 2011)."
+"Aby zapobiec podliczaniu starych ocen, te zapisy są liczone dopiero po 25 "
+"okresach (tj. liście numer 25, z 9 lutego 2011)."
 
 #. Translators: Period-points, see explanation on HoF page.
 #: templates/hof.djhtml:38
@@ -5299,7 +5298,7 @@ msgstr "PP"
 
 #: templates/hof.djhtml:39 templates/period.djhtml:321
 msgid "Start"
-msgstr "Start"
+msgstr "Początek"
 
 #: templates/hof.djhtml:40
 msgid "Length"
@@ -5321,7 +5320,7 @@ msgstr "Długość"
 #: templates/team.djhtml:107 templates/team.djhtml.py:249
 #: templates/team.djhtml:252
 msgid "F jS, Y"
-msgstr "F jS, Y"
+msgstr "j. E, Y"
 
 #: templates/hof.djhtml:65
 msgid "weeks"
@@ -5347,7 +5346,7 @@ msgstr "Znajdź gracza, drużynę lub zdarzenie"
 
 #: templates/index.djhtml:127
 msgid "Current top 10"
-msgstr "Obecne top 10"
+msgstr "Aktualne top 10"
 
 #: templates/index.djhtml:137
 #, python-format
@@ -5381,8 +5380,8 @@ msgid ""
 "Icons by Mark James. Race icons by %(a1)sLiquipedia</a>. Charts by "
 "%(a3)sHighcharts</a>."
 msgstr ""
-"Ikony przez Mark James. Ikony ras przez %(a1)sLiquipedię</a>. Wykresy przez "
-"%(a3)sHighcharts</a>."
+"Ikony stworzone przez Marka Jamesa. Ikony ras dzięki %(a1)sLiquipedii</a>. "
+"Wykresy dzięki %(a3)sHighcharts</a>."
 
 #: templates/index.djhtml:171
 #, python-format
@@ -5394,9 +5393,8 @@ msgid "Generate short URL for this page"
 msgstr "Generuj krótki URL tej strony"
 
 #: templates/index.djhtml:197
-#, fuzzy
 msgid "Your recent searches"
-msgstr "Ostatnie mecze"
+msgstr "Twoje ostatnie wyszukiwania"
 
 #: templates/index.djhtml:212
 msgid "Download PNG image"
@@ -5623,8 +5621,8 @@ msgid ""
 "have a submitter account, but still want to contribute, please let me know "
 "at: %(email)s."
 msgstr ""
-"Żeby dodać wyniki, proszę zaloguj się kontem submittera. Jeżeli nie masz "
-"konta submittera, a mimo tego chcesz pomóc, daj mi znać: %(email)s."
+"Żeby dodać wyniki, proszę zaloguj się kontem współautora. Jeżeli nie masz "
+"konta współautora, a mimo tego chcesz pomóc, daj mi znać: %(email)s."
 
 #: templates/login.djhtml:33 templates/login.djhtml.py:36
 msgid "Username"
@@ -5737,12 +5735,11 @@ msgstr "Prawdopodobne trafienia"
 #: templates/message.notuniqueplayer.djhtml:9
 #, python-format
 msgid "and %(extra)s more"
-msgstr ""
+msgstr "i %(extra)s dodatkowych"
 
 #: templates/message.notuniqueplayer.djhtml:17
-#, fuzzy
 msgid "and"
-msgstr "2."
+msgstr "i"
 
 #: templates/misc.djhtml:6 templates/misc.djhtml.py:11
 msgid "Miscellaneous statistics"
@@ -5756,23 +5753,23 @@ msgstr "Lista %(n)s"
 
 #: templates/period.djhtml:28
 msgid "Best"
-msgstr "Najlepszy"
+msgstr "Najlepsza"
 
 #: templates/period.djhtml:29
 msgid "Most specialized"
-msgstr "Najbardziej wyspecjalizowany"
+msgstr "Specjalizacja"
 
 #: templates/period.djhtml:31
 msgid "Up/Down"
-msgstr "Góra/Dół"
+msgstr "Wzrost/Spadek"
 
 #: templates/period.djhtml:281
 msgid "Winners"
-msgstr "Wygrani"
+msgstr "Wzrost"
 
 #: templates/period.djhtml:283
 msgid "Losers"
-msgstr "Przegrani"
+msgstr "Spadek"
 
 #: templates/period.djhtml:325
 msgid "End"
@@ -5787,8 +5784,8 @@ msgstr "Aktywni gracze"
 msgid "%(cnt)s new"
 msgid_plural "%(cnt)s new"
 msgstr[0] "%(cnt)s nowy"
-msgstr[1] "%(cnt)s nowe"
-msgstr[2] "%(cnt)s nowe"
+msgstr[1] "%(cnt)s nowych"
+msgstr[2] "%(cnt)s nowych"
 
 #: templates/period.djhtml:336
 msgid "Leading race"
@@ -5820,11 +5817,11 @@ msgstr "następny okres"
 
 #: templates/periods.djhtml:10 templates/periods.djhtml.py:15
 msgid "Historical overview"
-msgstr "Przegląd historyczny"
+msgstr "Przegląd historii"
 
 #: templates/periods.djhtml:20
 msgid "List date"
-msgstr "Wypisz datę"
+msgstr "Data listy"
 
 #. Translators: Leading race
 #: templates/periods.djhtml:22
@@ -5838,7 +5835,7 @@ msgstr "Lamiąca"
 
 #: templates/periods.djhtml:25
 msgid "Active"
-msgstr "Aktywny"
+msgstr "Aktywnych"
 
 #: templates/player.djhtml:20
 msgid "Modify player"
@@ -5976,12 +5973,12 @@ msgstr "Historia drużyn"
 #: templates/player.djhtml:749 templates/player_transfers.djhtml:22
 #: templates/team.djhtml:231
 msgid "Joined"
-msgstr "Dołączył"
+msgstr "Do"
 
 #: templates/player.djhtml:750 templates/player_transfers.djhtml:20
 #: templates/team.djhtml:232
 msgid "Left"
-msgstr "Odszedł"
+msgstr "Z"
 
 #: templates/player.djhtml:761
 msgid "yes"
@@ -6003,9 +6000,9 @@ msgid "In total, %(tag)s has earned $%(money)s."
 msgstr "W sumie, %(tag)s zarobił $%(money)s."
 
 #: templates/player_earnings.djhtml:36
-#, fuzzy, python-format
+#, python-format
 msgid "In %(year)s, %(tag)s earned $%(money)s."
-msgstr "W sumie, %(tag)s zarobił $%(money)s."
+msgstr "W %(year)s lat, %(tag)s zarobił $%(money)s."
 
 #: templates/player_earnings.djhtml:38
 msgid "Broken down by currency, that is..."
@@ -6211,8 +6208,7 @@ msgstr "Pokaż mi przyszłość!"
 
 #: templates/predict.djhtml:43
 msgid "For <b>single elimination brackets</b> the following is possible:"
-msgstr ""
-"Dla<b>drabinek pojedynczej eliminacji</b> może się wydarzyć co następuje:"
+msgstr "Dla <b>drabinek pojedynczej eliminacji</b> można użyć:"
 
 #: templates/predict.djhtml:46
 msgid ""
@@ -6220,9 +6216,10 @@ msgid ""
 "best-of-5 for the first two rounds, and best-of-7 for the final. You can "
 "still enter a single number to apply to all rounds."
 msgstr ""
-"Użyj innego formatu meczu dla każdej rundy. Na przykład, \"5,5,7\" oznacza "
-"best-if-5 dla pierwszych dwóch rund i best-of-7 dla meczu finałowego. Wciąż "
-"możesz dodać pojedynczą liczbę, aby zastosować ją do wszystkich rund."
+"Możesz użyć innego formatu meczu dla każdej rundy. Na przykład, \"5,5,7\" "
+"oznacza best-of-5 dla pierwszych dwóch rund i best-of-7 dla meczu "
+"finałowego. Możesz dodać pojedynczą liczbę, aby zastosować ją do wszystkich "
+"rund."
 
 #: templates/predict.djhtml:47
 msgid "To indicate a BYE, enter \"bye\" or two hyphens."
@@ -6235,8 +6232,8 @@ msgid ""
 "each, but it doesn't have to be odd."
 msgstr ""
 "Dla <b>meczy proligi</b> najpierw wpisz wszystkich graczy z jednej drużyny, "
-"a następnie wszystkich graczy z drugiej drużyny. Musi być ich równa liczba, "
-"ale nie musi być nieparzysta."
+"a następnie wszystkich graczy z drugiej drużyny. Musi być ich taka sama "
+"liczba."
 
 #. Translators: Rating adjustments for [tag] on list number [listn].
 #: templates/ratingdetails.djhtml:11
@@ -6311,22 +6308,22 @@ msgstr "Nie znaleziono wpisów."
 #: templates/records.djhtml:12
 #, python-format
 msgid "Records for %(rc)s"
-msgstr "Recordy dla %(rc)s"
+msgstr "Rekordy dla %(rc)s"
 
 #: templates/records.djhtml:23
 #, python-format
 msgid "Records for %(r)s"
-msgstr "Recordy dla %(r)s"
+msgstr "Rekordy dla %(r)s"
 
 #: templates/records.djhtml:28
 msgid "To avoid rating artifacts, the earliest periods are not counted."
 msgstr ""
-"Aby uniemożliwić ocenę starych gier, najwcześniejsze okresy nie są wliczane."
+"Aby uniemożliwić ocenę starych gier najwcześniejsze okresy nie są wliczane."
 
 #: templates/records.djhtml:32
 #, python-format
 msgid "Highest ratings ever achieved by %(rc)s."
-msgstr "Najwyższe oceny kiedykolwiek osiągnięte przez %(rc)s."
+msgstr "Najwyższe oceny kiedykolwiek osiągnięte przez rasę %(rc)s."
 
 #: templates/records.djhtml:34
 msgid "Highest ratings ever achieved"
@@ -6428,10 +6425,10 @@ msgid ""
 "likely correlated to) actual game balance throughout the whole player "
 "population."
 msgstr ""
-"Pamiętaj, że daje to informacje dotyczące <em>metagame-u</em> balansie "
-"blisko <em>czołówki w skillu na ladderze</em>, i nie powinno być mylone z "
-"(mimo, że najprawdopodobniej jest powiązane) właściwego balansu gry na całej "
-"populacji graczy."
+"Pamiętaj, że daje to informacje dotyczące <em>metagame-u</em> blisko "
+"<em>topki w skillu na ladderze</em>, i nie powinno być mylone z (mimo, że "
+"najprawdopodobniej jest powiązane) właściwym balansem gry dla wszystkich "
+"graczy."
 
 #: templates/reports_balance.djhtml:201
 msgid ""
@@ -6439,7 +6436,7 @@ msgid ""
 "Protoss vs. Terran graph shoots up, that means Protoss is doing well and "
 "Terran poorly."
 msgstr ""
-"Statystyka jest pokazane w zgodzie z rasą wypisaną jako pierwsza. Jeżeli "
+"Statystyka jest pokazana w zgodzie z rasą wypisaną jako pierwsza. Jeżeli "
 "wyskoczy wykres Protoss vs. Terran, to oznacza, że Protoss daje sobie radę, "
 "a Terran niezbyt."
 
@@ -6457,14 +6454,14 @@ msgid ""
 "200 points better than expected."
 msgstr ""
 "Wykres różnicy wydajności pokazuje <em>przybliżoną</em> różnicę pomiędzy "
-"<em>aktualną wydajnością</em> potwierdzoną przez wyniki, a <em>przewidywaną "
-"wydajnością</em> przez ocenę. Na przykład, jeżeli, uśredniając do miesiąca, "
+"<em>aktualną wydajnością</em> potwierdzoną przez wyniki, a <em>wydajnością "
+"przewidywaną</em> przez ocenę. Na przykład, jeżeli, uśredniając do miesiąca, "
 "wszyscy Terranie mieli średnią różnicę w ocenie -100 (co trzeba uściślić, że "
 "ich średnia ocena była równa 100 mniej, niż ich przeciwników), ale grali "
 "tak, jakby ich średnia różnica w ocenie wynosiła +100 (około 54.5%% w "
-"statystykach), wtedy to się liczy do różnicy w wydajności jako <strong>+200</"
+"statystykach), wtedy liczy się to do różnicy w wydajności jako <strong>+200</"
 "strong>, co trzeba interpretować jako to, że Terranie ogólnie grali o 200 "
-"punktów niż zakładano."
+"punktów lepiej, niż zakładano."
 
 #: templates/reports_balance.djhtml:215
 msgid ""
@@ -6474,10 +6471,10 @@ msgid ""
 "of the players, this chart will tend toward equilibrium, even if balance "
 "never changes."
 msgstr ""
-"Ten wykres może uniknąć niektórych problemów, które mogą być wprowadzone "
-"wskutek świetnych pass od jednego lub dwóch świetnych graczy. Mimo tego, gdy "
-"oceny dogonią wydajność graczy, ten wykres będzie powracał do równowagi, "
-"nawet wtedy, gdy balans się nie zmieni."
+"Ten wykres może uniknąć niektórych problemów tego systemu, które mogą być "
+"wprowadzone wskutek świetnych pass od jednego lub dwóch świetnych graczy. "
+"Mimo tego, gdy oceny dogonią wydajność graczy, ten wykres będzie powracał do "
+"równowagi, nawet wtedy, gdy balans się nie zmieni."
 
 #: templates/results.djhtml:12 templates/results.djhtml.py:19
 #, python-format
@@ -6677,7 +6674,7 @@ msgstr "Rozwiązane"
 
 #: templates/team.djhtml:121 templates/teams.djhtml:25
 msgid "Top 5 rating"
-msgstr "Top 5 wg. oceny"
+msgstr "Ocena Top 5"
 
 #. Translators: #[rank] among [name]
 #: templates/team.djhtml:133

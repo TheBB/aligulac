@@ -6,11 +6,13 @@ This is the template for the main player page, called from ratings.views.player.
 
 {% load ratings_extras %}
 {% load i18n %}
+{% load l10n %}
 
 {% block title %}{% trans "Balance report" %}{% endblock %}
 
 {% block postscript %}
   <script type="text/javascript">
+   {% localize off %}
    $(document).ready(function() { 
      var chart1 = new Highcharts.Chart({
        chart: {
@@ -183,6 +185,7 @@ This is the template for the main player page, called from ratings.views.player.
      });
    });
   </script>
+  {% endlocalize %}
 {% endblock %}
 
 {% block content %}

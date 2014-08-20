@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-19 22:34+0200\n"
+"POT-Creation-Date: 2014-08-20 11:39+0000\n"
 "PO-Revision-Date: 2014-08-19 23:10+0100\n"
 "Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
 "Language-Team: Aligulac <evfonn@gmail.com>\n"
@@ -55,16 +55,16 @@ msgid "This field is required."
 msgstr "Dies ist ein Pflichtfeld"
 
 #: aligulac/aligulac/tools.py:207 aligulac/aligulac/tools.py:218
-#: templates/history.djhtml:55
+#: templates/history.djhtml:57
 msgid "Ranking"
 msgstr "Rangliste"
 
-#: aligulac/aligulac/tools.py:210 templates/player.djhtml:751
+#: aligulac/aligulac/tools.py:210 templates/player.djhtml:754
 msgid "Current"
 msgstr "Aktuell"
 
 #: aligulac/aligulac/tools.py:211 aligulac/aligulac/tools.py:225
-#: templates/history.djhtml:10 templates/history.djhtml.py:136
+#: templates/history.djhtml:11 templates/history.djhtml.py:139
 msgid "History"
 msgstr "Vergangenheit"
 
@@ -97,12 +97,12 @@ msgstr "Ruhmeshalle"
 #: aligulac/ratings/player_views.py:188 aligulac/ratings/player_views.py:194
 #: aligulac/ratings/results_views.py:547 aligulac/ratings/results_views.py:562
 #: templates/earnings.djhtml:45 templates/earnings.djhtml.py:57
-#: templates/earnings.djhtml:75 templates/history.djhtml:152
-#: templates/history.djhtml.py:178 templates/period.djhtml:41
+#: templates/earnings.djhtml:75 templates/history.djhtml:155
+#: templates/history.djhtml.py:181 templates/period.djhtml:41
 #: templates/period.djhtml.py:48 templates/period.djhtml:132
 #: templates/period.djhtml.py:382 templates/period.djhtml:397
-#: templates/player.djhtml:266 templates/player.djhtml.py:353
-#: templates/player.djhtml:440 templates/player_earnings.djhtml:53
+#: templates/player.djhtml:269 templates/player.djhtml.py:356
+#: templates/player.djhtml:443 templates/player_earnings.djhtml:53
 #: templates/player_results.djhtml:64 templates/player_results.djhtml:118
 #: templates/ratingdetails.djhtml:208 templates/records.djhtml:38
 msgid "All"
@@ -111,27 +111,27 @@ msgstr "Alle"
 #: aligulac/aligulac/tools.py:229 aligulac/ratings/models.py:91
 #: aligulac/ratings/player_views.py:178 aligulac/ratings/player_views.py:674
 #: aligulac/ratings/templatetags/ratings_extras.py:137
-#: templates/history.djhtml:155 templates/period.djhtml:42
+#: templates/history.djhtml:158 templates/period.djhtml:42
 #: templates/period.djhtml.py:133 templates/period.djhtml:383
-#: templates/reports_balance.djhtml:159
+#: templates/reports_balance.djhtml:161
 msgid "Protoss"
 msgstr "Protoss"
 
 #: aligulac/aligulac/tools.py:230 aligulac/ratings/models.py:92
 #: aligulac/ratings/player_views.py:179 aligulac/ratings/player_views.py:675
 #: aligulac/ratings/templatetags/ratings_extras.py:138
-#: templates/history.djhtml:158 templates/period.djhtml:43
+#: templates/history.djhtml:161 templates/period.djhtml:43
 #: templates/period.djhtml.py:134 templates/period.djhtml:384
-#: templates/reports_balance.djhtml:167
+#: templates/reports_balance.djhtml:169
 msgid "Terran"
 msgstr "Terraner"
 
 #: aligulac/aligulac/tools.py:231 aligulac/ratings/models.py:93
 #: aligulac/ratings/player_views.py:180 aligulac/ratings/player_views.py:676
 #: aligulac/ratings/templatetags/ratings_extras.py:139
-#: templates/history.djhtml:161 templates/period.djhtml:44
+#: templates/history.djhtml:164 templates/period.djhtml:44
 #: templates/period.djhtml.py:135 templates/period.djhtml:385
-#: templates/reports_balance.djhtml:175
+#: templates/reports_balance.djhtml:177
 msgid "Zerg"
 msgstr "Zerg"
 
@@ -269,7 +269,7 @@ msgstr "Bürgerlicher Name"
 msgid "birthday"
 msgstr "Geburtstag"
 
-#: aligulac/aligulac/views.py:67 templates/player.djhtml:690
+#: aligulac/aligulac/views.py:67 templates/player.djhtml:693
 msgid "MC number"
 msgstr "MC-Nummer"
 
@@ -1397,7 +1397,7 @@ msgstr "Nordkorea"
 
 #: aligulac/countries/data.py:630 aligulac/ratings/player_views.py:188
 #: templates/add.djhtml:155 templates/earnings.djhtml:59
-#: templates/history.djhtml:180 templates/period.djhtml:398
+#: templates/history.djhtml:183 templates/period.djhtml:398
 msgid "South Korea"
 msgstr "Südkorea"
 
@@ -2210,7 +2210,7 @@ msgstr "Bearbeite Info"
 
 #: aligulac/ratings/misc_views.py:418 aligulac/ratings/models.py:1294
 #: templates/historical.djhtml:36 templates/matchlist.djhtml:43
-#: templates/matchlist.djhtml.py:47 templates/player.djhtml:97
+#: templates/matchlist.djhtml.py:47 templates/player.djhtml:99
 #: templates/ratinglist.djhtml:50 templates/ratinglist.djhtml.py:53
 #: templates/records.djhtml:38
 msgid "Rating"
@@ -2291,14 +2291,14 @@ msgid "Total"
 msgstr ""
 
 #. Translators: General rating
-#: aligulac/ratings/misc_views.py:509 templates/player.djhtml:179
+#: aligulac/ratings/misc_views.py:509 templates/player.djhtml:181
 msgid "General"
 msgstr "Allgemein"
 
 #: aligulac/ratings/misc_views.py:510 templates/historical.djhtml:38
 #: templates/period.djhtml:67 templates/period.djhtml.py:139
-#: templates/player.djhtml:286 templates/player.djhtml.py:373
-#: templates/player.djhtml:465 templates/player_results.djhtml:76
+#: templates/player.djhtml:289 templates/player.djhtml.py:376
+#: templates/player.djhtml:468 templates/player_results.djhtml:76
 #: templates/player_results.djhtml:130 templates/ratingdetails.djhtml:88
 #: templates/ratinglist.djhtml:64 templates/ratinglist.djhtml.py:67
 msgid "vP"
@@ -2306,8 +2306,8 @@ msgstr "vP"
 
 #: aligulac/ratings/misc_views.py:511 templates/historical.djhtml:40
 #: templates/period.djhtml:86 templates/period.djhtml.py:158
-#: templates/player.djhtml:306 templates/player.djhtml.py:393
-#: templates/player.djhtml:490 templates/player_results.djhtml:88
+#: templates/player.djhtml:309 templates/player.djhtml.py:396
+#: templates/player.djhtml:493 templates/player_results.djhtml:88
 #: templates/player_results.djhtml:142 templates/ratingdetails.djhtml:128
 #: templates/ratinglist.djhtml:78 templates/ratinglist.djhtml.py:81
 msgid "vT"
@@ -2315,8 +2315,8 @@ msgstr "vT"
 
 #: aligulac/ratings/misc_views.py:512 templates/historical.djhtml:42
 #: templates/period.djhtml:105 templates/period.djhtml.py:177
-#: templates/player.djhtml:327 templates/player.djhtml.py:414
-#: templates/player.djhtml:515 templates/player_results.djhtml:100
+#: templates/player.djhtml:330 templates/player.djhtml.py:417
+#: templates/player.djhtml:518 templates/player_results.djhtml:100
 #: templates/player_results.djhtml:154 templates/ratingdetails.djhtml:168
 #: templates/ratinglist.djhtml:92 templates/ratinglist.djhtml.py:95
 msgid "vZ"
@@ -2354,7 +2354,7 @@ msgstr "Einzel"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:72 templates/earnings.djhtml:124
-#: templates/player.djhtml:660 templates/player.djhtml.py:748
+#: templates/player.djhtml:663 templates/player.djhtml.py:751
 #: templates/ratinglist.djhtml:44
 msgid "Team"
 msgstr "Mannschaft"
@@ -2889,7 +2889,7 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:99 templates/player.djhtml:598
+#: aligulac/ratings/player_views.py:99 templates/player.djhtml:601
 msgid "Race"
 msgstr "Rasse"
 
@@ -2911,7 +2911,7 @@ msgstr "Rumänien"
 msgid "AKAs"
 msgstr "Aliase"
 
-#: aligulac/ratings/player_views.py:103 templates/player.djhtml:654
+#: aligulac/ratings/player_views.py:103 templates/player.djhtml:657
 msgid "Birthday"
 msgstr "Geburtstag"
 
@@ -2935,7 +2935,7 @@ msgid "SC2Earnings.com ID"
 msgstr "SC2Earnings.com ID"
 
 #: aligulac/ratings/player_views.py:111 aligulac/ratings/player_views.py:190
-#: templates/player.djhtml:602
+#: templates/player.djhtml:605
 msgid "Country"
 msgstr "Land"
 
@@ -2995,17 +2995,17 @@ msgid "Before"
 msgstr "Davor"
 
 #: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:679
-#: templates/history.djhtml:164 templates/period.djhtml:386
+#: templates/history.djhtml:167 templates/period.djhtml:386
 msgid "No Protoss"
 msgstr "Kein Protoss"
 
 #: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:678
-#: templates/history.djhtml:167 templates/period.djhtml:387
+#: templates/history.djhtml:170 templates/period.djhtml:387
 msgid "No Terran"
 msgstr "Kein Terraner"
 
 #: aligulac/ratings/player_views.py:183 aligulac/ratings/player_views.py:677
-#: templates/history.djhtml:170 templates/period.djhtml:388
+#: templates/history.djhtml:173 templates/period.djhtml:388
 msgid "No Zerg"
 msgstr "Kein Zerg"
 
@@ -3014,7 +3014,7 @@ msgid "Opponent race"
 msgstr "Gegnerische Rasse"
 
 #: aligulac/ratings/player_views.py:188 templates/earnings.djhtml:61
-#: templates/history.djhtml:182 templates/period.djhtml:400
+#: templates/history.djhtml:185 templates/period.djhtml:400
 msgid "Non-Koreans"
 msgstr "Nicht-Koreaner"
 
@@ -3098,7 +3098,7 @@ msgstr ""
 msgid "foreigners"
 msgstr ""
 
-#: aligulac/ratings/player_views.py:691 templates/player.djhtml:685
+#: aligulac/ratings/player_views.py:691 templates/player.djhtml:688
 msgid "offline"
 msgstr "Offline"
 
@@ -3116,8 +3116,8 @@ msgstr "Ergebnisse für"
 
 #: aligulac/ratings/player_views.py:703 templates/eventres.djhtml:499
 #: templates/historical.djhtml:45 templates/period.djhtml:350
-#: templates/periods.djhtml:27 templates/player.djhtml:102
-#: templates/player.djhtml.py:130 templates/pred_rrgroup.djhtml:74
+#: templates/periods.djhtml:27 templates/player.djhtml:104
+#: templates/player.djhtml.py:132 templates/pred_rrgroup.djhtml:74
 msgid "Games"
 msgstr "Spiele"
 
@@ -4510,8 +4510,8 @@ msgstr ""
 
 #: templates/db.djhtml:38 templates/db.djhtml.py:46 templates/db.djhtml:55
 #: templates/db.djhtml.py:64 templates/db.djhtml:73
-#: templates/reports_balance.djhtml:78 templates/reports_balance.djhtml:86
-#: templates/reports_balance.djhtml:94
+#: templates/reports_balance.djhtml:80 templates/reports_balance.djhtml:88
+#: templates/reports_balance.djhtml:96
 msgid "games"
 msgstr ""
 
@@ -4623,7 +4623,7 @@ msgstr "Währung:"
 
 #. Translators: The verb "to filter".
 #. Translators: The verb "to filter".
-#: templates/earnings.djhtml:85 templates/history.djhtml:192
+#: templates/earnings.djhtml:85 templates/history.djhtml:195
 #: templates/period.djhtml:408 templates/player_earnings.djhtml:60
 #: templates/player_results.djhtml:43
 msgid "Filter"
@@ -4637,7 +4637,7 @@ msgstr ""
 msgid "#"
 msgstr "#"
 
-#: templates/earnings.djhtml:125 templates/player.djhtml:678
+#: templates/earnings.djhtml:125 templates/player.djhtml:681
 #: templates/team.djhtml:142
 msgid "Total earnings"
 msgstr ""
@@ -4855,19 +4855,19 @@ msgstr ""
 
 #: templates/eventres.djhtml:347 templates/eventres.djhtml.py:507
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
-#: templates/reports_balance.djhtml:75 templates/reports_balance.djhtml:78
+#: templates/reports_balance.djhtml:77 templates/reports_balance.djhtml:80
 msgid "PvT"
 msgstr ""
 
 #: templates/eventres.djhtml:366 templates/eventres.djhtml.py:513
 #: templates/period.djhtml:219 templates/period.djhtml.py:358
-#: templates/reports_balance.djhtml:83 templates/reports_balance.djhtml:86
+#: templates/reports_balance.djhtml:85 templates/reports_balance.djhtml:88
 msgid "PvZ"
 msgstr ""
 
 #: templates/eventres.djhtml:385 templates/eventres.djhtml.py:519
 #: templates/period.djhtml:236 templates/period.djhtml.py:362
-#: templates/reports_balance.djhtml:91 templates/reports_balance.djhtml:94
+#: templates/reports_balance.djhtml:93 templates/reports_balance.djhtml:96
 msgid "TvZ"
 msgstr ""
 
@@ -4910,7 +4910,7 @@ msgstr ""
 msgid "ZvZ"
 msgstr ""
 
-#: templates/eventres.djhtml:534 templates/player.djhtml:696
+#: templates/eventres.djhtml:534 templates/player.djhtml:699
 #: templates/team.djhtml:154
 msgid "External"
 msgstr ""
@@ -4929,16 +4929,16 @@ msgstr ""
 #. Translators: LP = Liquipedia
 #: templates/eventres.djhtml:560 templates/events_open.djhtml:47
 #: templates/events_open.djhtml.py:93 templates/events_open.djhtml:140
-#: templates/player.djhtml:709 templates/team.djhtml:160
+#: templates/player.djhtml:712 templates/team.djhtml:160
 msgid "LP"
 msgstr ""
 
-#: templates/eventres.djhtml:568 templates/player.djhtml:717
+#: templates/eventres.djhtml:568 templates/player.djhtml:720
 #: templates/team.djhtml:168
 msgid "Edit info"
 msgstr "Bearbeite Info"
 
-#: templates/eventres.djhtml:569 templates/player.djhtml:718
+#: templates/eventres.djhtml:569 templates/player.djhtml:721
 #: templates/team.djhtml:169
 msgid "Admin interface"
 msgstr "Administrationsoberfläche"
@@ -4952,7 +4952,7 @@ msgid "Prize pool"
 msgstr ""
 
 #. Translators: Stories are the dots on a player's rating chart.
-#: templates/eventres.djhtml:576 templates/player.djhtml:192
+#: templates/eventres.djhtml:576 templates/player.djhtml:194
 msgid "Stories"
 msgstr "Ereignisse"
 
@@ -5079,20 +5079,20 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: templates/history.djhtml:31 templates/player.djhtml:73
-#: templates/reports_balance.djhtml:31 templates/reports_balance.djhtml:117
+#: templates/history.djhtml:33 templates/player.djhtml:75
+#: templates/reports_balance.djhtml:33 templates/reports_balance.djhtml:119
 msgid "Click and drag to zoom"
 msgstr ""
 
-#: templates/history.djhtml:139
+#: templates/history.djhtml:142
 msgid "Number of players:"
 msgstr ""
 
-#: templates/history.djhtml:149
+#: templates/history.djhtml:152
 msgid "Races:"
 msgstr ""
 
-#: templates/history.djhtml:175 templates/period.djhtml:395
+#: templates/history.djhtml:178 templates/period.djhtml:395
 msgid "Nationalities:"
 msgstr ""
 
@@ -5144,12 +5144,12 @@ msgstr ""
 
 #: templates/hof.djhtml:61 templates/period.djhtml:18
 #: templates/period.djhtml.py:322 templates/period.djhtml:326
-#: templates/periods.djhtml:32 templates/player.djhtml:202
-#: templates/player.djhtml.py:219 templates/player.djhtml:453
-#: templates/player.djhtml.py:478 templates/player.djhtml:503
-#: templates/player.djhtml.py:528 templates/player.djhtml:655
-#: templates/player.djhtml.py:667 templates/player.djhtml:673
-#: templates/player.djhtml.py:757 templates/player.djhtml:758
+#: templates/periods.djhtml:32 templates/player.djhtml:204
+#: templates/player.djhtml.py:221 templates/player.djhtml:456
+#: templates/player.djhtml.py:481 templates/player.djhtml:506
+#: templates/player.djhtml.py:531 templates/player.djhtml:658
+#: templates/player.djhtml.py:670 templates/player.djhtml:676
+#: templates/player.djhtml.py:760 templates/player.djhtml:761
 #: templates/player_transfers.djhtml:59 templates/ratingdetails.djhtml:61
 #: templates/recordlist.djhtml:47 templates/results.djhtml:12
 #: templates/results.djhtml.py:19 templates/review.djhtml:62
@@ -5669,151 +5669,151 @@ msgstr "Zurückliegende"
 msgid "Active"
 msgstr "Aktiv"
 
-#: templates/player.djhtml:20
+#: templates/player.djhtml:21
 msgid "Modify player"
 msgstr "Spieler verändern"
 
-#: templates/player.djhtml:70
+#: templates/player.djhtml:72
 #, python-format
 msgid "Rating history for %(tag)s"
 msgstr ""
 
-#: templates/player.djhtml:142
+#: templates/player.djhtml:144
 msgid "vs. Protoss"
 msgstr "vs. Protoss"
 
-#: templates/player.djhtml:154
+#: templates/player.djhtml:156
 msgid "vs. Terran"
 msgstr "vs. Terraner"
 
-#: templates/player.djhtml:166
+#: templates/player.djhtml:168
 msgid "vs. Zerg"
 msgstr "vs. Zerg"
 
-#: templates/player.djhtml:209
+#: templates/player.djhtml:211
 msgid "Team switches"
 msgstr "Mannschaftswechsel"
 
 #. Translators: All-time winrates
-#: templates/player.djhtml:253
+#: templates/player.djhtml:256
 msgid "All-time"
 msgstr "Allzeit"
 
 #. Translators: Recent winrates
 #. Translators: Recent winrates
 #. Translators: Form as in the current form of a player.
-#: templates/player.djhtml:255 templates/player_results.djhtml:56
+#: templates/player.djhtml:258 templates/player_results.djhtml:56
 #: templates/pred_match.djhtml:115
 msgid "Form"
 msgstr "Form"
 
 #. Translators: Highest ratings
-#: templates/player.djhtml:257
+#: templates/player.djhtml:260
 msgid "Highest"
 msgstr ""
 
-#: templates/player.djhtml:258
+#: templates/player.djhtml:261
 msgid "Rivalries"
 msgstr "Rivalitäten"
 
-#: templates/player.djhtml:452 templates/player.djhtml.py:477
-#: templates/player.djhtml:502 templates/player.djhtml.py:527
+#: templates/player.djhtml:455 templates/player.djhtml.py:480
+#: templates/player.djhtml:505 templates/player.djhtml.py:530
 msgctxt "on date"
 msgid "on"
 msgstr "am"
 
-#: templates/player.djhtml:549
+#: templates/player.djhtml:552
 msgid "Rival"
 msgid_plural "Rivals"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/player.djhtml:553
+#: templates/player.djhtml:556
 msgid "Nemesis"
 msgid_plural "Nemeses"
 msgstr[0] "Nemesis"
 msgstr[1] ""
 
-#: templates/player.djhtml:557
+#: templates/player.djhtml:560
 msgid "Victim"
 msgid_plural "Victims"
 msgstr[0] "Opfer"
 msgstr[1] ""
 
-#: templates/player.djhtml:612 templates/team.djhtml:127
+#: templates/player.djhtml:615 templates/team.djhtml:127
 msgid "Rank"
 msgstr "Rang"
 
 #. Translators: World rank.
-#: templates/player.djhtml:616
+#: templates/player.djhtml:619
 #, python-format
 msgid "#%(rank)s World"
 msgstr "#%(rank)s weltweit"
 
 #. Translators: Rank among non-Koreans.
-#: templates/player.djhtml:621
+#: templates/player.djhtml:624
 #, python-format
 msgid "#%(rank)s Non-Korean"
 msgstr "#%(rank)s nicht-koreanisch"
 
 #. Translators: Rank in a country.
-#: templates/player.djhtml:627
+#: templates/player.djhtml:630
 #, python-format
 msgid "#%(rank)s %(countryfull)s"
 msgstr "#%(rank)s %(countryfull)s"
 
-#: templates/player.djhtml:636
+#: templates/player.djhtml:639
 msgid "Full name"
 msgstr "Ausgeschriebener Name"
 
-#: templates/player.djhtml:642
+#: templates/player.djhtml:645
 msgid "Romanized name"
 msgstr "Romanisierten Namen"
 
-#: templates/player.djhtml:648 templates/team.djhtml:84
+#: templates/player.djhtml:651 templates/team.djhtml:84
 msgid "AKA"
 msgstr "AKA"
 
-#: templates/player.djhtml:666
+#: templates/player.djhtml:669
 msgid "First match"
 msgstr "Erstes Spiel"
 
-#: templates/player.djhtml:672
+#: templates/player.djhtml:675
 msgid "Last match"
 msgstr "Letztes Spiel"
 
-#: templates/player.djhtml:684
+#: templates/player.djhtml:687
 msgid "Matches played"
 msgstr "Absolvierte Spiele"
 
 #. Translators: SC2E = sc2earnings.com
-#: templates/player.djhtml:705
+#: templates/player.djhtml:708
 msgid "SC2E"
 msgstr "SC2E"
 
-#: templates/player.djhtml:736
+#: templates/player.djhtml:739
 msgid "Most recent results"
 msgstr "Letzte Ergebnisse"
 
-#: templates/player.djhtml:741
+#: templates/player.djhtml:744
 msgid "Team history"
 msgstr "Frühere Mannschaften"
 
-#: templates/player.djhtml:749 templates/player_transfers.djhtml:22
+#: templates/player.djhtml:752 templates/player_transfers.djhtml:22
 #: templates/team.djhtml:231
 msgid "Joined"
 msgstr "Beigetreten"
 
-#: templates/player.djhtml:750 templates/player_transfers.djhtml:20
+#: templates/player.djhtml:753 templates/player_transfers.djhtml:20
 #: templates/team.djhtml:232
 msgid "Left"
 msgstr "Verlassen"
 
-#: templates/player.djhtml:761
+#: templates/player.djhtml:764
 msgid "yes"
 msgstr "ja"
 
-#: templates/player.djhtml:763
+#: templates/player.djhtml:766
 msgid "no"
 msgstr "nein"
 
@@ -6208,42 +6208,42 @@ msgstr ""
 msgid "Rating vZ"
 msgstr ""
 
-#: templates/reports_balance.djhtml:10 templates/reports_balance.djhtml:28
-#: templates/reports_balance.djhtml:192
+#: templates/reports_balance.djhtml:11 templates/reports_balance.djhtml:30
+#: templates/reports_balance.djhtml:195
 msgid "Balance report"
 msgstr ""
 
-#: templates/reports_balance.djhtml:55
+#: templates/reports_balance.djhtml:57
 #, python-format
 msgid "Winrate [%%]"
 msgstr ""
 
-#: templates/reports_balance.djhtml:78 templates/reports_balance.djhtml:86
-#: templates/reports_balance.djhtml:94 templates/reports_balance.djhtml:162
-#: templates/reports_balance.djhtml:170 templates/reports_balance.djhtml:178
+#: templates/reports_balance.djhtml:80 templates/reports_balance.djhtml:88
+#: templates/reports_balance.djhtml:96 templates/reports_balance.djhtml:164
+#: templates/reports_balance.djhtml:172 templates/reports_balance.djhtml:180
 msgid "F Y"
 msgstr ""
 
-#: templates/reports_balance.djhtml:114
+#: templates/reports_balance.djhtml:116
 msgid "Performance difference"
 msgstr "Leistungsunterschied"
 
-#: templates/reports_balance.djhtml:141
+#: templates/reports_balance.djhtml:143
 msgid "Performance difference [points]"
 msgstr "Leistungsunterschied [Punkte]"
 
-#: templates/reports_balance.djhtml:162 templates/reports_balance.djhtml:170
-#: templates/reports_balance.djhtml:178
+#: templates/reports_balance.djhtml:164 templates/reports_balance.djhtml:172
+#: templates/reports_balance.djhtml:180
 msgid "Difference"
 msgstr "Unterschied"
 
-#: templates/reports_balance.djhtml:194
+#: templates/reports_balance.djhtml:197
 msgid ""
 "The following chart show the historical month-by-month winrates for each non-"
 "mirror matchup in the database."
 msgstr ""
 
-#: templates/reports_balance.djhtml:196
+#: templates/reports_balance.djhtml:199
 msgid ""
 "Note that this yields information about <em>metagame</em> balance near the "
 "<em>top of the skill ladder</em>, and is not to be confused with (although "
@@ -6251,14 +6251,14 @@ msgid ""
 "population."
 msgstr ""
 
-#: templates/reports_balance.djhtml:198
+#: templates/reports_balance.djhtml:201
 msgid ""
 "The winrate is shown with respect to the race listed first, so if the "
 "Protoss vs. Terran graph shoots up, that means Protoss is doing well and "
 "Terran poorly."
 msgstr ""
 
-#: templates/reports_balance.djhtml:210
+#: templates/reports_balance.djhtml:213
 #, python-format
 msgid ""
 "The performance difference chart shows the <em>approximate</em> difference "
@@ -6272,7 +6272,7 @@ msgid ""
 "200 points better than expected."
 msgstr ""
 
-#: templates/reports_balance.djhtml:212
+#: templates/reports_balance.djhtml:215
 msgid ""
 "This chart can avoid some of the problems with the above, which can "
 "potentially be influenced by incredibly hot streaks from one or two "

@@ -59,7 +59,7 @@ ratings.submitviews.review.
                 <tbody class="lm" data-id="{{g.id}}" style="display: none;">
                   <tr>
                     <th colspan="1" class="text-right">{% trans "Date" %}</th>
-                    <td colspan="6">{{g.date|cdate:_('F jS, Y')}}</td>
+                    <td colspan="6">{{g.date|date:_('F jS, Y')}}</td>
                   </tr>
                   <tr>
                     <th colspan="1" class="text-right">{% trans "Game" %}</th>

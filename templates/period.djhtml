@@ -15,7 +15,7 @@ This template shows a rating list for a given period.
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h2>
         {% blocktrans with n=period.id %}List {{n}}{% endblocktrans %}:
-        {{period.end|cdate:_('F jS, Y')}}
+        {{period.end|date:_('F jS, Y')}}
       </h2>
     </div>
   </div>
@@ -319,11 +319,11 @@ This template shows a rating list for a given period.
           </thead>
           <tr class="small">
             <td class="text-right ibox-left" style="width: 40%">{% trans "Start" %}</td>
-            <td style="width: 60%">{{period.start|cdate:_('F jS, Y')}}</td>
+            <td style="width: 60%">{{period.start|date:_('F jS, Y')}}</td>
           </tr>
           <tr class="small">
             <td class="text-right ibox-left">{% trans "End" %}</td>
-            <td>{{period.end|cdate:_('F jS, Y')}}</td>
+            <td>{{period.end|date:_('F jS, Y')}}</td>
           </tr>
           <tr class="small">
             <td class="text-right ibox-left">{% trans "Active players" %}</td>

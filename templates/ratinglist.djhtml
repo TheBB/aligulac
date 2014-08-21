@@ -217,6 +217,9 @@ example.)
                     <span class="right-caret"></span>
                   </a>
                 {% endif %}
+				<script>
+					pushJsonToLink('.show-players-map-link-rating', '{{entry.player.race}}', '{{entry.player.country}}', '{{entry.player.tag}}');
+				</script>
               </td>
             </tr>
           {% endfor %}

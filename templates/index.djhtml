@@ -31,6 +31,8 @@ To use, you should define the following blocks:
     <link rel="stylesheet" href="{{"bootstrap.min"|css}}" type="text/css">
     <link rel="stylesheet" href="{{"jquery-ui.min"|css}}" type="text/css">
     <link rel="stylesheet" href="{{"aligulac-theme"|css}}" type="text/css">
+    <link rel="stylesheet" href="{{"clusterpies"|css}}" type="text/css />
+    <link href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" rel="stylesheet" type="text/css />
     <link href='http://fonts.googleapis.com/css?family=Marcellus+SC' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
@@ -133,6 +135,12 @@ To use, you should define the following blocks:
         {% if curp.is_preview %}
           <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+			<p class="pull-right text-muted">
+			<a href="#" class="show-players-map-link show-players-map-link-rating" 
+				data-players="[]">
+				{% trans "Show map" %}
+			</a>
+	</p>
               <p class="pull-right text-muted">
                 {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
               </p>
@@ -185,6 +193,10 @@ To use, you should define the following blocks:
     <script type="text/javascript" src="{{"jquery.ui.datepicker-"|add:lang|js}}"></script>
     <script type="text/javascript" src="{{"jquery.tagsInput"|js}}"></script>
     <script type="text/javascript" src="{{"bootstrap.min"|js}}"></script>
+    <script type="text/javascript" src="{{"leaflet"|js}}"></script>
+    <script type="text/javascript" src="{{"markercluster"|js}}"></script>
+    <script type="text/javascript" src="{{"d3.v3.min"|js}}"></script>
+    <script type="text/javascript" src="{{"mapcluster"|js}}"></script>
     <script type="text/javascript">
      var flags_dir = '{{"flags/"|imgdir}}';
      var races_dir = '{{"/"|imgdir}}';
@@ -195,6 +207,8 @@ To use, you should define the following blocks:
        'hide': '{% trans "hide" %}',
        'show': '{% trans "show" %}',
        'Your recent searches': '{% trans "Your recent searches" %}',
+	   'race': '{% trans "race" %}',
+	   'name': '{% trans "Name" %}'
      };
      $(document).ready(function () { $(".datepicker").datepicker(); });
      $(document).ready(function () {
@@ -276,5 +290,26 @@ To use, you should define the following blocks:
       Aligulac.init_extra(apps);
       });
     </script>
+
+	
+    <div class="modal fade" id="playersMap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans "Close" %}</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans "Players map" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="container">
+                        <div id="map" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
   </body>
 </html>

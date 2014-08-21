@@ -71,7 +71,6 @@ from ratings.tools import (
     find_player,
     get_placements
 )
-from ratings.templatetags.ratings_extras import cdate
 # }}}
 
 # {{{ earnings_code: Converts a queryset of earnings to the corresponding code.

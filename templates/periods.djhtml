@@ -29,7 +29,7 @@ This is the template for the historical overview page, showing all the ranking l
           </thead>
           {% for period in periods %}
             <tr>
-              <td><a href="/periods/{{ period.id }}/">{{ period.end|cdate:_('F jS, Y') }}</a></td>
+              <td><a href="/periods/{{ period.id }}/">{{ period.end|date:_('F jS, Y') }}</a></td>
               <td class="ho_icon"><img src="{{ period|oprace|img }}" alt="{{ period|oprace }}"></td>
               <td class="ho_pctg">{{ period|oppctg }}%</td>
               <td class="ho_icon"><img src="{{ period|uprace|img }}" alt="{{ period|uprace }}"></td>

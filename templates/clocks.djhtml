@@ -64,7 +64,7 @@ Number of days since.
                     </thead>
                     {% for e, earn in clock.extra %}
                       <tr>
-                        <td>{{ e.latest|cdate:_('Y-m-d') }}</td>
+                        <td>{{ e.latest|date:_('Y-m-d') }}</td>
                         <td>{{ e|event }}</td>
                         <td>{{ earn.0.player|player }}</td>
                         <td class="text-right">{{ earn.0.earnings|add_sep_and_cur:"USD" }}</td>

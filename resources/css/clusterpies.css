@@ -1,0 +1,154 @@
+﻿#map {
+    width: 870px;
+    height: 500px;
+}
+
+#legend {
+    position: absolute;
+    top: 3px;
+    left: 780px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 100;
+    font-size: 1em;
+    font-family: sans-serif;
+    width: 165px;
+    background: rgba(255,255,255,0.6);
+}
+
+.legendheading {
+    position: relative;
+    height: 25px;
+    padding: 5px 2px 0px 2px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.legenditem {
+    padding: 2px;
+    margin-bottom: 2px;
+}
+
+/*Marker clusters*/
+.marker-cluster-pie g.arc {
+    fill-opacity: 0.5;
+}
+
+.marker-cluster-pie-label {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+/*Markers*/
+.marker {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: -12px;
+    margin-left: -12px;
+    fill: #CCC;
+    stroke: #444;
+    background: #CCC;
+}
+
+.marker div {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+/*marker categories*/
+.race-ico {
+    fill: #FFF;
+    stroke: #000;
+    background: white;
+    border-color: black;
+}
+
+.category-Z {
+    fill: #F88;
+    stroke: #800;
+    background: #F88;
+    border-color: #800;
+}
+
+.category-R {
+    fill: #FF3;
+    stroke: #D80;
+    background: #FF3;
+    border-color: #D80;
+}
+
+.category-P {
+    fill: #BFB;
+    stroke: #070;
+    background: #BFB;
+    border-color: #070;
+}
+
+.category-T {
+    fill: #9DF;
+    stroke: #007;
+    background: #9DF;
+    border-color: #007;
+}
+
+/*marker icons*/
+.icon-T {
+    background-image: url('http://img.aligulac.com/T.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon-Z {
+    background-image: url('http://img.aligulac.com/Z.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon-P {
+    background-image: url('http://img.aligulac.com/P.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon-R {
+    background-image: url('http://img.aligulac.com/R.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/*Popup*/
+.map-popup {
+}
+
+.map-popup span.heading {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.map-popup span.attribute {
+    display: block;
+    color: black;
+    font-size: 1em;
+    font-family: sans-serif;
+}
+
+.map-popup span.label {
+    font-weight: bold;
+    color: black;
+    font-size: 1em;
+    font-family: sans-serif;
+}
+
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+    -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}

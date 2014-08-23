@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Polish Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-21 13:41+0000\n"
-"PO-Revision-Date: 2014-08-20 23:46-0000\n"
+"POT-Creation-Date: 2014-08-22 11:11+0000\n"
+"PO-Revision-Date: 2014-08-22 01:13-0000\n"
 "Last-Translator: Krzysztof Krasuski <zythus12@live.com>\n"
 "Language-Team: Zythus <zythus12@live.com>\n"
 "Language: pl\n"
@@ -156,7 +156,7 @@ msgstr "Szukaj"
 
 #: aligulac/aligulac/tools.py:242
 msgid "Inference"
-msgstr "Wnioskowanie"
+msgstr "Prognozowanie"
 
 #: aligulac/aligulac/tools.py:245 templates/predict.djhtml:11
 #: templates/predict.djhtml.py:17
@@ -2347,7 +2347,7 @@ msgstr "Random"
 #. Translators: Race switcher
 #: aligulac/ratings/models.py:97
 msgid "Switcher"
-msgstr "Zmieniacz rasy"
+msgstr "Gracz zmieniający rasę"
 
 #: aligulac/ratings/models.py:100
 msgctxt "possibly small letter (used in the middle of sentences)"
@@ -2368,13 +2368,13 @@ msgstr "Zerg"
 #: aligulac/ratings/models.py:104
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Random"
-msgstr "random"
+msgstr "Random"
 
 #. Translators: Race switcher
 #: aligulac/ratings/models.py:106
 msgctxt "possibly small letter (used in the middle of sentences)"
 msgid "Switcher"
-msgstr "Zmieniacz rasy"
+msgstr "Gracz zmieniający rasy"
 
 #: aligulac/ratings/models.py:114 templates/db.djhtml:43
 msgid "Wings of Liberty"
@@ -3983,8 +3983,8 @@ msgid ""
 "week number, etc.)"
 msgstr ""
 "Cokolwiek, co może zostać użyte do identyfikacji turnieju i gier w nim "
-"rozegranych. Proszę dostarcz jak najwięcej informacji. (Rundy, numer dnia, "
-"numer tygodnia, etc.)"
+"rozegranych. Postaraj się dostarczyć jak najwięcej informacji. (Rundy, numer "
+"dnia, numer tygodnia, etc.)"
 
 #: templates/add.djhtml:53
 msgid "Event object"
@@ -4014,8 +4014,8 @@ msgid ""
 "The date the games were played (as accurate as possible). This will be used "
 "to check for possible duplicates."
 msgstr ""
-"Data kiedy gry zostały rozegrane (tak dokładnie, jak to możliwe). To pozwoli "
-"na sprawdzenie w kierunku prawdopodobnych duplikatów."
+"Kiedy gry zostały rozegrane (tak dokładnie, jak to możliwe). To pozwoli na "
+"sprawdzenie w kierunku prawdopodobnych duplikatów."
 
 #: templates/add.djhtml:63
 msgid "Indicate on which version of SC2 the games were played."
@@ -4036,8 +4036,8 @@ msgid ""
 "report thread)."
 msgstr ""
 "URL do wiarygodnego źródła, gdzie wyniki mogą być podwójnie sprawdzone (na "
-"przykład: oficjalna drabinka turniejowa, strona Liquipedii albo Team Liquid "
-"live report thread)."
+"przykład: oficjalna drabinka turniejowa, strona Liquipedii albo raport na "
+"żywo Team Liquid)."
 
 #: templates/add.djhtml:73
 msgid ""
@@ -4046,7 +4046,7 @@ msgid ""
 msgstr ""
 "(Opcjonalne) Sposób do skontaktowania się z Tobą, jeżeli będziemy mieli "
 "pytania dotyczące Twojego zgłoszenia. E-mail, nazwa użytkownika na Team "
-"Liquid, nazwa użytkownika na Reddicie itd."
+"Liquid, nazwa użytkownika na Reddicie, itd."
 
 #: templates/add.djhtml:76
 msgid ""
@@ -4086,7 +4086,7 @@ msgid ""
 "space-separated list of any of the following:"
 msgstr ""
 "Informacje dotyczące gracza najbardziej unikalnie go identyfikują i powinny "
-"być to oddzielone spacjami listy:"
+"być oddzielone spacjami:"
 
 #: templates/add.djhtml:95
 msgid ""
@@ -4106,7 +4106,7 @@ msgid ""
 "(random) or <code>S</code> (race switcher)."
 msgstr ""
 "Rasa, tj. <code>P</code>, <code>T</code>, <code>Z</code>, <code>R</code> "
-"(random) or <code>S</code> (zmieniacz rasy)."
+"(random) or <code>S</code> (Gracz zmieniający rasy)."
 
 #: templates/add.djhtml:101
 #, python-format
@@ -4116,7 +4116,7 @@ msgid ""
 "(the latter will only work if the country name does not contain spaces."
 msgstr ""
 "Dwuliterowe lub trzyliterowe %(a)sISO 3166-1 alpha-2 kod kraju</a>, np., "
-"<code>KR</code> albo </code>KOR</code>, albo popularna angielska nazwa kraju "
+"<code>KR</code> albo </code>KOR</code>, lub popularna angielska nazwa kraju "
 "(to ostatnie będzie działać tylko, jeżeli nazwa kraju nie zawiera spacji)."
 
 #: templates/add.djhtml:102
@@ -4148,18 +4148,18 @@ msgid ""
 "%(clause)s</code> clause at the <strong>end</strong> of the player "
 "information. For example, if MorroW plays Protoss, you can do this:"
 msgstr ""
-"Jeżeli dodajesz mecz przez zmieniacz rasy musisz powiedzieć systemowi którą "
-"rasą gracz grał w tym meczu. Zrób to dodając paragraf <code>%(clause)s</"
-"code> na <strong>koniec</strong> informacj o graczu. Na przykład, jeżeli "
-"MorroW gra Protossem, możesz zrobić to:"
+"Jeżeli dodajesz mecz, w którym gracz zmieniał rasę, musisz powiedzieć "
+"systemowi którą rasą gracz grał w tym meczu. Zrób to dodając paragraf <code>"
+"%(clause)s</code> na <strong>koniec</strong> informacji o graczu. Na "
+"przykład, jeżeli MorroW gra Protossem, możesz zrobić to:"
 
 #: templates/add.djhtml:111
 msgid ""
 "Please also provide race information about random players whenever this is "
 "known, though it's not required."
 msgstr ""
-"Dodatkowo, dostarcz informacje o rasach graczy grających randomem kiedy jest "
-"taka możliwość, mimo, że nie jest to wymagane."
+"Dodatkowo, dostarcz informacje o rasach graczy grających randomem, kiedy "
+"jest taka możliwość."
 
 #: templates/add.djhtml:113
 msgid ""
@@ -4220,9 +4220,9 @@ msgid ""
 "player can't be found, or if the information provided applies to more than "
 "one player, that's fine. We will fix it when reviewing the submission."
 msgstr ""
-"Gdy dodasz, system postara się znaleźć jak najwięcej graczy. Jeżeli mu się "
+"Gdy wyślesz, system postara się znaleźć jak najwięcej graczy. Jeżeli mu się "
 "to nie uda, albo informacje dostarczone będą pasowały do więcej, niż jednego "
-"gracza, to wszystko w porządku. Naprawimy to przeglądając wniosek."
+"gracza, nie przejmuj się. Naprawimy to przeglądając Twój wniosek."
 
 #: templates/add.djhtml:126
 msgid ""
@@ -4235,7 +4235,7 @@ msgstr ""
 "System będzie także próbował ominąć duplikację. Jeśli Twój mecz pojawi się "
 "jako duplikat innego meczu z bazy danych (Ci sami gracze, wynik i podobny "
 "termin) otrzymasz ostrzeżenie. Aby temu zapobiec dodaj <code>!DUP</code> na "
-"koniec opisu meczu. To zmusi mecz do dodania."
+"koniec opisu meczu. To zmusi system do dodania meczu."
 
 #: templates/add.djhtml:129
 msgid ""
@@ -4244,7 +4244,7 @@ msgid ""
 "strong>."
 msgstr ""
 "Większość graczy jest unikalnie identyfikowalna przez ich nicki. Po listę "
-"najczęściej spotykanych wyjątków zajrzyj na <strong>częste problemy</strong>."
+"najczęściej spotykanych wyjątków zajrzyj na <strong>FAQ</strong>."
 
 #: templates/add.djhtml:132
 msgid "Here are some real-world examples. From the GSL:"

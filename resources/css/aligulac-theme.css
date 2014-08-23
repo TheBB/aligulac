@@ -624,3 +624,8 @@ p, li, ul {
     width: 1px;
     white-space: nowrap;
 }
+
+.admin-buttons .glyphicon {
+    padding-left: 1px;
+    padding-right: 1px;
+}

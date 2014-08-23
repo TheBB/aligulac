@@ -164,7 +164,7 @@ This shows a team page. Called from ratings.teamviews.team.
           {% endif %}
           {% if adm %}
             <tr>
-              <td colspan="2" class="text-center">
+              <td colspan="2" class="text-center admin-buttons">
                 <a href="#" title="{% trans "Edit info" %}" data-toggle="modal" data-target="#md-edit"><span class="glyphicon glyphicon-pencil"></span></a>
                 <a href="/admin/ratings/group/{{team.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
               </td>

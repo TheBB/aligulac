@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-24 13:05+0200\n"
-"PO-Revision-Date: 2014-04-02 10:28+0100\n"
-"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2014-08-24 15:07+0100\n"
+"Last-Translator: \n"
+"Language-Team: translation from Ayka <LL@li.org>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -31,7 +31,7 @@ msgstr ""
 
 #: aligulac/aligulac/tools.py:116
 msgid "You are not logged in."
-msgstr "您未登录."
+msgstr "您未登录。"
 
 #: aligulac/aligulac/tools.py:116
 msgid "login"
@@ -62,37 +62,37 @@ msgstr "排名"
 
 #: aligulac/aligulac/tools.py:210 templates/player.djhtml:754
 msgid "Current"
-msgstr ""
+msgstr "当前排名"
 
 #: aligulac/aligulac/tools.py:211 aligulac/aligulac/tools.py:225
 #: templates/history.djhtml:11 templates/history.djhtml.py:139
 msgid "History"
-msgstr ""
+msgstr "历史记录"
 
 #: aligulac/aligulac/tools.py:212 aligulac/aligulac/tools.py:319
 #: aligulac/ratings/misc_views.py:495 templates/player_earnings.djhtml:73
 msgid "Earnings"
-msgstr ""
+msgstr "奖金"
 
 #: aligulac/aligulac/tools.py:215 templates/db.djhtml:104
 #: templates/index.djhtml:193 templates/search.djhtml:31
 #: templates/teams.djhtml:10
 msgid "Teams"
-msgstr ""
+msgstr "战队"
 
 #: aligulac/aligulac/tools.py:219
 msgid "Transfers"
-msgstr ""
+msgstr "转会"
 
 #: aligulac/aligulac/tools.py:222 templates/records.djhtml:14
 #: templates/records.djhtml.py:25
 msgid "Records"
-msgstr ""
+msgstr "最佳记录"
 
 #. Translators: Hall of fame
 #: aligulac/aligulac/tools.py:227
 msgid "HoF"
-msgstr ""
+msgstr "名人堂"
 
 #: aligulac/aligulac/tools.py:228 aligulac/ratings/player_views.py:177
 #: aligulac/ratings/player_views.py:188 aligulac/ratings/player_views.py:194
@@ -107,7 +107,7 @@ msgstr ""
 #: templates/player_results.djhtml:64 templates/player_results.djhtml:118
 #: templates/ratingdetails.djhtml:208 templates/records.djhtml:38
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: aligulac/aligulac/tools.py:229 aligulac/ratings/models.py:91
 #: aligulac/ratings/player_views.py:178 aligulac/ratings/player_views.py:674
@@ -116,7 +116,7 @@ msgstr ""
 #: templates/period.djhtml.py:133 templates/period.djhtml:383
 #: templates/reports_balance.djhtml:161
 msgid "Protoss"
-msgstr ""
+msgstr "星灵"
 
 #: aligulac/aligulac/tools.py:230 aligulac/ratings/models.py:92
 #: aligulac/ratings/player_views.py:179 aligulac/ratings/player_views.py:675
@@ -125,7 +125,7 @@ msgstr ""
 #: templates/period.djhtml.py:134 templates/period.djhtml:384
 #: templates/reports_balance.djhtml:169
 msgid "Terran"
-msgstr ""
+msgstr "人类"
 
 #: aligulac/aligulac/tools.py:231 aligulac/ratings/models.py:93
 #: aligulac/ratings/player_views.py:180 aligulac/ratings/player_views.py:676
@@ -134,7 +134,7 @@ msgstr ""
 #: templates/period.djhtml.py:135 templates/period.djhtml:385
 #: templates/reports_balance.djhtml:177
 msgid "Zerg"
-msgstr ""
+msgstr "异虫"
 
 #: aligulac/aligulac/tools.py:234
 msgid "Results"
@@ -156,7 +156,7 @@ msgstr "搜索"
 
 #: aligulac/aligulac/tools.py:242
 msgid "Inference"
-msgstr ""
+msgstr "预测统计"
 
 #: aligulac/aligulac/tools.py:245 templates/predict.djhtml:11
 #: templates/predict.djhtml.py:17
@@ -169,16 +169,16 @@ msgstr "杂项"
 
 #: aligulac/aligulac/tools.py:251 aligulac/ratings/misc_views.py:58
 msgid "Balance Report"
-msgstr ""
+msgstr "胜率平衡报告"
 
 #: aligulac/aligulac/tools.py:252
 msgid "Days Since…"
-msgstr ""
+msgstr "截至今日...(...日以来)"
 
 #: aligulac/aligulac/tools.py:253 aligulac/ratings/misc_views.py:66
 #: templates/compare.search.djhtml:25
 msgid "Compare"
-msgstr ""
+msgstr "比较"
 
 #: aligulac/aligulac/tools.py:256
 msgid "About"
@@ -198,7 +198,7 @@ msgstr "数据库"
 
 #: aligulac/aligulac/tools.py:262
 msgid "API"
-msgstr ""
+msgstr "应用程序接口"
 
 #: aligulac/aligulac/tools.py:265 templates/forms.djhtml:165
 #: templates/forms.djhtml.py:172
@@ -212,42 +212,42 @@ msgstr "提交"
 #: templates/add.djhtml:79 templates/eventres.djhtml:503
 #: templates/historical.djhtml:44 templates/pred_rrgroup.djhtml:73
 msgid "Matches"
-msgstr ""
+msgstr "对决"
 
 #: aligulac/aligulac/tools.py:270
 msgid "Review"
-msgstr ""
+msgstr "审阅"
 
 #: aligulac/aligulac/tools.py:271 templates/events.djhtml:10
 #: templates/events.djhtml.py:16 templates/index.djhtml:194
 #: templates/search.djhtml:41
 msgid "Events"
-msgstr ""
+msgstr "赛事"
 
 #: aligulac/aligulac/tools.py:272 templates/events_open.djhtml:6
 #: templates/events_open.djhtml.py:12
 msgid "Open events"
-msgstr ""
+msgstr "赛事（数据尚未完善）"
 
 #: aligulac/aligulac/tools.py:311
 msgid "Summary"
-msgstr ""
+msgstr "概览"
 
 #: aligulac/aligulac/tools.py:314
 msgid "Rating history"
-msgstr ""
+msgstr "评分记录"
 
 #: aligulac/aligulac/tools.py:316 templates/pred_match.djhtml:149
 msgid "Match history"
-msgstr ""
+msgstr "对决记录"
 
 #: aligulac/aligulac/tools.py:322
 msgid "Adjustments"
-msgstr ""
+msgstr "评分波动"
 
 #: aligulac/aligulac/views.py:61
 msgid "Contains player information."
-msgstr ""
+msgstr "内含玩家信息。"
 
 #: aligulac/aligulac/views.py:63 aligulac/aligulac/views.py:93
 #: aligulac/aligulac/views.py:133 aligulac/aligulac/views.py:172
@@ -256,7 +256,7 @@ msgstr ""
 #: aligulac/aligulac/views.py:280 aligulac/aligulac/views.py:294
 #: aligulac/aligulac/views.py:305 aligulac/aligulac/views.py:323
 msgid "primary key"
-msgstr ""
+msgstr "关系键"
 
 #: aligulac/aligulac/views.py:64
 msgid "in-game name of the player"
@@ -272,7 +272,7 @@ msgstr "生日"
 
 #: aligulac/aligulac/views.py:67 templates/player.djhtml:693
 msgid "MC number"
-msgstr ""
+msgstr "MC数（与MC对战之距离）"
 
 #: aligulac/aligulac/views.py:68 aligulac/aligulac/views.py:148
 msgid "external TLPD ID"
@@ -5498,21 +5498,20 @@ msgid_plural "Victims"
 msgstr[0] ""
 
 #: templates/player.djhtml:615 templates/team.djhtml:127
-#, fuzzy
 msgid "Rank"
 msgstr "排名"
 
 #. Translators: World rank.
 #: templates/player.djhtml:619
-#, fuzzy, python-format
+#, python-format
 msgid "#%(rank)s World"
-msgstr "非韩国玩家"
+msgstr "#%(rank)s世界排名"
 
 #. Translators: Rank among non-Koreans.
 #: templates/player.djhtml:624
-#, fuzzy, python-format
+#, python-format
 msgid "#%(rank)s Non-Korean"
-msgstr "非韩国玩家"
+msgstr "#%(rank)s除韩国玩家外排名"
 
 #. Translators: Rank in a country.
 #: templates/player.djhtml:630
@@ -5521,14 +5520,12 @@ msgid "#%(rank)s %(countryfull)s"
 msgstr ""
 
 #: templates/player.djhtml:639
-#, fuzzy
 msgid "Full name"
 msgstr "玩家真实姓名"
 
 #: templates/player.djhtml:645
-#, fuzzy
 msgid "Romanized name"
-msgstr "玩家真实姓名"
+msgstr "玩家真实姓名（罗马拼音）"
 
 #: templates/player.djhtml:651 templates/team.djhtml:84
 msgid "AKA"
@@ -5543,9 +5540,8 @@ msgid "Last match"
 msgstr ""
 
 #: templates/player.djhtml:687
-#, fuzzy
 msgid "Matches played"
-msgstr "玩家A分数"
+msgstr "曾参与对决数"
 
 #. Translators: SC2E = sc2earnings.com
 #: templates/player.djhtml:708
@@ -5553,9 +5549,8 @@ msgid "SC2E"
 msgstr ""
 
 #: templates/player.djhtml:739
-#, fuzzy
 msgid "Most recent results"
-msgstr "结果"
+msgstr "最近记录"
 
 #: templates/player.djhtml:744
 msgid "Team history"
@@ -5576,15 +5571,14 @@ msgid "yes"
 msgstr ""
 
 #: templates/player.djhtml:766
-#, fuzzy
 msgid "no"
-msgstr "十一月"
+msgstr "否"
 
 #. Translators: Earnings for [someone]
 #: templates/player_earnings.djhtml:12
-#, fuzzy, python-format
+#, python-format
 msgid "%(tag)s earnings"
-msgstr "总收入"
+msgstr "%(tag)s奖金收入"
 
 #: templates/player_earnings.djhtml:34
 #, python-format
@@ -5605,9 +5599,8 @@ msgid "Placement"
 msgstr ""
 
 #: templates/player_earnings.djhtml:72
-#, fuzzy
 msgid "Tournament"
-msgstr "苏里南"
+msgstr "赛事"
 
 #: templates/player_results.djhtml:11
 #, python-format
@@ -5615,14 +5608,12 @@ msgid "%(tag)s match history"
 msgstr ""
 
 #: templates/player_results.djhtml:34 templates/results_search.djhtml:49
-#, fuzzy
 msgid "Date range"
-msgstr "玩家A分数"
+msgstr "日期范围"
 
 #: templates/player_results.djhtml:54
-#, fuzzy
 msgid "Winrates"
-msgstr "日期"
+msgstr "胜率"
 
 #: templates/player_results.djhtml:57 templates/pred_4pswiss.djhtml:105
 #: templates/pred_match.djhtml:179 templates/pred_proleague.djhtml:110
@@ -5667,15 +5658,13 @@ msgstr ""
 
 #: templates/pred_4pswiss.djhtml:90 templates/pred_proleague.djhtml:95
 #: templates/pred_rrgroup.djhtml:127 templates/pred_sebracket.djhtml:86
-#, fuzzy
 msgid "Update results"
-msgstr "结果"
+msgstr "更新结果"
 
 #: templates/pred_4pswiss.djhtml:97 templates/pred_proleague.djhtml:102
 #: templates/pred_rrgroup.djhtml:134 templates/pred_sebracket.djhtml:93
-#, fuzzy
 msgid "Clear results"
-msgstr "结果"
+msgstr "重设结果"
 
 #: templates/pred_4pswiss.djhtml:108 templates/pred_match.djhtml:182
 #: templates/pred_proleague.djhtml:113 templates/pred_rrgroup.djhtml:145
@@ -5707,14 +5696,12 @@ msgid "%(pla)s vs. %(plb)s"
 msgstr ""
 
 #: templates/pred_match.djhtml:22
-#, fuzzy
 msgid "Verdict:"
-msgstr "预测"
+msgstr "评价："
 
 #: templates/pred_match.djhtml:23
-#, fuzzy
 msgid "Even chances."
-msgstr "玩家真实姓名"
+msgstr "获胜机率相当。"
 
 #: templates/pred_match.djhtml:24
 #, python-format
@@ -5722,19 +5709,19 @@ msgid "Slight advantage for %(pl)s."
 msgstr ""
 
 #: templates/pred_match.djhtml:25
-#, fuzzy, python-format
+#, python-format
 msgid "Advantage for %(pl)s."
-msgstr "玩家A分数"
+msgstr "玩家%(pl)s有较大获胜优势。"
 
 #: templates/pred_match.djhtml:26
-#, fuzzy, python-format
+#, python-format
 msgid "Large advantage for %(pl)s."
-msgstr "玩家A分数"
+msgstr "玩家%(pl)s有极大获胜优势。"
 
 #: templates/pred_match.djhtml:27
 #, python-format
 msgid "Overwhelming advantage for %(pl)s."
-msgstr ""
+msgstr "玩家%(pl)s有不可阻挡的获胜优势。"
 
 #: templates/pred_match.djhtml:87
 msgid "Historical score"
@@ -5754,9 +5741,9 @@ msgid "Score vs. each other"
 msgstr ""
 
 #: templates/pred_match.djhtml:162 templates/pred_match.djhtml.py:168
-#, fuzzy, python-format
+#, python-format
 msgid "Score for %(pl)s"
-msgstr "玩家A分数"
+msgstr "玩家%(pl)s分数"
 
 #: templates/pred_match.djhtml:172 templates/pred_proleague.djhtml:82
 msgid "Update match progress"
@@ -5770,9 +5757,9 @@ msgstr ""
 
 #. Translators: Team [player], e.g. "Team Jaedong"
 #: templates/pred_proleague.djhtml:25 templates/pred_proleague.djhtml.py:31
-#, fuzzy, python-format
+#, python-format
 msgid "Team %(p)s"
-msgstr "玩家真实姓名"
+msgstr "%(p)s战队"
 
 #: templates/pred_sebracket.djhtml:31
 #, python-format
@@ -5886,14 +5873,14 @@ msgid "No entries found."
 msgstr ""
 
 #: templates/records.djhtml:12
-#, fuzzy, python-format
+#, python-format
 msgid "Records for %(rc)s"
-msgstr "玩家A分数"
+msgstr "%(rc)s之最佳记录"
 
 #: templates/records.djhtml:23
-#, fuzzy, python-format
+#, python-format
 msgid "Records for %(r)s"
-msgstr "玩家A分数"
+msgstr "%(r)s之最佳记录"
 
 #: templates/records.djhtml:28
 msgid "To avoid rating artifacts, the earliest periods are not counted."
@@ -6141,14 +6128,12 @@ msgid "The following modifications will be made to all checked matches:"
 msgstr ""
 
 #: templates/review.djhtml:12 templates/review.djhtml.py:18
-#, fuzzy
 msgid "Review results"
-msgstr "结果"
+msgstr "待审核数据"
 
 #: templates/review.djhtml:27
-#, fuzzy
 msgid "The following matches were successfully approved:"
-msgstr "以下各项已顺利提交"
+msgstr "以下对决信息已通过审核"
 
 #: templates/review.djhtml:65
 msgid "Game"
@@ -6171,9 +6156,8 @@ msgid "There are no results awaiting review."
 msgstr ""
 
 #: templates/search.djhtml:16
-#, fuzzy
 msgid "Search results"
-msgstr "搜索"
+msgstr "搜索结果"
 
 #: templates/search.djhtml:18
 #, python-format
@@ -6181,9 +6165,8 @@ msgid "No such player, team or event '%(query)s' found."
 msgstr ""
 
 #: templates/team.djhtml:20
-#, fuzzy
 msgid "Modify team"
-msgstr "修改"
+msgstr "修改战队信息"
 
 #: templates/team.djhtml:61
 #, python-format
@@ -6201,9 +6184,8 @@ msgid "%(teamname)s was disbanded on %(disbanded)s."
 msgstr ""
 
 #: templates/team.djhtml:94
-#, fuzzy
 msgid "Short name"
-msgstr "苏里南"
+msgstr "短名"
 
 #: templates/team.djhtml:100
 msgid "Founded"
@@ -6219,18 +6201,17 @@ msgstr ""
 
 #. Translators: #[rank] among [name]
 #: templates/team.djhtml:133
-#, fuzzy, python-format
+#, python-format
 msgid "#%(rank)s %(name)s"
-msgstr "非韩国玩家"
+msgstr "%(name)s排名:%(rank)s"
 
 #: templates/team.djhtml:148
 msgid "Offline matches"
 msgstr ""
 
 #: templates/team.djhtml:182
-#, fuzzy
 msgid "Active roster"
-msgstr "玩家A分数"
+msgstr "活跃队员"
 
 #: templates/team.djhtml:184
 #, python-format
@@ -6266,9 +6247,8 @@ msgid "Past members"
 msgstr ""
 
 #: templates/teams.djhtml:16
-#, fuzzy
 msgid "Active teams"
-msgstr "玩家A分数"
+msgstr "活跃战队"
 
 #: templates/teams.djhtml:23
 msgid "All-kill score"

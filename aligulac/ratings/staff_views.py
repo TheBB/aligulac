@@ -51,6 +51,7 @@ from ratings.models import (
 )
 from ratings.templatetags.ratings_extras import player as player_filter
 from ratings.tools import (
+    country_list,
     display_matches,
     find_player,
 )
@@ -1030,11 +1031,24 @@ def player_info(request, choice=None):
                 )
             )
 
-    page = 1 if 'page' not in request.GET else int(request.GET['page'])
+    page = 1
+    if 'page' in request.GET:
+        try:
+            page = int(request.GET['page'])
+        except:
+            pass
+    country = 'all' if 'country' not in request.GET else request.GET['country']
+    base['country'] = country
+    base['countries'] = country_list(Player.objects.all())
 
-    all_count = Player.objects.count()
+    if country == 'all':
+        all_count = Player.objects.count()
+    else:
+        all_count = Player.objects.filter(country=country).count()
     base["all_count"] = all_count
     q = Player.objects.all()
+    if country != 'all':
+        q = q.filter(country=country)
 
     queries = {
         'birthday': q.filter(birthday__isnull=True),
@@ -1042,27 +1056,32 @@ def player_info(request, choice=None):
         'country': q.filter(country__isnull=True)
     }
 
-    base["subnav"] = [('Progress', '/add/player_info/')]
+    base["subnav"] = [(_('Progress'), '/add/player_info/')]
 
-    if choice is not None and choice in ('birthday', 'name', 'country'):
+    if all_count == 0:
+        base['no_players'] = True
+    elif choice is not None and choice in ('birthday', 'name', 'country'):
         q = queries[choice].extra(select=EXTRA_NULL_SELECT)\
                            .order_by("-null_curr", "-current_rating__rating")
-
         base["players"] = q[(page-1)*50:page*50]
         base["page"] = page
+        base["next_page"] = q.count() > (page + 1) * 50
         base["form"] = PlayerInfoForm()
     else:
-        base["values"] = dict()
+        values = dict()
         for k, v in queries.items():
-            c = v.count()
-            base["values"][k] = {
+            c = all_count - v.count()
+            values[k] = {
                 'count': c,
                 'pctg': '%.2f' % (100*float(c)/float(all_count))
             }
 
-        base["values"]["birthday"]["title"] = "Players missing birthday"
-        base["values"]["name"]["title"] = "Players missing name"
-        base["values"]["country"]["title"] = "Players missing country"
+        values["birthday"]["title"] = _("Players with birthday")
+        values["name"]["title"] = _("Players with name")
+        values["country"]["title"] = _("Players with country")
+
+        base["values"] = list(values.items())
+        base["values"].sort(key=lambda x: x[0])
 
     return render_to_response('player_info.djhtml', base)
 

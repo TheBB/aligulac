@@ -17,3 +17,6 @@ module.exports.PlayerInfo = PlayerInfo =
     init: ->
         $('.player-info-edit-button').click ->
             toggle_form this
+
+        $('#country_filter').change ->
+            $(this).closest('form').submit()

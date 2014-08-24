@@ -639,8 +639,11 @@
 
   module.exports.PlayerInfo = PlayerInfo = {
     init: function() {
-      return $('.player-info-edit-button').click(function() {
+      $('.player-info-edit-button').click(function() {
         return toggle_form(this);
+      });
+      return $('#country_filter').change(function() {
+        return $(this).closest('form').submit();
       });
     }
   };

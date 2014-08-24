@@ -55,8 +55,31 @@
 
 <div class="row">
   <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
-    {% if players %}
-    <a href="/add/player_info">← Return to progress list</a>
+    <div>
+      <form action="" method="GET" role="form" class="form-inline pull-right">
+        <input type="hidden" name="page" value="{{ page }}" />
+        <div class="form-group">
+          <select name="country" id="country_filter" class="form-control">
+            <option value="all">
+              {% trans "All" %}
+            </option>
+            {% for c in countries %}
+            <option value="{{ c.cc }}" {% if country == c.cc %}selected{% endif %}>
+              {{ c.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
+    {% if no_players %}
+    <div class="text-center">
+      <strong>
+        {% trans "No players found!" %}
+      </strong>
+    </div>
+    {% elif players %}
+    <a href="/add/player_info{% if country != 'all' %}?country={{ country }}{% endif %}">← Return to progress list</a>
     <table class="table table-striped table-hover" style="width: 100%">
       <thead>
         <tr>
@@ -123,8 +146,21 @@
             {% endif %}
           </td>
           <td>
-            <a href="#" class="player-info-edit-button" data-toggle="modal" data-target="#md-player-info" title="{% trans "Edit info" %}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <a href="/admin/ratings/player/{{p.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
+            <a href="#"
+               class="player-info-edit-button"
+               data-toggle="modal"
+               data-target="#md-player-info"
+               title="{% trans "Edit info" %}">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <a href="/admin/ratings/player/{{p.id}}/"
+               title="{% trans "Admin interface" %}">
+              <span class="glyphicon glyphicon-cog"></span>
+            </a>
+            {% if p.lp_name %}
+            {% comment %}Translators: LP = Liquipedia{% endcomment %}
+            <a href="http://wiki.teamliquid.net/starcraft2/{{ p.lp_name }}" target="_blank">{% trans "LP" %}</a>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
@@ -133,23 +169,34 @@
     <div class="text-center">
       <ul class="pagination">
         {% if page > 1 %}
-        <li><a href="?page={{ page|sub:1 }}">«</a></li>
+        <li><a href="?page={{ page|sub:1 }}&country={{ country }}">«</a></li>
         {% else %}
         <li class="disabled"><a href="#">«</a></li>
         {% endif %}
-        <li><a href="?page={{ page|add:1 }}">»</a></li>
+        {% if next_page %}
+        <li><a href="?page={{ page|add:1 }}&country={{ country }}">»</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">»</a></li>
+        {% endif %}
       </ul>
     </div>
     {% else %}
-    {% for k, v in values.items %}
-    <div class="row">
-      <h3>{{ v.title }}</h3>
+    {% for k, v in values %}
+    <div>
+      <h3>
+        {{ v.title }}
+        {% if v.count == all_count %}
+        <small><span class="glyphicon glyphicon-check"></span></small>
+        {% endif %}
+      </h3>
       <small>{{ v.count }}/{{ all_count }} ({{ v.pctg }}%)</small>
       <div class="progress progress-striped" style="width: 100%">
         <div class="progress-bar progress-bar-default" style="width: {{ v.pctg }}%">
         </div>
       </div>
-      <a href="/add/player_info/{{ k }}" class="btn btn-default">Show</a>
+      <a href="/add/player_info/{{ k }}?country={{ country }}" class="btn btn-default{% if v.count == all_count %} disabled{% endif %}">
+      {% trans "Show missing" %}
+      </a>
     </div>
     {% endfor %}
     {% endif %}

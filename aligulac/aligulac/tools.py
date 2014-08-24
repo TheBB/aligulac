@@ -17,6 +17,7 @@ from django.contrib.auth import (
 from django.core.context_processors import csrf
 from django.db.models import Q, F
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
@@ -82,58 +83,23 @@ class NotUniquePlayerMessage(Message):
     def __init__(self, search, players, update=None, updateline=None, type='error'):
         id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
 
-        lst = []
-        for p in chain(players.filter(current_rating__isnull=False).order_by('-current_rating__rating'),
-                       players.filter(current_rating__isnull=True).order_by('tag')):
-            s = ''
-            if p.country is not None and p.country != '':
-                s += '<img src="http://static.aligulac.com/flags/%s.png" /> ' % p.country.lower()
-            s += '<img src="http://static.aligulac.com/%s.png" /> ' % p.race
-
-            if update is None:
-                s += '<a href="/players/%i-%s/">%s</a>' % (p.id, p.tag, p.tag)
-            else:
-                s += ((
-                    '<a href="#" onclick="$(\'#%s_tagsinput span:nth-child(%i) span\').html(\'%s %i&nbsp;&nbsp\'); '
-                    '$(\'#%s\').toggle(); return false;">%s</a>'
-                ) % (update, updateline+1, p.tag, p.id, id, p.tag))
-
-            lst.append(s)
-
-        num = 5
-        if len(lst) < num:
-            s = (
-                # Translators: matches as in search matches, not SC2 matches
-                _('Possible matches:') + ' ' +
-                # Translators: E.g. "John, Lisa, Darren and Mike"
-                _('%(commalist)s and %(final)s') % {
-                    'commalist': ', '.join(lst[:-1]), 
-                    'final': lst[-1]
-                } +
-                '.'
+        ctx = dict()
+        ctx['msg_id'] = id
+        player_list = list(
+            chain(
+                players.filter(current_rating__isnull=False)
+                  .order_by('-current_rating__rating'),
+                players.filter(current_rating__isnull=True)
+                  .order_by('tag')
             )
-        else:
-            rand = ''.join(random.choice(string.ascii_lowercase) for _ in range(10))
+        )
+        ctx['players'] = player_list
+        if len(player_list) >= 5:
+            ctx['extra_players'] = len(player_list) - 5
+        ctx['update'] = update
+        ctx['updateline'] = updateline
 
-            # Yes, I know this is ugly as seven hells. -- TheBB
-            s = (
-                _('Possible matches:') + ' ' +
-                # Translators: E.g. "John, Lisa, Darren, Mike and 5 more"
-                _('%(commalist)s and %(number)s more') % {
-                    'commalist': '<span id="%s-a">' % rand + ', '.join(lst[:num-1]),
-                    'number': 
-                        ' <a href="#" onclick="$(\'#%s-a\').toggle(); ' % rand +
-                        '$(\'#%s-b\').toggle(); return false;">' % rand +
-                        '%i' % (len(lst) - num + 1)
-                } +
-                '</a></span><span id="%s-b" style="display: none;">%s</span>' % (
-                    rand,
-                    _('%(commalist)s and %(final)s') % {
-                        'commalist': ', '.join(lst[:-1]),
-                        'final': lst[-1] 
-                    }
-                ) + '.'
-            )
+        s = render_to_string("message.notuniqueplayer.djhtml", ctx)
 
         Message.__init__(self, s, _('\'%s\' not unique') % search, type)
         self.id = id

@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 # Misc staff tools
+import json
 import shlex
-import simplejson
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -916,7 +916,7 @@ def event_children(request, id):
         )
         q['uplink__distance__max'] = depth + 1
 
-    return HttpResponse(simplejson.dumps(ret))
+    return HttpResponse(json.dumps(ret))
 
 # Event overview
 def open_events(request):
@@ -960,9 +960,9 @@ def open_events(request):
     # Open events without games
     base['open_nogames'] = (
         Event.objects.filter(type=TYPE_EVENT, closed=False)
-            .exclude(downlink__child__match__isnull=False)
-            .exclude(id=2)
+            .exclude(id__in=Event.objects.filter(downlink__child__match__isnull=False).distinct())
             .distinct()
+            .exclude(id=2)
             .prefetch_related('uplink__parent')
             .order_by('fullname')
     )

@@ -212,6 +212,32 @@ body {
     width: 15%;
 }
 
+/* Prize pool table */
+.pp_header {
+    background-color: #f5f5f5;
+}
+
+.pp_showbtn {
+    font-variant: small-caps;
+}
+
+.pp_icon {
+    width: 1em;
+    text-align: center;
+}
+
+.pp_1 {
+    background-color: gold;
+}
+
+.pp_2 {
+    background-color: silver;
+}
+
+.pp_3 {
+    background-color: #cd7f32;
+}
+
 /* Match table */
 .lm_date {
     width: 17%;
@@ -276,6 +302,11 @@ td.winner {
 
 td.loser {
     color: #aaaaaa;
+}
+
+/* Days since styles */
+.clock-expandable {
+    cursor: pointer;
 }
 
 /* Subelements of h2 headings -- make sure the h2 has position: relative; */
@@ -586,4 +617,15 @@ p, li, ul {
 /* Prevent progress bars from linebreaking if too small */
 .progress {
     white-space: nowrap;
+}
+
+/* Helper class to shrink table columns */
+.shrink {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.admin-buttons .glyphicon {
+    padding-left: 1px;
+    padding-right: 1px;
 }

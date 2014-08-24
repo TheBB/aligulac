@@ -29,16 +29,6 @@ In general, if you're trying to figure out how this works, may God have mercy on
 {% load ratings_extras %}
 {% load i18n %}
 
-{% if lm_predict %}
-  <script type="text/javascript">
-   var lm_toggle_visibility = function (id) {
-     $("#fix" + id).toggle();
-     $("#inp" + id).toggle();
-     $("#" + id + "_1").focus();
-   };
-  </script>
-{% endif %}
-
 {% if not lm_notable %}
 <div class="row" {% if lm_id %}id="{{lm_id}}"{% endif %}>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -87,20 +77,28 @@ In general, if you're trying to figure out how this works, may God have mercy on
                       <a href="/add/?eventid={{ m.match.eventobj_id }}" title="Add more matches">{% trans "add" %}</a>
                     {% endif %}
 
-                    <a id="lma-{{m.match_id}}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
+                    <a class="lma" data-id="{{m.match_id}}" href="#">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
 
                     {% if lm_adm and lm_check %}
                       {% comment %}Translators: Check{% endcomment %}
-                      <a href="#" onclick="$('.match-{{m.match.event_fullpath|smallhash}}').prop('checked', true); return false;">{% trans "chk" %}</a>
+                      <a href="#"
+                         class="check-boxes-btn"
+                         data-match="{{m.match.event_fullpath|smallhash}}">
+                        {% trans "chk" %}
+                      </a>
                       {% comment %}Translators: Uncheck{% endcomment %}
-                      <a href="#" onclick="$('.match-{{m.match.event_fullpath|smallhash}}').prop('checked', false); return false;">{% trans "unchk" %}</a>
+                      <a href="#"
+                         class="uncheck-boxes-btn"
+                         data-match="{{m.match.event_fullpath|smallhash}}">
+                        {% trans "unchk" %}
+                      </a>
                     {% endif %}
 
                     <span class="text-muted small">{% if m.eventcount %}({{ m.eventcount }}){% endif %}</span>
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+              <tbody class="lm" data-id="{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endifchanged %}
           {% elif lm_header == "partial" %}
             {% ifchanged m.match.event_partpath %}
@@ -122,18 +120,26 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     {% endif %}
                   </th>
                   <th class="text-right lm_right eventheader-right">
-                    <a id="lma-{{ m.match_id }}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
+                    <a class="lma" data-id="{{ m.match_id }}" href="#">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
 
                     {% if lm_adm and lm_check %}
                       {% comment %}Translators: Check{% endcomment %}
-                      <a href="#" onclick="$('.match-{{m.match.event_partpath|smallhash}}').prop('checked', true); return false;">{% trans "chk" %}</a>
+                      <a href="#"
+                         class="check-boxes-btn"
+                         data-match="{{m.match.event_partpath|smallhash}}">
+                        {% trans "chk" %}
+                      </a>
                       {% comment %}Translators: Uncheck{% endcomment %}
-                      <a href="#" onclick="$('.match-{{m.match.event_partpath|smallhash}}').prop('checked', false); return false;">{% trans "unchk" %}</a>
+                      <a href="#"
+                         class="uncheck-boxes-btn"
+                         data-match="{{m.match.event_partpath|smallhash}}">
+                        {% trans "unchk" %}
+                      </a>
                     {% endif %}
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+              <tbody class="lm" data-id="{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endifchanged %}
           {% elif lm_header == "custom" %}
             {% ifchanged m.eventtext %}
@@ -145,11 +151,11 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     {{ m.eventtext }}
                   </th>
                   <th class="text-right lm_right eventheader-right">
-                    <a id="lma-{{ m.match_id }}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
+                    <a class="lma" data-id="{{ m.match_id }}" href="#">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+              <tbody class="lm" data-id="{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endifchanged %}
           {% elif lm_header == "fixed" %}
             {% if forloop.first %}
@@ -160,17 +166,17 @@ In general, if you're trying to figure out how this works, may God have mercy on
                     {{ lm_fixedheader }}
                   </th>
                   <th class="text-right lm_right eventheader-right">
-                    <a id="lma-{{ m.match_id }}" href="#" onclick="toggle_block('{{m.match_id}}'); return false;">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
+                    <a class="lma" data-id="{{ m.match_id }}" href="#">{% if lm_autohide %}{% trans "show" %}{% else %}{% trans "hide" %}{% endif %}</a>
                   </th>
                 </tr>
               </thead>
-              <tbody id="lm-{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
+              <tbody class="lm" data-id="{{ m.match_id }}" {% if lm_autohide %}style="display: none;"{% endif %}>
             {% endif %}
           {% endif %}
           {% if m.pla.id and m.plb.id or lm_show_noid %}
             <tr {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
               <td class="lm_date">
-                {% if m.date %}{{ m.date|cdate:_('Y-m-d') }}{% endif %}
+                {% if m.date %}{{ m.date|date:_('Y-m-d') }}{% endif %}
               </td>
               <td class="lm_rta">
                 {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
@@ -195,7 +201,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
               <td class="lm_score" style="vertical-align: middle;">
                 {% if lm_predict %}
                   <span id="fix{{ m.identifier }}">
-                    <a href="#" onclick="lm_toggle_visibility('{{ m.identifier }}'); return false;">
+                    <a href="#" class="lmp" data-id="{{ m.identifier }}">
                       {{ m.pla.score }}–{{ m.plb.score }}
                     </a>
                   </span>
@@ -238,12 +244,12 @@ In general, if you're trying to figure out how this works, may God have mercy on
                       <input type="checkbox" name="match-{{ m.match_id }}" value="y">
                     {% elif lm_header == "partial" %}
                       <input type="checkbox"
-                             class="match-{{m.match.event_partpath|smallhash}}"
+                             data-match="{{m.match.event_partpath|smallhash}}"
                              name="match-{{ m.match_id }}"
                              value="y">
                     {% else %}
                       <input type="checkbox"
-                             class="match-{{m.match.event_fullpath|smallhash}}"
+                             data-match="{{m.match.event_fullpath|smallhash}}"
                              name="match-{{ m.match.event_fullpath|smallhash }}-{{ m.match_id }}"
                              value="y">
                     {% endif %}

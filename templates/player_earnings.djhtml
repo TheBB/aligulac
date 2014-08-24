@@ -28,9 +28,13 @@ This is the template for the earnings of a player. It's called from ratings.view
   </div>
 
   <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text">
       <p>
-        {% blocktrans with tag=player.tag money=totalearnings|add_separator %}In total, {{tag}} has earned ${{money}}.{% endblocktrans %}
+        {% if year == "all" %}
+          {% blocktrans with tag=player.tag money=totalearnings|add_separator %}In total, {{tag}} has earned ${{money}}.{% endblocktrans %}
+        {% else %}
+          {% blocktrans with tag=player.tag money=totalearnings|add_separator year=year%}In {{ year }}, {{tag}} earned ${{money}}.{% endblocktrans %}
+        {% endif %}
         {% if by_currency %}{% trans "Broken down by currency, that is..." %}{% endif %}
       </p>
       {% if by_currency %}
@@ -40,6 +44,21 @@ This is the template for the earnings of a player. It's called from ratings.view
           {% endfor %}
         </ul>
       {% endif %}
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+      <form class="form-inline pull-right" role="form" method="get" action="">
+        <div class="form-group">
+          <label for="year" class="inline-label">{% trans "Year:" %}</label>
+          <select name="year" class="form-control input-sm">
+            <option value="all" {% if year == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+            {% for y in valid_years %}
+            <option value="{{ y }}" {% if year == y %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% comment %}Translators: The verb "to filter".{% endcomment %}
+        <button type="submit" class="btn btn-primary input-sm">{% trans "Filter" %}</button>
+      </form>
     </div>
   </div>
 

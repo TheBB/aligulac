@@ -4,6 +4,7 @@ from datetime import (
     date,
 )
 from decimal import Decimal
+from itertools import groupby
 import operator
 import shlex
 
@@ -68,8 +69,8 @@ from ratings.tools import (
     display_matches,
     filter_flags,
     find_player,
+    get_placements
 )
-from ratings.templatetags.ratings_extras import cdate
 # }}}
 
 # {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
@@ -878,10 +879,34 @@ def events(request, event_id=None):
             check_form('ppform', PrizepoolModForm, 'modpp')
         if not event.has_children() and event.get_immediate_matchset().exists():
             check_form('stform', StoriesForm, 'modstory')
+
+        if 'close' in request.GET and request.GET['close'] == '1':
+            event.close()
+            base['messages'].append(Message(_('Sucessfully closed event.'), type=Message.SUCCESS))
     # }}}
 
     # {{{ Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__uplink__parent=event)
+
+    local_earnings = Earnings.objects.filter(event=event)
+
+    ranked_prize = local_earnings.exclude(placement=0)\
+                                 .order_by('-earnings', 'placement')
+    unranked_prize = list(
+        local_earnings.filter(placement=0).order_by('-earnings')
+    )
+
+    placements = get_placements(event)
+    prize_pool_table = list()
+    for k, g in groupby(ranked_prize, key=lambda x: x.earnings):
+        gl = list(g)
+        prize_pool_table.append((k, placements[k], gl, len(gl)))
+
+    if len(prize_pool_table) > 0:
+        base['ranked_prize'] = prize_pool_table
+    if len(unranked_prize) > 0:
+        base['unranked_prize'] = unranked_prize
+
     currencies = list({r['currency'] for r in total_earnings.values('currency').distinct()})
     base.update({
         'prizepool':     total_earnings.aggregate(Sum('earnings'))['earnings__sum'],

@@ -49,7 +49,13 @@ def player_team(p):
 player_team.short_description = 'Team'
 
 class MembersInline(admin.TabularInline):
+    raw_id_fields = ('player',)
     model = Group.members.through
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "group":
+            kwargs["queryset"] = Group.objects.order_by('name')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 class AliasesInline(admin.TabularInline):
     model = Alias
@@ -160,6 +166,7 @@ class MatchAdmin(admin.ModelAdmin):
         ('date', DateFieldListFilter),
         ('game', AllValuesFieldListFilter),
     ]
+    raw_id_fields = ('pla', 'plb')
     form = MatchForm
 
     def get_actions(self, request):

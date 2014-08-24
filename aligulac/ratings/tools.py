@@ -336,7 +336,7 @@ def split_matchset(queryset, player):
 # {{{ get_placements: Returns a dict mapping prizemoney to tuple (min,max) placements for a given event.
 def get_placements(event):
     ret = {}
-    for earning in event.earnings_set.order_by('placement'):
+    for earning in event.earnings_set.exclude(placement=0).order_by('placement'):
         try:
             ret[earning.earnings] = (
                 min(min(ret[earning.earnings]), earning.placement),

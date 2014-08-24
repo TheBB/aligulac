@@ -9,14 +9,14 @@ This page shows the results by date. Called from ratings.views.results.
 {% load l10n %}
 
 {% block title %}
-  {% blocktrans with date=td|cdate:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
+  {% blocktrans with date=td|date:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
 {% endblock %}
 
 {% block content %}
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <h2>
-        {% blocktrans with date=td|cdate:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
+        {% blocktrans with date=td|date:_('F jS, Y') %}Results for {{ date }}{% endblocktrans %}
       </h2>
     </div>
   </div>
@@ -48,12 +48,16 @@ This page shows the results by date. Called from ratings.views.results.
         </li>
         <li {% if td == mindate %}class="disabled"{% endif %}>
           <a href="/results/?d={{td|yesterday|datemax:mindate|date:"Y-m-d"}}">
-            &laquo; {% trans "day" %}
+            &laquo;
+            {% comment %}Hack to get translation to work.{% endcomment %}
+            {% blocktrans count 1 as cnt %}day{% plural %}days{% endblocktrans %}
           </a>
         </li>
         <li {% if td == maxdate %}class="disabled"{% endif %}>
           <a href="/results/?d={{td|tomorrow|datemin:maxdate|date:"Y-m-d"}}">
-            {% trans "day" %} &raquo;
+            {% comment %}Hack to get translation to work.{% endcomment %}
+            {% blocktrans count 1 as cnt %}day{% plural %}days{% endblocktrans %}
+            &raquo;
           </a>
         </li>
         <li {% if td == maxdate %}class="disabled"{% endif %}>

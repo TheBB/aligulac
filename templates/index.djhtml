@@ -134,7 +134,7 @@ To use, you should define the following blocks:
           <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
               <p class="pull-right text-muted">
-                {% blocktrans with dt=curp.end|cdate:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
+                {% blocktrans with dt=curp.end|date:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
               </p>
             </div>
           </div>
@@ -167,7 +167,10 @@ To use, you should define the following blocks:
               <p>{% blocktrans %}Icons by Mark James. Race icons by {{a1}}Liquipedia</a>. Charts by {{a3}}Highcharts</a>.{% endblocktrans %}</p>
             {% endwith %}{% endwith %}
 
-            <button onclick="gen_short('{{cur_path}}');" class="btn btn-default" id="gen_short">
+            {% with btc="1Ew7FPorb5u3EpqgUtz9s8wFPRDPbYcbMo" %}
+              <p>{% blocktrans %}Bitcoin donations (if you insist) on address: <br>{{btc}}{% endblocktrans %}</p>
+            {% endwith %}
+            <button class="btn btn-default" id="gen_short">
               <span class="small text-muted">{% trans "Generate short URL for this page" %}</span>
             </button>
 
@@ -191,6 +194,7 @@ To use, you should define the following blocks:
        'Events': '{% trans "Events" %}',
        'hide': '{% trans "hide" %}',
        'show': '{% trans "show" %}',
+       'Your recent searches': '{% trans "Your recent searches" %}',
      };
      $(document).ready(function () { $(".datepicker").datepicker(); });
      $(document).ready(function () {
@@ -262,5 +266,15 @@ To use, you should define the following blocks:
     
     <!-- Put special scripts here that should be loaded after the rest of the document -->
     {% block postscript %}{% endblock %}
+    <script type="text/javascript">
+      var apps = "{% block jsapps %}{% endblock %}";
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+      var Aligulac = require('aligulac').Aligulac;
+      Aligulac.init();
+      Aligulac.init_extra(apps);
+      });
+    </script>
   </body>
 </html>

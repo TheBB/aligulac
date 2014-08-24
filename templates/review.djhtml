@@ -42,24 +42,24 @@ ratings.submitviews.review.
                   <tr class="eventheader">
                     <th colspan="5">{{g.event}}</th>
                     <th colspan="2" class="text-right eventheader-right">
-                      <a id="lma-{{g.id}}" href="#" onclick="toggle_block('{{g.id}}'); return false;">
+                      <a class="lma" data-id="{{g.id}}" href="#">
                         {% trans "show" %}
                       </a>
-                      <a href="#" onclick="$('#lm-{{g.id}}').find('input[type=&quot;checkbox&quot;]').prop('checked',true); return false;">
+                      <a href="#" class="check-boxes-btn" data-match="{{g.event|smallhash}}">
                         {% comment %}Translators: Check, as in the verb, to make a checkmark.{% endcomment %}
                         {% trans "chk" %}
                       </a>
-                      <a href="#" onclick="$('#lm-{{g.id}}').find('input[type=&quot;checkbox&quot;]').prop('checked',false); return false;">
+                      <a href="#" class="uncheck-boxes-btn" data-match="{{g.event|smallhash}}">
                         {% comment %}Translators: Uncheck, as in the verb, to remove a checkmark.{% endcomment %}
                         {% trans "unchk" %}
                       </a>
                     </th>
                   </tr>
                 </thead>
-                <tbody id="lm-{{g.id}}" style="display: none;">
+                <tbody class="lm" data-id="{{g.id}}" style="display: none;">
                   <tr>
                     <th colspan="1" class="text-right">{% trans "Date" %}</th>
-                    <td colspan="6">{{g.date|cdate:_('F jS, Y')}}</td>
+                    <td colspan="6">{{g.date|date:_('F jS, Y')}}</td>
                   </tr>
                   <tr>
                     <th colspan="1" class="text-right">{% trans "Game" %}</th>

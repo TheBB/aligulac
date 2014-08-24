@@ -1,6 +1,13 @@
+# Requires
+#   uglifyjs (installed and in PATH)
+#   stitch   (npm install stitch)
+#   ncp      (npm install ncp)
+
 fs = require 'fs'
+stitch  = require('stitch');
 
 {spawn} = require 'child_process'
+{ncp} = require 'ncp'
 
 target_dir = '../js/'
 deploy_dir = 'deploy/'
@@ -8,6 +15,21 @@ build_dir = 'build/'
 src_dir = 'src/'
 
 target_file_name = 'aligulac'
+
+
+create_package = () ->
+    if not fs.existsSync deploy_dir
+        fs.mkdirSync deploy_dir
+    pckage = stitch.createPackage({
+      paths: [__dirname + '/src']
+    })
+
+    pckage.compile (err, source) ->
+        fs.writeFile("#{deploy_dir}#{target_file_name}.js", source, (err) ->
+            if err
+                throw err
+            console.log "Compiled #{target_file_name}.js package"
+        )
 
 js_file_regex = ///.*\.js$///
 get_files = (dir, callback) ->
@@ -19,52 +41,38 @@ log = (msg) ->
 
 build = (callback) ->
     log "Building..."
-    coffee = spawn 'coffee', ['-b', '-c', '-o', build_dir, src_dir]
-    coffee.stderr.on 'data', (data) ->
-        process.stderr.write data.toString()
-    coffee.on 'exit', (code) ->
-        get_files src_dir, (files) ->
-            copy = spawn 'cp', files.concat [build_dir]
-            copy.on 'exit', (code) ->
-                log "Build complete."
-                if callback?
-                    callback()
+    create_package()
 
 deploy = (callback) ->
-    build ->
-        "Deploying..."
-        if not fs.existsSync deploy_dir
-            fs.mkdirSync deploy_dir
-        get_files build_dir, (files) ->
-            uglify = spawn 'uglifyjs', ['-m', '-c', '-o', deploy_dir + target_file_name + '.min.js'].concat files
-            uglify.stderr.on 'data', (data) ->
-                process.stderr.write data.toString()
-            uglify.on 'exit', (code) ->
-                log "Uglyify done."
-                target_file_stream = fs.createWriteStream deploy_dir + target_file_name + '.js'
-                cat = spawn 'cat', files
-                cat.stdout.pipe target_file_stream
-                cat.on 'exit', (code) ->
-                    log "cat done."
-                    log "Deploy complete."
-                    if callback?
-                        callback()
+    invoke 'build'
+    "Deploying..."
+    if not fs.existsSync deploy_dir
+        fs.mkdirSync deploy_dir
+
+    f = deploy_dir + target_file_name
+    uglify = spawn 'uglifyjs', ['-m', '-c', '-o', f + '.min.js', f + '.js']
+    uglify.stderr.on 'data', (data) ->
+        process.stderr.write data.toString()
+    uglify.on 'exit', (code) ->
+        log "Uglyify done."
+        invoke 'copy'
 
 copy = () ->
-    "Copying..."
-    get_files deploy_dir, (files) ->
-        cp = spawn 'cp', files.concat [target_dir]
-        cp.stderr.on 'data', (data) ->
-            process.stderr.write data.toString()
-        cp.stdout.on 'data', (data) ->
-            log data.toString()
-        log "Copy complete."
+    log "Copying..."
+    ncp deploy_dir, target_dir, (err) ->
+        if err?
+            log err
+        else
+            log "Done!"
 
 task 'build', 'build all coffee files', (options) ->
     build()
 
+task 'copy', 'copies files from deploy to target', (options) ->
+    copy()
+
 task 'deploy', 'build and combine all coffee files', (options) ->
-    deploy copy
+    deploy()
 
 task 'clean', 'remove all compiled files', (options) ->
     rm = spawn 'rm', ['-r', deploy_dir, build_dir]

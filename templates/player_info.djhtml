@@ -6,9 +6,45 @@
 
 {% block title %}{% trans "Player Info" %}{% endblock %}
 
+{% block jsapps %}player_info{% endblock %}
+
+{% block modals %}
+{% if form %}
+<div class="modal fade" id="md-player-info" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="md-edit-label">
+          {% trans "Modify player" %}
+        </h4>
+      </div>
+      {% form "forms.djhtml" %}
+      <form method="post" action="" role="form">
+        <div class="modal-body">
+          {% use "hidden" name="id" id="id_id" %}
+          {% csrf_token %}
+          {% field "basic" form.name %}
+          {% field "basic" form.romanized_name  %}
+          {% field "date" form.birthday  %}
+          {% field "select" form.country %}
+        </div>
+        <div class="modal-footer">
+          {% use "submit" name="modplayer" %}
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+      {% endform %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
     <h2>
       {% trans "Player information" %}
     </h2>
@@ -18,7 +54,7 @@
 {% include "messages.djhtml" %}
 
 <div class="row">
-  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
     {% if players %}
     <a href="/add/player_info">← Return to progress list</a>
     <table class="table table-striped table-hover" style="width: 100%">
@@ -35,7 +71,13 @@
       </thead>
       <tbody>
         {% for p in players %}
-        <tr data-id="{{ p.id }}">
+        <tr data-id="{{ p.id }}"
+            data-tag="{{ p.tag }}"
+            data-country="{% if p.country %}{{ p.country }}{% endif %}"
+            data-birthday="{% if p.birthday %}{{ p.birthday|date:"Y-m-d" }}{% endif %}"
+            data-name="{% if p.name %}{{ p.name }}{% endif %}"
+            data-romanized-name="{% if p.romanized_name %}{{ p.romanized_name }}{% endif %}"
+            class="info-row">
           <td class="rl_icon">
             {% if p.country %}
             <img src="{{ p.country|lower|img:"flags"}}" alt="{{p.country}}" />
@@ -81,7 +123,7 @@
             {% endif %}
           </td>
           <td>
-            <a href="#" onclick="return show_player_info_form({{ p.id }});" title="{% trans "Edit info" %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="#" class="player-info-edit-button" data-toggle="modal" data-target="#md-player-info" title="{% trans "Edit info" %}"><span class="glyphicon glyphicon-pencil"></span></a>
             <a href="/admin/ratings/player/{{p.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
           </td>
         </tr>

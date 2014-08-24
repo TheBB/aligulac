@@ -21,3 +21,6 @@ exports.Aligulac = Aligulac =
         if 'clocks' in apps_list
             Clocks = require('clocks').Clocks
             Clocks.init()
+        if 'player_info' in apps_list
+            PlayerInfo = require('player_info').PlayerInfo
+            PlayerInfo.init()

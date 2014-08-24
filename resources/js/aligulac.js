@@ -65,7 +65,7 @@
       return GenShort.init();
     },
     init_extra: function(apps) {
-      var Clocks, EventMgr, EventRes, apps_list;
+      var Clocks, EventMgr, EventRes, PlayerInfo, apps_list;
       apps_list = apps.split(" ");
       if (__indexOf.call(apps_list, 'eventmgr') >= 0) {
         EventMgr = require('eventmgr').EventMgr;
@@ -77,7 +77,11 @@
       }
       if (__indexOf.call(apps_list, 'clocks') >= 0) {
         Clocks = require('clocks').Clocks;
-        return Clocks.init();
+        Clocks.init();
+      }
+      if (__indexOf.call(apps_list, 'player_info') >= 0) {
+        PlayerInfo = require('player_info').PlayerInfo;
+        return PlayerInfo.init();
       }
     }
   };
@@ -616,12 +620,29 @@
 
 }).call(this);
 }, "player_info": function(exports, require, module) {(function() {
-  var show_player_info_form;
+  var PlayerInfo, toggle_form;
 
-  show_player_info_form = function(player_id) {
-    var row;
-    row = $("[data-id=" + player_id + "]");
-    return false;
+  toggle_form = function(sender) {
+    var data, k, keys, val, _i, _len, _results;
+    data = function(x) {
+      return $(sender).closest('tr').data(x);
+    };
+    keys = ['id', 'country', 'birthday', 'name', 'romanized-name'];
+    _results = [];
+    for (_i = 0, _len = keys.length; _i < _len; _i++) {
+      k = keys[_i];
+      val = data(k);
+      _results.push($("#id_" + (k.replace('-', '_'))).val(val));
+    }
+    return _results;
+  };
+
+  module.exports.PlayerInfo = PlayerInfo = {
+    init: function() {
+      return $('.player-info-edit-button').click(function() {
+        return toggle_form(this);
+      });
+    }
   };
 
 }).call(this);

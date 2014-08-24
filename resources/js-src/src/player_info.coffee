@@ -1,4 +1,19 @@
-show_player_info_form = (player_id) ->
-    row = $("[data-id=#{ player_id }]")
+toggle_form = (sender) ->
+    data = (x) -> $(sender).closest('tr').data x
 
-    false
+    keys = [
+        'id',
+        'country',
+        'birthday',
+        'name',
+        'romanized-name'
+    ]
+
+    for k in keys
+        val = data k
+        $("#id_#{ k.replace('-', '_') }").val(val)
+
+module.exports.PlayerInfo = PlayerInfo =
+    init: ->
+        $('.player-info-edit-button').click ->
+            toggle_form this

@@ -3,6 +3,7 @@ from datetime import date, timedelta
 import json
 import shlex
 
+from countries import data
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import connection
@@ -48,6 +49,7 @@ from ratings.models import (
     TYPE_EVENT,
     TYPE_ROUND,
 )
+from ratings.templatetags.ratings_extras import player as player_filter
 from ratings.tools import (
     display_matches,
     find_player,
@@ -983,18 +985,50 @@ def open_events(request):
 
     return render_to_response('events_open.djhtml', base)
 
+class PlayerInfoForm(forms.Form):
+    id = forms.IntegerField(required=True)
+    name = StrippedCharField(required=False, label=_('Name'))
+    romanized_name = StrippedCharField(
+        required=False,
+        label=_('Romanized name')
+    )
+    birthday = forms.DateField(required=False, label=_('Birthday'))
+    country = forms.ChoiceField(
+        choices=data.countries,
+        required=False,
+        label=_('Country')
+    )
+
+    def commit(self):
+        data = dict(self.cleaned_data)
+        player = Player.objects.get(id=data['id'])
+
+        for k, v in data.items():
+            if getattr(player, k) != v:
+                setattr(player, k, v)
+                print(k, v)
+
+        player.save()
+
+        return player
+
 def player_info(request, choice=None):
     base = base_ctx('Submit', 'Player Info', request)
     if not base['adm']:
         return redirect('/login/')
     login_message(base)
 
-    # if request.method == 'POST' and 'modplayer' in request.POST and base['adm']:
-    #     modform = PlayerModForm(request)
-    #     base['messages'] += modform.update_player(player)
-    # else:
-    #     modform = PlayerModForm(player=player)
-
+    if request.method == 'POST':
+        form = PlayerInfoForm(request.POST)
+        if form.is_valid():
+            player = form.commit()
+            base['messages'].append(
+                Message(
+                    # Translators: Updated a player
+                    text=_("Updated %s") % player_filter(player),
+                    type=Message.SUCCESS
+                )
+            )
 
     page = 1 if 'page' not in request.GET else int(request.GET['page'])
 
@@ -1014,10 +1048,9 @@ def player_info(request, choice=None):
         q = queries[choice].extra(select=EXTRA_NULL_SELECT)\
                            .order_by("-null_curr", "-current_rating__rating")
 
-        base["players"] = []
-        for p in q[(page-1)*50:page*50]:
-            
+        base["players"] = q[(page-1)*50:page*50]
         base["page"] = page
+        base["form"] = PlayerInfoForm()
     else:
         base["values"] = dict()
         for k, v in queries.items():

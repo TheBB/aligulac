@@ -1126,7 +1126,8 @@ def player_info_lp_helper(title):
     pages = list(data["query"]["pages"].items())
     page = pages[0][1]
     raw_text = page["revisions"][0]["*"]
-    m = re.match(r"#REDIRECT\[\[(.*?)\]\]", raw_text)
+
+    m = re.match(r"#REDIRECT(?:\s*)\[\[(.*?)\]\]", raw_text)
     if m is not None:
         return player_info_lp_helper(m.group(1))
 

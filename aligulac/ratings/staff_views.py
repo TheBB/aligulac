@@ -3,6 +3,7 @@ from datetime import date, timedelta
 import json
 import shlex
 
+from countries import data
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import connection
@@ -20,6 +21,7 @@ from django.shortcuts import (
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
+from aligulac.views import EXTRA_NULL_SELECT
 from aligulac.tools import (
     base_ctx,
     etn,
@@ -47,7 +49,9 @@ from ratings.models import (
     TYPE_EVENT,
     TYPE_ROUND,
 )
+from ratings.templatetags.ratings_extras import player as player_filter
 from ratings.tools import (
+    country_list,
     display_matches,
     find_player,
 )
@@ -981,6 +985,105 @@ def open_events(request):
     fill_aux_event(base['pp_events'])
 
     return render_to_response('events_open.djhtml', base)
+
+class PlayerInfoForm(forms.Form):
+    id = forms.IntegerField(required=True)
+    name = StrippedCharField(required=False, label=_('Name'))
+    romanized_name = StrippedCharField(
+        required=False,
+        label=_('Romanized name')
+    )
+    birthday = forms.DateField(required=False, label=_('Birthday'))
+    country = forms.ChoiceField(
+        choices=data.countries,
+        required=False,
+        label=_('Country')
+    )
+
+    def commit(self):
+        data = dict(self.cleaned_data)
+        player = Player.objects.get(id=data['id'])
+
+        for k, v in data.items():
+            if getattr(player, k) != v:
+                setattr(player, k, v)
+                print(k, v)
+
+        player.save()
+
+        return player
+
+def player_info(request, choice=None):
+    base = base_ctx('Submit', 'Player Info', request)
+    if not base['adm']:
+        return redirect('/login/')
+    login_message(base)
+
+    if request.method == 'POST':
+        form = PlayerInfoForm(request.POST)
+        if form.is_valid():
+            player = form.commit()
+            base['messages'].append(
+                Message(
+                    # Translators: Updated a player
+                    text=_("Updated %s") % player_filter(player),
+                    type=Message.SUCCESS
+                )
+            )
+
+    page = 1
+    if 'page' in request.GET:
+        try:
+            page = int(request.GET['page'])
+        except:
+            pass
+    country = 'all' if 'country' not in request.GET else request.GET['country']
+    base['country'] = country
+    base['countries'] = country_list(Player.objects.all())
+
+    if country == 'all':
+        all_count = Player.objects.count()
+    else:
+        all_count = Player.objects.filter(country=country).count()
+    base["all_count"] = all_count
+    q = Player.objects.all()
+    if country != 'all':
+        q = q.filter(country=country)
+
+    queries = {
+        'birthday': q.filter(birthday__isnull=True),
+        'name': q.filter(name__isnull=True),
+        'country': q.filter(country__isnull=True)
+    }
+
+    base["subnav"] = [(_('Progress'), '/add/player_info/')]
+
+    if all_count == 0:
+        base['no_players'] = True
+    elif choice is not None and choice in ('birthday', 'name', 'country'):
+        q = queries[choice].extra(select=EXTRA_NULL_SELECT)\
+                           .order_by("-null_curr", "-current_rating__rating")
+        base["players"] = q[(page-1)*50:page*50]
+        base["page"] = page
+        base["next_page"] = q.count() > (page + 1) * 50
+        base["form"] = PlayerInfoForm()
+    else:
+        values = dict()
+        for k, v in queries.items():
+            c = all_count - v.count()
+            values[k] = {
+                'count': c,
+                'pctg': '%.2f' % (100*float(c)/float(all_count))
+            }
+
+        values["birthday"]["title"] = _("Players with birthday")
+        values["name"]["title"] = _("Players with name")
+        values["country"]["title"] = _("Players with country")
+
+        base["values"] = list(values.items())
+        base["values"].sort(key=lambda x: x[0])
+
+    return render_to_response('player_info.djhtml', base)
 
 # Misc staff tools
 def misc(request):

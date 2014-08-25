@@ -112,6 +112,7 @@ urlpatterns = patterns('',
     url(r'^add/events/$', 'ratings.staff_views.events'),
     url(r'^add/events/children/(?P<id>\d+)/$', 'ratings.staff_views.event_children'),
     url(r'^add/open_events/$', 'ratings.staff_views.open_events'),
+    url(r'^add/player_info/(?P<choice>[A-Za-z_]+)?/?$', 'ratings.staff_views.player_info'),
     url(r'^add/misc/$', 'ratings.staff_views.misc'),
 
     url(r'^login/$', 'aligulac.views.login_view'),

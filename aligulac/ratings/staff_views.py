@@ -1062,10 +1062,14 @@ def player_info(request, choice=None):
         base['no_players'] = True
     elif choice is not None and choice in ('birthday', 'name', 'country'):
         q = queries[choice].extra(select=EXTRA_NULL_SELECT)\
-                           .order_by("-null_curr", "-current_rating__rating")
+                           .order_by(
+                               "-null_curr",
+                               "-current_rating__rating",
+                               "id"
+                           )
         base["players"] = q[(page-1)*50:page*50]
         base["page"] = page
-        base["next_page"] = q.count() > (page + 1) * 50
+        base["next_page"] = q.count() > page * 50
         base["form"] = PlayerInfoForm()
     else:
         values = dict()

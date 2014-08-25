@@ -433,6 +433,10 @@
     return false;
   };
 
+  module.exports.create_tag = function(tag) {
+    return $(document.createElement(tag));
+  };
+
   module.exports.Common = Common = {
     init: function() {
       $('.lma').click(function() {
@@ -620,21 +624,77 @@
 
 }).call(this);
 }, "player_info": function(exports, require, module) {(function() {
-  var PlayerInfo, toggle_form;
+  var PlayerInfo, create_tag, get_player_info, toggle_form;
+
+  create_tag = require('common').create_tag;
 
   toggle_form = function(sender) {
-    var data, k, keys, val, _i, _len, _results;
+    var data, k, k2, keys, lbl, lp, val, _i, _len;
     data = function(x) {
       return $(sender).closest('tr').data(x);
     };
     keys = ['id', 'country', 'birthday', 'name', 'romanized-name'];
-    _results = [];
     for (_i = 0, _len = keys.length; _i < _len; _i++) {
       k = keys[_i];
       val = data(k);
-      _results.push($("#id_" + (k.replace('-', '_'))).val(val));
+      k2 = k.replace('-', '_');
+      $("#id_" + k2).val(val);
+      if (k2 === "id") {
+        continue;
+      }
+      lbl = $("label[for=id_" + k2 + "]");
+      if (lbl.children("small").length === 0) {
+        lbl.append(create_tag('small').attr("id", "id_" + k2 + "_small").css({
+          "font-weight": "normal"
+        }).hide());
+      } else {
+        lbl.children("small").empty().hide();
+      }
     }
-    return _results;
+    lp = data('lp');
+    if ((lp != null) && lp !== "") {
+      $("#get_lp_btn").data('lp', lp);
+      $("#get_lp_btn").show();
+      $("#get_lp_span").show();
+      return $("#get_lp_span").children("small").text(autocomp_strings["Loading..."]).hide();
+    } else {
+      $("#get_lp_btn").data('lp', null);
+      $("#get_lp_btn").hide();
+      return $("#get_lp_span").hide();
+    }
+  };
+
+  get_player_info = function(lp) {
+    $("#get_lp_span").children().toggle();
+    return $.getJSON("/add/player_info_lp/?title=" + (escape(lp)), function(_data) {
+      var c, data, k, keys, n, o, _i, _len;
+      if (_data.data == null) {
+        $("#get_lp_span").children("small").text(autocomp_strings[_data.message]);
+        return;
+      }
+      data = _data.data;
+      keys = ['name', 'romanized_name', 'birthday'];
+      for (_i = 0, _len = keys.length; _i < _len; _i++) {
+        k = keys[_i];
+        if (data[k] != null) {
+          o = $("#id_" + k).val();
+          n = data[k];
+          if (o !== n) {
+            $("#id_" + k).val(n);
+            $("#id_" + k + "_small").text(autocomp_strings["Old value"] + ": " + o).show();
+            c = $("#id_" + k).css('background-color');
+            $("#id_" + k).animate({
+              'background-color': 'rgb(144, 238, 144)'
+            }, 100).delay(750).animate({
+              'background-color': c
+            }, 600);
+          } else {
+            $("#id_" + k + "_small").hide();
+          }
+        }
+      }
+      return $("#get_lp_span").children().toggle();
+    });
   };
 
   module.exports.PlayerInfo = PlayerInfo = {
@@ -642,8 +702,12 @@
       $('.player-info-edit-button').click(function() {
         return toggle_form(this);
       });
-      return $('#country_filter').change(function() {
+      $('#country_filter').change(function() {
         return $(this).closest('form').submit();
+      });
+      return $("#get_lp_btn").click(function() {
+        get_player_info($(this).data('lp'));
+        return false;
       });
     }
   };

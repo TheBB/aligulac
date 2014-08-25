@@ -1,8 +1,11 @@
 from datetime import date, timedelta
 # Misc staff tools
 import json
+import re
 import shlex
+from urllib.request import Request, urlopen
 
+from bs4 import UnicodeDammit
 from countries import data
 from django import forms
 from django.core.exceptions import ValidationError
@@ -20,11 +23,13 @@ from django.shortcuts import (
 )
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
+from mwparserfromhell import parse as parsemw
 
 from aligulac.views import EXTRA_NULL_SELECT
 from aligulac.tools import (
     base_ctx,
     etn,
+    JsonResponse,
     login_message,
     Message,
     ntz,
@@ -1088,6 +1093,69 @@ def player_info(request, choice=None):
         base["values"].sort(key=lambda x: x[0])
 
     return render_to_response('player_info.djhtml', base)
+
+# Helper view for grabbing LP-info
+def player_info_lp(request):
+    base = base_ctx('Submit', 'Player Info', request)
+    if not base['adm']:
+        return HttpResponse(status=403)
+
+    if 'title' not in request.GET:
+        return JsonResponse({"message": "Missing title"})
+
+    return player_info_lp_helper(request.GET['title'])
+
+def player_info_lp_helper(title):
+    API_URL_BASE = (
+        "http://wiki.teamliquid.net/starcraft2/api.php?"
+        "format=json&"
+        "action=query&"
+        "titles={title}&"
+        "prop=revisions&"
+        "rvprop=content"
+    )
+    def get_lp_api_url(page_title):
+        return API_URL_BASE.format(title=page_title)
+
+    req = Request(get_lp_api_url(title))
+    resp = urlopen(req)
+
+    text = UnicodeDammit(resp.read()).unicode_markup
+    data = json.loads(text)
+
+    pages = list(data["query"]["pages"].items())
+    page = pages[0][1]
+    raw_text = page["revisions"][0]["*"]
+    m = re.match(r"#REDIRECT\[\[(.*?)\]\]", raw_text)
+    if m is not None:
+        return player_info_lp_helper(m.group(1))
+
+    mw = parsemw(raw_text)
+
+    def get_birthday(code):
+        for t in code.ifilter_templates():
+            if t.name.matches("Birth date and age"):
+                return "{}-{}-{}".format(
+                    *[str(t.get(i)).strip() for i in range(1, 4)]
+                )
+
+    for t in mw.ifilter_templates():
+        if t.name.matches('Infobox Player 2'):
+            return_data = dict()
+            if t.has('birth_date', ignore_empty=True):
+                return_data['birthday'] = (
+                    get_birthday(t.get('birth_date').value)
+                )
+            if t.has('name', ignore_empty=True):
+                return_data['name'] = (
+                    str(t.get('name').value).strip()
+                )
+            if t.has('romanized_name', ignore_empty=True):
+                return_data['romanized_name'] = (
+                    str(t.get('romanized_name').value).strip()
+                )
+            return JsonResponse({"message": "Success", "data": return_data})
+    return JsonResponse({"message": "No data found"})
 
 # Misc staff tools
 def misc(request):

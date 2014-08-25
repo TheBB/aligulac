@@ -31,6 +31,16 @@
           {% field "select" form.country %}
         </div>
         <div class="modal-footer">
+          <span id="get_lp_span">
+            <a href="#"
+               id="get_lp_btn"
+               style="display: none;"
+               class="btn btn-default">
+              {% trans "Get data from Liquipedia" %}
+              <span class="glyphicon glyphicon-download"></span>
+            </a>
+            <small style="display: none;"></small>
+          </span>
           {% use "submit" name="modplayer" %}
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
@@ -102,6 +112,7 @@
             data-birthday="{% if p.birthday %}{{ p.birthday|date:"Y-m-d" }}{% endif %}"
             data-name="{% if p.name %}{{ p.name }}{% endif %}"
             data-romanized-name="{% if p.romanized_name %}{{ p.romanized_name }}{% endif %}"
+            data-lp="{% if p.lp_name %}{{ p.lp_name }}{% endif %}"
             class="info-row">
           <td class="rl_icon">
             {% if p.country %}

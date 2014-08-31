@@ -5950,7 +5950,7 @@ msgstr "Første kamp"
 
 #: templates/player.djhtml:672
 msgid "Last match"
-msgstr "Sidste kamp"
+msgstr "Seneste kamp"
 
 #: templates/player.djhtml:684
 msgid "Matches played"

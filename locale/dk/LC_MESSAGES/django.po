@@ -2907,7 +2907,7 @@ msgstr "Aliasser"
 
 #: aligulac/ratings/player_views.py:103 templates/player.djhtml:654
 msgid "Birthday"
-msgstr "Fødselsdage"
+msgstr "Fødselsdag"
 
 #: aligulac/ratings/player_views.py:105 aligulac/ratings/player_views.py:158
 #: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:199
@@ -5934,7 +5934,7 @@ msgstr "#%(rank)s %(countryfull)s"
 
 #: templates/player.djhtml:636
 msgid "Full name"
-msgstr "Fulde navn"
+msgstr "Fuldt navn"
 
 #: templates/player.djhtml:642
 msgid "Romanized name"

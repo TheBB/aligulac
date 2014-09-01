@@ -60,10 +60,10 @@ To use, you should define the following blocks:
       <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
       {% if debug %}
         <p class="subheading" style="color: red; font-weight: bold;">
-          <span class="visible-lg">{% trans "DEVELOPMENT SERVER" %} (LARGE)</span>
-          <span class="visible-md">{% trans "DEVELOPMENT SERVER" %} (MEDIUM)</span>
-          <span class="visible-sm">{% trans "DEVELOPMENT SERVER" %} (SMALL)</span>
-          <span class="visible-xs">{% trans "DEVELOPMENT SERVER" %} (EXTRA SMALL)</span>
+          <span class="visible-lg">{{ commithash }} (LARGE)</span>
+          <span class="visible-md">{{ commithash }} (MEDIUM)</span>
+          <span class="visible-sm">{{ commithash }} (SMALL)</span>
+          <span class="visible-xs">{{ commithash }} (EXTRA SMALL)</span>
         </p>
       {% else %}
         <p class="subheading text-muted">{% trans "StarCraft 2 Progaming Statistics and Predictions" %}</p>

@@ -4,6 +4,7 @@ import json
 import random
 import shlex
 import string
+import subprocess
 from datetime import (
     date, 
     datetime,
@@ -21,7 +22,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_protect
 
 from aligulac.cache import cache_page
-from aligulac.settings import DEBUG
+from aligulac.settings import PROJECT_PATH, DEBUG
 
 from ratings.models import (
     Earnings,
@@ -321,6 +322,11 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
             if rating is not None:
                 add_subnav(_('Adjustments'), base_url + 'period/%i/' % rating.period.id)
+
+
+    if DEBUG:
+        p = subprocess.Popen(['git', '-C', PROJECT_PATH, 'rev-parse', 'HEAD'], stdout=subprocess.PIPE)
+        base['commithash'] = p.communicate()[0].decode().strip()[:8]
 
     return base
 # }}}

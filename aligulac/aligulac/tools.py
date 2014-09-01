@@ -328,6 +328,10 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         p = subprocess.Popen(['git', '-C', PROJECT_PATH, 'rev-parse', 'HEAD'], stdout=subprocess.PIPE)
         base['commithash'] = p.communicate()[0].decode().strip()[:8]
 
+        p = subprocess.Popen(['git', '-C', PROJECT_PATH, 'rev-parse', '--abbrev-ref', 'HEAD'],
+                             stdout=subprocess.PIPE)
+        base['commitbranch'] = p.communicate()[0].decode().strip()
+
     return base
 # }}}
 

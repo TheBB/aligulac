@@ -1,4 +1,6 @@
 # {{{ Imports
+import os
+
 from tastypie.api import Api
 
 from django.conf.urls import (
@@ -141,12 +143,12 @@ urlpatterns = patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^fonts/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/fonts'}),
+            {'document_root': os.path.abspath(settings.PROJECT_PATH + '../resources/fonts')}),
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/css'}),
+            {'document_root': os.path.abspath(settings.PROJECT_PATH + '../resources/css')}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/js'}),
+            {'document_root': os.path.abspath(settings.PROJECT_PATH + '../resources/js')}),
         url(r'^img/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/img'})
+            {'document_root': os.path.abspath(settings.PROJECT_PATH + '../resources/img')})
     )
 # }}}

@@ -60,13 +60,13 @@ else:
     files = [f.strip() for f in files if f.strip() != '']
 files.append(this_file_name)
 
-if len(files) > 100:
-    for f in files[:-100]:
+if len(files) > 50:
+    for f in files[:-50]:
         try:
             os.remove(os.path.join(BACKUP_PATH, f))
         except:
             pass
-    files = files[-100:]
+    files = files[-50:]
 
 with open(files_path, 'w') as f:
     for item in files:

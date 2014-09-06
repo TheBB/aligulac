@@ -289,7 +289,7 @@ ratings.views.events.
         {% if siblings or children %}
           <div class="tab-pane active" id="navigation" style="padding-top: 1em;">
             {% if siblings %}
-              <h4>Same level</h4>
+              <h4>{% trans "Same level" %}</h4>
               {% if siblings.count < 30 %}
                 <p class="searchres">
                   {% for e in siblings %}
@@ -314,7 +314,7 @@ ratings.views.events.
             {% endif %}
 
             {% if children %}
-              <h4>Next level</h4>
+              <h4>{% trans "Next level" %}</h4>
               {% if children.count < 30 %}
                 <p class="searchres">
                   {% for e in children %}

@@ -2,7 +2,7 @@
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
 
 jQuery(function($){
-    $datepicker.regional['pl'] = {
+    $.datepicker.regional['pl'] = {
         closeText: 'Zamknij',
         prevText: '&#x3C;Poprzedni',
         nextText: 'Następny&#x3E;',

@@ -36,6 +36,7 @@ LANGUAGES = [
     ('en', 'English'),
     ('dk', 'Dansk'),
     ('no', 'Norsk'),
+    ('pl', 'Polski'),
 ]
 
 if DEBUG:
@@ -46,7 +47,6 @@ if DEBUG:
         ('de', 'Deutsch'),
         ('fr', 'Français'),
         ('se', 'Svenska'),
-        ('pl', 'Polski'),
         ('pt', 'Português'),
     ]
 

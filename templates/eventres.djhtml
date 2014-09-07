@@ -289,7 +289,7 @@ ratings.views.events.
         {% if siblings or children %}
           <div class="tab-pane active" id="navigation" style="padding-top: 1em;">
             {% if siblings %}
-              <h4>Same level</h4>
+              <h4>{% trans "Same level" %}</h4>
               {% if siblings.count < 30 %}
                 <p class="searchres">
                   {% for e in siblings %}
@@ -314,7 +314,7 @@ ratings.views.events.
             {% endif %}
 
             {% if children %}
-              <h4>Next level</h4>
+              <h4>{% trans "Next level" %}</h4>
               {% if children.count < 30 %}
                 <p class="searchres">
                   {% for e in children %}
@@ -564,7 +564,7 @@ ratings.views.events.
           {% endif %}
           {% if adm %}
             <tr class="small">
-              <td colspan="2" class="text-center">
+              <td colspan="2" class="text-center admin-buttons">
                 <a href="#" title="{% trans "Edit info" %}" data-toggle="modal" data-target="#md-edit"><span class="glyphicon glyphicon-pencil"></span></a>
                 <a href="/admin/ratings/event/{{event.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
                 <a href="/add/?eventid={{event.id}}" title="{% trans "Add matches" %}"><span class="glyphicon glyphicon-plus"></span> </a>
@@ -577,6 +577,9 @@ ratings.views.events.
                 {% endif %}
                 {% if event.has_children %}
                   <a href="#" title="{% trans "Reorder subevents" %}" data-toggle="modal" data-target="#md-ord"><span class="glyphicon glyphicon-random"></span></a>
+                {% endif %}
+                {% if not event.closed %}
+                  <a href="?close=1" title="{% trans "Close event" %}"><span class="glyphicon glyphicon-off"></span></a>
                 {% endif %}
               </td>
             </tr>

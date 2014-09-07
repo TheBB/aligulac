@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Polish Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-06 23:46+0200\n"
-"PO-Revision-Date: 2014-09-06 23:47+0100\n"
-"Last-Translator: Eivind Fonn <evfonn@gmail.com>\n"
+"POT-Creation-Date: 2014-09-06 23:34+0200\n"
+"PO-Revision-Date: 2014-09-07 10:36-0000\n"
+"Last-Translator: Krzysztof Krasuski <zythus12@live.com>\n"
 "Language-Team: Zythus <zythus12@live.com>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.6.7\n"
 
 #: aligulac/currency.py:99
 #, python-format
@@ -62,7 +62,7 @@ msgstr "Ranking"
 
 #: aligulac/aligulac/tools.py:211 templates/player.djhtml:754
 msgid "Current"
-msgstr "Obecny"
+msgstr "Obecna"
 
 #: aligulac/aligulac/tools.py:212 aligulac/aligulac/tools.py:226
 #: templates/history.djhtml:11 templates/history.djhtml.py:139
@@ -143,11 +143,11 @@ msgstr "Wyniki"
 
 #: aligulac/aligulac/tools.py:238
 msgid "By Date"
-msgstr "Przez datę"
+msgstr "Według daty"
 
 #: aligulac/aligulac/tools.py:239
 msgid "By Event"
-msgstr "Przez wydarzenie"
+msgstr "Według zdarzenia"
 
 #: aligulac/aligulac/tools.py:240 templates/results_search.djhtml:11
 #: templates/results_search.djhtml.py:17 templates/results_search.djhtml:60
@@ -261,7 +261,7 @@ msgstr "Zawiera informacje o graczu"
 #: aligulac/aligulac/views.py:280 aligulac/aligulac/views.py:294
 #: aligulac/aligulac/views.py:305 aligulac/aligulac/views.py:323
 msgid "primary key"
-msgstr "Główny klucz"
+msgstr "Klucz główny"
 
 #: aligulac/aligulac/views.py:64
 msgid "in-game name of the player"
@@ -318,11 +318,11 @@ msgstr "ich wynik PP (zobacz <a href=\"%s\">Salę Sław</a> dla wyjaśnienia)"
 
 #: aligulac/aligulac/views.py:82
 msgid "foreign key to period (start of PP-period)"
-msgstr "zewnętrzny klucz do period (rozpoczęcie okresu PP)"
+msgstr "klucz obcy do okresu (rozpoczęcie okresu PP)"
 
 #: aligulac/aligulac/views.py:83
 msgid "foreign key to period (first period after end of PP-period)"
-msgstr "zewnętrzny klucz do period (pierwszy okres po zakończeniu okresu PP)"
+msgstr "klucz obcy do okresu (pierwszy okres po zakończeniu okresu PP)"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:86
@@ -330,8 +330,8 @@ msgid ""
 "foreign key to rating (should link to the latest published rating of the "
 "player)"
 msgstr ""
-"zewnętrzny klucz do rating (powinno kierować do ostatniej opublikowanej "
-"oceny gracza)"
+"klucz obcy do rating (powinno kierować do ostatniej opublikowanej oceny "
+"gracza)"
 
 #: aligulac/aligulac/views.py:91
 msgid "Contains game information."
@@ -340,7 +340,7 @@ msgstr "Zawiera informacje odnośnie gry."
 #. Translators: period is a table name and must be in English
 #: aligulac/aligulac/views.py:96
 msgid "foreign key to period (the period this match was played in)"
-msgstr "zewnętrzny klucz do period (okres, w którym mecz się odbył)"
+msgstr "klucz obcy do period (okres, w którym mecz się odbył)"
 
 #: aligulac/aligulac/views.py:97
 msgid "when the match was played (often approximate)"
@@ -348,11 +348,11 @@ msgstr "kiedy mecz został rozegrany (najczęściej w przybliżeniu)"
 
 #: aligulac/aligulac/views.py:98
 msgid "foreign key to player (player A)"
-msgstr "zewnętrzny klucz do gracza (gracz A)"
+msgstr "klucz obcy do gracza (gracz A)"
 
 #: aligulac/aligulac/views.py:99
 msgid "foreign key to player (player B)"
-msgstr "zewnętrzny klucz do gracza (gracz B)"
+msgstr "klucz obcy do gracza (gracz B)"
 
 #: aligulac/aligulac/views.py:100
 msgid "score for player A"
@@ -389,11 +389,11 @@ msgstr ""
 #. Translators: event is a table name and must be in English
 #: aligulac/aligulac/views.py:113
 msgid "foreign key to event (supercedes event field)"
-msgstr "zewnętrzny klucz do event (nakłada się na pole zdarzenia)"
+msgstr "klucz obcy do event (nakłada się na pole zdarzenia)"
 
 #: aligulac/aligulac/views.py:114
 msgid "foreign key to a table removed from the dump"
-msgstr "zewnętrzny klucz do table usuniętej ze składu"
+msgstr "klucz obcy do tabeli usuniętej ze składu"
 
 #: aligulac/aligulac/views.py:115
 msgid "game version used (WoL, HotS, LotV)"
@@ -406,12 +406,12 @@ msgstr "czy mecz był rozegrany offline"
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:119
 msgid "foreign key to rating (rating of player A at the time of the match)"
-msgstr "zewnętrzny klucz do rating (rating gracza A w czasie meczu)"
+msgstr "klucz obcy do rating (ocena gracza A w czasie meczu)"
 
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:123
 msgid "foreign key to rating (rating of player B at the time of the match)"
-msgstr "zewnętrzny klucz do rating (rating gracza B w czasie meczu)"
+msgstr "klucz obcy do rating (ocena gracza B w czasie meczu)"
 
 #: aligulac/aligulac/views.py:129
 msgid ""
@@ -435,7 +435,7 @@ msgstr "węzeł rodzicielski"
 
 #: aligulac/aligulac/views.py:136 aligulac/aligulac/views.py:137
 msgid "deprecated"
-msgstr "potępiony"
+msgstr "używany sporadycznie"
 
 #: aligulac/aligulac/views.py:138
 msgid "whether the event is finished or not"
@@ -463,7 +463,7 @@ msgid ""
 "bit-flag value denoting which TLPD databases this event is in: (1 = KR WoL, "
 "2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)"
 msgstr ""
-"bitowa-flaga wartości oznaczająca w której bazie danych TLPD jest to "
+"flaga bitowa, której wartość oznacza w której bazie danych TLPD jest to "
 "zdarzenie: (1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)"
 
 #: aligulac/aligulac/views.py:152
@@ -472,7 +472,7 @@ msgstr "TL.net ID forumowego tematu"
 
 #: aligulac/aligulac/views.py:153
 msgid "whether this event has an associated prizepool (NULL if unknown)"
-msgstr "czy to zdarzenie posiada wyznaczone nagrody(NULL jeśli niewiadomą)"
+msgstr "czy to zdarzenie posiada wyznaczone nagrody (NULL jeśli niewiadomą)"
 
 #: aligulac/aligulac/views.py:154
 msgid "date of earliest match"
@@ -494,9 +494,9 @@ msgid ""
 "events are always categories and that descendants of events are always "
 "rounds)"
 msgstr ""
-"kategoria, zdarzenie (to jest turniej) albo runda (możesz przyjąć, że "
-"przodkowie zdarzeń są zawsze kategoriami, natomiast spadkobiercy zdarzeń są "
-"zawsze rundami)"
+"kategoria, zdarzenie (np. turniej) albo runda (możesz przyjąć, że przodkowie "
+"zdarzeń są zawsze kategoriami, natomiast spadkobiercy zdarzeń są zawsze "
+"rundami)"
 
 #: aligulac/aligulac/views.py:164
 msgid "sorting index"
@@ -516,7 +516,7 @@ msgstr ""
 #: aligulac/aligulac/views.py:174 aligulac/aligulac/views.py:176
 #: aligulac/aligulac/views.py:282 aligulac/aligulac/views.py:313
 msgid "foreign key to event"
-msgstr "zewnętrzny klucz do event"
+msgstr "klucz obcy do event"
 
 #: aligulac/aligulac/views.py:177
 msgid "how many edges between the nodes"
@@ -529,14 +529,14 @@ msgstr "Posiada informacje dotyczące oceny."
 #. Translators: period is a table name and must be in English
 #: aligulac/aligulac/views.py:185
 msgid "foreign key to period"
-msgstr "zewnętrzny klucz do period"
+msgstr "klucz obcy do period"
 
 #. Translators: player is a table name and must be in English
 #: aligulac/aligulac/views.py:187 aligulac/aligulac/views.py:264
 #: aligulac/aligulac/views.py:284 aligulac/aligulac/views.py:297
 #: aligulac/aligulac/views.py:311 aligulac/aligulac/views.py:324
 msgid "foreign key to player"
-msgstr "zewnętrzny klucz do player"
+msgstr "klucz obcy do player"
 
 #: aligulac/aligulac/views.py:188
 msgid "current rating"
@@ -647,7 +647,7 @@ msgstr "różnica oceny do liczby 7 (używane w <a href=\"%s\">Sala Sław</a>)"
 #. Translators: rating is a table name and must be in English
 #: aligulac/aligulac/views.py:218
 msgid "foreign key to rating; previous rating for this player"
-msgstr "zewnętrzny klucz do rating; poprzedni rating tego gracza"
+msgstr "klucz obcy do rating; poprzednia ocena tego gracza"
 
 #: aligulac/aligulac/views.py:222
 msgid ""
@@ -752,7 +752,7 @@ msgstr "Łączy drużyny i graczy razem w związku wielu-do-wielu."
 #: aligulac/aligulac/views.py:266 aligulac/aligulac/views.py:299
 #: aligulac/aligulac/views.py:315
 msgid "foreign key to group"
-msgstr "zewnętrzny klucz do group"
+msgstr "klucz obcy do group"
 
 #: aligulac/aligulac/views.py:267
 msgid "start date of membership"
@@ -824,7 +824,7 @@ msgstr "informacja, ostrzeżenie, sukces albo błąd"
 
 #: aligulac/aligulac/views.py:308
 msgid "text describing this message"
-msgstr "tekst opisujący tą wiadomość"
+msgstr "tekst opisujący tę wiadomość"
 
 #: aligulac/aligulac/views.py:309 aligulac/aligulac/views.py:326
 msgid "parameters for string interpolation"
@@ -833,7 +833,7 @@ msgstr "parametry dla wstawiania ciągu znaków"
 #. Translators: match is a table name and must be in English
 #: aligulac/aligulac/views.py:317
 msgid "foreign key to match"
-msgstr "zewnętrzny klucz do match"
+msgstr "klucz obcy do match"
 
 #: aligulac/aligulac/views.py:321
 msgid "Contains stories (dots plotted in some players' rating charts.)"
@@ -850,7 +850,7 @@ msgstr "kiedy to się wydarzyło"
 #. Translators: event is a table name and must be in English
 #: aligulac/aligulac/views.py:329
 msgid "foreign key to event (if applicable)"
-msgstr "zewnętrzny  klucz do event (jeśli da się zastosować)"
+msgstr "klucz obcy do event (jeśli da się zastosować)"
 
 #: aligulac/aligulac/views.py:342 aligulac/blog/views.py:18
 msgid "The blog/news section is only in English, sorry."
@@ -1907,7 +1907,7 @@ msgstr "Oczekuje dokładnie jednego \"best of\"."
 #: aligulac/ratings/inference_views.py:63 templates/pred_4pswiss.djhtml:10
 #: templates/pred_4pswiss.djhtml.py:16
 msgid "Dual tournament"
-msgstr "Podwójny turniej."
+msgstr "Drabinka podwójnej eliminacji"
 
 #: aligulac/ratings/inference_views.py:65
 msgid "Expected exactly four players."
@@ -1916,7 +1916,7 @@ msgstr "Oczekuje dokładnie 4 graczy."
 #: aligulac/ratings/inference_views.py:70 templates/pred_sebracket.djhtml:10
 #: templates/pred_sebracket.djhtml.py:16
 msgid "Single elimination bracket"
-msgstr "Drabinka pojedynczej eliminacji."
+msgstr "Drabinka pojedynczej eliminacji"
 
 #: aligulac/ratings/inference_views.py:72
 msgid "Expected number of players to be a power of two (2,4,8,…)."
@@ -1929,7 +1929,7 @@ msgstr "Oczekiwane co najmniej jedno 'best of'."
 #: aligulac/ratings/inference_views.py:77 templates/pred_proleague.djhtml:17
 #: templates/pred_rrgroup.djhtml:11 templates/pred_rrgroup.djhtml.py:17
 msgid "Round robin group"
-msgstr "Grupa round robin."
+msgstr "Każdy z każdym"
 
 #: aligulac/ratings/inference_views.py:79
 msgid "Expected at least three players."
@@ -1937,7 +1937,7 @@ msgstr "Oczekiwana liczba graczy to co najmniej trzy."
 
 #: aligulac/ratings/inference_views.py:85
 msgid "Proleague team match"
-msgstr "Mecz drużynowy Proligi."
+msgstr "Mecz drużynowy Proligi"
 
 #: aligulac/ratings/inference_views.py:87
 msgid "Expected an even number of players."
@@ -2097,7 +2097,7 @@ msgstr "MMA i DongRaeGu grali Bo5+."
 
 #: aligulac/ratings/misc_views.py:92
 msgid "Mvp won a premier event"
-msgstr "Mvp wygrał duży turniej"
+msgstr "Mvp wygrał premier tournament"
 
 #: aligulac/ratings/misc_views.py:102
 msgid "A Korean terran won against a Korean protoss in a Bo5+ (offline)"
@@ -2117,7 +2117,7 @@ msgstr "Foreigner wygrał w GSL Code S"
 
 #: aligulac/ratings/misc_views.py:134
 msgid "A CIS player won a major event"
-msgstr "Gracz CIS wygrał duży turniej"
+msgstr "Gracz CIS wygrał major tournament"
 
 #: aligulac/ratings/misc_views.py:135
 msgid "Player from BY, RU, UA or KZ with 1st place prize money >= $2000"
@@ -2125,7 +2125,7 @@ msgstr "Gracz z BY, RU, UA or KZ z pieniędzmi za 1. miejsce => $2000"
 
 #: aligulac/ratings/misc_views.py:143
 msgid "A Nordic player won a major event"
-msgstr "Gracz nordycki wygrał duży turniej"
+msgstr "Gracz nordycki wygrał major tournament"
 
 #: aligulac/ratings/misc_views.py:144
 msgid "Player from SE, NO, DK, IS or FI with 1st place prize money >= $2000"
@@ -2133,7 +2133,7 @@ msgstr "Gracz ze SE, NO, DK, IS albo FI z nagrodą za 1. miejsce >= $2000"
 
 #: aligulac/ratings/misc_views.py:152
 msgid "A North American player won a major event"
-msgstr "Północnoamerykański gracz wygrał duże zdarzenie"
+msgstr "Północnoamerykański gracz wygrał major tournament"
 
 #: aligulac/ratings/misc_views.py:153
 msgid "Player from US or CA with 1st place prize money >= $2000"
@@ -2141,7 +2141,7 @@ msgstr "Gracz z USA lub CA z nagrodą za 1. miejsce >= $2000"
 
 #: aligulac/ratings/misc_views.py:161
 msgid "A foreigner won a premier event"
-msgstr "Foreigner wygrał duży turniej"
+msgstr "Foreigner wygrał premier tournament"
 
 #: aligulac/ratings/misc_views.py:162
 msgid "At least one game played offline with 1st place prize money >= $10,000"
@@ -2171,7 +2171,7 @@ msgstr "Dodaj najwyżej 6 graczy."
 #: aligulac/ratings/misc_views.py:413 templates/eventres.djhtml:209
 #: templates/eventres.djhtml.py:226 templates/periods.djhtml:26
 msgid "New"
-msgstr "Nowych"
+msgstr "Nowi"
 
 #: aligulac/ratings/misc_views.py:414
 msgid "Edit"
@@ -2195,11 +2195,11 @@ msgstr "Bo3"
 
 #: aligulac/ratings/misc_views.py:433
 msgid "a round robin group"
-msgstr "grupa round robin"
+msgstr "każdy z każdym"
 
 #: aligulac/ratings/misc_views.py:438
 msgid "a dual tournament"
-msgstr "podwójny turniej"
+msgstr "dual tournament"
 
 #: aligulac/ratings/misc_views.py:442
 msgid "Between these players"
@@ -2872,7 +2872,7 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:98 templates/player_info.djhtml:100
 msgid "Tag"
-msgstr "Tag"
+msgstr "Pseudonim"
 
 #: aligulac/ratings/player_views.py:99 templates/player.djhtml:601
 #: templates/player_info.djhtml:99
@@ -2947,7 +2947,7 @@ msgstr "Zmieniono %s."
 
 #: aligulac/ratings/player_views.py:152
 msgid "tag"
-msgstr "tag"
+msgstr "Pseudonim"
 
 #: aligulac/ratings/player_views.py:153
 msgid "race"
@@ -3020,7 +3020,7 @@ msgstr "Format meczu"
 #: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:554
 #: aligulac/ratings/results_views.py:947
 msgid "Both"
-msgstr "Obaj"
+msgstr "Oba"
 
 #: aligulac/ratings/player_views.py:203 aligulac/ratings/results_views.py:97
 #: aligulac/ratings/results_views.py:555 aligulac/ratings/results_views.py:713
@@ -3932,8 +3932,8 @@ msgstr "Bitcoin"
 #, python-format
 msgid "Player '%s' was not found and cound not be made (missing player tag)"
 msgstr ""
-"Gracz '%s' nie został znaleziony i nie mógł zostać stworzony (brakuje tagu "
-"gracza)"
+"Gracz '%s' nie został znaleziony i nie mógł zostać stworzony (brakuje "
+"psuedonimu gracza)"
 
 #: aligulac/ratings/tools.py:194
 #, python-format
@@ -4137,7 +4137,7 @@ msgstr ""
 
 #: templates/add.djhtml:99
 msgid "Player tag, e.g. <code>DongRaeGu</code>."
-msgstr "Tag gracza, np. <code>DongRaeGu</code>."
+msgstr "Psuedonim gracza, np. <code>DongRaeGu</code>."
 
 #: templates/add.djhtml:100
 msgid ""
@@ -4215,7 +4215,7 @@ msgid ""
 "Some entries might produce warnings, in which case you will be notified "
 "about what to do. This happens when:"
 msgstr ""
-"Gdy dodasz, system postara się dodać tyle meczy, ile będzie mógł. Niektóre "
+"Gdy dodasz, system postara się dodać tyle meczów, ile będzie mógł. Niektóre "
 "wpisy mogą wyrzucić ostrzeżenia, wtedy zostaniesz poinformowany co robić. To "
 "dzieje się wtedy, gdy:"
 
@@ -4235,10 +4235,10 @@ msgid ""
 "Please also provide a country code if possible, and make sure the player tag "
 "is spelled correctly (including capitalisation)."
 msgstr ""
-"Gracz nie może został znaleziony. W takim wypadku dodaj <code>!MAKE</code> "
+"Gracz nie może zostać znaleziony. W takim wypadku dodaj <code>!MAKE</code> "
 "na koniec odpowiednich linii. To stworzy wpis gracza jeśli będzie potrzebny. "
-"W tym wypadku <strong>musisz</strong> dostarczyć nam tag gracza i jego rasę. "
-"Dodatkowo, proszę dostarcz kod kraju i upewnij się, że tag gracza jest "
+"W tym wypadku <strong>musisz</strong> dostarczyć nam psuedonim gracza i jego "
+"rasę. Dodatkowo, proszę dostarcz kod kraju i upewnij się, że tag gracza jest "
 "odpowiednio wpisany (wliczając wielkość liter)."
 
 #: templates/add.djhtml:121
@@ -4283,7 +4283,7 @@ msgid ""
 "strong>."
 msgstr ""
 "Większość graczy jest unikalnie identyfikowalna przez ich nicki. Po listę "
-"najczęściej spotykanych wyjątków zajrzyj na <strong>FAQ</strong>."
+"najczęściej spotykanych wyjątków zajrzyj do <strong>FAQ</strong>."
 
 #: templates/add.djhtml:132
 msgid "Here are some real-world examples. From the GSL:"
@@ -4321,8 +4321,8 @@ msgid ""
 "Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top all need "
 "to be identified by race and/or country."
 msgstr ""
-"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest, and Top wszyscy "
-"muszą być identyfikowani przez rasę i/lub kraj."
+"Creator, Dream, First, Happy, Maru, Rain, Tails, TheBest i Top muszą być "
+"identyfikowani przez rasę i/lub kraj."
 
 #: templates/add.djhtml:151
 msgid "Common country codes"
@@ -4515,7 +4515,7 @@ msgid ""
 "have been removed from the dump (primarily involving user accounts). "
 "Everything given below is in terms of <strong>PostgreSQL standards</strong>."
 msgstr ""
-"Stos zawiera 11 tabel. Niektóre kolumny to zewnętrzne klucze do tabel, które "
+"Stos zawiera 11 tabel. Niektóre kolumny to obce klucze do tabel, które "
 "zostały usunięte ze stosu (głównie korzystając z kont użytkowników). "
 "Wszystko podane poniżej działa pod zasadami <strong>standardów PostgreSQL</"
 "strong>."
@@ -5138,7 +5138,7 @@ msgid ""
 "when the player was not in the top seven, if these are sufficiently brief "
 "and negligible."
 msgstr ""
-"Dla większości graczy ich PO jest równe sumie różnic ocen każdej listy, na "
+"Dla większości graczy ich PP są równe sumie różnic ocen każdej listy, na "
 "której byli w top siedem. Jeżeli gracz był tam więcej niż raz, optymalny "
 "zasięg list jest wybierany i może on zaliczać także okresy, kiedy gracza nie "
 "było w top siedem, jeśli są one wystarczająco krótkie i nieistotne."
@@ -5198,7 +5198,7 @@ msgstr "tygodnie"
 
 #: templates/index.djhtml:69
 msgid "StarCraft 2 Progaming Statistics and Predictions"
-msgstr "StarCraft 2 Profesjonalne Statystyki i Przewidywania"
+msgstr "StarCraft 2 Profesjonalne Statystyki i Predykcje"
 
 #: templates/index.djhtml:111 templates/language.djhtml:11
 #: templates/language.djhtml.py:17
@@ -5708,7 +5708,7 @@ msgstr "Lamiąca"
 
 #: templates/periods.djhtml:25
 msgid "Active"
-msgstr "Aktywnych"
+msgstr "Aktywni"
 
 #: templates/player.djhtml:21 templates/player_info.djhtml:20
 msgid "Modify player"
@@ -5773,9 +5773,9 @@ msgstr[2] "Rywale"
 #: templates/player.djhtml:556
 msgid "Nemesis"
 msgid_plural "Nemeses"
-msgstr[0] "Nemesis"
-msgstr[1] "Nemeses"
-msgstr[2] "Nemeses"
+msgstr[0] "Wróg"
+msgstr[1] "Wrogowie"
+msgstr[2] "Wrogowie"
 
 #: templates/player.djhtml:560
 msgid "Victim"
@@ -5824,7 +5824,7 @@ msgstr "Ostatni mecz"
 
 #: templates/player.djhtml:687
 msgid "Matches played"
-msgstr "Meczy rozegranych"
+msgstr "Meczów rozegranych"
 
 #. Translators: SC2E = sc2earnings.com
 #: templates/player.djhtml:708
@@ -5842,12 +5842,12 @@ msgstr "Historia drużyn"
 #: templates/player.djhtml:752 templates/player_transfers.djhtml:22
 #: templates/team.djhtml:231
 msgid "Joined"
-msgstr "Do"
+msgstr "Dołączył"
 
 #: templates/player.djhtml:753 templates/player_transfers.djhtml:20
 #: templates/team.djhtml:232
 msgid "Left"
-msgstr "Z"
+msgstr "Odszedł"
 
 #: templates/player.djhtml:764
 msgid "yes"
@@ -5875,7 +5875,7 @@ msgstr "W %(year)s lat, %(tag)s zarobił $%(money)s."
 
 #: templates/player_earnings.djhtml:38
 msgid "Broken down by currency, that is..."
-msgstr "Rozpisując walutami..."
+msgstr "W podziale na waluty:"
 
 #: templates/player_earnings.djhtml:71
 msgid "Placement"
@@ -5887,15 +5887,11 @@ msgstr "Turniej"
 
 #: templates/player_info.djhtml:7
 msgid "Player Info"
-msgstr "Informacje o graczu"
+msgstr "Informacje o graczach"
 
 #: templates/player_info.djhtml:39
 msgid "Get data from Liquipedia"
 msgstr "Pobierz dane z Liquipedii"
-
-#: templates/player_info.djhtml:45
-msgid "Close"
-msgstr "Zamknij"
 
 #: templates/player_info.djhtml:59
 msgid "Player information"
@@ -6127,7 +6123,7 @@ msgid ""
 "then all the players of the other team. There must be an equal number of "
 "each, but it doesn't have to be odd."
 msgstr ""
-"Dla <b>meczy proligi</b> najpierw wpisz wszystkich graczy z jednej drużyny, "
+"Dla <b>meczów proligi</b> najpierw wpisz wszystkich graczy z jednej drużyny, "
 "a następnie wszystkich graczy z drugiej drużyny. Musi być ich taka sama "
 "liczba."
 
@@ -6219,7 +6215,7 @@ msgstr ""
 #: templates/records.djhtml:32
 #, python-format
 msgid "Highest ratings ever achieved by %(rc)s."
-msgstr "Najwyższe oceny kiedykolwiek osiągnięte przez rasę %(rc)s."
+msgstr "Najwyższe oceny kiedykolwiek osiągnięte przez rasę %(rc)s"
 
 #: templates/records.djhtml:34
 msgid "Highest ratings ever achieved"
@@ -6321,8 +6317,8 @@ msgid ""
 "likely correlated to) actual game balance throughout the whole player "
 "population."
 msgstr ""
-"Pamiętaj, że daje to informacje dotyczące <em>metagame-u</em> blisko "
-"<em>topki w skillu na ladderze</em>, i nie powinno być mylone (mimo, że "
+"Pamiętaj, że daje to informacje dotyczące <em>metagame'u</em> blisko "
+"<em>topki w skillu na ladderze</em> i nie powinno być mylone (mimo że "
 "najprawdopodobniej jest powiązane) z właściwym balansem gry dotyczącym "
 "wszystkich graczy."
 
@@ -6332,9 +6328,9 @@ msgid ""
 "Protoss vs. Terran graph shoots up, that means Protoss is doing well and "
 "Terran poorly."
 msgstr ""
-"Statystyka jest pokazana w zgodzie z rasą wypisaną jako pierwsza. Jeżeli "
-"wyskoczy wykres Protoss vs. Terran, to oznacza, że Protoss daje sobie radę, "
-"a Terran niezbyt."
+"Statystyka jest pokazana zgodnie z rasą wypisaną jako pierwsza. Jeżeli "
+"wystrzeli w górę wykres Protoss vs. Terran to znaczy, że Protoss daje sobie "
+"radę, a Terran niezbyt."
 
 #: templates/reports_balance.djhtml:213
 #, python-format
@@ -6353,8 +6349,8 @@ msgstr ""
 "<em>aktualną wydajnością</em> potwierdzoną przez wyniki, a <em>wydajnością "
 "przewidywaną</em> przez ocenę. Na przykład, jeżeli, uśredniając do miesiąca, "
 "wszyscy Terranie mieli średnią różnicę w ocenie -100 (co trzeba uściślić, że "
-"ich średnia ocena była równa 100 mniej, niż ich przeciwników), ale grali "
-"tak, jakby ich średnia różnica w ocenie wynosiła +100 (około 54.5%% w "
+"ich średnia ocena była równa 100 mniej niż ich przeciwników), ale grali tak, "
+"jakby ich średnia różnica w ocenie wynosiła +100 (około 54.5%% w "
 "statystykach), wtedy liczy się to do różnicy w wydajności jako <strong>+200</"
 "strong>, co trzeba interpretować jako to, że Terranie ogólnie grali o 200 "
 "punktów lepiej, niż zakładano."
@@ -6414,7 +6410,7 @@ msgstr ""
 
 #: templates/results_search.djhtml:29
 msgid "Player tag, e.g. \"DongRaeGu\""
-msgstr "Tag gracza, np. \"DongRaeGu\""
+msgstr "Pseudonim gracza, np. \"DongRaeGu\""
 
 #: templates/results_search.djhtml:30
 msgid "Race, i.e. \"P\", \"T\", \"Z\", \"R\" or \"S\""
@@ -6426,8 +6422,8 @@ msgid ""
 "A two- or three-letter <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> country "
 "code. e.g. \"KR\", or the common English name of a country"
 msgstr ""
-"2. lub 3. literowy <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> kod kraju np."
-"\"KR\", lub popularna angielska nazwa tego kraju"
+"Dwu- lub trzyliterowy <a href=\"%(uri)s\">ISO 3166-1 alpha-2</a> kod kraju "
+"np.\"KR\", lub popularna angielska nazwa tego kraju"
 
 #: templates/results_search.djhtml:34
 msgid "Team name, e.g. \"MVP\""
@@ -6496,7 +6492,7 @@ msgstr "Odznacz wszystkie"
 #: templates/results_search.djhtml:124
 msgid "The following modifications will be made to all checked matches:"
 msgstr ""
-"Następujące modyfikacje zostaną dodane do wszystkich zaznaczonych meczy:"
+"Następujące modyfikacje zostaną dodane do wszystkich zaznaczonych meczów:"
 
 #: templates/review.djhtml:12 templates/review.djhtml.py:18
 msgid "Review results"

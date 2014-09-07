@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Polish Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-06 23:34+0200\n"
-"PO-Revision-Date: 2014-09-07 10:14-0000\n"
+"PO-Revision-Date: 2014-09-07 10:36-0000\n"
 "Last-Translator: Krzysztof Krasuski <zythus12@live.com>\n"
 "Language-Team: Zythus <zythus12@live.com>\n"
 "Language: pl\n"
@@ -62,7 +62,7 @@ msgstr "Ranking"
 
 #: aligulac/aligulac/tools.py:211 templates/player.djhtml:754
 msgid "Current"
-msgstr "Obecny"
+msgstr "Obecna"
 
 #: aligulac/aligulac/tools.py:212 aligulac/aligulac/tools.py:226
 #: templates/history.djhtml:11 templates/history.djhtml.py:139
@@ -143,11 +143,11 @@ msgstr "Wyniki"
 
 #: aligulac/aligulac/tools.py:238
 msgid "By Date"
-msgstr "Przez datę"
+msgstr "Według daty"
 
 #: aligulac/aligulac/tools.py:239
 msgid "By Event"
-msgstr "Przez wydarzenie"
+msgstr "Według zdarzenia"
 
 #: aligulac/aligulac/tools.py:240 templates/results_search.djhtml:11
 #: templates/results_search.djhtml.py:17 templates/results_search.djhtml:60
@@ -4235,7 +4235,7 @@ msgid ""
 "Please also provide a country code if possible, and make sure the player tag "
 "is spelled correctly (including capitalisation)."
 msgstr ""
-"Gracz nie może został znaleziony. W takim wypadku dodaj <code>!MAKE</code> "
+"Gracz nie może zostać znaleziony. W takim wypadku dodaj <code>!MAKE</code> "
 "na koniec odpowiednich linii. To stworzy wpis gracza jeśli będzie potrzebny. "
 "W tym wypadku <strong>musisz</strong> dostarczyć nam psuedonim gracza i jego "
 "rasę. Dodatkowo, proszę dostarcz kod kraju i upewnij się, że tag gracza jest "
@@ -5842,12 +5842,12 @@ msgstr "Historia drużyn"
 #: templates/player.djhtml:752 templates/player_transfers.djhtml:22
 #: templates/team.djhtml:231
 msgid "Joined"
-msgstr "Do"
+msgstr "Dołączył"
 
 #: templates/player.djhtml:753 templates/player_transfers.djhtml:20
 #: templates/team.djhtml:232
 msgid "Left"
-msgstr "Z"
+msgstr "Odszedł"
 
 #: templates/player.djhtml:764
 msgid "yes"

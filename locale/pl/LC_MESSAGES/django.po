@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Polish Aligulac\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-06 23:34+0200\n"
-"PO-Revision-Date: 2014-09-07 10:36-0000\n"
+"PO-Revision-Date: 2014-09-07 23:51-0000\n"
 "Last-Translator: Krzysztof Krasuski <zythus12@live.com>\n"
 "Language-Team: Zythus <zythus12@live.com>\n"
 "Language: pl\n"
@@ -335,7 +335,7 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:91
 msgid "Contains game information."
-msgstr "Zawiera informacje odnośnie gry."
+msgstr "Zawiera informacje odnośnie meczu."
 
 #. Translators: period is a table name and must be in English
 #: aligulac/aligulac/views.py:96
@@ -393,7 +393,7 @@ msgstr "klucz obcy do event (nakłada się na pole zdarzenia)"
 
 #: aligulac/aligulac/views.py:114
 msgid "foreign key to a table removed from the dump"
-msgstr "klucz obcy do tabeli usuniętej ze składu"
+msgstr "klucz obcy do tabeli usuniętej ze zrzutu"
 
 #: aligulac/aligulac/views.py:115
 msgid "game version used (WoL, HotS, LotV)"
@@ -422,8 +422,8 @@ msgid ""
 msgstr ""
 "Zawiera informacje o zdarzeniu. Zdarzenia są organizowane w drzewku opisanym "
 "<strong>eventadjacency</strong>. \"Zdarzenie\" w tym wypadku oznacza "
-"cokolwiek , np. organizatora, sezon, turniej, rundę (włączając "
-"kwalifikacje), grupę, dni i tygodnie, itd."
+"cokolwiek, np. organizatora, sezon, turniej, rundę (włączając kwalifikacje), "
+"grupę, dni i tygodnie, itd."
 
 #: aligulac/aligulac/views.py:134
 msgid "name of this node"
@@ -509,8 +509,8 @@ msgid ""
 "closure, so links of any distance are listed."
 msgstr ""
 "Posiada drzewo informacji dla zdarzeń. Jest tu zawarty wiersz dla każdej "
-"relacji przodek-spadkobierca. Ta tabela zawiera przemijające zamknięcie, "
-"więc linki jakiejkolwiek odległości są wypisane."
+"relacji przodek-potomek. Ta tabela zawiera przemijające zamknięcie, więc "
+"linki jakiejkolwiek odległości są wypisane."
 
 #. Translators: event is a table name and must be in English
 #: aligulac/aligulac/views.py:174 aligulac/aligulac/views.py:176
@@ -2887,7 +2887,7 @@ msgstr "Rasa"
 #: templates/recordlist.djhtml:15 templates/team.djhtml:230
 #: templates/teams.djhtml:22
 msgid "Name"
-msgstr "Nazwa"
+msgstr "Gracz"
 
 #: aligulac/ratings/player_views.py:101 templates/player_info.djhtml:102
 msgid "Romanized Name"
@@ -4468,7 +4468,7 @@ msgstr "Nieskatalogowane mecze"
 #: templates/db.djhtml:98
 #, python-format
 msgid "%(nplayers)s, of which %(nkoreans)s Koreans"
-msgstr "%(nplayers)s, z których %(nkoreans)s Koreańczyków"
+msgstr "%(nplayers)s, w tym %(nkoreans)s Koreańczyków"
 
 #: templates/db.djhtml:107
 #, python-format
@@ -4485,7 +4485,7 @@ msgstr "więcej"
 
 #: templates/db.djhtml:141
 msgid "Database dump"
-msgstr "Stos bazy danych"
+msgstr "Zrzut bazy danych"
 
 #: templates/db.djhtml:144
 #, python-format
@@ -4493,7 +4493,7 @@ msgid ""
 "The database dump file is currently %(span)soffline</span> for reasons "
 "unknown."
 msgstr ""
-"Plik stosu bazy danych jest w tym momencie %(span)soffline</span> z "
+"Plik zrzutu bazy danych jest w tym momencie %(span)soffline</span> z "
 "nieznanego powodu."
 
 #: templates/db.djhtml:150
@@ -4504,7 +4504,7 @@ msgid ""
 "as of %(datetime)s (UTC %(tz)s). It is free to use for non-commercial "
 "purposes if you credit this website when doing so."
 msgstr ""
-"Możesz ściągnąć stos PostgreSQL <a href=\"%(dump)s\">stąd</a> (%(dumpmb)s "
+"Możesz ściągnąć zrzut PostgreSQL <a href=\"%(dump)s\">stąd</a> (%(dumpmb)s "
 "MiB) lub <a href=\"%(gzdump)s\">stąd</a> (%(gzdumpmb)s MiB gzipped), na "
 "dzień %(datetime)s (UTC %(tz)s). Można go używać za darmo w celach "
 "niekomercyjnych, jeżeli wspomnisz o tej stronie używając go."
@@ -4515,9 +4515,9 @@ msgid ""
 "have been removed from the dump (primarily involving user accounts). "
 "Everything given below is in terms of <strong>PostgreSQL standards</strong>."
 msgstr ""
-"Stos zawiera 11 tabel. Niektóre kolumny to obce klucze do tabel, które "
-"zostały usunięte ze stosu (głównie korzystając z kont użytkowników). "
-"Wszystko podane poniżej działa pod zasadami <strong>standardów PostgreSQL</"
+"Zrzut zawiera 11 tabel. Niektóre kolumny to obce klucze do tabel, które "
+"zostały usunięte ze stosu (głównie są to dowiązania do kont użytkowników). "
+"Wszystko podane niżej działa w zgodzie ze <strong>standardami PostgreSQL</"
 "strong>."
 
 #: templates/db.djhtml:165
@@ -5172,7 +5172,7 @@ msgstr "Początek"
 
 #: templates/hof.djhtml:40
 msgid "Length"
-msgstr "Długość"
+msgstr "Długość okresu"
 
 #: templates/hof.djhtml:61 templates/period.djhtml:18
 #: templates/period.djhtml.py:322 templates/period.djhtml:326
@@ -5798,7 +5798,7 @@ msgstr "#%(rank)s Światowy"
 #: templates/player.djhtml:624
 #, python-format
 msgid "#%(rank)s Non-Korean"
-msgstr "#%(rank)s niekoreański"
+msgstr "#%(rank)s Niekoreański"
 
 #. Translators: Rank in a country.
 #: templates/player.djhtml:630
@@ -6200,12 +6200,12 @@ msgstr "Nie znaleziono wpisów."
 #: templates/records.djhtml:12
 #, python-format
 msgid "Records for %(rc)s"
-msgstr "Rekordy dla %(rc)s"
+msgstr "Rekordy dla rasy: %(rc)s"
 
 #: templates/records.djhtml:23
 #, python-format
 msgid "Records for %(r)s"
-msgstr "Rekordy dla %(r)s"
+msgstr "Rekordy dla rasy: %(r)s"
 
 #: templates/records.djhtml:28
 msgid "To avoid rating artifacts, the earliest periods are not counted."

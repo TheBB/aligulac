@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-07 18:34+0200\n"
-"PO-Revision-Date: 2014-09-07 18:24+0100\n"
+"PO-Revision-Date: 2014-09-07 21:18+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
@@ -230,9 +230,8 @@ msgid "Open events"
 msgstr "Événements ouverts"
 
 #: aligulac/aligulac/tools.py:274
-#, fuzzy
 msgid "Player info"
-msgstr "Joueur A"
+msgstr "Info du joueur"
 
 #: aligulac/aligulac/tools.py:313
 msgid "Summary"
@@ -3427,7 +3426,6 @@ msgstr ""
 "groupe se trouve dans son événement Code S, et ainsi de suite."
 
 #: aligulac/ratings/results_views.py:885
-#, fuzzy
 msgid "Sucessfully closed event."
 msgstr "Evènement fermé avec succès"
 
@@ -3750,27 +3748,25 @@ msgstr "Nom romanisé"
 
 #. Translators: Updated a player
 #: aligulac/ratings/staff_views.py:1034
-#, fuzzy, python-format
+#, python-format
 msgid "Updated %s"
-msgstr "Mettre à jour"
+msgstr "%s mis à jour"
 
 #: aligulac/ratings/staff_views.py:1064
 msgid "Progress"
-msgstr ""
+msgstr "Progression"
 
 #: aligulac/ratings/staff_views.py:1088
 msgid "Players with birthday"
-msgstr ""
+msgstr "Joueurs dont c'est l'anniversaire"
 
 #: aligulac/ratings/staff_views.py:1089
-#, fuzzy
 msgid "Players with name"
 msgstr "Surnoms des joueurs"
 
 #: aligulac/ratings/staff_views.py:1090
-#, fuzzy
 msgid "Players with country"
-msgstr "Filtrer par pays :"
+msgstr "Joueurs par pays"
 
 #: aligulac/ratings/team_views.py:87
 msgid "short name"
@@ -4884,9 +4880,8 @@ msgid "Other Prizes"
 msgstr "Autre gains"
 
 #: templates/eventres.djhtml:292
-#, fuzzy
 msgid "Same level"
-msgstr "Même niveau :"
+msgstr "Même niveau"
 
 #. Translators: Go as in go to a page.
 #. Translators: Go as in go to a page.
@@ -4896,9 +4891,8 @@ msgid "Go"
 msgstr "Go"
 
 #: templates/eventres.djhtml:317
-#, fuzzy
 msgid "Next level"
-msgstr "Niveau suivant :"
+msgstr "Niveau suivant"
 
 #: templates/eventres.djhtml:347 templates/eventres.djhtml.py:507
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
@@ -5314,12 +5308,11 @@ msgstr "Vous recherches récentes"
 
 #: templates/index.djhtml:198
 msgid "Old value"
-msgstr ""
+msgstr "Ancienne valeur"
 
 #: templates/index.djhtml:199
-#, fuzzy
 msgid "No data found"
-msgstr "date de création"
+msgstr "Pas de données trouvée"
 
 #: templates/index.djhtml:200 templates/index.djhtml.py:219
 msgid "Loading..."
@@ -5935,36 +5928,32 @@ msgid "Tournament"
 msgstr "Tournoi"
 
 #: templates/player_info.djhtml:7
-#, fuzzy
 msgid "Player Info"
-msgstr "Joueur A"
+msgstr "Infos du joueur"
 
 #: templates/player_info.djhtml:39
 msgid "Get data from Liquipedia"
-msgstr ""
+msgstr "Obtenir les infos depuis Liquipedia"
 
 #: templates/player_info.djhtml:45
-#, fuzzy
 msgid "Close"
 msgstr "Clôturé"
 
 #: templates/player_info.djhtml:59
-#, fuzzy
 msgid "Player information"
-msgstr "Contient les informations du joueur"
+msgstr "Informations du joueur"
 
 #: templates/player_info.djhtml:88
-#, fuzzy
 msgid "No players found!"
-msgstr "Pas d'entrées trouvées."
+msgstr "Aucun joueur trouvé !"
 
 #: templates/player_info.djhtml:93
 msgid "← Return to progress list"
-msgstr ""
+msgstr "← retour à la liste de progression"
 
 #: templates/player_info.djhtml:211
 msgid "Show missing"
-msgstr ""
+msgstr "Montrer les manquants"
 
 #: templates/player_results.djhtml:11
 #, python-format

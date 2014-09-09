@@ -34,9 +34,10 @@ LANGUAGE_CODE = 'en_US'
 
 LANGUAGES = [
     ('en', 'English'),
+    ('fr', 'Français'),
+    ('pl', 'Polski'),
     ('dk', 'Dansk'),
     ('no', 'Norsk'),
-    ('pl', 'Polski'),
 ]
 
 if DEBUG:
@@ -45,7 +46,6 @@ if DEBUG:
         ('ru', 'Русский'),
         ('es', 'Español'),
         ('de', 'Deutsch'),
-        ('fr', 'Français'),
         ('se', 'Svenska'),
         ('pt', 'Português'),
     ]

@@ -36,8 +36,8 @@ LANGUAGES = [
     ('en', 'English'),
     ('fr', 'Français'),
     ('pl', 'Polski'),
-    ('dk', 'Dansk'),
-    ('no', 'Norsk'),
+    ('da', 'Dansk'),
+    ('nb', 'Norsk (bokmål)'),
 ]
 
 if DEBUG:

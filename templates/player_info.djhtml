@@ -155,7 +155,7 @@
               None
             </span>
             {% else %}
-            {{ p.birthday }}
+            {{ p.birthday|date:"DATE_FORMAT" }}
             {% endif %}
           </td>
           <td>

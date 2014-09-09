@@ -134,7 +134,7 @@ To use, you should define the following blocks:
           <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
               <p class="pull-right text-muted">
-                {% blocktrans with dt=curp.end|date:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
+                {% blocktrans with dt=curp.end|date:"DATE_FORMAT" %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
               </p>
             </div>
           </div>

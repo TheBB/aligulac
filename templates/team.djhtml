@@ -58,7 +58,7 @@ This shows a team page. Called from ratings.teamviews.team.
     <div class="col-lg-4 col-lg-offset-2 col-md-6 col-md-offset-1 col-sm-7 col-xs-12 text">
       {% if team.founded and team.disbanded %}
         <p>
-          {% blocktrans with teamname=team.name founded=team.founded|date:_('F jS, Y') disbanded=team.disbanded|date:"DATE_FORMAT" %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}
+          {% blocktrans with teamname=team.name founded=team.founded|date:"DATE_FORMAT" disbanded=team.disbanded|date:"DATE_FORMAT" %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}
         </p>
       {% elif team.founded %}
         <p>

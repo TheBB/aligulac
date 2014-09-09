@@ -201,7 +201,7 @@ This is the template for the main player page, called from ratings.views.player.
              radius: 5
            },
            data: [{% for s in stories %}{% if not s.skip %} {
-             name: '{{s|jsescape|safe}}<br/>{{s.date|cdate:_('F jS, Y')}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
+             name: '{{s|jsescape|safe}}<br/>{{s.date|date:"DATE_FORMAT"|jsescape|safe}}{% if s.event %}: {{s.event.fullname|jsescape|safe}}{% endif %}',
              url: '/results/events/{{s.event.id}}-{{s.event.fullname|urlfilter|jsescape}}/',
              x: {{ s.date|milliseconds }},
              y: {{ s.rating|ratscale }}
@@ -218,7 +218,7 @@ This is the template for the main player page, called from ratings.views.player.
              radius: 5
            },
            data: [{% for t in teampoints %} {
-             name: '{% for d in t.data %}{{d.date|cdate:_('F jS, Y')}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
+             name: '{% for d in t.data %}{{d.date|date:"DATE_FORMAT"|jsescape|safe}}: {{player.tag|jsescape}} {{d.jol}} {{d.team.name|jsescape}}<br/>{% endfor %}',
              x: {{ t.date|milliseconds }},
              y: {{ t.rating|ratscale }}
                                 },{% endfor %}]
@@ -453,7 +453,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <td style="width: 18em; border-top: none;">
                   {% if highs %}
                     {% trans "on" context "on date" %}
-                    <a href="/periods/{{ highs.0.period.id }}/">{{ highs.0.period.end|cdate:_('F jS, Y') }}</a>
+                    <a href="/periods/{{ highs.0.period.id }}/">{{ highs.0.period.end|date:"DATE_FORMAT" }}</a>
                   {% endif %}
                 </td>
                 <td style="border-top: none;">
@@ -478,7 +478,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <td>
                   {% if highs %}
                     {% trans "on" context "on date" %}
-                    <a href="/periods/{{ highs.1.period.id }}/">{{ highs.1.period.end|cdate:_('F jS, Y') }}</a>
+                    <a href="/periods/{{ highs.1.period.id }}/">{{ highs.1.period.end|date:"DATE_FORMAT" }}</a>
                   {% endif %}
                 </td>
                 <td>
@@ -503,7 +503,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <td>
                   {% if highs %}
                     {% trans "on" context "on date" %}
-                    <a href="/periods/{{ highs.2.period.id }}/">{{ highs.2.period.end|cdate:_('F jS, Y') }}</a>
+                    <a href="/periods/{{ highs.2.period.id }}/">{{ highs.2.period.end|date:"DATE_FORMAT" }}</a>
                   {% endif %}
                 </td>
                 <td>
@@ -528,7 +528,7 @@ This is the template for the main player page, called from ratings.views.player.
                 <td>
                   {% if highs %}
                     {% trans "on" context "on date" %}
-                    <a href="/periods/{{ highs.3.period.id }}/">{{ highs.3.period.end|cdate:_('F jS, Y') }}</a>
+                    <a href="/periods/{{ highs.3.period.id }}/">{{ highs.3.period.end|date:"DATE_FORMAT" }}</a>
                   {% endif %}
                 </td>
                 <td>
@@ -655,7 +655,7 @@ This is the template for the main player page, called from ratings.views.player.
           {% if player.birthday %}
             <tr class="small">
               <td class="text-right ibox-left">{% trans "Birthday" %}</td>
-              <td>{{player.birthday|cdate:_('F jS, Y')}}</td>
+              <td>{{player.birthday|date:"DATE_FORMAT"}}</td>
             </tr>
           {% endif %}
           {% if team %}
@@ -667,13 +667,13 @@ This is the template for the main player page, called from ratings.views.player.
           {% if first %}
             <tr class="small">
               <td class="text-right ibox-left">{% trans "First match" %}</td>
-              <td>{{first.date|cdate:_('F jS, Y')}}</td>
+              <td>{{first.date|date:"DATE_FORMAT"}}</td>
             </tr>
           {% endif %}
           {% if last %}
             <tr class="small">
               <td class="text-right ibox-left">{% trans "Last match" %}</td>
-              <td>{{last.date|cdate:_('F jS, Y')}}</td>
+              <td>{{last.date|date:"DATE_FORMAT"}}</td>
             </tr>
           {% endif %}
           {% if earnings %}
@@ -716,7 +716,7 @@ This is the template for the main player page, called from ratings.views.player.
           {% endif %}
           {% if adm %}
             <tr>
-              <td colspan="2" class="text-center">
+              <td colspan="2" class="text-center admin-buttons">
                 <a href="#" title="{% trans "Edit info" %}" data-toggle="modal" data-target="#md-edit"><span class="glyphicon glyphicon-pencil"></span></a>
                 <a href="/admin/ratings/player/{{player.id}}/" title="{% trans "Admin interface" %}"><span class="glyphicon glyphicon-cog"></span> </a>
               </td>
@@ -757,8 +757,8 @@ This is the template for the main player page, called from ratings.views.player.
             {% for tm in teammems %}
               <tr>
                 <td><a href="/teams/{{tm.group.id}}-{{tm.group.name|urlfilter}}/">{{tm.group.name}}</a></td>
-                <td>{{tm.start|cdate:_('F jS, Y')}}</td>
-                <td>{{tm.end|cdate:_('F jS, Y')}}</td>
+                <td>{{tm.start|date:"DATE_FORMAT"}}</td>
+                <td>{{tm.end|date:"DATE_FORMAT"}}</td>
                 <td class="text-right">
                   {% if tm.current %}
                     <img src="{{ "yes"|img }}" alt="{% trans "yes" %}">

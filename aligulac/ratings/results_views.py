@@ -71,7 +71,6 @@ from ratings.tools import (
     find_player,
     get_placements
 )
-from ratings.templatetags.ratings_extras import cdate
 # }}}
 
 # {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
@@ -880,6 +879,10 @@ def events(request, event_id=None):
             check_form('ppform', PrizepoolModForm, 'modpp')
         if not event.has_children() and event.get_immediate_matchset().exists():
             check_form('stform', StoriesForm, 'modstory')
+
+        if 'close' in request.GET and request.GET['close'] == '1':
+            event.close()
+            base['messages'].append(Message(_('Sucessfully closed event.'), type=Message.SUCCESS))
     # }}}
 
     # {{{ Prizepool information for the public

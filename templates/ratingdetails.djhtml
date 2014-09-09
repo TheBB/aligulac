@@ -58,7 +58,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
     {% if has_treated %}
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-          {% with start=period.start|cdate:_('F jS, Y') end=period.end|cdate:_('F jS, Y') %}
+          {% with start=period.start|date:"DATE_FORMAT" end=period.end|date:"DATE_FORMAT" %}
             {% if period.is_preview %}
               <p>{% blocktrans %}This period started on {{ start }} and will end on {{ end }}. The numbers given below are projected adjustments and can change before then.{% endblocktrans %}</p>
             {% else %}

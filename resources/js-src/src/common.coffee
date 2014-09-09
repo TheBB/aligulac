@@ -30,6 +30,9 @@ uncheck_boxes = (id) ->
     $("input[data-match=#{id}]").prop('checked', false)
     false
 
+module.exports.create_tag = (tag) ->
+    $(document.createElement(tag))
+
 module.exports.Common = Common =
     init: () ->
         $('.lma').click ->

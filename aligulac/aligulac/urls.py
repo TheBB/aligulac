@@ -1,4 +1,6 @@
 # {{{ Imports
+from os.path import normpath, dirname, join
+
 from tastypie.api import Api
 
 from django.conf.urls import (
@@ -112,6 +114,8 @@ urlpatterns = patterns('',
     url(r'^add/events/$', 'ratings.staff_views.events'),
     url(r'^add/events/children/(?P<id>\d+)/$', 'ratings.staff_views.event_children'),
     url(r'^add/open_events/$', 'ratings.staff_views.open_events'),
+    url(r'^add/player_info/(?P<choice>[A-Za-z_]+)?/?$', 'ratings.staff_views.player_info'),
+    url(r'^add/player_info_lp/?$', 'ratings.staff_views.player_info_lp'),
     url(r'^add/misc/$', 'ratings.staff_views.misc'),
 
     url(r'^login/$', 'aligulac.views.login_view'),
@@ -137,14 +141,15 @@ urlpatterns = patterns('',
 
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
 if settings.DEBUG:
+    resources = join(dirname(normpath(settings.PROJECT_PATH)), 'resources')
     urlpatterns += patterns('',
         url(r'^fonts/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/fonts'}),
+            {'document_root': join(resources, 'fonts')}),
         url(r'^css/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/css'}),
+            {'document_root': join(resources, 'css')}),
         url(r'^js/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/js'}),
+            {'document_root': join(resources, 'js')}),
         url(r'^img/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.PROJECT_PATH + '../resources/img'})
+            {'document_root': join(resources, 'img')})
     )
 # }}}

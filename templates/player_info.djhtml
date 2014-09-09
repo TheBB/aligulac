@@ -1,0 +1,218 @@
+{% extends "index.djhtml" %}
+
+{% load ratings_extras %}
+{% load formulation %}
+{% load i18n %}
+
+{% block title %}{% trans "Player Info" %}{% endblock %}
+
+{% block jsapps %}player_info{% endblock %}
+
+{% block modals %}
+{% if form %}
+<div class="modal fade" id="md-player-info" tabindex="-1" role="dialog" aria-labelledby="md-edit-label"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="md-edit-label">
+          {% trans "Modify player" %}
+        </h4>
+      </div>
+      {% form "forms.djhtml" %}
+      <form method="post" action="" role="form">
+        <div class="modal-body">
+          {% use "hidden" name="id" id="id_id" %}
+          {% csrf_token %}
+          {% field "basic" form.name %}
+          {% field "basic" form.romanized_name  %}
+          {% field "date" form.birthday  %}
+          {% field "select" form.country %}
+        </div>
+        <div class="modal-footer">
+          <span id="get_lp_span">
+            <a href="#"
+               id="get_lp_btn"
+               style="display: none;"
+               class="btn btn-default">
+              {% trans "Get data from Liquipedia" %}
+              <span class="glyphicon glyphicon-download"></span>
+            </a>
+            <small style="display: none;"></small>
+          </span>
+          {% use "submit" name="modplayer" %}
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+        </div>
+      </form>
+      {% endform %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+    <h2>
+      {% trans "Player information" %}
+    </h2>
+  </div>
+</div>
+
+{% include "messages.djhtml" %}
+
+<div class="row">
+  <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+    <div>
+      <form action="" method="GET" role="form" class="form-inline pull-right">
+        <input type="hidden" name="page" value="{{ page }}" />
+        <div class="form-group">
+          <select name="country" id="country_filter" class="form-control">
+            <option value="all">
+              {% trans "All" %}
+            </option>
+            {% for c in countries %}
+            <option value="{{ c.cc }}" {% if country == c.cc %}selected{% endif %}>
+              {{ c.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
+    {% if no_players %}
+    <div class="text-center">
+      <strong>
+        {% trans "No players found!" %}
+      </strong>
+    </div>
+    {% elif players %}
+    <a href="/add/player_info{% if country != 'all' %}?country={{ country }}{% endif %}">
+      {% trans "← Return to progress list" %}
+    </a>
+    <table class="table table-striped table-hover" style="width: 100%">
+      <thead>
+        <tr>
+          <th>{% trans "Country" %}</th>
+          <th>{% trans "Race" %}</th>
+          <th>{% trans "Tag" %}</th>
+          <th>{% trans "Name" %}</th>
+          <th>{% trans "Romanized Name" %}</th>
+          <th>{% trans "Birthday" %}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in players %}
+        <tr data-id="{{ p.id }}"
+            data-tag="{{ p.tag }}"
+            data-country="{% if p.country %}{{ p.country }}{% endif %}"
+            data-birthday="{% if p.birthday %}{{ p.birthday|date:"Y-m-d" }}{% endif %}"
+            data-name="{% if p.name %}{{ p.name }}{% endif %}"
+            data-romanized-name="{% if p.romanized_name %}{{ p.romanized_name }}{% endif %}"
+            data-lp="{% if p.lp_name %}{{ p.lp_name }}{% endif %}"
+            class="info-row">
+          <td class="rl_icon">
+            {% if p.country %}
+            <img src="{{ p.country|lower|img:"flags"}}" alt="{{p.country}}" />
+            {% else %}
+            <span class="badge">
+              None
+            </span>
+            {% endif %}
+          </td>
+
+          <td class="rl_icon">
+            <img src="{{p.race|img}}" alt="{{p.race}}" />
+          </td>
+
+          <td>
+            <a href="{{ p|player_url }}">{{ p.tag }}</a>
+          </td>
+          <td>
+            {% if not p.name %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.name }}
+            {% endif %}
+          </td>
+          <td>
+            {% if not p.romanized_name %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.romanized_name }}
+            {% endif %}
+          </td>
+          <td>
+            {% if not p.birthday %}
+            <span class="badge">
+              None
+            </span>
+            {% else %}
+            {{ p.birthday|date:"DATE_FORMAT" }}
+            {% endif %}
+          </td>
+          <td>
+            <a href="#"
+               class="player-info-edit-button"
+               data-toggle="modal"
+               data-target="#md-player-info"
+               title="{% trans "Edit info" %}">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <a href="/admin/ratings/player/{{p.id}}/"
+               title="{% trans "Admin interface" %}">
+              <span class="glyphicon glyphicon-cog"></span>
+            </a>
+            {% if p.lp_name %}
+            {% comment %}Translators: LP = Liquipedia{% endcomment %}
+            <a href="http://wiki.teamliquid.net/starcraft2/{{ p.lp_name }}" target="_blank">{% trans "LP" %}</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-center">
+      <ul class="pagination">
+        {% if page > 1 %}
+        <li><a href="?page={{ page|sub:1 }}&country={{ country }}">«</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">«</a></li>
+        {% endif %}
+        {% if next_page %}
+        <li><a href="?page={{ page|add:1 }}&country={{ country }}">»</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">»</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% else %}
+    {% for k, v in values %}
+    <div>
+      <h3>
+        {{ v.title }}
+        {% if v.count == all_count %}
+        <small><span class="glyphicon glyphicon-check"></span></small>
+        {% endif %}
+      </h3>
+      <small>{{ v.count }}/{{ all_count }} ({{ v.pctg }}%)</small>
+      <div class="progress progress-striped" style="width: 100%">
+        <div class="progress-bar progress-bar-default" style="width: {{ v.pctg }}%">
+        </div>
+      </div>
+      <a href="/add/player_info/{{ k }}?country={{ country }}" class="btn btn-default{% if v.count == all_count %} disabled{% endif %}">
+      {% trans "Show missing" %}
+      </a>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

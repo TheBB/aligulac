@@ -4,6 +4,7 @@ This template prints a list of blog posts. It is included from the front page (i
 {% endcomment %}
 
 {% load ratings_extras %}
+{% load i18n %}
 
 {% for post in blogposts %}
   <div class="row">
@@ -14,9 +15,11 @@ This template prints a list of blog posts. It is included from the front page (i
       <h2 class="sub">
         {{post.title}}
         <small class="right">
+          {% language "en" %}
           By {{post.author}}
-          on {{post.date|date:"F jS, Y, H:i e"}} 
+          on {{post.date|date:"DATETIME_FORMAT"}} 
           (UTC {{post.date|date:"O"}})
+          {% endlanguage %}
         </small>
       </h2>
 

@@ -44,7 +44,7 @@ This is the subroutine for printing a record list, used by records.djhtml.
           {% endif %}
         </td>
         <td>
-          <a href="/periods/{{ h.period.id }}/">{{ h.period.end|cdate:_('F jS, Y') }}</a>
+          <a href="/periods/{{ h.period.id }}/">{{ h.period.end|date:"DATE_FORMAT" }}</a>
         </td>
         <td class="rl_arrow">
           <a href="/players/{{ h.player.id }}-{{ h.player.tag|urlfilter }}/period/{{ h.period.id }}/">

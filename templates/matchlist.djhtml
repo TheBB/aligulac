@@ -176,7 +176,7 @@ In general, if you're trying to figure out how this works, may God have mercy on
           {% if m.pla.id and m.plb.id or lm_show_noid %}
             <tr {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
               <td class="lm_date">
-                {% if m.date %}{{ m.date|cdate:_('Y-m-d') }}{% endif %}
+                {% if m.date %}{{ m.date|date:"SHORT_DATE_FORMAT" }}{% endif %}
               </td>
               <td class="lm_rta">
                 {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-07 18:34+0200\n"
-"PO-Revision-Date: 2014-09-07 21:18+0100\n"
+"PO-Revision-Date: 2014-09-08 22:37+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
@@ -1970,7 +1970,7 @@ msgstr "Format"
 
 #: aligulac/ratings/inference_views.py:101
 msgid "Best of"
-msgstr "Meilleur des "
+msgstr "Meilleurs des (BOx)"
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:257
 #: templates/db.djhtml:95 templates/eventres.djhtml:495
@@ -2349,7 +2349,7 @@ msgstr "Individuel"
 #: templates/player.djhtml:663 templates/player.djhtml.py:751
 #: templates/ratinglist.djhtml:44
 msgid "Team"
-msgstr "Par équipe"
+msgstr "Equipe"
 
 #. Translators: Event category
 #: aligulac/ratings/models.py:74
@@ -3145,7 +3145,7 @@ msgstr "Résultats pour"
 #: templates/periods.djhtml:27 templates/player.djhtml:104
 #: templates/player.djhtml.py:132 templates/pred_rrgroup.djhtml:74
 msgid "Games"
-msgstr "manches"
+msgstr "Manches"
 
 #: aligulac/ratings/player_views.py:705
 msgid "Current form"
@@ -3205,7 +3205,7 @@ msgstr ""
 
 #: aligulac/ratings/ranking_views.py:67 templates/index.djhtml:137
 msgid "F jS"
-msgstr "F jS"
+msgstr "j F"
 
 #: aligulac/ratings/results_views.py:93 aligulac/ratings/results_views.py:97
 #: aligulac/ratings/results_views.py:101 aligulac/ratings/results_views.py:713
@@ -4929,7 +4929,7 @@ msgstr "Dates"
 #: templates/eventres.djhtml:457
 #, python-format
 msgid "%(fst)s to %(snd)s"
-msgstr "De %(fst)s à %(snd)s"
+msgstr "Du %(fst)s au %(snd)s"
 
 #: templates/eventres.djhtml:471
 msgid "On-/Offline"
@@ -5235,7 +5235,7 @@ msgstr "Longueur"
 #: templates/team.djhtml:107 templates/team.djhtml.py:249
 #: templates/team.djhtml:252
 msgid "F jS, Y"
-msgstr "F jS, Y"
+msgstr "j F Y"
 
 #: templates/hof.djhtml:65
 msgid "weeks"
@@ -5668,7 +5668,7 @@ msgstr "Statistiques diverses"
 #: templates/period.djhtml:318
 #, python-format
 msgid "List %(n)s"
-msgstr "Lister les %(n)s"
+msgstr "Lister %(n)s"
 
 #: templates/period.djhtml:28
 msgid "Best"
@@ -6148,13 +6148,13 @@ msgstr "Reddit (arbre)"
 
 #: templates/predict.djhtml:35
 msgid "Show me the future!"
-msgstr "Lis moi l'avenir!"
+msgstr "Lis moi l'avenir !"
 
 #: templates/predict.djhtml:43
 msgid "For <b>single elimination brackets</b> the following is possible:"
 msgstr ""
-"Pour des <b>arbres à élimination simple</b>, les issues suivantes sont "
-"possibles:"
+"Pour des <b>arbres à élimination simple</b>, les possibilités sont les "
+"suivantes :"
 
 #: templates/predict.djhtml:46
 msgid ""
@@ -6163,9 +6163,9 @@ msgid ""
 "still enter a single number to apply to all rounds."
 msgstr ""
 "Utilisez un format de match différent pour chaque tour. Par exemple "
-"\"5,5,7\" signifie des matches en meilleur-de-5 pour les deux premiers "
-"rounds puis en meilleur-de-7 pour la finale. Vous pouvez toutefois entrer un "
-"nombre unique pour l'appliquer à tous les tours."
+"\"5,5,7\" signifie des matches en meilleur-des-5 pour les deux premiers "
+"rounds puis en meilleur-des-7 pour la finale. Vous pouvez toutefois entrer "
+"un nombre unique pour l'appliquer à tous les tours."
 
 #: templates/predict.djhtml:47
 msgid "To indicate a BYE, enter \"bye\" or two hyphens."
@@ -6177,7 +6177,7 @@ msgid ""
 "then all the players of the other team. There must be an equal number of "
 "each, but it doesn't have to be odd."
 msgstr ""
-"Pour les<b>matches proleague</b> entrez en premier tous les joueurs d'un "
+"Pour les <b>matches proleague</b> entrez en premier tous les joueurs d'un "
 "équipe puis tous les joueurs de l'autre. Il doit y avoir le même nombre de "
 "joueurs de chaque côté."
 
@@ -6466,8 +6466,8 @@ msgid ""
 "player, and should be a space-separated list of any of the following:"
 msgstr ""
 "Entrez les joueurs. Les informations concernant le joueur ne doivent pas "
-"forcément identifier un joueur en particulier, et doivent être une liste "
-"séparée par des espaces consistuées d'éléments suivants:"
+"forcément identifier un joueur en particulier et doivent être une liste "
+"séparée par des espaces consistuées d'éléments suivants :"
 
 #: templates/results_search.djhtml:29
 msgid "Player tag, e.g. \"DongRaeGu\""
@@ -6508,7 +6508,7 @@ msgstr ""
 
 #: templates/results_search.djhtml:42
 msgid "Note that everything is case insensitive."
-msgstr "Notez que tout les entrées ne sont pas sensibles à la casse."
+msgstr "Notez que toutes les entrées ne sont pas sensibles à la casse."
 
 #: templates/results_search.djhtml:72
 #, python-format
@@ -6700,7 +6700,7 @@ msgstr "Score Proleague"
 
 #: templates/teams.djhtml:42
 msgid "Disbanded teams"
-msgstr "Équipes dissous"
+msgstr "Équipes dissoutes"
 
 #~ msgid "January"
 #~ msgstr "Janvier"

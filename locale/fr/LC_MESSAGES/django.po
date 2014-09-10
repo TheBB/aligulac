@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-07 18:34+0200\n"
-"PO-Revision-Date: 2014-09-08 22:37+0100\n"
+"POT-Creation-Date: 2014-09-10 09:11+0200\n"
+"PO-Revision-Date: 2014-09-09 18:57+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fr\n"
@@ -3203,7 +3203,7 @@ msgstr ""
 "Ceci est un <em>aperçu</em> de la prochaine liste de niveau. elle ne sera "
 "pas finalisé avant %s."
 
-#: aligulac/ratings/ranking_views.py:67 templates/index.djhtml:137
+#: aligulac/ratings/ranking_views.py:67
 msgid "F jS"
 msgstr "j F"
 
@@ -4420,10 +4420,6 @@ msgid_plural "days"
 msgstr[0] "jour"
 msgstr[1] "jours"
 
-#: templates/clocks.djhtml:67 templates/matchlist.djhtml:180
-msgid "Y-m-d"
-msgstr "A-m-j"
-
 #: templates/clocks.djhtml:88
 msgid ""
 "<b>Major</b> is defined as a tournament where the first place prize money "
@@ -4466,10 +4462,6 @@ msgstr "Statut de la base de données"
 #: templates/db.djhtml:26
 msgid "Last ratings update"
 msgstr "Dernière mise à jour des niveaux"
-
-#: templates/db.djhtml:29 templates/db.djhtml.py:149
-msgid "F jS, Y, H:i e"
-msgstr "j F Y, H:i e"
 
 #: templates/db.djhtml:30
 msgid "log"
@@ -5219,24 +5211,6 @@ msgstr "Début"
 msgid "Length"
 msgstr "Longueur"
 
-#: templates/hof.djhtml:61 templates/period.djhtml:18
-#: templates/period.djhtml.py:322 templates/period.djhtml:326
-#: templates/periods.djhtml:32 templates/player.djhtml:204
-#: templates/player.djhtml.py:221 templates/player.djhtml:456
-#: templates/player.djhtml.py:481 templates/player.djhtml:506
-#: templates/player.djhtml.py:531 templates/player.djhtml:658
-#: templates/player.djhtml.py:670 templates/player.djhtml:676
-#: templates/player.djhtml.py:760 templates/player.djhtml:761
-#: templates/player_transfers.djhtml:59 templates/ratingdetails.djhtml:61
-#: templates/recordlist.djhtml:47 templates/results.djhtml:12
-#: templates/results.djhtml.py:19 templates/review.djhtml:62
-#: templates/team.djhtml:61 templates/team.djhtml.py:65
-#: templates/team.djhtml:69 templates/team.djhtml.py:101
-#: templates/team.djhtml:107 templates/team.djhtml.py:249
-#: templates/team.djhtml:252
-msgid "F jS, Y"
-msgstr "j F Y"
-
 #: templates/hof.djhtml:65
 msgid "weeks"
 msgstr "semaines"
@@ -5304,7 +5278,7 @@ msgstr "Générer une URL raccourcie pour cette page"
 
 #: templates/index.djhtml:197
 msgid "Your recent searches"
-msgstr "Vous recherches récentes"
+msgstr "Vos recherches récentes"
 
 #: templates/index.djhtml:198
 msgid "Old value"
@@ -6339,12 +6313,6 @@ msgstr "Rapport d'équilibrage"
 msgid "Winrate [%%]"
 msgstr "Winrate [%%]"
 
-#: templates/reports_balance.djhtml:80 templates/reports_balance.djhtml:88
-#: templates/reports_balance.djhtml:96 templates/reports_balance.djhtml:164
-#: templates/reports_balance.djhtml:172 templates/reports_balance.djhtml:180
-msgid "F Y"
-msgstr "F Y"
-
 #: templates/reports_balance.djhtml:116
 msgid "Performance difference"
 msgstr "Différence de performance"
@@ -6373,7 +6341,7 @@ msgid ""
 "likely correlated to) actual game balance throughout the whole player "
 "population."
 msgstr ""
-"Noter que cela contiens des informations sur l'équilibrage du <em>méta-jeue</"
+"Noter que cela contient des informations sur l'équilibrage du <em>méta-jeu</"
 "em> au niveau des joueurs les plus compétents</em>, et cela ne doit pas être "
 "confondu (même si les deux sont liés) avec l'équilibrage du jeu pour "
 "l'ensemble des joueurs."
@@ -6385,7 +6353,7 @@ msgid ""
 "Terran poorly."
 msgstr ""
 "Le pourcentage de victoire est indiqué avec la priorité donnée à la race "
-"listée en premier, donc si la courbe Protoss vs. Terran est supérieure à 50% "
+"listée en premier, donc si la courbe Protoss vs. Terran est supérieure à 50 "
 "alors cela signifie que les joueurs Protoss ont plus de succès dans le match-"
 "up que les joueurs Terran."
 
@@ -6406,11 +6374,11 @@ msgstr ""
 "<em>approximative</em> entre la <em>performance réelle</em> donnée par les "
 "résultats et la <em>performance calculée</em> de l'évaluation. Par exemple, "
 "si, en moyenne sur un mois, tous les Terran ont une différence d'évaluation "
-"moyenne de -100 (ce qui signifie que leurs évaluations moyenne étaient "
+"moyenne de -100 (ce qui signifie que leurs évaluations moyennes étaient "
 "égales à celles de leurs opposants - 100), mais qu'ils ont joué tel que leur "
 "différence d'évaluation moyenne soit de +100 (correspondant à un pourcentage "
 "de victoire de 54.5%%), alors cela équivaut à une différence de performance "
-"de <strong>+200</strong>. Cela doit être interprêté comme : les joueurs "
+"de <strong>+200</strong>. Cela doit être interprété comme : les joueurs "
 "Terran en général ont joué avec 200 points de plus que prévu."
 
 #: templates/reports_balance.djhtml:215
@@ -6423,7 +6391,7 @@ msgid ""
 msgstr ""
 "Ce graphique peut éviter certains problèmes rencontré avec celui au-dessus "
 "qui est potentiellement influencé par des séries de victoires d'un ou "
-"plusieurs joueurs en forme. Toutefois, les évalutations rattrapant les "
+"plusieurs joueurs en forme. Toutefois, les évaluations rattrapant les "
 "performances des joueurs, ce graphique tend à l'équilibre même si "
 "l'équilibrage du jeu ne change pas."
 
@@ -6701,6 +6669,18 @@ msgstr "Score Proleague"
 #: templates/teams.djhtml:42
 msgid "Disbanded teams"
 msgstr "Équipes dissoutes"
+
+#~ msgid "Y-m-d"
+#~ msgstr "A-m-j"
+
+#~ msgid "F jS, Y, H:i e"
+#~ msgstr "j F Y, H:i e"
+
+#~ msgid "F jS, Y"
+#~ msgstr "j F Y"
+
+#~ msgid "F Y"
+#~ msgstr "F Y"
 
 #~ msgid "January"
 #~ msgstr "Janvier"

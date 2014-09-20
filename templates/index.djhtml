@@ -60,10 +60,10 @@ To use, you should define the following blocks:
       <h1><a href="/" class="blacklink">ALIGULAC</a></h1>
       {% if debug %}
         <p class="subheading" style="color: red; font-weight: bold;">
-          <span class="visible-lg">{% trans "DEVELOPMENT SERVER" %} (LARGE)</span>
-          <span class="visible-md">{% trans "DEVELOPMENT SERVER" %} (MEDIUM)</span>
-          <span class="visible-sm">{% trans "DEVELOPMENT SERVER" %} (SMALL)</span>
-          <span class="visible-xs">{% trans "DEVELOPMENT SERVER" %} (EXTRA SMALL)</span>
+          <span class="visible-lg">{{ commithash }} on {{ commitbranch }} (LARGE)</span>
+          <span class="visible-md">{{ commithash }} on {{ commitbranch }} (MEDIUM)</span>
+          <span class="visible-sm">{{ commithash }} on {{ commitbranch }} (SMALL)</span>
+          <span class="visible-xs">{{ commithash }} on {{ commitbranch }} (EXTRA SMALL)</span>
         </p>
       {% else %}
         <p class="subheading text-muted">{% trans "StarCraft 2 Progaming Statistics and Predictions" %}</p>
@@ -109,7 +109,7 @@ To use, you should define the following blocks:
       <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-muted">
           {% trans "Language" %}:
-          <a href="/language/"><img src="{{ lang|img:"flags" }}"></a>
+          <a href="/language/"><img src="{{ lang|img:"flags/langs" }}"></a>
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">
           <form class="form-inline" role="form" action="/search/" method="get">
@@ -134,7 +134,7 @@ To use, you should define the following blocks:
           <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
               <p class="pull-right text-muted">
-                {% blocktrans with dt=curp.end|date:_('F jS') %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
+                {% blocktrans with dt=curp.end|date:"DATE_FORMAT" %}The above list is a preview of the next rating list, which will be finalized on {{dt}}. <a href="/periods/latest">Full list</a>.{% endblocktrans %}
               </p>
             </div>
           </div>
@@ -195,6 +195,9 @@ To use, you should define the following blocks:
        'hide': '{% trans "hide" %}',
        'show': '{% trans "show" %}',
        'Your recent searches': '{% trans "Your recent searches" %}',
+       'Old value': '{% trans "Old value" %}',
+       'No data found': '{% trans "No data found" %}',
+       'Loading...': '{% trans "Loading..." %}'
      };
      $(document).ready(function () { $(".datepicker").datepicker(); });
      $(document).ready(function () {

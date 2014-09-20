@@ -7,3 +7,5 @@ South>=0.8.2
 ccy>=0.5.1
 django-debug-toolbar
 django-tastypie
+beautifulsoup4
+git+https://github.com/earwig/mwparserfromhell.git

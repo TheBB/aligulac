@@ -56,7 +56,7 @@
                 {% endif %}
               </td>
               <td class="text-right">
-                {{trade.date|date:_('F jS, Y')}}
+                {{trade.date|date:"DATE_FORMAT"}}
               </td>
             </tr>
           {% endfor %}

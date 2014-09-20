@@ -58,15 +58,15 @@ This shows a team page. Called from ratings.teamviews.team.
     <div class="col-lg-4 col-lg-offset-2 col-md-6 col-md-offset-1 col-sm-7 col-xs-12 text">
       {% if team.founded and team.disbanded %}
         <p>
-          {% blocktrans with teamname=team.name founded=team.founded|date:_('F jS, Y') disbanded=team.disbanded|date:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}
+          {% blocktrans with teamname=team.name founded=team.founded|date:"DATE_FORMAT" disbanded=team.disbanded|date:"DATE_FORMAT" %}{{ teamname }} was founded on {{ founded }} and disbanded on {{ disbanded }}.{% endblocktrans %}
         </p>
       {% elif team.founded %}
         <p>
-          {% blocktrans with teamname=team.name founded=team.founded|date:_('F jS, Y') %}{{ teamname }} was founded on {{ founded }}.{% endblocktrans %}
+          {% blocktrans with teamname=team.name founded=team.founded|date:"DATE_FORMAT" %}{{ teamname }} was founded on {{ founded }}.{% endblocktrans %}
         </p>
       {% elif team.disbanded %}
         <p>
-          {% blocktrans with teamname=team.name disbanded=team.disbanded|date:_('F jS, Y') %}{{ teamname }} was disbanded on {{ disbanded }}.{% endblocktrans %}
+          {% blocktrans with teamname=team.name disbanded=team.disbanded|date:"DATE_FORMAT" %}{{ teamname }} was disbanded on {{ disbanded }}.{% endblocktrans %}
         </p>
       {% endif %}
     </div>
@@ -98,13 +98,13 @@ This shows a team page. Called from ratings.teamviews.team.
           {% if team.founded %}
             <tr class="small">
               <td class="text-right ibox-left" style="width: 40%">{% trans "Founded" %}</td>
-              <td style="width: 60%">{{team.founded|date:_('F jS, Y')}}</td>
+              <td style="width: 60%">{{team.founded|date:"DATE_FORMAT"}}</td>
             </tr>
           {% endif %}
           {% if team.disbanded %}
             <tr class="small">
               <td class="text-right ibox-left" style="width: 40%">{% trans "Disbanded" %}</td>
-              <td style="width: 60%">{{team.disbanded|date:_('F jS, Y')}}</td>
+              <td style="width: 60%">{{team.disbanded|date:"DATE_FORMAT"}}</td>
             </tr>
           {% endif %}
           {% if nplayers %}
@@ -246,10 +246,10 @@ This shows a team page. Called from ratings.teamviews.team.
                   <a href="/players/{{tm.player.id}}-{{tm.player.tag|urlfilter}}/">{{tm.player.tag}}</a>
                 </td>
                 <td>
-                  {{tm.start|date:_('F jS, Y')}}
+                  {{tm.start|date:"DATE_FORMAT"}}
                 </td>
                 <td>
-                  {{tm.end|date:_('F jS, Y')}}
+                  {{tm.end|date:"DATE_FORMAT"}}
                 </td>
               </tr>
             {% endfor %}

@@ -2,7 +2,7 @@
 /* Written by Naimdjon Takhirov (naimdjon@gmail.com). */
 
 jQuery(function($){
-	$.datepicker.regional['no'] = {
+	$.datepicker.regional['nb'] = {
 		closeText: 'Lukk',
 		prevText: '&#xAB;Forrige',
 		nextText: 'Neste&#xBB;',
@@ -19,5 +19,5 @@ jQuery(function($){
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-    $.datepicker.setDefaults($.datepicker.regional['no']);
+    $.datepicker.setDefaults($.datepicker.regional['nb']);
 });

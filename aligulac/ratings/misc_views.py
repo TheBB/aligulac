@@ -193,7 +193,7 @@ CLOCKS = [
             .filter(earnings__player_id=125,
                     eventobj__fullname__istartswith="GSL",
                     eventobj__fullname__icontains="Code S",
-                    earnings__placement__in=[2, 1])
+                    Q(earnings__placement__in=[2, 1])
             .order_by("-latest")
         ),
         "event_winner"

@@ -5,7 +5,7 @@ from countries.data import cca2_to_ccn
 from collections import Counter, namedtuple
 from datetime import datetime
 
-from django import forms
+from django import formsa
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import F, Q, Sum
 from django.http import HttpResponse
@@ -180,6 +180,20 @@ CLOCKS = [
             .filter(type="event")
             .filter(earnings__player_id=73,
                     earnings__placement=2)
+            .order_by("-latest")
+        ),
+        "event_winner"
+    ),
+        (
+        _("A GSL final was held without soO"),
+        None,
+        (
+            Event.objects
+            .filter(type="event")
+            .filter(earnings__player_id=125,
+                    earnings__placement__in=[2, 1],
+                    eventobj__fullname__istartswith="GSL",
+                    eventobj__fullname__icontains="Code S")
             .order_by("-latest")
         ),
         "event_winner"

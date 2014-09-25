@@ -185,6 +185,20 @@ CLOCKS = [
         "event_winner"
     ),
     (
+        _("A GSL final was held without soO"),
+        None,
+        (
+            Event.objects
+            .filter(type="event")
+            .filter(earnings__player_id=125,
+                    eventobj__fullname__istartswith="GSL",
+                    eventobj__fullname__icontains="Code S",
+                    earnings__placement__in=[2, 1])
+            .order_by("-latest")
+        ),
+        "event_winner"
+    ),
+    (
         _("SlayerS disbanded"),
         None,
         lambda: Group.objects.get(id=47).disbanded,

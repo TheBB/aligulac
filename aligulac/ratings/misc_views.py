@@ -199,6 +199,31 @@ CLOCKS = [
         "event_winner"
     ),
     (
+        _("Taeja won a premier event"),
+        None,
+        (
+            Event.objects
+            .filter(type="event")
+            .filter(earnings__player_id=6,
+                    earnings__earnings_gte=10000,
+                    earnings__placement=1)
+            .order_by("-latest")
+        ),
+        "event_winner"
+    ),
+    (
+        _("sOs won 100.000$ in a tournament"),
+        None,
+        (
+            Event.objects
+            .filter(type="event")
+            .filter(earnings__player_id=110,
+                    earnings__earnings_gte=100000)
+            .order_by("-latest")
+        ),
+        "event_winner"
+    ),
+    (
         _("SlayerS disbanded"),
         None,
         lambda: Group.objects.get(id=47).disbanded,

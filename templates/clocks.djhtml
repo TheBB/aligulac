@@ -69,12 +69,14 @@ Number of days since.
                         <td>{{ earn.0.player|player }}</td>
                         <td class="text-right">{{ earn.0.earnings|add_sep_and_cur:"USD" }}</td>
                       </tr>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{ earn.1.player|player }}</td>
-                        <td class="text-right">{{ earn.1.earnings|add_sep_and_cur:"USD" }}</td>
-                      </tr>
+                      {% if earn.1 %}
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td>{{ earn.1.player|player }}</td>
+                          <td class="text-right">{{ earn.1.earnings|add_sep_and_cur:"USD" }}</td>
+                        </tr>
+                      {% endif %}
                     {% endfor %}
                   </table>
                 </td>

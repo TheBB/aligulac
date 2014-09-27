@@ -190,10 +190,10 @@ CLOCKS = [
         (
             Event.objects
             .filter(type="event")
-            .filter(earnings__player_id=125,
-                    eventobj__fullname__istartswith="GSL",
-                    eventobj__fullname__icontains="Code S",
-                    ~Q(earnings__placement__in=[2, 1])
+            .filter(fullname__istartswith="GSL",
+                    fullname__icontains="Code S")
+            .exclude(Q(earnings__placement__in=[2, 1]),
+                     earnings__player_id=125)
             .order_by("-latest")
         ),
         "event_winner"
@@ -205,7 +205,7 @@ CLOCKS = [
             Event.objects
             .filter(type="event")
             .filter(earnings__player_id=6,
-                    earnings__earnings_gte=10000,
+                    earnings__earnings__gte=10000,
                     earnings__placement=1)
             .order_by("-latest")
         ),
@@ -218,7 +218,7 @@ CLOCKS = [
             Event.objects
             .filter(type="event")
             .filter(earnings__player_id=110,
-                    earnings__earnings_gte=100000)
+                    earnings__earnings__gte=100000)
             .order_by("-latest")
         ),
         "event_winner"

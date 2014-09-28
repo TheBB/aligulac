@@ -188,15 +188,14 @@ CLOCKS = [
         _("A GSL final was held without soO"),
         None,
         (
-            Event.objects
-            .filter(type="event")
-            .filter(fullname__istartswith="GSL",
-                    fullname__icontains="Code S")
-            .exclude(Q(earnings__placement__in=[2, 1]),
-                     earnings__player_id=125)
-            .order_by("-latest")
+            Match.objects
+            .filter(~Q(pla_id=125) & ~Q(plb_id=125))
+            .filter(eventobj__fullname__istartswith="GSL",
+                    eventobj__fullname__icontains="Code S",
+                    eventobj__fullname__iendswith="Final")
+            .order_by("-date")
         ),
-        "event_winner"
+        "match"
     ),
     (
         _("Taeja won a premier event"),
@@ -212,7 +211,7 @@ CLOCKS = [
         "event_winner"
     ),
     (
-        _("sOs won 100.000$ in a tournament"),
+        _("sOs won $100,000 in a tournament"),
         None,
         (
             Event.objects

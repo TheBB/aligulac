@@ -185,12 +185,23 @@ CLOCKS = [
         "event_winner"
     ),
     (
+        _("soO got second place in an event"),
+        None,
+        (
+            Event.objects
+            .filter(type="event")
+            .filter(earnings__player_id=125,
+                    earnings__placement=2)
+            .order_by("-latest")
+        ),
+        "event_winner"
+    ),
+    (
         _("A GSL final was held without soO"),
         None,
         (
             Match.objects
             .filter(~Q(pla_id=125) & ~Q(plb_id=125))
-            .filter(eventobj__fullname__istartswith="GSL",
                     eventobj__fullname__icontains="Code S",
                     eventobj__fullname__iendswith="Final")
             .order_by("-date")

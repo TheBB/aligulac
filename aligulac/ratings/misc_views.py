@@ -202,7 +202,7 @@ CLOCKS = [
         (
             Match.objects
             .filter(~Q(pla_id=125) & ~Q(plb_id=125))
-                    eventobj__fullname__icontains="Code S",
+            .filter(eventobj__fullname__icontains="Code S",
                     eventobj__fullname__iendswith="Final")
             .order_by("-date")
         ),

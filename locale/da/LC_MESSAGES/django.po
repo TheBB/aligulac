@@ -5088,7 +5088,7 @@ msgstr "Historier"
 
 #: templates/eventres.djhtml:593
 msgid "This event has no registered games... yet."
-msgstr "Dette evnt har ingen registrerede kampe... endu."
+msgstr "Dette event har ingen registrerede kampe... endnu."
 
 #: templates/eventres.djhtml:598
 #, python-format

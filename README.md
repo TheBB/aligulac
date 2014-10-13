@@ -146,6 +146,8 @@ process for adding new matches and reviewing them is fairly similar.
 
 The syntax for adding matches is described in depth on the submission page.
 
+**NOTE:** Try to verify game was actually played if possible, do not add walkover games.
+
 ### Other
 
 #### Aliases

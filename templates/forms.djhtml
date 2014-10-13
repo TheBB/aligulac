@@ -34,7 +34,12 @@
                 name="{{field.html_name}}"
                 id="{{field.auto_id}}"
                 rows="{{rows|default:"15"}}"
-                placeholder="{{placeholder|default:field.label}}">{{field.value}}</textarea>
+                {% if field %}
+                placeholder="{{placeholder|default:field.label|default:""}}"
+                {% else %}
+                placeholder="{{placeholder|default:""}}"
+                {% endif %}
+                >{{field.value}}</textarea>
     </div>
     {% if help %}
       <span class="help-block">

@@ -146,7 +146,36 @@ ratings.views.events.
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </form>
-            {% endform %}
+          {% endform %}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="md-wcs" tabindex="-1" role="dialog" aria-labelledby="md-wcs-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="md-wcs-label">
+              {% trans "Modify WCS data" %}
+            </h4>
+          </div>
+          {% form "forms.djhtml" %}
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                {% csrf_token %}
+                {% use "hidden" name="modwcs" value="modwcs" %}
+                {% field "select" wcsform.year %}
+                {% field "select" wcsform.tier %}
+                {% field "textarea" wcsform.points rows=8 placeholder=_("[points] [player]") %}
+              </div>
+              <div class="modal-footer">
+                {% use "submit" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+          {% endform %}
         </div>
       </div>
     </div>
@@ -571,6 +600,7 @@ ratings.views.events.
                 <a href="#" title="{% trans "Add subevents" %}" data-toggle="modal" data-target="#md-add"><span class="glyphicon glyphicon-file"></span></a>
                 {% if event.type == "event" %}
                   <a href="#" title="{% trans "Prize pool" %}" data-toggle="modal" data-target="#md-pp"><span class="glyphicon glyphicon-usd"></span></a>
+                  <a href="#" title="{% trans "WCS data" %}" data-toggle="modal" data-target="#md-wcs"><span class="glyphicon glyphicon-globe"></span></a>
                 {% endif %}
                 {% if not event.has_children and stform %}
                   <a href="#" title="{% trans "Stories" %}" data-toggle="modal" data-target="#md-st"><span class="glyphicon glyphicon-flag"></span></a>

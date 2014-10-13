@@ -60,6 +60,9 @@ from ratings.models import (
     TYPE_CATEGORY,
     TYPE_EVENT,
     TYPE_ROUND,
+    WCSPoints,
+    WCS_TIERS,
+    WCS_YEARS,
 )
 from ratings.tools import (
     currency_strip,
@@ -73,14 +76,23 @@ from ratings.tools import (
 )
 # }}}
 
-# {{{ earnings_code: Converts a queryset of earnings to the corresponding code.
+# {{{ earnings_code, wcs_points_code: Converts a queryset of earnings or
+# wcs points to the corresponding code.
 def earnings_code(queryset):
     if not queryset.exists():
-        return '[prize] [player]'
+        return ''
     return '\n'.join([
         '{} {} {}'.format(currency_strip(e.origearnings), 
                           e.player.tag, 
                           e.player_id) 
+        for e in queryset
+    ])
+
+def wcs_points_code(queryset):
+    if not queryset.exists():
+        return ''
+    return '\n'.join([
+        '{} {} {}'.format(e.points, e.player.tag, e.player_id)
         for e in queryset
     ])
 # }}}
@@ -281,6 +293,99 @@ class StoriesForm(forms.Form):
 
         return ret
 
+# {{{ WCSModForm: Form for changing WCS status.
+class WCSModForm(forms.Form):
+    year = forms.ChoiceField(choices=[(None, _('None'))] + WCS_YEARS, required=False, label=_('Year'))
+    # Translators: WCS event tier
+    tier = forms.ChoiceField(choices=WCS_TIERS, required=False, label=_('Tier'))
+    points = forms.CharField(required=False, max_length=10000, label=_('Points'))
+
+    def __init__(self, request=None, event=None):
+        if request is not None:
+            super(WCSModForm, self).__init__(request.POST)
+        else:
+            initial = {
+                'year': str(event.wcs_year),
+                'tier': str(event.wcs_tier),
+                'points': wcs_points_code(event.wcspoints_set.order_by('-points')),
+            }
+
+            super(WCSModForm, self).__init__(initial=initial)
+
+        self.label_suffix = ''
+
+    # {{{ Function for parsing a single line
+    def line_to_data(self, line):
+        ind = line.find(' ')
+        points = int(line[:ind])
+
+        queryset = find_player(query=line[ind+1:])
+        if not queryset.exists():
+            raise Exception(_("No such player: '%s'.") % line[ind+1:])
+        elif queryset.count() > 1:
+            raise Exception(_("Ambiguous player: '%s'.") % line[ind+1:])
+        else:
+            return points, queryset.first()
+    # }}}
+
+    # {{{ update_event: Pushes changes to event object
+    def update_event(self, event):
+        ret = []
+
+        if not self.is_valid():
+            ret.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
+            for field, errors in self.errors.items():
+                for error in errors:
+                    ret.append(Message(error=error, field=self.fields[field].label))
+            return ret
+
+        # {{{ Gather data
+        entries, ok = [], True
+
+        for line in self.cleaned_data['points'].split('\n'):
+            if line.strip() == '':
+                continue
+            try:
+                points, player = self.line_to_data(line)
+                entries.append({'points': points, 'player': player, 'placement': 0})
+            except Exception as e:
+                ret.append(Message(str(e), type=Message.ERROR))
+                ok = False
+
+        if not ok:
+            ret.append(Message(_('Errors occured, no changes made.'), type=Message.ERROR))
+            return ret
+        # }}}
+
+        # {{{ If not a WCS event, clear all data
+        if self.cleaned_data['year'] == 'None':
+            WCSPoints.set_points(event, [])
+            event.wcs_year = None
+            event.wcs_tier = None
+            event.save()
+
+            ret.append(Message(_('WCS data cleared'), type=Message.SUCCESS))
+
+            return ret
+        # }}}
+
+        # {{{ If a WCS event, set all data
+        entries.sort(key=lambda a: a['placement'])
+        for i, e in enumerate(entries):
+            e['placement'] = i
+
+        WCSPoints.set_points(event, entries)
+        event.wcs_year = int(self.cleaned_data['year'])
+        event.wcs_tier = int(self.cleaned_data['tier'])
+        event.save()
+
+        ret.append(Message(_('WCS data stored.'), type=Message.SUCCESS))
+
+        return ret
+        # }}}
+    # }}}
+# }}}
+
 # {{{ PrizepoolModForm: Form for changing prizepools.
 class PrizepoolModForm(forms.Form):
     sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
@@ -370,10 +475,8 @@ class PrizepoolModForm(forms.Form):
 
         # {{{ Commit
         try:
-            Earnings.set_earnings(event, ranked,
-                                  self.cleaned_data['currency'], True)
-            Earnings.set_earnings(event, unranked,
-                                  self.cleaned_data['currency'], False)
+            Earnings.set_earnings(event, ranked, self.cleaned_data['currency'], True)
+            Earnings.set_earnings(event, unranked, self.cleaned_data['currency'], False)
         except RateNotFoundError as e:
             ret.append(Message(str(e), type=Message.ERROR))
             return ret
@@ -877,6 +980,7 @@ def events(request, event_id=None):
             check_form('reorderform', ReorderForm, 'reorder')
         if event.type == TYPE_EVENT:
             check_form('ppform', PrizepoolModForm, 'modpp')
+            check_form('wcsform', WCSModForm, 'modwcs')
         if not event.has_children() and event.get_immediate_matchset().exists():
             check_form('stform', StoriesForm, 'modstory')
 

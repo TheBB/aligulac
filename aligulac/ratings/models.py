@@ -86,6 +86,20 @@ EVENT_TYPES = [
     (TYPE_ROUND,    _('Round')),
 ]
 
+WCS_YEARS = [
+    (2013, '2013'),
+    (2014, '2014'),
+]
+
+WCS_TIERS = [
+    # Translators: Native WCS tier
+    (0, _('Native')),
+    # Translators: WCS tier number
+    (1, _('Tier #%i') % 1),
+    (2, _('Tier #%i') % 2),
+    (3, _('Tier #%i') % 3),
+]
+
 P, T, Z, R, S = 'PTZRS'
 RACES = [
     (P, _('Protoss')),
@@ -402,6 +416,9 @@ class Event(models.Model):
     )
 
     family = models.ManyToManyField('Event', through='EventAdjacency')
+
+    wcs_year = models.IntegerField('WCS year', blank=True, null=True, choices=WCS_YEARS)
+    wcs_tier = models.IntegerField('WCS tier', blank=True, null=True, choices=WCS_TIERS)
     # }}}
 
     # {{{ open_events: Not used... is this useful?
@@ -677,6 +694,11 @@ class Event(models.Model):
         self.set_prizepool(None)
         new_event.set_prizepool(True)
         new_event.change_type(Event.EVENT)
+    # }}}
+
+    # {{{ delete_points: Deletes WCS points objects associated with this event
+    def delete_points(self):
+        WCSPoints.objects.filter(event=self).delete()
     # }}}
 # }}}
 
@@ -1699,6 +1721,45 @@ class Message(models.Model):
             return True
         except:
             return False
+# }}}
+
+# {{{ WCS points
+class WCSPoints(models.Model):
+    class Meta:
+        db_table = 'wcspoints'
+        ordering = ['-points']
+
+    # {{{ Fields
+    event = models.ForeignKey(
+        Event, verbose_name='Event', null=False,
+        help_text='Event in which these WCS points was awarded'
+    )
+    player = models.ForeignKey(
+        Player, verbose_name='Player', null=False,
+        help_text='Player to which these WCS points was awarded'
+    )
+    points = models.IntegerField('Points', null=False, help_text='Number of points awarded')
+    placement = models.IntegerField('Place', help_text='Placement')
+    # }}}
+
+    # {{{ set_points(event, entries): Sets WCS points for a given event
+    # Payouts is a list of dicts with keys 'player', 'points' and 'placement'.
+    # TODO: Probably should be more subtle and not delete everything on change
+    @staticmethod
+    def set_points(event, entries):
+        # Delete existent points
+        if WCSPoints.objects.filter(event=event).exists():
+            event.delete_points()
+
+        for entry in entries:
+            new = WCSPoints(
+                event=event,
+                player=entry['player'],
+                placement=entry['placement'],
+                points=entry['points'],
+            )
+            new.save()
+    # }}}
 # }}}
 
 # {{{ Earnings

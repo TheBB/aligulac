@@ -34,7 +34,7 @@
                 name="{{field.html_name}}"
                 id="{{field.auto_id}}"
                 rows="{{rows|default:"15"}}"
-                placeholder="{{field.label}}">{{field.value}}</textarea>
+                placeholder="{{placeholder|default:field.label}}">{{field.value}}</textarea>
     </div>
     {% if help %}
       <span class="help-block">

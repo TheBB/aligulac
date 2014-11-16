@@ -107,6 +107,13 @@ CLOCKS = [
         "match"
     ),
     (
+        _("Flash was 3-0'ed"),
+        None,
+        Match.objects.symmetric_filter(pla_id=55, sca=0, scb=3)
+        .order_by("-date"),
+        "match"
+    ),
+    (
         _("A foreign terran won against a Korean protoss (offline)"),
         None,
         Match.objects.symmetric_filter(

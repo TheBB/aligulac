@@ -78,7 +78,7 @@ DBTABLES = [{
                 _('P, T or Z for normal races, R for random and S for race switcher')),
             ('dom_val', 'double precision', 
                 _('their PP score (' +
-                  'see <a href="%s">Hall of Fame</a> for explanation)') % '/results/hof/'),
+                  'see <a href="%s">Hall of Fame</a> for explanation)') % '/records/hof/'),
             ('dom_start_id', 'integer', _('foreign key to period (start of PP-period)')),
             ('dom_end_id', 'integer', _('foreign key to period (first period after end of PP-period)')),
             ('current_rating_id', 'integer', 
@@ -213,7 +213,7 @@ DBTABLES = [{
             ('decay', 'integer not null', _('number of periods since last game')),
             ('domination', 'double precision', 
                 _('rating gap to number 7 ('
-                  'used in the <a href="%s">Hall of Fame</a>)') % '/recods/hof/'),
+                  'used in the <a href="%s">Hall of Fame</a>)') % '/records/hof/'),
             # Translators: rating is a table name and must be in English
             ('prev_id', 'integer', _('foreign key to rating; previous rating for this player')),
         ]

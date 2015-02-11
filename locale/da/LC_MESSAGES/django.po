@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Aligulac Danish\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-09 05:45+0000\n"
-"PO-Revision-Date: 2014-08-17 12:36+0100\n"
+"PO-Revision-Date: 2015-01-16 23:18+0100\n"
 "Last-Translator: Morten Jørgensen <mortenbo3@hotmail.com>\n"
 "Language-Team: Morten <LL@li.org>\n"
 "Language: da\n"
@@ -229,9 +229,8 @@ msgid "Open events"
 msgstr "Åbne events"
 
 #: aligulac/aligulac/tools.py:274
-#, fuzzy
 msgid "Player info"
-msgstr "Spiller A"
+msgstr "Spiller info"
 
 #: aligulac/aligulac/tools.py:313
 msgid "Summary"
@@ -2111,7 +2110,7 @@ msgstr "En koreansk Terran vandt over en koreansk Protoss i en Ba5+ (offline)"
 
 #: aligulac/ratings/misc_views.py:110
 msgid "Flash was 3-0'ed"
-msgstr ""
+msgstr "Flash tabte 3-0"
 
 #: aligulac/ratings/misc_views.py:117
 msgid "A foreign terran won against a Korean protoss (offline)"
@@ -2166,22 +2165,20 @@ msgid "Jaedong got second place in an event"
 msgstr "Jaedong fik 2. plads i et event"
 
 #: aligulac/ratings/misc_views.py:195
-#, fuzzy
 msgid "soO got second place in an event"
-msgstr "Jaedong fik 2. plads i et event"
+msgstr "soO fik 2. plads i et event"
 
 #: aligulac/ratings/misc_views.py:207
 msgid "A GSL final was held without soO"
-msgstr ""
+msgstr "En GSL finale blev holdt uden soO"
 
 #: aligulac/ratings/misc_views.py:219
-#, fuzzy
 msgid "Taeja won a premier event"
-msgstr "Mvp vandt en premier turnering"
+msgstr "Taeja vandt en premier turnering"
 
 #: aligulac/ratings/misc_views.py:232
 msgid "sOs won $100,000 in a tournament"
-msgstr ""
+msgstr "sOs vandt $100.000 i en turnering"
 
 #: aligulac/ratings/misc_views.py:244
 msgid "SlayerS disbanded"
@@ -2375,16 +2372,15 @@ msgstr "Runde"
 
 #. Translators: Native WCS tier
 #: aligulac/ratings/models.py:96
-#, fuzzy
 msgid "Native"
-msgstr "Aktive"
+msgstr "Standard"
 
 #. Translators: WCS tier number
 #: aligulac/ratings/models.py:98 aligulac/ratings/models.py:99
 #: aligulac/ratings/models.py:100
 #, python-format
 msgid "Tier #%i"
-msgstr ""
+msgstr "Niveau #%i"
 
 #. Translators: Random race
 #: aligulac/ratings/models.py:109
@@ -3323,21 +3319,20 @@ msgstr "Historie succesfuldt oprettet."
 
 #: aligulac/ratings/results_views.py:298
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 #: aligulac/ratings/results_views.py:298
-#, fuzzy
 msgid "Year"
-msgstr "År:"
+msgstr "År"
 
 #. Translators: WCS event tier
 #: aligulac/ratings/results_views.py:300
 msgid "Tier"
-msgstr ""
+msgstr "Niveau"
 
 #: aligulac/ratings/results_views.py:301
 msgid "Points"
-msgstr ""
+msgstr "Points"
 
 #: aligulac/ratings/results_views.py:324 aligulac/ratings/results_views.py:424
 #, python-format
@@ -3357,11 +3352,11 @@ msgstr "Fejl skete, ingen ændringer gemt."
 
 #: aligulac/ratings/results_views.py:367
 msgid "WCS data cleared"
-msgstr ""
+msgstr "WCS data nulstillet"
 
 #: aligulac/ratings/results_views.py:382
 msgid "WCS data stored."
-msgstr ""
+msgstr "WCS data gemt."
 
 #: aligulac/ratings/results_views.py:393
 msgid "Currency"
@@ -3455,7 +3450,6 @@ msgstr ""
 "under deres respektive Code S events osv."
 
 #: aligulac/ratings/results_views.py:989
-#, fuzzy
 msgid "Sucessfully closed event."
 msgstr "Lukket event succesfuldt."
 
@@ -3774,27 +3768,25 @@ msgstr "Romaniseret navn"
 
 #. Translators: Updated a player
 #: aligulac/ratings/staff_views.py:1034
-#, fuzzy, python-format
+#, python-format
 msgid "Updated %s"
-msgstr "Opdater"
+msgstr "Opdateret %s"
 
 #: aligulac/ratings/staff_views.py:1064
 msgid "Progress"
-msgstr ""
+msgstr "Forløb"
 
 #: aligulac/ratings/staff_views.py:1088
 msgid "Players with birthday"
-msgstr ""
+msgstr "Spillere med fødselsdag"
 
 #: aligulac/ratings/staff_views.py:1089
-#, fuzzy
 msgid "Players with name"
-msgstr "Spillernavne"
+msgstr "Spillere med navn"
 
 #: aligulac/ratings/staff_views.py:1090
-#, fuzzy
 msgid "Players with country"
-msgstr "Filtrer efter land:"
+msgstr "Spillere med land"
 
 #: aligulac/ratings/team_views.py:87
 msgid "short name"
@@ -4816,14 +4808,12 @@ msgstr ""
 "Brug denne til præmier urelateret til den endelige placering, fx \"tips\"."
 
 #: templates/eventres.djhtml:161
-#, fuzzy
 msgid "Modify WCS data"
-msgstr "Modificer hold"
+msgstr "Modificer WCS data"
 
 #: templates/eventres.djhtml:171
-#, fuzzy
 msgid "[points] [player]"
-msgstr "[præmie] [spiller]"
+msgstr "[points] [spiller]"
 
 #: templates/eventres.djhtml:191 templates/eventres.djhtml.py:609
 msgid "Reorder subevents"
@@ -4881,9 +4871,8 @@ msgid "Other Prizes"
 msgstr "Andre præmier"
 
 #: templates/eventres.djhtml:321
-#, fuzzy
 msgid "Same level"
-msgstr "Samme niveau:"
+msgstr "Samme niveau"
 
 #. Translators: Go as in go to a page.
 #. Translators: Go as in go to a page.
@@ -4893,9 +4882,8 @@ msgid "Go"
 msgstr "Gå"
 
 #: templates/eventres.djhtml:346
-#, fuzzy
 msgid "Next level"
-msgstr "Næste niveau:"
+msgstr "Næste niveau"
 
 #: templates/eventres.djhtml:376 templates/eventres.djhtml.py:536
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
@@ -4999,7 +4987,7 @@ msgstr "Præmiesum"
 
 #: templates/eventres.djhtml:603
 msgid "WCS data"
-msgstr ""
+msgstr "WCS data"
 
 #. Translators: Stories are the dots on a player's rating chart.
 #: templates/eventres.djhtml:606 templates/player.djhtml:194
@@ -5291,12 +5279,11 @@ msgstr "Tidligere søgninger"
 
 #: templates/index.djhtml:198
 msgid "Old value"
-msgstr ""
+msgstr "Gammel værdi"
 
 #: templates/index.djhtml:199
-#, fuzzy
 msgid "No data found"
-msgstr "dato grundlagt"
+msgstr "Ingen data fundet"
 
 #: templates/index.djhtml:200 templates/index.djhtml.py:219
 msgid "Loading..."
@@ -5854,7 +5841,7 @@ msgstr "Kampe spillet"
 
 #: templates/player.djhtml:698
 msgid "Aligulac ID"
-msgstr ""
+msgstr "Aligulac ID"
 
 #. Translators: SC2E = sc2earnings.com
 #: templates/player.djhtml:712
@@ -5916,36 +5903,32 @@ msgid "Tournament"
 msgstr "Turnering"
 
 #: templates/player_info.djhtml:7
-#, fuzzy
 msgid "Player Info"
-msgstr "Spiller A"
+msgstr "Spillerinformation"
 
 #: templates/player_info.djhtml:39
 msgid "Get data from Liquipedia"
-msgstr ""
+msgstr "Hent data fra Liquipedia"
 
 #: templates/player_info.djhtml:45
-#, fuzzy
 msgid "Close"
-msgstr "Lukket"
+msgstr "Luk"
 
 #: templates/player_info.djhtml:59
-#, fuzzy
 msgid "Player information"
-msgstr "Indeholder spillerinformation"
+msgstr "Spillerinformation"
 
 #: templates/player_info.djhtml:88
-#, fuzzy
 msgid "No players found!"
-msgstr "Ingen indtastninger fundet."
+msgstr "Ingen spillere fundet!"
 
 #: templates/player_info.djhtml:93
 msgid "← Return to progress list"
-msgstr ""
+msgstr "Tilbage til oversigtsliste"
 
 #: templates/player_info.djhtml:211
 msgid "Show missing"
-msgstr ""
+msgstr "Vis mangler"
 
 #: templates/player_results.djhtml:11
 #, python-format

@@ -4046,7 +4046,7 @@ msgstr "De afventer godkendelse før de er synlige."
 
 #: templates/add.djhtml:39
 msgid "Guide"
-msgstr "guide"
+msgstr "Guide"
 
 #: templates/add.djhtml:40
 msgid "Match syntax"

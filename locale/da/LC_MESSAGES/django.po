@@ -4565,7 +4565,7 @@ msgstr "Indtjeningsrangliste"
 #: templates/earnings.djhtml:22
 #, python-format
 msgid "In %(year)s, %(origpp)s (%(totalpp)s) was awarded in prize money."
-msgstr "I %(year)s, vandt %(origpp)s (%(totalpp)s) i præmiesum."
+msgstr "I %(year)s, blev der vundet %(origpp)s (%(totalpp)s) i præmiesum."
 
 #: templates/earnings.djhtml:24
 #, python-format

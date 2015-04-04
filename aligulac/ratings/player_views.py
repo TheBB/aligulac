@@ -41,7 +41,9 @@ from ratings.models import (
     Story,
     T,
     TLPD_DBS,
-    Z,
+    WCS_TIERS,
+    WCS_YEARS,
+    Z
 )
 from ratings.tools import (
     add_counts,
@@ -205,6 +207,23 @@ class ResultsFilterForm(forms.Form):
         ],
         required=False, label=_('On/offline'), initial='both',
     )
+    wcs_season = forms.ChoiceField(
+        choices=[
+            ('',     _('All events')),
+            ('all',  _('All seasons')),
+        ]+WCS_YEARS,
+        required=False, label=_('WCS Season'), initial='',
+    )
+    _all_tiers = ''.join(map(lambda t: str(t[0]), WCS_TIERS))
+    wcs_tier = forms.ChoiceField(
+        choices=[
+            ('',         _('All events')),
+            (_all_tiers, _('All tiers')),
+        ] + WCS_TIERS + [
+            (''.join(map(lambda t: str(t[0]), WCS_TIERS[1:])),  _('Non-native'))
+        ],
+        required=False, label=_('WCS Tier'), initial='',
+    )
     game = forms.ChoiceField(
         choices=[('all','All')]+GAMES, required=False, label=_('Game version'), initial='all')
 
@@ -221,11 +240,13 @@ class ResultsFilterForm(forms.Form):
             return self.fields[field].initial
         return self.cleaned_data[field]
 
-    clean_race    = lambda s: s.clean_default('race')
-    clean_country = lambda s: s.clean_default('country')
-    clean_bestof  = lambda s: s.clean_default('bestof')
-    clean_offline = lambda s: s.clean_default('offline')
-    clean_game    = lambda s: s.clean_default('game')
+    clean_race       = lambda s: s.clean_default('race')
+    clean_country    = lambda s: s.clean_default('country')
+    clean_bestof     = lambda s: s.clean_default('bestof')
+    clean_offline    = lambda s: s.clean_default('offline')
+    clean_wcs_season = lambda s: s.clean_default('wcs_season')
+    clean_wcs_tier   = lambda s: s.clean_default('wcs_tier')
+    clean_game       = lambda s: s.clean_default('game')
     # }}}
 # }}}
 
@@ -499,6 +520,22 @@ def results(request, player_id):
 
     if form.cleaned_data['game'] != 'all':
         matches = matches.filter(game=form.cleaned_data['game'])
+
+    if form.cleaned_data['wcs_season'] != '':
+        if form.cleaned_data['wcs_season'] == 'all':
+            matches = matches.filter(
+                eventobj__uplink__parent__wcs_year__isnull=False
+            )
+        else:
+            matches = matches.filter(
+                eventobj__uplink__parent__wcs_year=int(form.cleaned_data['wcs_season'])
+            )
+
+    if form.cleaned_data['wcs_tier'] != '':
+        tiers = list(map(int, form.cleaned_data['wcs_tier']))
+        matches = matches.filter(
+            eventobj__uplink__parent__wcs_tier__in=tiers
+        )
 
     if form.cleaned_data['after'] is not None:
         matches = matches.filter(date__gte=form.cleaned_data['after'])

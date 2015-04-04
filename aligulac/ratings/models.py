@@ -278,6 +278,8 @@ STORIES = [
     ('%(player)s fails to qualify for %(event)s', _('%(player)s fails to qualify for %(event)s')),
     ('%(player)s fails to qualify for %(event)s after %(num)s appearances',
         _('%(player)s fails to qualify for %(event)s after %(num)s appearances')),
+    ('%(player)s attends their first event as a caster',
+        _('%(player)s attends their first event as a caster'))
 ]
 STORIES_DICT = dict(STORIES)
 STORIES_IDX = list(map(lambda m: m[0], STORIES))

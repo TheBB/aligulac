@@ -555,6 +555,7 @@ def results(request, player_id):
                 r"\s".join(r".*{}.*".format(term) for term in terms)
             )
         )
+    matches = matches.distinct()
     # }}}
 
     # {{{ Statistics

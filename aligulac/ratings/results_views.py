@@ -660,6 +660,24 @@ class SearchForm(forms.Form):
         ],
         required=False, label=_('On/offline'), initial='both',
     )
+    wcs_season = forms.ChoiceField(
+        choices=[
+            ('',     _('All events')),
+            ('all',  _('All seasons')),
+        ]+WCS_YEARS,
+        required=False, label=_('WCS Season'), initial='',
+    )
+    _all_tiers = ''.join(map(lambda t: str(t[0]), WCS_TIERS))
+    wcs_tier = forms.ChoiceField(
+        choices=[
+            ('',         _('All events')),
+            (_all_tiers, _('All tiers')),
+        ] + WCS_TIERS + [
+            (''.join(map(lambda t: str(t[0]), WCS_TIERS[1:])),  _('Non-native'))
+        ],
+        required=False, label=_('WCS Tier'), initial='',
+    )
+
     game = forms.ChoiceField(
         choices=[('all',_('All'))]+GAMES, required=False, label=_('Game version'), initial='all')
 
@@ -711,7 +729,26 @@ class SearchForm(forms.Form):
 
         if self.cleaned_data['game'] != 'all':
             matches = matches.filter(game=self.cleaned_data['game'])
+
+        if self.cleaned_data['wcs_season'] != '':
+            if self.cleaned_data['wcs_season'] == 'all':
+                matches = matches.filter(
+                    eventobj__uplink__parent__wcs_year__isnull=False
+                )
+            else:
+                matches = matches.filter(
+                    eventobj__uplink__parent__wcs_year=int(self.cleaned_data['wcs_season'])
+                )
+
+        if self.cleaned_data['wcs_tier'] != '':
+            tiers = list(map(int, self.cleaned_data['wcs_tier']))
+            matches = matches.filter(
+                eventobj__uplink__parent__wcs_tier__in=tiers
+            )
+
         # }}}
+
+        matches = matches.distinct()
 
         # {{{ Filter by event
         if self.cleaned_data['event'] != None:

@@ -40,7 +40,7 @@ this_backup_path = os.path.join(BACKUP_PATH, this_file_name)
 info("Dumping full database.")
 
 pg_dump = [
-    "pg_dump", "-O", "-c", "-U", 
+    "pg_dump", "-O", "-c", "-U",
     DATABASES['default']['USER'],
     DATABASES['default']['NAME']
 ]
@@ -60,13 +60,13 @@ else:
     files = [f.strip() for f in files if f.strip() != '']
 files.append(this_file_name)
 
-if len(files) > 50:
-    for f in files[:-50]:
+if len(files) > 25:
+    for f in files[:-25]:
         try:
             os.remove(os.path.join(BACKUP_PATH, f))
         except:
             pass
-    files = files[-50:]
+    files = files[-25:]
 
 with open(files_path, 'w') as f:
     for item in files:

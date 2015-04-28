@@ -1,13 +1,17 @@
 from urllib.request import unquote
 
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from tastypie import fields
 from tastypie.authentication import Authentication
 from tastypie.resources import Resource, ModelResource, ALL, ALL_WITH_RELATIONS
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.db.models import F
+from django.db.models import F, Sum
 
 from aligulac.settings import DEBUG
+from aligulac.tools import ntz
 
 from ratings.inference_views import (
     DualPredictionResult,
@@ -26,10 +30,13 @@ from ratings.models import (
     Period,
     Player,
     Rating,
+    P, T, Z
 )
 from ratings.tools import (
     filter_active,
     total_ratings,
+    count_winloss_player,
+    count_matchup_player,
 )
 
 class APIKeyAuthentication(Authentication):
@@ -232,8 +239,19 @@ class PlayerResource(ModelResource):
             'race', 'dom_val', 'current_rating', 'dom_start', 'dom_end',
         ]
 
+    def dehydrate_total_earnings(self, bundle):
+        return ntz(bundle.obj.earnings_set.aggregate(Sum('earnings'))['earnings__sum'])
+
     def dehydrate_aliases(self, bundle):
         return [a.name for a in bundle.obj.alias_set.all()]
+
+    def dehydrate_form(self, bundle):
+        matches = bundle.obj.get_matchset()
+        recent = matches.filter(date__gte=(date.today() - relativedelta(months=2)))
+        return {'total': count_winloss_player(recent, bundle.obj),
+                'P': count_matchup_player(recent, bundle.obj, P),
+                'T': count_matchup_player(recent, bundle.obj, T),
+                'Z': count_matchup_player(recent, bundle.obj, Z)}
 
     dom_start = fields.ForeignKey(PeriodResource, 'dom_start', blank=True, null=True)
     dom_end = fields.ForeignKey(PeriodResource, 'dom_end', blank=True, null=True)
@@ -249,6 +267,10 @@ class PlayerResource(ModelResource):
         attribute=lambda b: b.obj.groupmembership_set.filter(current=False, group__is_team=True),
         help_text='Past teams'
     )
+
+    total_earnings = fields.FloatField(help_text='Total earnings (USD)')
+
+    form = fields.DictField(help_text='Recent form (last two months)')
 
     aliases = fields.ListField(null=True, help_text='Aliases')
 

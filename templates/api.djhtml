@@ -247,6 +247,14 @@
         <li><strong>range</strong></li>
       </ul>
 
+      <h3>Get the history between two players</h3>
+
+      <p>This is accomplished by using the <code>in</code> filter
+      on the <code>match</code> resource. Let's assume the we want the history between
+      {{parting|player}} (id 5) and {{maru|player}} (id 49).</p>
+
+      <pre>/api/v1/match/?pla__in=5,49&plb__in=5,49</pre>
+
       <h3>Searching by name</h3>
 
       <p>To facilitate easier searching by name (aliases, etc.) we have a different URL endpoint: <code>/search/json/?q=query</code>. This is the endpoint used by Aligulac's own autocompletion feature, and so it obeys the same rules (e.g. it will search for teams, events and players, and it will be sensitive to things like country names and races). This feature is strictly speaking not part of the API, and so its use does not require an access key.</p>

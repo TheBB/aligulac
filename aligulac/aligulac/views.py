@@ -486,6 +486,12 @@ def api(request):
 
     base.update({'form': form})
 
+    # To enable pretty rendering of these players in the documentation
+    base.update({
+        'parting': Player.objects.get(id=5),
+        'maru':    Player.objects.get(id=49)
+    })
+
     return render_to_response('api.djhtml', base)
 # }}}
 

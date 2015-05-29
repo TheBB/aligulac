@@ -254,9 +254,6 @@ In general, if you're trying to figure out how this works, may God have mercy on
                              value="y">
                     {% endif %}
                   {% endif %}
-                  <a target="new" href="/admin/ratings/match/{{ m.match_id }}/">
-                    <span class="right-caret"></span>
-                  </a>
                 {% elif lm_predict %}
                   <a target="new" href="{{ m|makematchlink|safe }}">
                     <span class="right-caret"></span>
@@ -277,6 +274,11 @@ In general, if you're trying to figure out how this works, may God have mercy on
                   <img src="{{ m.offline|yesno:"offline,online"|img }}" 
                        alt="{{ m.offline|yesno:"offline,online" }}"
                        title="{{ m.offline|yesno:offon }}">
+                {% endif %}
+                {% if lm_adm or adm %}
+                  <a target="new" href="/admin/ratings/match/{{ m.match_id }}/">
+                    <span class="right-caret"></span>
+                  </a>
                 {% endif %}
               </td>
             </tr>

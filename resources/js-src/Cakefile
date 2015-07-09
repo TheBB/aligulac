@@ -1,7 +1,8 @@
 # Requires
-#   uglifyjs (installed and in PATH)
-#   stitch   (npm install stitch)
-#   ncp      (npm install ncp)
+#   coffee-script (npm install coffee-script) <- will fail silently without it
+#   uglifyjs      (installed and in PATH)
+#   stitch        (npm install stitch)
+#   ncp           (npm install ncp)
 
 fs = require 'fs'
 stitch  = require('stitch');

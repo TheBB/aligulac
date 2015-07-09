@@ -108,8 +108,12 @@ To use, you should define the following blocks:
       <!-- Language picker and search -->
       <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-muted">
-          {% trans "Language" %}:
-          <a href="/language/"><img src="{{ lang|img:"flags/langs" }}"></a>
+          <form action="/language/" method="POST">
+            {% trans "Language" %}:
+            <a href="#" class="langbtn"><img src="{{ lang|img:"flags/langs" }}"></a>
+            <input type="hidden" name="return" value="{{ cur_path }}" />
+            {% csrf_token %}
+          </form>
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">
           <form class="form-inline" role="form" action="/search/" method="get">

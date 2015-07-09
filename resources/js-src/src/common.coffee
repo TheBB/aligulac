@@ -35,6 +35,9 @@ module.exports.create_tag = (tag) ->
 
 module.exports.Common = Common =
     init: () ->
+        $('.langbtn').click ->
+            $(this).closest('form').submit()
+
         $('.lma').click ->
             toggle_block $(this).data('id')
         $('.lmp').click ->

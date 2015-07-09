@@ -364,6 +364,10 @@ def language(request):
     base = base_ctx(request=request)
 
     base['languages'] = LANGUAGES
+    if 'return' in request.POST:
+        base['return'] = request.POST['return']
+    else:
+        base['return'] = '/'
 
     return render_to_response('language.djhtml', base)
 # }}}

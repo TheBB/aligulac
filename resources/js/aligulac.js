@@ -50,7 +50,7 @@
   return this.require.define;
 }).call(this)({"aligulac": function(exports, require, module) {(function() {
   var Aligulac,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   exports.Aligulac = Aligulac = {
     init: function() {
@@ -67,19 +67,19 @@
     init_extra: function(apps) {
       var Clocks, EventMgr, EventRes, PlayerInfo, apps_list;
       apps_list = apps.split(" ");
-      if (__indexOf.call(apps_list, 'eventmgr') >= 0) {
+      if (indexOf.call(apps_list, 'eventmgr') >= 0) {
         EventMgr = require('eventmgr').EventMgr;
         EventMgr.init();
       }
-      if (__indexOf.call(apps_list, 'eventres') >= 0) {
+      if (indexOf.call(apps_list, 'eventres') >= 0) {
         EventRes = require('eventres').EventRes;
         EventRes.init();
       }
-      if (__indexOf.call(apps_list, 'clocks') >= 0) {
+      if (indexOf.call(apps_list, 'clocks') >= 0) {
         Clocks = require('clocks').Clocks;
         Clocks.init();
       }
-      if (__indexOf.call(apps_list, 'player_info') >= 0) {
+      if (indexOf.call(apps_list, 'player_info') >= 0) {
         PlayerInfo = require('player_info').PlayerInfo;
         return PlayerInfo.init();
       }
@@ -104,17 +104,17 @@
           html: aligulac_autocomplete_templates(obj),
           key: obj.key,
           type: 'cache',
-          'origin-type': "" + obj.type + "s"
+          'origin-type': obj.type + "s"
         };
       }
       keys = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = recent_result.length; _i < _len; _i++) {
-          x = recent_result[_i];
-          _results.push(x.key);
+        var k, len, results;
+        results = [];
+        for (k = 0, len = recent_result.length; k < len; k++) {
+          x = recent_result[k];
+          results.push(x.key);
         }
-        return _results;
+        return results;
       })();
       idx = $.inArray(obj.key, keys);
       if (idx > -1) {
@@ -129,7 +129,7 @@
   };
 
   load_recent_results_from_cache = function(restrict_to) {
-    var i, items, j, result, _i, _j, _len, _len1;
+    var i, items, j, k, l, len, len1, result;
     result = [];
     if (window.localStorage) {
       items = JSON.parse(localStorage.getItem('aligulac.autocomplete.caching'));
@@ -139,10 +139,10 @@
       if (!restrict_to) {
         return items;
       }
-      for (_i = 0, _len = items.length; _i < _len; _i++) {
-        i = items[_i];
-        for (_j = 0, _len1 = restrict_to.length; _j < _len1; _j++) {
-          j = restrict_to[_j];
+      for (k = 0, len = items.length; k < len; k++) {
+        i = items[k];
+        for (l = 0, len1 = restrict_to.length; l < len1; l++) {
+          j = restrict_to[l];
           if (i['origin-type'] === j) {
             result.push(i);
           }
@@ -162,7 +162,7 @@
       case 'header':
         return "<span class='autocomp-header'>" + autocomp_strings[obj.label] + "</span>";
       case 'player':
-        obj.key = "" + obj.tag + " " + obj.id;
+        obj.key = obj.tag + " " + obj.id;
         team = (obj.teams && obj.teams.length > 0 ? "<span class='autocomp-team pull-right'>" + obj.teams[0][0] + "</span>" : '');
         flag = (obj.country ? "<img src='" + (flags_dir + obj.country.toLowerCase()) + ".png' />" : '');
         race = "<img src='" + (races_dir + obj.race.toUpperCase()) + ".png' />";
@@ -216,12 +216,12 @@
         return $.when(getResults(request.term)).then(function(result) {
           var cacheresult, eventresult, playerresult, prepare_response, teamresult;
           prepare_response = function(list, type, label) {
-            var x, _i, _len;
+            var k, len, x;
             if (!list || list.length === 0) {
               return [];
             }
-            for (_i = 0, _len = list.length; _i < _len; _i++) {
-              x = list[_i];
+            for (k = 0, len = list.length; k < len; k++) {
+              x = list[k];
               x.type = type;
             }
             return [
@@ -257,13 +257,13 @@
       return $('.event-ac').autocomplete({
         source: function(request, response) {
           return $.when(getResults(request.term, 'events')).then(function(result) {
-            var x, _i, _len, _ref;
+            var k, len, ref, x;
             if ((result == null) || (result.events == null) || result.events.length === 0) {
               return [];
             }
-            _ref = result.events;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              x = _ref[_i];
+            ref = result.events;
+            for (k = 0, len = ref.length; k < len; k++) {
+              x = ref[k];
               x.type = 'event';
             }
             return response(result.events);
@@ -312,11 +312,11 @@
       },
       autocomplete_url: function(request, response) {
         return $.when(getResults(request.term, 'players')).then(function(result) {
-          var p, _i, _len, _ref;
+          var k, len, p, ref;
           if (result.players) {
-            _ref = result.players;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              p = _ref[_i];
+            ref = result.players;
+            for (k = 0, len = ref.length; k < len; k++) {
+              p = ref[k];
               p.type = 'player';
             }
             if (global_player_autocomplete_allow_byes && (request.term === 'bye' || request.term === '--')) {
@@ -439,6 +439,9 @@
 
   module.exports.Common = Common = {
     init: function() {
+      $('.langbtn').click(function() {
+        return $(this).closest('form').submit();
+      });
       $('.lma').click(function() {
         return toggle_block($(this).data('id'));
       });
@@ -459,7 +462,7 @@
         return false;
       });
       return $('.not-unique-update-player').click(function() {
-        var id, input, tag, taglist, update, updateline, _this;
+        var _this, id, input, tag, taglist, update, updateline;
         _this = $(this);
         update = _this.data('update');
         updateline = _this.data('updateline');
@@ -629,13 +632,13 @@
   create_tag = require('common').create_tag;
 
   toggle_form = function(sender) {
-    var data, k, k2, keys, lbl, lp, val, _i, _len;
+    var data, i, k, k2, keys, lbl, len, lp, val;
     data = function(x) {
       return $(sender).closest('tr').data(x);
     };
     keys = ['id', 'country', 'birthday', 'name', 'romanized-name'];
-    for (_i = 0, _len = keys.length; _i < _len; _i++) {
-      k = keys[_i];
+    for (i = 0, len = keys.length; i < len; i++) {
+      k = keys[i];
       val = data(k);
       k2 = k.replace('-', '_');
       $("#id_" + k2).val(val);
@@ -667,15 +670,15 @@
   get_player_info = function(lp) {
     $("#get_lp_span").children().toggle();
     return $.getJSON("/add/player_info_lp/?title=" + (escape(lp)), function(_data) {
-      var c, data, k, keys, n, o, _i, _len;
+      var c, data, i, k, keys, len, n, o;
       if (_data.data == null) {
         $("#get_lp_span").children("small").text(autocomp_strings[_data.message]);
         return;
       }
       data = _data.data;
       keys = ['name', 'romanized_name', 'birthday'];
-      for (_i = 0, _len = keys.length; _i < _len; _i++) {
-        k = keys[_i];
+      for (i = 0, len = keys.length; i < len; i++) {
+        k = keys[i];
         if (data[k] != null) {
           o = $("#id_" + k).val();
           n = data[k];

@@ -30,7 +30,7 @@ ratings.submitviews.)
         {% for l in languages %}
           <form method="post" action="/i18n/setlang/">
             {% csrf_token %}
-            <input type="hidden" name="next" value="/">
+            <input type="hidden" name="next" value="{{ return }}">
             <input type="hidden" name="language" value="{{l.0}}">
             <button type="submit" class="btn btn-{% if l.0 == lang %}info{% else %}default{% endif %}"
                     style="width: 20em; margin-bottom: 1em;">

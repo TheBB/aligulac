@@ -290,10 +290,11 @@ def player(request, player_id):
         'vzf':              count_matchup_player(recent, player, Z),
     })
 
-    riv = player.rivals or []
-    nem = player.nemesis or []
-    vic = player.victim or []
-    base['riv_nem_vic'] = zip_longest(riv, nem, vic)
+    base['riv_nem_vic'] = zip_longest(
+        player.rivals,
+        player.nemesis,
+        player.victim
+    )
 
     if player.country is not None:
         base['countryfull'] = transformations.cc_to_cn(player.country)

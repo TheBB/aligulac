@@ -23,7 +23,7 @@ from django.utils.translation import (
 )
 
 from aligulac.settings import (
-    start_rating, 
+    start_rating,
     INACTIVE_THRESHOLD,
     SHOW_PER_LIST_PAGE
 )
@@ -1019,11 +1019,8 @@ class Player(models.Model):
         q = Player.objects.raw(PLAYER_RIVAL_QUERY, {"id": self.id})
 
         rivals = list(islice(q, 5))
-        
-        if len(rivals) == 0:
-            self._rivals = None
-        else:
-            self._rivals = rivals
+
+        self._rivals = rivals
 
         return self._rivals
 
@@ -1036,26 +1033,20 @@ class Player(models.Model):
 
         nemesis = list(islice(reversed([x for x in pm if x.pm < 0]), 5))
 
-        if len(nemesis) > 0:
-            self._nemesis = nemesis
-        else:
-            self._nemesis = None
-        
+        self._nemesis = nemesis
+
         return self._nemesis
 
     @property
     def victim(self):
         if '_victim' in dir(self):
             return self._victim
-    
+
         pm = self._nemesis_victim_helper()
-        
+
         victim = list(islice((x for x in pm if x.pm > 0), 5))
 
-        if len(victim) > 0:
-            self._victim = victim
-        else:
-            self._victim = None
+        self._victim = victim
 
         return self._victim
 

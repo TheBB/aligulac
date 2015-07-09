@@ -26,7 +26,7 @@ This file is a part of eventres.djhtml
       <tr class="pp_header">
         <td class="text-right shrink">
           <span class="label label-default">
-            {{ p.0|ordinal }}&ndash;{{ p.1|ordinal }}
+            {{ p.0|ordinal|safe }}&ndash;{{ p.1|ordinal|safe }}
           </span>
         </td>
         <td class="text-right shrink">
@@ -63,9 +63,9 @@ This file is a part of eventres.djhtml
               {% if l <= 2 %}
                 {% ifchanged %}
                   {% if l == 1 %}
-                    {{ p.0|ordinal }}
+                    {{ p.0|ordinal|safe }}
                   {% else %}
-                    {{ p.0|ordinal }}&ndash;{{ p.1|ordinal }}
+                    {{ p.0|ordinal|safe }}&ndash;{{ p.1|ordinal|safe }}
                   {% endif %}
                 {% endifchanged %}
               {% endif %}

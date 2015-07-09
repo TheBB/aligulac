@@ -79,9 +79,9 @@ This is the template for the earnings of a player. It's called from ratings.view
               <td class="text-right">
                 {% if earning.rng and earning.rng.0 %}
                   {% if earning.rng.0 != earning.rng.1 %}
-                    {{ earning.rng.0|ordinal }}&ndash;{{ earning.rng.1|ordinal }}
+                    {{ earning.rng.0|ordinal|safe }}&ndash;{{ earning.rng.1|ordinal|safe }}
                   {% else %}
-                    {{ earning.rng.0|ordinal }}
+                    {{ earning.rng.0|ordinal|safe }}
                   {% endif %}
                 {% endif %}
               </td>

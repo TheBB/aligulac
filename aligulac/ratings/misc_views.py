@@ -245,12 +245,6 @@ CLOCKS = [
         None,
         lambda: Group.objects.get(id=47).disbanded,
         "one_time"
-    ),
-    (
-        _("HasuObs joined mousesports"),
-        None,
-        lambda: GroupMembership.objects.get(player_id=83,group_id=22).start,
-        "one_time"
     )
 ]
 

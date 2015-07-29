@@ -1354,7 +1354,11 @@ class Alias(models.Model):
     def __str__(self):
         return self.name
     # }}}
-    
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.strip()
+        super().save(*args, **kwargs)
+
     # {{{ Standard adders
     @staticmethod
     def add_player_alias(player, name):

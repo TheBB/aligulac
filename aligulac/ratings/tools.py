@@ -149,8 +149,15 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
 
         tag_filter = format_filter(tag__MATCHES=s)
         alias_filter = format_filter(alias__name__MATCHES=s)
+        full_name_filter = format_filter(name__MATCHES=s)
+        romanized_name_filter = format_filter(romanized_name__MATCHES=s)
 
-        q = Q(**tag_filter) | Q(**alias_filter)
+        q = (
+            Q(**tag_filter) |
+            Q(**alias_filter) |
+            Q(**full_name_filter) |
+            Q(**romanized_name_filter)
+        )
         if not strict or len(lst) > 1:
             group_name_filter = format_filter(
                 groupmembership__current=True,

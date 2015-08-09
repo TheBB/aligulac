@@ -6,5 +6,6 @@ Django>=1.8,<1.9
 ccy>=0.5.1
 django-debug-toolbar
 django-tastypie
+django-sniplates
 beautifulsoup4
 git+https://github.com/earwig/mwparserfromhell.git

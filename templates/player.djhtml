@@ -5,7 +5,7 @@ This is the template for the main player page, called from ratings.views.player.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 {% load l10n %}
 
@@ -21,28 +21,26 @@ This is the template for the main player page, called from ratings.views.player.
               {% trans "Modify player" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/players/{{player.id}}-{{player.tag|urlfilter}}/">
-              <div class="modal-body">
-                {% csrf_token %}
-                {% field "basic"        modform.tag            %}
-                {% field "select"       modform.race           %}
-                {% field "select"       modform.country        %}
-                {% field "basic"        modform.name           %}
-                {% field "basic"        modform.romanized_name %}
-                {% field "basic"        modform.akas           %}
-                {% field "date"         modform.birthday       %}
-                {% field "basic"        modform.sc2e_id        %}
-                {% field "basic"        modform.lp_name        %}
-                {% field "basic"        modform.tlpd_id        %}
-                {% field "selectmulti"  modform.tlpd_db        %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" name="modplayer" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-            {% endform %}
+          <form role="form" method="post" action="/players/{{player.id}}-{{player.tag|urlfilter}}/">
+            <div class="modal-body">
+              {% csrf_token %}
+              {% form_field modform.tag "common:basic" %}
+              {% form_field modform.race "common:select" %}
+              {% form_field modform.country "common:select" %}
+              {% form_field modform.name "common:basic" %}
+              {% form_field modform.romanized_name "common:basic" %}
+              {% form_field modform.akas "common:basic" %}
+              {% form_field modform.birthday "common:date" %}
+              {% form_field modform.sc2e_id "common:basic" %}
+              {% form_field modform.lp_name "common:basic" %}
+              {% form_field modform.tlpd_id "common:basic" %}
+              {% form_field modform.tlpd_db "common:selectmulti" %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" name="modplayer" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

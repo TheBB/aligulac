@@ -1,7 +1,7 @@
 {% extends "index.djhtml" %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Player Info" %}{% endblock %}
@@ -20,32 +20,30 @@
           {% trans "Modify player" %}
         </h4>
       </div>
-      {% form "forms.djhtml" %}
-      <form method="post" action="" role="form">
-        <div class="modal-body">
-          {% use "hidden" name="id" id="id_id" %}
-          {% csrf_token %}
-          {% field "basic" form.name %}
-          {% field "basic" form.romanized_name  %}
-          {% field "date" form.birthday  %}
-          {% field "select" form.country %}
-        </div>
-        <div class="modal-footer">
-          <span id="get_lp_span">
-            <a href="#"
-               id="get_lp_btn"
-               style="display: none;"
-               class="btn btn-default">
-              {% trans "Get data from Liquipedia" %}
-              <span class="glyphicon glyphicon-download"></span>
-            </a>
-            <small style="display: none;"></small>
-          </span>
-          {% use "submit" name="modplayer" %}
-          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
-        </div>
-      </form>
-      {% endform %}
+    <form method="post" action="" role="form">
+      <div class="modal-body">
+        {% widget "common:hidden" name="id" id="id_id" %}
+        {% csrf_token %}
+        {% form_field form.name "common:basic" %}
+        {% form_field form.romanized_name "common:basic"  %}
+        {% form_field form.birthday "common:date"  %}
+        {% form_field form.country "common:select" %}
+      </div>
+      <div class="modal-footer">
+        <span id="get_lp_span">
+          <a href="#"
+             id="get_lp_btn"
+             style="display: none;"
+             class="btn btn-default">
+            {% trans "Get data from Liquipedia" %}
+            <span class="glyphicon glyphicon-download"></span>
+          </a>
+          <small style="display: none;"></small>
+        </span>
+        {% widget "common:submit" name="modplayer" %}
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </form>
     </div>
   </div>
 </div>

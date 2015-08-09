@@ -120,9 +120,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tastypie',
+    'sniplates',
     'blog',
     'faq',
-    'formulation',
     'miniURL',
     'ratings',
 ]

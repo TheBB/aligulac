@@ -5,7 +5,7 @@ This is the template for the match history of a player. It's called from ratings
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% blocktrans with tag=player.tag %}{{ tag }} match history{% endblocktrans %}{% endblock %}
@@ -30,22 +30,20 @@ This is the template for the match history of a player. It's called from ratings
   <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
       <form class="form-horizontal" role="form" action="/players/{{player.id}}/results/" method="get">
-        {% form "forms.djhtml" %}
-          {% use "daterange" label=_('Date range') after=form.after before=form.before style="hz-half" %}
-	  {% field "basic"  form.event style="hz-half" extraclasses="event-ac" %}
-          {% field "select" form.race style="hz-half" %}
-          {% field "select" form.country style="hz-half" %}
-          {% field "select" form.bestof style="hz-half" %}
-          {% field "select" form.offline style="hz-half" %}
-          {% field "select" form.game style="hz-half" %}
-          {% field "select" form.wcs_season style="hz-half" %}
-          {% field "select" form.wcs_tier style="hz-half" %}
-          <div class="form-group">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
-              {% use "submit" text=_('Filter') %}
-            </div>
+        {% widget "common:daterange" label=_('Date range') after=form.after before=form.before style="hz-half" %}
+ {% form_field form.event "common:basic" style="hz-half" extraclasses="event-ac" %}
+        {% form_field form.race "common:select" style="hz-half" %}
+        {% form_field form.country "common:select" style="hz-half" %}
+        {% form_field form.bestof "common:select" style="hz-half" %}
+        {% form_field form.offline "common:select" style="hz-half" %}
+        {% form_field form.game "common:select" style="hz-half" %}
+        {% form_field form.wcs_season "common:select" style="hz-half" %}
+        {% form_field form.wcs_tier "common:select" style="hz-half" %}
+        <div class="form-group">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+            {% widget "common:submit" text=_('Filter') %}
           </div>
-        {% endform %}
+        </div>
       </form>
     </div>
 

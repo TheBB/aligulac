@@ -5,7 +5,7 @@ This is the main prediction page, showing all available options. It's called fro
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Predict" %}{% endblock %}
@@ -26,15 +26,13 @@ This is the main prediction page, showing all available options. It's called fro
   
   <div class="row" style="margin-top: 2em;">
     <form role="form" method="get" action="/inference/">
-      {% form "forms.djhtml" %}
-        {% use "hidden" name="submitted" value="" %}
-        {% field "select" form.format style="full-mid" %}
-        {% field "basic" form.bestof style="full-mid" %}
-        {% field "textarea" form.players rows="6" style="full-mid" %}
-        <div class="form-group text-right {{"full-mid"|formdiv}}">
-          {% use "submit" text=_('Show me the future!') noname=1 %}
-        </div>
-      {% endform %}
+      {% widget "common:hidden" name="submitted" value="" %}
+      {% form_field form.format "common:select" style="full-mid" %}
+      {% form_field form.bestof "common:basic" style="full-mid" %}
+      {% form_field form.players "common:textarea" rows="6" style="full-mid" %}
+      <div class="form-group text-right {{"full-mid"|formdiv}}">
+        {% widget "common:submit" text=_('Show me the future!') noname=1 %}
+      </div>
     </form>
   </div>
 

@@ -25,6 +25,9 @@ DB_PASSWORD =
 # Folder where the templates are stored
 TEMPLATE_DIRS = ('/home/efonn/repos/aligulac/templates/',)
 
+# Host names this server accepts connections to
+ALLOWED_HOSTS = ['.aligulac.com']
+
 # Necessary for django debug toolbar to work
 INTERNAL_IPS = ('127.0.0.1',)
 

@@ -130,8 +130,6 @@ INSTALLED_APPS = [
 if DEBUG and DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
 
-INSTALLED_APPS.append('south')
-
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',

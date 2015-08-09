@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.db.models.expressions import F, ExpressionNode
+from django.db.models.expressions import F, BaseExpression
 import re
 
 # {{{
@@ -20,14 +20,12 @@ def _swap_q_child(child):
         return _swap(k), v
 
 def swap_f_object(f):
-    if isinstance(f, F):
-        fs = F(_swap(f.name))
-    elif isinstance(f, ExpressionNode):
-        fs = ExpressionNode()
-    fs.children = [swap_f_object(c) for c in f.children]
-    fs.connector = f.connector
-    fs.negated = f.negated
-    return fs
+    assert(isinstance(f, F))
+
+    if isinstance(f.name, F):
+        return F(swap_f_object(f.name))
+    elif isinstance(f.name, str):
+        return F(_swap(f.name))
 
 def _repl(match):
     return match.group(1) + ("a" if match.group(2) == "b" else "b")

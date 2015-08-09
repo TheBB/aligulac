@@ -5,7 +5,7 @@ This shows a team page. Called from ratings.teamviews.team.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block modals %}
@@ -20,22 +20,20 @@ This shows a team page. Called from ratings.teamviews.team.
               {% trans "Modify team" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/teams/{{team.id}}-{{team.name|urlfilter}}/">
-              <div class="modal-body">
-                {% csrf_token %}
-                {% field "basic"        form.name          %}
-                {% field "basic"        form.akas          %}
-                {% field "basic"        form.shortname     %}
-                {% field "basic"        form.homepage      %}
-                {% field "basic"        form.lp_name       %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" name="modplayer" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-            {% endform %}
+          <form role="form" method="post" action="/teams/{{team.id}}-{{team.name|urlfilter}}/">
+            <div class="modal-body">
+              {% csrf_token %}
+              {% form_field form.name "common:basic" %}
+              {% form_field form.akas "common:basic" %}
+              {% form_field form.shortname "common:basic" %}
+              {% form_field form.homepage "common:basic" %}
+              {% form_field form.lp_name "common:basic" %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" name="modplayer" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

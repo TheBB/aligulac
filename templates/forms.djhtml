@@ -3,17 +3,17 @@
 
 {% block basic %}
   <div class="form-group {{style|formdiv}}">
-    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-      {{field.label}}
+    <label for="{{form_field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{form_field.label}}
     </label>
     <div class="{{style|forminput}}">
       <input type="{{field_type|default:"text"}}"
-             name="{{field.html_name}}"
-             id="{{field.auto_id}}"
+             name="{{form_field.html_name}}"
+             id="{{form_field.auto_id}}"
              class="form-control {{extraclasses}}"
              {% if onkeypress %}onkeypress="{{onkeypress}}"{% endif %}
-             value="{{field.value|default:""}}"
-             placeholder="{{field.label}}">
+             value="{{form_field.value|default:""}}"
+             placeholder="{{form_field.label}}">
     </div>
     {% if help %}
       <span class="help-block">
@@ -26,20 +26,20 @@
 
 {% block textarea %}
   <div class="form-group {{style|formdiv}}">
-    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-      {{field.label}}
+    <label for="{{form_field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{form_field.label}}
     </label>
     <div class="{{style|forminput}}">
       <textarea class="form-control"
-                name="{{field.html_name}}"
-                id="{{field.auto_id}}"
+                name="{{form_field.html_name}}"
+                id="{{form_field.auto_id}}"
                 rows="{{rows|default:"15"}}"
                 {% if field %}
-                placeholder="{{placeholder|default:field.label|default:""}}"
+                placeholder="{{placeholder|default:form_field.label|default:""}}"
                 {% else %}
                 placeholder="{{placeholder|default:""}}"
                 {% endif %}
-                >{{field.value}}</textarea>
+                >{{form_field.value}}</textarea>
     </div>
     {% if help %}
       <span class="help-block">
@@ -52,21 +52,21 @@
 
 {% block select %}
   <div class="form-group {{style|formdiv}}">
-    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-      {{field.label}}
+    <label for="{{form_field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{form_field.label}}
     </label>
     <div class="{{style|forminput}}">
       <select class="form-control"
-              name="{{field.html_name}}"
-              id="{{field.auto_id}}"
+              name="{{form_field.html_name}}"
+              id="{{form_field.auto_id}}"
               {% if onchange %}onchange="{{onchange}}"{% endif %}>
-              {% for value, label in field.field.choices %}
+              {% for value, label in form_field.field.choices %}
                 {% if not value and not label %}
                   <option disabled>------------</option>
                 {% else %}
                   <option value="{{value}}"
                           {% if value == override %}selected="selected"
-                          {% elif not override and field.value == value|safe %}selected="selected"{% endif %}>
+                          {% elif not override and form_field.value == value|safe %}selected="selected"{% endif %}>
                           {{label}}
                   </option>
                 {% endif %}
@@ -84,15 +84,15 @@
 {% block selectmulti %}
   <div class="form-group {{style|formdiv}}">
     <label class="{{style|formlabel}} control-label">
-      {{field.label}}
+      {{form_field.label}}
     </label>
     <div class="{{style|forminput}}">
-      {% for value, label in field.field.choices %}
-        <label for="{{field.auto_id}}_{{forloop.counter0}}" class="control-label">
+      {% for value, label in form_field.field.choices %}
+        <label for="{{form_field.auto_id}}_{{forloop.counter0}}" class="control-label">
           <input type="checkbox"
-                 {% if value|stringformat:"i" in field.value or value in field.value %}checked="checked"{% endif %}
-                 id="{{field.auto_id}}_{{forloop.counter0}}"
-                 name="{{field.html_name}}"
+                 {% if value|stringformat:"i" in form_field.value or value in form_field.value %}checked="checked"{% endif %}
+                 id="{{form_field.auto_id}}_{{forloop.counter0}}"
+                 name="{{form_field.html_name}}"
                  type="checkbox"
                  style=""
                  value="{{value}}">
@@ -109,14 +109,14 @@
       <label class="{{style|formlabel}} control-label">&nbsp;</label>
     {% endif %}
     <div class="{{style|forminput}}">
-      <label for="{{field.auto_id}}">
+      <label for="{{form_field.auto_id}}">
         <input type="checkbox"
-               {% if field.value %}checked="checked"{% endif %}
-               id="{{field.auto_id}}"
-               name="{{field.html_name}}"
+               {% if form_field.value %}checked="checked"{% endif %}
+               id="{{form_field.auto_id}}"
+               name="{{form_field.html_name}}"
                type="checkbox"
                style="">
-               {{ field.label }}
+               {{ form_field.label }}
       </label>
     </div>
   </div>
@@ -124,20 +124,20 @@
 
 {% block date %}
   <div class="form-group {{style|formdiv}}">
-    <label for="{{field.auto_id}}" class="{{style|formlabel}} control-label">
-      {{field.label}}
+    <label for="{{form_field.auto_id}}" class="{{style|formlabel}} control-label">
+      {{form_field.label}}
     </label>
     <div class="{{style|forminput}}">
       <input type="text"
-             name="{{field.html_name}}"
+             name="{{form_field.html_name}}"
              {% if id %}
              id="{{ id }}"
              {% else %}
-             id="{{field.auto_id}}"
+             id="{{form_field.auto_id}}"
              {% endif %}
              class="form-control datepicker"
-             value="{{field.value|makedate|date:"Y-m-d"|default:""}}"
-             placeholder="{{placeholder|default:field.label}}">
+             value="{{form_field.value|makedate|date:"Y-m-d"|default:""}}"
+             placeholder="{{placeholder|default:form_field.label}}">
     </div>
   </div>
   <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>

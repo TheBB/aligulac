@@ -5,7 +5,7 @@ This is the results search function. Called from ratings.views.results_search.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Search" %}{% endblock %}
@@ -44,25 +44,23 @@ This is the results search function. Called from ratings.views.results_search.
     <div class="clearfix visible-sm visible-xs"></div>
     <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
       <form class="form-horizontal" role="form" method="get" action="/results/search/">
-        {% form "forms.djhtml" %}
-          {% use "hidden" name="search" value="" %}
-          {% use "daterange" label=_('Date range') after=searchform.after before=searchform.before style="hz-half"%}
-          {% field "textarea" searchform.players style="hz-half" rows="6" %}
-          {% field "basic" searchform.event style="hz-half" extraclasses="event-ac" %}
-          {% if adm %}
-            {% field "checkbox" searchform.unassigned style="hz-half" inc_label=1 %}
-          {% endif %}
-          {% field "select" searchform.bestof style="hz-half" %}
-          {% field "select" searchform.offline style="hz-half" %}
-          {% field "select" searchform.game style="hz-half" %}
-          {% field "select" searchform.wcs_season style="hz-half" %}
-          {% field "select" searchform.wcs_tier style="hz-half" %}
-          <div class="form-group">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
-              {% use "submit" text=_('Search') %}
-            </div>
+        {% widget "common:hidden" name="search" value="" %}
+        {% widget "common:daterange" label=_('Date range') after=searchform.after before=searchform.before style="hz-half"%}
+        {% form_field searchform.players "common:textarea" style="hz-half" rows="6" %}
+        {% form_field searchform.event "common:basic" style="hz-half" extraclasses="event-ac" %}
+        {% if adm %}
+          {% form_field searchform.unassigned "common:checkbox" style="hz-half" inc_label=1 %}
+        {% endif %}
+        {% form_field searchform.bestof "common:select" style="hz-half" %}
+        {% form_field searchform.offline "common:select" style="hz-half" %}
+        {% form_field searchform.game "common:select" style="hz-half" %}
+        {% form_field searchform.wcs_season "common:select" style="hz-half" %}
+        {% form_field searchform.wcs_tier "common:select" style="hz-half" %}
+        <div class="form-group">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+            {% widget "common:submit" text=_('Search') %}
           </div>
-        {% endform %}
+        </div>
       </form>
     </div>
   </div>
@@ -128,16 +126,14 @@ This is the results search function. Called from ratings.views.results_search.
       </div>
 
       <div class="row">
-        {% form "forms.djhtml" %}
-          {% use "hidden" name="search" value="" %}
-          {% field "select" modform.event style="full-mid" %}
-          {% field "date" modform.date style="full-mid" placeholder=_('No change') %}
-          {% field "select" modform.offline style="full-mid" %}
-          {% field "select" modform.game style="full-mid" %}
-          <div class="form-group text-right {{"full-mid"|formdiv}}">
-            {% use "submit" text=_('Modify') %}
-          </div>
-        {% endform %}
+        {% widget "common:hidden" name="search" value="" %}
+        {% form_field modform.event "common:select" style="full-mid" %}
+        {% form_field modform.date "common:date" style="full-mid" placeholder=_('No change') %}
+        {% form_field modform.offline "common:select" style="full-mid" %}
+        {% form_field modform.game "common:select" style="full-mid" %}
+        <div class="form-group text-right {{"full-mid"|formdiv}}">
+          {% widget "common:submit" text=_('Modify') %}
+        </div>
       </div>
       </form>
     {% endif %}

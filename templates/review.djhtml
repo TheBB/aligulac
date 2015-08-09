@@ -6,7 +6,7 @@ ratings.submitviews.review.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Review results" %}{% endblock %}
@@ -95,15 +95,13 @@ ratings.submitviews.review.
       </div>
 
       <div class="row">
-        {% form "forms.djhtml" %}
-          {% field "select" form.eventobj style="full-mid" %}
-          {% field "date" form.date style="full-mid" placeholder=_('No change') %}
-          {% field "checkbox" form.dup_flag style="full-mid" %}
-          <div class="form-group text-right {{"full-mid"|formdiv}}">
-            {% use "submit" text=_('Approve') name='approve' btnstyle='success' %}
-            {% use "submit" text=_('Reject') name='reject' btnstyle='danger' %}
-          </div>
-          {% endform %}
+        {% form_field form.eventobj "common:select" style="full-mid" %}
+        {% form_field form.date "common:date" style="full-mid" placeholder=_('No change') %}
+        {% form_field form.dup_flag "common:checkbox" style="full-mid" %}
+        <div class="form-group text-right {{"full-mid"|formdiv}}">
+          {% widget "common:submit" text=_('Approve') name='approve' btnstyle='success' %}
+          {% widget "common:submit" text=_('Reject') name='reject' btnstyle='danger' %}
+        </div>
       </div>
     </form>
   {% else %}

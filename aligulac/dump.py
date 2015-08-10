@@ -7,7 +7,6 @@ from subprocess import Popen
 import shutil
 
 from aligulac.settings import (
-    BACKUP_PATH,
     DATABASES,
     DUMP_PATH,
 )
@@ -28,12 +27,10 @@ public_tables = [
 ]
 
 def info(string):
-    print("[{}]: {}".format(datetime.now(), string))
+    print("[{}]: {}".format(datetime.now(), string), flush=True)
 
 dt = datetime.now()
 
-this_file_name = dt.isoformat() + '.sql.gz'
-this_backup_path = os.path.join(BACKUP_PATH, this_file_name)
 
 # {{{ Backup and private dump
 
@@ -45,38 +42,11 @@ pg_dump = [
     DATABASES['default']['NAME']
 ]
 
-with open(this_backup_path, "w") as f:
+full_path = os.path.join(DUMP_PATH, 'full.sql.gz')
+with open(full_path, "w") as f:
     p_pg = Popen(pg_dump, stdout=subprocess.PIPE)
     p_gzip = Popen(["gzip"], stdin=p_pg.stdout, stdout=f)
     p_gzip.communicate()
-
-files_path = os.path.join(BACKUP_PATH, 'files')
-
-if not os.path.exists(files_path):
-    files = []
-else:
-    with open(files_path, 'r') as f:
-        files = f.readlines()
-    files = [f.strip() for f in files if f.strip() != '']
-files.append(this_file_name)
-
-if len(files) > 25:
-    for f in files[:-25]:
-        try:
-            os.remove(os.path.join(BACKUP_PATH, f))
-        except:
-            pass
-    files = files[-25:]
-
-with open(files_path, 'w') as f:
-    for item in files:
-        f.write('%s\n' % item)
-
-full_path = os.path.join(DUMP_PATH, 'full.sql.gz')
-
-info("Copying to dump dir.")
-
-shutil.copy(this_backup_path, full_path)
 # }}}
 
 # {{{ Public dump

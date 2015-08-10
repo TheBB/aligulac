@@ -5,10 +5,6 @@ PROJECT_PATH = '/home/efonn/repos/aligulac/aligulac/'
 # If you never call dump.py this is not necessary
 DUMP_PATH = '/home/efonn/repos/aligulac/untracked/'
 
-# Path of folder where backups are saved
-# If you never call dump.py this is not necessary
-BACKUP_PATH = '/home/efonn/repos/aligulac/untracked/backup/'
-
 # Path of folder where the locales are stored
 LOCALE_PATHS = ('/home/efonn/repos/aligulac/locale/',)
 

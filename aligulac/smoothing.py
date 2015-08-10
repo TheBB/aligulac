@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from django.db import connection, transaction
 from django.db.models import F

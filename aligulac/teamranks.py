@@ -7,6 +7,8 @@ from random import shuffle
 import sys
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from aligulac.tools import get_latest_period
 

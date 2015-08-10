@@ -1,38 +1,26 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Post'
-        db.create_table('blog_post', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('author', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('blog', ['Post'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Post'
-        db.delete_table('blog_post')
-
-
-    models = {
-        'blog.post': {
-            'Meta': {'object_name': 'Post'},
-            'author': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        }
-    }
-
-    complete_apps = ['blog']
+    operations = [
+        migrations.CreateModel(
+            name='Post',
+            fields=[
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('date', models.DateTimeField(auto_now=True, verbose_name='Date')),
+                ('author', models.CharField(verbose_name='Author', max_length=100)),
+                ('title', models.CharField(verbose_name='Title', max_length=100)),
+                ('text', models.TextField(verbose_name='Text')),
+            ],
+            options={
+                'ordering': ['-date'],
+            },
+        ),
+    ]

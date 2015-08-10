@@ -27,7 +27,7 @@ DEBUG_TOOLBAR = local.DEBUG_TOOLBAR
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['.aligulac.com']
+ALLOWED_HOSTS = local.ALLOWED_HOSTS
 
 LOCALE_PATHS = local.LOCALE_PATHS
 LANGUAGE_CODE = 'en_US'
@@ -54,7 +54,6 @@ if DEBUG:
 
 PROJECT_PATH = local.PROJECT_PATH
 DUMP_PATH = local.DUMP_PATH
-BACKUP_PATH = local.BACKUP_PATH
 INTERNAL_IPS = local.INTERNAL_IPS
 EXCHANGE_ID = local.EXCHANGE_ID
 
@@ -120,17 +119,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tastypie',
+    'sniplates',
     'blog',
     'faq',
-    'formulation',
     'miniURL',
     'ratings',
 ]
 
 if DEBUG and DEBUG_TOOLBAR:
     INSTALLED_APPS.append('debug_toolbar')
-
-INSTALLED_APPS.append('south')
 
 MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',

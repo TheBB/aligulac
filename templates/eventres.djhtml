@@ -7,7 +7,7 @@ ratings.views.events.
 
 {% load ratings_extras %}
 {% load humanize %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{{ event }}{% endblock %}
@@ -63,30 +63,28 @@ ratings.views.events.
               {% trans "Modify event" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/results/events/{{event.id}}/">
-              <div class="modal-body">
-                <div class="alert alert-danger text">{% blocktrans %}<strong>Danger!</strong> Changes to date, game and offline will modify all matches associated with all events in this tree. Changing type will potentially change all children and ancestor events! Make sure you know what you are doing!{% endblocktrans %}</div>
-                {% csrf_token %}
-                {% use "hidden" name="modevent" value="modevent" %}
-                {% field "basic" form.name %}
-                {% field "date" form.date %}
-                {% field "select" form.game %}
-                {% field "select" form.offline %}
-                {% field "select" form.type %}
-                {% field "checkbox" form.same_level %}
-                {% field "basic" form.homepage %}
-                {% field "basic" form.tlpd_id %}
-                {% field "selectmulti" form.tlpd_db %}
-                {% field "basic" form.tl_thread %}
-                {% field "basic" form.lp_name %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-            {% endform %}
+          <form role="form" method="post" action="/results/events/{{event.id}}/">
+            <div class="modal-body">
+              <div class="alert alert-danger text">{% blocktrans %}<strong>Danger!</strong> Changes to date, game and offline will modify all matches associated with all events in this tree. Changing type will potentially change all children and ancestor events! Make sure you know what you are doing!{% endblocktrans %}</div>
+              {% csrf_token %}
+              {% widget "common:hidden" name="modevent" value="modevent" %}
+              {% form_field form.name "common:basic" %}
+              {% form_field form.date "common:date" %}
+              {% form_field form.game "common:select" %}
+              {% form_field form.offline "common:select" %}
+              {% form_field form.type "common:select" %}
+              {% form_field form.same_level "common:checkbox" %}
+              {% form_field form.homepage "common:basic" %}
+              {% form_field form.tlpd_id "common:basic" %}
+              {% form_field form.tlpd_db "common:selectmulti" %}
+              {% form_field form.tl_thread "common:basic" %}
+              {% form_field form.lp_name "common:basic" %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -101,27 +99,25 @@ ratings.views.events.
               {% trans "Add subevents" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/results/events/{{event.id}}/">
-              <div class="modal-body">
-                <div class="alert alert-info text">{% blocktrans %}If you need more options, or if you need to add more than one subevent, use the <a href="/add/events/">event manager</a> tool.{% endblocktrans %}</div>
-                {% csrf_token %}
-                {% use "hidden" name="addevent" value="addevent" %}
-                {% field "basic" addform.name %}
-                {% field "select" addform.type %}
-                {% field "checkbox" addform.noprint %}
-                {% field "checkbox" addform.closed %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-            {% endform %}
+          <form role="form" method="post" action="/results/events/{{event.id}}/">
+            <div class="modal-body">
+              <div class="alert alert-info text">{% blocktrans %}If you need more options, or if you need to add more than one subevent, use the <a href="/add/events/">event manager</a> tool.{% endblocktrans %}</div>
+              {% csrf_token %}
+              {% widget "common:hidden" name="addevent" value="addevent" %}
+              {% form_field addform.name "common:basic" %}
+              {% form_field addform.type "common:select" %}
+              {% form_field addform.noprint "common:checkbox" %}
+              {% form_field addform.closed "common:checkbox" %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-
+    {% if ppform %}
     <div class="modal fade" id="md-pp" tabindex="-1" role="dialog" aria-labelledby="md-pp-label"
          aria-hidden="true">
       <div class="modal-dialog">
@@ -132,25 +128,25 @@ ratings.views.events.
               {% trans "Modify prizepool" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/results/events/{{event.id}}/">
-              <div class="modal-body">
-                {% csrf_token %}
-                {% use "hidden" name="modpp" value="modpp" %}
-                {% field "select" ppform.currency help=_("The currency in which the prize was paid, usually the official currency in the country the tournament was held.") %}
-                {% field "textarea" ppform.ranked rows=8 help=_("Use this for prizes related to final placement in the event.") placeholder=_("[prize] [player]") %}
-                {% field "textarea" ppform.unranked rows=8 help=_("Use this for prizes unrelated to placement, i.e. public tips.") placeholder=_("[prize] [player]") %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-          {% endform %}
+          <form role="form" method="post" action="/results/events/{{event.id}}/">
+            <div class="modal-body">
+              {% csrf_token %}
+              {% widget "common:hidden" name="modpp" value="modpp" %}
+              {% form_field ppform.currency "common:select" help=_("The currency in which the prize was paid, usually the official currency in the country the tournament was held.") %}
+              {% form_field ppform.ranked "common:textarea" rows=8 help=_("Use this for prizes related to final placement in the event.") placeholder=_("[prize] [player]") %}
+              {% form_field ppform.unranked "common:textarea" rows=8 help=_("Use this for prizes unrelated to placement, i.e. public tips.") placeholder=_("[prize] [player]") %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+    {% endif %}
 
+    {% if wcsform %}
     <div class="modal fade" id="md-wcs" tabindex="-1" role="dialog" aria-labelledby="md-wcs-label"
          aria-hidden="true">
       <div class="modal-dialog">
@@ -161,24 +157,23 @@ ratings.views.events.
               {% trans "Modify WCS data" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/results/events/{{event.id}}/">
-              <div class="modal-body">
-                {% csrf_token %}
-                {% use "hidden" name="modwcs" value="modwcs" %}
-                {% field "select" wcsform.year %}
-                {% field "select" wcsform.tier %}
-                {% field "textarea" wcsform.points rows=8 placeholder=_("[points] [player]") %}
-              </div>
-              <div class="modal-footer">
-                {% use "submit" %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-          {% endform %}
+          <form role="form" method="post" action="/results/events/{{event.id}}/">
+            <div class="modal-body">
+              {% csrf_token %}
+              {% widget "common:hidden" name="modwcs" value="modwcs" %}
+              {% form_field wcsform.year "common:select" %}
+              {% form_field wcsform.tier "common:select" %}
+              {% form_field wcsform.points "common:textarea" rows=8 placeholder=_("[points] [player]") %}
+            </div>
+            <div class="modal-footer">
+              {% widget "common:submit" %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+    {% endif %}
 
     {% if event.has_children %}
       <div class="modal fade" id="md-ord" tabindex="-1" role="dialog" aria-labelledby="md-ord-label"
@@ -191,25 +186,23 @@ ratings.views.events.
                 {% trans "Reorder subevents" %}
               </h4>
             </div>
-            {% form "forms.djhtml" %}
-              <form role="form" method="post" action="/results/events/{{event.id}}/">
-                <div class="modal-body">
-                  <div class="alert alert-info text">{% blocktrans %}Put the <strong>least significant</strong> events first (the ones played first, or with most players). Finals should be toward the bottom.{% endblocktrans %}</div>
-                  <ol id="sortable">
-                    {% for e in children %}
-                      <li id="{{ e.id }}">{{ e.name }}</li>
-                    {% endfor %}
-                  </ol>
-                  {% csrf_token %}
-                  {% use "hidden" name="reorder" value="reorder" %}
-                  {% use "hidden" name="order" value="" id="order" %}
-                </div>
-                <div class="modal-footer">
-                  {% use "submit" id="submit-order"%}
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </form>
-              {% endform %}
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                <div class="alert alert-info text">{% blocktrans %}Put the <strong>least significant</strong> events first (the ones played first, or with most players). Finals should be toward the bottom.{% endblocktrans %}</div>
+                <ol id="sortable">
+                  {% for e in children %}
+                    <li id="{{ e.id }}">{{ e.name }}</li>
+                  {% endfor %}
+                </ol>
+                {% csrf_token %}
+                {% widget "common:hidden" name="reorder" value="reorder" %}
+                {% widget "common:hidden" name="order" value="" id="order" %}
+              </div>
+              <div class="modal-footer">
+                {% widget "common:submit" id="submit-order"%}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -226,39 +219,37 @@ ratings.views.events.
                 {% trans "Add or change stories" %}
               </h4>
             </div>
-            {% form "forms.djhtml" %}
-              <form role="form" method="post" action="/results/events/{{event.id}}/">
-                <div class="modal-body">
-                  <div class="form-group {{""|formdiv}}">
-                    <label for="extantstories" class="{{""|formlabel}} control-label">
-                      {% trans "Extant stories" %}
-                    </label>
-                    <div class="{{style|forminput}}">
-                      <select class="form-control" id="extantstories">
-                        <option value="{% trans "New" %}" selected>{% trans "New" %}
-                          {% for story in event.story_set.all %}
-                            <option value="{{story.id}}">{{story}}</option>
-                          {% endfor %}
-                      </select>
-                    </div>
+            <form role="form" method="post" action="/results/events/{{event.id}}/">
+              <div class="modal-body">
+                <div class="form-group {{""|formdiv}}">
+                  <label for="extantstories" class="{{""|formlabel}} control-label">
+                    {% trans "Extant stories" %}
+                  </label>
+                  <div class="{{style|forminput}}">
+                    <select class="form-control" id="extantstories">
+                      <option value="{% trans "New" %}" selected>{% trans "New" %}
+                        {% for story in event.story_set.all %}
+                          <option value="{{story.id}}">{{story}}</option>
+                        {% endfor %}
+                    </select>
                   </div>
-                  <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
-                  {% csrf_token %}
-                  {% use "hidden" name="modstory" value="yes" %}
-                  {% use "hidden" name="story_id" value="" id="story_id" %}
-                  {% field "date" stform.date id="st_date" %}
-                  {% field "select" stform.player %}
-                  {% field "select" stform.text %}
-                  {% field "textarea" stform.params help=_("For each parameter, a line of the form \"parameter: value\". The parameters needed are in the story text of the form \"%(parameter)s\". This will be replaced by the value you enter.") %}
                 </div>
-                <div class="modal-footer">
-                  {% use "submit" text=_('New') name="storynew" id="storynewbtn" %}
-                  {% use "submit" text=_('Update') name="storyupd" id="storyupdbtn" disabled=True %}
-                  {% use "submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True btnstyle="danger" %}
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </form>
-              {% endform %}
+                <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
+                {% csrf_token %}
+                {% widget "common:hidden" name="modstory" value="yes" %}
+                {% widget "common:hidden" name="story_id" value="" id="story_id" %}
+                {% form_field stform.date "common:date" id="st_date" %}
+                {% form_field stform.player "common:select" %}
+                {% form_field stform.text "common:select" %}
+                {% form_field stform.params "common:textarea" help=_("For each parameter, a line of the form \"parameter: value\". The parameters needed are in the story text of the form \"%(parameter)s\". This will be replaced by the value you enter.") %}
+              </div>
+              <div class="modal-footer">
+                {% widget "common:submit" text=_('New') name="storynew" id="storynewbtn" %}
+                {% widget "common:submit" text=_('Update') name="storyupd" id="storyupdbtn" disabled=True %}
+                {% widget "common:submit" text=_('Delete') name="storydel" id="storydelbtn" disabled=True btnstyle="danger" %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

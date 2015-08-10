@@ -1,7 +1,7 @@
 {% extends "index.djhtml" %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}API documentation{% endblock %}
@@ -17,19 +17,17 @@
             Generate API key
           </h4>
         </div>
-        {% form "forms.djhtml" %}
-          <form role="form" method="post" action="/about/api/">
-            <div class="modal-body">
-              {% csrf_token %}
-              {% field "basic" form.organization %}
-              {% field "basic" form.contact %}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              {% use "submit" %}
-            </div>
-          </form>
-          {% endform %}
+        <form role="form" method="post" action="/about/api/">
+          <div class="modal-body">
+            {% csrf_token %}
+            {% form_field form.organization "common:basic" %}
+            {% form_field form.contact "common:basic" %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            {% widget "common:submit" %}
+          </div>
+        </form>
       </div>
     </div>
   </div>

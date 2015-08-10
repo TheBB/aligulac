@@ -1,7 +1,7 @@
 {% extends "index.djhtml" %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Compare players" %}{% endblock %}
@@ -18,13 +18,11 @@
   
   <div class="row" style="margin-top: 2em;">
     <form role="form" method="get" action="/misc/compare/">
-      {% form "forms.djhtml" %}
-        {% use "hidden" name="op" value="compare" style="full-mid" %}
-        {% field "textarea" form.players rows="6" style="full-mid" %}
-        <div class="form-group text-right {{"full-mid"|formdiv}}">
-          {% use "submit" text=_('Compare') noname=1 %}
-        </div>
-      {% endform %}
+      {% widget "common:hidden" name="op" value="compare" style="full-mid" %}
+      {% form_field form.players "common:textarea" rows="6" style="full-mid" %}
+      <div class="form-group text-right {{"full-mid"|formdiv}}">
+        {% widget "common:submit" text=_('Compare') noname=1 %}
+      </div>
     </form>
   </div>
 

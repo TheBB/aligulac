@@ -4,7 +4,7 @@ This file is a part of eventres.djhtml
 
 {% load ratings_extras %}
 {% load humanize %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% if ranked_prize %}

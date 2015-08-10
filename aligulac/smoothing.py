@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from django.db import connection, transaction
 from django.db.models import F
@@ -41,7 +43,8 @@ for period_id in range(last.id-1, 0, -1):
     print('[%s] Smoothing period %i' % (str(datetime.now()), period_id), flush=True)
 
     # {{{ Update RDs
-    cur.execute('''
+    with transaction.atomic():
+        cur.execute('''
         UPDATE rating
            SET bf_dev=i.d, bf_dev_vp=i.dvp, bf_dev_vt=i.dvt, bf_dev_vz=i.dvz
           FROM (
@@ -54,13 +57,13 @@ for period_id in range(last.id-1, 0, -1):
                WHERE p.player_id = m.player_id AND p.period_id = {pid} AND m.period_id = {mid}
           ) i
          WHERE rating.id = i.id'''
-        .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
-    )
-    transaction.commit_unless_managed()
+         .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
+        )
     # }}}
 
     # {{{ Update ratings
-    cur.execute('''
+    with transaction.atomic():
+        cur.execute('''
         UPDATE rating
            SET bf_rating=i.r, bf_rating_vp=i.rvp, bf_rating_vt=i.rvt, bf_rating_vz=i.rvz
           FROM (
@@ -78,12 +81,12 @@ for period_id in range(last.id-1, 0, -1):
           ) i
          WHERE rating.id = i.id'''
         .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
-    )
-    transaction.commit_unless_managed()
+        )
     # }}}
 
     # {{{ Enforce RD between min and max (init)
-    cur.execute('''
+    with transaction.atomic():
+        cur.execute('''
         UPDATE rating
            SET bf_dev=i.d, bf_dev_vp=i.dvp, bf_dev_vt=i.dvt, bf_dev_vz=i.dvz
           FROM (
@@ -97,12 +100,12 @@ for period_id in range(last.id-1, 0, -1):
           ) i
          WHERE rating.id = i.id'''
         .format(min=MIN_DEV, init=INIT_DEV, mid=period_id)
-    )
-    transaction.commit_unless_managed()
+        )
     # }}}
 
     # {{{ Subtract mean to renormalize
-    cur.execute('''
+    with transaction.atomic():
+        cur.execute('''
         UPDATE rating
            SET bf_rating    = bf_rating    + i.delta,
                bf_rating_vp = bf_rating_vp - i.delta,
@@ -116,6 +119,5 @@ for period_id in range(last.id-1, 0, -1):
           ) i
          WHERE rating.id = i.id'''
         .format(mid=period_id)
-    )
-    transaction.commit_unless_managed()
+        )
     # }}}

@@ -4,6 +4,8 @@
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta

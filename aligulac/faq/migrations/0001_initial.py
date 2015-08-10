@@ -1,36 +1,25 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Post'
-        db.create_table('faq_post', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
-            ('index', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('faq', ['Post'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'Post'
-        db.delete_table('faq_post')
-
-
-    models = {
-        'faq.post': {
-            'Meta': {'ordering': "['index']", 'object_name': 'Post'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'index': ('django.db.models.fields.IntegerField', [], {}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        }
-    }
-
-    complete_apps = ['faq']
+    operations = [
+        migrations.CreateModel(
+            name='Post',
+            fields=[
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('title', models.CharField(verbose_name='Title', max_length=100)),
+                ('text', models.TextField(verbose_name='Text')),
+                ('index', models.IntegerField(verbose_name='Index')),
+            ],
+            options={
+                'ordering': ['index'],
+            },
+        ),
+    ]

@@ -64,6 +64,7 @@ class AliasesInline(admin.TabularInline):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
+        fields = ['type', 'message', 'params']
 
     def clean(self):
         params = {}
@@ -92,6 +93,7 @@ class EarningsInline(admin.TabularInline):
 class StoriesForm(forms.ModelForm):
     class Meta:
         model = Story
+        fields = ['date', 'message', 'params']
 
     def clean(self):
         params = {}

@@ -5,10 +5,6 @@ PROJECT_PATH = '/home/efonn/repos/aligulac/aligulac/'
 # If you never call dump.py this is not necessary
 DUMP_PATH = '/home/efonn/repos/aligulac/untracked/'
 
-# Path of folder where backups are saved
-# If you never call dump.py this is not necessary
-BACKUP_PATH = '/home/efonn/repos/aligulac/untracked/backup/'
-
 # Path of folder where the locales are stored
 LOCALE_PATHS = ('/home/efonn/repos/aligulac/locale/',)
 
@@ -24,6 +20,9 @@ DB_PASSWORD =
 
 # Folder where the templates are stored
 TEMPLATE_DIRS = ('/home/efonn/repos/aligulac/templates/',)
+
+# Host names this server accepts connections to
+ALLOWED_HOSTS = ['.aligulac.com']
 
 # Necessary for django debug toolbar to work
 INTERNAL_IPS = ('127.0.0.1',)

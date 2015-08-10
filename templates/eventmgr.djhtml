@@ -5,7 +5,7 @@ This is the template for the event manager admin page. It's called from ratings.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Event manager" %}{% endblock %}
@@ -24,27 +24,25 @@ This is the template for the event manager admin page. It's called from ratings.
               {% trans "Modify event / add new sub-events" %}
             </h4>
           </div>
-          {% form "forms.djhtml" %}
-            <form role="form" method="post" action="/add/events/">
-              <div class="modal-body">
-                {% csrf_token %}
-                {% use "hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
-                {% use "text" left="Parent" right_id="parent_name" %}
-                {% field "select" form.predef_names help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
-                {% field "basic" form.custom_names help=_("Use this for custom names. Separate each new subevent by a comma.") %}
-                {% field "select" form.type %}
-                {% field "checkbox" form.big %}
-                {% field "checkbox" form.noprint %}
-              </div>
-              <div class="modal-footer">
-                {% trans "Commit new sub-events" as commitnew %}
-                {% trans "Close event" as close %}
-                {% use "submit" name="commit" text=commitnew %}
-                {% use "submit" name="close" text=close %}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </form>
-            {% endform %}
+          <form role="form" method="post" action="/add/events/">
+            <div class="modal-body">
+              {% csrf_token %}
+              {% widget "common:hidden" name=form.parent_id.html_name value="" id="parent_id_field" %}
+              {% widget "common:text" left="Parent" right_id="parent_name" %}
+              {% form_field form.predef_names "common:select" help=_("Use this if you want to add several events at once using a predefined naming pattern.") %}
+              {% form_field form.custom_names "common:basic" help=_("Use this for custom names. Separate each new subevent by a comma.") %}
+              {% form_field form.type "common:select" %}
+              {% form_field form.big "common:checkbox" %}
+              {% form_field form.noprint "common:checkbox" %}
+            </div>
+            <div class="modal-footer">
+              {% trans "Commit new sub-events" as commitnew %}
+              {% trans "Close event" as close %}
+              {% widget "common:submit" name="commit" text=commitnew %}
+              {% widget "common:submit" name="close" text=close %}
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

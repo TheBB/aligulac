@@ -6,7 +6,7 @@ ratings.submitviews.add_matches.
 {% endcomment %}
 
 {% load ratings_extras %}
-{% load formulation %}
+{% load sniplates %}
 {% load i18n %}
 
 {% block title %}{% trans "Submit results" %}{% endblock %}
@@ -167,33 +167,30 @@ Keen-Roro 0-2</pre>
   <div class="row">
     <form role="form" method="post" action="/add/">
       {% csrf_token %}
-
-      {% form "forms.djhtml" %}
-        {% use "hidden" name="submit" value="submit" %}
+      {% widget "common:hidden" name="submit" value="submit" %}
+      {% if adm %}
+        {% form_field form.eventobj "common:select" override=event_override style="full-mid" %}
+      {% else %}
+        {% form_field form.eventtext "common:basic" style="full-mid" %}
+      {% endif %}
+      {% form_field form.date "common:date" style="full-mid" %}
+      {% form_field form.game "common:select" style="full-mid" %}
+      {% form_field form.offline "common:checkbox" style="full-mid" %}
+      {% if not adm %}
+        {% form_field form.source "common:basic" style="full-mid" %}
+        {% form_field form.contact "common:basic" style="full-mid" %}
+        {% form_field form.notes "common:textarea" style="full-mid" rows="5" %}
+      {% endif %}
+      {% form_field form.matches "common:textarea" style="full-mid" rows="15" %}
+      <div class="form-group text-right {{"full-mid"|formdiv}}">
+        {% trans "Commit" as commit %}
+        {% trans "Commit and close event" as commitclose %}
+        {% widget "common:submit" name="commit" text=commit %}
         {% if adm %}
-          {% field "select" form.eventobj override=event_override style="full-mid" %}
-        {% else %}
-          {% field "basic" form.eventtext style="full-mid" %}
+          {% widget "common:submit" name="commit_close" text=commitclose %}
         {% endif %}
-        {% field "date" form.date style="full-mid" %}
-        {% field "select" form.game style="full-mid" %}
-        {% field "checkbox" form.offline style="full-mid" %}
-        {% if not adm %}
-          {% field "basic" form.source style="full-mid" %}
-          {% field "basic" form.contact style="full-mid" %}
-          {% field "textarea" form.notes style="full-mid" rows="5" %}
-        {% endif %}
-        {% field "textarea" form.matches style="full-mid" rows="15" %}
-        <div class="form-group text-right {{"full-mid"|formdiv}}">
-          {% trans "Commit" as commit %}
-          {% trans "Commit and close event" as commitclose %}
-          {% use "submit" name="commit" text=commit %}
-          {% if adm %}
-            {% use "submit" name="commit_close" text=commitclose %}
-          {% endif %}
-        </div>
-        <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
-        {% endform %}
+      </div>
+      <div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
     </form>
   </div>
 {% endblock %}

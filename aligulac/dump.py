@@ -32,7 +32,7 @@ def info(string):
 dt = datetime.now()
 
 
-# {{{ Backup and private dump
+# Backup and private dump
 
 info("Dumping full database.")
 
@@ -47,9 +47,8 @@ with open(full_path, "w") as f:
     p_pg = Popen(pg_dump, stdout=subprocess.PIPE)
     p_gzip = Popen(["gzip"], stdin=p_pg.stdout, stdout=f)
     p_gzip.communicate()
-# }}}
 
-# {{{ Public dump
+# Public dump
 
 info("Dumping public database.")
 
@@ -65,9 +64,8 @@ pub_pg_dump.append(pg_dump[-1])
 with open(public_path, 'w') as f:
     subprocess.call(pub_pg_dump, stdout=f)
 
-# }}}
 
-# {{{ Compress/decompress files
+# Compress/decompress files
 
 def compress_file(source):
     info("Compressing {}".format(source))
@@ -81,8 +79,5 @@ def decompress_file(source):
         with open(source[:-3], "w") as dst:
             subprocess.call(["gunzip"], stdin=src, stdout=dst)
 
-
 compress_file(public_path)
 decompress_file(full_path)
-
-# }}}

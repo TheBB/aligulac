@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from math import log
@@ -48,9 +48,8 @@ from simul.formats.mslgroup import MSLGroup
 from simul.formats.sebracket import SEBracket
 from simul.formats.rrgroup import RRGroup
 from simul.formats.teampl import TeamPL
-# }}}
 
-# {{{ Prediction formats
+# Prediction formats
 FORMATS = [{
     'url':        'match',
     'name':       _('Best-of-N match'),
@@ -88,9 +87,8 @@ FORMATS = [{
     'bo-check':   lambda a: a == 1,
     'bo-errmsg':  _("Expected exactly one 'best of'."),
 }]
-# }}}
 
-# {{{ PredictForm: Form for entering a prediction request.
+# PredictForm: Form for entering a prediction request.
 class PredictForm(forms.Form):
     format = forms.ChoiceField(
         choices=[(i, f['name']) for i, f in enumerate(FORMATS)],
@@ -101,7 +99,7 @@ class PredictForm(forms.Form):
     bestof = StrippedCharField(max_length=100, required=True, label=_('Best of'), initial='1')
     players = forms.CharField(max_length=10000, required=True, label=_('Players'), initial='')
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None):
         self.messages = []
  
@@ -111,9 +109,8 @@ class PredictForm(forms.Form):
             super(PredictForm, self).__init__()
 
         self.label_suffix = ''
-    # }}}
 
-    # {{{ Custom validation of bestof and players
+    # Custom validation of bestof and players
     def clean_bestof(self):
         try:
             ret = []
@@ -156,9 +153,8 @@ class PredictForm(forms.Form):
             raise ValidationError(_('One or more errors found in player list.'))
 
         return players
-    # }}}
 
-    # {{{ Combined validation of format, bestof and players
+    # Combined validation of format, bestof and players
     def clean(self):
         self.cleaned_data['format'] = min(max(int(self.cleaned_data['format']), 0), len(FORMATS))
         fmt = FORMATS[self.cleaned_data['format']]
@@ -169,9 +165,8 @@ class PredictForm(forms.Form):
             raise ValidationError(fmt['bo-errmsg'])
 
         return self.cleaned_data
-    # }}}
 
-    # {{{ get_messages: Returns a list of messages after validation
+    # get_messages: Returns a list of messages after validation
     def get_messages(self):
         if not self.is_valid():
             ret = []
@@ -184,24 +179,21 @@ class PredictForm(forms.Form):
             return self.messages + ret
 
         return self.messages
-    # }}}
 
-    # {{{ generate_url: Returns an URL to continue to (assumes validation has passed)
+    # generate_url: Returns an URL to continue to (assumes validation has passed)
     def generate_url(self):
         return '/inference/%s/?bo=%s&ps=%s' % (
             FORMATS[self.cleaned_data['format']]['url'],
             '%2C'.join([str(b) for b in self.cleaned_data['bestof']]),
             '%2C'.join([str(p.id) if p is not None else '0' for p in self.cleaned_data['players']]),
         )
-    # }}}
-# }}}
 
-# {{{ SetupForm: Form for getting the bo and player data from GET for each prediction format.
+# SetupForm: Form for getting the bo and player data from GET for each prediction format.
 class SetupForm(forms.Form):
     bo = forms.CharField(max_length=200, required=True)
     ps = forms.CharField(max_length=200, required=True)
 
-    # {{{ Cleaning methods. NO VALIDATION IS PERFORMED HERE.
+    # Cleaning methods. NO VALIDATION IS PERFORMED HERE.
     def clean_bo(self):
         return [(int(a)+1)//2 for a in self.cleaned_data['bo'].split(',')]
 
@@ -209,10 +201,8 @@ class SetupForm(forms.Form):
         ids = [int(a) for a in self.cleaned_data['ps'].split(',')]
         players = Player.objects.in_bulk(ids)
         return [players[id] if id in players else None for id in ids]
-    # }}}
-# }}}
 
-# {{{ group_by: Works the same as itertools.groupby but makes a list.
+# group_by: Works the same as itertools.groupby but makes a list.
 def group_by(lst, key):
     ret = [(key(lst[0]), [lst[0]])]
     for e in lst[1:]:
@@ -221,9 +211,8 @@ def group_by(lst, key):
         else:
             ret[-1][1].append(e)
     return ret
-# }}}
 
-# {{{ predict view
+# predict view
 @cache_page
 def predict(request):
     base = base_ctx('Inference', 'Predict', request=request)
@@ -238,11 +227,10 @@ def predict(request):
     if not base['form'].is_valid():
         return render_to_response('predict.djhtml', base)
     return redirect(base['form'].generate_url())
-# }}}
 
-# {{{ Match predictions
+# Match predictions
 
-# {{{ MatchPredictionResult
+# MatchPredictionResult
 class MatchPredictionResult:
     def range(self, i, mn, mx):
         return min(max(i, mn), mx)
@@ -278,14 +266,13 @@ class MatchPredictionResult:
 
     def generate_updates(self):
         return '&'.join(['s1=%s' % self.sca, 's2=%s' % self.scb])
-# }}}
 
-# {{{ Match prediction view
+# Match prediction view
 @cache_page
 def match(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    # {{{ Get data, set up and simulate
+    # Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
         return redirect('/inference/')
@@ -296,9 +283,8 @@ def match(request):
         s1=get_param(request, 's1', 0),
         s2=get_param(request, 's2', 0),
     )
-    # }}}
 
-    # {{{ Postprocessing
+    # Postprocessing
     base.update({
         'form': form,
         'dbpl': result.dbpl,
@@ -321,9 +307,8 @@ def match(request):
     else:
         resb = [None] * (len(resa) - len(resb)) + resb
     base['res'] = list(zip(resa, resb))
-    # }}}
 
-    # {{{ Scores and other data
+    # Scores and other data
     dbpl = result.dbpl
     thr = date.today() - relativedelta(months=2)
     pla_matches = dbpl[0].get_matchset()
@@ -353,16 +338,12 @@ def match(request):
             .order_by('-date', 'id'),
         fix_left=dbpl[0],
     )
-    # }}}
 
     postable_match(base, request)
 
     return render_to_response('pred_match.djhtml', base)
-# }}}
 
-# }}}
-
-# {{{ Superclass for combination format results
+# Superclass for combination format results
 class CombinationPredictionResult:
     def range(self, i, mn, mx):
         return min(max(int(i), mn), mx)
@@ -451,11 +432,10 @@ class CombinationPredictionResult:
 
     def generate_updates(self):
         return '&'.join('%s=%s' % up for up in self.updates)
-# }}}
 
-# {{{ Dual tournament predictions
+# Dual tournament predictions
 
-# {{{ DualPredictionResult
+# DualPredictionResult
 class DualPredictionResult(CombinationPredictionResult):
     def __init__(self, dbpl=None, bos=None, args=None):
         if dbpl is None:
@@ -490,14 +470,13 @@ class DualPredictionResult(CombinationPredictionResult):
 
         self.matches = self.create_matches(obj, rounds)
         self.meanres = self.create_median_matches(obj, rounds)
-# }}}
 
-# {{{ Dual tournament prediction view
+# Dual tournament prediction view
 @cache_page
 def dual(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    # {{{ Get data, set up and simulate
+    # Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
         return redirect('/inference/')
@@ -507,27 +486,22 @@ def dual(request):
         bos=form.cleaned_data['bo'],
         args=request.GET,
     )
-    # }}}
 
-    # {{{ Post-processing
+    # Post-processing
     base.update({
         'table':    result.table,
         'matches':  result.matches,
         'meanres':  result.meanres,
         'form':     form,
     })
-    # }}}
 
     postable_dual(base, request)
 
     return render_to_response('pred_4pswiss.djhtml', base)
-# }}}
 
-# }}}
+# Single elimination predictions
 
-# {{{ Single elimination predictions
-
-# {{{ SingleEliminationPredictionResult
+# SingleEliminationPredictionResult
 class SingleEliminationPredictionResult(CombinationPredictionResult):
     def __init__(self, dbpl=None, bos=None, args=None):
         if dbpl is None:
@@ -566,14 +540,13 @@ class SingleEliminationPredictionResult(CombinationPredictionResult):
         self.matches = self.create_matches(obj, rounds)
         self.meanres = self.create_median_matches(obj, rounds)
         self.nrounds = nrounds
-# }}}
 
-# {{{ Single tournament prediction view
+# Single tournament prediction view
 @cache_page
 def sebracket(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    # {{{ Get data, set up and simulate
+    # Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
         return redirect('/inference/')
@@ -583,9 +556,8 @@ def sebracket(request):
         bos=form.cleaned_data['bo'],
         args=request.GET,
     )
-    # }}}
 
-    # {{{ Post-processing
+    # Post-processing
     base.update({
         'table':    result.table,
         'matches':  result.matches,
@@ -593,18 +565,14 @@ def sebracket(request):
         'nrounds':  result.nrounds,
         'form':     form,
     })
-    # }}}
 
     postable_sebracket(base, request, group_by(base['meanres'], key=lambda a: a['eventtext']))
 
     return render_to_response('pred_sebracket.djhtml', base)
-# }}}
 
-# }}}
+# Round robin predictions
 
-# {{{ Round robin predictions
-
-# {{{ RoundRobinPredictionResult
+# RoundRobinPredictionResult
 class RoundRobinPredictionResult(CombinationPredictionResult):
     def __init__(self, dbpl=None, bos=None, args=None):
         if dbpl is None:
@@ -653,14 +621,13 @@ class RoundRobinPredictionResult(CombinationPredictionResult):
             'exp_set_wins': p.mtally.exp_sscore()[0],
             'exp_set_losses': p.mtally.exp_sscore()[1],
         } for p in obj.table]
-# }}}
 
-# {{{ Round robin group prediction view
+# Round robin group prediction view
 @cache_page
 def rrgroup(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    # {{{ Get data, set up and simulate
+    # Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
         return redirect('/inference/')
@@ -670,9 +637,7 @@ def rrgroup(request):
         bos=form.cleaned_data['bo'],
         args=request.GET,
     )
-    # }}}
 
-    #{{{ Post-processing
     base.update({
         'table':    result.table,
         'mtable':   result.mtable,
@@ -680,18 +645,14 @@ def rrgroup(request):
         'meanres':  result.meanres,
         'form':     form,
     })
-    # }}}
 
     postable_rrgroup(base, request)
 
     return render_to_response('pred_rrgroup.djhtml', base)
-# }}}
 
-# }}}
+# Proleague predictions
 
-# {{{ Proleague predictions
-
-# {{{ ProleaguePredictionResult
+# ProleaguePredictionResult
 class ProleaguePredictionResult(CombinationPredictionResult):
     def __init__(self, dbpl=None, bos=None, args=None):
         if dbpl is None:
@@ -736,14 +697,13 @@ class ProleaguePredictionResult(CombinationPredictionResult):
         self.probb = sum(r['probb'] for r in self.outcomes)
 
         self.meanres = self.create_median_matches(obj, [(_('Matches'), prefixes)])
-# }}}
 
-# {{{ Proleage prediction view
+# Proleage prediction view
 @cache_page
 def proleague(request):
     base = base_ctx('Inference', 'Predict', request=request)
 
-    # {{{ Get data, set up and simulate
+    # Get data, set up and simulate
     form = SetupForm(request.GET)
     if not form.is_valid():
         return redirect('/inference/')
@@ -753,9 +713,8 @@ def proleague(request):
         bos=form.cleaned_data['bo'],
         args=request.GET,
     )
-    # }}}
 
-    # {{{ Post-processing
+    # Post-processing
     base.update({
         's1':         result.s1,
         's2':         result.s2,
@@ -767,18 +726,14 @@ def proleague(request):
         'meanres':    result.meanres,
         'form':       form,
     })
-    # }}}
 
     postable_proleague(base, request)
 
     return render_to_response('pred_proleague.djhtml', base)
-# }}}
 
-# }}}
+# Postables
 
-# {{{ Postables
-
-# {{{ Headers and footers
+# Headers and footers
 TL_HEADER = '[center][code]'
 TL_SEBRACKET_MIDDLE = (
     '[/code][/center][b]%(medoutbr)s[/b]\n'
@@ -797,9 +752,8 @@ TL_FOOTER = (
 
 REDDIT_HEADER = ''
 REDDIT_FOOTER = '\n\n^(%(estby)s) [^Aligulac](http://aligulac.com/)^. [^%(modify)s](%(modurl)s)^.'
-# }}}
 
-# {{{ ordinal: Converts an integer to its ordinal (string) representation
+# ordinal: Converts an integer to its ordinal (string) representation
 def ordinal(value):
     return str(value)
 
@@ -815,9 +769,8 @@ def ordinal(value):
     #if value % 100 in (11, 12, 13):
         #return "%d%s" % (value, suffixes[0])
     #return "%d%s" % (value, suffixes[value % 10])
-## }}}
 
-# {{{ left_center_right(strings, gap=2, justify=True, indent=0): Aid for pretty-printing tables
+# left_center_right(strings, gap=2, justify=True, indent=0): Aid for pretty-printing tables
 # Takes a list of triples (strings), each element a line with left, center and right entries.
 # gap: The number of spaces between columns
 # justify: If true, makes the left and right columns equally wide
@@ -849,9 +802,8 @@ def left_center_right(strings, gap=2, justify=True, indent=0):
         )
 
     return '\n'.join(out)
-# }}}
 
-# {{{ postable_match
+# postable_match
 def postable_match(base, request):
     pla = base['match'].get_player(0)
     plb = base['match'].get_player(1)
@@ -907,9 +859,8 @@ def postable_match(base, request):
               'estby': _('Estimated by'),
           }
     )
-# }}}
 
-# {{{ postable_dual
+# postable_dual
 def postable_dual(base, request):
     numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
@@ -947,9 +898,8 @@ def postable_dual(base, request):
               'estby': _('Estimated by'),
           }
     )
-# }}}
 
-# {{{ postable_sebracket
+# postable_sebracket
 def postable_sebracket(base, request, bracket):
     numlen = max([len(p['player']['tag']) for p in base['table'] if p['player']['id'] is not None])
 
@@ -1000,9 +950,8 @@ def postable_sebracket(base, request, bracket):
               'estby': _('Estimated by'),
           }
     )
-# }}}
 
-# {{{ create_postable_bracket
+# create_postable_bracket
 def create_postable_bracket(bracket, indent=0):
     nrounds = len(bracket)
 
@@ -1045,9 +994,8 @@ def create_postable_bracket(bracket, indent=0):
         postable_result += ' '*indent + ''.join(block[line] for block in result if line < len(block)) + '\n'
 
     return postable_result.rstrip()
-# }}}
 
-# {{{ postable_rrgroup
+# postable_rrgroup
 def postable_rrgroup(base, request):
     numlen = max([len(p['player']['tag']) for p in base['table']])
 
@@ -1081,9 +1029,8 @@ def postable_rrgroup(base, request):
               'estby': _('Estimated by'),
           }
     )
-# }}}
 
-# {{{ postable_proleague
+# postable_proleague
 def postable_proleague(base, request):
     numlen = len(str((len(base['matches']) + 1) // 2))
     strings = [(
@@ -1129,6 +1076,3 @@ def postable_proleague(base, request):
               'estby': _('Estimated by'),
           }
     )
-# }}}
-
-# }}}

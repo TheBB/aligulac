@@ -1,36 +1,29 @@
-# {{{ Imports
+# Imports
 import re
 
 from countries.data import cca2_to_ccn
-from collections import Counter, namedtuple
+from collections import namedtuple
 from datetime import datetime
 
 from django import forms
-from django.core.exceptions import PermissionDenied, ValidationError
-from django.db.models import F, Q, Sum
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.core.exceptions import ValidationError
+from django.db.models import F, Q
+from django.shortcuts import render_to_response, redirect
 from django.utils.translation import ugettext_lazy as _
-
-from itertools import zip_longest
 
 from urllib.parse import quote
 
 from ratings.comparisons import (
-    Comparison,
     EarningsComparison,
     FormComparison,
     MatchComparison,
     MetaComparison,
-    PercentageComparison,
     PredictionComparison,
     RatingComparison,
-    SimpleComparison
 )
 from ratings.models import (
     Event,
     Group,
-    GroupMembership,
     Match,
     Player,
 )
@@ -41,36 +34,30 @@ from aligulac.tools import (
     Message,
     NotUniquePlayerMessage
 )
-from ratings.tools import display_matches, find_player, ntz
-from ratings.templatetags.ratings_extras import (
-    add_sep_and_cur,
-    ratscale,
-    ratscalediff,
-)
-# }}}
+from ratings.tools import display_matches, find_player
+
 
 @cache_page
 def home(request):
     ctx = base_ctx('Misc', request=request)
 
     ctx["miscpages"] = (
-        { "url": "/misc/balance/",
-          "title": _("Balance Report"),
-          "desc": _("Charts showing balance in StarCraft II over time.")
-        },
-        { "url": "/misc/days/",
-          "title": _("Number of days since..."),
-          "desc": _("Page showing the most recent time some things happened.")
-        },
-        { "url": "/misc/compare/",
-          "title": _("Compare"),
-          "desc": _("Tool for comparing players.")
-        }
+        {"url": "/misc/balance/",
+         "title": _("Balance Report"),
+         "desc": _("Charts showing balance in StarCraft II over time.")
+         },
+        {"url": "/misc/days/",
+         "title": _("Number of days since..."),
+         "desc": _("Page showing the most recent time some things happened.")
+         },
+        {"url": "/misc/compare/",
+         "title": _("Compare"),
+         "desc": _("Tool for comparing players.")
+         }
     )
 
     return render_to_response("misc.djhtml", ctx)
 
-# {{{ Clocks
 # Format (description, hover_description, queryset, type)
 Clock = namedtuple('Clock', ['desc', 'alt_desc', 'object', 'type', 'date', 'years', 'days', 'extra'])
 
@@ -248,6 +235,7 @@ CLOCKS = [
     )
 ]
 
+
 @cache_page
 def clocks(request):
     ctx = base_ctx('Misc', 'Days Since…', request)
@@ -295,10 +283,7 @@ def clocks(request):
     ctx["clocks"].sort(key=lambda c: c.date, reverse=True)
 
     return render_to_response("clocks.djhtml", ctx)
-# }}}
 
-
-# {{{ Compare players
 
 class CompareForm(forms.Form):
     players = forms.CharField(
@@ -307,14 +292,12 @@ class CompareForm(forms.Form):
         label=_('Players'),
         initial='')
 
-    # {{{ Constructor
     def __init__(self, request=None):
         if request is not None:
             super().__init__(request.GET)
         else:
             super().__init__()
         self.messages = []
-    # }}}
 
     # Copied from inference_views.PredictForm
     def clean_players(self):
@@ -343,14 +326,13 @@ class CompareForm(forms.Form):
         if not ok:
             raise ValidationError(_('One or more errors found in player list.'))
 
-
         if len(players) < 2:
             raise ValidationError(_('Enter at least two players.'))
         if len(players) > 6:
             raise ValidationError(_('Enter at most six players.'))
         return players
 
-    # {{{ get_messages: Returns a list of messages after validation
+    # get_messages: Returns a list of messages after validation
     def get_messages(self):
         if not self.is_valid():
             ret = []
@@ -363,9 +345,8 @@ class CompareForm(forms.Form):
             return self.messages + ret
 
         return self.messages
-    # }}}
 
-    # {{{ generate_url: Returns an URL to continue to (assumes validation has passed)
+    # generate_url: Returns an URL to continue to (assumes validation has passed)
     def generate_url(self):
         return '/misc/compare/%s/' % (
             ','.join(
@@ -373,12 +354,10 @@ class CompareForm(forms.Form):
                 for p in self.cleaned_data['players']
             ),
         )
-    # }}}
 
 
 @cache_page
 def compare_search(request):
-
     base = base_ctx('Misc', 'Compare', request)
 
     if "op" in request.GET:
@@ -407,11 +386,12 @@ def compare_search(request):
 
     return redirect(form.generate_url())
 
+
 @cache_page
 def compare(request, players):
     base = base_ctx('Misc', 'Compare', request)
 
-    # {{{ Check that we have enough players
+    # Check that we have enough players
     if players is None:
         return redirect('/misc/compare/')
 
@@ -425,14 +405,13 @@ def compare(request, players):
     except:
         return redirect('/misc/compare/')
 
-    fail_url =  (
+    fail_url = (
         "/misc/compare/?op=edit&players=" +
         quote('\n'.join(str(x) for x in players))
     )
 
     if len(players) < 2 or len(players) > 6:
         return redirect(fail_url)
-    # }}}
 
     q = Player.objects.filter(id__in=players)\
                       .prefetch_related('current_rating')
@@ -443,14 +422,13 @@ def compare(request, players):
         idx = players.index(p.id)
         clean_players[idx] = p
 
-
     def fmt_url_player(x):
         if isinstance(x, int):
             return str(x)
         else:
             return x.tag + " " + str(x.id)
 
-    edit_url =  (
+    edit_url = (
         "/misc/compare/?op=edit&players=" +
         quote('\n').join(quote(fmt_url_player(x)) for x in clean_players)
     )
@@ -561,6 +539,3 @@ RATING_COMPARISONS = (
     (('current_rating', lambda x: x.get_totalrating_vt()), _("vT")),
     (('current_rating', lambda x: x.get_totalrating_vz()), _("vZ"))
 )
-
-# }}}
-

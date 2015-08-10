@@ -12,7 +12,7 @@ from ratings.templatetags.ratings_extras import (
     ratscale
 )
 
-# {{{ Metaclass magic! This is not really necessary, but fun!
+# Metaclass magic! This is not really necessary, but fun!
 def cached_properties(cls_name, cls_parents, cls_attrs):
     """
     Creates a class where it caches properties marked with Cached()

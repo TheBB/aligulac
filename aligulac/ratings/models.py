@@ -1,9 +1,8 @@
-# {{{ Imports
+# Imports
 import datetime
 from itertools import islice
 from math import sqrt, ceil
 import random
-import re
 import string
 
 from django.contrib.auth.models import User
@@ -12,7 +11,6 @@ from django.db import (
     transaction,
 )
 from django.db.models import (
-    F,
     Max,
     Min,
     Q,
@@ -35,7 +33,6 @@ from countries import (
     data,
 )
 from ratings.model_tools import swap_q_object
-# }}}
 
 # List of countries
 # This is used in a couple of models, although it adds a bit of overhead, it would be better to do this
@@ -43,47 +40,47 @@ from ratings.model_tools import swap_q_object
 countries = [(code, transformations.cc_to_cn(code)) for code in data.ccn_to_cca2.values()]
 countries.sort(key=lambda a: a[1])
 
-# {{{ Various enum-types
-TLPD_DB_WOLKOREAN        = 0b00001
+# Various enum-types
+TLPD_DB_WOLKOREAN = 0b00001
 TLPD_DB_WOLINTERNATIONAL = 0b00010
-TLPD_DB_HOTS             = 0b00100
-TLPD_DB_HOTSBETA         = 0b01000
-TLPD_DB_WOLBETA          = 0b10000
+TLPD_DB_HOTS = 0b00100
+TLPD_DB_HOTSBETA = 0b01000
+TLPD_DB_WOLBETA = 0b10000
 TLPD_DBS = [
     # Translators: TLPD database
-    (TLPD_DB_WOLBETA,          _('WoL Beta')),
+    (TLPD_DB_WOLBETA, _('WoL Beta')),
     # Translators: TLPD database
-    (TLPD_DB_WOLKOREAN,        _('WoL Korean')),
+    (TLPD_DB_WOLKOREAN, _('WoL Korean')),
     # Translators: TLPD database
     (TLPD_DB_WOLINTERNATIONAL, _('WoL International')),
     # Translators: TLPD database
-    (TLPD_DB_HOTSBETA,         _('HotS Beta')),
+    (TLPD_DB_HOTSBETA, _('HotS Beta')),
     # Translators: TLPD database
-    (TLPD_DB_HOTS,             _('HotS')),
+    (TLPD_DB_HOTS, _('HotS')),
 ]
 
 CAT_INDIVIDUAL = 'individual'
-CAT_TEAM       = 'team'
-CAT_FREQUENT   = 'frequent'
+CAT_TEAM = 'team'
+CAT_FREQUENT = 'frequent'
 EVENT_CATEGORIES = [
     # Translators: Event category
     (CAT_INDIVIDUAL, _('Individual')),
     # Translators: Event category
-    (CAT_TEAM,       _('Team')),
+    (CAT_TEAM, _('Team')),
     # Translators: Event category
-    (CAT_FREQUENT,   _('Frequent')),
+    (CAT_FREQUENT, _('Frequent')),
 ]
 
 TYPE_CATEGORY = 'category'
-TYPE_EVENT    = 'event'
-TYPE_ROUND    = 'round'
+TYPE_EVENT = 'event'
+TYPE_ROUND = 'round'
 EVENT_TYPES = [
     # Translators: Event type
     (TYPE_CATEGORY, _('Category')),
     # Translators: Event type
-    (TYPE_EVENT,    _('Event')),
+    (TYPE_EVENT, _('Event')),
     # Translators: Event type
-    (TYPE_ROUND,    _('Round')),
+    (TYPE_ROUND, _('Round')),
 ]
 
 WCS_YEARS = [
@@ -122,26 +119,26 @@ SRACES = dict([
 ])
 MRACES = RACES[:-1]
 
-WOL  = 'WoL'
+WOL = 'WoL'
 HOTS = 'HotS'
 LOTV = 'LotV'
 GAMES = [
-    (WOL,  _('Wings of Liberty')),
+    (WOL, _('Wings of Liberty')),
     (HOTS, _('Heart of the Swarm')),
     (LOTV, _('Legacy of the Void')),
 ]
 
-TYPE_INFO    = 'info'
+TYPE_INFO = 'info'
 TYPE_WARNING = 'warning'
-TYPE_ERROR   = 'error'
+TYPE_ERROR = 'error'
 TYPE_SUCCESS = 'success'
 MESSAGE_TYPES = [
     # Translators: Message type
-    (TYPE_INFO,    _('info')),
+    (TYPE_INFO, _('info')),
     # Translators: Message type
     (TYPE_WARNING, _('warning')),
     # Translators: Message type
-    (TYPE_ERROR,   _('error')),
+    (TYPE_ERROR, _('error')),
     # Translators: Message type
     (TYPE_SUCCESS, _('success')),
 ]
@@ -193,7 +190,7 @@ MESSAGES_SRC = [
         _('%(player)s switched to %(race)s after game %(num)s.')),
     (_('Smurf'),
         '%(player)s was smurfing for %(otherplayer)s.', _('%(player)s was smurfing for %(otherplayer)s.')),
-    (_('Smurf'), 
+    (_('Smurf'),
         '%(player)s was smurfing as %(otherplayer)s.', _('%(player)s was smurfing as %(otherplayer)s.')),
     (_('Smurf'),
         '%(player)s was smurfing as %(otherplayer)s and was disqualified due to residency rules.',
@@ -243,7 +240,7 @@ MESSAGES_SRC = [
     (_('Seed'), '%(player)s was seeded.', _('%(player)s was seededs.')),
     (_('Seeds'), '%(players)s and %(player)s were seeded.', _('%(players)s and %(player)s were seeded.')),
     (_('Draw'),
-        'Game %(num)s was a draw and had to be replayed.', 
+        'Game %(num)s was a draw and had to be replayed.',
         _('Game %(num)s was a draw and had to be replayed.')),
 ]
 MESSAGES = list(map(lambda m: (m[1], m[2]), MESSAGES_SRC))
@@ -253,7 +250,7 @@ MESSAGES_IDX = list(map(lambda m: m[1], MESSAGES))
 
 STORIES = [
     ('%(player)s wins %(event)s', _('%(player)s wins %(event)s')),
-    ('%(player)s defeats %(opponent)s and wins %(event)s', 
+    ('%(player)s defeats %(opponent)s and wins %(event)s',
         _('%(player)s defeats %(opponent)s and wins %(event)s')),
     ('%(player)s wins %(event)s as a royal roader', _('%(player)s wins %(event)s as a royal roader')),
     ('%(player)s defeats %(opponent)s and wins %(event)s as a royal roader',
@@ -283,14 +280,12 @@ STORIES = [
 ]
 STORIES_DICT = dict(STORIES)
 STORIES_IDX = list(map(lambda m: m[0], STORIES))
-# }}}
 
-# {{{ Periods
+
 class Period(models.Model):
     class Meta:
         db_table = 'period'
 
-    # {{{ Fields
     start = models.DateField(
         'Start date', null=False, db_index=True,
         help_text='Start date'
@@ -328,26 +323,20 @@ class Period(models.Model):
         'Zerg OP value', null=True,
         help_text='Zerg OP value'
     )
-    # }}}
 
-    # {{{ String representation
     def __str__(self):
         return 'Period #' + str(self.id) + ': ' + str(self.start) + ' to ' + str(self.end)
-    # }}}
 
-    # {{{ is_preview: Checks whether this period is still a preview
     def is_preview(self):
+        "Checks whether this period is still a preview"
         return self.end >= datetime.date.today()
-    # }}}
-# }}}
 
-# {{{ Events
+
 class Event(models.Model):
     class Meta:
         ordering = ['idx', 'latest', 'fullname']
         db_table = 'event'
 
-    # {{{ Fields
     name = models.CharField(
         'Name', max_length=100,
         help_text='Event name'
@@ -380,7 +369,7 @@ class Event(models.Model):
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
-    # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
+    # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.
     # Use bitwise AND (&) with the flags to check.
     tlpd_id = models.IntegerField(
         'TLPD ID', blank=True, null=True,
@@ -422,41 +411,35 @@ class Event(models.Model):
 
     wcs_year = models.IntegerField('WCS year', blank=True, null=True, choices=WCS_YEARS)
     wcs_tier = models.IntegerField('WCS tier', blank=True, null=True, choices=WCS_TIERS)
-    # }}}
 
-    # {{{ open_events: Not used... is this useful?
+    # Not used... is this useful?
     @staticmethod
     def open_events():
         qset = (
             Event.objects.filter(closed=False)
-                .exclude(downlink__distance__gt=0)
-                .order_by('idx', 'fullname')
-                .values('id', 'fullname')
+                 .exclude(downlink__distance__gt=0)
+                 .order_by('idx', 'fullname')
+                 .values('id', 'fullname')
         )
         for e in qset:
             yield (e['id'], e['fullname'])
-    # }}}
 
-    # {{{ String representation
     def __str__(self):
         return self.fullname
-    # }}}
 
-    # {{{ get_parent(): Returns the parent, or null
     def get_parent(self):
+        "Returns the parent, or null"
         try:
             return self.uplink.get(distance=1).parent
         except:
             return None
-    # }}}
 
-    # {{{ get_ancestors(id=False): Returns a queryset/list containing the
-    # ancestors sorted by distance.
-    # If id=True, the queryset/list contains the object itself.
-    #
-    # get_ancestors_list is preferred if no modifications to the queryset is
-    # needed as it gets a performance boost from prefetch_related
     def get_ancestors(self, id=False):
+        """Returns a queryset/list containing the ancestors sorted by distance.
+        If id=True, the queryset/list contains the object itself.
+
+        get_ancestors_list is preferred if no modifications to the queryset is
+        needed as it gets a performance boost from prefetch_related"""
         q = Event.objects.filter(downlink__child=self)
         if not id:
             q = q.filter(downlink__distance__gt=0)
@@ -470,48 +453,43 @@ class Event(models.Model):
         ]
         results.sort(key=lambda link: -link.distance)
         return [link.parent for link in results]
-    # }}}
 
-    # {{{ get_ancestors_print: Returns a list containing the printable ancestors
     def get_ancestors_print(self, id=True):
+        "Returns a list containing the printable ancestors"
         return [event for event in self.get_ancestors_list(id) if not event.noprint]
-    # }}}
 
-    # {{{ get_ancestors_event: Returns a list containing printable ancestors of type event or category
     def get_ancestors_event(self):
+        """Returns a list containing printable ancestors of type event or
+        category"""
         return [
             x for x in self.get_ancestors_list(id=True)
             if x.type in (TYPE_CATEGORY, TYPE_EVENT)
         ]
-    # }}}
 
-    # {{{ get_root: Returns the farthest removed ancestor
     def get_root(self):
+        "Returns the farthest removed ancestor"
         return self.get_ancestors_list(id=True)[0]
-    # }}}
 
-    # {{{ get_children(types=[category,event,round], id=False): Returns a queryset containing the children
-    # of this event, with the matching criteria
     def get_children(self, types=[TYPE_CATEGORY, TYPE_EVENT, TYPE_ROUND], id=False):
+        """Returns a queryset containing the children of this event, with the
+        matching criteria"""
         if not id:
             qset = Event.objects.filter(uplink__parent=self, uplink__distance__gt=0)
         else:
             qset = Event.objects.filter(uplink__parent=self)
         return qset.filter(type__in=types)
-    # }}}
 
-    # {{{ get_immediate_children: Returns a queryset of immediate children
     def get_immediate_children(self):
+        "Returns a queryset of immediate children"
         return Event.objects.filter(uplink__parent=self, uplink__distance=1)
-    # }}}
 
-    # {{{ has_children: Returns true if this event has children, false if not
     def has_children(self):
+        "Returns true if this event has children, false if not"
         return self.downlink.filter(distance__gt=0).exists()
-    # }}}
 
-    # {{{ update_name: Refreshes the fullname field (must be called after changing name of ancestors)
     def update_name(self, newname=None):
+        """Refreshes the fullname field (must be called after changing name of
+        ancestors)"""
         if newname is not None:
             self.name = newname
             self.save()
@@ -519,65 +497,56 @@ class Event(models.Model):
         ancestors = self.get_ancestors_print()
         self.fullname = ' '.join([e.name for e in ancestors])
         self.save()
-    # }}}
 
-    # {{{ get_event_fullname: Returns the fullname of the nearest ancestor of type event or category
-    # This is not cached and will query the DB!
     def get_event_fullname(self):
+        """Returns the fullname of the nearest ancestor of type event or
+        category. This is not cached and will query the DB!"""
         return self.get_ancestors_event()[-1].fullname
-    # }}}
 
-    # {{{ get_event: Returns the nearest ancestor of type event or category
     def get_event_event(self):
+        "Returns the nearest ancestor of type event or category"
         return self.get_ancestors_event()[-1]
-    # }}}
-    
-    # {{{ get_homepage: Returns the URL if one can be found, None otherwise
-    # This is not cached and will query the DB!
+
     def get_homepage(self):
+        """Returns the URL if one can be found, None otherwise. This is not
+        cached and will query the DB!"""
         try:
             return self.get_ancestors(id=True).filter(homepage__isnull=False).last().homepage
         except:
             return None
-    # }}}
 
-    # {{{ get_lp_name: Returns the Liquipedia title if one can be found, None otherwise
-    # This is not cached and will query the DB!
     def get_lp_name(self):
+        """Returns the Liquipedia title if one can be found, None otherwise.
+        This is not cached and will query the DB!"""
         try:
             return self.get_ancestors(id=True).filter(lp_name__isnull=False).last().lp_name
         except:
             return None
-    # }}}
 
-    # {{{ get_tl_thread: Returns the ID of the TL thread if one can be found, None otherwise
+    # get_tl_thread: Returns the ID of the TL thread if one can be found, None otherwise
     def get_tl_thread(self):
         try:
             return self.get_ancestors(id=True).filter(tl_thread__isnull=False).last().tl_thread
         except:
             return None
-    # }}}
 
-    # {{{ get_matchset: Returns a queryset of matches
+    # get_matchset: Returns a queryset of matches
     def get_matchset(self):
         return Match.objects.filter(eventobj__uplink__parent=self)
-    # }}}
 
-    # {{{ get_immediate_matchset: Returns a queryset of matches attached to this event only. (May be faster
+    # get_immediate_matchset: Returns a queryset of matches attached to this event only. (May be faster
     # leaves.)
     def get_immediate_matchset(self):
         return self.match_set.all()
-    # }}}
 
-    # {{{ update_dates: Updates the fields earliest and latest
+    # update_dates: Updates the fields earliest and latest
     def update_dates(self):
         res = self.get_matchset().aggregate(Max('date'), Min('date'))
         self.latest = res['date__max']
         self.earliest = res['date__min']
         self.save()
-    # }}}
 
-    # {{{ change_type(type): Modifies the type of this event, and possibly all ancestors and events
+    # change_type(type): Modifies the type of this event, and possibly all ancestors and events
     @transaction.atomic
     def change_type(self, tp):
         # If EVENT or ROUND, children must be ROUND
@@ -590,9 +559,8 @@ class Event(models.Model):
 
         self.type = tp
         self.save()
-    # }}}
 
-    # {{{ Standard setters
+    # Standard setters
     def set_big(self, big):
         self.big = big
         self.save()
@@ -632,9 +600,8 @@ class Event(models.Model):
     def set_idx(self, idx):
         self.idx = idx
         self.save()
-    # }}}
 
-    # {{{ add_child(name, type, noprint=False, closed=False): Adds a new child to the right of all existing
+    # add_child(name, type, noprint=False, closed=False): Adds a new child to the right of all existing
     # children
     @transaction.atomic
     def add_child(self, name, type, big=False, noprint=False):
@@ -643,7 +610,7 @@ class Event(models.Model):
         new.save()
 
         links = [
-            EventAdjacency(parent_id=l.parent_id, child=new, distance=l.distance+1) 
+            EventAdjacency(parent_id=l.parent_id, child=new, distance=l.distance+1)
             for l in self.uplink.all()
         ]
         EventAdjacency.objects.bulk_create(links)
@@ -653,9 +620,8 @@ class Event(models.Model):
         new.change_type(type)
 
         return new
-    # }}}
 
-    # {{{ add_root(name, type, big=False, noprint=False): Adds a new root node
+    # add_root(name, type, big=False, noprint=False): Adds a new root node
     @staticmethod
     @transaction.atomic
     def add_root(name, type, big=False, noprint=False):
@@ -669,43 +635,32 @@ class Event(models.Model):
         new.change_type(type)
 
         return new
-    # }}}
 
-    # {{{ close: Closes this event and all children
-    def close(self):
-        self.get_children(id=True).update(closed=True)
-    # }}}
-
-    # {{{ open: Opens this event and all ancestors
+    # open: Opens this event and all ancestors
     def open(self):
         self.get_ancestors(id=True).update(closed=False)
-    # }}}
 
-    # {{{ delete_earnings(ranked=True): Deletes earnings objects associated to this event fulfilling the
+    # delete_earnings(ranked=True): Deletes earnings objects associated to this event fulfilling the
     # criteria.
     def delete_earnings(self, ranked=True):
         if ranked:
             Earnings.objects.filter(event=self).exclude(placement__exact=0).delete()
         else:
             Earnings.objects.filter(event=self, placement__exact=0).delete()
-    # }}}
 
-    # {{{ move_earnings(new_event): Moves earnings from this event to the new event
+    # move_earnings(new_event): Moves earnings from this event to the new event
     # Will update the type of the new event to EVENT.
     def move_earnings(self, new_event):
         Earnings.objects.filter(event=self).update(event=new_event)
         self.set_prizepool(None)
         new_event.set_prizepool(True)
         new_event.change_type(Event.EVENT)
-    # }}}
 
-    # {{{ delete_points: Deletes WCS points objects associated with this event
+    # delete_points: Deletes WCS points objects associated with this event
     def delete_points(self):
         WCSPoints.objects.filter(event=self).delete()
-    # }}}
-# }}}
 
-# {{{ EventAdjacencies
+
 class EventAdjacency(models.Model):
     class Meta:
         db_table = 'eventadjacency'
@@ -714,19 +669,16 @@ class EventAdjacency(models.Model):
     child = models.ForeignKey(Event, null=False, db_index=True, related_name='uplink')
     distance = models.IntegerField(null=True, default=None)
 
-    # {{{ String representation
     def __str__(self):
         return str(self.parent) + ' -> ' + str(self.child) + ' (' + str(self.distance) + ')'
-    # }}}
-# }}}
 
-# {{{ Players
+
 class Player(models.Model):
     class Meta:
         ordering = ['tag']
         db_table = 'player'
 
-    # {{{ Fields
+    # Fields
     tag = models.CharField(
         'In-game name', max_length=30, null=False, db_index=True,
         help_text='Player tag'
@@ -750,7 +702,7 @@ class Player(models.Model):
 
     # tlpd_db contains information in binary form on which TLPD databases to use:
     # 1 for Korean, 10 for International, 100 for HotS, 1000 for Hots beta, 10000 for WoL beta
-    # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.  
+    # So a value of 5 (00101 in binary) would correspond to a link to the Korean and HotS TLPD.
     # Use bitwise AND (&) with the flags to check.
     tlpd_id = models.IntegerField(
         'TLPD ID', blank=True, null=True,
@@ -798,17 +750,15 @@ class Player(models.Model):
         Period, blank=True, null=True, related_name='player_dom_end',
         help_text='End of domination period'
     )
-    # }}}
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
-        if self.country != None and self.country != '':
+        if self.country is not None and self.country != '':
             return self.tag + ' (' + self.race + ', ' + self.country + ')'
         else:
             return self.tag + ' (' + self.race + ')'
-    # }}}
 
-    # {{{ Standard setters
+    # Standard setters
     def set_tag(self, tag):
         self.tag = tag
         self.save()
@@ -816,11 +766,11 @@ class Player(models.Model):
     def set_race(self, race):
         self.race = race
         self.save()
-    
+
     def set_country(self, country):
         self.country = country
         self.save()
-    
+
     def set_name(self, name):
         self.name = None if name == '' else name
         self.save()
@@ -828,7 +778,7 @@ class Player(models.Model):
     def set_romanized_name(self, name):
         self.romanized_name = None if name == '' else name
         self.save()
-    
+
     def set_birthday(self, birthday):
         self.birthday = None if birthday == '' else birthday
         self.save()
@@ -848,9 +798,8 @@ class Player(models.Model):
     def set_lp_name(self, lp_name):
         self.lp_name = None if lp_name == '' else lp_name
         self.save()
-    # }}}
 
-    # {{{ Adding and removing TLPD databases
+    # Adding and removing TLPD databases
     def add_tlpd_db(self, tlpd_db):
         self.tlpd_db |= tlpd_db
         self.save()
@@ -859,12 +808,7 @@ class Player(models.Model):
         self.tlpd_db -= self.tlpd_db & tlpd_db
         self.save()
 
-    def set_tlpd_db(self, tlpd_db):
-        self.tlpd_db = tlpd_db
-        self.save()
-    # }}}
-
-    # {{{ set_aliases: Set aliases
+    # set_aliases: Set aliases
     # Input: An array of string aliases, which are compared to existing aliases.
     # New ones are added, existing superfluous ones are removed. Returns True if something changed.
     def set_aliases(self, aliases):
@@ -893,23 +837,20 @@ class Player(models.Model):
                 old.delete()
                 return True
             return False
-    # }}}
 
-    # {{{ get_aliases: Returns all aliases as a list
+    # get_aliases: Returns all aliases as a list
     def get_aliases(self):
         return [a.name for a in self.alias_set.all()]
-    # }}}
 
-    # {{{ get_current_teammembership: Gets the current team membership object of this player, if any.
+    # get_current_teammembership: Gets the current team membership object of this player, if any.
     def get_current_teammembership(self):
         try:
             groups = self.groupmembership_set.all()
             return next(x for x in groups if x.group.is_team and x.current)
         except:
             return None
-    # }}}
 
-    # {{{ get_current_team: Gets the current team object of this player, if any.
+    # get_current_team: Gets the current team object of this player, if any.
     def get_current_team(self):
         try:
             return (
@@ -920,9 +861,8 @@ class Player(models.Model):
             )
         except:
             return None
-    # }}}
 
-    # {{{ get_current_rating: Gets the current rating, if any.
+    # get_current_rating: Gets the current rating, if any.
     def get_current_rating(self):
         try:
             return (
@@ -932,22 +872,19 @@ class Player(models.Model):
             )
         except:
             return None
-    # }}}
 
-    # {{{ get_latest_rating_update: Gets the latest rating of this player with decay zero, or None.
+    # get_latest_rating_update: Gets the latest rating of this player with decay zero, or None.
     def get_latest_rating_update(self):
         try:
             return self.rating_set.filter(decay=0).latest('period')
         except:
             return None
-    # }}}
 
-    # {{{ has_earnings: Checks whether the player has any earnings.
+    # has_earnings: Checks whether the player has any earnings.
     def has_earnings(self):
         return self.earnings_set.exists()
-    # }}}
 
-    # {{{ get_matchset: Returns a queryset of all this player's matches.
+    # get_matchset: Returns a queryset of all this player's matches.
     def get_matchset(self, related=[]):
         qset = Match.objects.filter(Q(pla=self) | Q(plb=self))
 
@@ -956,20 +893,19 @@ class Player(models.Model):
         qset = qset.prefetch_related('message_set')
 
         return qset.order_by('-date', '-id')
-    # }}}
 
-    # {{{ get_rank: Calculates the rank for the player with country as filter
+    # get_rank: Calculates the rank for the player with country as filter
     def get_rank(self, country=''):
         if '_ranks' not in dir(self):
             self._ranks = dict()
         if country in self._ranks:
             return self._ranks[country]
 
-        q = Rating.objects.filter(period=self.current_rating.period,
-                                  rating__gt=self.current_rating.rating,
-                                  decay__lt=INACTIVE_THRESHOLD)\
-                          .exclude(player=self)
-        
+        q = (Rating.objects.filter(period=self.current_rating.period,
+                                   rating__gt=self.current_rating.rating,
+                                   decay__lt=INACTIVE_THRESHOLD)
+                           .exclude(player=self))
+
         if country == "foreigners":
             q = q.exclude(player__country='KR')
         elif country != '':
@@ -1007,10 +943,6 @@ class Player(models.Model):
     def foreigner_rank_page(self):
         return self.rank_page('foreigner_rank')
 
-    # }}}
-
-
-    # {{{ rivalries
     @property
     def rivals(self):
         if '_rivals' in dir(self):
@@ -1060,59 +992,54 @@ class Player(models.Model):
     def rivals_pretty(self):
         return ', '.join(str(x) for x in self.rivals)
 
-    # }}}
 
 PLAYER_RIVAL_QUERY = """
-SELECT "player"."id", "player"."country", "player"."tag", "player"."race", Count(T2."plid") AS "matches" 
-FROM player 
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race", Count(T2."plid") AS "matches"
+FROM player
 JOIN (
-     SELECT "player"."id" AS "plid", "match"."id" AS "mid" 
-     FROM player JOIN match ON 
-         ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
-     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s 
-     ) T2 
-ON "player"."id" = T2."plid" 
+     SELECT "player"."id" AS "plid", "match"."id" AS "mid"
+     FROM player JOIN match ON
+         ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id")
+     WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s
+     ) T2
+ON "player"."id" = T2."plid"
 GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
 ORDER BY "matches" DESC
 LIMIT 5;"""
 
 PLAYER_PM_QUERY = """
-SELECT "player"."id", "player"."country", "player"."tag", "player"."race", 
+SELECT "player"."id", "player"."country", "player"."tag", "player"."race",
        Sum(T2."for") - Sum(T2."against") AS "pm"
 FROM player JOIN (
-     SELECT 
-     	    "player"."id" AS "plid", 
-	    "match"."id" AS "mid", 
-	    (CASE 
-	    	  WHEN "player"."id" = "match"."pla_id" THEN 
-		       "match"."scb"
-		  ELSE
-		       "match"."sca"
-		  END
-            ) AS "for", 
-	    (CASE 
-	    	  WHEN "player"."id" = "match"."pla_id" THEN 
-		       "match"."sca"
-		  ELSE
-		       "match"."scb"
-		  END
-            ) AS "against", 
-	    "match"."sca" AS "sca",
-	    "match"."scb" AS "scb",
-	    "match"."pla_id",
-	    "match"."plb_id"
-     FROM player JOIN match ON 
-     ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id") 
+     SELECT
+        "player"."id" AS "plid",
+        "match"."id" AS "mid",
+        (CASE WHEN "player"."id" = "match"."pla_id" THEN
+             "match"."scb"
+         ELSE
+             "match"."sca"
+         END
+        ) AS "for",
+        (CASE WHEN "player"."id" = "match"."pla_id" THEN
+             "match"."sca"
+         ELSE
+             "match"."scb"
+         END
+        ) AS "against",
+        "match"."sca" AS "sca",
+        "match"."scb" AS "scb",
+        "match"."pla_id",
+        "match"."plb_id"
+     FROM player JOIN match ON
+     ("player"."id" = "match"."pla_id" OR "player"."id" = "match"."plb_id")
      WHERE ("match"."pla_id" = %(id)s OR "match"."plb_id" = %(id)s) AND "player"."id" != %(id)s
-     ) T2 
-     ON "player"."id" = T2."plid" 
+     ) T2
+     ON "player"."id" = T2."plid"
 GROUP BY "player"."id", "player"."country", "player"."tag", "player"."race"
 ORDER BY "pm" DESC;
 """
 
-# }}}
 
-# {{{ Stories
 class Story(models.Model):
     class Meta:
         db_table = 'story'
@@ -1129,7 +1056,6 @@ class Story(models.Model):
 
     def __str__(self):
         try:
-            params = self.get_param_dict()
             return STORIES_DICT[self.message] % self.get_param_dict()
         except:
             return '[[[Error]]]'
@@ -1152,18 +1078,17 @@ class Story(models.Model):
 
     def verify(self):
         try:
-            _ = self.message % self.get_param_dict()
+            self.message % self.get_param_dict()
             return True
         except:
             return False
-# }}}
 
-# {{{ Groups
+
 class Group(models.Model):
     class Meta:
         db_table = 'group'
 
-    # {{{ Fields
+    # Fields
     name = models.CharField(
         'Name', max_length=100, null=False, db_index=True,
         help_text='Team name'
@@ -1208,18 +1133,16 @@ class Group(models.Model):
 
     is_team = models.BooleanField('Team', null=False, default=True, db_index=True)
     is_manual = models.BooleanField('Manual entry', null=False, default=True)
-    # }}}
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         return self.name
-    # }}}
 
-    # {{{ Standard setters
+    # Standard setters
     def set_name(self, name):
         self.name = name
         self.save()
-    
+
     def set_shortname(self, shortname):
         self.shortname = None if shortname == '' else shortname
         self.save()
@@ -1227,13 +1150,12 @@ class Group(models.Model):
     def set_homepage(self, homepage):
         self.homepage = None if homepage == '' else homepage
         self.save()
-    
+
     def set_lp_name(self, lp_name):
         self.lp_name = None if lp_name == '' else lp_name
-        self.save()    
-    # }}}
-    
-    # {{{ set_aliases: Set aliases
+        self.save()
+
+    # set_aliases: Set aliases
     # Input: An array of string aliases, which are compared to existing aliases.
     # New ones are added, existing superfluous ones are removed.
     def set_aliases(self, aliases):
@@ -1253,14 +1175,12 @@ class Group(models.Model):
 
         else:
             Alias.objects.filter(group=self).delete()
-    # }}}
 
-    # {{{ get_aliases: Returns all aliases as a list
+    # get_aliases: Returns all aliases as a list
     def get_aliases(self):
         return [a.name for a in self.alias_set.all()]
-    # }}}
 
-    # {{{ get_rank: Calculates the rank for the team given a metric
+    # get_rank: Calculates the rank for the team given a metric
     def get_rank(self, rank_type):
         if rank_type not in {"scoreak", "scorepl", "meanrating"}:
             raise Exception()
@@ -1314,11 +1234,8 @@ class Group(models.Model):
     def has_ranks(self):
         return self.ak_rank or self.pl_rank or self.rating_rank
 
-    # }}}
 
-# }}}
-
-# {{{ GroupMemberships
+# GroupMemberships
 class GroupMembership(models.Model):
     class Meta:
         db_table = 'groupmembership'
@@ -1330,17 +1247,15 @@ class GroupMembership(models.Model):
     end = models.DateField('Date left', blank=True, null=True)
     current = models.BooleanField('Current', default=True, null=False, db_index=True)
     playing = models.BooleanField('Playing', default=True, null=False, db_index=True)
-    
-    # {{{ String representation
+
+    # String representation
     def __str__(self):
         return (
-            'Player: %s Group: %s (%s - %s)' % 
+            'Player: %s Group: %s (%s - %s)' %
             (self.player.tag, self.group.name, str(self.start), str(self.end))
         )
-    # }}}
-# }}}
 
-# {{{ Aliases
+
 class Alias(models.Model):
     class Meta:
         verbose_name_plural = 'aliases'
@@ -1350,16 +1265,15 @@ class Alias(models.Model):
     player = models.ForeignKey(Player, null=True)
     group = models.ForeignKey(Group, null=True)
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         return self.name
-    # }}}
 
     def save(self, *args, **kwargs):
         self.name = self.name.strip()
         super().save(*args, **kwargs)
 
-    # {{{ Standard adders
+    # Standard adders
     @staticmethod
     def add_player_alias(player, name):
         new = Alias(player=player, name=name)
@@ -1369,10 +1283,7 @@ class Alias(models.Model):
     def add_group_alias(group, name):
         new = Alias(group=group, name=name)
         new.save()
-    # }}}
-# }}}
 
-# {{{ Matches
 
 # This can operate on querysets in the current dev branch
 # of Django. Worth noting for the future. So currently it
@@ -1390,6 +1301,7 @@ class MatchManager(models.Manager):
         swapped = swap_q_object(q)
         return super().filter(q | swapped)
 
+
 class Match(models.Model):
     class Meta:
         verbose_name_plural = 'matches'
@@ -1397,7 +1309,7 @@ class Match(models.Model):
 
     objects = MatchManager()
 
-    # {{{ Fields
+    # Fields
     period = models.ForeignKey(
         Period, null=False,
         help_text='Period in which the match was played'
@@ -1464,66 +1376,61 @@ class Match(models.Model):
         'Rating', related_name='rtb', verbose_name='Rating B', null=True,
         help_text='Rating for player B at the time the match was played'
     )
-    # }}}
 
-    # {{{ populate_orig: Populates the original data fields, to check later if anything changed.
+    # populate_orig: Populates the original data fields, to check later if anything changed.
     def populate_orig(self):
         if self.pk:
             try:
-                self.orig_pla    = self.pla_id
-                self.orig_plb    = self.plb_id
-                self.orig_rca    = self.rca
-                self.orig_rcb    = self.rcb
-                self.orig_sca    = self.sca
-                self.orig_scb    = self.scb
-                self.orig_date   = self.date
+                self.orig_pla = self.pla_id
+                self.orig_plb = self.plb_id
+                self.orig_rca = self.rca
+                self.orig_rcb = self.rcb
+                self.orig_sca = self.sca
+                self.orig_scb = self.scb
+                self.orig_date = self.date
                 self.orig_period = self.period_id
             except:
-                self.orig_pla    = None
-                self.orig_plb    = None
-                self.orig_rca    = None
-                self.orig_rcb    = None
-                self.orig_sca    = None
-                self.orig_scb    = None
-                self.orig_date   = None
+                self.orig_pla = None
+                self.orig_plb = None
+                self.orig_rca = None
+                self.orig_rcb = None
+                self.orig_sca = None
+                self.orig_scb = None
+                self.orig_date = None
                 self.orig_period = None
         else:
-            self.orig_pla    = None
-            self.orig_plb    = None
-            self.orig_rca    = None
-            self.orig_rcb    = None
-            self.orig_sca    = None
-            self.orig_scb    = None
-            self.orig_date   = None
+            self.orig_pla = None
+            self.orig_plb = None
+            self.orig_rca = None
+            self.orig_rcb = None
+            self.orig_sca = None
+            self.orig_scb = None
+            self.orig_date = None
             self.orig_period = None
-    # }}}
 
-    # {{{ changed_effect: Returns true if an effective change (requiring recomputation) has been made.
+    # changed_effect: Returns true if an effective change (requiring recomputation) has been made.
     def changed_effect(self):
-        return (
-              self.orig_pla != self.pla_id or self.orig_plb != self.plb_id
-            or self.orig_rca != self.rca    or self.orig_rcb != self.rcb
-            or self.orig_sca != self.sca    or self.orig_scb != self.scb
-        )
-    # }}}
+        return (self.orig_pla != self.pla_id or
+                self.orig_plb != self.plb_id or
+                self.orig_rca != self.rca or
+                self.orig_rcb != self.rcb or
+                self.orig_sca != self.sca or
+                self.orig_scb != self.scb)
 
-    # {{{ changed_date: Returns true if the date has been changed.
+    # changed_date: Returns true if the date has been changed.
     def changed_date(self):
         return self.orig_date != self.date
-    # }}}
 
-    # {{{ changed_period: Returns true if the period has been changed.
+    # changed_period: Returns true if the period has been changed.
     def changed_period(self):
         return self.orig_period != self.period_id
-    # }}}
 
-    # {{{ __init__: Has been overloaded to call populate_orig.
+    # __init__: Has been overloaded to call populate_orig.
     def __init__(self, *args, **kwargs):
         super(Match, self).__init__(*args, **kwargs)
         self.populate_orig()
-    # }}}
 
-    # {{{ save: Has been overloaded to check for effective changes, flagging a period as needing recomputation
+    # save: Has been overloaded to check for effective changes, flagging a period as needing recomputation
     # if necessary.
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         # Check if the date have been changed. If it has, move to a different period if necessary.
@@ -1562,30 +1469,27 @@ class Match(models.Model):
                     event.set_earliest(self.date)
                 if event.latest is None or self.date > event.latest:
                     event.set_latest(self.date)
-    # }}}
 
-    # {{{ delete: Has been overloaded to check for effective changes, flagging a period as needing
+    # delete: Has been overloaded to check for effective changes, flagging a period as needing
     # recomputation if necessary.
-    def delete(self,  *args, **kwargs):
+    def delete(self, *args, **kwargs):
         self.period.needs_recompute = True
         self.period.save()
 
         eventobj = self.eventobj
         super(Match, self).delete(*args, **kwargs)
 
-        # This is very slow if used for many matches, but that should rarely happen. 
+        # This is very slow if used for many matches, but that should rarely happen.
         if eventobj:
             for event in self.eventobj.get_ancestors(id=True):
                 event.update_dates()
-    # }}}
 
-    # {{{ set_period: Sets the correct period for this match depending on the date.
+    # set_period: Sets the correct period for this match depending on the date.
     def set_period(self):
         pers = Period.objects.filter(start__lte=self.date).filter(end__gte=self.date)
         self.period = pers[0]
-    # }}}
 
-    # {{{ set_ratings: Sets the ratings of the players if they exist.
+    # set_ratings: Sets the ratings of the players if they exist.
     def set_ratings(self):
         try:
             self.rta = Rating.objects.get(player=self.pla, period_id=self.period_id-1)
@@ -1596,17 +1500,15 @@ class Match(models.Model):
             self.rtb = Rating.objects.get(player=self.plb, period_id=self.period_id-1)
         except:
             self.rtb = None
-    # }}}
 
-    # {{{ set_date(date): Exactly what it says on the tin.
+    # set_date(date): Exactly what it says on the tin.
     def set_date(self, date):
         self.date = date
         self.save()
-    # }}}
 
-    # {{{ set_event(event): Updates the earliest and latest fields for both new and old event.
+    # set_event(event): Updates the earliest and latest fields for both new and old event.
     def set_event(self, event):
-        old = self.eventobj
+        oldevent = self.eventobj
         self.eventobj = event
         self.save()
 
@@ -1620,55 +1522,46 @@ class Match(models.Model):
         if oldevent:
             for event in oldevent.get_ancestors(id=True):
                 event.update_dates()
-    # }}}
 
-    # {{{ String representation 
+    # String representation
     def __str__(self):
         return '%s %s %s - %s %s' % (str(self.date), self.pla.tag, self.sca, self.scb, self.plb.tag)
-    # }}}
 
-    # {{{ get_winner: Returns the winner of this match, or None if tie.
+    # get_winner: Returns the winner of this match, or None if tie.
     def get_winner(self):
         if self.sca > self.scb:
             return self.pla
         elif self.scb > self.sca:
             return self.plb
         return None
-    # }}}
 
-    # {{{ get_winner_id
+    # get_winner_id
     def get_winner_id(self):
         if self.sca > self.scb:
             return self.pla_id
         elif self.scb > self.sca:
             return self.plb_id
         return None
-    # }}}
 
-    # {{{ get_winner_score: Returns the score of the winner.
+    # get_winner_score: Returns the score of the winner.
     def get_winner_score(self):
         return max(self.sca, self.scb)
-    # }}}
 
-    # {{{ get_loser_score: Returns the score of the loser.
+    # get_loser_score: Returns the score of the loser.
     def get_loser_score(self):
         return min(self.sca, self.scb)
-    # }}}
 
-    # {{{ event_fullpath: Returns the full event name, taken from event object if available, or event text if
+    # event_fullpath: Returns the full event name, taken from event object if available, or event text if
     # not. Can be None.
     def event_fullpath(self):
         return self.event if self.eventobj is None else self.eventobj.fullname
-    # }}}
 
-    # {{{ event_partpath: Returns the partial event name (up to the nearest non-ROUND ancestor), taken from
+    # event_partpath: Returns the partial event name (up to the nearest non-ROUND ancestor), taken from
     # event object if available, or event text if not. Can be None.
     def event_partpath(self):
         return self.event if self.eventobj is None else self.eventobj.get_event_fullname()
-    # }}}
-# }}}
 
-# {{{ Messages
+
 class Message(models.Model):
     class Meta:
         db_table = 'message'
@@ -1686,7 +1579,6 @@ class Message(models.Model):
 
     def __str__(self):
         try:
-            params = self.get_param_dict()
             return MESSAGES_DICT[self.message] % self.get_param_dict()
         except:
             return _('Error')
@@ -1715,19 +1607,18 @@ class Message(models.Model):
 
     def verify(self):
         try:
-            _ = self.message % self.get_param_dict()
+            self.message % self.get_param_dict()
             return True
         except:
             return False
-# }}}
 
-# {{{ WCS points
+
 class WCSPoints(models.Model):
     class Meta:
         db_table = 'wcspoints'
         ordering = ['-points']
 
-    # {{{ Fields
+    # Fields
     event = models.ForeignKey(
         Event, verbose_name='Event', null=False,
         help_text='Event in which these WCS points was awarded'
@@ -1738,9 +1629,8 @@ class WCSPoints(models.Model):
     )
     points = models.IntegerField('Points', null=False, help_text='Number of points awarded')
     placement = models.IntegerField('Place', help_text='Placement')
-    # }}}
 
-    # {{{ set_points(event, entries): Sets WCS points for a given event
+    # set_points(event, entries): Sets WCS points for a given event
     # Payouts is a list of dicts with keys 'player', 'points' and 'placement'.
     # TODO: Probably should be more subtle and not delete everything on change
     @staticmethod
@@ -1757,16 +1647,14 @@ class WCSPoints(models.Model):
                 points=entry['points'],
             )
             new.save()
-    # }}}
-# }}}
 
-# {{{ Earnings
+
 class Earnings(models.Model):
     class Meta:
         db_table = 'earnings'
         ordering = ['-earnings']
 
-    # {{{ Fields
+    # Fields
     event = models.ForeignKey(
         Event, verbose_name='Event', null=False,
         help_text='Event in which this prize was awarded'
@@ -1782,7 +1670,7 @@ class Earnings(models.Model):
     origearnings = models.DecimalField(
         'Earnings (original currency)',
         help_text='Prize money in original currency',
-        decimal_places=8, # Bitcoin uses 8 places
+        decimal_places=8,  # Bitcoin uses 8 places
         max_digits=12+8
     )
     currency = models.CharField(
@@ -1793,9 +1681,8 @@ class Earnings(models.Model):
         'Place',
         help_text='Placement'
     )
-    # }}}
 
-    # {{{ set_earnings(event, payouts, currency): Sets earnings for a given event.
+    # set_earnings(event, payouts, currency): Sets earnings for a given event.
     # Payouts is a list of dicts with keys 'player', 'prize' and 'placement'.
     # TODO: Probably should be more subtle and not delete everything on change
     @staticmethod
@@ -1817,9 +1704,8 @@ class Earnings(models.Model):
         Earnings.convert_earnings(event)
 
         event.set_prizepool(True)
-    # }}}
 
-    # {{{ convert_earnings(event): Performs currency conversion for all earnings associated to an event.
+    # convert_earnings(event): Performs currency conversion for all earnings associated to an event.
     @staticmethod
     def convert_earnings(event):
         earningobjs = Earnings.objects.filter(event=event)
@@ -1833,15 +1719,12 @@ class Earnings(models.Model):
                 exchangerates = ExchangeRates(date)
                 earning.earnings = round(exchangerates.convert(earning.origearnings, earning.currency))
             earning.save()
-    # }}}
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         return '#%i at %s: %s $%s' % (self.placement, self.event.fullname, self.player.tag, self.earnings)
-    # }}}
-# }}}
 
-# {{{ PreMatchGroups
+
 class PreMatchGroup(models.Model):
     class Meta:
         db_table = 'prematchgroup'
@@ -1857,13 +1740,11 @@ class PreMatchGroup(models.Model):
     game = models.CharField('Game', max_length=10, default='wol', blank=False, null=False, choices=GAMES)
     offline = models.BooleanField(default=False, null=False)
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         return str(self.date) + ' ' + self.event
-    # }}}
-# }}}
 
-# {{{ PreMatches
+
 class PreMatch(models.Model):
     class Meta:
         db_table = 'prematch'
@@ -1883,36 +1764,32 @@ class PreMatch(models.Model):
     rca = models.CharField(max_length=1, choices=MRACES, null=True, verbose_name='Race A')
     rcb = models.CharField(max_length=1, choices=MRACES, null=True, verbose_name='Race B')
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         ret = '(' + self.group.event + ') '
         ret += self.pla.tag if self.pla else self.pla_string
         ret += ' %i-%i ' % (self.sca, self.scb)
         ret += self.plb.tag if self.plb else self.plb_string
         return ret
-    # }}}
 
-    # {{{ event_fullpath and event_partpath: For compatibility with Match objects, where needed
+    # event_fullpath and event_partpath: For compatibility with Match objects, where needed
     def event_fullpath(self):
         return self.group.event
 
     def event_partpath(self):
         return self.group.event
-    # }}}
 
-    # {{{ is_valid: Checks if this can be turned into a Match.
+    # is_valid: Checks if this can be turned into a Match.
     def is_valid(self):
         return self.pla is not None and self.plb is not None
-    # }}}
-# }}}
 
-# {{{ Ratings
+
 class Rating(models.Model):
     class Meta:
         ordering = ['period']
         db_table = 'rating'
 
-    # {{{ Fields
+    # Fields
     period = models.ForeignKey(
         Period, null=False, verbose_name='Period',
         help_text='This rating applies to the given period'
@@ -2044,14 +1921,12 @@ class Rating(models.Model):
         null=True, blank=True,
         help_text='Difference from number 7 on rating list'
     )
-    # }}}
 
-    # {{{ String representation
+    # String representation
     def __str__(self):
         return self.player.tag + ' P' + str(self.period.id)
-    # }}}
 
-    # {{{ get_next: Get next rating object for the same palyer
+    # get_next: Get next rating object for the same palyer
     def get_next(self):
         try:
             if self.next:
@@ -2064,19 +1939,16 @@ class Rating(models.Model):
             return self.next
         except:
             return None
-    # }}}
 
-    # {{{ get_ratings: Return all rating information in a list
+    # get_ratings: Return all rating information in a list
     def ratings(self):
         return [self.rating, self.rating_vp, self.rating_vt, self.rating_vz]
-    # }}}
 
-    # {{{ get_devs: Return all RD information in a list
+    # get_devs: Return all RD information in a list
     def get_devs(self):
         return [self.dev, self.dev_vp, self.dev_vt, self.dev_vz]
-    # }}}
 
-    # {{{ rating_diff(_vx): Differences in rating between this and previous period
+    # rating_diff(_vx): Differences in rating between this and previous period
     def rating_diff(self, race=None):
         if self.prev is not None:
             a = self.get_totalrating(race) - self.prev.get_totalrating(race)
@@ -2091,9 +1963,8 @@ class Rating(models.Model):
 
     def rating_diff_vz(self):
         return self.rating_diff('Z')
-    # }}}
 
-    # {{{ get_rating(race=None): Return rating delta by race
+    # get_rating(race=None): Return rating delta by race
     def get_rating(self, race=None):
         if race == 'P':
             return self.rating_vp
@@ -2102,9 +1973,8 @@ class Rating(models.Model):
         elif race == 'Z':
             return self.rating_vz
         return self.rating
-    # }}}
 
-    # {{{ get_dev(race=None): Return RD by race
+    # get_dev(race=None): Return RD by race
     def get_dev(self, race=None):
         if race == 'P':
             return self.dev_vp
@@ -2113,9 +1983,8 @@ class Rating(models.Model):
         elif race == 'Z':
             return self.dev_vz
         return self.dev
-    # }}}
 
-    # {{{ get_totalrating(race): Return total rating by race
+    # get_totalrating(race): Return total rating by race
     def get_totalrating(self, race):
         if race in ['P','T','Z']:
             return self.rating + self.get_rating(race)
@@ -2130,9 +1999,8 @@ class Rating(models.Model):
 
     def get_totalrating_vz(self):
         return self.get_totalrating('Z')
-    # }}}
 
-    # {{{ get_totaldev(race): Return total RD by race (expected total RD if None)
+    # get_totaldev(race): Return total RD by race (expected total RD if None)
     def get_totaldev(self, race):
         if race in ['P','T','Z']:
             return sqrt(self.get_dev(None)**2 + self.get_dev(race)**2)
@@ -2141,9 +2009,8 @@ class Rating(models.Model):
             for r in ['P','T','Z']:
                 d += self.get_dev(r)**2/9
             return sqrt(d)
-    # }}}
 
-    # {{{ set_rating(d, write_bf=False): Sets rating numbers as given by the dict d with keys MPTZ, writes
+    # set_rating(d, write_bf=False): Sets rating numbers as given by the dict d with keys MPTZ, writes
     # them to bf if write_bf is True
     def set_rating(self, d, write_bf=False):
         self.rating = d['M']
@@ -2156,9 +2023,8 @@ class Rating(models.Model):
             self.bf_rating_vp = self.rating_vp
             self.bf_rating_vt = self.rating_vt
             self.bf_rating_vz = self.rating_vz
-    # }}}
 
-    # {{{ set_dev(d, write_bf=False): Sets RD as given by the dict d with keys MPTZ, writes to bf if write_bf
+    # set_dev(d, write_bf=False): Sets RD as given by the dict d with keys MPTZ, writes to bf if write_bf
     # is True
     def set_dev(self, d, write_bf=False):
         self.dev = d['M']
@@ -2171,26 +2037,22 @@ class Rating(models.Model):
             self.bf_dev_vp = self.dev_vp
             self.bf_dev_vt = self.dev_vt
             self.bf_dev_vz = self.dev_vz
-    # }}}
 
-    # {{{ set_comp_rating(d): Sets performance ratings as given by the dict d with keys MPTZ
+    # set_comp_rating(d): Sets performance ratings as given by the dict d with keys MPTZ
     def set_comp_rating(self, d):
         self.comp_rat = d['M']
         self.comp_rat_vp = d['P']
         self.comp_rat_vt = d['T']
         self.comp_rat_vz = d['Z']
-    # }}}
 
-    # {{{ set_comp_dev(d): Sets performance RD as given by the dict d with keys MPTZ
+    # set_comp_dev(d): Sets performance RD as given by the dict d with keys MPTZ
     def set_comp_dev(self, d):
         self.comp_dev = d['M']
         self.comp_dev_vp = d['P']
         self.comp_dev_vt = d['T']
         self.comp_dev_vz = d['Z']
-    # }}}
-# }}}
 
-# {{{ BalanceEntries
+
 class BalanceEntry(models.Model):
     class Meta:
         db_table = 'balanceentry'
@@ -2205,9 +2067,8 @@ class BalanceEntry(models.Model):
     p_gains = models.FloatField('P gains', null=False)
     t_gains = models.FloatField('T gains', null=False)
     z_gains = models.FloatField('Z gains', null=False)
-# }}}
 
-# {{{ API access keys
+
 class APIKey(models.Model):
     class Meta:
         db_table = 'apikey'
@@ -2224,4 +2085,3 @@ class APIKey(models.Model):
     def generate_key(self):
         characters = string.ascii_letters + string.digits
         self.key = ''.join([random.choice(characters) for _ in range(20)])
-# }}}

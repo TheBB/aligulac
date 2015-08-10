@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from itertools import chain
 import json
 import random
@@ -37,9 +37,8 @@ from ratings.models import (
 from ratings.tools import get_latest_period, find_player
 from ratings.templatetags.ratings_extras import urlfilter
 from django.utils.translation import ugettext as _
-# }}}
 
-# {{{ JsonResponse
+# JsonResponse
 # Works similarily to HttpResponse but returns JSON instead.
 class JsonResponse(HttpResponse):
 
@@ -50,10 +49,9 @@ class JsonResponse(HttpResponse):
             kwargs["content_type"] = "application/json"
 
         super().__init__(scontent, *args, **kwargs)
-# }}}
 
 
-# {{{ Message
+# Message
 # This class encodes error/success/warning messages sent to the templates.
 # context['messages'] should point to a list of Message objects.
 class Message:
@@ -76,9 +74,8 @@ class Message:
             self.text = field + ': ' + error
             self.type = self.ERROR
         self.id = ''.join([random.choice(string.ascii_letters+string.digits) for _ in range(10)])
-# }}}
 
-# {{{ NotUniquePlayerMessage
+# NotUniquePlayerMessage
 class NotUniquePlayerMessage(Message):
 
     def __init__(self, search, players, update=None, updateline=None, type='error'):
@@ -104,14 +101,12 @@ class NotUniquePlayerMessage(Message):
 
         Message.__init__(self, s, _('\'%s\' not unique') % search, type)
         self.id = id
-# }}}
 
-# {{{ generate_messages: Generates a list of message objects for an object that supports them.
+# generate_messages: Generates a list of message objects for an object that supports them.
 def generate_messages(obj):
     return [Message(m.get_message(), m.get_title(), m.type) for m in obj.message_set.all()]
-# }}}
 
-# {{{ login_message: Generates a message notifying about login status.
+# login_message: Generates a message notifying about login status.
 def login_message(base, extra=''):
     if not base['adm']:
         text = ' '.join([_('You are not logged in.'), extra, '(<a href="/login/">%s</a>)' % _('login')])
@@ -124,9 +119,8 @@ def login_message(base, extra=''):
             )
         ])
     base['messages'].append(Message(text, type=Message.INFO))
-# }}}
 
-# {{{ StrippedCharField: Subclass of CharField that performs stripping.
+# StrippedCharField: Subclass of CharField that performs stripping.
 class StrippedCharField(forms.CharField):
     def clean(self, value):
         value = super(StrippedCharField, self).clean(value)
@@ -138,17 +132,15 @@ class StrippedCharField(forms.CharField):
                 return None
             return value
         return None
-# }}}
 
-# {{{ get_param(request, param, default): Returns request.GET[param] if available, default if not.
+# get_param(request, param, default): Returns request.GET[param] if available, default if not.
 def get_param(request, param, default):
     try:
         return request.GET[param]
     except:
         return default
-# }}}
 
-# {{{ get_param_choice(request, param, choices, default): Returns request.GET[param] if available and in
+# get_param_choice(request, param, choices, default): Returns request.GET[param] if available and in
 # the list choices, default if not.
 def get_param_choice(request, param, choices, default):
     try:
@@ -157,9 +149,8 @@ def get_param_choice(request, param, choices, default):
         return val
     except:
         return default
-# }}}
 
-# {{{ get_param_range(request, param, range, default): Returns request.GET[param] as an int, restricted to the
+# get_param_range(request, param, range, default): Returns request.GET[param] as an int, restricted to the
 # range given (a tuple (min,max)), or default if not.
 def get_param_range(request, param, rng, default):
     try:
@@ -167,27 +158,24 @@ def get_param_range(request, param, rng, default):
         return min(max(val, rng[0]), rng[1])
     except:
         return default
-# }}}
 
-# {{{ get_param_date(request, param, default): Converts a GET param to a date.
+# get_param_date(request, param, default): Converts a GET param to a date.
 def get_param_date(request, param, default):
     param = get_param(request, param, None)
     try:
         return datetime.strptime(param, '%Y-%m-%d').date()
     except:
         return default
-# }}}
 
-# {{{ post_param(request, param, default): Returns request.POST[param] if available, default if not.
+# post_param(request, param, default): Returns request.POST[param] if available, default if not.
 # If you're using this method, consider deploying a form instead.
 def post_param(request, param, default):
     try:
         return request.POST[param]
     except:
         return default
-# }}}
 
-# {{{ base_ctx: Generates a minimal context, required to render the site layout and menus
+# base_ctx: Generates a minimal context, required to render the site layout and menus
 # Parameters:
 # - section: A string, name of the current major section (or None)
 # - subpage: A string, name of the current subsection (or None)
@@ -333,9 +321,8 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
         base['commitbranch'] = p.communicate()[0].decode().strip()
 
     return base
-# }}}
 
-# {{{ cache_login_protect: Decorator for caching only if user is not logged in.
+# cache_login_protect: Decorator for caching only if user is not logged in.
 # Use this in place of BOTH cache_page and csrf_protect, and only on pages that require a CSRF token IF AND
 # ONLY IF the user is logged in. If the view ALWAYS issues a CSRF token (or SOMETIMES does, but you can't tell
 # when easily), use neither cache_page nor csrf_protect. If the view NEVER issues a CSRF token, use cache_page
@@ -348,25 +335,22 @@ def cache_login_protect(view):
             final_view = cache_page(view)
         return final_view(request, *args, **kwargs)
     return handler
-# }}}
 
-# {{{ etn: Executes a function and returns its result if it doesn't throw an exception, or None if it does.
+# etn: Executes a function and returns its result if it doesn't throw an exception, or None if it does.
 def etn(f):
     try:
         return f()
     except:
         return None
-# }}}
 
-# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
+# ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
 # AS IT FUCKING SHOULD BE.
 ntz = lambda k: k if k is not None else 0
-# }}}
 
 
-# {{{ search: Helper function for performing searches
+# search: Helper function for performing searches
 def search(query, search_for=['players', 'teams', 'events'], strict=False):
-    # {{{ Split query
+    # Split query
     lex = shlex.shlex(query, posix=True)
     lex.wordchars += "'#-"
     lex.commenters = ''
@@ -375,9 +359,8 @@ def search(query, search_for=['players', 'teams', 'events'], strict=False):
     terms = [s.strip() for s in list(lex) if s.strip() != '']
     if len(terms) == 0:
         return None
-    # }}}
 
-    # {{{ Search for players, teams and events
+    # Search for players, teams and events
     if 'players' in search_for:
         players = find_player(lst=terms, make=False, soft=True, strict=strict)
     else:
@@ -404,7 +387,5 @@ def search(query, search_for=['players', 'teams', 'events'], strict=False):
 
     if 'teams' in search_for:
         teams = teams.distinct()
-    # }}}
 
     return players, teams, events
-# }}}

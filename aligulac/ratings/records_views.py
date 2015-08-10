@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from django.db.models import (
     Q,
     Max,
@@ -31,12 +31,12 @@ from ratings.tools import (
 from countries import data
 # }}}
 
-# {{{ history view
+# history view
 @cache_page
 def history(request):
     base = base_ctx('Records', 'History', request)
 
-    # {{{ Filtering (appears faster with custom SQL)
+    # Filtering (appears faster with custom SQL)
     nplayers = int(get_param(request, 'nplayers', '5'))
     race = get_param_choice(request, 'race', ['ptzrs','p','t','z','ptrs','tzrs','pzrs'], 'ptzrs')
     nats = get_param_choice(request, 'nats', ['all','foreigners'] + list(data.ccn_to_cca2.values()), 'all')
@@ -71,7 +71,7 @@ def history(request):
     return render_to_response('history.djhtml', base)
 # }}}
 
-# {{{ hof view
+# hof view
 @cache_page
 def hof(request):
     base = base_ctx('Records', 'HoF', request)
@@ -84,12 +84,12 @@ def hof(request):
     return render_to_response('hof.djhtml', base)
 # }}}
 
-# {{{ filter stolen from templatetags/ratings_extras.py
+# filter stolen from templatetags/ratings_extras.py
 def racefull(value):
     return dict(RACES)[value]
 # }}}
 
-# {{{ race view
+# race view
 @cache_page
 def race(request):
     race = get_param(request, 'race', 'all')

@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 import shlex
 
 from datetime import datetime, date, timedelta
@@ -70,7 +70,7 @@ msg_inactive = _(
 )
 msg_nochart  = _('%s has no rating chart on account of having played matches in fewer than two periods.')
 
-# {{{ meandate: Rudimentary function for sorting objects with a start and end date.
+# meandate: Rudimentary function for sorting objects with a start and end date.
 def meandate(tm):
     if tm.start is not None and tm.end is not None:
         return (tm.start.toordinal() + tm.end.toordinal()) / 2
@@ -82,7 +82,7 @@ def meandate(tm):
         return 1000000
 # }}}
 
-# {{{ interp_rating: Takes a date and a rating list, and interpolates linearly.
+# interp_rating: Takes a date and a rating list, and interpolates linearly.
 def interp_rating(date, ratings):
     for ind, r in enumerate(ratings):
         if (r.period.end - date).days >= 0:
@@ -95,7 +95,7 @@ def interp_rating(date, ratings):
     return ratings[-1].bf_rating
 # }}}
 
-# {{{ PlayerModForm: Form for modifying a player.
+# PlayerModForm: Form for modifying a player.
 class PlayerModForm(forms.Form):
     tag            = StrippedCharField(max_length=30, required=True, label=_('Tag'))
     race           = forms.ChoiceField(choices=RACES, required=True, label=_('Race'))
@@ -112,7 +112,7 @@ class PlayerModForm(forms.Form):
 
     country       = forms.ChoiceField(choices=data.countries, required=False, label=_('Country'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, player=None):
         if request is not None:
             super(PlayerModForm, self).__init__(request.POST)
@@ -134,7 +134,7 @@ class PlayerModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ update_player: Pushes updates to player, responds with messages
+    # update_player: Pushes updates to player, responds with messages
     def update_player(self, player):
         ret = []
 
@@ -169,7 +169,7 @@ class PlayerModForm(forms.Form):
     # }}}
 # }}} 
 
-# {{{ ResultsFilterForm: Form for filtering results.
+# ResultsFilterForm: Form for filtering results.
 class ResultsFilterForm(forms.Form):
     after  = forms.DateField(required=False, label=_('After'))
     before = forms.DateField(required=False, label=_('Before'))
@@ -227,14 +227,14 @@ class ResultsFilterForm(forms.Form):
     game = forms.ChoiceField(
         choices=[('all','All')]+GAMES, required=False, label=_('Game version'), initial='all')
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, *args, **kwargs):
         super(ResultsFilterForm, self).__init__(*args, **kwargs)
 
         self.label_suffix = ''
     # }}}
 
-    # {{{ Cleaning with default values
+    # Cleaning with default values
     def clean_default(self, field):
         if not self[field].html_name in self.data:
             return self.fields[field].initial
@@ -250,10 +250,10 @@ class ResultsFilterForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ player view
+# player view
 @cache_login_protect
 def player(request, player_id):
-    # {{{ Get player object and base context, generate messages and make changes if needed
+    # Get player object and base context, generate messages and make changes if needed
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Summary', request, context=player)
 
@@ -266,7 +266,7 @@ def player(request, player_id):
     base['messages'] += generate_messages(player)
     # }}}
 
-    # {{{ Various easy data
+    # Various easy data
     matches = player.get_matchset()
     recent = matches.filter(date__gte=(date.today() - relativedelta(months=2)))
 
@@ -300,13 +300,13 @@ def player(request, player_id):
         base['countryfull'] = transformations.cc_to_cn(player.country)
     # }}}
 
-    # {{{ Recent matches
+    # Recent matches
     matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj'])[0:10]
     if matches.exists():
         base['matches'] = display_matches(matches, fix_left=player, ratings=True)
     # }}}
 
-    # {{{ Team memberships
+    # Team memberships
     team_memberships = list(player.groupmembership_set.filter(group__is_team=True).select_related('group'))
     team_memberships.sort(key=lambda t: t.id, reverse=True)
     team_memberships.sort(key=meandate, reverse=True)
@@ -314,7 +314,7 @@ def player(request, player_id):
     base['teammems'] = team_memberships
     # }}}
 
-    # {{{ If the player has at least one rating
+    # If the player has at least one rating
     if player.current_rating:
         ratings = total_ratings(player.rating_set.filter(period__computed=True)).select_related('period')
         base.update({
@@ -338,7 +338,7 @@ def player(request, player_id):
         base['charts'] = False
     # }}}
 
-    # {{{ If the player has enough games to make a chart
+    # If the player has enough games to make a chart
     if base['charts']:
         ratings = (
             total_ratings(player.rating_set.filter(period_id__lte=base['recentchange'].period_id))
@@ -347,7 +347,7 @@ def player(request, player_id):
                 .order_by('period')
         )
 
-        # {{{ Add stories and other extra information
+        # Add stories and other extra information
         earliest = base['firstrating']
         latest = base['recentchange']
 
@@ -404,10 +404,10 @@ def player(request, player_id):
     return render_to_response('player.djhtml', base)
 # }}}
 
-# {{{ adjustment view
+# adjustment view
 @cache_page
 def adjustment(request, player_id, period_id):
-    # {{{ Get objects
+    # Get objects
     period = get_object_or_404(Period, id=period_id, computed=True)
     player = get_object_or_404(Player, id=player_id)
     rating = get_object_or_404(Rating, player=player, period=period)
@@ -422,7 +422,7 @@ def adjustment(request, player_id, period_id):
     })
     # }}}
 
-    # {{{ Matches
+    # Matches
     matches = player.get_matchset(related=['rta','rtb','pla','plb','eventobj']).filter(period=period)
 
     # If there are no matches, we don't need to continue
@@ -436,7 +436,7 @@ def adjustment(request, player_id, period_id):
     })
     # }}}
 
-    # {{{ Perform calculations
+    # Perform calculations
     tot_rating = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
     ngames     = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
     expwins    = {'M': 0.0, 'P': 0.0, 'T': 0.0, 'Z': 0.0}
@@ -481,17 +481,17 @@ def adjustment(request, player_id, period_id):
     return render_to_response('ratingdetails.djhtml', base)
 # }}}
 
-# {{{ results view
+# results view
 @cache_page
 def results(request, player_id):
-    # {{{ Get objects
+    # Get objects
     player = get_object_or_404(Player, id=player_id)
     base = base_ctx('Ranking', 'Match history', request, context=player)
 
     base['player'] = player
     # }}}
 
-    # {{{ Filtering
+    # Filtering
     matches = player.get_matchset(related=['pla','plb','eventobj'])
 
     form = ResultsFilterForm(request.GET)
@@ -559,7 +559,7 @@ def results(request, player_id):
     matches = matches.distinct()
     # }}}
 
-    # {{{ Statistics
+    # Statistics
     disp_matches = display_matches(matches, fix_left=player)
     base['matches'] = disp_matches
     base.update({
@@ -582,7 +582,7 @@ def results(request, player_id):
     })
     # }}}
 
-    # {{{ TL Postable
+    # TL Postable
     
     has_after = form.cleaned_data['after'] is not None
     has_before = form.cleaned_data['before'] is not None
@@ -770,7 +770,7 @@ def results(request, player_id):
     return render_to_response('player_results.djhtml', base)
 # }}}
 
-# {{{ historical view
+# historical view
 @cache_page
 def historical(request, player_id):
     player = get_object_or_404(Player, id=player_id)
@@ -794,7 +794,7 @@ def historical(request, player_id):
     return render_to_response('historical.djhtml', base)
 # }}}
 
-# {{{ earnings view
+# earnings view
 @cache_page
 def earnings(request, player_id):
     player = get_object_or_404(Player, id=player_id)
@@ -802,7 +802,7 @@ def earnings(request, player_id):
 
     year = get_param(request, 'year', 'all')
 
-    # {{{ Gather data
+    # Gather data
     earnings = player.earnings_set
     if year != 'all':
         earnings = earnings.filter(event__latest__year=year)
@@ -822,7 +822,7 @@ def earnings(request, player_id):
                 e.rng = rng
     # }}}
 
-    # {{{ Sum up earnings by currency
+    # Sum up earnings by currency
     currencies = {e.currency for e in earnings}
     by_currency = {cur: sum([e.origearnings for e in earnings if e.currency == cur]) for cur in currencies}
     if len(by_currency) == 1 and 'USD' in by_currency:
@@ -842,7 +842,7 @@ def earnings(request, player_id):
 # }}}
 
 
-# {{{ Postable templates
+# Postable templates
 TL_HISTORY_TEMPLATE = (
     "{resfor} {player_country_formatted} :{player_race}: " +
     "[url={url}/players/{pid}/]{player_tag}[/url]{date}.\n" +

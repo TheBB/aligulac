@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from datetime import date
 
 from django import forms
@@ -42,7 +42,7 @@ from ratings.tools import (
 )
 # }}}
 
-# {{{ TeamModForm: Form for modifying a team.
+# TeamModForm: Form for modifying a team.
 class TeamModForm(forms.Form):
     name      = StrippedCharField(max_length=100, required=True, label=_('Name'))
     akas      = forms.CharField(max_length=200, required=False, label=_('AKAs'))
@@ -50,7 +50,7 @@ class TeamModForm(forms.Form):
     homepage  = StrippedCharField(max_length=200, required=False, label=_('Homepage'))
     lp_name   = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, team=None):
         if request is not None:
             super(TeamModForm, self).__init__(request.POST)
@@ -66,7 +66,7 @@ class TeamModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ update_player: Pushes updates to player, responds with messages
+    # update_player: Pushes updates to player, responds with messages
     def update_team(self, team):
         ret = []
 
@@ -94,7 +94,7 @@ class TeamModForm(forms.Form):
     # }}}
 # }}} 
 
-# {{{ teams view
+# teams view
 @cache_page
 def teams(request):
     base = base_ctx('Teams', 'Ranking', request)
@@ -128,10 +128,10 @@ def teams(request):
     return render_to_response('teams.djhtml', base)
 # }}}
 
-# {{{ team view
+# team view
 @cache_login_protect
 def team(request, team_id):
-    # {{{ Get team object and base context, generate messages and make changes if needed
+    # Get team object and base context, generate messages and make changes if needed
     team = get_object_or_404(Group, id=team_id)
     base = base_ctx('Teams', None, request)
 
@@ -148,7 +148,7 @@ def team(request, team_id):
     base['messages'] += generate_messages(team)
     # }}}
 
-    # {{{ Easy statistics
+    # Easy statistics
     players = team.groupmembership_set.filter(current=True, playing=True)
     player_ids = players.values('player')
     matches = Match.objects.filter(Q(pla__in=player_ids) | Q(plb__in=player_ids))
@@ -166,7 +166,7 @@ def team(request, team_id):
     })
     # }}}
 
-    # {{{ Player lists
+    # Player lists
     all_members = total_ratings(
         Rating.objects.all().order_by('-rating').filter(
             player__groupmembership__group=team,
@@ -196,12 +196,12 @@ def team(request, team_id):
     return render_to_response('team.djhtml', base)
 # }}}
 
-# {{{ transfers view
+# transfers view
 @cache_page
 def transfers(request):
     base = base_ctx('Teams', 'Transfers', request)
 
-    # {{{ Get relevant groupmembership objects
+    # Get relevant groupmembership objects
     trades = (
         GroupMembership.objects
             .exclude(start__isnull=True, end__isnull=True)
@@ -220,7 +220,7 @@ def transfers(request):
     )
     # }}}
 
-    # {{{ Separate them into joins and leaves
+    # Separate them into joins and leaves
     pretrades = []
     for t in trades:
         if t.start is not None and t.start <= date.today():
@@ -231,7 +231,7 @@ def transfers(request):
     pretrades.sort(key=lambda t: t['date'], reverse=True)
     # }}}
 
-    # {{{ Combine joins and leaves for the same player on the same date
+    # Combine joins and leaves for the same player on the same date
     ind = 0
     while ind < len(pretrades) - 1:
         if pretrades[ind]['player'] == pretrades[ind+1]['player'] and\

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# {{{ Imports
+# Imports
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
@@ -30,17 +30,16 @@ from ratings.tools import (
     ntz,
     PATCHES,
 )
-# }}}
 
 def info(string):
     print("[{}] {}".format(datetime.now(), string))
 
-# {{{ Balance reports
+# Balance reports
 def balance():
     first = date(year=2010, month=7, day=1)
     last  = date.today().replace(day=1) - relativedelta(months=1)
 
-    # {{{ Auxiliary functions for updating
+    # Auxiliary functions for updating
     def get_data_perf_single(matches, rca, rcb):
         res = (
             matches.filter(rca=rca, rcb=rcb)
@@ -71,9 +70,8 @@ def balance():
 
         perfdiff = icdf(wa/(wa+wb), loc=0.0, scale=1.0)
         return perfdiff - diff/(wa+wb)
-    # }}}
 
-    # {{{ Update data
+    # Update data
     while first <= last:
         matches = Match.objects.filter(date__gte=first, date__lt=(first+relativedelta(months=1)))
         pvt_w, pvt_l = count_matchup_games(matches, 'P', 'T')
@@ -110,8 +108,6 @@ def balance():
         be.save()
 
         first = first + relativedelta(months=1)
-    # }}}
-# }}}
 
 if __name__ == '__main__':
     balance()

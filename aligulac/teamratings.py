@@ -24,7 +24,7 @@ from simul.playerlist import make_player
 
 print('[%s] Updating team ratings' % str(datetime.now()), flush=True)
 
-# {{{ Update ratings
+# Update ratings
 curp = get_latest_period()
 for team in Group.objects.filter(active=True, is_team=True):
     ratings = filter_active(Rating.objects.filter(
@@ -39,4 +39,3 @@ for team in Group.objects.filter(active=True, is_team=True):
     else:
         team.meanrating = -10
     team.save()
-# }}}

@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from os.path import normpath, dirname, join
 
 from tastypie.api import Api
@@ -29,7 +29,6 @@ from ratings.api.resources import (
 
 from django.contrib import admin
 admin.autodiscover()
-# }}}
 
 handler404 = 'aligulac.views.h404'
 handler500 = 'aligulac.views.h500'
@@ -139,7 +138,7 @@ urlpatterns = patterns('',
     url(r'^api/', include(v1_api.urls)),
 )
 
-# {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
+# If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
 if settings.DEBUG:
     resources = join(dirname(normpath(settings.PROJECT_PATH)), 'resources')
     urlpatterns += patterns('',
@@ -152,4 +151,3 @@ if settings.DEBUG:
         url(r'^img/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': join(resources, 'img')})
     )
-# }}}

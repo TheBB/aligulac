@@ -23,7 +23,7 @@ from ratings.models import (
 
 print('[%s] Backwards smoothing' % str(datetime.now()), flush=True)
 
-# {{{ Copy data for the last period
+# Copy data for the last period
 last = Period.objects.filter(computed=True).latest('id')
 Rating.objects.filter(period=last).update(
     bf_rating=F('rating'),
@@ -35,14 +35,13 @@ Rating.objects.filter(period=last).update(
     bf_dev_vt=F('dev_vt'),
     bf_dev_vz=F('dev_vz'),
 )
-# }}}
 
 cur = connection.cursor()
 
 for period_id in range(last.id-1, 0, -1):
     print('[%s] Smoothing period %i' % (str(datetime.now()), period_id), flush=True)
 
-    # {{{ Update RDs
+    # Update RDs
     with transaction.atomic():
         cur.execute('''
         UPDATE rating
@@ -59,9 +58,8 @@ for period_id in range(last.id-1, 0, -1):
          WHERE rating.id = i.id'''
          .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
         )
-    # }}}
 
-    # {{{ Update ratings
+    # Update ratings
     with transaction.atomic():
         cur.execute('''
         UPDATE rating
@@ -82,9 +80,8 @@ for period_id in range(last.id-1, 0, -1):
          WHERE rating.id = i.id'''
         .format(dec=DECAY_DEV, pid=period_id+1, mid=period_id)
         )
-    # }}}
 
-    # {{{ Enforce RD between min and max (init)
+    # Enforce RD between min and max (init)
     with transaction.atomic():
         cur.execute('''
         UPDATE rating
@@ -101,9 +98,8 @@ for period_id in range(last.id-1, 0, -1):
          WHERE rating.id = i.id'''
         .format(min=MIN_DEV, init=INIT_DEV, mid=period_id)
         )
-    # }}}
 
-    # {{{ Subtract mean to renormalize
+    # Subtract mean to renormalize
     with transaction.atomic():
         cur.execute('''
         UPDATE rating
@@ -120,4 +116,3 @@ for period_id in range(last.id-1, 0, -1):
          WHERE rating.id = i.id'''
         .format(mid=period_id)
         )
-    # }}}

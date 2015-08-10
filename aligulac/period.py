@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# {{{ Imports
+# Imports
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
@@ -42,9 +42,8 @@ from ratings.tools import (
     filter_active,
     cdf,
 )
-# }}}
 
-# {{{ Initialize periods
+# Initialize periods
 try:
     period = Period.objects.get(id=sys.argv[1])
 except:
@@ -61,9 +60,8 @@ print('[{0}] Recomputing #{1} ({2} -> {3})'.format(str(datetime.now()), period.i
     #sys.exit(1)
 
 prev = etn(lambda: Period.objects.get(id=period.id-1))
-# }}}
 
-# {{{ Get players
+# Get players
 players = {}
 
 if prev:
@@ -89,15 +87,13 @@ for p in new_players:
         'prev_devs': { 'M': INIT_DEV, 'P': INIT_DEV, 'T': INIT_DEV, 'Z': INIT_DEV },
         'opp_c': [], 'opp_r': [], 'opp_d': [], 'wins': [], 'losses': [],
     }
-# }}}
 
-# {{{ Decay all ratings
+# Decay all ratings
 for p in players.values():
     for r in p['prev_devs']:
         p['prev_devs'][r] = min(sqrt(p['prev_devs'][r]**2 + DECAY_DEV**2), INIT_DEV)
-# }}}
 
-# {{{ Collect match information
+# Collect match information
 ngames = 0
 
 for m in Match.objects.filter(period=period).select_related('pla','plb'):
@@ -126,11 +122,10 @@ for m in Match.objects.filter(period=period).select_related('pla','plb'):
             players[m.plb_id]['losses'].append(m.sca * weight)
 
     ngames += m.sca + m.scb
-# }}}
 
 print('[%s] Initialized %i players and %i games' % (str(datetime.now()), len(players), ngames), flush=True)
 
-# {{{ Compute new ratings, devs and performances
+# Compute new ratings, devs and performances
 for p in players.values():
     new_ratings, new_devs = update(
         array(
@@ -152,26 +147,23 @@ for p in players.values():
         'new_devs': { 'M': new_devs[0], 'P': new_devs[1], 'T': new_devs[2], 'Z': new_devs[3] },
         'perfs': { 'M': perfs[0], 'P': perfs[1], 'T': perfs[2], 'Z': perfs[3] },
     })
-# }}}
 
-# {{{ Prepare to commit
+# Prepare to commit
 extant_ids = {r.player_id for r in Rating.objects.filter(period=period)}
 computed_ids = {p['player'].id for p in players.values()}
 insert_ids = computed_ids - extant_ids
 update_ids = computed_ids & extant_ids
 delete_ids = extant_ids - computed_ids
-# }}}
 
-# {{{ Delete extant ratings that shouldn't be there
+# Delete extant ratings that shouldn't be there
 Match.objects.filter(rta__period=period, rta__player_id__in=delete_ids).update(rta=None)
 Match.objects.filter(rtb__period=period, rtb__player_id__in=delete_ids).update(rtb=None)
 Rating.objects.filter(prev__period=period, prev__player_id__in=delete_ids).update(prev=None)
 Rating.objects.filter(period=period, player_id__in=delete_ids).delete()
-# }}}
 
 cur = connection.cursor()
 
-# {{{ Update extant ratings
+# Update extant ratings
 if update_ids:
     cur.execute('BEGIN')
     cur.execute(
@@ -205,9 +197,8 @@ if update_ids:
         'FROM temp_rating AS t WHERE r.player_id=t.player_id AND r.period_id=%i' % period.id
     )
     cur.execute('COMMIT')
-    # }}}
 
-# {{{ Insert new ratings
+# Insert new ratings
 Rating.objects.bulk_create([Rating(
     period       = period,
     player       = p['player'],
@@ -255,9 +246,8 @@ if insert_ids:
          WHERE period_id=%i AND plb_id IN (%s)'''
         % (period.id, period.id+1, ','.join(str_ids))
     )
-# }}}
 
-# {{{ Bookkeeping
+# Bookkeeping
 Match.objects.filter(period=period).update(treated=True)
 
 def mean(a):
@@ -293,7 +283,6 @@ cur.execute('''
     ) r
     WHERE rating.id = r.id''' % (period.id, INACTIVE_THRESHOLD)
 )
-# }}}
 
 print(
     '[%s] Deleted: %i, Updated: %i, Inserted: %i'

@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from django.shortcuts import (
     get_object_or_404,
     render_to_response,
@@ -43,7 +43,7 @@ from aligulac.settings import INACTIVE_THRESHOLD, SHOW_PER_LIST_PAGE
 
 msg_preview = _('This is a <em>preview</em> of the next rating list. It will not be finalized until %s.')
 
-# {{{ periods view
+# periods view
 @cache_page
 def periods(request):
     base = base_ctx('Ranking', 'History', request)
@@ -52,12 +52,12 @@ def periods(request):
     return render_to_response('periods.djhtml', base)
 # }}}
 
-# {{{ period view
+# period view
 @cache_page
 def period(request, period_id=None):
     base = base_ctx('Ranking', 'Current', request)
 
-    # {{{ Get period object
+    # Get period object
     if not period_id:
         period = base['curp']
     else:
@@ -71,7 +71,7 @@ def period(request, period_id=None):
         base['curpage'] = ''
     # }}}
 
-    # {{{ Best and most specialised players
+    # Best and most specialised players
     qset = total_ratings(filter_active(Rating.objects.filter(period=period))).select_related('player')
     qsetp = qset.filter(player__race=P)
     qsett = qset.filter(player__race=T)
@@ -108,7 +108,7 @@ def period(request, period_id=None):
     })
     # }}}
 
-    # {{{ Highest gainer and biggest losers
+    # Highest gainer and biggest losers
 
     # TODO: Fix these queries, highly dependent on the way django does things.
     gainers = filter_active(Rating.objects.filter(period=period))\
@@ -127,7 +127,7 @@ def period(request, period_id=None):
     })
     # }}}
 
-    # {{{ Matchup statistics
+    # Matchup statistics
     qset = period.match_set
     base['pvt_wins'], base['pvt_loss'] = count_matchup_games(qset, 'P', 'T')
     base['pvz_wins'], base['pvz_loss'] = count_matchup_games(qset, 'P', 'Z')
@@ -141,12 +141,12 @@ def period(request, period_id=None):
     base['tot_mirror'] = base['pvp_games'] + base['tvt_games'] + base['zvz_games']
     # }}}
 
-    # {{{ Build country list
+    # Build country list
     all_players = Player.objects.filter(rating__period_id=period.id, rating__decay__lt=INACTIVE_THRESHOLD)
     base['countries'] = country_list(all_players)
     # }}}
 
-    # {{{ Initial filtering of ratings
+    # Initial filtering of ratings
     entries = filter_active(period.rating_set).select_related('player')
 
     # Race filter
@@ -179,7 +179,7 @@ def period(request, period_id=None):
     })
     # }}}
 
-    # {{{ Pages etc.
+    # Pages etc.
     pagesize = SHOW_PER_LIST_PAGE
     page = int(get_param(request, 'page', 1))
     nitems = entries.count()
@@ -217,18 +217,18 @@ def period(request, period_id=None):
     return render_to_response('period.djhtml', base)
 # }}}
 
-# {{{ earnings view
+# earnings view
 @cache_page
 def earnings(request):
     base = base_ctx('Ranking', 'Earnings', request)
 
-    # {{{ Build country and currency list
+    # Build country and currency list
     all_players = Player.objects.filter(earnings__player__isnull=False).distinct()
     base['countries'] = country_list(all_players)
     base['currencies'] = currency_list(Earnings.objects)
     # }}}
 
-    # {{{ Initial filtering of earnings
+    # Initial filtering of earnings
     preranking = Earnings.objects.filter(earnings__isnull=False)
 
     # Filtering by year
@@ -258,14 +258,14 @@ def earnings(request):
     )
     # }}}
 
-    # {{{ Calculate total earnings
+    # Calculate total earnings
     base.update({
         'totalorigprizepool': preranking.aggregate(Sum('origearnings'))['origearnings__sum'],
         'totalprizepool':     preranking.aggregate(Sum('earnings'))['earnings__sum'],
     })
     # }}}
 
-    # {{{ Pages, etc.
+    # Pages, etc.
     pagesize = SHOW_PER_LIST_PAGE
     page = int(get_param(request, 'page', 1))
     nitems = ranking.count()
@@ -295,7 +295,7 @@ def earnings(request):
         base['empty'] = True
     # }}}
 
-    # {{{ Populate with player and team objects
+    # Populate with player and team objects
     ids = [p['player'] for p in ranking]
     players = Player.objects.in_bulk(ids)
     for p in ranking:

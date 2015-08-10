@@ -165,7 +165,7 @@ To use, you should define the following blocks:
             {% with a2="<a target=\"_blank\" href=\"http://python.org\">" %}
             {% with a3="<a target=\"_blank\" href=\"http://httpd.apache.org\">" %}
             {% with a4="<a target=\"_blank\" href=\"http://debian.org\">" %}
-              <p>{% blocktrans %}Powered by {{a1}}Django 1.6</a>, {{a2}}Python 3.2</a>, {{a3}}Apache 2</a> and {{a4}}Debian GNU/Linux 6</a>.{% endblocktrans %}</p>
+              <p>{% blocktrans %}Powered by {{a1}}Django 1.8</a>, {{a2}}Python 3.4</a>, {{a3}}Nginx 1.9</a> and {{a4}}Debian GNU/Linux 8</a>.{% endblocktrans %}</p>
             {% endwith %}{% endwith %}{% endwith %}{% endwith %}
 
             {% with a1="<a target=\"_blank\" href=\"http://wiki.teamliquid.net/starcraft2/Main_Page\">" %}

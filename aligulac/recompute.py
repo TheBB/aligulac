@@ -3,6 +3,8 @@
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from datetime import date, datetime
 import itertools
@@ -12,7 +14,7 @@ import subprocess
 from django.core.cache import cache
 from django.db import connection
 from django.db.models import F, Q
-from django.db.transaction import commit_on_success
+from django.db.transaction import atomic
 
 from aligulac.settings import PROJECT_PATH
 
@@ -30,7 +32,7 @@ if q.count() > 0:
 
     period_set = set()
 
-    @commit_on_success
+    @atomic
     def fix_artifacts():
         periods = list(Period.objects.filter(start__lte=datetime.today()))
     
@@ -73,7 +75,7 @@ count = q.count() + q2.count()
 if count != 0:
     period_set = set()
 
-    @commit_on_success
+    @atomic
     def fix_artifacts():
         print("Found")
         print("[%s] Fixing artifacts..." % str(datetime.now()))

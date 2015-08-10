@@ -5,6 +5,8 @@ from itertools import combinations
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
+import django
+django.setup()
 
 from django.db.models import F
 

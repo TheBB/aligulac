@@ -278,7 +278,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     x = dim(x)
 
     # If maximization failed, return the current rating and print an error message
-    if x == None:
+    if x is None:
         print('Failed to converge for %s' % text)
         return (myr, mys, [None]*(Ncats+1), [None]*(Ncats+1))
 

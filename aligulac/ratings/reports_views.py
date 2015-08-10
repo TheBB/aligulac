@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -25,7 +25,7 @@ from ratings.tools import (
 )
 # }}}
 
-# {{{ Balance report view
+# Balance report view
 @cache_page
 def balance(request):
     base = base_ctx('Misc', 'Balance Report', request)

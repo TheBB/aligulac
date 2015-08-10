@@ -23,7 +23,7 @@ LIMIT = 7
 # Nothing counts before here.
 FIRST_PERIOD = 25
 
-# {{{ Evaluate the domination scores
+# Evaluate the domination scores
 #print('[%s] Erasing domination scores' % str(datetime.now()), flush=True)
 #Rating.objects.update(domination=None)
 
@@ -31,9 +31,8 @@ print('[%s] Reevaluating domination scores' % str(datetime.now()), flush=True)
 for period in Period.objects.filter(computed=True, id__gte=FIRST_PERIOD):
     benchmark = filter_active(period.rating_set.all()).order_by('-rating')[LIMIT-1].rating
     filter_active(period.rating_set.all()).update(domination=F('rating')-benchmark)
-# }}}
 
-# {{{ Hall of fame
+# Hall of fame
 print('[%s] Reevaluating hall of fame' % str(datetime.now()), flush=True)
 for player in Player.objects.all():
     ratings = list(
@@ -45,7 +44,7 @@ for player in Player.objects.all():
     if len(ratings) == 0:
         continue
 
-    # {{{ Collect a list of indices where the domination switches sign (always pick the positive side)
+    # Collect a list of indices where the domination switches sign (always pick the positive side)
     inds = set()
     for i in range(1, len(ratings)):
         if ratings[i]['domination'] is None or ratings[i-1]['domination'] is None:
@@ -57,9 +56,8 @@ for player in Player.objects.all():
     if ratings[-1]['domination'] is not None and ratings[-1]['domination'] > 0:
         inds.add(len(ratings) - 1)
     inds = sorted(list(inds))
-    # }}}
 
-    # {{{ Try out combinations of start and end indices to find the optimal choice
+    # Try out combinations of start and end indices to find the optimal choice
     dom, init, fin = 0, None, None
     for i1, i2 in combinations(inds, 2):
         d = sum([r['domination'] for r in ratings[i1:i2+1] if r['domination'] != None])
@@ -71,10 +69,8 @@ for player in Player.objects.all():
         init, _ = min(enumerate(ratings), key=lambda e: e[1]['domination'] or 10000)
         fin = init
         dom = ratings[init]['domination']
-    # }}}
 
     player.dom_val = dom
     player.dom_start_id = init + FIRST_PERIOD
     player.dom_end_id = fin + FIRST_PERIOD + 1
     player.save()
-# }}}

@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from numpy import (
     arctanh,
     tanh,
@@ -39,7 +39,7 @@ from ratings.models import (
 )
 # }}}
 
-# {{{ Patchlist
+# Patchlist
 PATCHES = [
     (date(year=2010, month=10, day=14), '1.1.2'),
     (date(year=2011, month=3,  day=22), '1.3.0'),
@@ -56,7 +56,7 @@ PATCHES = [
 ]
 # }}}
 
-# {{{ Currency names 
+# Currency names 
 CURRENCIES = {
     'EUR': _('Euro'),
     'GBP': _('British Pound'),
@@ -107,7 +107,7 @@ CURRENCIES = {
 }
 # }}}
 
-# {{{ find_player: Magic!
+# find_player: Magic!
 def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     queryset = Player.objects.all()
 
@@ -119,7 +119,7 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
 
     tag, country, race = None, None, None
 
-    # {{{ Build filter
+    # Build filter
     for s in lst:
         # If numeric, assume a restriction on ID
         if s.isdigit():
@@ -195,9 +195,9 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
         queryset = queryset.filter(q)
     # }}}
 
-    # {{{ If no results, make player if allowed
+    # If no results, make player if allowed
     if not queryset.exists() and make:
-        # {{{ Raise exceptions if missing crucial data
+        # Raise exceptions if missing crucial data
         if tag == None:
             msg = _("Player '%s' was not found and cound not be made (missing player tag)") % ' '.join(lst)
             raise Exception(msg)
@@ -216,22 +216,22 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     return queryset.distinct()
 # }}}
 
-# {{{ cdf: Cumulative distribution function
+# cdf: Cumulative distribution function
 def cdf(x, loc=0.0, scale=1.0):
     return 0.5 + 0.5 * tanh(pi/2/sqrt(3) * (x-loc)/scale)
 # }}}
 
-# {{{ pdf: Probability distribution function
+# pdf: Probability distribution function
 def pdf(x, loc=0.0, scale=1.0):
     return pi/4/sqrt(3)/scale * (1 - tanh(pi/2/sqrt(3)*(x-loc)/scale)**2)
 # }}}
 
-# {{{ icdf: Inverse cumulative distribution function
+# icdf: Inverse cumulative distribution function
 def icdf(c, loc=0.0, scale=1.0):
     return loc + scale * 2*sqrt(3)/pi * arctanh(2*c - 1)
 # }}}
 
-# {{{ get_latest_period: Returns the latest computed period, or None.
+# get_latest_period: Returns the latest computed period, or None.
 def get_latest_period():
     try:
         return Period.objects.filter(computed=True).latest('start')
@@ -239,7 +239,7 @@ def get_latest_period():
         return None
 # }}}
 
-# {{{ filter_active: Filters a rating queryset by removing inactive ratings.
+# filter_active: Filters a rating queryset by removing inactive ratings.
 def filter_active(queryset):
     return queryset.filter(decay__lt=INACTIVE_THRESHOLD)
 
@@ -247,7 +247,7 @@ def filter_active_players(queryset):
     return queryset.filter(current_rating__decay__lt=INACTIVE_THRESHOLD)
 # }}}
 
-# {{{ filter_inactive: Filters a rating queryset by removing active ratings.
+# filter_inactive: Filters a rating queryset by removing active ratings.
 def filter_inactive(queryset):
     return queryset.exclude(decay__lt=INACTIVE_THRESHOLD)
 
@@ -255,7 +255,7 @@ def filter_inactive_players(queryset):
     return queryset.exclude(current_rating__decay__lt=INACTIVE_THRESHOLD)
 # }}}
 
-# {{{ total_ratings: Annotates a rating queryset by adding tot_vp, tot_vt and tot_vz.
+# total_ratings: Annotates a rating queryset by adding tot_vp, tot_vt and tot_vz.
 def total_ratings(queryset):
     return queryset.extra(select={
         'tot_vp': 'rating+rating_vp',
@@ -264,7 +264,7 @@ def total_ratings(queryset):
     })
 # }}}
 
-# {{{ populate_teams: Adds team information to rows in a queryset (ratings or players) by populating the
+# populate_teams: Adds team information to rows in a queryset (ratings or players) by populating the
 # members team (short name), teamfull (full name) and teamid (team ID).
 def populate_teams(queryset, player_set=False):
     if player_set:
@@ -292,7 +292,7 @@ def populate_teams(queryset, player_set=False):
     return q
 # }}}
 
-# {{{ country_list: Creates a list of countries in the given queryset (of Players).
+# country_list: Creates a list of countries in the given queryset (of Players).
 def country_list(queryset):
     countries = queryset.values('country').distinct()
     country_codes = {c['country'] for c in countries if c['country'] is not None}
@@ -301,7 +301,7 @@ def country_list(queryset):
     return country_dict
 # }}}
 
-# {{{ currency_list: Creates a list of currencies in the given queryset (of Earnings).
+# currency_list: Creates a list of currencies in the given queryset (of Earnings).
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
     currency_dict = [
@@ -312,7 +312,7 @@ def currency_list(queryset):
 # }}}
 
 
-# {{{
+#
 def currency_strip(value):
     """
     Pretty prints the value using as few characters as possible
@@ -327,7 +327,7 @@ def currency_strip(value):
         return str(value)
 # }}}
 
-# {{{ filter_flags: Splits an integer representing bitwise or into a list of each flag.
+# filter_flags: Splits an integer representing bitwise or into a list of each flag.
 def filter_flags(flags):
     power = 1
     ret = []
@@ -340,12 +340,12 @@ def filter_flags(flags):
     return ret
 # }}}
 
-# {{{ split_matchset: Splits a match queryset into two, where player is A and B respectively
+# split_matchset: Splits a match queryset into two, where player is A and B respectively
 def split_matchset(queryset, player):
     return queryset.filter(pla=player), queryset.filter(plb=player)
 # }}}
 
-# {{{ get_placements: Returns a dict mapping prizemoney to tuple (min,max) placements for a given event.
+# get_placements: Returns a dict mapping prizemoney to tuple (min,max) placements for a given event.
 def get_placements(event):
     ret = {}
     for earning in event.earnings_set.exclude(placement=0).order_by('placement'):
@@ -359,45 +359,45 @@ def get_placements(event):
     return ret
 # }}}
 
-# {{{ ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
+# ntz: Helper function with aggregation, sending None to 0, so that the sum of an empty list is 0.
 # AS IT FUCKING SHOULD BE.
 ntz = lambda k: k if k is not None else 0
 # }}}
 
-# {{{ count_winloss_games: Counts wins and losses over a queryset relative to player A.
+# count_winloss_games: Counts wins and losses over a queryset relative to player A.
 def count_winloss_games(queryset):
     agg = queryset.aggregate(Sum('sca'), Sum('scb'))
     return ntz(agg['sca__sum']), ntz(agg['scb__sum'])
 # }}}
 
-# {{{ count_winloss_player(queryset, player): Counts wins and losses over a queryset for a given player.
+# count_winloss_player(queryset, player): Counts wins and losses over a queryset for a given player.
 def count_winloss_player(queryset, player):
     wa, la = count_winloss_games(queryset.filter(pla=player))
     lb, wb = count_winloss_games(queryset.filter(plb=player))
     return wa+wb, la+lb
 # }}}
 
-# {{{ count_matchup_games: Gets the matchup W-L data for a queryset.
+# count_matchup_games: Gets the matchup W-L data for a queryset.
 def count_matchup_games(queryset, rca, rcb):
     wa, la = count_winloss_games(queryset.filter(rca=rca, rcb=rcb))
     lb, wb = count_winloss_games(queryset.filter(rca=rcb, rcb=rca))
     return wa+wb, la+lb
 # }}}
 
-# {{{ count_matchup_player: Gets the matcup W-L data for a queryset for a given player.
+# count_matchup_player: Gets the matcup W-L data for a queryset for a given player.
 def count_matchup_player(queryset, player, race):
     wa, la = count_winloss_games(queryset.filter(pla=player, rcb=race))
     lb, wb = count_winloss_games(queryset.filter(plb=player, rca=race))
     return wa+wb, la+lb
 # }}}
 
-# {{{ count_mirror_games: Gets the number of mirror games for a queryset.
+# count_mirror_games: Gets the number of mirror games for a queryset.
 def count_mirror_games(queryset, race):
     w, l = count_winloss_games(queryset.filter(rca=race, rcb=race))
     return w + l
 # }}}
 
-# {{{ add_counts: Add match and game counts to a rating queryset (should have prefetched prev__rt(a,b)).
+# add_counts: Add match and game counts to a rating queryset (should have prefetched prev__rt(a,b)).
 # Will probably result in two queries being run.
 def add_counts(queryset):
     for r in queryset:
@@ -416,7 +416,7 @@ def add_counts(queryset):
     return queryset
 # }}}
 
-# {{{ display_matches: Prepare a match queryset for display. Works for both Match and PreMatch objects.
+# display_matches: Prepare a match queryset for display. Works for both Match and PreMatch objects.
 # Optional arguments:
 # - date: True to display dates, false if not.
 # - fix_left: Set to a player object if you want that player to be always listed on the left.
@@ -429,7 +429,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     ret = []
     for idx, m in enumerate(matches):
-        # {{{ Basic stuff
+        # Basic stuff
         r = {
             'match':        m,
             'match_id':     m.id,
@@ -462,7 +462,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
         r['add_links'] = add_links and m.eventobj is not None and not m.eventobj.closed
         # }}}
 
-        # {{{ Add dates and messages if needed
+        # Add dates and messages if needed
         if date and isinstance(m, Match):
             r['date'] = m.date
 
@@ -473,7 +473,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             ]
         # }}}
 
-        # {{{ Check ratings if needed
+        # Check ratings if needed
         if ratings and isinstance(m, Match):
             r['pla'].update({
                 'rating':  m.rta.get_totalrating(m.rcb) if m.rta
@@ -488,7 +488,7 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
             })
         # }}}
 
-        # {{{ Switch roles of pla and plb if needed
+        # Switch roles of pla and plb if needed
         if fix_left is not None and fix_left.id == r['plb']['id']:
             r['pla'], r['plb'] = r['plb'], r['pla']
         # }}}

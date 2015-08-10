@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from datetime import (
     datetime,
     date,
@@ -76,7 +76,7 @@ from ratings.tools import (
 )
 # }}}
 
-# {{{ earnings_code, wcs_points_code: Converts a queryset of earnings or
+# earnings_code, wcs_points_code: Converts a queryset of earnings or
 # wcs points to the corresponding code.
 def earnings_code(queryset):
     if not queryset.exists():
@@ -97,7 +97,7 @@ def wcs_points_code(queryset):
     ])
 # }}}
 
-# {{{ EventModForm: Form for modifying an event.
+# EventModForm: Form for modifying an event.
 class EventModForm(forms.Form):
     name       = StrippedCharField(max_length=100, required=True, label='Name')
     date       = forms.DateField(required=False, label='Date')
@@ -123,7 +123,7 @@ class EventModForm(forms.Form):
     tl_thread  = forms.IntegerField(required=False, label=_('TL thread'))
     lp_name    = StrippedCharField(max_length=200, required=False, label=_('Liquipedia title'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(EventModForm, self).__init__(request.POST)
@@ -145,7 +145,7 @@ class EventModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ update_event: Pushes updates to event, responds with messages
+    # update_event: Pushes updates to event, responds with messages
     def update_event(self, event):
         ret = []
 
@@ -293,7 +293,7 @@ class StoriesForm(forms.Form):
 
         return ret
 
-# {{{ WCSModForm: Form for changing WCS status.
+# WCSModForm: Form for changing WCS status.
 class WCSModForm(forms.Form):
     year = forms.ChoiceField(choices=[(None, _('None'))] + WCS_YEARS, required=False, label=_('Year'))
     # Translators: WCS event tier
@@ -314,7 +314,7 @@ class WCSModForm(forms.Form):
 
         self.label_suffix = ''
 
-    # {{{ Function for parsing a single line
+    # Function for parsing a single line
     def line_to_data(self, line):
         ind = line.find(' ')
         points = int(line[:ind])
@@ -328,7 +328,7 @@ class WCSModForm(forms.Form):
             return points, queryset.first()
     # }}}
 
-    # {{{ update_event: Pushes changes to event object
+    # update_event: Pushes changes to event object
     def update_event(self, event):
         ret = []
 
@@ -339,7 +339,7 @@ class WCSModForm(forms.Form):
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
-        # {{{ Gather data
+        # Gather data
         entries, ok = [], True
 
         for line in self.cleaned_data['points'].split('\n'):
@@ -357,7 +357,7 @@ class WCSModForm(forms.Form):
             return ret
         # }}}
 
-        # {{{ If not a WCS event, clear all data
+        # If not a WCS event, clear all data
         if self.cleaned_data['year'] == 'None':
             WCSPoints.set_points(event, [])
             event.wcs_year = None
@@ -369,7 +369,7 @@ class WCSModForm(forms.Form):
             return ret
         # }}}
 
-        # {{{ If a WCS event, set all data
+        # If a WCS event, set all data
         entries.sort(key=lambda a: a['placement'])
         for i, e in enumerate(entries):
             e['placement'] = i
@@ -386,7 +386,7 @@ class WCSModForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ PrizepoolModForm: Form for changing prizepools.
+# PrizepoolModForm: Form for changing prizepools.
 class PrizepoolModForm(forms.Form):
     sorted_curs = sorted(ccy.currencydb(), key=operator.itemgetter(0))
     currencies  = [(ccy.currency(c).code, ccy.currency(c).name) for c in sorted_curs]
@@ -394,7 +394,7 @@ class PrizepoolModForm(forms.Form):
     ranked      = forms.CharField(required=False, max_length=10000, label=_('Ranked'))
     unranked    = forms.CharField(required=False, max_length=10000, label=_('Unranked'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(PrizepoolModForm, self).__init__(request.POST)
@@ -414,7 +414,7 @@ class PrizepoolModForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ Function for parsing a single line
+    # Function for parsing a single line
     def line_to_data(self, line):
         ind = line.find(' ')
         prize = Decimal(line[:ind])
@@ -428,7 +428,7 @@ class PrizepoolModForm(forms.Form):
             return prize, queryset.first()
     # }}}
 
-    # {{{ update_event: Pushes changes to event object
+    # update_event: Pushes changes to event object
     def update_event(self, event):
         ret = []
 
@@ -439,7 +439,7 @@ class PrizepoolModForm(forms.Form):
                     ret.append(Message(error=error, field=self.fields[field].label))
             return ret
 
-        # {{{ Gather data
+        # Gather data
         ranked, unranked, ok = [], [], True
 
         for line in self.cleaned_data['ranked'].split('\n'):
@@ -467,13 +467,13 @@ class PrizepoolModForm(forms.Form):
             return ret
         # }}}
 
-        # {{{ Fix placements of ranked prizes
+        # Fix placements of ranked prizes
         ranked.sort(key=lambda a: a['placement'])
         for i, e in enumerate(ranked):
             ranked[i]['placement'] = i
         # }}}
 
-        # {{{ Commit
+        # Commit
         try:
             Earnings.set_earnings(event, ranked, self.cleaned_data['currency'], True)
             Earnings.set_earnings(event, unranked, self.cleaned_data['currency'], False)
@@ -489,13 +489,13 @@ class PrizepoolModForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ StoryModForm: Form for adding stories.
+# StoryModForm: Form for adding stories.
 class StoryModForm(forms.Form):
     player = forms.ChoiceField(required=True, label=_('Player'))
     date   = forms.DateField(required=True, label=_('Date'))
     text   = StrippedCharField(max_length=200, required=True, label=_('Text'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(StoryModForm, self).__init__(request.POST)
@@ -511,7 +511,7 @@ class StoryModForm(forms.Form):
         self.existing_stories = Player.objects.filter(story__event=event)
     # }}}
 
-    # {{{ update_event: Pushes changes
+    # update_event: Pushes changes
     def update_event(self, event):
         ret = []
 
@@ -537,14 +537,14 @@ class StoryModForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ AddForm: Form for adding subevents.
+# AddForm: Form for adding subevents.
 class AddForm(forms.Form):
     name    = StrippedCharField(max_length=100, required=True, label=_('Name'))
     type    = forms.ChoiceField(choices=EVENT_TYPES, required=True, label=_('Type'))
     noprint = forms.BooleanField(required=False, label=_('No Print'))
     closed  = forms.BooleanField(required=False, label=_('Closed'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(AddForm, self).__init__(request.POST)
@@ -558,7 +558,7 @@ class AddForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ update_event: Pushes changes
+    # update_event: Pushes changes
     def update_event(self, event):
         ret = []
 
@@ -582,11 +582,11 @@ class AddForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ ReorderForm: Form for reordering events.
+# ReorderForm: Form for reordering events.
 class ReorderForm(forms.Form):
     order = StrippedCharField(max_length=10000, required=True)
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, event=None):
         if request is not None:
             super(ReorderForm, self).__init__(request.POST)
@@ -594,7 +594,7 @@ class ReorderForm(forms.Form):
             super(ReorderForm, self).__init__()
     # }}}
 
-    # {{{ Custom validation
+    # Custom validation
     def clean_order(self):
         try:
             ids = [int(s) for s in self.cleaned_data['order'].split(',') if s.strip() != '']
@@ -605,7 +605,7 @@ class ReorderForm(forms.Form):
         return [events[i] for i in ids]
     # }}}
 
-    # {{{ update_event: Pushes changes
+    # update_event: Pushes changes
     def update_event(self, event):
         ret = []
 
@@ -636,7 +636,7 @@ class ReorderForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ SearchForm: Form for searching.
+# SearchForm: Form for searching.
 class SearchForm(forms.Form):
     after      = forms.DateField(required=False, label=_('After'), initial=None)
     before     = forms.DateField(required=False, label=_('Before'), initial=None)
@@ -681,7 +681,7 @@ class SearchForm(forms.Form):
     game = forms.ChoiceField(
         choices=[('all',_('All'))]+GAMES, required=False, label=_('Game version'), initial='all')
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None):
         if request is not None:
             super(SearchForm, self).__init__(request.GET)
@@ -691,9 +691,9 @@ class SearchForm(forms.Form):
         self.label_suffix = ''
     # }}}
 
-    # {{{ search: Performs a search, returns a dict with results to be added to the rendering context
+    # search: Performs a search, returns a dict with results to be added to the rendering context
     def search(self, adm):
-        # {{{ Check validity (lol)
+        # Check validity (lol)
         if not self.is_valid():
             msgs = []
             msgs.append(Message(_('Entered data was invalid, no changes made.'), type=Message.ERROR))
@@ -709,7 +709,7 @@ class SearchForm(forms.Form):
                 .annotate(Count('eventobj__match'))
         )
 
-        # {{{ All the easy filtering
+        # All the easy filtering
         if self.cleaned_data['after'] is not None:
             matches = matches.filter(date__gte=self.cleaned_data['after'])
 
@@ -750,7 +750,7 @@ class SearchForm(forms.Form):
 
         matches = matches.distinct()
 
-        # {{{ Filter by event
+        # Filter by event
         if self.cleaned_data['event'] != None:
             lex = shlex.shlex(self.cleaned_data['event'], posix=True)
             lex.wordchars += "'"
@@ -777,7 +777,7 @@ class SearchForm(forms.Form):
 
         ret = {'messages': []}
 
-        # {{{ Filter by players
+        # Filter by players
         lines = self.cleaned_data['players'].splitlines()
         lineno, ok, players = -1, True, []
         for line in lines:
@@ -814,7 +814,7 @@ class SearchForm(forms.Form):
             matches = matches.filter(Q(pla__in=pls) | Q(plb__in=pls))
         # }}}
 
-        # {{{ Collect data
+        # Collect data
         ret['count'] = matches.count()
         if ret['count'] > 1000:
             ret['messages'].append(Message(
@@ -845,7 +845,7 @@ class SearchForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ ResultsModForm: Form for modifying search results.
+# ResultsModForm: Form for modifying search results.
 class ResultsModForm(forms.Form):
     event   = forms.ChoiceField(required=True, label=_('Event'))
     date    = forms.DateField(required=False, label=_('Date'), initial=None)
@@ -858,7 +858,7 @@ class ResultsModForm(forms.Form):
         required=True, label=_('Game version'), initial='nochange'
     )
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None):
         if request is not None:
             super(ResultsModForm, self).__init__(request.POST)
@@ -874,7 +874,7 @@ class ResultsModForm(forms.Form):
         ]
     # }}}
 
-    # {{{ modify: Commits modifications
+    # modify: Commits modifications
     def modify(self, ids):
         ret = []
 
@@ -910,7 +910,7 @@ class ResultsModForm(forms.Form):
     # }}}
 # }}}
 
-# {{{ results view
+# results view
 @cache_login_protect
 def results(request):
     base = base_ctx('Results', 'By Date', request)
@@ -942,17 +942,17 @@ def results(request):
     return render_to_response('results.djhtml', base)
 # }}}
 
-# {{{ events view
+# events view
 @cache_login_protect
 def events(request, event_id=None):
-    # {{{ Get base context, redirect if necessary
+    # Get base context, redirect if necessary
     if 'goto' in request.GET:
         return redirect('/results/events/' + request.GET['goto'])
 
     base = base_ctx('Results', 'By Event', request)
     # }}}
 
-    # {{{ Display the main table if event ID is not given
+    # Display the main table if event ID is not given
     if event_id is None:
         root_events = (
             Event.objects
@@ -984,7 +984,7 @@ def events(request, event_id=None):
         return render_to_response('events.djhtml', base)
     # }}}
 
-    # {{{ Get object, generate messages, and ensure big is set. Find familial relationships.
+    # Get object, generate messages, and ensure big is set. Find familial relationships.
     event = get_object_or_404(Event, id=event_id)
     base['messages'] += generate_messages(event)
 
@@ -1001,7 +1001,7 @@ def events(request, event_id=None):
     })
     # }}}
 
-    # {{{ Make forms
+    # Make forms
     if base['adm']:
         def check_form(formname, cl, check):
             if request.method == 'POST' and check in request.POST:
@@ -1026,7 +1026,7 @@ def events(request, event_id=None):
             base['messages'].append(Message(_('Sucessfully closed event.'), type=Message.SUCCESS))
     # }}}
 
-    # {{{ Prizepool information for the public
+    # Prizepool information for the public
     total_earnings = Earnings.objects.filter(event__uplink__parent=event)
 
     local_earnings = Earnings.objects.filter(event=event)
@@ -1059,7 +1059,7 @@ def events(request, event_id=None):
     })
     # }}}
 
-    # {{{ Other easy statistics
+    # Other easy statistics
 
     add_links = request.user.is_authenticated() and request.user.is_staff
 
@@ -1098,12 +1098,12 @@ def events(request, event_id=None):
     return render_to_response('eventres.djhtml', base)
 # }}}
 
-# {{{ search view
+# search view
 @cache_login_protect
 def search(request):
     base = base_ctx('Results', 'Search', request)
 
-    # {{{ Filtering and modifying
+    # Filtering and modifying
     if base['adm']:
         if request.method == 'POST':
             modform = ResultsModForm(request=request)

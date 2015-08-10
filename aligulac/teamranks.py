@@ -28,7 +28,7 @@ nplayers_max = 6 if proleague else 5
 nplayers_min = 6 if proleague else 1
 Simulator = TeamPL if proleague else TeamAK
 
-# {{{ Get a list of teams that can compete
+# Get a list of teams that can compete
 curp = get_latest_period()
 allowed_teams = []
 teams = Group.objects.filter(active=True, is_team=True)
@@ -50,9 +50,8 @@ else:
     disallowed.update(scoreak=0.0)
 
 nteams = len(allowed_teams)
-# }}}
 
-# {{{ Simulate
+# Simulate
 print(
     '[%s] Simulating %s for %i teams' 
     % (str(datetime.now()), 'PL' if proleague else 'AK', nteams), 
@@ -92,9 +91,8 @@ for ta, tb in combinations(allowed_teams, 2):
     else:
         scores[ta] += sim._tally[0][1]/(nteams-1)
         scores[tb] += sim._tally[1][1]/(nteams-1)
-# }}}
 
-# {{{ Save
+# Save
 print(
     '[%s] Saving %s scores for %i teams'
     % (str(datetime.now()), 'PL' if proleague else 'AK', nteams),
@@ -106,4 +104,3 @@ for team in allowed_teams:
     else:
         team.scoreak = scores[team]
     team.save()
-# }}}

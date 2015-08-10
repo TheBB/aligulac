@@ -1,4 +1,4 @@
-# {{{ Imports
+# Imports
 from datetime import datetime
 from itertools import zip_longest
 import os
@@ -53,9 +53,8 @@ from ratings.tools import (
     filter_active,
     populate_teams,
 )
-# }}}
 
-# {{{ DB table specification
+# DB table specification
 DBTABLES = [{
         'name': 'player',
         'desc': _('Contains player information.'),
@@ -330,9 +329,8 @@ DBTABLES = [{
         ]
     },
 ]
-# }}}
 
-# {{{ Home page
+# Home page
 @cache_page
 def home(request):
     base = base_ctx(request=request)
@@ -357,9 +355,8 @@ def home(request):
     })
 
     return render_to_response('index.djhtml', base)
-# }}}
 
-# {{{ Language change page
+# Language change page
 def language(request):
     base = base_ctx(request=request)
 
@@ -370,9 +367,8 @@ def language(request):
         base['return'] = '/'
 
     return render_to_response('language.djhtml', base)
-# }}}
 
-# {{{ db view
+# db view
 @cache_page
 def db(request):
     base = base_ctx('About', 'Database', request)
@@ -430,14 +426,13 @@ def db(request):
         })
 
     return render_to_response('db.djhtml', base)
-# }}}
 
-# {{{ API documentation and keys
+# API documentation and keys
 class APIKeyForm(forms.Form):
     organization = StrippedCharField(max_length=200, required=True, label=_('Name/organization'))
     contact = forms.EmailField(max_length=200, required=True, label=_('Contact'))
 
-    # {{{ Constructor
+    # Constructor
     def __init__(self, request=None, player=None):
         if request is not None:
             super(APIKeyForm, self).__init__(request.POST)
@@ -445,9 +440,8 @@ class APIKeyForm(forms.Form):
             super(APIKeyForm, self).__init__()
 
         self.label_suffix = ''
-    # }}}
 
-    # {{{ add_key: Adds key if valid, returns messages
+    # add_key: Adds key if valid, returns messages
     def add_key(self):
         ret = []
 
@@ -471,7 +465,6 @@ class APIKeyForm(forms.Form):
             _("Your API key is <code>%s</code>. Please keep it safe.") % key.key, type=Message.SUCCESS))
 
         return ret
-# }}}
 
 def api(request):
     base = base_ctx('About', 'API', request)
@@ -497,9 +490,8 @@ def api(request):
     })
 
     return render_to_response('api.djhtml', base)
-# }}}
 
-# {{{ search view
+# search view
 @cache_page
 def search(request):
     base = base_ctx(request=request)
@@ -511,14 +503,13 @@ def search(request):
 
     players, teams, events = results
 
-    # {{{ Redirect if only one hit
+    # Redirect if only one hit
     if   players.count() == 1 and teams.count() == 0 and events.count() == 0:
         return redirect('/players/%i-%s/' % (players.first().id, urlfilter(players.first().tag)))
     elif players.count() == 0 and teams.count() == 1 and events.count() == 0:
         return redirect('/teams/%i-%s/' % (teams.first().id, urlfilter(teams.first().name)))
     elif players.count() == 0 and teams.count() == 0 and events.count() == 1:
         return redirect('/results/events/%i-%s/' % (events.first().id, urlfilter(events.first().fullname)))
-    # }}}
 
     base.update({
         'results':  zip_longest(players, teams, events, fillvalue=None),
@@ -529,9 +520,8 @@ def search(request):
     })
 
     return render_to_response('search.djhtml', base)
-# }}}
 
-# {{{ auto-complete search view
+# auto-complete search view
 EXTRA_NULL_SELECT = {
     'null_curr': 'CASE WHEN player.current_rating_id IS NULL THEN 0 ELSE 1 END'
 }
@@ -587,9 +577,8 @@ def auto_complete_search(request):
             } for e in events[:num]]
 
     return JsonResponse(data)
-# }}}
 
-# {{{ Login, logout and change password
+# Login, logout and change password
 def login_view(request):
     base = base_ctx(request=request)
     login_message(base)
@@ -629,9 +618,8 @@ def changepwd(request):
     )
 
     return render_to_response('changepwd.djhtml', base)
-# }}}
 
-# {{{ Error handlers
+# Error handlers
 @cache_page
 def h404(request):
     base = base_ctx(request=request)
@@ -641,4 +629,3 @@ def h404(request):
 def h500(request):
     base = base_ctx(request=request)
     return HttpResponseNotFound(render_to_string('500.djhtml', base))
-# }}}

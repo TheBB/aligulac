@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# {{{ Imports
+# Imports
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aligulac.settings')
@@ -13,7 +13,6 @@ from itertools import chain
 from django.db import connection, transaction
 
 from ratings.models import Event
-# }}}
 
 print('[%s] Refreshing event sort indices' % str(datetime.now()), flush=True)
 

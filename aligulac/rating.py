@@ -216,7 +216,7 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
     myrc = myr[[0]+played_cats_p1]
     mysc = mys[[0]+played_cats_p1]
 
-    # {{{ Objective function
+    # Objective function
     def logL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         Phi = array([gen_Phi(i,Mv[i]) for i in range(0,M)])
@@ -228,9 +228,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return sum(log(1 - tanh(alpha*(extend(x)-myrc)/mysc)**2))
 
     logF = lambda x: logL(x) + logE(x)
-    # }}}
 
-    # {{{ Derivative
+    # Derivative
     def DlogL(x):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
@@ -244,9 +243,8 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return ret
 
     DlogF = lambda x: DlogL(x) + DlogE(x)
-    # }}}
 
-    # {{{ Hessian
+    # Hessian
     def D2logL(x, DM, C):
         Mv = x[0] + extend(x)[loc(oppc)+1]
         phi = array([gen_phi(i,Mv[i]) for i in range(0,M)])
@@ -270,7 +268,6 @@ def update(myr, mys, oppr, opps, oppc, W, L, text='', pr=False, Ncats=3):
         return diag(diags)
 
     D2logF = lambda x: D2logL(x,DM,C) + D2logE(x)
-    # }}}
 
     # Prepare initial guess in unrestricted format and maximize
     x = hstack((myr[0], myr[played_cats_p1]))[0:-1]

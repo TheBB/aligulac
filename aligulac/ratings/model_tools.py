@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.db.models.expressions import F, BaseExpression
 import re
 
-# {{{
+#
 _swap_regex = re.compile(r"^(sc|pl|rc)(a|b)")
 def swap_q_object(q):
     qs = Q(*[_swap_q_child(c) for c in q.children])

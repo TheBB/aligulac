@@ -16,6 +16,8 @@ from django.db.models import (
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
+from pyparsing import *
+
 import ccy
 from countries import data
 from countries.transformations import (
@@ -215,6 +217,70 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
 
     return queryset.distinct()
 # }}}
+
+# Submit match parserrrrrrrrrrrrrrrrr
+def parse_match(line, allow_archon=False):
+    quote = Literal('"').suppress()
+    slash = Literal('/').suppress()
+    dash  = Literal('-').suppress()
+    excl  = Literal('!').suppress()
+
+    quotedWord = QuotedString('"', escChar='\\', unquoteResults=False)
+    quotedWordUnQuote = QuotedString('"', escChar='\\', unquoteResults=True)
+    string = CharsNotIn('-/"\' ')
+    country = Word(alphas, min=2, max=2)
+    player_id = Word(nums)
+
+    sca = Word(nums)("sca")
+    scb = Word(nums)("scb")
+    score = sca + dash + scb
+
+    flag = Combine(excl + (
+        Literal("MAKE") |
+        Literal("DUP")
+    ))
+    flags = ZeroOrMore(flag).setResultsName("flags")
+
+    entry = string | quotedWordUnQuote
+    player = entry + ZeroOrMore(
+            ~score + ~dash + ~slash + White().suppress() + entry
+    )
+
+    pla = player.setResultsName("pla")
+    plb = player.setResultsName("plb")
+    archon = pla + slash + plb
+
+    players = pla + dash + plb
+
+    if allow_archon:
+        archona = archon.setResultsName("archona")
+        archonb = archon.setResultsName("archonb")
+
+        players = archona + dash + archonb | players
+
+    match = players + score + flags
+
+    result = match.parseString(line)
+
+    result_dict = dict(result)
+
+    ## Clean-up
+    if 'archona' in result_dict:
+        clean = lambda key: dict(
+            map(lambda x: (x[0], list(x[1])), dict(result_dict[key]).items())
+        )
+        result_dict['archona'] = clean('archona')
+        result_dict['archonb'] = clean('archonb')
+    else:
+        result_dict['pla'] = list(result_dict['pla'])
+        result_dict['plb'] = list(result_dict['plb'])
+
+    if 'flags' in result_dict:
+         result_dict['flags'] = set(list(result_dict['flags']))
+    else:
+         result_dict['flags'] = set()
+
+    return result_dict
 
 # {{{ cdf: Cumulative distribution function
 def cdf(x, loc=0.0, scale=1.0):

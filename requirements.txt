@@ -8,4 +8,5 @@ django-debug-toolbar
 django-tastypie
 django-sniplates
 beautifulsoup4
+pyparsing
 git+https://github.com/earwig/mwparserfromhell.git

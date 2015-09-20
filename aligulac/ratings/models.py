@@ -1668,6 +1668,71 @@ class Match(models.Model):
     # }}}
 # }}}
 
+class ArchonMatch(models.Model):
+    class Meta:
+        verbose_name_plural = 'archonmatches'
+        db_table = 'archonmatch'
+
+    objects = MatchManager()
+
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False,
+        help_text='Period in which the match was played'
+    )
+    date = models.DateField(
+        'Date played', null=False,
+        help_text='Date played'
+    )
+    pla1 = models.ForeignKey(
+        Player, related_name='match_pla', verbose_name='Player A1', null=False,
+        help_text='Player A1'
+    )
+    pla2 = models.ForeignKey(
+        Player, related_name='match_pla', verbose_name='Player A2', null=False,
+        help_text='Player A2'
+    )
+    plb1 = models.ForeignKey(
+        Player, related_name='match_plb', verbose_name='Player B1', null=False,
+        help_text='Player B1'
+    )
+    plb2 = models.ForeignKey(
+        Player, related_name='match_plb', verbose_name='Player B2', null=False,
+        help_text='Player B2'
+    )
+    sca = models.SmallIntegerField(
+        'Score for player A', null=False, db_index=True,
+        help_text='Score for player A'
+    )
+    scb = models.SmallIntegerField(
+        'Score for player B', null=False, db_index=True,
+        help_text='Score for player B'
+    )
+
+    rca = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race A', db_index=True,
+        help_text='Race for player A'
+    )
+    rcb = models.CharField(
+        max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True,
+        help_text='Race for player B'
+    )
+    event = models.CharField(
+        'Event text (deprecated)', max_length=200, default='', blank=True,
+        help_text='Event text (if no event object)'
+    )
+    eventobj = models.ForeignKey(
+        Event, null=True, blank=True, verbose_name='Event',
+        help_text='Event object'
+    )
+    submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
+
+    offline = models.BooleanField(
+        'Offline', default=False, null=False, db_index=True,
+        help_text='True if the match was played offline'
+    )
+
+
 # {{{ Messages
 class Message(models.Model):
     class Meta:

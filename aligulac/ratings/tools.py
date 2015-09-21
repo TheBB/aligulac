@@ -124,7 +124,7 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     # {{{ Build filter
     for s in lst:
         # If numeric, assume a restriction on ID
-        if s.isdigit():
+        if type(s) is int or s.isdigit():
             queryset = queryset.filter(id=int(s))
             continue
 
@@ -219,6 +219,27 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
 # }}}
 
 # Submit match parser
+# Format is:
+#   player-player score-score flags
+# or:
+#   archon-archon score-score flags
+#   where archon = player / player
+#
+# Examples:
+#  'flash 55-2 life 1-2 !MAKE' =>
+#    {'flags': {'MAKE'},
+#     'pla': ['flash', 55],
+#     'plb': [2, 'life'],
+#     'sca': 1,
+#     'scb': 2}
+#
+#  'hello  /  hi    -    1  /  " /!/!/-/ "     3-1 !MAKE !DUP !DUP'  =>
+#    {'archona': {'pla': ['hello'], 'plb': ['hi']},
+#     'archonb': {'pla': [1], 'plb': [' /!/!/-/ ']},
+#     'flags': {'DUP', 'MAKE'},
+#     'sca': 3,
+#     'scb': 1}
+
 def parse_match(line, allow_archon=False):
     quote = Literal('"').suppress()
     slash = Literal('/').suppress()
@@ -241,7 +262,11 @@ def parse_match(line, allow_archon=False):
 
     entry = integer | string | quotedWord
     player = entry + ZeroOrMore(
-            ~score + ~dash + ~slash + White().suppress() + entry
+        ~(score + flags + stringEnd) +
+        ~dash +
+        ~slash +
+        White().suppress() +
+        entry
     )
 
     pla = player("pla")

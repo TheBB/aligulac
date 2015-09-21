@@ -24,6 +24,8 @@ from django.shortcuts import (
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 from mwparserfromhell import parse as parsemw
+import pyparsing
+import re
 
 from aligulac.views import EXTRA_NULL_SELECT
 from aligulac.tools import (
@@ -59,6 +61,7 @@ from ratings.tools import (
     country_list,
     display_matches,
     find_player,
+    parse_match
 )
 
 def find_dashes(line):
@@ -73,13 +76,19 @@ def find_dashes(line):
 
     return dashes
 
+race_override_re = re.compile(r"r:([ptzr])", flags=re.IGNORECASE)
 def find_race_override(lst):
     override = None
     i = 0
 
     while i < len(lst):
-        if len(lst[i]) == 3 and lst[i][:2].upper() == 'R:' and lst[i][2].upper() in 'PTZR':
-            override = lst[i][2].upper()
+        if type(lst[i]) is int:
+            i += 1
+            continue
+
+        match = race_override_re.match(lst[i])
+        if match is not None:
+            override = match.group(1).upper()
             del lst[i]
         else:
             i += 1
@@ -363,18 +372,16 @@ class AddMatchesForm(forms.Form):
             if line.strip() == '':
                 continue
 
-            dashes = find_dashes(line)
             try:
-                pla_query = shlex.split(line[:dashes[0]])
-                middle = shlex.split(line[dashes[0]+1:dashes[1]])
-                plb_query = middle[:-1]
-                sca = int(middle[-1])
-                end = shlex.split(line[dashes[1]+1:])
-                scb = int(end[0])
+                parse_results = parse_match(line.strip(), allow_archon=False)
+                pla_query = parse_results['pla']
+                plb_query = parse_results['plb']
+                sca = parse_results['sca']
+                scb = parse_results['scb']
 
-                make_flag = '!MAKE' in end
-                dup_flag = '!DUP' in end
-            except Exception as e:
+                make_flag = 'MAKE' in parse_results['flags']
+                dup_flag = 'DUP' in parse_results['flags']
+            except pyparsing.ParseException as e:
                 self.messages.append(Message(
                     _("Could not parse '%(line)s' (%(error)s).") % {'line': line, 'error': str(e)},
                     type=Message.ERROR
@@ -436,16 +443,16 @@ class AddMatchesForm(forms.Form):
     # Auxiliary function for searching for players
     def get_player(self, query, make_flag):
         players = find_player(lst=query, make=make_flag, soft=False)
-
+        printable = ' '.join(str(x) for x in query)
         if players.count() != 1:
             if self.is_adm:
                 if players.count() == 0:
                     self.messages.append(
-                        Message(_("Could not find player: '%s'.") % ' '.join(query), type=Message.ERROR))
+                        Message(_("Could not find player: '%s'.") % printable, type=Message.ERROR))
                     self.close_after = False
                 elif players.count() > 1:
                     self.messages.append(
-                        Message(_("Ambiguous player: '%s'.") % ' '.join(query), type=Message.ERROR))
+                        Message(_("Ambiguous player: '%s'.") % printable, type=Message.ERROR))
                     self.close_after = False
             return None
 

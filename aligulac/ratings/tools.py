@@ -16,6 +16,8 @@ from django.db.models import (
 from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
+from pyparsing import *
+
 import ccy
 from countries import data
 from countries.transformations import (
@@ -122,7 +124,7 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     # {{{ Build filter
     for s in lst:
         # If numeric, assume a restriction on ID
-        if s.isdigit():
+        if type(s) is int or s.isdigit():
             queryset = queryset.filter(id=int(s))
             continue
 
@@ -215,6 +217,95 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
 
     return queryset.distinct()
 # }}}
+
+# Submit match parser
+# Format is:
+#   player-player score-score flags
+# or:
+#   archon-archon score-score flags
+#   where archon = player / player
+#
+# Examples:
+#  'flash 55-2 life 1-2 !MAKE' =>
+#    {'flags': {'MAKE'},
+#     'pla': ['flash', 55],
+#     'plb': [2, 'life'],
+#     'sca': 1,
+#     'scb': 2}
+#
+#  'hello  /  hi    -    1  /  " /!/!/-/ "     3-1 !MAKE !DUP !DUP'  =>
+#    {'archona': {'pla': ['hello'], 'plb': ['hi']},
+#     'archonb': {'pla': [1], 'plb': [' /!/!/-/ ']},
+#     'flags': {'DUP', 'MAKE'},
+#     'sca': 3,
+#     'scb': 1}
+
+def parse_match(line, allow_archon=False):
+    quote = Literal('"').suppress()
+    slash = Literal('/').suppress()
+    dash  = Literal('-').suppress()
+    excl  = Literal('!').suppress()
+
+    quotedWord = QuotedString('"', escChar='\\', unquoteResults=True)
+    string = CharsNotIn('-/"\' ')
+    integer = Word(nums).addParseAction(lambda t: int(t[0]))
+
+    sca = integer("sca")
+    scb = integer("scb")
+    score = sca + dash + scb
+
+    flag = Combine(excl + (
+        Literal("MAKE") |
+        Literal("DUP")
+    ))
+    flags = ZeroOrMore(flag)("flags")
+
+    entry = integer | string | quotedWord
+    player = entry + ZeroOrMore(
+        ~(score + flags + stringEnd) +
+        ~dash +
+        ~slash +
+        White().suppress() +
+        entry
+    )
+
+    pla = player("pla")
+    plb = player("plb")
+    archon = pla + slash + plb
+
+    players = pla + dash + plb
+
+    if allow_archon:
+        archona = archon("archona")
+        archonb = archon("archonb")
+
+        players = archona + dash + archonb | players
+
+    match = players + score + flags
+
+    result = match.parseString(line)
+
+    result_dict = dict(result)
+
+    ## Clean-up
+    if 'archona' in result_dict:
+        clean = lambda key: dict(
+            map(lambda x: (x[0], list(x[1])), dict(result_dict[key]).items())
+        )
+        result_dict['archona'] = clean('archona')
+        result_dict['archonb'] = clean('archonb')
+        del result_dict['pla']
+        del result_dict['plb']
+    else:
+        result_dict['pla'] = list(result_dict['pla'])
+        result_dict['plb'] = list(result_dict['plb'])
+
+    if 'flags' in result_dict:
+         result_dict['flags'] = set(list(result_dict['flags']))
+    else:
+         result_dict['flags'] = set()
+
+    return result_dict
 
 # {{{ cdf: Cumulative distribution function
 def cdf(x, loc=0.0, scale=1.0):

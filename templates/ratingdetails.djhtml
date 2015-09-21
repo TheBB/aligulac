@@ -246,7 +246,7 @@ This is the page showing the details of a rating adjustment. It's called from ra
       </div>
     {% endif %}
 
-    {% include "matchlist.djhtml" with lm_list=matches lm_header="info" %}
+    {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_header="info" %}
 
     {% if has_nontreated %} 
       <div class="row">

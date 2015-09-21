@@ -105,7 +105,7 @@ This is the results search function. Called from ratings.views.results_search.
         {% csrf_token %}
     {% endif %}
 
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_check=1 lm_header="full" %}
+    {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_adm=adm lm_check=1 lm_header="full" %}
 
     {% if adm %}
       <div class="row">

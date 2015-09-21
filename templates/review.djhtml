@@ -27,7 +27,7 @@ ratings.submitviews.review.
         <p>{% trans "The following matches were successfully approved:" %}</p>
       </div>
     </div>
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" lm_check=0 %}
+    {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_adm=adm lm_header="full" lm_check=0 %}
   {% endif %}
 
   {% if groups %}
@@ -81,7 +81,7 @@ ratings.submitviews.review.
                     <th colspan="1" class="text-right">{% trans "Notes" %}</th>
                     <td colspan="6">{{ g.notes|markdown }}</td>
                   </tr>
-                  {% include "matchlist.djhtml" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True lm_notable=True lm_autohide=True %}
+                  {% include "matchlist/matchlist.djhtml" with lm_list=g.prematches lm_adm=1 lm_check=1 lm_show_noid=True lm_notable=True lm_autohide=True %}
                 </tbody>
               {% endfor %}
             </table>

@@ -218,43 +218,41 @@ def find_player(query=None, lst=None, make=False, soft=False, strict=False):
     return queryset.distinct()
 # }}}
 
-# Submit match parserrrrrrrrrrrrrrrrr
+# Submit match parser
 def parse_match(line, allow_archon=False):
     quote = Literal('"').suppress()
     slash = Literal('/').suppress()
     dash  = Literal('-').suppress()
     excl  = Literal('!').suppress()
 
-    quotedWord = QuotedString('"', escChar='\\', unquoteResults=False)
-    quotedWordUnQuote = QuotedString('"', escChar='\\', unquoteResults=True)
+    quotedWord = QuotedString('"', escChar='\\', unquoteResults=True)
     string = CharsNotIn('-/"\' ')
-    country = Word(alphas, min=2, max=2)
-    player_id = Word(nums)
+    integer = Word(nums).addParseAction(lambda t: int(t[0]))
 
-    sca = Word(nums)("sca")
-    scb = Word(nums)("scb")
+    sca = integer("sca")
+    scb = integer("scb")
     score = sca + dash + scb
 
     flag = Combine(excl + (
         Literal("MAKE") |
         Literal("DUP")
     ))
-    flags = ZeroOrMore(flag).setResultsName("flags")
+    flags = ZeroOrMore(flag)("flags")
 
-    entry = string | quotedWordUnQuote
+    entry = integer | string | quotedWord
     player = entry + ZeroOrMore(
             ~score + ~dash + ~slash + White().suppress() + entry
     )
 
-    pla = player.setResultsName("pla")
-    plb = player.setResultsName("plb")
+    pla = player("pla")
+    plb = player("plb")
     archon = pla + slash + plb
 
     players = pla + dash + plb
 
     if allow_archon:
-        archona = archon.setResultsName("archona")
-        archonb = archon.setResultsName("archonb")
+        archona = archon("archona")
+        archonb = archon("archonb")
 
         players = archona + dash + archonb | players
 
@@ -271,6 +269,8 @@ def parse_match(line, allow_archon=False):
         )
         result_dict['archona'] = clean('archona')
         result_dict['archonb'] = clean('archonb')
+        del result_dict['pla']
+        del result_dict['plb']
     else:
         result_dict['pla'] = list(result_dict['pla'])
         result_dict['plb'] = list(result_dict['plb'])

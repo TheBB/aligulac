@@ -46,7 +46,7 @@ Number of days since.
               <tr style="display: none;">
                 <td colspan="3" style="padding: 0;">
                   <table class="table table-hover" style="margin: 0;">
-                    {% include "matchlist.djhtml" with lm_list=clock.extra lm_adm=0 lm_header="partial" lm_notable=1 %}
+                    {% include "matchlist/matchlist.djhtml" with lm_list=clock.extra lm_adm=0 lm_header="partial" lm_notable=1 %}
                   </table>
                 </td>
               </tr>

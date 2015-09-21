@@ -70,7 +70,7 @@ This is the prediction page for four player Swiss groups. It's called from ratin
 
       <div class="table-responsive">
         <table class="table table-hover">
-          {% include "matchlist.djhtml" with lm_list=meanres lm_header="custom" lm_noright=True lm_notable=1 %}
+          {% include "matchlist/matchlist.djhtml" with lm_list=meanres lm_header="custom" lm_noright=True lm_notable=1 %}
         </table>
       </div>
 
@@ -83,7 +83,7 @@ This is the prediction page for four player Swiss groups. It's called from ratin
         <input type="hidden" name="ps" value="{{ form.ps.value }}">
         <div class="table-responsive">
           <table class="table table-hover">
-            {% include "matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 %}
+            {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 %}
           </table>
         </div>
         <button type="submit" class="btn btn-primary pull-right" style="margin: 0.4em;">

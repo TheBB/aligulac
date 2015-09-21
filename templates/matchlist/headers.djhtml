@@ -1,0 +1,151 @@
+{% load sniplates %}
+{% load ratings_extras %}
+{% load i18n %}
+{% load l10n %}
+
+{% block info_header %}
+<thead>
+  <tr class="eventheader">
+    <th class="lm_date">{% if lm_list.0.date %}{% trans "Date" %}{% endif %}</th>
+    <th class="lm_rta">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
+    <th class="lm_pla">{% trans "Player A" %}</th>
+    <th class="lm_score">{% trans "Score" %}</th>
+    <th class="lm_plb">{% trans "Player B" %}</th>
+    <th class="lm_rtb">{% if lm_list.0.pla.rating %}{% trans "Rating" %}{% endif %}</th>
+    <th class="lm_right eventheader-right"></th>
+  </tr>
+</thead>
+{% endblock %}
+
+{% comment %}------------------------------------------{% endcomment %}
+
+{% block full_header %}
+<thead>
+  <tr class="eventheader">
+    <th class="lm_date"></th>
+    <th colspan="5" class="text-center eventheader-mid">
+      {% if m.match.eventobj %}
+        {% for event in m.match.eventobj.get_ancestors_print %}
+          <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter }}/">
+            {{ event.name }}
+          </a>
+        {% endfor %}
+      {% elif m.match.event %}
+        {{ m.match.event }}
+      {% elif m.match.group.event %}
+        {{ m.match.group.event }}
+      {% else %}
+        {% trans "Unknown event(s)" %}
+      {% endif %}
+    </th>
+    <th class="text-right lm_right eventheader-right">
+      {% if m.add_links %}
+        <a href="/add/?eventid={{ m.match.eventobj_id }}"
+           title="Add more matches">
+          {% trans "add" %}
+        </a>
+      {% endif %}
+
+      <a class="lma" data-id="{{m.match_id}}" href="#">
+        {% if lm_autohide %}
+          {% trans "show" %}
+        {% else %}
+          {% trans "hide" %}
+        {% endif %}
+      </a>
+
+      {% if lm_adm and lm_check %}
+        {% comment %}Translators: Check{% endcomment %}
+        <a href="#"
+           class="check-boxes-btn"
+           data-match="{{m.match.event_fullpath|smallhash}}">
+          {% trans "chk" %}
+        </a>
+        {% comment %}Translators: Uncheck{% endcomment %}
+        <a href="#"
+           class="uncheck-boxes-btn"
+           data-match="{{m.match.event_fullpath|smallhash}}">
+          {% trans "unchk" %}
+        </a>
+      {% endif %}
+
+      <span class="text-muted small">
+        {% if m.eventcount %}({{ m.eventcount }}){% endif %}
+      </span>
+    </th>
+  </tr>
+</thead>
+{% endblock %}
+
+{% comment %}------------------------------------------{% endcomment %}
+
+{% block partial_header %}
+<thead>
+  <tr class="eventheader">
+    <th class="lm_date"></th>
+    <th colspan="5" class="text-center eventheader-mid">
+      {% if m.match.eventobj %}
+        {% with event=m.match.eventobj.get_event_event %}
+          <a href="/results/events/{{ event.id }}-{{ event.fullname|urlfilter}}">
+            {{ event.fullname }}
+          </a>
+        {% endwith %}
+      {% elif m.match.event %}
+        {{ m.match.event }}
+      {% elif m.match.group.event %}
+        {{ m.match.group.event }}
+      {% else %}
+        {% trans "Unknown event(s)" %}
+      {% endif %}
+    </th>
+    <th class="text-right lm_right eventheader-right">
+      <a class="lma" data-id="{{ m.match_id }}" href="#">
+        {% if lm_autohide %}
+          {% trans "show" %}
+        {% else %}
+          {% trans "hide" %}
+        {% endif %}
+      </a>
+
+      {% if lm_adm and lm_check %}
+        {% comment %}Translators: Check{% endcomment %}
+        <a href="#"
+           class="check-boxes-btn"
+           data-match="{{m.match.event_partpath|smallhash}}">
+          {% trans "chk" %}
+        </a>
+        {% comment %}Translators: Uncheck{% endcomment %}
+        <a href="#"
+           class="uncheck-boxes-btn"
+           data-match="{{m.match.event_partpath|smallhash}}">
+          {% trans "unchk" %}
+        </a>
+      {% endif %}
+    </th>
+  </tr>
+</thead>
+{% endblock %}
+
+{% comment %}------------------------------------------{% endcomment %}
+
+{% block custom_header %}
+
+<thead>
+  <tr class="eventheader">
+    <th class="lm_date"></th>
+    <th class="eventheader-mid text-center" colspan="5">
+      {{ m.eventtext }}
+    </th>
+    <th class="text-right lm_right eventheader-right">
+      <a class="lma" data-id="{{ m.match_id }}" href="#">
+        {% if lm_autohide %}
+          {% trans "show" %}
+        {% else %}
+          {% trans "hide" %}
+        {% endif %}
+      </a>
+    </th>
+  </tr>
+</thead>
+
+{% endblock %}

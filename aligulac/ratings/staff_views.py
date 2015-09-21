@@ -39,6 +39,7 @@ from aligulac.tools import (
 )
 
 from ratings.models import (
+    ArchonMatch,
     CAT_TEAM,
     Earnings,
     Event,
@@ -103,6 +104,24 @@ def check_duplicates(match, dup_flag):
     matches = Match.objects.filter(date__gte=(match.date - day), date__lte=(match.date + day)).filter(
         Q(pla=match.pla, plb=match.plb, sca=match.sca, scb=match.scb) |
         Q(pla=match.plb, plb=match.pla, sca=match.scb, scb=match.sca)
+    )
+
+    return matches.exists()
+
+def check_archon_duplicates(match, dup_flag):
+    if dup_flag:
+        return False
+
+    day = timedelta(days=1)
+    matches = ArchonMatch.objects.filter(
+        date__gte=(match.date - day), date__lte=(match.date + day)
+    ).filter(
+        Q(pla1=match.pla1, pla2=match.pla2,
+          plb1=match.plb1, plb2=match.plb2,
+          sca=match.sca, scb=match.scb) |
+        Q(plb1=match.pla1, plb2=match.pla2,
+          pla1=match.plb1, pla2=match.plb2,
+          scb=match.sca, sca=match.scb)
     )
 
     return matches.exists()
@@ -373,14 +392,7 @@ class AddMatchesForm(forms.Form):
                 continue
 
             try:
-                parse_results = parse_match(line.strip(), allow_archon=False)
-                pla_query = parse_results['pla']
-                plb_query = parse_results['plb']
-                sca = parse_results['sca']
-                scb = parse_results['scb']
-
-                make_flag = 'MAKE' in parse_results['flags']
-                dup_flag = 'DUP' in parse_results['flags']
+                parse_results = parse_match(line.strip(), allow_archon=True)
             except pyparsing.ParseException as e:
                 self.messages.append(Message(
                     _("Could not parse '%(line)s' (%(error)s).") % {'line': line, 'error': str(e)},
@@ -390,16 +402,14 @@ class AddMatchesForm(forms.Form):
                 error_lines.append(line)
                 continue
 
-            pla_race_override = find_race_override(pla_query)
-            plb_race_override = find_race_override(plb_query)
+            sca = parse_results['sca']
+            scb = parse_results['scb']
+
+            make_flag = 'MAKE' in parse_results['flags']
+            dup_flag = 'DUP' in parse_results['flags']
 
             try:
-                match = self.make_match(
-                    pla_query, plb_query,
-                    pla_race_override, plb_race_override,
-                    sca, scb,
-                    make_flag, dup_flag,
-                )
+                match = self.make_match(parse_results)
                 if match is None:
                     error_lines.append(line)
                     continue
@@ -459,12 +469,76 @@ class AddMatchesForm(forms.Form):
         return players.first()
 
     # Make matches (called from parse_matches). DOES NOT SAVE THEM.
-    def make_match(self, pla_query, plb_query, pla_race_or, plb_race_or, sca, scb, make_flag, dup_flag):
-        pla = self.get_player(pla_query, make_flag)
-        plb = self.get_player(plb_query, make_flag)
+    def make_match(self, parse_results): #pla_query, plb_query, pla_race_or, plb_race_or, sca, scb, make_flag, dup_flag):
+        cleaned = dict()
+        make_flag = 'MAKE' in parse_results['flags']
+        dup_flag = 'DUP' in parse_results['flags']
 
-        if (pla is None or plb is None) and self.is_adm:
-            return None
+        archon = 'archona' in parse_results
+
+        if archon:
+            _players = [
+                parse_results[k1][k2]
+                for k1 in ('archona', 'archonb')
+                for k2 in ('pla', 'plb')
+            ]
+            overrides = list(map(find_race_override, _players))
+            _players = list(map(lambda x: self.get_player(x, make_flag), _players))
+
+            cleaned['pla1'], cleaned['pla2'], cleaned['plb1'], cleaned['plb2'] = _players
+        else:
+            _players = [
+                parse_results[k]
+                for k in ('pla', 'plb')
+            ]
+            overrides = list(map(find_race_override, _players))
+            _players = list(map(lambda x: self.get_player(x, make_flag), _players))
+
+            cleaned['pla'], cleaned['plb'] = _players
+
+        for k, v in cleaned.items():
+            if v is None and self.is_adm:
+                return None
+
+        # if (cleaned['pla'] is None or cleaned['plb'] is None) and self.is_adm:
+        #     return None
+
+        cleaned['sca'] = parse_results['sca']
+        cleaned['scb'] = parse_results['scb']
+
+        cleaned['date'] = self.cleaned_data['date']
+        cleaned['offline'] = self.cleaned_data['offline']
+
+        if archon:
+            # Works in the following order:
+            #  pla1_or -> pla2_or -> pla1_race -> pla2_race
+            cleaned['rca'] = (
+                overrides[0] or
+                overrides[1] or
+                (
+                    cleaned['pla1'].race if cleaned['pla1'].race != 'S' else (
+                        cleaned['pla2'].race if cleaned['pla2'].race != 'S' else 'R'
+                    )
+                )
+            )
+            cleaned['rcb'] = (
+                overrides[2] or
+                overrides[3] or
+                (
+                    cleaned['plb1'].race if cleaned['plb1'].race != 'S' else (
+                        cleaned['plb2'].race if cleaned['plb2'].race != 'S' else 'R'
+                    )
+                )
+            )
+        else:
+            cleaned['rca'] = (
+                overrides[0] or
+                (cleaned['pla'].race if cleaned['pla'].race != 'S' else 'R')
+            )
+            cleaned['rcb'] = (
+                overrides[1] or
+                (cleaned['plb'].race if cleaned['plb'].race != 'S' else 'R')
+            )
 
         if not self.is_adm:
             match = PreMatch(
@@ -481,35 +555,42 @@ class AddMatchesForm(forms.Form):
             )
             return match
         else:
-            match = Match(
-                pla      = pla,
-                plb      = plb,
-                sca      = sca,
-                scb      = scb,
-                rca      = pla_race_or or (pla.race if pla.race != 'S' else 'R'),
-                rcb      = plb_race_or or (plb.race if plb.race != 'S' else 'R'),
-                date     = self.cleaned_data['date'],
-                treated  = False,
-                eventobj = self.cleaned_data['eventobj'],
-                game     = self.cleaned_data['game'],
-                offline  = self.cleaned_data['offline'],
-            )
-            if check_duplicates(match, dup_flag):
-                self.messages.append(Message(
-                    _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.") 
+            cleaned['eventobj'] = self.cleaned_data['eventobj']
+            if archon:
+                match = ArchonMatch(**cleaned)
+
+                if check_archon_duplicates(match, dup_flag):
+                    self.messages.append(Message(
+                        _("Could not make match %(pla1)s / %(pla2)s vs %(plb1)s / %(plb2)s: possible duplicate found.")
+                        % {'pla1': cleaned['pla1'].tag,
+                           'pla2': cleaned['pla2'].tag,
+                           'plb1': cleaned['plb1'].tag,
+                           'plb2': cleaned['plb2'].tag,},
+                        type=Message.ERROR,
+                    ))
+                    self.close_after = False
+                    return None
+            else:
+                cleaned['treated']  = False
+                cleaned['game']     = self.cleaned_data['game']
+                match = Match(**cleaned)
+
+                if check_duplicates(match, dup_flag):
+                    self.messages.append(Message(
+                        _("Could not make match %(pla)s vs %(plb)s: possible duplicate found.")
                         % {'pla': pla.tag, 'plb': plb.tag},
-                    type=Message.ERROR,
-                ))
-                self.close_after = False
-                return None
+                        type=Message.ERROR,
+                    ))
+                    self.close_after = False
+                    return None
+                match.set_period()
+                match.set_ratings()
             if 'R' in [match.rca, match.rcb]:
                 self.messages.append(Message(
                     _("Unknown race in %(pla)s vs %(plb)s: set to random.")
                         % {'pla': pla.tag, 'plb': plb.tag},
                     type=Message.WARNING,
                 ))
-            match.set_period()
-            match.set_ratings()
             return match
 
 # Form for adding events.

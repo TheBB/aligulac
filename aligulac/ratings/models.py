@@ -1676,28 +1676,24 @@ class ArchonMatch(models.Model):
     objects = MatchManager()
 
     # {{{ Fields
-    period = models.ForeignKey(
-        Period, null=False,
-        help_text='Period in which the match was played'
-    )
     date = models.DateField(
         'Date played', null=False,
         help_text='Date played'
     )
     pla1 = models.ForeignKey(
-        Player, related_name='match_pla', verbose_name='Player A1', null=False,
+        Player, related_name='archon_match_pla1', verbose_name='Player A1', null=False,
         help_text='Player A1'
     )
     pla2 = models.ForeignKey(
-        Player, related_name='match_pla', verbose_name='Player A2', null=False,
+        Player, related_name='archon_match_pla2', verbose_name='Player A2', null=False,
         help_text='Player A2'
     )
     plb1 = models.ForeignKey(
-        Player, related_name='match_plb', verbose_name='Player B1', null=False,
+        Player, related_name='archon_match_plb1', verbose_name='Player B1', null=False,
         help_text='Player B1'
     )
     plb2 = models.ForeignKey(
-        Player, related_name='match_plb', verbose_name='Player B2', null=False,
+        Player, related_name='archon_match_plb2', verbose_name='Player B2', null=False,
         help_text='Player B2'
     )
     sca = models.SmallIntegerField(
@@ -1732,6 +1728,16 @@ class ArchonMatch(models.Model):
         help_text='True if the match was played offline'
     )
 
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+
+        if self.pla1.id > self.pla2.id:
+            self.pla1, self.pla2 = self.pla2, self.pla1
+        if self.plb1.id > self.plb2.id:
+            self.plb1, self.plb2 = self.plb2, self.plb1
+        # Save to DB and repopulate original fields.
+        super(ArchonMatch, self).save(force_insert, force_update, *args, **kwargs)
+    # }}}
+
 
 # {{{ Messages
 class Message(models.Model):
@@ -1748,6 +1754,7 @@ class Message(models.Model):
     event = models.ForeignKey(Event, null=True)
     group = models.ForeignKey(Group, null=True)
     match = models.ForeignKey(Match, null=True)
+    archon_match = models.ForeignKey(ArchonMatch, null=True)
 
     def __str__(self):
         try:

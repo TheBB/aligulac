@@ -15,7 +15,7 @@
     <td class="lm_pla {% if m.pla.score >= m.plb.score %}winner{% else %}loser{% endif %}"
         style="vertical-align: middle;">
       {% if m.archon %}
-        {% widget "player:player" p=m.pla.a1 %} / {% widget "player:player" p=m.pla.a2 %}
+        {% widget "player:archon" p=m.pla %}
       {% else %}
         {% widget "player:player" p=m.pla %}
       {% endif %}
@@ -42,8 +42,7 @@
     <td class="lm_plb {% if m.plb.score >= m.pla.score %}winner{% else %}loser{% endif %}"
         style="vertical-align: middle;">
       {% if m.archon %}
-        {% widget "player:player" p=m.plb.a1 rev=True %} /
-        {% widget "player:player" p=m.plb.a2 rev=True %}
+        {% widget "player:archon" p=m.plb rev=True %}
       {% else %}
         {% widget "player:player" p=m.plb rev=True%}
       {% endif %}
@@ -78,7 +77,7 @@
             <img src="{{ msg.type|img }}" title="{{ msg.text }}">
           {% endfor %}
         {% endif %}
-         {% if not m.treated %}
+        {% if not m.archon and not m.treated %}
           <img src="{{ "no"|img }}" alt="unrated" title="{% trans "unrated" %}">
         {% endif %}
         <img src="{{ m.game|img }}" alt="{{ m.game }}" title="{% trans m.game %}">

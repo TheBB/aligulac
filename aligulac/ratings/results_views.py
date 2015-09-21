@@ -29,6 +29,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
+import itertools
 
 from aligulac.cache import cache_page
 from aligulac.tools import (
@@ -45,6 +46,7 @@ from aligulac.tools import (
 from currency import RateNotFoundError
 
 from ratings.models import (
+    ArchonMatch,
     CAT_FREQUENT,
     CAT_INDIVIDUAL,
     CAT_TEAM,
@@ -921,10 +923,15 @@ def results(request):
         day = date.today()
 
     bounds = Match.objects.aggregate(Min('date'), Max('date'))
-    day = min(max(bounds['date__min'], day), bounds['date__max'])
+    abounds = ArchonMatch.objects.aggregate(Min('date'), Max('date'))
+
+    minn = min(bounds['date__min'], abounds['date__min'])
+    maxx = max(bounds['date__max'], abounds['date__max'])
+
+    day = min(max(minn, day), maxx)
     base.update({
-        'mindate': bounds['date__min'],
-        'maxdate': bounds['date__max'],
+        'mindate': minn,
+        'maxdate': maxx,
         'td':      day,
     })
 
@@ -933,8 +940,14 @@ def results(request):
             .prefetch_related('message_set', 'rta', 'rtb', 'pla', 'plb', 'eventobj')
             .annotate(Count('eventobj__match'))
     )
-
+    archon_matches = (
+        ArchonMatch.objects.filter(date=day).order_by('eventobj__idx', 'eventobj__latest', 'event', 'id')
+            .prefetch_related('message_set', 'pla1', 'pla2', 'plb1', 'plb2', 'eventobj')
+            .annotate(Count('eventobj__match'))
+    )
     add_links = request.user.is_authenticated() and request.user.is_staff
+
+    matches = itertools.chain(matches, archon_matches)
 
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True,
                                       eventcount=True, add_links=add_links)

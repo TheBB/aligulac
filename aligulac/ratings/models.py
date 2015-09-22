@@ -1374,16 +1374,7 @@ class Alias(models.Model):
 
 # {{{ Matches
 
-# This can operate on querysets in the current dev branch
-# of Django. Worth noting for the future. So currently it
-# works like this:
-#   q = Match.objects.symmetric_filter(...)
-# But in the future we can have things like:
-#   q = Match.objects.filter(date="2014-03-08")
-#   q = q.symmetric_filter(...)
-#
-# -- Prillan, 2014-03-08
-class MatchManager(models.Manager):
+class MatchQuerySet(models.QuerySet):
 
     def symmetric_filter(self, *args, **kwargs):
         q = Q(*args, **kwargs)
@@ -1395,7 +1386,7 @@ class Match(models.Model):
         verbose_name_plural = 'matches'
         db_table = 'match'
 
-    objects = MatchManager()
+    objects = MatchQuerySet.as_manager()
 
     # {{{ Fields
     period = models.ForeignKey(
@@ -1673,7 +1664,7 @@ class ArchonMatch(models.Model):
         verbose_name_plural = 'archonmatches'
         db_table = 'archonmatch'
 
-    objects = MatchManager()
+    objects = MatchQuerySet.as_manager()
 
     # {{{ Fields
     date = models.DateField(

@@ -57,6 +57,15 @@ dump. Called from aligulac.views.db.
             </td>
           </tr>
           <tr>
+            <td class="text-right ibox-left" style="border-top: none;">
+              {% trans "Legacy of the Void" %}
+            </td>
+            <td style="border-top: none;">
+              {{ nlotvgames }} {% trans "games" %} <small class="text-muted">({{ nlotvgames|pctg:ngames }}%)</small>,
+              {{ nlotv }} {% trans "matches" %} <small class="text-muted">({{ nlotv|pctg:nmatches }}%)</small>
+            </td>
+          </tr>
+          <tr>
             <td class="text-right ibox-left">
               {% trans "Online" %}
             </td>

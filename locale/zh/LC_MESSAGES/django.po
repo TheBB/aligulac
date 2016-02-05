@@ -44,7 +44,7 @@ msgstr "%(commalist)s 以及其余的 %(number)s 位"
 #: aligulac/aligulac/tools.py:138
 #, python-format
 msgid "'%s' not unique"
-msgstr ""
+msgstr "'%s' 不唯一"
 
 #: aligulac/aligulac/tools.py:150
 msgid "You are not logged in."
@@ -273,7 +273,7 @@ msgstr "包含选手信息"
 #: aligulac/aligulac/views.py:280 aligulac/aligulac/views.py:294
 #: aligulac/aligulac/views.py:305 aligulac/aligulac/views.py:323
 msgid "primary key"
-msgstr ""
+msgstr "主键"
 
 #: aligulac/aligulac/views.py:64
 msgid "in-game name of the player"
@@ -493,7 +493,7 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:164
 msgid "sorting index"
-msgstr ""
+msgstr "索引关键字"
 
 #: aligulac/aligulac/views.py:169
 msgid ""
@@ -514,7 +514,7 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:181
 msgid "Contains rating information."
-msgstr ""
+msgstr "包含的评分信息"
 
 #. Translators: period is a table name and must be in English
 #: aligulac/aligulac/views.py:185
@@ -707,11 +707,11 @@ msgstr "职业联赛得分（仅战队）"
 
 #: aligulac/aligulac/views.py:246
 msgid "date founded"
-msgstr ""
+msgstr "创立时间"
 
 #: aligulac/aligulac/views.py:247
 msgid "date disbanded"
-msgstr ""
+msgstr "解散时间"
 
 #: aligulac/aligulac/views.py:248
 msgid "whether the group is active"
@@ -733,7 +733,7 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:260
 msgid "Links teams and players together in a many-to-many relationship."
-msgstr ""
+msgstr "在多对多关系中连接战队和选手。"
 
 #. Translators: group is a table name and must be in English
 #: aligulac/aligulac/views.py:266 aligulac/aligulac/views.py:299
@@ -743,11 +743,11 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:267
 msgid "start date of membership"
-msgstr ""
+msgstr "加入时间"
 
 #: aligulac/aligulac/views.py:268
 msgid "end date of membership"
-msgstr ""
+msgstr "结束时间"
 
 #: aligulac/aligulac/views.py:270
 msgid ""
@@ -758,17 +758,19 @@ msgstr ""
 #: aligulac/aligulac/views.py:273
 msgid ""
 "whether the player is a playing member (false for coaches, among others)"
-msgstr "这名玩家是否是一个选手（即不是教练或其他工作人员）"
+msgstr ""
+"这名玩家是否是一个选手（即不是教练或其他工作人员）"
 
 #: aligulac/aligulac/views.py:278
 msgid ""
 "Contains prize pool information. Each row represents a single payout to a "
 "single player."
 msgstr ""
+"包含奖金池信息。每行代表着对某一选手的单笔支出。"
 
 #: aligulac/aligulac/views.py:285
 msgid "amount in USD at the time of the win"
-msgstr ""
+msgstr "以获奖时汇率计算的美元"
 
 #: aligulac/aligulac/views.py:286
 msgid "amount in original currency"
@@ -780,7 +782,7 @@ msgstr "货币代码"
 
 #: aligulac/aligulac/views.py:288
 msgid "place in the event"
-msgstr ""
+msgstr "赛事名次"
 
 #: aligulac/aligulac/views.py:292
 msgid ""
@@ -790,7 +792,7 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:295
 msgid "the alias"
-msgstr ""
+msgstr "别名"
 
 #: aligulac/aligulac/views.py:303
 msgid ""
@@ -800,11 +802,11 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:307
 msgid "info, warning, sucess or error"
-msgstr ""
+msgstr "通知，警告，成功或错误"
 
 #: aligulac/aligulac/views.py:308
 msgid "text describing this message"
-msgstr ""
+msgstr "描述该消息的文本"
 
 #: aligulac/aligulac/views.py:309 aligulac/aligulac/views.py:326
 msgid "parameters for string interpolation"
@@ -821,11 +823,11 @@ msgstr ""
 
 #: aligulac/aligulac/views.py:325
 msgid "text describing this story"
-msgstr ""
+msgstr "描述该故事的文本"
 
 #: aligulac/aligulac/views.py:327
 msgid "when it happened"
-msgstr ""
+msgstr "发生时间"
 
 #. Translators: event is a table name and must be in English
 #: aligulac/aligulac/views.py:329
@@ -1877,28 +1879,28 @@ msgstr "BO几的比赛"
 
 #: aligulac/ratings/inference_views.py:58
 msgid "Expected exactly two players."
-msgstr ""
+msgstr "角逐出两名选手"
 
 #: aligulac/ratings/inference_views.py:60
 #: aligulac/ratings/inference_views.py:67
 #: aligulac/ratings/inference_views.py:81
 #: aligulac/ratings/inference_views.py:89
 msgid "Expected exactly one 'best of'."
-msgstr ""
+msgstr "角逐出一名选手"
 
 #: aligulac/ratings/inference_views.py:63 templates/pred_4pswiss.djhtml:10
 #: templates/pred_4pswiss.djhtml.py:16
 msgid "Dual tournament"
-msgstr ""
+msgstr "双重比赛"
 
 #: aligulac/ratings/inference_views.py:65
 msgid "Expected exactly four players."
-msgstr ""
+msgstr "角逐出四名选手"
 
 #: aligulac/ratings/inference_views.py:70 templates/pred_sebracket.djhtml:10
 #: templates/pred_sebracket.djhtml.py:16
 msgid "Single elimination bracket"
-msgstr ""
+msgstr "单淘"
 
 #: aligulac/ratings/inference_views.py:72
 msgid "Expected number of players to be a power of two (2,4,8,…)."
@@ -1915,11 +1917,11 @@ msgstr ""
 
 #: aligulac/ratings/inference_views.py:79
 msgid "Expected at least three players."
-msgstr ""
+msgstr "角逐出至少三名选手"
 
 #: aligulac/ratings/inference_views.py:85
 msgid "Proleague team match"
-msgstr ""
+msgstr "职业战队比赛"
 
 #: aligulac/ratings/inference_views.py:87
 msgid "Expected an even number of players."
@@ -1927,18 +1929,18 @@ msgstr ""
 
 #: aligulac/ratings/inference_views.py:98
 msgid "Format"
-msgstr ""
+msgstr "模式"
 
 #: aligulac/ratings/inference_views.py:101
 msgid "Best of"
-msgstr ""
+msgstr "BO"
 
 #: aligulac/ratings/inference_views.py:102 aligulac/ratings/misc_views.py:254
 #: templates/db.djhtml:95 templates/eventres.djhtml:495
 #: templates/index.djhtml:192 templates/search.djhtml:21
 #: templates/team.djhtml:112 templates/teams.djhtml:26
 msgid "Players"
-msgstr ""
+msgstr "选手数"
 
 #: aligulac/ratings/inference_views.py:125
 msgid "Must be a comma-separated list of positive odd integers (1,3,5,…)."
@@ -2013,7 +2015,7 @@ msgstr "修改"
 #: aligulac/ratings/inference_views.py:1119
 #: aligulac/ratings/inference_views.py:1129
 msgid "Estimated by"
-msgstr ""
+msgstr "估计"
 
 #: aligulac/ratings/inference_views.py:917 templates/pred_4pswiss.djhtml:26
 msgid "Top 2"
@@ -2168,11 +2170,11 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:422
 msgid "Probability of winning..."
-msgstr ""
+msgstr "胜利可能性..."
 
 #: aligulac/ratings/misc_views.py:425
 msgid "a Bo3"
-msgstr ""
+msgstr "一场BO3的比赛"
 
 #: aligulac/ratings/misc_views.py:430
 msgid "a round robin group"
@@ -2180,15 +2182,15 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:435
 msgid "a dual tournament"
-msgstr ""
+msgstr "一场双重比赛"
 
 #: aligulac/ratings/misc_views.py:439
 msgid "Between these players"
-msgstr ""
+msgstr "在这些选手中"
 
 #: aligulac/ratings/misc_views.py:445 aligulac/ratings/misc_views.py:459
 msgid "Match wins"
-msgstr ""
+msgstr "比赛胜利"
 
 #: aligulac/ratings/misc_views.py:447 aligulac/ratings/misc_views.py:463
 msgid "Match +/-"
@@ -2196,7 +2198,7 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:450 aligulac/ratings/misc_views.py:466
 msgid "Game wins"
-msgstr ""
+msgstr "游戏胜利"
 
 #: aligulac/ratings/misc_views.py:452 aligulac/ratings/misc_views.py:470
 msgid "Game +/-"
@@ -2204,7 +2206,7 @@ msgstr ""
 
 #: aligulac/ratings/misc_views.py:454
 msgid "Lifetime"
-msgstr ""
+msgstr "生涯"
 
 #: aligulac/ratings/misc_views.py:461
 msgid "Match win %"
@@ -2397,7 +2399,7 @@ msgstr "成功"
 #: aligulac/ratings/models.py:135 aligulac/ratings/models.py:137
 #: aligulac/ratings/models.py:224
 msgid "Possible confusion"
-msgstr ""
+msgstr "可能的争议"
 
 #: aligulac/ratings/models.py:136
 #, python-format
@@ -2430,12 +2432,12 @@ msgstr ""
 #: aligulac/ratings/models.py:156 aligulac/ratings/models.py:164
 #: aligulac/ratings/models.py:186
 msgid "Forfeit"
-msgstr ""
+msgstr "违规"
 
 #: aligulac/ratings/models.py:144
 #, python-format
 msgid "%(player)s forfeited."
-msgstr ""
+msgstr "%(player)s 违规"
 
 #: aligulac/ratings/models.py:145
 msgid "Disqualification"
@@ -2449,16 +2451,16 @@ msgstr "%(player)s 没有资格"
 #: aligulac/ratings/models.py:148
 #, python-format
 msgid "%(player)s forfeited and was replaced by %(otherplayer)s."
-msgstr ""
+msgstr "%(player)s 违规被 %(otherplayer)s 代替"
 
 #: aligulac/ratings/models.py:149 aligulac/ratings/models.py:158
 msgid "Forfeits"
-msgstr ""
+msgstr "违规"
 
 #: aligulac/ratings/models.py:149
 #, python-format
 msgid "%(players)s and %(player)s forfeited."
-msgstr ""
+msgstr "%(players)s 和 %(player)s 违规"
 
 #: aligulac/ratings/models.py:151
 #, python-format
@@ -2528,17 +2530,17 @@ msgstr "改变种族"
 #: aligulac/ratings/models.py:174
 #, python-format
 msgid "%(player)s played %(race)s in game %(num)s."
-msgstr ""
+msgstr "%(player)s 在第 %(num)s 场游戏中 使用  %(race)s 种族"
 
 #: aligulac/ratings/models.py:175
 #, python-format
 msgid "%(player)s played %(race)s."
-msgstr ""
+msgstr "%(player)s 使用 %(race)s 种族"
 
 #: aligulac/ratings/models.py:178
 #, python-format
 msgid "%(player)s switched to %(race)s after game %(num)s."
-msgstr ""
+msgstr "%(player)s 在第%(num)s场游戏之后改变种族为 %(race)s"
 
 #: aligulac/ratings/models.py:179 aligulac/ratings/models.py:181
 #: aligulac/ratings/models.py:183
@@ -2565,7 +2567,7 @@ msgstr ""
 #: aligulac/ratings/models.py:186
 #, python-format
 msgid "%(player)s was unable to attend."
-msgstr ""
+msgstr "%(player)s 无法参加"
 
 #: aligulac/ratings/models.py:188
 msgid "This match was split due to race-changing."
@@ -2574,47 +2576,48 @@ msgstr ""
 #: aligulac/ratings/models.py:189 aligulac/ratings/models.py:192
 #: aligulac/ratings/models.py:195 aligulac/ratings/models.py:198
 msgid "Irregular match"
-msgstr ""
+msgstr "不寻常的比赛"
 
 #: aligulac/ratings/models.py:191
 #, python-format
 msgid "Coming from the loser's bracket, %(player)s had to win two Bo%(num)ss."
-msgstr ""
+msgstr "从败者组出线， %(player)s 需要赢得两场 Bo%(num)ss 的比赛"
 
 #: aligulac/ratings/models.py:194
 #, python-format
 msgid ""
 "Coming from the winner's bracket, %(player)s started the match with a %(na)s-"
 "%(nb)s lead."
-msgstr ""
+msgstr "从胜者组出线， %(player)s 以 %(na)s-%(nb)s 开始比赛"
 
 #: aligulac/ratings/models.py:197
 #, python-format
 msgid ""
 "%(player)s started the match with a %(na)s–%(nb)s lead from a previous match."
-msgstr ""
+msgstr "因为先前的比赛， %(player)s 以 %(na)s-%(nb)s 开始下一场"
 
 #: aligulac/ratings/models.py:200
 #, python-format
 msgid "%(player)s started the match with a %(na)s–%(nb)s lead."
-msgstr ""
+msgstr "%(player)s 以 %(na)s-%(nb)s 开始比赛"
 
 #: aligulac/ratings/models.py:201 aligulac/ratings/models.py:204
 #: aligulac/ratings/models.py:207 aligulac/ratings/models.py:210
 #: aligulac/ratings/models.py:216
 msgid "Qualification"
-msgstr ""
+msgstr "资格"
 
 #: aligulac/ratings/models.py:203
 #, python-format
 msgid "%(player)s defeated %(opponent)s to qualify for %(event)s."
-msgstr ""
+msgstr "%(player)s 战胜了 %(opponent)s 获得 %(event)s 出线资格"
 
 #: aligulac/ratings/models.py:206
 #, python-format
 msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s."
 msgstr ""
+"%(player)s 战胜了 %(opponent)s 和 %(opponent)s 获得 %(event)s 出线资格"
 
 #: aligulac/ratings/models.py:209
 #, python-format
@@ -2622,6 +2625,8 @@ msgid ""
 "%(player)s defeated %(opponent)s to qualify for %(event)s alongside "
 "%(otherplayer)s."
 msgstr ""
+"%(player)s 战胜了 %(opponent)s 获得 %(event)s 出线资格"
+"其他出线名额包括 %(otherplayer)s"
 
 #: aligulac/ratings/models.py:212
 #, python-format
@@ -2629,6 +2634,8 @@ msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s "
 "alongside %(otherplayer)s."
 msgstr ""
+"%(player)s 战胜了 %(opponent)s 和 %(opponent)s 获得 %(event)s 出线资格"
+"其他出线名额包括 %(otherplayer)s"
 
 #: aligulac/ratings/models.py:213
 msgid "Forfeit and qualification"
@@ -2662,7 +2669,7 @@ msgstr ""
 #: aligulac/ratings/models.py:223
 #, python-format
 msgid "Game %(num)s lasted for %(h)s hours, %(m)s minutes and %(s)s seconds."
-msgstr ""
+msgstr "第 %(num)s 场游戏持续 %(h)s 小时 %(m)s 分 %(s)s 秒"
 
 #: aligulac/ratings/models.py:226
 #, python-format
@@ -2675,21 +2682,21 @@ msgstr ""
 
 #: aligulac/ratings/models.py:228
 msgid "Seed"
-msgstr ""
+msgstr "种子"
 
 #: aligulac/ratings/models.py:228
 #, python-format
 msgid "%(player)s was seededs."
-msgstr ""
+msgstr "%(player)s 成为种子选手"
 
 #: aligulac/ratings/models.py:229
 msgid "Seeds"
-msgstr ""
+msgstr "种子"
 
 #: aligulac/ratings/models.py:229
 #, python-format
 msgid "%(players)s and %(player)s were seeded."
-msgstr ""
+msgstr "%(players)s 和 %(player)s 成为种子选手"
 
 #: aligulac/ratings/models.py:230
 msgid "Draw"
@@ -2703,12 +2710,12 @@ msgstr ""
 #: aligulac/ratings/models.py:240
 #, python-format
 msgid "%(player)s wins %(event)s"
-msgstr ""
+msgstr "%(player)s 赢得了 %(event)s 冠军"
 
 #: aligulac/ratings/models.py:242
 #, python-format
 msgid "%(player)s defeats %(opponent)s and wins %(event)s"
-msgstr ""
+msgstr "%(player)s 战胜 %(opponent)s 赢得了 %(event)s 冠军"
 
 #: aligulac/ratings/models.py:243
 #, python-format
@@ -2723,74 +2730,76 @@ msgstr ""
 #: aligulac/ratings/models.py:246
 #, python-format
 msgid "%(player)s all-kills %(team)s"
-msgstr ""
+msgstr "%(player)s all-kills %(team)s 战队"
 
 #: aligulac/ratings/models.py:248
 #, python-format
 msgid "%(player)s all-kills %(team)s and wins %(event)s"
-msgstr ""
+msgstr "%(player)s all-kills %(team)s 战队赢得了 %(event)s"
 
 #: aligulac/ratings/models.py:249
 #, python-format
 msgid "%(player)s finishes second in %(event)s"
-msgstr ""
+msgstr "%(player)s 在 %(event)s 中获得亚军"
 
 #: aligulac/ratings/models.py:250
 #, python-format
 msgid "%(player)s finishes third in %(event)s"
-msgstr ""
+msgstr "%(player)s 在 %(event)s 中获得季军"
 
 #: aligulac/ratings/models.py:251
 #, python-format
 msgid "%(player)s finishes fourth in %(event)s"
-msgstr ""
+msgstr "%(player)s 在 %(event)s 中获得殿军"
 
 #: aligulac/ratings/models.py:252
 #, python-format
 msgid "%(player)s finishes top 4 in %(event)s"
-msgstr ""
+msgstr "%(player)s 在 %(event)s 中获得前四"
 
 #: aligulac/ratings/models.py:253
 #, python-format
 msgid "%(player)s finishes top 8 in %(event)s"
-msgstr ""
+msgstr "%(player)s 在 %(event)s 中获得前八"
 
 #: aligulac/ratings/models.py:254
 #, python-format
 msgid "%(player)s switches to %(race)s"
-msgstr ""
+msgstr "%(player)s 改变种族为 %(race)s"
 
 #: aligulac/ratings/models.py:255
 #, python-format
 msgid "%(player)s switches back to %(race)s"
-msgstr ""
+msgstr "%(player)s 改回种族为 %(race)s"
 
 #: aligulac/ratings/models.py:256
 #, python-format
 msgid "%(player)s switches from %(racea)s to %(raceb)s"
-msgstr ""
+msgstr "%(player)s 从 %(racea)s 改成了 %(raceb)s"
 
 #: aligulac/ratings/models.py:258
 #, python-format
 msgid "%(player)s switches from %(racea)s back to %(raceb)s"
-msgstr ""
+msgstr "%(player)s 从 %(racea)s 改回了 %(raceb)s"
 
 #: aligulac/ratings/models.py:260
 #, python-format
 msgid ""
 "%(player)s defeats %(opponent)s and starts a %(num)s-kill spree in %(event)s"
 msgstr ""
+"%(player)s 战胜了 %(opponent)s ，创造了自己在 %(event)s 上的 %(num)s 杀"
 
 #: aligulac/ratings/models.py:262
 #, python-format
 msgid ""
 "%(player)s loses to %(opponent)s, ending a %(num)s-kill spree in %(event)s"
 msgstr ""
+"%(player)s 输给了 %(opponent)s ，终结了自己在 %(event)s 上的 %(num)s 杀"
 
 #: aligulac/ratings/models.py:263
 #, python-format
 msgid "%(player)s fails to qualify for %(event)s"
-msgstr ""
+msgstr "%(player)s 没能获得 %(event)s 参赛资格"
 
 #: aligulac/ratings/models.py:265
 #, python-format
@@ -2799,15 +2808,15 @@ msgstr ""
 
 #: aligulac/ratings/models.py:1292
 msgid "All-Kill"
-msgstr ""
+msgstr "All-Kill"
 
 #: aligulac/ratings/models.py:1293
 msgid "Proleague"
-msgstr ""
+msgstr "职业联赛"
 
 #: aligulac/ratings/models.py:1672
 msgid "Error"
-msgstr ""
+msgstr "错误与"
 
 #: aligulac/ratings/player_views.py:66
 #, python-format
@@ -2816,6 +2825,9 @@ msgid ""
 "and removed from the current rating list. Once they play a rated game they "
 "will be reinstated."
 msgstr ""
+"因为缺乏 %s 最近的比赛信息，他们被标记为 <em>不活跃</em> "
+"并且被移出了当前评分榜，一旦他们进行了一盘被统计的比赛， "
+"他们将会被重新加入。"
 
 #: aligulac/ratings/player_views.py:69
 #, python-format
@@ -2823,14 +2835,15 @@ msgid ""
 "%s has no rating chart on account of having played matches in fewer than two "
 "periods."
 msgstr ""
+"%s 没有评分图表，因为缺乏最近两个周期的比赛数据"
 
 #: aligulac/ratings/player_views.py:98
 msgid "Tag"
-msgstr ""
+msgstr "标签"
 
 #: aligulac/ratings/player_views.py:99 templates/player.djhtml:598
 msgid "Race"
-msgstr ""
+msgstr "种族"
 
 #: aligulac/ratings/player_views.py:100 aligulac/ratings/results_views.py:440
 #: aligulac/ratings/team_views.py:47 aligulac/ratings/team_views.py:49
@@ -2839,44 +2852,44 @@ msgstr ""
 #: templates/recordlist.djhtml:15 templates/team.djhtml:230
 #: templates/teams.djhtml:22
 msgid "Name"
-msgstr ""
+msgstr "姓名"
 
 #: aligulac/ratings/player_views.py:101
 #, fuzzy
 msgid "Romanized Name"
-msgstr "罗马尼亚"
+msgstr "罗马拼音名"
 
 #: aligulac/ratings/player_views.py:102 aligulac/ratings/team_views.py:48
 msgid "AKAs"
-msgstr ""
+msgstr "别名"
 
 #: aligulac/ratings/player_views.py:103 templates/player.djhtml:654
 msgid "Birthday"
-msgstr ""
+msgstr "生日"
 
 #: aligulac/ratings/player_views.py:105 aligulac/ratings/player_views.py:158
 #: aligulac/ratings/results_views.py:109 aligulac/ratings/results_views.py:199
 msgid "TLPD ID"
-msgstr ""
+msgstr "TLPD ID"
 
 #: aligulac/ratings/player_views.py:107 aligulac/ratings/results_views.py:111
 msgid "TLPD DB"
-msgstr ""
+msgstr "TLPD DB"
 
 #: aligulac/ratings/player_views.py:108 aligulac/ratings/player_views.py:159
 #: aligulac/ratings/results_views.py:113 aligulac/ratings/results_views.py:200
 #: aligulac/ratings/team_views.py:51 aligulac/ratings/team_views.py:86
 msgid "Liquipedia title"
-msgstr ""
+msgstr "Liquipedia 标题"
 
 #: aligulac/ratings/player_views.py:109 aligulac/ratings/player_views.py:160
 msgid "SC2Earnings.com ID"
-msgstr ""
+msgstr "SC2Earnings.com ID"
 
 #: aligulac/ratings/player_views.py:111 aligulac/ratings/player_views.py:190
 #: templates/player.djhtml:602
 msgid "Country"
-msgstr ""
+msgstr "国籍"
 
 #: aligulac/ratings/player_views.py:140 aligulac/ratings/results_views.py:142
 #: aligulac/ratings/results_views.py:238 aligulac/ratings/results_views.py:332
@@ -2887,26 +2900,26 @@ msgstr ""
 #: aligulac/ratings/staff_views.py:649 aligulac/ratings/staff_views.py:729
 #: aligulac/ratings/team_views.py:74
 msgid "Entered data was invalid, no changes made."
-msgstr ""
+msgstr "键入的数据非法，改变未生效"
 
 #. Translators: Changed something (a noun).
 #: aligulac/ratings/player_views.py:150 aligulac/ratings/results_views.py:196
 #: aligulac/ratings/team_views.py:83
 #, python-format
 msgid "Changed %s."
-msgstr ""
+msgstr "%s 已修改"
 
 #: aligulac/ratings/player_views.py:152
 msgid "tag"
-msgstr ""
+msgstr "标签"
 
 #: aligulac/ratings/player_views.py:153
 msgid "race"
-msgstr ""
+msgstr "种族"
 
 #: aligulac/ratings/player_views.py:154
 msgid "country"
-msgstr "国家"
+msgstr "国籍"
 
 #: aligulac/ratings/player_views.py:155 aligulac/ratings/team_views.py:85
 msgid "name"
@@ -2915,11 +2928,11 @@ msgstr "姓名"
 #: aligulac/ratings/player_views.py:156
 #, fuzzy
 msgid "romanized name"
-msgstr "玩家真实姓名"
+msgstr "罗马拼音名"
 
 #: aligulac/ratings/player_views.py:161 aligulac/ratings/results_views.py:202
 msgid "TLPD DBs"
-msgstr ""
+msgstr "TLPD DBs"
 
 #: aligulac/ratings/player_views.py:164 aligulac/ratings/team_views.py:91
 msgid "Changed aliases."
@@ -2936,17 +2949,17 @@ msgstr "之前"
 #: aligulac/ratings/player_views.py:181 aligulac/ratings/player_views.py:679
 #: templates/history.djhtml:164 templates/period.djhtml:386
 msgid "No Protoss"
-msgstr ""
+msgstr "无神族"
 
 #: aligulac/ratings/player_views.py:182 aligulac/ratings/player_views.py:678
 #: templates/history.djhtml:167 templates/period.djhtml:387
 msgid "No Terran"
-msgstr ""
+msgstr "无人族"
 
 #: aligulac/ratings/player_views.py:183 aligulac/ratings/player_views.py:677
 #: templates/history.djhtml:170 templates/period.djhtml:388
 msgid "No Zerg"
-msgstr ""
+msgstr "五虫族"
 
 #: aligulac/ratings/player_views.py:185
 msgid "Opponent race"
@@ -2959,15 +2972,15 @@ msgstr "非韩国玩家"
 
 #: aligulac/ratings/player_views.py:195 aligulac/ratings/results_views.py:548
 msgid "Best of 3+"
-msgstr ""
+msgstr "BO3+"
 
 #: aligulac/ratings/player_views.py:196 aligulac/ratings/results_views.py:549
 msgid "Best of 5+"
-msgstr ""
+msgstr "BO5+"
 
 #: aligulac/ratings/player_views.py:198 aligulac/ratings/results_views.py:551
 msgid "Match format"
-msgstr ""
+msgstr "比赛形式"
 
 #: aligulac/ratings/player_views.py:202 aligulac/ratings/results_views.py:555
 #: aligulac/ratings/results_views.py:944
@@ -2979,50 +2992,50 @@ msgstr ""
 #: aligulac/ratings/results_views.py:946 aligulac/ratings/staff_views.py:275
 #: templates/db.djhtml:70
 msgid "Offline"
-msgstr ""
+msgstr "线下"
 
 #: aligulac/ratings/player_views.py:204 aligulac/ratings/results_views.py:98
 #: aligulac/ratings/results_views.py:557 aligulac/ratings/results_views.py:714
 #: aligulac/ratings/results_views.py:946 templates/db.djhtml:61
 msgid "Online"
-msgstr ""
+msgstr "线上"
 
 #: aligulac/ratings/player_views.py:206 aligulac/ratings/results_views.py:99
 #: aligulac/ratings/results_views.py:559 aligulac/ratings/results_views.py:715
 msgid "On/offline"
-msgstr ""
+msgstr "线上/线下"
 
 #: aligulac/ratings/player_views.py:209 aligulac/ratings/results_views.py:95
 #: aligulac/ratings/results_views.py:562 aligulac/ratings/results_views.py:719
 #: aligulac/ratings/staff_views.py:274 templates/add.djhtml:62
 #: templates/eventres.djhtml:465
 msgid "Game version"
-msgstr ""
+msgstr "游戏版本"
 
 #: aligulac/ratings/player_views.py:315
 #, python-format
 msgid "%s has no rating yet."
-msgstr ""
+msgstr "%s 还没有评分"
 
 #: aligulac/ratings/player_views.py:339
 msgid "joins"
-msgstr ""
+msgstr "加入"
 
 #: aligulac/ratings/player_views.py:345
 msgid "leaves"
-msgstr ""
+msgstr "离开"
 
 #: aligulac/ratings/player_views.py:554
 msgid " before {}"
-msgstr ""
+msgstr " 在 {} 之前"
 
 #: aligulac/ratings/player_views.py:556
 msgid " after {}"
-msgstr ""
+msgstr " 在 {} 之后"
 
 #: aligulac/ratings/player_views.py:558
 msgid " between {} and {}"
-msgstr ""
+msgstr " 在 {} 和 {} 之间"
 
 #: aligulac/ratings/player_views.py:666
 msgid "best of"
@@ -3039,11 +3052,11 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:691 templates/player.djhtml:685
 msgid "offline"
-msgstr ""
+msgstr "线下"
 
 #: aligulac/ratings/player_views.py:692
 msgid "online"
-msgstr ""
+msgstr "线上"
 
 #: aligulac/ratings/player_views.py:693
 msgid "both"
@@ -3066,11 +3079,11 @@ msgstr ""
 
 #: aligulac/ratings/player_views.py:706
 msgid "Recent matches"
-msgstr ""
+msgstr "最近比赛"
 
 #: aligulac/ratings/player_views.py:707
 msgid "Filters"
-msgstr ""
+msgstr "筛选"
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:709
@@ -3085,17 +3098,17 @@ msgstr ""
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:713
 msgid "Match Format:     "
-msgstr ""
+msgstr "比赛形式：     "
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:715
 msgid "On/offline:       "
-msgstr ""
+msgstr "线上/线下：       "
 
 #. Translators: These have to line up on the right!
 #: aligulac/ratings/player_views.py:717
 msgid "Game Version:     "
-msgstr ""
+msgstr "游戏版本：       "
 
 #: aligulac/ratings/player_views.py:718
 #, python-brace-format
@@ -3105,7 +3118,7 @@ msgstr ""
 #. Translators: Link in the sense of a HTTP hyperlink.
 #: aligulac/ratings/player_views.py:720
 msgid "Link"
-msgstr ""
+msgstr "链接"
 
 #: aligulac/ratings/ranking_views.py:44
 #, python-format
@@ -3123,7 +3136,7 @@ msgstr ""
 #: aligulac/ratings/results_views.py:718 aligulac/ratings/results_views.py:729
 #: templates/results_search.djhtml:132 templates/review.djhtml:100
 msgid "No change"
-msgstr ""
+msgstr "无变更"
 
 #. Translators: Type as in event type
 #. Translators: Event type.
@@ -3131,7 +3144,7 @@ msgstr ""
 #: aligulac/ratings/staff_views.py:535 templates/add.djhtml:65
 #: templates/eventres.djhtml:490 templates/review.djhtml:69
 msgid "Type"
-msgstr ""
+msgstr "类型"
 
 #. Translators: Apply (changes) to…
 #: aligulac/ratings/results_views.py:107
@@ -3143,15 +3156,15 @@ msgstr ""
 #: templates/events_open.djhtml.py:87 templates/events_open.djhtml:134
 #: templates/team.djhtml:157
 msgid "Homepage"
-msgstr ""
+msgstr "主页"
 
 #: aligulac/ratings/results_views.py:112 aligulac/ratings/results_views.py:201
 msgid "TL thread"
-msgstr ""
+msgstr "TL thread"
 
 #: aligulac/ratings/results_views.py:152
 msgid "Changed event name."
-msgstr ""
+msgstr "赛事名已修改"
 
 #: aligulac/ratings/results_views.py:157
 #, python-format
@@ -3204,7 +3217,7 @@ msgstr "日期"
 
 #: aligulac/ratings/results_views.py:212
 msgid "Story text"
-msgstr ""
+msgstr "故事文本"
 
 #: aligulac/ratings/results_views.py:213
 msgid "Parameters"
@@ -3212,11 +3225,11 @@ msgstr ""
 
 #: aligulac/ratings/results_views.py:249
 msgid "Story could not be found."
-msgstr ""
+msgstr "找不到该故事"
 
 #: aligulac/ratings/results_views.py:261
 msgid "Story was successfully changed."
-msgstr ""
+msgstr "故事修改成功"
 
 #: aligulac/ratings/results_views.py:263 aligulac/ratings/results_views.py:281
 msgid "Parameter verification failed."
@@ -3224,11 +3237,11 @@ msgstr ""
 
 #: aligulac/ratings/results_views.py:267
 msgid "Story was successfully deleted."
-msgstr ""
+msgstr "故事删除成功"
 
 #: aligulac/ratings/results_views.py:279
 msgid "Story was successfully created."
-msgstr ""
+msgstr "故事创建成功"
 
 #: aligulac/ratings/results_views.py:289
 msgid "Currency"
@@ -3245,7 +3258,7 @@ msgstr ""
 #: aligulac/ratings/results_views.py:320
 #, python-format
 msgid "No such player: '%s'."
-msgstr ""
+msgstr "找不到该选手： '%s'"
 
 #: aligulac/ratings/results_views.py:322 aligulac/ratings/staff_views.py:106
 #: aligulac/ratings/staff_views.py:116 aligulac/ratings/staff_views.py:439
@@ -3255,33 +3268,33 @@ msgstr ""
 
 #: aligulac/ratings/results_views.py:362
 msgid "Errors occured, no changes made."
-msgstr ""
+msgstr "发生错误，修改失败"
 
 #. Translators: New prizepools added to the database.
 #: aligulac/ratings/results_views.py:384
 msgid "New prizes committed."
-msgstr ""
+msgstr "新奖金已提交"
 
 #: aligulac/ratings/results_views.py:394
 msgid "Text"
-msgstr ""
+msgstr "文本"
 
 #. Translators: Stories are the dots on a player's rating chart
 #: aligulac/ratings/results_views.py:432
 msgid "Added a story."
-msgstr ""
+msgstr "添加一个故事"
 
 #: aligulac/ratings/results_views.py:442
 msgid "No Print"
-msgstr ""
+msgstr "无打印"
 
 #: aligulac/ratings/results_views.py:443
 msgid "Closed"
-msgstr ""
+msgstr "已关闭"
 
 #: aligulac/ratings/results_views.py:477
 msgid "Added a subevent."
-msgstr ""
+msgstr "添加子赛事"
 
 #: aligulac/ratings/results_views.py:501
 msgid "Unable to get these events."
@@ -3293,7 +3306,7 @@ msgstr ""
 
 #: aligulac/ratings/results_views.py:523
 msgid "Non-child event found. This should never happen."
-msgstr ""
+msgstr "未找到子赛事"
 
 #. Translators: Children as in sub-events.
 #: aligulac/ratings/results_views.py:531
@@ -3305,7 +3318,7 @@ msgstr ""
 
 #: aligulac/ratings/results_views.py:541
 msgid "Involving players"
-msgstr ""
+msgstr "参与选手"
 
 #. Translators: Unassigned as in not assigned to an event.
 #: aligulac/ratings/results_views.py:544
@@ -3335,7 +3348,7 @@ msgstr ""
 #: aligulac/ratings/staff_views.py:435
 #, python-format
 msgid "Could not find player: '%s'."
-msgstr ""
+msgstr "找不到该选手： '%s'"
 
 #: aligulac/ratings/staff_views.py:139
 msgid "Ignore duplicates"
@@ -3428,43 +3441,43 @@ msgstr ""
 
 #: aligulac/ratings/staff_views.py:507
 msgid "Ro64→Final"
-msgstr ""
+msgstr "64强→决赛"
 
 #: aligulac/ratings/staff_views.py:508
 msgid "Ro32→Final"
-msgstr ""
+msgstr "32强→决赛"
 
 #: aligulac/ratings/staff_views.py:509
 msgid "Ro16→Final"
-msgstr ""
+msgstr "16强→决赛"
 
 #: aligulac/ratings/staff_views.py:510
 msgid "Ro8→Final"
-msgstr ""
+msgstr "8强→决赛"
 
 #: aligulac/ratings/staff_views.py:511
 msgid "Ro4→Final"
-msgstr ""
+msgstr "4强→决赛"
 
 #: aligulac/ratings/staff_views.py:512
 msgid "Ro64→Final + 3rd place"
-msgstr ""
+msgstr "64强→决赛 + 第三名"
 
 #: aligulac/ratings/staff_views.py:513
 msgid "Ro32→Final + 3rd place"
-msgstr ""
+msgstr "32强→决赛 + 第三名"
 
 #: aligulac/ratings/staff_views.py:514
 msgid "Ro16→Final + 3rd place"
-msgstr ""
+msgstr "16强→决赛 + 第三名"
 
 #: aligulac/ratings/staff_views.py:515
 msgid "Ro8→Final + 3rd place"
-msgstr ""
+msgstr "8强→决赛 + 第三名"
 
 #: aligulac/ratings/staff_views.py:516
 msgid "Ro4→Final + 3rd place"
-msgstr ""
+msgstr "4强→决赛 + 第三名"
 
 #: aligulac/ratings/staff_views.py:517
 msgid "Ro64→Final + early rounds"
@@ -3642,7 +3655,7 @@ msgstr[1] ""
 
 #: aligulac/ratings/team_views.py:87
 msgid "short name"
-msgstr ""
+msgstr "简称"
 
 #: aligulac/ratings/tools.py:56
 msgid "Euro"
@@ -3658,7 +3671,7 @@ msgstr "澳元"
 
 #: aligulac/ratings/tools.py:59
 msgid "New-Zealand Dollar"
-msgstr ""
+msgstr "新西兰元"
 
 #: aligulac/ratings/tools.py:60
 msgid "US Dollar"
@@ -3694,23 +3707,23 @@ msgstr "人民币"
 
 #: aligulac/ratings/tools.py:68
 msgid "South Korean won"
-msgstr ""
+msgstr "韩元"
 
 #: aligulac/ratings/tools.py:69
 msgid "Singapore Dollar"
-msgstr ""
+msgstr "新加坡元"
 
 #: aligulac/ratings/tools.py:70
 msgid "Indonesian Rupiah"
-msgstr ""
+msgstr "印尼卢比"
 
 #: aligulac/ratings/tools.py:71
 msgid "Thai Baht"
-msgstr ""
+msgstr "泰铢"
 
 #: aligulac/ratings/tools.py:72
 msgid "Taiwan Dollar"
-msgstr "台币"
+msgstr "新台币"
 
 #: aligulac/ratings/tools.py:73
 msgid "Hong Kong Dollar"
@@ -3718,115 +3731,115 @@ msgstr "港币"
 
 #: aligulac/ratings/tools.py:74
 msgid "Philippines Peso"
-msgstr ""
+msgstr "菲律宾比索"
 
 #: aligulac/ratings/tools.py:75
 msgid "Indian Rupee"
-msgstr ""
+msgstr "印度卢比"
 
 #: aligulac/ratings/tools.py:76
 msgid "Malaysian Ringgit"
-msgstr ""
+msgstr "马来西亚林吉特"
 
 #: aligulac/ratings/tools.py:77
 msgid "Vietnamese Dong"
-msgstr ""
+msgstr "越南盾"
 
 #: aligulac/ratings/tools.py:78
 msgid "Brazilian Real"
-msgstr ""
+msgstr "巴西雷亚尔"
 
 #: aligulac/ratings/tools.py:79
 msgid "Peruvian Nuevo Sol"
-msgstr ""
+msgstr "秘鲁的新索尔"
 
 #: aligulac/ratings/tools.py:80
 msgid "Argentine Peso"
-msgstr ""
+msgstr "阿根廷比索"
 
 #: aligulac/ratings/tools.py:81
 msgid "Mexican Peso"
-msgstr ""
+msgstr "墨西哥比索"
 
 #: aligulac/ratings/tools.py:82
 msgid "Chilean Peso"
-msgstr ""
+msgstr "智利比索"
 
 #: aligulac/ratings/tools.py:83
 msgid "Colombian Peso"
-msgstr ""
+msgstr "哥伦比亚比索"
 
 #: aligulac/ratings/tools.py:84
 msgid "Jamaican Dollar"
-msgstr ""
+msgstr "牙买加元"
 
 #: aligulac/ratings/tools.py:85
 msgid "Trinidad and Tobago Dollar"
-msgstr ""
+msgstr "特立尼达和多巴哥元"
 
 #: aligulac/ratings/tools.py:86
 msgid "Bermudian Dollar"
-msgstr ""
+msgstr "百慕大元"
 
 #: aligulac/ratings/tools.py:87
 msgid "Czech Koruna"
-msgstr ""
+msgstr "捷克克朗"
 
 #: aligulac/ratings/tools.py:88
 msgid "Polish Zloty"
-msgstr ""
+msgstr "波兰兹罗提"
 
 #: aligulac/ratings/tools.py:89
 msgid "Turkish Lira"
-msgstr ""
+msgstr "土耳其里拉"
 
 #: aligulac/ratings/tools.py:90
 msgid "Hungarian Forint"
-msgstr ""
+msgstr "匈牙利福林"
 
 #: aligulac/ratings/tools.py:91
 msgid "Romanian Leu"
-msgstr ""
+msgstr "罗马尼亚列伊"
 
 #: aligulac/ratings/tools.py:92
 msgid "Russian Ruble"
-msgstr ""
+msgstr "俄罗斯卢布"
 
 #: aligulac/ratings/tools.py:93
 msgid "Croatian kuna"
-msgstr ""
+msgstr "库纳"
 
 #: aligulac/ratings/tools.py:94
 msgid "Kazakhstani Tenge"
-msgstr ""
+msgstr "坚戈"
 
 #: aligulac/ratings/tools.py:95
 msgid "Israeli Shekel"
-msgstr ""
+msgstr "以色列谢克尔"
 
 #: aligulac/ratings/tools.py:96
 msgid "United Arab Emirates Dirham"
-msgstr ""
+msgstr "阿联酋迪拉姆"
 
 #: aligulac/ratings/tools.py:97
 msgid "Qatari Riyal"
-msgstr ""
+msgstr "卡塔尔里亚尔"
 
 #: aligulac/ratings/tools.py:98
 msgid "Saudi Riyal"
-msgstr ""
+msgstr "沙特里亚尔"
 
 #: aligulac/ratings/tools.py:99
 msgid "Egyptian Pound"
-msgstr ""
+msgstr "埃及镑"
 
 #: aligulac/ratings/tools.py:100
 msgid "South African Rand"
-msgstr ""
+msgstr "南非兰德"
 
 #: aligulac/ratings/tools.py:101
 msgid "Bitcoin"
-msgstr ""
+msgstr "比特币"
 
 #: aligulac/ratings/tools.py:190
 #, python-format

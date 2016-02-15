@@ -2166,7 +2166,7 @@ msgstr "编辑"
 #: templates/ratinglist.djhtml:50 templates/ratinglist.djhtml.py:53
 #: templates/records.djhtml:38
 msgid "Rating"
-msgstr ""
+msgstr "评分"
 
 #: aligulac/ratings/misc_views.py:422
 msgid "Probability of winning..."
@@ -4517,15 +4517,15 @@ msgstr ""
 
 #: templates/db.djhtml:165
 msgid "Definition"
-msgstr ""
+msgstr "定义"
 
 #: templates/db.djhtml:166
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: templates/earnings.djhtml:11 templates/earnings.djhtml.py:16
 msgid "Earnings ranking"
-msgstr ""
+msgstr "收入排行"
 
 #: templates/earnings.djhtml:22
 #, python-format
@@ -4553,16 +4553,16 @@ msgstr ""
 
 #: templates/earnings.djhtml:43
 msgid "Year:"
-msgstr ""
+msgstr "年份："
 
 #: templates/earnings.djhtml:54
 #, fuzzy
 msgid "Country:"
-msgstr "国家"
+msgstr "国家："
 
 #: templates/earnings.djhtml:72
 msgid "Currency:"
-msgstr ""
+msgstr "货币："
 
 #. Translators: The verb "to filter".
 #: templates/earnings.djhtml:85 templates/history.djhtml:192
@@ -4590,7 +4590,7 @@ msgstr "玩家真实姓名"
 
 #: templates/eventmgr.djhtml:24
 msgid "Modify event / add new sub-events"
-msgstr ""
+msgstr "修改赛事/添加新的子赛事"
 
 #: templates/eventmgr.djhtml:33
 msgid ""
@@ -4604,12 +4604,12 @@ msgstr ""
 
 #: templates/eventmgr.djhtml:40
 msgid "Commit new sub-events"
-msgstr ""
+msgstr "提交一个新子赛事"
 
 #: templates/eventmgr.djhtml:41
 #, fuzzy
 msgid "Close event"
-msgstr "根据赛事"
+msgstr "关闭赛事"
 
 #: templates/eventmgr.djhtml:67
 msgid ""
@@ -4674,20 +4674,20 @@ msgstr ""
 
 #: templates/eventmgr.djhtml:95
 msgid "Add root event"
-msgstr ""
+msgstr "添加主赛事"
 
 #: templates/eventmgr.djhtml:98
 msgid "Show guide"
-msgstr ""
+msgstr "显示向导"
 
 #: templates/eventmgr.djhtml:118
 #, fuzzy
 msgid "event"
-msgstr "根据赛事"
+msgstr "赛事"
 
 #: templates/eventmgr.djhtml:122
 msgid "admin"
-msgstr ""
+msgstr "管理员"
 
 #: templates/eventmgr.djhtml:128
 msgid "modify"
@@ -4708,7 +4708,7 @@ msgstr ""
 
 #: templates/eventres.djhtml:101 templates/eventres.djhtml.py:571
 msgid "Add subevents"
-msgstr ""
+msgstr "添加子赛事"
 
 #: templates/eventres.djhtml:107
 msgid ""
@@ -4734,7 +4734,7 @@ msgstr ""
 #: templates/eventres.djhtml:141 templates/eventres.djhtml.py:142
 #, fuzzy
 msgid "[prize] [player]"
-msgstr "玩家A分数"
+msgstr "[prize] [player]"
 
 #: templates/eventres.djhtml:142
 msgid "Use this for prizes unrelated to placement, i.e. public tips."
@@ -4768,11 +4768,11 @@ msgstr ""
 
 #: templates/eventres.djhtml:227
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: templates/eventres.djhtml:228
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: templates/eventres.djhtml:267
 msgid "Navigation"
@@ -4784,7 +4784,7 @@ msgstr ""
 
 #: templates/eventres.djhtml:276
 msgid "Prize Pool"
-msgstr ""
+msgstr "奖金池"
 
 #: templates/eventres.djhtml:283
 msgid "Other Prizes"
@@ -4795,25 +4795,25 @@ msgstr ""
 #: templates/eventres.djhtml:311 templates/eventres.djhtml.py:336
 #: templates/events.djhtml:38 templates/results.djhtml:30
 msgid "Go"
-msgstr ""
+msgstr "前往"
 
 #: templates/eventres.djhtml:347 templates/eventres.djhtml.py:507
 #: templates/period.djhtml:202 templates/period.djhtml.py:354
 #: templates/reports_balance.djhtml:75 templates/reports_balance.djhtml:78
 msgid "PvT"
-msgstr ""
+msgstr "PvT"
 
 #: templates/eventres.djhtml:366 templates/eventres.djhtml.py:513
 #: templates/period.djhtml:219 templates/period.djhtml.py:358
 #: templates/reports_balance.djhtml:83 templates/reports_balance.djhtml:86
 msgid "PvZ"
-msgstr ""
+msgstr "PvZ"
 
 #: templates/eventres.djhtml:385 templates/eventres.djhtml.py:519
 #: templates/period.djhtml:236 templates/period.djhtml.py:362
 #: templates/reports_balance.djhtml:91 templates/reports_balance.djhtml:94
 msgid "TvZ"
-msgstr ""
+msgstr "TvZ"
 
 #: templates/eventres.djhtml:404 templates/eventres.djhtml.py:525
 #: templates/period.djhtml:253 templates/period.djhtml.py:366
@@ -4837,64 +4837,64 @@ msgstr ""
 
 #: templates/eventres.djhtml:471
 msgid "On-/Offline"
-msgstr ""
+msgstr "线上/线下"
 
 #: templates/eventres.djhtml:477
 msgid "Prizepool"
-msgstr ""
+msgstr "奖金池"
 
 #: templates/eventres.djhtml:527 templates/period.djhtml:367
 msgid "PvP"
-msgstr ""
+msgstr "PvP"
 
 #: templates/eventres.djhtml:528 templates/period.djhtml:367
 msgid "TvT"
-msgstr ""
+msgstr "TvT"
 
 #: templates/eventres.djhtml:529 templates/period.djhtml:367
 msgid "ZvZ"
-msgstr ""
+msgstr "ZvZ"
 
 #: templates/eventres.djhtml:534 templates/player.djhtml:696
 #: templates/team.djhtml:154
 msgid "External"
-msgstr ""
+msgstr "外部链接"
 
 #: templates/eventres.djhtml:541 templates/eventres.djhtml.py:544
 #: templates/eventres.djhtml:547 templates/eventres.djhtml.py:550
 #: templates/eventres.djhtml:553
 msgid "TLPD"
-msgstr ""
+msgstr "TLPD"
 
 #: templates/eventres.djhtml:557 templates/events_open.djhtml:44
 #: templates/events_open.djhtml.py:90 templates/events_open.djhtml:137
 msgid "TL"
-msgstr ""
+msgstr "TL"
 
 #. Translators: LP = Liquipedia
 #: templates/eventres.djhtml:560 templates/events_open.djhtml:47
 #: templates/events_open.djhtml.py:93 templates/events_open.djhtml:140
 #: templates/player.djhtml:709 templates/team.djhtml:160
 msgid "LP"
-msgstr ""
+msgstr "LP"
 
 #: templates/eventres.djhtml:568 templates/player.djhtml:717
 #: templates/team.djhtml:168
 msgid "Edit info"
-msgstr ""
+msgstr "编辑信息"
 
 #: templates/eventres.djhtml:569 templates/player.djhtml:718
 #: templates/team.djhtml:169
 msgid "Admin interface"
-msgstr ""
+msgstr "管理员界面"
 
 #: templates/eventres.djhtml:570
 msgid "Add matches"
-msgstr ""
+msgstr "添加比赛"
 
 #: templates/eventres.djhtml:573
 msgid "Prize pool"
-msgstr ""
+msgstr "奖金池"
 
 #. Translators: Stories are the dots on a player's rating chart.
 #: templates/eventres.djhtml:576 templates/player.djhtml:192
@@ -4903,7 +4903,7 @@ msgstr ""
 
 #: templates/eventres.djhtml:593
 msgid "This event has no registered games... yet."
-msgstr ""
+msgstr "这个赛事目前没有注册的游戏"
 
 #: templates/eventres.djhtml:598
 #, python-format
@@ -4917,13 +4917,13 @@ msgstr ""
 #: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
 #: templates/review.djhtml:46
 msgid "show"
-msgstr ""
+msgstr "显示"
 
 #: templates/eventres.prizepool.djhtml:45 templates/index.djhtml:195
 #: templates/matchlist.djhtml:81 templates/matchlist.djhtml.py:124
 #: templates/matchlist.djhtml:155 templates/matchlist.djhtml.py:170
 msgid "hide"
-msgstr ""
+msgstr "隐藏"
 
 #: templates/events.djhtml:27
 msgid "Go to smaller event:"
@@ -4942,16 +4942,16 @@ msgstr ""
 
 #: templates/events_open.djhtml:30
 msgid "Last added game"
-msgstr ""
+msgstr "最近添加的游戏"
 
 #: templates/events_open.djhtml:31 templates/events_open.djhtml.py:79
 #: templates/events_open.djhtml:125
 msgid "External links"
-msgstr ""
+msgstr "外部链接"
 
 #: templates/events_open.djhtml:60
 msgid "Close events"
-msgstr ""
+msgstr "关闭赛事"
 
 #: templates/events_open.djhtml:72
 msgid ""
@@ -5085,11 +5085,11 @@ msgstr ""
 
 #: templates/hof.djhtml:39 templates/period.djhtml:321
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 #: templates/hof.djhtml:40
 msgid "Length"
-msgstr ""
+msgstr "长度"
 
 #: templates/hof.djhtml:61 templates/period.djhtml:18
 #: templates/period.djhtml.py:322 templates/period.djhtml:326
@@ -5111,7 +5111,7 @@ msgstr ""
 
 #: templates/hof.djhtml:65
 msgid "weeks"
-msgstr ""
+msgstr "周"
 
 #: templates/index.djhtml:63 templates/index.djhtml.py:64
 #: templates/index.djhtml:65 templates/index.djhtml.py:66
@@ -5503,7 +5503,7 @@ msgstr ""
 #. Translators: No spaces
 #: templates/matchlist.djhtml:277
 msgid "offline,online"
-msgstr ""
+msgstr "线下，线上"
 
 #: templates/misc.djhtml:6 templates/misc.djhtml.py:11
 #, fuzzy
@@ -5514,7 +5514,7 @@ msgstr ""
 #: templates/period.djhtml:318
 #, python-format
 msgid "List %(n)s"
-msgstr ""
+msgstr "列表 %(n)s"
 
 #: templates/period.djhtml:28
 msgid "Best"
@@ -5526,7 +5526,7 @@ msgstr ""
 
 #: templates/period.djhtml:31
 msgid "Up/Down"
-msgstr ""
+msgstr "上/下"
 
 #: templates/period.djhtml:281
 msgid "Winners"
@@ -6211,25 +6211,25 @@ msgstr ""
 #: templates/results.djhtml:12 templates/results.djhtml.py:19
 #, python-format
 msgid "Results for %(date)s"
-msgstr ""
+msgstr "%(date)s 的结果"
 
 #: templates/results.djhtml:28
 msgid "Go to date:"
-msgstr ""
+msgstr "跳转日期至："
 
 #: templates/results.djhtml:41 templates/results.djhtml.py:72
 #: templates/results.djhtml:87 templates/results.djhtml.py:112
 msgid "month"
-msgstr ""
+msgstr "月"
 
 #: templates/results.djhtml:46 templates/results.djhtml.py:67
 #: templates/results.djhtml:92 templates/results.djhtml.py:107
 msgid "week"
-msgstr ""
+msgstr "周"
 
 #: templates/results.djhtml:121
 msgid "No registered results on this date."
-msgstr ""
+msgstr "该日期没有注册的结果"
 
 #: templates/results.djhtml:129
 #, python-format

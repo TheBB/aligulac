@@ -1858,8 +1858,7 @@ msgstr "瓦利斯群岛和富图纳群岛"
 
 #: aligulac/countries/data.py:754
 msgid "Samoa"
-msgstr "
-萨摩亚群岛"
+msgstr "萨摩亚群岛"
 
 #: aligulac/countries/data.py:755
 msgid "Yemen"
@@ -2617,7 +2616,7 @@ msgstr "%(player)s 战胜了 %(opponent)s 获得 %(event)s 出线资格"
 msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s."
 msgstr ""
-"%(player)s 战胜了 %(opponent)s 和 %(opponent)s 获得 %(event)s 出线资格"
+"%(player)s 战胜了 %(opponents)s 和 %(opponent)s 获得 %(event)s 出线资格"
 
 #: aligulac/ratings/models.py:209
 #, python-format
@@ -2634,7 +2633,7 @@ msgid ""
 "%(player)s defeated %(opponents)s and %(opponent)s to qualify for %(event)s "
 "alongside %(otherplayer)s."
 msgstr ""
-"%(player)s 战胜了 %(opponent)s 和 %(opponent)s 获得 %(event)s 出线资格"
+"%(player)s 战胜了 %(opponents)s 和 %(opponent)s 获得 %(event)s 出线资格"
 "其他出线名额包括 %(otherplayer)s"
 
 #: aligulac/ratings/models.py:213

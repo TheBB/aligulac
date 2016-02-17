@@ -38,11 +38,11 @@ LANGUAGES = [
     ('pl', 'Polski'),
     ('da', 'Dansk'),
     ('nb', 'Norsk (bokmål)'),
+    ('zh', '中文(简体)'),
 ]
 
 if DEBUG:
     LANGUAGES += [
-        ('zh', '中文(简化字)'),
         ('ru', 'Русский'),
         ('es', 'Español'),
         ('de', 'Deutsch'),

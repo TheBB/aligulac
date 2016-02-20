@@ -47,6 +47,7 @@ from ratings.models import (
     GAMES,
     GroupMembership,
     HOTS,
+    LOTV,
     Match,
     Player,
     PreMatch,
@@ -289,7 +290,7 @@ class ReviewMatchesForm(forms.Form):
 class AddMatchesForm(forms.Form):
     eventtext = StrippedCharField(max_length=200, required=False, label=_('Event'))
     date      = forms.DateField(required=True, label=_('Date'))
-    game      = forms.ChoiceField(choices=GAMES, label=_('Game version'), initial=HOTS)
+    game      = forms.ChoiceField(choices=GAMES, label=_('Game version'), initial=LOTV)
     offline   = forms.BooleanField(required=False, label=_('Offline'), initial=False)
     source    = StrippedCharField(max_length=1000, required=False, label=_('Source'))
     contact   = StrippedCharField(max_length=1000, required=False, label=_('Contact'))

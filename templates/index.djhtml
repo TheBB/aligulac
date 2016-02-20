@@ -114,7 +114,6 @@ To use, you should define the following blocks:
             {% trans "Language" %}:
             <a href="#" class="langbtn"><img src="{{ lang|img:"flags/langs" }}"></a>
             <input type="hidden" name="return" value="{{ cur_path }}" />
-            {% csrf_token %}
           </form>
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 text-right text-muted">

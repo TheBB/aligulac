@@ -17,6 +17,7 @@ from django.shortcuts import (
 )
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 
 from aligulac.cache import cache_page
 from aligulac.settings import (
@@ -360,6 +361,7 @@ def home(request):
 # }}}
 
 # {{{ Language change page
+@csrf_exempt
 def language(request):
     base = base_ctx(request=request)
 

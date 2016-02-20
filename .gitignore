@@ -195,3 +195,6 @@ resources/js/general.js
 
 # Used for testing bugs.
 aligulac/bugrep/
+
+# Virtualenv
+.venv

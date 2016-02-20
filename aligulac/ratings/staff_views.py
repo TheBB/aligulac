@@ -313,11 +313,15 @@ class AddMatchesForm(forms.Form):
 
         self.fields['eventobj'] = forms.ChoiceField(
             choices=[
-                (e['id'], e['fullname']) for e in Event.objects.filter(closed=False)
-                    .annotate(num_downlinks=Count('downlink'))
-                    .filter(num_downlinks=1)
-                    .order_by('idx')
-                    .values('id', 'fullname')
+                (e['id'], e['fullname'])
+                for e in Event.objects.filter(
+                        closed=False,
+                        type__in=(TYPE_ROUND, TYPE_EVENT)
+                )
+                .annotate(num_downlinks=Count('downlink'))
+                .filter(num_downlinks=1)
+                .order_by('idx')
+                .values('id', 'fullname')
             ],
             required=False, label=_('Event'),
         )

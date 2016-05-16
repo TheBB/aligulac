@@ -214,6 +214,20 @@ Needs:
 
 The repository does **not** contain the Django settings file or the database dumps. Templates are provided in [default.settings.py](aligulac/aligulac/default.settings.py) and [template.local.py](aligulac/aligulac/template.local.py)
 
+## Translating
+
+We're using [Transifex](https://www.transifex.com/) to manage our localization
+process. To contribute, head to the
+[Aligulac project on Transifex](https://www.transifex.com/aligulac/public/)
+and request to join a team.
+
+### Releasing with translations
+
+To download the translations from Transifex you'll need the
+[Transifex Client](https://pypi.python.org/pypi/transifex-client) Python package (`pip install transifex-client`) and run:
+    
+    tx pull --all
+
 ## Other
 
 (Unfinished section.)

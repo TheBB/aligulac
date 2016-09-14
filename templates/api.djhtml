@@ -131,7 +131,7 @@
 
       <pre>/api/v1/resourcename/?relatedobject__fieldname__filtername=value</pre>
 
-      <p>In principle, these chains can be arbitrarily long. The available filters correspond to those found in <a href="https://docs.djangoproject.com/en/1.6/ref/models/querysets/#field-lookups">Django</a>. Here is a brief overview:</p>
+      <p>In principle, these chains can be arbitrarily long. The available filters correspond to those found in <a href="https://docs.djangoproject.com/en/1.8/ref/models/querysets/#field-lookups">Django</a>. Here is a brief overview:</p>
 
       <ul>
         <li><strong>exact, iexact</strong>:

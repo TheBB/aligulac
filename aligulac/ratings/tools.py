@@ -55,7 +55,12 @@ PATCHES = [
     (date(year=2014, month=5,  day=23), '2.1.2 BU'),
     (date(year=2014, month=7,  day=25), '2.1.3 BU'),
     (date(year=2015, month=4,  day=9), '2.1.9 BU'),
-    (date(year=2015, month=11,  day=10), 'LotV')
+    (date(year=2015, month=11,  day=10), 'LotV'),
+    (date(year=2016, month=1,  day=29), '3.1.1 BU'),
+    (date(year=2016, month=5,  day=23), '3.3.0 BU'),
+    (date(year=2016, month=7,  day=6), '3.3.2 BU'),
+    (date(year=2016, month=11, day=21), '3.8.0'),
+    (date(year=2016, month=12, day=8), '3.8.0 BU')
 ]
 # }}}
 

@@ -200,7 +200,7 @@ The requirements are described in the requirements.txt file. It can be used dire
 Needs:
 
 - Python 2.6 or 2.7
-- Django 1.4.x
+- Django 1.8.x
 - A MySQL server
 - Python modules:
     * ccy

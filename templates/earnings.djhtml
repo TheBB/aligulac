@@ -43,6 +43,7 @@ This is the template for the earnings of a player. It's called from ratings.view
           <label for="year" class="inline-label">{% trans "Year:" %}</label>
           <select name="year" class="form-control input-sm">
             <option value="all" {% if filters.year == 'all' %}selected{% endif %}>{% trans "All" %}</option>
+            <option value="2017" {% if filters.year == '2017' %}selected{% endif %}>2017</option>
             <option value="2016" {% if filters.year == '2016' %}selected{% endif %}>2016</option>
             <option value="2015" {% if filters.year == '2015' %}selected{% endif %}>2015</option>
             <option value="2014" {% if filters.year == '2014' %}selected{% endif %}>2014</option>

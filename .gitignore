@@ -198,3 +198,6 @@ aligulac/bugrep/
 
 # Virtualenv
 .venv
+
+# Transifex
+locale

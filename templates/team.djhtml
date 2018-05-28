@@ -155,7 +155,7 @@ This shows a team page. Called from ratings.teamviews.team.
                   <a href="{{ team.homepage }}" target="_blank">{% trans "Homepage" %}</a>
                 {% endif %} 
                 {% if team.lp_name %}
-                  <a href="http://wiki.teamliquid.net/starcraft2/{{ team.lp_name }}" target="_blank">{% trans "LP" %}</a>
+                  <a href="https://liquipedia.net/starcraft2/{{ team.lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
               </td>
             </tr>

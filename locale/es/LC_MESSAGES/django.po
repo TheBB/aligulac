@@ -303,7 +303,7 @@ msgstr ""
 #: aligulac/aligulac/views.py:73 aligulac/aligulac/views.py:146
 #: aligulac/aligulac/views.py:251
 msgid ""
-"title of Liquipedia page (the part after http://wiki.teamliquid.net/"
+"title of Liquipedia page (the part after https://liquipedia.net/"
 "starcraft2/)"
 msgstr ""
 

@@ -290,10 +290,10 @@ msgstr ""
 #: aligulac/aligulac/views.py:251
 #, fuzzy
 msgid ""
-"title of Liquipedia page (the part after http://wiki.teamliquid.net/"
+"title of Liquipedia page (the part after https://liquipedia.net/"
 "starcraft2/)"
 msgstr ""
-"Titel des Liquipedia-Artikels <br/>der auf http://wiki.teamliquid.net/"
+"Titel des Liquipedia-Artikels <br/>der auf https://liquipedia.net/"
 "starcraft2/ folgende Teil"
 
 #: aligulac/aligulac/views.py:75

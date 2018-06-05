@@ -577,7 +577,7 @@ ratings.views.events.
                   <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ event.get_tl_thread }}" target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if event.get_lp_name %}
-                  <a href="http://wiki.teamliquid.net/starcraft2/{{ event.get_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                  <a href="https://liquipedia.net/starcraft2/{{ event.get_lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
               </td>
             </tr>

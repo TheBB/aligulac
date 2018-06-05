@@ -292,10 +292,10 @@ msgstr ""
 #: aligulac/aligulac/views.py:73 aligulac/aligulac/views.py:146
 #: aligulac/aligulac/views.py:251
 msgid ""
-"title of Liquipedia page (the part after http://wiki.teamliquid.net/"
+"title of Liquipedia page (the part after https://liquipedia.net/"
 "starcraft2/)"
 msgstr ""
-"titel på Liquipedia side <br/>delen efter http://wiki.teamliquid.net/"
+"titel på Liquipedia side <br/>delen efter https://liquipedia.net/"
 "starcraft2/"
 
 #: aligulac/aligulac/views.py:75

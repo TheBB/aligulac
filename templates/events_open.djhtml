@@ -44,7 +44,7 @@
                   <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if e.up_lp_name %}
-                  <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                  <a href="https://liquipedia.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
                 {% if e.up_tlpd_id %}
                   {% for tl, human in e.up_tlpd_db|get_tlpd_list %}
@@ -90,7 +90,7 @@
                 <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
               {% endif %}
               {% if e.up_lp_name %}
-                <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                <a href="https://liquipedia.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
               {% endif %}
               {% if e.up_tlpd_id %}
                 {% for tl, human in e.up_tlpd_db|get_tlpd_list %}
@@ -137,7 +137,7 @@
                   <a href="http://www.teamliquid.net/forum/viewmessage.php?topic_id={{ e.up_tl_thread }}" target="_blank">{% trans "TL" %}</a>
                 {% endif %}
                 {% if e.up_lp_name %}
-                  <a href="http://wiki.teamliquid.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
+                  <a href="https://liquipedia.net/starcraft2/{{ e.up_lp_name }}" target="_blank">{% trans "LP" %}</a>
                 {% endif %}
                 {% if e.up_tlpd_id %}
                   {% for tl, human in e.up_tlpd_db|get_tlpd_list %}

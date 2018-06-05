@@ -170,7 +170,7 @@
             </a>
             {% if p.lp_name %}
             {% comment %}Translators: LP = Liquipedia{% endcomment %}
-            <a href="http://wiki.teamliquid.net/starcraft2/{{ p.lp_name }}" target="_blank">{% trans "LP" %}</a>
+            <a href="https://liquipedia.net/starcraft2/{{ p.lp_name }}" target="_blank">{% trans "LP" %}</a>
             {% endif %}
           </td>
         </tr>

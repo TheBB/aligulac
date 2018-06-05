@@ -72,7 +72,7 @@ DBTABLES = [{
                   '1 = KR WoL, 2 = IN WoL, 4 = HotS, 8 = HotS beta, 16 = WoL beta)')),
             ('lp_name', 'integer', 
                 _('title of Liquipedia page ('
-                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
+                  'the part after https://liquipedia.net/starcraft2/)')),
             ('sc2e_id', 'integer', _('external sc2earnings.com ID')),
             ('country', 'character varying(2)', _('ISO-3166-1 alpha-2 country code')),
             ('race', 'character varying(1) not null', 
@@ -145,7 +145,7 @@ DBTABLES = [{
             ('homepage', 'character varying(200)', _('URL of the event website')),
             ('lp_name', 'character varying(200)', 
                 _('title of Liquipedia page ('
-                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
+                  'the part after https://liquipedia.net/starcraft2/)')),
             ('tlpd_id', 'integer', _('external TLPD ID')),
             ('tlpd_db', 'integer', 
                 _('bit-flag value denoting which TLPD databases this event is in: ('
@@ -250,7 +250,7 @@ DBTABLES = [{
             ('homepage', 'character varying (200)', _('URL of team website')),
             ('lp_name', 'character varying (200)', 
                 _('title of Liquipedia page ('
-                  'the part after http://wiki.teamliquid.net/starcraft2/)')),
+                  'the part after https://liquipedia.net/starcraft2/)')),
             ('is_team', 'boolean not null', _('whether this group is a proper team')),
             ('is_manual', 'boolean not null', 
                 _('whether this group has manually added members or not ('

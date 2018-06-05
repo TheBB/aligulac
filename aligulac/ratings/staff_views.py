@@ -1119,7 +1119,7 @@ def player_info_lp(request):
 
 def player_info_lp_helper(title):
     API_URL_BASE = (
-        "http://wiki.teamliquid.net/starcraft2/api.php?"
+        "https://liquipedia.net/starcraft2/api.php?"
         "format=json&"
         "action=query&"
         "titles={title}&"

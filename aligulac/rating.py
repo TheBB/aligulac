@@ -57,11 +57,7 @@ def maximize_1d(L, DL, D2L, x, disp=False):
 
     print("No solution from Newton's method, trying Scipy")
     res = minimize_scalar(mL)
-    if res.success:
-        return res.x
-
-    print('Returning None! (perf)')
-    return None
+    return res.x
 
 
 def fix_ww(myr, mys, oppr, opps, oppc, W, L):

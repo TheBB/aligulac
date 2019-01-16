@@ -15,6 +15,7 @@ from ratings.tools import (
     pdf,
     cdf,
 )
+from scipy.optimize import minimize_scalar
 
 LOG_CAP = 1e-10
 TOL = 1e-3 / 2

@@ -145,7 +145,7 @@ def performance(oppr, opps, oppc, W, L, text='', pr=False):
                     ret -= p[3]*alpha*(alpha+Mv) + p[4]*beta*(beta-Mv)
                 return ret
 
-            perf, init = nan, 1.0
+            perf, init = None, 1.0
             while perf is None and init >= -3.0:
                 perf = maximize_1d(logL, DlogL, D2logL, init)
                 init -= 0.1

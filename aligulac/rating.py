@@ -51,10 +51,16 @@ def maximize_1d(L, DL, D2L, x, disp=False):
             break
         x = x - y
 
-    if i == 100:
-        print('Returning None! (perf)')
-        return None
-    return x
+    if i < 99 and not isnan(x):
+        return x
+
+    print("No solution from Newton's method, trying Scipy")
+    res = minimize_scalar(mL)
+    if res.success:
+        return res.x
+
+    print('Returning None! (perf)')
+    return None
 
 
 def fix_ww(myr, mys, oppr, opps, oppc, W, L):
@@ -140,10 +146,10 @@ def performance(oppr, opps, oppc, W, L, text='', pr=False):
                 return ret
 
             perf, init = nan, 1.0
-            while isnan(perf):
+            while perf is None and init >= -3.0:
                 perf = maximize_1d(logL, DlogL, D2logL, init)
                 init -= 0.1
-            ret[cat+1] = perf
+            ret[cat+1] = perf if perf is not None else 1.0
 
     if meanok:
         ret[0] = sum(ret[1:]) / 3

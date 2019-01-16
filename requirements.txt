@@ -1,4 +1,5 @@
 numpy>=1.7.1
+scipy
 markdown2>=2.1.1
 python-dateutil>=2.1
 psycopg2>=2.5.1

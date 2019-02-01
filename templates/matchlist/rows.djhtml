@@ -1,0 +1,100 @@
+{% load sniplates %}
+{% load ratings_extras %}
+{% load i18n %}
+{% load l10n %}
+
+{% block player_row %}
+{% load_widgets player="matchlist/player.djhtml" %}
+  <tr {% if m.eventtext %}title="{{ m.eventtext }}"{% endif %}>
+    <td class="lm_date">
+      {% if m.date %}{{ m.date|date:"SHORT_DATE_FORMAT" }}{% endif %}
+    </td>
+    <td class="lm_rta">
+      {% if m.pla.rating %}{{ m.pla.rating|ratscale }}{% endif %}
+    </td>
+    <td class="lm_pla {% if m.pla.score >= m.plb.score %}winner{% else %}loser{% endif %}"
+        style="vertical-align: middle;">
+      {% if m.archon %}
+        {% widget "player:archon" p=m.pla %}
+      {% else %}
+        {% widget "player:player" p=m.pla %}
+      {% endif %}
+    </td>
+    <td class="lm_score" style="vertical-align: middle;">
+      {% if lm_predict %}
+        <span id="fix{{ m.identifier }}">
+          <a href="#" class="lmp" data-id="{{ m.identifier }}">
+            {{ m.pla.score }}–{{ m.plb.score }}
+          </a>
+        </span>
+        <span id="inp{{ m.identifier }}" style="display: none;">
+          <input type="text" name="{{ m.identifier }}_1" id="{{ m.identifier }}_1"
+                 style="text-align: right; width: 1.8em; padding: 0.2em;"
+                 value="{{ m.pla.score }}" class="form-control input-sm">
+          <input type="text" name="{{ m.identifier }}_2" id="{{ m.identifier }}_2"
+                 style="width: 1.8em; padding: 0.2em;" 
+                 value="{{ m.plb.score }}" class="form-control input-sm">
+        </span>
+      {% else %}
+        {{m.pla.score}}–{{m.plb.score}}
+      {% endif %}
+    </td>
+    <td class="lm_plb {% if m.plb.score >= m.pla.score %}winner{% else %}loser{% endif %}"
+        style="vertical-align: middle;">
+      {% if m.archon %}
+        {% widget "player:archon" p=m.plb rev=True %}
+      {% else %}
+        {% widget "player:player" p=m.plb rev=True%}
+      {% endif %}
+    </td>
+    <td class="lm_rtb">
+      {% if m.plb.rating %}{{ m.plb.rating|ratscale }}{% endif %}
+    </td>
+    <td class="lm_right">
+      {% if lm_adm %}
+        {% if lm_check %}
+          {% if lm_header == "info" %}
+            <input type="checkbox" name="match-{{ m.match_id }}" value="y">
+          {% elif lm_header == "partial" %}
+            <input type="checkbox"
+                   data-match="{{m.match.event_partpath|smallhash}}"
+                   name="match-{{ m.match_id }}"
+                   value="y">
+          {% else %}
+            <input type="checkbox"
+                   data-match="{{m.match.event_fullpath|smallhash}}"
+                   name="match-{{ m.match.event_fullpath|smallhash }}-{{ m.match_id }}"
+                   value="y">
+          {% endif %}
+        {% endif %}
+      {% elif lm_predict %}
+        <a target="new" href="{{ m|makematchlink|safe }}">
+          <span class="right-caret"></span>
+        </a>
+      {% elif not lm_noright %}
+        {% if m.messages %}
+          {% for msg in m.messages %}
+            <img src="{{ msg.type|img }}" title="{{ msg.text }}">
+          {% endfor %}
+        {% endif %}
+        {% if not m.archon and not m.treated %}
+          <img src="{{ "no"|img }}" alt="unrated" title="{% trans "unrated" %}">
+        {% endif %}
+        <img src="{{ m.game|img }}" alt="{{ m.game }}" title="{% trans m.game %}">
+        {% comment %}Translators: No spaces{% endcomment %}
+        {% trans "offline,online" as offon %}
+        <img src="{{ m.offline|yesno:"offline,online"|img }}" 
+             alt="{{ m.offline|yesno:"offline,online" }}"
+             title="{{ m.offline|yesno:offon }}">
+      {% endif %}
+      {% if not lm_noright %}
+      {% if lm_adm or adm %}
+        <a target="new" href="/admin/ratings/match/{{ m.match_id }}/">
+          <span class="right-caret"></span>
+        </a>
+      {% endif %}
+      {% endif %}
+    </td>
+  </tr>
+
+{% endblock %}

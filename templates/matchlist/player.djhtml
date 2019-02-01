@@ -1,0 +1,85 @@
+{% load sniplates %}
+{% load ratings_extras %}
+{% load i18n %}
+{% load l10n %}
+
+{% block player %}
+
+{% load_widgets player="matchlist/player.djhtml" %}
+
+{% if not rev %}
+
+{% widget "player:player_id" %}
+{% widget "player:player_review" %}
+{% widget "player:player_country" %}
+{% widget "player:player_race" %}
+
+{% else %}
+
+{% widget "player:player_race" %}
+{% widget "player:player_country" %}
+{% widget "player:player_review" %}
+{% widget "player:player_id" %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block archon %}
+
+{% load_widgets player="matchlist/player.djhtml" %}
+
+{% if not rev %}
+
+{% widget "player:player_id"      p=p.a1 %}
+{% widget "player:player_country" p=p.a1 %}
+/
+{% widget "player:player_id"      p=p.a2 %}
+{% widget "player:player_country" p=p.a2 %}
+{% widget "player:player_race" %}
+
+{% else %}
+
+{% widget "player:player_race" %}
+{% widget "player:player_country" p=p.a1 %}
+{% widget "player:player_id"      p=p.a1 %}
+/
+{% widget "player:player_country" p=p.a2 %}
+{% widget "player:player_id"      p=p.a2 %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block player_id %}
+  {% if p.id %}
+  <a href="/players/{{ p.id }}-{{ p.tag|urlfilter }}/">
+    {{p.tag}}
+  </a>
+  {% endif %}
+{% endblock %}
+
+{% block player_country %}
+{% if p.country %}
+  <img src="{{ p.country|lower|img:"flags" }}" alt="{{ p.country }}">
+{% endif %}
+{% endblock %}
+
+{% block player_race %}
+{% if p.race %}
+  <img src="{{ p.race|img }}" alt="{{ p.race }}">
+{% endif %}
+{% endblock %}
+
+{% block player_review %}
+{% if not p.id and lm_adm %}
+<div class="form-group"
+     style="display: inline-block; margin-bottom: 0; vertical-align: middle;">
+  <input type="text"
+         class="form-control"
+         name="match-{{ m.match_id }}-p"
+         style="text-align: right; display: inline-block; width: auto; veritcal-align: middle;"
+         value="{{p.tag}}">
+  </div>
+{% endif %}
+{% endblock %}

@@ -611,7 +611,7 @@ ratings.views.events.
   </div>
 
   {% if matches %}
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
+    {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
   {% else %}
     <div class="row text-center">
       <p>{% trans "This event has no registered games... yet." %}</p>

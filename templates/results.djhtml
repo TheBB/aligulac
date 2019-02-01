@@ -75,7 +75,7 @@ This page shows the results by date. Called from ratings.views.results.
   </div>
 
   {% if matches %}
-    {% include "matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
+    {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_adm=0 lm_header="full" %}
 
     <div class="row text-center">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -34,6 +34,8 @@ from aligulac.settings import (
 )
 
 from ratings.models import (
+    ArchonMatch,
+    LOTV,
     Match,
     Period,
     Player,
@@ -523,7 +525,7 @@ def add_counts(queryset):
     return queryset
 # }}}
 
-# {{{ display_matches: Prepare a match queryset for display. Works for both Match and PreMatch objects.
+# {{{ display_matches: Prepare a match queryset for display. Works for both Match, ArchonMatch and PreMatch objects.
 # Optional arguments:
 # - date: True to display dates, false if not.
 # - fix_left: Set to a player object if you want that player to be always listed on the left.
@@ -536,28 +538,67 @@ def display_matches(matches, date=True, fix_left=None, ratings=False, messages=T
 
     ret = []
     for idx, m in enumerate(matches):
+        not_pre = isinstance(m, Match) or isinstance(m, ArchonMatch)
         # {{{ Basic stuff
         r = {
             'match':        m,
             'match_id':     m.id,
-            'game':         m.game if isinstance(m, Match) else m.group.game,
-            'offline':      m.offline if isinstance(m, Match) else m.group.offline,
+            'offline':      m.offline if not_pre else m.group.offline,
             'treated':      isinstance(m, Match) and m.treated,
-            'pla': {
-                'id': m.pla_id,
-                'tag': m.pla.tag if m.pla is not None else m.pla_string,
-                'race': m.rca or (m.pla.race if m.pla else None),
-                'country': m.pla.country if m.pla else None,
-                'score': m.sca,
-            },
-            'plb': {
-                'id': m.plb_id,
-                'tag': m.plb.tag if m.plb is not None else m.plb_string,
-                'race': m.rcb or (m.plb.race if m.plb else None),
-                'country': m.plb.country if m.plb else None,
-                'score': m.scb,
-            },
         }
+
+        if type(m) is ArchonMatch:
+            r.update({
+                'pla': {
+                    'a1': {
+                        'id': m.pla1_id,
+                        'tag': m.pla1.tag,
+                        'country': m.pla1.country,
+                    },
+                    'a2': {
+                        'id': m.pla2_id,
+                        'tag': m.pla2.tag,
+                        'country': m.pla2.country,
+                    },
+                    'race': m.rca,
+                    'score': m.sca
+                },
+                'plb': {
+                    'a1': {
+                        'id': m.plb1_id,
+                        'tag': m.plb1.tag,
+                        'country': m.plb1.country,
+                    },
+                    'a2': {
+                        'id': m.plb2_id,
+                        'tag': m.plb2.tag,
+                        'country': m.plb2.country,
+                    },
+                    'race': m.rcb,
+                    'score': m.scb
+                },
+                'game': LOTV,
+                'archon': True
+            })
+        else:
+            r.update({
+                'pla': {
+                    'id': m.pla_id,
+                    'tag': m.pla.tag if m.pla is not None else m.pla_string,
+                    'race': m.rca or (m.pla.race if m.pla else None),
+                    'country': m.pla.country if m.pla else None,
+                    'score': m.sca,
+                },
+                'plb': {
+                    'id': m.plb_id,
+                    'tag': m.plb.tag if m.plb is not None else m.plb_string,
+                    'race': m.rcb or (m.plb.race if m.plb else None),
+                    'country': m.plb.country if m.plb else None,
+                    'score': m.scb,
+                },
+                'game': m.game if isinstance(m, Match) else m.group.game,
+                'archon': False
+            })
 
         if eventcount and isinstance(m, Match):
             r['eventcount'] = m.eventobj__match__count

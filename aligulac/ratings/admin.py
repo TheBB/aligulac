@@ -17,6 +17,7 @@ from tastypie.models import ApiKey as TPApiKey
 from ratings.models import (
     Alias,
     APIKey,
+    ArchonMatch,
     Earnings,
     Event,
     EventAdjacency,
@@ -187,6 +188,29 @@ class MatchAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+class ArchonMatchAdmin(admin.ModelAdmin):
+    list_display = ('date', 'get_res', 'offline', 'eventobj', 'submitter')
+    inlines = [MessagesInline]
+    exclude = ('period',)
+    list_filter = [
+        ('date', DateFieldListFilter)
+    ]
+    raw_id_fields = ('pla1', 'pla2', 'plb1', 'plb2')
+    form = MatchForm
+
+    def get_res(self, obj):
+        return '%s/%s %i-%i %s/%s' % (
+            str(obj.pla1), str(obj.pla2),
+            obj.sca, obj.scb,
+            str(obj.plb1), str(obj.plb2)
+        )
+    get_res.short_description = 'Result'
+
+    def has_add_permission(self, request):
+        return False
+
+
+
 class PeriodAdmin(admin.ModelAdmin):
     list_display = ('id', 'start', 'end', 'computed', 'needs_recompute')
     list_filter = ('computed', 'needs_recompute')
@@ -293,5 +317,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(PreMatchGroup, PreMatchGroupAdmin)
 admin.site.register(PreMatch, PreMatchAdmin)
 admin.site.register(APIKey, APIKeyAdmin)
+
+admin.site.register(ArchonMatch, ArchonMatchAdmin)
 
 admin.site.unregister(TPApiKey)

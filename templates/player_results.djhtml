@@ -183,6 +183,6 @@ This is the template for the match history of a player. It's called from ratings
     </div>
   </div>
 
-  {% include "matchlist.djhtml" with lm_list=matches lm_header="partial" %}
+  {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_header="partial" %}
 
 {% endblock %}

@@ -1374,46 +1374,82 @@ class Alias(models.Model):
 
 # {{{ Matches
 
-# This can operate on querysets in the current dev branch
-# of Django. Worth noting for the future. So currently it
-# works like this:
-#   q = Match.objects.symmetric_filter(...)
-# But in the future we can have things like:
-#   q = Match.objects.filter(date="2014-03-08")
-#   q = q.symmetric_filter(...)
-#
-# -- Prillan, 2014-03-08
-class MatchManager(models.Manager):
+class MatchQuerySet(models.QuerySet):
 
     def symmetric_filter(self, *args, **kwargs):
         q = Q(*args, **kwargs)
         swapped = swap_q_object(q)
         return super().filter(q | swapped)
 
-class Match(models.Model):
+def merge_query_sets(*qs, field_names=[]):
+
+    n = len(qs)
+    EOF = (1,)
+    EMPTY = (2,)
+    cache = [EMPTY] * n
+
+    reverse = [1] * len(field_names)
+    for i in range(len(field_names)):
+        if field_names[i][0] == '-':
+            reverse[i] = -1
+            field_names[i] = field_names[i][1:]
+    def comp(i):
+        x = cache[i]
+        return tuple(
+            map(lambda i: reverse[i] * getattr(x,field_names[i]),
+                range(len(field_names)))
+            )
+    def f(i):
+        return cache[i] is not EOF
+    def gen():
+        print(qs)
+        for i in range(n):
+            if cache[i] is EMPTY:
+                try:
+                    _x = next(qs[i])
+                except StopIteration:
+                    _x = EOF
+                cache[i] = _x
+
+        while not all(map(lambda x: x is EOF, cache)):
+            print(cache)
+            index = max(filter(f, range(n)), key=comp)
+            yield cache[index]
+            try:
+                _x = next(qs[index])
+            except StopIteration:
+                _x = EOF
+            cache[index] = _x
+
+    return gen()
+
+# class MergeMatchQuerySet(models.QuerySet):
+
+#     def __init__(self, *args, **kwargs):
+#         self.archon = ArchonMatch.objects
+#         self.match  = Match.objects
+
+#         self.sorter = []
+
+#         return super().__init__(*args, **kvargs)
+
+#     def order_by(self, *field_names):
+#         self.archon = self.archon.order_by(*field_names)
+#         self.match  = self.match.order_by(*field_names)
+
+#         self.sorter += field_names
+
+#         return self
+
+class BaseMatch(models.Model):
     class Meta:
-        verbose_name_plural = 'matches'
-        db_table = 'match'
+        abstract = True
 
-    objects = MatchManager()
-
-    # {{{ Fields
-    period = models.ForeignKey(
-        Period, null=False,
-        help_text='Period in which the match was played'
-    )
     date = models.DateField(
         'Date played', null=False,
         help_text='Date played'
     )
-    pla = models.ForeignKey(
-        Player, related_name='match_pla', verbose_name='Player A', null=False,
-        help_text='Player A'
-    )
-    plb = models.ForeignKey(
-        Player, related_name='match_plb', verbose_name='Player B', null=False,
-        help_text='Player B'
-    )
+
     sca = models.SmallIntegerField(
         'Score for player A', null=False, db_index=True,
         help_text='Score for player A'
@@ -1431,11 +1467,6 @@ class Match(models.Model):
         max_length=1, choices=MRACES, null=False, verbose_name='Race B', db_index=True,
         help_text='Race for player B'
     )
-
-    treated = models.BooleanField(
-        'Computed', default=False, null=False,
-        help_text='True if the given period has been recomputed since last change'
-    )
     event = models.CharField(
         'Event text (deprecated)', max_length=200, default='', blank=True,
         help_text='Event text (if no event object)'
@@ -1446,13 +1477,41 @@ class Match(models.Model):
     )
     submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
 
-    game = models.CharField(
-        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True,
-        help_text='Game version'
-    )
     offline = models.BooleanField(
         'Offline', default=False, null=False, db_index=True,
         help_text='True if the match was played offline'
+    )
+
+
+class Match(BaseMatch):
+    class Meta:
+        verbose_name_plural = 'matches'
+        db_table = 'match'
+
+    objects = MatchQuerySet.as_manager()
+
+    # {{{ Fields
+    period = models.ForeignKey(
+        Period, null=False,
+        help_text='Period in which the match was played'
+    )
+    pla = models.ForeignKey(
+        Player, related_name='match_pla', verbose_name='Player A', null=False,
+        help_text='Player A'
+    )
+    plb = models.ForeignKey(
+        Player, related_name='match_plb', verbose_name='Player B', null=False,
+        help_text='Player B'
+    )
+
+    treated = models.BooleanField(
+        'Computed', default=False, null=False,
+        help_text='True if the given period has been recomputed since last change'
+    )
+
+    game = models.CharField(
+        'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True,
+        help_text='Game version'
     )
 
     # Helper fields for fast loading of frequently accessed information
@@ -1519,7 +1578,7 @@ class Match(models.Model):
 
     # {{{ __init__: Has been overloaded to call populate_orig.
     def __init__(self, *args, **kwargs):
-        super(Match, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.populate_orig()
     # }}}
 
@@ -1668,6 +1727,42 @@ class Match(models.Model):
     # }}}
 # }}}
 
+class ArchonMatch(BaseMatch):
+    class Meta:
+        verbose_name_plural = 'archonmatches'
+        db_table = 'archonmatch'
+
+    objects = MatchQuerySet.as_manager()
+
+    # {{{ Fields
+    pla1 = models.ForeignKey(
+        Player, related_name='archon_match_pla1', verbose_name='Player A1', null=False,
+        help_text='Player A1'
+    )
+    pla2 = models.ForeignKey(
+        Player, related_name='archon_match_pla2', verbose_name='Player A2', null=False,
+        help_text='Player A2'
+    )
+    plb1 = models.ForeignKey(
+        Player, related_name='archon_match_plb1', verbose_name='Player B1', null=False,
+        help_text='Player B1'
+    )
+    plb2 = models.ForeignKey(
+        Player, related_name='archon_match_plb2', verbose_name='Player B2', null=False,
+        help_text='Player B2'
+    )
+
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+
+        if self.pla1.id > self.pla2.id:
+            self.pla1, self.pla2 = self.pla2, self.pla1
+        if self.plb1.id > self.plb2.id:
+            self.plb1, self.plb2 = self.plb2, self.plb1
+        # Save to DB and repopulate original fields.
+        super(ArchonMatch, self).save(force_insert, force_update, *args, **kwargs)
+    # }}}
+
+
 # {{{ Messages
 class Message(models.Model):
     class Meta:
@@ -1683,6 +1778,7 @@ class Message(models.Model):
     event = models.ForeignKey(Event, null=True)
     group = models.ForeignKey(Group, null=True)
     match = models.ForeignKey(Match, null=True)
+    archon_match = models.ForeignKey(ArchonMatch, null=True)
 
     def __str__(self):
         try:

@@ -103,7 +103,7 @@ This is the prediction page for single elimination brackets. It's called from ra
           <tr>
             <td colspan="8" style="padding: 0;">
               <table class="table table-hover" style="margin: 0;">
-                {% include "matchlist.djhtml" with lm_list=meanres lm_header="custom" lm_noright=True lm_autohide=True lm_notable=1 %}
+                {% include "matchlist/matchlist.djhtml" with lm_list=meanres lm_header="custom" lm_noright=True lm_autohide=True lm_notable=1 %}
               </table>
             </td>
           </tr>
@@ -119,7 +119,7 @@ This is the prediction page for single elimination brackets. It's called from ra
         <input type="hidden" name="ps" value="{{ form.ps.value }}">
         <div class="table-responsive">
           <table class="table table-hover">
-            {% include "matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 %}
+            {% include "matchlist/matchlist.djhtml" with lm_list=matches lm_header="custom" lm_predict=True lm_notable=1 lm_noright=True%}
           </table>
         </div>
         <button type="submit" class="btn btn-primary pull-right" style="margin: 0.4em;">

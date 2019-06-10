@@ -1,9 +1,8 @@
-from django.conf.urls import (
-    patterns,
-    url,
-)
+from django.urls import path
 
-urlpatterns = patterns('miniURL.views',
-    url(r'^new/$', 'new', name='url_new'),
-    url(r'^(?P<code>\w{16})/$', 'find_redirect', name='url_redirect'),
-)
+from .views import new, find_redirect
+
+urlpatterns = [
+    path('new', new, name='url_new'),
+    path('<slug:code>', find_redirect, name='url_redirect'),
+]

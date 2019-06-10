@@ -342,7 +342,7 @@ def player(request, player_id):
     if base['charts']:
         ratings = (
             total_ratings(player.rating_set.filter(period_id__lte=base['recentchange'].period_id))
-                .select_related('period__end')
+                .select_related('period')
                 .prefetch_related('prev__rta', 'prev__rtb')
                 .order_by('period')
         )
@@ -383,7 +383,7 @@ def player(request, player_id):
             point['data'].sort(key=lambda a: a['date'])
 
         # Look through stories
-        stories = player.story_set.all().select_related('event__fullname')
+        stories = player.story_set.all().select_related('event')
         for s in stories:
             if earliest.period.start < s.date < latest.period.start:
                 s.rating = interp_rating(s.date, ratings)

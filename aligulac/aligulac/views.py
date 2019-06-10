@@ -635,7 +635,7 @@ def changepwd(request):
 
 # {{{ Error handlers
 @cache_page
-def h404(request):
+def h404(request, exception):
     base = base_ctx(request=request)
     return HttpResponseNotFound(render_to_string('404.djhtml', base))
 

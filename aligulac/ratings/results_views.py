@@ -21,6 +21,7 @@ from django.db.models import (
 )
 from django.http import HttpResponse
 from django.shortcuts import (
+    render,
     redirect,
     render_to_response,
     get_object_or_404,
@@ -934,7 +935,7 @@ def results(request):
             .annotate(Count('eventobj__match'))
     )
 
-    add_links = request.user.is_authenticated() and request.user.is_staff
+    add_links = request.user.is_authenticated and request.user.is_staff
 
     base['matches'] = display_matches(matches, date=False, ratings=True, messages=True,
                                       eventcount=True, add_links=add_links)
@@ -1061,7 +1062,7 @@ def events(request, event_id=None):
 
     # {{{ Other easy statistics
 
-    add_links = request.user.is_authenticated() and request.user.is_staff
+    add_links = request.user.is_authenticated and request.user.is_staff
 
     base.update({
         'game':      etn(lambda: dict(GAMES)[matches.values('game').distinct()[0]['game']]),
@@ -1125,5 +1126,5 @@ def search(request):
     base['searchform'] = searchform
     # }}}
 
-    return render_to_response('results_search.djhtml', base, context_instance=RequestContext(request))
+    return render(request, 'results_search.djhtml', base)
 # }}}

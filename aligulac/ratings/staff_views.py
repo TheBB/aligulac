@@ -520,7 +520,7 @@ class AddMatchesForm(forms.Form):
 # Form for adding events.
 class AddEventsForm(forms.Form):
     parent_id = forms.IntegerField(required=True, label=_('Parent ID'))
-    predef_names = forms.ChoiceField([
+    predef_names = forms.ChoiceField(choices=[
         ('other', _('Other')),
         ('Group Stage, Playoffs', _('Group stage and playoffs')),
         ('Group A,Group B,Group C,Group D', _('Groups A through D')),
@@ -540,7 +540,7 @@ class AddEventsForm(forms.Form):
         ('Early rounds,Ro16,Ro8,Ro4,Final', _('Ro16→Final + early rounds')),
         ('Early rounds,Ro8,Ro4,Final', _('Ro8→Final + early rounds')),
         ('Early rounds,Ro4,Final', _('Ro4→Final + early rounds')),
-        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final', 
+        ('Early rounds,Ro64,Ro32,Ro16,Ro8,Ro4,Third place match,Final',
             _('Ro64→Final + 3rd place and early rounds')),
         ('Early rounds,Ro32,Ro16,Ro8,Ro4,Third place match,Final', _('Ro32→Final + 3rd place and early rounds')),
         ('Early rounds,Ro16,Ro8,Ro4,Third place match,Final', _('Ro16→Final + 3rd place and early rounds')),

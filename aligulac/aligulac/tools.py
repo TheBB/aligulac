@@ -15,7 +15,7 @@ from django.contrib.auth import (
     authenticate,
     login,
 )
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 from django.db.models import Q, F
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -290,7 +290,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 
     # Check for admin rights (must belong to match uploader group, but this is the only group that exists)
     if request != None:
-        base['adm'] = request.user.is_authenticated() and request.user.groups.exists()
+        base['adm'] = request.user.is_authenticated and request.user.groups.exists()
         base['user'] = request.user.username
     else:
         base['adm'] = False
@@ -342,7 +342,7 @@ def base_ctx(section=None, subpage=None, request=None, context=None):
 # alone.
 def cache_login_protect(view):
     def handler(request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             final_view = view
         else:
             final_view = cache_page(view)

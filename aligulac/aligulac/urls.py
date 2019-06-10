@@ -148,11 +148,14 @@ urlpatterns = [
 
 # {{{ If in debug mode (i.e. with the django server), we must serve CSS and JS ourselves.
 if settings.DEBUG:
+    import debug_toolbar
+
     resources = join(dirname(normpath(settings.PROJECT_PATH)), 'resources')
     urlpatterns += [
         re_path('fonts/(?P<path>.*)$', django.views.static.serve, {'document_root': join(resources, 'fonts')}),
         re_path('css/(?P<path>.*)$', django.views.static.serve, {'document_root': join(resources, 'css')}),
         re_path('js/(?P<path>.*)$', django.views.static.serve, {'document_root': join(resources, 'js')}),
-        re_path('img/(?P<path>.*)$', django.views.static.serve, {'document_root': join(resources, 'img')})
+        re_path('img/(?P<path>.*)$', django.views.static.serve, {'document_root': join(resources, 'img')}),
+        path('__debug__/', include(debug_toolbar.urls)),
     ]
 # }}}

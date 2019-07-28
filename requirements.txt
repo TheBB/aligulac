@@ -6,8 +6,6 @@ django-debug-toolbar==1.11
 django-sniplates==0.6.0
 django-tastypie==0.14.2
 markdown2==2.3.7
-mkl-fft==1.0.12
-mkl-random==1.0.2
 mwparserfromhell==0.5.4
 numpy==1.16.4
 psycopg2==2.7.6.1

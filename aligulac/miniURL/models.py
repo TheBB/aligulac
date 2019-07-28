@@ -13,7 +13,7 @@ class MiniURL(models.Model):
     code = models.CharField('Code', max_length=16, primary_key=True)
     longURL = models.URLField('URL', max_length=500, unique=True, null=False)
     date = models.DateTimeField('Date', auto_now_add=True, null=False)
-    submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
+    submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter', on_delete=models.CASCADE)
     nb_access = models.PositiveIntegerField('# accessed', default=0, null=False)
 
     def __str__(self):

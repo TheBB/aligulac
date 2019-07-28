@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('longURL', models.URLField(unique=True, verbose_name='URL')),
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name='Date')),
                 ('nb_access', models.PositiveIntegerField(default=0, verbose_name='# accessed')),
-                ('submitter', models.ForeignKey(blank=True, verbose_name='Submitter', to=settings.AUTH_USER_MODEL, null=True)),
+                ('submitter', models.ForeignKey(blank=True, verbose_name='Submitter', to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name_plural': 'Mini URLs',

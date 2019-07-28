@@ -354,7 +354,7 @@ class Event(models.Model):
     )
     parent = models.ForeignKey(
         'Event', null=True, blank=True, related_name='parent_event',
-        help_text='Parent event'
+        help_text='Parent event', on_delete=models.CASCADE,
     )
     lft = models.IntegerField('Left', null=True, blank=True, default=None)
     rgt = models.IntegerField('Right', null=True, blank=True, default=None)
@@ -710,8 +710,8 @@ class EventAdjacency(models.Model):
     class Meta:
         db_table = 'eventadjacency'
 
-    parent = models.ForeignKey(Event, null=False, db_index=True, related_name='downlink')
-    child = models.ForeignKey(Event, null=False, db_index=True, related_name='uplink')
+    parent = models.ForeignKey(Event, null=False, db_index=True, related_name='downlink', on_delete=models.CASCADE)
+    child = models.ForeignKey(Event, null=False, db_index=True, related_name='uplink', on_delete=models.CASCADE)
     distance = models.IntegerField(null=True, default=None)
 
     # {{{ String representation
@@ -782,7 +782,7 @@ class Player(models.Model):
 
     current_rating = models.ForeignKey(
         'Rating', blank=True, null=True, related_name='current',
-        help_text='Current rating'
+        help_text='Current rating', on_delete=models.CASCADE,
     )
 
     # Domination fields (for use in the hall of fame)
@@ -792,11 +792,11 @@ class Player(models.Model):
     )
     dom_start = models.ForeignKey(
         Period, blank=True, null=True, related_name='player_dom_start',
-        help_text='Start of domination period'
+        help_text='Start of domination period', on_delete=models.CASCADE,
     )
     dom_end = models.ForeignKey(
         Period, blank=True, null=True, related_name='player_dom_end',
-        help_text='End of domination period'
+        help_text='End of domination period', on_delete=models.CASCADE,
     )
     # }}}
 
@@ -1119,9 +1119,9 @@ class Story(models.Model):
         verbose_name_plural = 'stories'
         ordering = ['date']
 
-    player = models.ForeignKey(Player, null=False)
+    player = models.ForeignKey(Player, null=False, on_delete=models.CASCADE)
     date = models.DateField('Date', null=False)
-    event = models.ForeignKey(Event, null=True, blank=True)
+    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.CASCADE)
 
     message = models.CharField(
         'Message', max_length=1000, null=False, blank=False, choices=STORIES, default='')
@@ -1323,8 +1323,8 @@ class GroupMembership(models.Model):
     class Meta:
         db_table = 'groupmembership'
 
-    player = models.ForeignKey(Player, null=False)
-    group = models.ForeignKey(Group, null=False)
+    player = models.ForeignKey(Player, null=False, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=False, on_delete=models.CASCADE)
 
     start = models.DateField('Date joined', blank=True, null=True)
     end = models.DateField('Date left', blank=True, null=True)
@@ -1347,8 +1347,8 @@ class Alias(models.Model):
         db_table = 'alias'
 
     name = models.CharField('Alias', max_length=100, null=False)
-    player = models.ForeignKey(Player, null=True)
-    group = models.ForeignKey(Group, null=True)
+    player = models.ForeignKey(Player, null=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
 
     # {{{ String representation
     def __str__(self):
@@ -1399,7 +1399,7 @@ class Match(models.Model):
 
     # {{{ Fields
     period = models.ForeignKey(
-        Period, null=False,
+        Period, null=False, on_delete=models.CASCADE,
         help_text='Period in which the match was played'
     )
     date = models.DateField(
@@ -1408,11 +1408,11 @@ class Match(models.Model):
     )
     pla = models.ForeignKey(
         Player, related_name='match_pla', verbose_name='Player A', null=False,
-        help_text='Player A'
+        help_text='Player A', on_delete=models.CASCADE,
     )
     plb = models.ForeignKey(
         Player, related_name='match_plb', verbose_name='Player B', null=False,
-        help_text='Player B'
+        help_text='Player B', on_delete=models.CASCADE,
     )
     sca = models.SmallIntegerField(
         'Score for player A', null=False, db_index=True,
@@ -1442,9 +1442,9 @@ class Match(models.Model):
     )
     eventobj = models.ForeignKey(
         Event, null=True, blank=True, verbose_name='Event',
-        help_text='Event object'
+        help_text='Event object', on_delete=models.CASCADE,
     )
-    submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter')
+    submitter = models.ForeignKey(User, null=True, blank=True, verbose_name='Submitter', on_delete=models.SET_NULL)
 
     game = models.CharField(
         'Game', max_length=10, default=WOL, blank=False, null=False, choices=GAMES, db_index=True,
@@ -1457,11 +1457,11 @@ class Match(models.Model):
 
     # Helper fields for fast loading of frequently accessed information
     rta = models.ForeignKey(
-        'Rating', related_name='rta', verbose_name='Rating A', null=True,
+        'Rating', related_name='rta', verbose_name='Rating A', null=True, on_delete=models.CASCADE,
         help_text='Rating for player A at the time the match was played'
     )
     rtb = models.ForeignKey(
-        'Rating', related_name='rtb', verbose_name='Rating B', null=True,
+        'Rating', related_name='rtb', verbose_name='Rating B', null=True, on_delete=models.CASCADE,
         help_text='Rating for player B at the time the match was played'
     )
     # }}}
@@ -1679,10 +1679,10 @@ class Message(models.Model):
         'Message', max_length=1000, null=False, blank=False, choices=MESSAGES, default='')
     params = models.CharField('Parameters', max_length=1000, null=False, blank=False, default='')
 
-    player = models.ForeignKey(Player, null=True)
-    event = models.ForeignKey(Event, null=True)
-    group = models.ForeignKey(Group, null=True)
-    match = models.ForeignKey(Match, null=True)
+    player = models.ForeignKey(Player, null=True, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, null=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
+    match = models.ForeignKey(Match, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         try:
@@ -1729,11 +1729,11 @@ class WCSPoints(models.Model):
 
     # {{{ Fields
     event = models.ForeignKey(
-        Event, verbose_name='Event', null=False,
+        Event, verbose_name='Event', null=False, on_delete=models.CASCADE,
         help_text='Event in which these WCS points was awarded'
     )
     player = models.ForeignKey(
-        Player, verbose_name='Player', null=False,
+        Player, verbose_name='Player', null=False, on_delete=models.CASCADE,
         help_text='Player to which these WCS points was awarded'
     )
     points = models.IntegerField('Points', null=False, help_text='Number of points awarded')
@@ -1768,11 +1768,11 @@ class Earnings(models.Model):
 
     # {{{ Fields
     event = models.ForeignKey(
-        Event, verbose_name='Event', null=False,
+        Event, verbose_name='Event', null=False, on_delete=models.CASCADE,
         help_text='Event in which this prize was awarded'
     )
     player = models.ForeignKey(
-        Player, verbose_name='Player', null=False,
+        Player, verbose_name='Player', null=False, on_delete=models.CASCADE,
         help_text='Player to which this prize was awarded'
     )
     earnings = models.IntegerField(
@@ -1869,11 +1869,13 @@ class PreMatch(models.Model):
         db_table = 'prematch'
         verbose_name_plural = 'prematches'
 
-    group = models.ForeignKey(PreMatchGroup, null=False, blank=False, verbose_name='Group')
+    group = models.ForeignKey(PreMatchGroup, null=False, blank=False, verbose_name='Group', on_delete=models.CASCADE)
     pla = models.ForeignKey(
-        Player, related_name='prematch_pla', verbose_name='Player A', null=True, blank=True)
+        Player, related_name='prematch_pla', verbose_name='Player A',
+        null=True, blank=True, on_delete=models.CASCADE)
     plb = models.ForeignKey(
-        Player, related_name='prematch_plb', verbose_name='Player B', null=True, blank=True)
+        Player, related_name='prematch_plb', verbose_name='Player B',
+        null=True, blank=True, on_delete=models.CASCADE)
     pla_string = models.CharField('Player A (str)', max_length=200, default='', null=True, blank=True)
     plb_string = models.CharField('Player A (str)', max_length=200, default='', null=True, blank=True)
     sca = models.SmallIntegerField('Score for player A', null=False)
@@ -1914,18 +1916,18 @@ class Rating(models.Model):
 
     # {{{ Fields
     period = models.ForeignKey(
-        Period, null=False, verbose_name='Period',
+        Period, null=False, verbose_name='Period', on_delete=models.CASCADE,
         help_text='This rating applies to the given period'
     )
     player = models.ForeignKey(
-        Player, null=False, verbose_name='Player',
+        Player, null=False, verbose_name='Player', on_delete=models.CASCADE,
         help_text='This rating applies to the given player'
     )
 
     # Helper fields for fast loading of frequently accessed information
     prev = models.ForeignKey(
         'Rating', related_name='prevrating', verbose_name='Previous rating', null=True,
-        help_text='Previous rating for the same player'
+        help_text='Previous rating for the same player', on_delete=models.CASCADE,
     )
 
     # Standard rating numbers

@@ -195,7 +195,7 @@ class PeriodAdmin(admin.ModelAdmin):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.list_display_links = (None, )
+        self.list_display_links = ()
 
     def get_queryset(self, request):
         return Period.objects.filter(start__lte=datetime.today())

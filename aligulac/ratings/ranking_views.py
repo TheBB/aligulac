@@ -64,7 +64,7 @@ def period(request, period_id=None):
         period = get_object_or_404(Period, id=period_id, computed=True)
 
     if period.is_preview():
-        base['messages'].append(Message(msg_preview % django_date_filter(period.end, _('F jS')), type=Message.INFO))
+        base['messages'].append(Message(msg_preview % django_date_filter(period.end, 'F jS'), type=Message.INFO))
 
     base['period'] = period
     if period.id != base['curp'].id:

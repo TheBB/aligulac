@@ -125,6 +125,7 @@ CURRENCIES = {
     'EGP': _('Egyptian Pound'),
     'ZAR': _('South African Rand'),
     'XBT': _('Bitcoin'),
+    'BGN': _('Bulgarian Lev'),
 }
 # }}}
 

@@ -415,10 +415,10 @@ def country_list(queryset):
 # {{{ currency_list: Creates a list of currencies in the given queryset (of Earnings).
 def currency_list(queryset):
     currencies = queryset.values('currency').distinct().order_by('currency')
-    currency_dict = [
-        {'name': CURRENCIES[ccy.currency(c['currency']).code], 'code': ccy.currency(c['currency']).code} 
-        for c in currencies
-    ]
+    currency_dict = [{
+        'name': CURRENCIES.get(ccy.currency(c['currency']).code, _('Unknown currency')),
+        'code': ccy.currency(c['currency']).code
+    } for c in currencies]
     return currency_dict
 # }}}
 

@@ -73,7 +73,9 @@ PATCHES = [
     (date(year=2018, month=5, day=15), '4.3.0 BU'),
     (date(year=2018, month=11, day=20), '4.7.1'),
     (date(year=2019, month=1, day=22), '4.8.2'),
-    (date(year=2019, month=3, day=25), '4.8.3 BU')
+    (date(year=2019, month=3, day=25), '4.8.3 BU'),
+    (date(year=2019, month=8, day=21), '4.10.1 BU'),
+    (date(year=2019, month=11, day=26), '4.11.0')
 ]
 # }}}
 

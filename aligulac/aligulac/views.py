@@ -603,7 +603,7 @@ def logout_view(request):
     return redirect('/login/')
 
 def changepwd(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return redirect('/login/')
 
     base = base_ctx(request=request)

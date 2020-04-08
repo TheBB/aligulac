@@ -57,7 +57,7 @@ This is the Hall of Fame template. It's called from ratings.views.records.
            text: '{% trans "Ranking" %}' 
          },
          min: 800,
-         max: 3000
+         max: 3500
        },
        tooltip: {
          enabled: true,

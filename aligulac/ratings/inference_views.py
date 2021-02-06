@@ -290,11 +290,17 @@ def match(request):
     if not form.is_valid():
         return redirect('/inference/')
 
+    # Issue #314: Check for numeric value or reset to 0
+    if not str.isnumeric(s1):
+        s1 = 0
+    if not str.isnumeric(s2):
+        s2 = 0
+    
     result = MatchPredictionResult(
         dbpl=form.cleaned_data['ps'],
         bos=form.cleaned_data['bo'],
-        s1=get_param(request, 's1', 0),
-        s2=get_param(request, 's2', 0),
+        s1=s1,
+        s2=s2,
     )
     # }}}
 

@@ -291,6 +291,9 @@ def match(request):
         return redirect('/inference/')
 
     # Issue #314: Check for numeric value or reset to 0
+    s1 = get_param(request, 's1', 0)
+    s2 = get_param(request, 's1', 0)
+    
     if not str.isnumeric(s1):
         s1 = 0
     if not str.isnumeric(s2):

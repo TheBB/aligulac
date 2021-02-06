@@ -294,9 +294,9 @@ def match(request):
     s1 = get_param(request, 's1', 0)
     s2 = get_param(request, 's2', 0)
     
-    if type(s1) == str and not str.isnumeric(s1):
+    if not unicode(s1).isnumeric():
         s1 = 0
-    if type(s2) == str and not str.isnumeric(s2):
+    if not unicode(s2).isnumeric():
         s2 = 0
     
     result = MatchPredictionResult(

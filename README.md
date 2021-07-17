@@ -199,11 +199,13 @@ The requirements are described in the requirements.txt file. It can be used dire
 
 Needs:
 
-- Python 2.6 or 2.7
-- Django 1.8.x
+- Python 3.6
+- Django 2.2.x
 - A MySQL server
 - Python modules:
+    * beautifulsoup4
     * ccy
+    * certifi
     * dateutil
     * markdown
     * mysqldb

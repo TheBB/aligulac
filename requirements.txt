@@ -1,7 +1,7 @@
 beautifulsoup4==4.7.1
 ccy==1.0.0
 certifi==2019.3.9
-Django==2.2.4
+Django==2.2.27
 django-debug-toolbar==1.11
 django-sniplates==0.6.0
 django-tastypie==0.14.2

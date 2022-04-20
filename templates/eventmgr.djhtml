@@ -98,17 +98,14 @@ This is the template for the event manager admin page. It's called from ratings.
       </p>
     </div>
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 text">
-      <ul class="list-group">
-        {% for e in tree %}
+      <ul class="list-group" id="eventcontainer-0">
+        {% comment %}
+        {% for e in events %}
           <li class="list-group-item tree-node tree-node-{{e.event.type}} {% if forloop.first %}tree-node-first{% endif %}" {% if e.inc < 0 %}style="margin-bottom: -1px;"{% endif %}>
-            <span style="margin-left: {{e.indent|add:e.indent}}em;">
-              {% if e.inc > 0 %}
-                <a href="#" class="tree-toggle">
-                  {{e.event.name}}
-                </a>
-              {% else %}
-                {{e.event.name}}
-              {% endif %}
+            <span style="margin-left: 0em;">
+              <a href="#" class="tree-toggle">
+                {{e.name}}
+              </a>
             </span>
             <small class="pull-right">
               <a class="btn btn-default btn-xs"
@@ -133,9 +130,124 @@ This is the template for the event manager admin page. It's called from ratings.
               {{ e.inc|closedivs|safe }}
           {% endif %}
         {% endfor %}
+        {% endcomment %}
       </ul>
     </div>
   </div>
 
+  <script>
+    function modify(pid, pname, ptype) {
+      $('#parent_id_field').val(pid);
+      $('#id_type').val((function() {
+        switch (ptype) {
+          case 'round':
+            return 'round';
+          case 'event':
+            return 'round';
+          case 'category':
+            return 'category';
+        }
+      })());
+      $('#parent_name').html(pname);
+      return $('#md-eventmgr').modal();
+    };
+
+    function buildevent(data, top, indent) {
+      var elt = document.createElement('li');
+      elt.classList.add('list-group-item');
+      elt.classList.add('tree-node');
+      elt.classList.add('tree-node-' + data.type);
+      if (top)
+        elt.classList.add('tree-node-first');
+
+      var title = document.createElement('span');
+      title.setAttribute('style', 'margin-left: ' + indent + 'em;');
+      elt.appendChild(title);
+
+      if (data.has_subtree) {
+        var expandlink = document.createElement('a');
+        expandlink.innerHTML = data.name;
+        expandlink.href = '';
+        expandlink.setAttribute('data-event-id', data.id.toString());
+        expandlink.setAttribute('data-exparnded', '0');
+        expandlink.onclick = function () {
+          if ($(this).data('expanded') == '1')
+            return false;
+          $(this).data('expanded', '1');
+          var id = $(this).data('event-id');
+          addevents(id, indent + 1);
+          return false;
+        };
+        title.appendChild(expandlink);
+      }
+      else
+        title.innerHTML = data.name;
+
+      var right = document.createElement('span');
+      right.classList.add('pull-right');
+      elt.appendChild(right);
+
+      var eventlink = document.createElement('a');
+      eventlink.classList.add('btn');
+      eventlink.classList.add('btn-default');
+      eventlink.classList.add('btn-xs');
+      eventlink.href = '/results/events/' + data.id + '/';
+      eventlink.innerHTML = '{% trans "event" %}';
+      right.appendChild(eventlink);
+      right.appendChild(document.createTextNode(' '));
+
+      var adminlink = document.createElement('a');
+      adminlink.classList.add('btn');
+      adminlink.classList.add('btn-default');
+      adminlink.classList.add('btn-xs');
+      adminlink.href = '/admin/ratings/event/' + data.id + '/';
+      adminlink.innerHTML = '{% trans "admin" %}';
+      right.appendChild(adminlink);
+      right.appendChild(document.createTextNode(' '));
+
+      var modifylink = document.createElement('button');
+      modifylink.classList.add('btn');
+      modifylink.classList.add('btn-default');
+      modifylink.classList.add('btn-xs');
+      modifylink.classList.add('event-modify-button');
+      modifylink.setAttribute('data-event-id', data.id.toString());
+      modifylink.setAttribute('data-event-fullname', data.fullname);
+      modifylink.setAttribute('data-event-type', data.type);
+      modifylink.innerHTML = '{% trans "modify" %}';
+      modifylink.onclick = function () {
+        var id, name, type;
+        name = $(this).data('event-fullname');
+        id = $(this).data('event-id');
+        type = $(this).data('event-type');
+        return modify(id, name, type);
+      };
+      right.appendChild(modifylink);
+
+      var subtree = document.createElement('div');
+      subtree.classList.add('subtree');
+      subtree.id = 'eventcontainer-' + data.id;
+
+      if (data.parent_id === null)
+        data.parent_id = 0;
+      var container = document.getElementById('eventcontainer-' + data.parent_id);
+      container.appendChild(elt);
+      container.appendChild(subtree);
+    }
+
+    function addevents(parentid, indent) {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var events = JSON.parse(this.responseText);
+          for (var i = 0; i < events.length; i++)
+            buildevent(events[i], parentid == 0 && i == 0, indent);
+        }
+      }
+      xmlhttp.open('GET', '/add/events/children/' + parentid + '/');
+      xmlhttp.send();
+    }
+
+    addevents(0, 0);
+  </script>
 
 {% endblock %}

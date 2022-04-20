@@ -869,72 +869,34 @@ def events(request):
     base['form'] = form
 
     # Build event list
-    root_events = (
+    base['events'] = (
         Event.objects.filter(downlink__child__closed=False)
                      .filter(parent__isnull=True)
                      .order_by('idx')
                      .distinct()
     )
 
-    subtreemap = {
-        e.id: []
-        for e in root_events
-    }
-
-    tree = [{ 
-        'event': e,
-        'subtree': subtreemap[e.id],
-        'inc': 0,
-    } for e in root_events]
-
-    events = root_events
-    while events:
-        events = (
-            Event.objects.filter(downlink__child__closed=False)
-                         .filter(parent__in=events)
-                         .order_by('idx')
-                         .distinct()
-        )
-
-        for e in events:
-            subtreemap[e.id] = []
-            subtreemap[e.parent_id].append({
-                'event': e,
-                'subtree': subtreemap[e.id],
-                'inc': 0,
-            })
-
-    base['tree'] = []
-
-    def do_level(level, indent):
-        for e in level:
-            e['indent'] = indent
-            base['tree'].append(e)
-            if e['subtree']:
-                base['tree'][-1]['inc'] += 1
-                do_level(e['subtree'], indent+1)
-                base['tree'][-1]['inc'] -= 1
-
-    do_level(tree, 0)
+    # for ev in base['events']:
+    #     print(ev.name)
 
     return render_to_response('eventmgr.djhtml', base)
 
 # Auxiliary view called by JS code in the event manager for progressively opening subtrees
 def event_children(request, id):
-    event = Event.objects.get(id=id)
-    ret = [dict(q) for q in
-        event.get_immediate_children().filter(closed=False)
-            .order_by('name')
-            .values('id','type','name','fullname')
-    ]
+    if id == 0:
+        query = Event.objects.filter(downlink__child__closed=False).filter(parent__isnull=True).distinct()
+    else:
+        query = Event.objects.get(id=id).get_immediate_children().filter(closed=False)
 
-    depth = ntz(event.uplink.aggregate(Max('distance'))['distance__max'])
+    ret = [
+        dict(q) for q in
+        query.order_by('name').values('id','type','name','fullname','parent_id')
+    ]
 
     for q in ret:
         q['has_subtree'] = (
             Event.objects.filter(uplink__parent_id=q['id'], uplink__distance=1, closed=False).exists()
         )
-        q['uplink__distance__max'] = depth + 1
 
     return HttpResponse(json.dumps(ret))
 

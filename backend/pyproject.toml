@@ -20,3 +20,70 @@ aligulac = "aligulac:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=9.0.1",
+    "ruff>=0.14.5",
+]
+
+[tool.ruff]
+line-length = 110
+include = ["src/**/*.py", "stubs/**/*.pyi", "tests/**/*.py"]
+
+[tool.ruff.lint]
+extend-select = [
+    "A",        # Shadowing built-ins
+    "E",        # PyCodeStyle errors
+    "F",        # Pyflakes rules
+    "I",        # Sort imports properly
+    "N",        # Naming conventions
+    "S",        # Certain security checks
+    "W",        # PyCodeStyle warnings
+    "C4",       # Catch incorrect use of comprehensions, dict, list, etc
+    "FA",       # Enforce from __future__ import annotations
+    "TC",       # Enforce importing certain types in a TYPE_CHECKING block
+    "TD",       # Be diligent with TODO comments
+    "UP",       # Warn if certain things can changed due to newer Python versions
+    "BLE",      # Disallow catch-all except blocks
+    "COM",      # Trailing comma rules
+    "DTZ",      # Datetimes and timezones
+    "FBT",      # Boolean positional arguments
+    "ICN",      # Use common import conventions
+    "ISC",      # Good use of string concatenation
+    "NPY",      # Some numpy-specific things
+    "RET",      # Good return practices
+    "SIM",      # Common simplification rules
+    "TID",      # Some good import practices
+    "PTH",      # Use pathlib instead of os.path
+]
+ignore = [
+    "S101",     # Allow asserts
+    "COM812",   # Prevent formatting conflicts
+]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+lines-after-imports = 2
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "pydantic_settings.BaseSettings",
+    "sqlalchemy.orm.DeclarativeBase",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# asyncio_default_fixture_loop_scope = "function"
+
+[tool.mypy]
+files = ["src/**/*.py", "tests/**/*.py"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+show_error_codes = true
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src/stubs"

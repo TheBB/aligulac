@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import asyncio
-
 from datetime import date, datetime
 from decimal import Decimal
 
-from sqlalchemy import ForeignKey, types
-from sqlalchemy.ext.asyncio import AsyncAttrs, create_async_engine
+from sqlalchemy import ForeignKey
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -96,8 +94,8 @@ class Earning(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    event_id: Mapped[id] = mapped_column(ForeignKey("event.id"))
-    player_id: Mapped[id] = mapped_column(ForeignKey("player.id"))
+    event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    player_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
     earnings: Mapped[int | None]
     origearnings: Mapped[Decimal]
     currency: Mapped[str]

@@ -1,0 +1,22 @@
+[project]
+name = "aligulac"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Eivind Fonn", email = "evfonn@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.1",
+    "asyncpg>=0.30.0",
+    "psycopg2-binary>=2.9.11",
+    "sqlalchemy>=2.0.44",
+]
+
+[project.scripts]
+aligulac = "aligulac:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

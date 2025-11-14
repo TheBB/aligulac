@@ -1,0 +1,8 @@
+FROM python:3.6.15-bullseye
+
+COPY legacy /legacy
+RUN python3 -m pip install -r legacy/requirements.txt
+RUN python3 -m pip install gunicorn psycopg2-binary
+
+WORKDIR /legacy
+CMD ["gunicorn", "aligulac.wsgi", "--bind=0.0.0.0:8000"]

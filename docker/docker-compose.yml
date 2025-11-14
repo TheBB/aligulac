@@ -29,6 +29,17 @@ services:
       context: ../
       dockerfile: docker/Dockerfile.legacy
 
+  backend:
+    container_name: aligulac-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '${ALIGULAC_EXPOSE_BACKEND_PORT:-}:8000'
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.backend
+
   proxy:
     container_name: aligulac-proxy
     depends_on:

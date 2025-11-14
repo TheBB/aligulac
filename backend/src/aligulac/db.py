@@ -114,11 +114,11 @@ class Event(Base):
     parent_id: Mapped[int | None] = mapped_column(ForeignKey("event.id"))
     lft: Mapped[int | None]
     rgt: Mapped[int | None]
-    idx: Mapped[int]
+    idx: Mapped[int] = mapped_column(index=True)
 
-    closed: Mapped[bool]
+    closed: Mapped[bool] = mapped_column(index=True)
     big: Mapped[bool]
-    noprint: Mapped[bool]
+    noprint: Mapped[bool] = mapped_column(index=True)
 
     fullname: Mapped[str]
     homepage: Mapped[str | None]
@@ -128,12 +128,12 @@ class Event(Base):
     tlpd_db: Mapped[int | None]
     tl_thread: Mapped[int | None]
 
-    prizepool: Mapped[bool | None]
-    earliest: Mapped[date | None]
-    latest: Mapped[date | None]
+    prizepool: Mapped[bool | None] = mapped_column(index=True)
+    earliest: Mapped[date | None] = mapped_column(index=True)
+    latest: Mapped[date | None] = mapped_column(index=True)
 
-    category: Mapped[str | None]
-    kind: Mapped[str] = mapped_column("type")
+    category: Mapped[str | None] = mapped_column(index=True)
+    kind: Mapped[str] = mapped_column("type", index=True)
 
     family: Mapped[list[Event]] = relationship(secondary="EventAdjacency")
 
@@ -145,8 +145,8 @@ class EventAdjacency(Base):
     __tablename__ = "eventadjacency"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    parent_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
-    child_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+    parent_id: Mapped[int] = mapped_column(ForeignKey("event.id"), index=True)
+    child_id: Mapped[int] = mapped_column(ForeignKey("event.id"), index=True)
     distance: Mapped[int | None]
 
 
@@ -164,18 +164,18 @@ class Group(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(index=True)
     shortname: Mapped[str | None]
     scoreak: Mapped[float | None]
     scorepl: Mapped[float | None]
     meanrating: Mapped[float | None]
     founded: Mapped[date | None]
     disbanded: Mapped[date | None]
-    active: Mapped[bool]
+    active: Mapped[bool] = mapped_column(index=True)
     homepage: Mapped[str | None]
     lp_name: Mapped[str | None]
 
-    is_team: Mapped[bool]
+    is_team: Mapped[bool] = mapped_column(index=True)
     is_manual: Mapped[bool]
 
     players: Mapped[list[Player]] = relationship(
@@ -193,8 +193,8 @@ class GroupMembership(Base):
 
     start: Mapped[date | None]
     end: Mapped[date | None]
-    current: Mapped[bool]
-    playing: Mapped[bool]
+    current: Mapped[bool] = mapped_column(index=True)
+    playing: Mapped[bool] = mapped_column(index=True)
 
 
 class Match(Base):
@@ -206,11 +206,11 @@ class Match(Base):
     date: Mapped[date]
     pla_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
     plb_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
-    sca: Mapped[int]
-    scb: Mapped[int]
+    sca: Mapped[int] = mapped_column(index=True)
+    scb: Mapped[int] = mapped_column(index=True)
 
-    rca: Mapped[str]
-    rcb: Mapped[str]
+    rca: Mapped[str] = mapped_column(index=True)
+    rcb: Mapped[str] = mapped_column(index=True)
 
     treated: Mapped[bool]
     event: Mapped[str]
@@ -218,8 +218,8 @@ class Match(Base):
 
     submitter_id: Mapped[int | None] = mapped_column(ForeignKey("auth_user.id"))
 
-    game: Mapped[str]
-    offline: Mapped[bool]
+    game: Mapped[str] = mapped_column(index=True)
+    offline: Mapped[bool] = mapped_column(index=True)
 
     rta_id: Mapped[int | None] = mapped_column(ForeignKey("rating.id"))
     rtb_id: Mapped[int | None] = mapped_column(ForeignKey("rating.id"))
@@ -256,10 +256,10 @@ class Period(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    start: Mapped[date]
-    end: Mapped[date]
-    computed: Mapped[bool]
-    needs_recompute: Mapped[bool]
+    start: Mapped[date] = mapped_column(index=True)
+    end: Mapped[date] = mapped_column(index=True)
+    computed: Mapped[bool] = mapped_column(index=True)
+    needs_recompute: Mapped[bool] = mapped_column(index=True)
     num_retplayers: Mapped[int]
     num_newplayers: Mapped[int]
     num_games: Mapped[int]
@@ -273,12 +273,12 @@ class Player(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    tag: Mapped[str]
+    tag: Mapped[str] = mapped_column(index=True)
     name: Mapped[str | None]
     romanized_name: Mapped[str | None]
     birthday: Mapped[date | None]
-    country: Mapped[str | None]
-    race: Mapped[str]
+    country: Mapped[str | None] = mapped_column(index=True)
+    race: Mapped[str] = mapped_column(index=True)
     mcnum: Mapped[int | None]
 
     tlpd_id: Mapped[int | None]

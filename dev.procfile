@@ -1,0 +1,2 @@
+db: ALIGULAC_EXPOSE_DB_PORT=5432 docker compose -f docker/docker-compose.yml up db
+backend: uv --directory backend run litestar --app aligulac.server:create_app run -dr -R src/

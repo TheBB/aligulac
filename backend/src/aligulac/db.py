@@ -2,10 +2,15 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from decimal import Decimal
+from types import TracebackType
+from typing import Self
 
-from sqlalchemy import ForeignKey
-from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy import ForeignKey, select
+from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, AsyncSession, create_async_engine, AsyncEngine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
+type Session = AsyncSession
 
 
 class Base(AsyncAttrs, DeclarativeBase):
@@ -133,8 +138,6 @@ class Event(Base):
     category: Mapped[str | None] = mapped_column(index=True)
     kind: Mapped[str] = mapped_column("type", index=True)
 
-    family: Mapped[list[Event]] = relationship(secondary="EventAdjacency")
-
     wcs_year: Mapped[int | None]
     wcs_tier: Mapped[int | None]
 
@@ -176,10 +179,10 @@ class Group(Base):
     is_team: Mapped[bool] = mapped_column(index=True)
     is_manual: Mapped[bool]
 
-    players: Mapped[list[Player]] = relationship(
-        secondary="GroupMembership",
-        back_populates="groups",
-    )
+    # players: Mapped[list[Player]] = relationship(
+    #     secondary="groupmembership",
+    #     # back_populates="groups",
+    # )
 
 
 class GroupMembership(Base):
@@ -290,6 +293,11 @@ class Player(Base):
     dom_start_id: Mapped[float | None] = mapped_column(ForeignKey("period.id"))
     dom_end_id: Mapped[float | None] = mapped_column(ForeignKey("period.id"))
 
+    @staticmethod
+    async def from_pk(session: Session, player_id: int) -> Player:
+        result = await session.execute(select(Player).where(Player.id == player_id))
+        return result.scalar_one()
+
 
 class PreMatchGroup(Base):
     __tablename__ = "prematchgroup"
@@ -387,3 +395,27 @@ class WcsPoints(Base):
     player_id: Mapped[int] = mapped_column(ForeignKey("player.id"))
     points: Mapped[int]
     placement: Mapped[int]
+
+
+class Database:
+    url: str
+    session: async_sessionmaker[Session]
+
+    _engine: AsyncEngine
+
+    def __init__(self, url: str) -> None:
+        self.url = url
+
+    async def __aenter__(self) -> Self:
+        engine = create_async_engine(self.url)
+        self._engine = engine
+        self.session = async_sessionmaker(engine, expire_on_commit=False)
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None
+    ) -> None:
+        await self._engine.dispose()

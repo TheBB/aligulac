@@ -1,6 +1,7 @@
 import type { Config } from "vike/types";
 import vikePhoton from "vike-photon/config";
 import vikeReact from "vike-react/config";
+import vikeReactQuery from "vike-react-query/config";
 
 // Default config (can be overridden by pages)
 // https://vike.dev/config
@@ -10,7 +11,7 @@ export default {
   title: "My Vike App",
   description: "Demo showcasing Vike",
 
-  extends: [vikeReact, vikePhoton],
+  extends: [vikeReact, vikeReactQuery, vikePhoton],
 
   // https://vike.dev/vike-photon
   photon: {

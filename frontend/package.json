@@ -8,28 +8,30 @@
     "prod": "vike build && node ./dist/server/index.mjs"
   },
   "dependencies": {
-    "vike": "^0.4.246",
+    "@mantine/core": "^8.3.7",
+    "@mantine/hooks": "^8.3.7",
     "@photonjs/hono": "^0.1.6",
+    "@tanstack/react-query": "^5.90.9",
+    "@universal-middleware/core": "^0.4.13",
     "hono": "^4.10.5",
-    "vike-photon": "^0.1.16",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "vike": "^0.4.246",
+    "vike-photon": "^0.1.16",
     "vike-react": "^0.6.12",
-    "@universal-middleware/core": "^0.4.13",
-    "@mantine/core": "^8.3.7",
-    "@mantine/hooks": "^8.3.7"
+    "vike-react-query": "^0.1.10"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^7.2.2",
     "@biomejs/biome": "2.3.4",
     "@types/node": "^20.19.24",
-    "@vitejs/plugin-react": "^5.1.0",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.1.0",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
-    "postcss-simple-vars": "^7.0.1"
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.2"
   },
   "type": "module"
 }

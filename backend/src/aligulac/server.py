@@ -30,7 +30,7 @@ async def session_provider(database: db.Database) -> AsyncIterator[db.Session]:
         yield session
 
 
-@get("/player")
+@get("/api/web/player")
 async def get_player(player_id: int, session: db.Session) -> dict:
     player = await db.Player.from_pk(session, player_id)
     return {

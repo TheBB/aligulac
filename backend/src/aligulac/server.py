@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import os
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
-from typing import Callable, AsyncIterator
+from typing import TYPE_CHECKING
 
 from litestar import Litestar, get
-from litestar.datastructures import State
 from litestar.di import Provide
 
 from . import db
+
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator, Callable
+
+    from litestar.datastructures import State
 
 
 def db_connection(url: str) -> Callable[[Litestar], AbstractAsyncContextManager[None]]:
@@ -22,7 +27,7 @@ def db_connection(url: str) -> Callable[[Litestar], AbstractAsyncContextManager[
 
 
 async def database_provider(state: State) -> db.Database:
-    return state.database
+    return state.database  # type: ignore[no-any-return]
 
 
 async def session_provider(database: db.Database) -> AsyncIterator[db.Session]:
@@ -59,5 +64,5 @@ def create_app() -> Litestar:
         dependencies={
             "database": Provide(database_provider),
             "session": Provide(session_provider),
-        }
+        },
     )

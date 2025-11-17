@@ -2,12 +2,21 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from decimal import Decimal
-from types import TracebackType
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 from sqlalchemy import ForeignKey, select
-from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, AsyncSession, create_async_engine, AsyncEngine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 
 type Session = AsyncSession
@@ -416,6 +425,6 @@ class Database:
         self,
         exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
-        exc_tb: TracebackType | None
+        exc_tb: TracebackType | None,
     ) -> None:
         await self._engine.dispose()

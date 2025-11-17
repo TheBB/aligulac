@@ -4,7 +4,8 @@
     "build": "vike build",
     "preview": "vike preview",
     "lint": "biome lint --write .",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
+    "check": "biome check .",
     "prod": "vike build && node ./dist/server/index.mjs"
   },
   "dependencies": {

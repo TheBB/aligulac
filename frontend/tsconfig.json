@@ -4,22 +4,13 @@
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "Bundler",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    "types": [
-      "vite/client",
-      "vike-react"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vite/client", "vike-react"],
     "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
-  "exclude": [
-    "dist"
-  ]
+  "exclude": ["dist"]
 }

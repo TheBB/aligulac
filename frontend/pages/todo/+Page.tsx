@@ -1,4 +1,4 @@
-import { TodoList } from "./TodoList.js";
+import { TodoList } from "./TodoList.js"
 
 export default function Page() {
   return (
@@ -6,5 +6,5 @@ export default function Page() {
       <h1>To-do List</h1>
       <TodoList />
     </>
-  );
+  )
 }

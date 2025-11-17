@@ -1,11 +1,12 @@
-import type { Data } from "./+data";
-import { useState } from "react";
-import { useData } from "vike-react/useData";
+import { useState } from "react"
+import { useData } from "vike-react/useData"
+import type { Data } from "./+data"
 
 export function TodoList() {
-  const { todoItemsInitial } = useData<Data>();
-  const [todoItems, setTodoItems] = useState<{ text: string }[]>(todoItemsInitial);
-  const [newTodo, setNewTodo] = useState("");
+  const { todoItemsInitial } = useData<Data>()
+  const [todoItems, setTodoItems] =
+    useState<{ text: string }[]>(todoItemsInitial)
+  const [newTodo, setNewTodo] = useState("")
   return (
     <>
       <ul>
@@ -17,11 +18,11 @@ export function TodoList() {
       <div>
         <form
           onSubmit={async (ev) => {
-            ev.preventDefault();
+            ev.preventDefault()
 
-            const text = newTodo;
-            setTodoItems((prev) => [...prev, { text }]);
-            setNewTodo("");
+            const text = newTodo
+            setTodoItems((prev) => [...prev, { text }])
+            setNewTodo("")
 
             const response = await fetch("/api/todo/create", {
               method: "POST",
@@ -29,14 +30,18 @@ export function TodoList() {
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            await response.blob();
+            })
+            await response.blob()
           }}
         >
-          <input type="text" onChange={(ev) => setNewTodo(ev.target.value)} value={newTodo} />
+          <input
+            type="text"
+            onChange={(ev) => setNewTodo(ev.target.value)}
+            value={newTodo}
+          />
           <button type="submit">Add to-do</button>
         </form>
       </div>
     </>
-  );
+  )
 }

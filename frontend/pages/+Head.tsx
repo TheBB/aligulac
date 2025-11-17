@@ -1,7 +1,7 @@
 // https://vike.dev/Head
 
-import { ColorSchemeScript } from "@mantine/core";
-import logoUrl from "../assets/logo.svg";
+import { ColorSchemeScript } from "@mantine/core"
+import logoUrl from "../assets/logo.svg"
 
 export default function HeadDefault() {
   return (
@@ -9,5 +9,5 @@ export default function HeadDefault() {
       <link rel="icon" href={logoUrl} />
       <ColorSchemeScript defaultColorScheme="auto" />
     </>
-  );
+  )
 }

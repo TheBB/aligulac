@@ -1,7 +1,7 @@
-import type { Config } from "vike/types";
-import vikePhoton from "vike-photon/config";
-import vikeReact from "vike-react/config";
-import vikeReactQuery from "vike-react-query/config";
+import type { Config } from "vike/types"
+import vikePhoton from "vike-photon/config"
+import vikeReact from "vike-react/config"
+import vikeReactQuery from "vike-react-query/config"
 
 // Default config (can be overridden by pages)
 // https://vike.dev/config
@@ -17,4 +17,4 @@ export default {
   photon: {
     server: "../server/entry.ts",
   },
-} satisfies Config;
+} satisfies Config

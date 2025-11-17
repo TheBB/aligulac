@@ -1,10 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { Counter } from "./Counter.js"
+import { usePageContext } from "vike-react/usePageContext"
 
 export default function Page() {
   const isBrowser = typeof window !== "undefined"
   const isDev = import.meta.env.DEV
+  const context = usePageContext()
 
   const apiBase = isBrowser
     ? ""
@@ -38,6 +40,7 @@ export default function Page() {
             Inc
           </button>
         </li>
+        <li>{JSON.stringify(context.urlParsed.search)}</li>
       </ul>
     </>
   )

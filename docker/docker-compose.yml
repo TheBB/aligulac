@@ -36,9 +36,19 @@ services:
         condition: service_healthy
     ports:
       - '${ALIGULAC_EXPOSE_BACKEND_PORT:-}:8000'
+    environment:
+      ALIGULAC_DB: aligulac:aligulac@db:5432/aligulac
     build:
       context: ../
       dockerfile: docker/Dockerfile.backend
+
+  frontend:
+    container_name: aligulac-frontend
+    ports:
+      - '${ALIGULAC_EXPOSE_FRONTEND_PORT:-}:3000'
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.frontend
 
   proxy:
     container_name: aligulac-proxy
@@ -49,4 +59,4 @@ services:
       - '${ALIGULAC_EXPOSE_PROXY_PORT:-}:80'
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile.proxy

@@ -1,10 +1,18 @@
-import { useState } from "react";
-import { Counter } from "./Counter.js";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useState } from "react"
+import { Counter } from "./Counter.js"
+import { useSuspenseQuery } from "@tanstack/react-query"
+
 
 export default function Page() {
-  const isServer = typeof window === "undefined"
-  const apiBase = isServer ? "http://localhost:8000" : ""
+  const isBrowser = typeof window !== "undefined"
+  const isDev = import.meta.env.DEV
+
+  const apiBase =
+    isBrowser ? "" :
+    isDev ? "http://localhost:8000" :
+    "http://backend:8000"
+  // const apiBase =
+  //   isServer ? "http://localhost:8000" : ""
   const [playerId, setPlayerId] = useState(1)
 
   const result = useSuspenseQuery({
@@ -24,9 +32,9 @@ export default function Page() {
           Interactive. <Counter />
         </li>
         <li>{JSON.stringify(result)}</li>
-        <li>{JSON.stringify(isServer)}</li>
+        <li>{JSON.stringify({browser: isBrowser, dev: isDev})}</li>
         <li>Player {playerId} <button onClick={() => setPlayerId(p => p + 1)}>Inc</button></li>
       </ul>
     </>
-  );
+  )
 }

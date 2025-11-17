@@ -1,0 +1,11 @@
+FROM nginx:1.25.4-bookworm
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+HEALTHCHECK \
+    --interval=30s \
+    --timeout=10s \
+    --start-period=20s \
+    --start-interval=0.5s \
+    --retries=5 \
+    CMD service nginx status

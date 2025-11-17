@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from base64 import b64encode
 from datetime import date, datetime
 from decimal import Decimal
+from hashlib import pbkdf2_hmac
 from typing import TYPE_CHECKING, Self
 
 from sqlalchemy import ForeignKey, select
@@ -54,7 +56,7 @@ class AuthUser(Base):
     __tablename__ = "auth_user"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    password: Mapped[bytes]
+    password: Mapped[str]
     last_login: Mapped[datetime | None]
     is_superuser: Mapped[bool]
     username: Mapped[str]
@@ -64,6 +66,17 @@ class AuthUser(Base):
     is_staff: Mapped[bool]
     is_active: Mapped[bool]
     date_joined: Mapped[datetime]
+
+    @staticmethod
+    async def from_username(session: Session, username: str) -> AuthUser:
+        result = await session.execute(select(AuthUser).where(AuthUser.username == username))
+        return result.scalar_one()
+
+    def password_valid(self, password: str) -> bool:
+        method, niters, salt, checksum = self.password.encode().split(b"$")
+        if method != b"pbkdf2_sha256":
+            return False
+        return b64encode(pbkdf2_hmac("sha256", password.encode(), salt, int(niters))) == checksum
 
 
 class ApiKey(Base):

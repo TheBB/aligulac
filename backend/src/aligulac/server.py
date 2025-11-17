@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
 from typing import TYPE_CHECKING
 
 from litestar import Litestar, Request, Response, get, post
@@ -10,6 +10,7 @@ from litestar.di import Provide
 from litestar.exceptions import NotAuthorizedException
 from litestar.security.jwt import JWTCookieAuth, Token
 from pydantic import BaseModel
+from sqlalchemy.exc import NoResultFound
 
 from . import db
 
@@ -39,6 +40,20 @@ async def session_provider(database: db.Database) -> AsyncIterator[db.Session]:
         yield session
 
 
+@asynccontextmanager
+async def session_context(app: Litestar) -> AsyncIterator[db.Session]:
+    database: db.Database = app.state.database
+    session_provider = app.dependencies["session"]
+    session_it = (await session_provider(database=database)).__aiter__()
+
+    session: db.Session = await session_it.__anext__()
+    try:
+        yield session
+    finally:
+        with suppress(StopAsyncIteration):
+            await session_it.__anext__()
+
+
 @get("/api/web/player")
 async def get_player(player_id: int, session: db.Session) -> dict:
     player = await db.Player.from_pk(session, player_id)
@@ -59,10 +74,16 @@ class LoginData(BaseModel):
 
 
 @post("/api/login")
-async def login(data: LoginData) -> Response:
-    if data.username != "eivind" or data.password != "heihei":
+async def login(data: LoginData, session: db.Session) -> Response:
+    try:
+        user = await db.AuthUser.from_username(session, data.username)
+    except NoResultFound:
         raise NotAuthorizedException
-    return jwt_auth.login(identifier="eivind", response_body={"message": "login successful"})
+
+    if not user.password_valid(data.password):
+        raise NotAuthorizedException
+
+    return jwt_auth.login(identifier=data.username, response_body={"message": "login successful"})
 
 
 @post("/api/logout")
@@ -83,13 +104,15 @@ class User(BaseModel):
     username: str
 
 
-def retrieve_user_handler(token: Token, _: ASGIConnection) -> User | None:
-    if token.sub == "eivind":
-        return User(username="eivind")
-    return None
+async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> db.AuthUser | None:
+    async with session_context(connection.app) as session:
+        try:
+            return await db.AuthUser.from_username(session, token.sub)
+        except NoResultFound:
+            return None
 
 
-jwt_auth = JWTCookieAuth[User](
+jwt_auth = JWTCookieAuth[db.AuthUser](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=os.environ.get("ALIGULAC_SECRET", "dev-secret"),
     exclude=["/favicon.ico", "/api/login", "/api/logout", "/api/web/player"],

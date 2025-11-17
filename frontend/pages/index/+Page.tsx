@@ -57,8 +57,8 @@ export default function Page() {
             fetch(`${apiBase}/api/login`, {
               method: "POST",
               body: JSON.stringify({
-                username: "eivind",
-                password: "heihei"
+                username: "TheBB",
+                password: "<hidden>"
               })
             }).then(response => {
                 if (!response.ok) { throw new Error("damn") }

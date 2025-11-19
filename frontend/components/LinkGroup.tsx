@@ -19,42 +19,27 @@ interface LinksGroupProps {
   link?: string
 }
 
-export function LinksGroup({
-  icon: Icon,
-  label,
-  initiallyOpened,
-  links,
-  link,
-}: LinksGroupProps) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link }: LinksGroupProps) {
   const hasLinks = Array.isArray(links)
   const pageContext = usePageContext()
   const [opened, setOpened] = useState(
-    initiallyOpened ||
-      (hasLinks &&
-        links.some(({ link, exact }) =>
-          isLinkActive(pageContext, link, exact),
-        )),
+    initiallyOpened || (hasLinks && links.some(({ link, exact }) => isLinkActive(pageContext, link, exact))),
   )
-  const items = (hasLinks ? links : []).map(
-    ({ link, label, icon, exact, params }) => (
-      <Link
-        key={link}
-        href={link}
-        label={label}
-        className={classes.link}
-        icon={icon}
-        exact={exact}
-        params={params}
-      />
-    ),
-  )
+  const items = (hasLinks ? links : []).map(({ link, label, icon, exact, params }) => (
+    <Link
+      key={link}
+      href={link}
+      label={label}
+      className={classes.link}
+      icon={icon}
+      exact={exact}
+      params={params}
+    />
+  ))
 
   return hasLinks ? (
     <>
-      <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
-        className={classes.control}
-      >
+      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
         <Group justify="space-between" gap={0}>
           <Box style={{ display: "flex", alignItems: "center" }}>
             <ThemeIcon variant="light" size={30}>
@@ -75,11 +60,6 @@ export function LinksGroup({
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   ) : (
-    <Link
-      href={link as string}
-      label={label}
-      icon={Icon}
-      className={classes.barelink}
-    />
+    <Link href={link as string} label={label} icon={Icon} className={classes.barelink} />
   )
 }

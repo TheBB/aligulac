@@ -5,8 +5,11 @@ from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppres
 from typing import TYPE_CHECKING
 
 from litestar import Litestar, Response, get, post
+from litestar import Request as LitestarRequest
+from litestar.datastructures import State as LitestarState
 from litestar.di import Provide
 from litestar.exceptions import NotAuthorizedException
+from litestar.handlers import HTTPRouteHandler
 from litestar.security.jwt import JWTCookieAuth, Token
 from pydantic import BaseModel
 from sqlalchemy.exc import NoResultFound
@@ -17,8 +20,17 @@ from . import db
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Callable
 
-    from litestar.connection import ASGIConnection
-    from litestar.datastructures import State
+    from litestar.connection import ASGIConnection as LitestarASGIConnection
+
+
+class State(LitestarState):
+    database: db.Database
+
+
+type User = db.AuthUser
+type Auth = JWTCookieAuth[User]
+type AsgiConnection = LitestarASGIConnection[HTTPRouteHandler, User, Auth, State]
+type Request = LitestarRequest[User, Auth, State]
 
 
 def db_connection(url: str) -> Callable[[Litestar], AbstractAsyncContextManager[None]]:
@@ -32,7 +44,7 @@ def db_connection(url: str) -> Callable[[Litestar], AbstractAsyncContextManager[
 
 
 async def database_provider(state: State) -> db.Database:
-    return state.database  # type: ignore[no-any-return]
+    return state.database
 
 
 async def session_provider(database: db.Database) -> AsyncIterator[db.Session]:
@@ -54,6 +66,13 @@ async def session_context(app: Litestar) -> AsyncIterator[db.Session]:
             await session_it.__anext__()
 
 
+@get("/api/web/whoami")
+async def whoami(request: Request) -> dict:
+    return {
+        "username": request.user.username,
+    }
+
+
 @get("/api/web/player")
 async def get_player(player_id: int, session: db.Session) -> dict:
     player = await db.Player.from_pk(session, player_id)
@@ -73,7 +92,7 @@ class LoginData(BaseModel):
     password: str
 
 
-@post("/api/login")
+@post("/api/web/login")
 async def login(data: LoginData, session: db.Session) -> Response:
     try:
         user = await db.AuthUser.from_username(session, data.username)
@@ -83,28 +102,24 @@ async def login(data: LoginData, session: db.Session) -> Response:
     if not user.password_valid(data.password):
         raise NotAuthorizedException
 
-    return jwt_auth.login(identifier=data.username, response_body={"message": "login successful"})
+    return jwt_auth.login(identifier=data.username, response_body={"username": data.username})
 
 
-@post("/api/logout")
+@post("/api/web/logout")
 async def logout() -> Response:
     response = Response({"message": "logout successful"})
     response.delete_cookie("access_token")
     return response
 
 
-@get("/api/protected")
+@get("/api/web/protected")
 async def protected() -> dict:
     return {
         "bonk": "hi",
     }
 
 
-class User(BaseModel):
-    username: str
-
-
-async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> db.AuthUser | None:
+async def retrieve_user_handler(token: Token, connection: AsgiConnection) -> User | None:
     async with session_context(connection.app) as session:
         try:
             return await db.AuthUser.from_username(session, token.sub)
@@ -112,10 +127,10 @@ async def retrieve_user_handler(token: Token, connection: ASGIConnection) -> db.
             return None
 
 
-jwt_auth = JWTCookieAuth[db.AuthUser](
+jwt_auth = JWTCookieAuth[User](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=os.environ.get("ALIGULAC_SECRET", "dev-secret"),
-    exclude=["/favicon.ico", "/api/login", "/api/logout", "/api/web/player"],
+    exclude=["/favicon.ico", "/api/web/login", "/api/web/logout", "/api/web/player"],
     key="access_token",
     secure=bool(os.environ.get("ALIGULAC_PROD")),
     samesite="strict",
@@ -133,6 +148,7 @@ def create_app() -> Litestar:
             login,
             logout,
             protected,
+            whoami,
         ],
         lifespan=[
             db_connection(db_connstr),

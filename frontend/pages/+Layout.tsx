@@ -1,11 +1,13 @@
 import "@mantine/core/styles.css"
 import type { MantineThemeOverride } from "@mantine/core"
-import { ActionIcon, AppShell, createTheme, MantineProvider, useComputedColorScheme, useMantineColorScheme } from "@mantine/core"
+import { AppShell, createTheme, MantineProvider } from "@mantine/core"
+import { Notifications } from "@mantine/notifications"
 import { Navbar } from "../components/Navbar"
 
 import "./root.css"
-import { IconMoon, IconSun } from "@tabler/icons-react"
+import { AuthProvider } from "../components/Api"
 
+import "@mantine/notifications/styles.css"
 
 const theme: MantineThemeOverride = createTheme({
   primaryColor: "violet",
@@ -14,18 +16,21 @@ const theme: MantineThemeOverride = createTheme({
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <MantineProvider theme={theme} defaultColorScheme="auto">
-      <AppShell
-        navbar={{
-          width: 300,
-          breakpoint: "sm",
-        }}
-        padding="md"
-      >
-        <AppShell.Navbar>
-          <Navbar />
-        </AppShell.Navbar>
-        <AppShell.Main> {children} </AppShell.Main>
-      </AppShell>
+      <Notifications />
+      <AuthProvider>
+        <AppShell
+          navbar={{
+            width: 300,
+            breakpoint: "sm",
+          }}
+          padding="md"
+        >
+          <AppShell.Navbar>
+            <Navbar />
+          </AppShell.Navbar>
+          <AppShell.Main>{children}</AppShell.Main>
+        </AppShell>
+      </AuthProvider>
     </MantineProvider>
   )
 }

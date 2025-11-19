@@ -6,7 +6,8 @@
     }
   },
   "formatter": {
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "lineWidth": 110
   },
   "assist": {
     "actions": {
@@ -20,7 +21,8 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "noDuplicateProperties": "off"
       }
     },
     "domains": {

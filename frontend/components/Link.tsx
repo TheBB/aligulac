@@ -19,8 +19,7 @@ export const isLinkActive = (
     href = href.substring(0, index)
   }
 
-  let rval =
-    href === "/" || exact ? urlPathname === href : urlPathname.startsWith(href)
+  let rval = href === "/" || exact ? urlPathname === href : urlPathname.startsWith(href)
 
   if (params !== undefined) {
     Object.entries(params).forEach(([key, value]) => {
@@ -43,14 +42,7 @@ interface LinkProps {
   params?: { [k: string]: string }
 }
 
-export const Link: FC<LinkProps> = ({
-  href,
-  label,
-  className,
-  icon: Icon,
-  exact,
-  params,
-}) => {
+export const Link: FC<LinkProps> = ({ href, label, className, icon: Icon, exact, params }) => {
   const pageContext = usePageContext()
   const isActive = isLinkActive(pageContext, href, exact, params)
 

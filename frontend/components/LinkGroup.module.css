@@ -1,0 +1,21 @@
+.control {
+  display: block;
+  width: 100%;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  padding-top: var(--mantine-spacing-xs);
+  padding-bottom: var(--mantine-spacing-xs);
+  font-size: var(--mantine-font-size-sm);
+}
+
+.link {
+  display: block;
+  /* width: calc(var(--app-shell-navbar-width) - var(--mantine-spacing-xs) * ); */
+  /* border-left: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4)); */
+  /* padding-left: -10px; */
+  /* margin-left: var(--mantine-spacing-sm); */
+  /* margin-right: var(--mantine-spacing-xl); */
+}
+
+.chevron {
+  transition: transform 200ms ease;
+}

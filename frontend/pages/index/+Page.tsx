@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import { Counter } from "./Counter.js"
 import { usePageContext } from "vike-react/usePageContext"
+import { Counter } from "./Counter.js"
 
 export default function Page() {
   const isBrowser = typeof window !== "undefined"
@@ -26,10 +26,10 @@ export default function Page() {
   // Server-side query to protected page
   const bob = useSuspenseQuery({
     queryKey: ["protected"],
-    queryFn: () => fetch(
-      `${apiBase}/api/protected`,
-      {headers: {"Cookie": context.headers?.cookie ?? ""}}
-    ).then(res => res.json())
+    queryFn: () =>
+      fetch(`${apiBase}/api/protected`, {
+        headers: { Cookie: context.headers?.cookie ?? "" },
+      }).then((res) => res.json()),
   })
 
   return (
@@ -53,47 +53,64 @@ export default function Page() {
         </li>
         <li>{JSON.stringify(context.urlParsed.search)}</li>
         <li>
-          <button onClick={() => {
-            fetch(`${apiBase}/api/login`, {
-              method: "POST",
-              body: JSON.stringify({
-                username: "TheBB",
-                password: "<hidden>"
+          <button
+            type="button"
+            onClick={() => {
+              fetch(`${apiBase}/api/login`, {
+                method: "POST",
+                body: JSON.stringify({
+                  username: "TheBB",
+                  password: "<hidden>",
+                }),
               })
-            }).then(response => {
-                if (!response.ok) { throw new Error("damn") }
-                return response.json()
-              })
-              .then(data => alert(`success: ${JSON.stringify(data)}`))
-              .catch(error => alert(`error: ${JSON.stringify(error)}`))
-          }}>
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("damn")
+                  }
+                  return response.json()
+                })
+                .then((data) => alert(`success: ${JSON.stringify(data)}`))
+                .catch((error) => alert(`error: ${JSON.stringify(error)}`))
+            }}
+          >
             log in
           </button>
         </li>
         <li>
-          <button onClick={() => {
-            fetch(`${apiBase}/api/logout`, {
-              method: "POST"
-            }).then(response => {
-                if (!response.ok) { throw new Error("damn") }
-                return response.json()
+          <button
+            type="button"
+            onClick={() => {
+              fetch(`${apiBase}/api/logout`, {
+                method: "POST",
               })
-              .then(data => alert(`success: ${JSON.stringify(data)}`))
-              .catch(error => alert(`error: ${JSON.stringify(error)}`))
-          }}>
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("damn")
+                  }
+                  return response.json()
+                })
+                .then((data) => alert(`success: ${JSON.stringify(data)}`))
+                .catch((error) => alert(`error: ${JSON.stringify(error)}`))
+            }}
+          >
             log out
           </button>
         </li>
         <li>
-          <button onClick={() => {
-            fetch(`${apiBase}/api/protected`)
-              .then(response => {
-                if (!response.ok) { throw new Error("damn") }
-                return response.json()
-              })
-              .then(data => alert(`success: ${JSON.stringify(data)}`))
-              .catch(error => alert(`error: ${JSON.stringify(error)}`))
-          }}>
+          <button
+            type="button"
+            onClick={() => {
+              fetch(`${apiBase}/api/protected`)
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("damn")
+                  }
+                  return response.json()
+                })
+                .then((data) => alert(`success: ${JSON.stringify(data)}`))
+                .catch((error) => alert(`error: ${JSON.stringify(error)}`))
+            }}
+          >
             fetch protected
           </button>
         </li>

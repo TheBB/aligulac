@@ -4,8 +4,7 @@ import os
 from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
 from typing import TYPE_CHECKING
 
-from litestar import Litestar, Request, Response, get, post
-from litestar.connection import ASGIConnection
+from litestar import Litestar, Response, get, post
 from litestar.di import Provide
 from litestar.exceptions import NotAuthorizedException
 from litestar.security.jwt import JWTCookieAuth, Token
@@ -18,6 +17,7 @@ from . import db
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Callable
 
+    from litestar.connection import ASGIConnection
     from litestar.datastructures import State
 
 

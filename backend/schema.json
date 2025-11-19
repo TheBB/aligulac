@@ -1,5 +1,80 @@
 {
   "$defs": {
+    "ListedPlayer": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "integer"
+        },
+        "tag": {
+          "title": "Tag",
+          "type": "string"
+        },
+        "race": {
+          "$ref": "#/$defs/Race"
+        },
+        "country": {
+          "title": "Country",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "tag",
+        "race",
+        "country"
+      ],
+      "title": "ListedPlayer",
+      "type": "object"
+    },
+    "ListedRating": {
+      "properties": {
+        "rating": {
+          "title": "Rating",
+          "type": "number"
+        },
+        "vp": {
+          "title": "Vp",
+          "type": "number"
+        },
+        "vt": {
+          "title": "Vt",
+          "type": "number"
+        },
+        "vz": {
+          "title": "Vz",
+          "type": "number"
+        }
+      },
+      "required": [
+        "rating",
+        "vp",
+        "vt",
+        "vz"
+      ],
+      "title": "ListedRating",
+      "type": "object"
+    },
+    "ListedRatingEntry": {
+      "properties": {
+        "player": {
+          "$ref": "#/$defs/ListedPlayer"
+        },
+        "current": {
+          "$ref": "#/$defs/ListedRating"
+        },
+        "previous": {
+          "$ref": "#/$defs/ListedRating"
+        }
+      },
+      "required": [
+        "player",
+        "current",
+        "previous"
+      ],
+      "title": "ListedRatingEntry",
+      "type": "object"
+    },
     "LoginRequest": {
       "properties": {
         "username": {
@@ -29,6 +104,43 @@
         "username"
       ],
       "title": "LoginResponse",
+      "type": "object"
+    },
+    "Race": {
+      "enum": [
+        "P",
+        "T",
+        "Z",
+        "R"
+      ],
+      "type": "string"
+    },
+    "TopTenResponse": {
+      "properties": {
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "ratings": {
+          "items": {
+            "$ref": "#/$defs/ListedRatingEntry"
+          },
+          "title": "Ratings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "period_start",
+        "period_end",
+        "ratings"
+      ],
+      "title": "TopTenResponse",
       "type": "object"
     }
   },

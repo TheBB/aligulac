@@ -66,6 +66,18 @@ async def session_context(app: Litestar) -> AsyncIterator[Session]:
             await session_it.__anext__()
 
 
+@get("/api/web/topten")
+async def top_ten(session: Session) -> models.TopTenResponse:
+    period = await db.Period.latest(session)
+    ratings = await db.Rating.ranking(session, period_id=period.id)
+    return models.TopTenResponse.model_validate({
+        "period_start": period.start,
+        "period_end": period.end,
+        "ratings": ratings,
+    })
+
+
+
 @get("/api/web/whoami")
 async def whoami(request: Request) -> models.LoginResponse:
     """Return the ID of the currently logged-in user.
@@ -129,7 +141,13 @@ async def retrieve_user_handler(token: Token, connection: AsgiConnection) -> Use
 jwt_auth = JWTCookieAuth[User](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=os.environ.get("ALIGULAC_SECRET", "dev-secret"),
-    exclude=["/favicon.ico", "/api/web/login", "/api/web/logout", "/api/web/player"],
+    exclude=[
+        "/favicon.ico",
+        "/api/web/login",
+        "/api/web/logout",
+        "/api/web/player",
+        "/api/web/topten",
+    ],
     key="access_token",
     secure=bool(os.environ.get("ALIGULAC_PROD")),
     samesite="strict",
@@ -144,9 +162,12 @@ def create_app() -> Litestar:
         [
             favicon,
             get_player,
+            protected,
+
+            top_ten,
+
             login,
             logout,
-            protected,
             whoami,
         ],
         lifespan=[

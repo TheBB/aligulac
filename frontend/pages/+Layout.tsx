@@ -1,13 +1,15 @@
 import "@mantine/core/styles.css"
+
 import type { MantineThemeOverride } from "@mantine/core"
 import { AppShell, createTheme, MantineProvider } from "@mantine/core"
 import { Notifications } from "@mantine/notifications"
 import { Navbar } from "../components/Navbar"
 
-import "./root.css"
 import { AuthProvider } from "../components/Api"
 
 import "@mantine/notifications/styles.css"
+import "mantine-datatable/styles.layer.css"
+import "./root.css"
 
 const theme: MantineThemeOverride = createTheme({
   primaryColor: "violet",

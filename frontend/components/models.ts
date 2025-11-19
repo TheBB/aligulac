@@ -5,11 +5,58 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+export type Id = number;
+export type Tag = string;
+/**
+ * This interface was referenced by `Schema`'s JSON-Schema
+ * via the `definition` "Race".
+ */
+export type Race = "P" | "T" | "Z" | "R";
+export type Country = string;
+export type Rating = number;
+export type Vp = number;
+export type Vt = number;
+export type Vz = number;
 export type Username = string;
 export type Password = string;
 export type Username1 = string;
+export type PeriodStart = string;
+export type PeriodEnd = string;
+export type Ratings = ListedRatingEntry[];
 
 export interface Schema {
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `Schema`'s JSON-Schema
+ * via the `definition` "ListedPlayer".
+ */
+export interface ListedPlayer {
+  id: Id;
+  tag: Tag;
+  race: Race;
+  country: Country;
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `Schema`'s JSON-Schema
+ * via the `definition` "ListedRating".
+ */
+export interface ListedRating {
+  rating: Rating;
+  vp: Vp;
+  vt: Vt;
+  vz: Vz;
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `Schema`'s JSON-Schema
+ * via the `definition` "ListedRatingEntry".
+ */
+export interface ListedRatingEntry {
+  player: ListedPlayer;
+  current: ListedRating;
+  previous: ListedRating;
   [k: string]: unknown;
 }
 /**
@@ -27,5 +74,15 @@ export interface LoginRequest {
  */
 export interface LoginResponse {
   username: Username1;
+  [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `Schema`'s JSON-Schema
+ * via the `definition` "TopTenResponse".
+ */
+export interface TopTenResponse {
+  period_start: PeriodStart;
+  period_end: PeriodEnd;
+  ratings: Ratings;
   [k: string]: unknown;
 }

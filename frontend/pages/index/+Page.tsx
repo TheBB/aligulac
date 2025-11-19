@@ -1,7 +1,54 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { FC, useState } from "react"
 import { usePageContext } from "vike-react/usePageContext"
+import { DataTable } from "mantine-datatable"
 import { Counter } from "./Counter.js"
+import { useTopTen } from "../../components/Api.js"
+import { Box, NumberFormatter, ThemeIcon } from "@mantine/core"
+import { IconCaretDown, IconCaretDownFilled, IconCaretUpFilled } from "@tabler/icons-react"
+
+const Rating: FC<{value: number}> = ({value}) => {
+  return (
+    <NumberFormatter value={(value + 1) * 1000} decimalScale={0} />
+  )
+}
+
+const Arrows: FC<{magnitude: number}> = ({magnitude}) => {
+  if (magnitude === 0) { return null }
+  const Arrow = magnitude > 0 ? IconCaretUpFilled : IconCaretDownFilled
+  const color = magnitude > 0 ? "green" : "red"
+
+  if (Math.abs(magnitude) > 2) {
+    return (
+      <Box pos="relative" w={16} h={26}>
+        <ThemeIcon color={color} variant="subtle">
+          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 13px)", left: "calc(50% - 8px)"}} />
+          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)"}} />
+          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 3px)", left: "calc(50% - 8px)"}} />
+        </ThemeIcon>
+      </Box>
+    )
+  }
+
+  if (Math.abs(magnitude) > 1) {
+    return (
+      <Box pos="relative" w={16} h={26}>
+        <ThemeIcon color={color} variant="subtle">
+          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 10px)", left: "calc(50% - 8px)"}} />
+          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 5px)", left: "calc(50% - 8px)"}} />
+        </ThemeIcon>
+      </Box>
+    )
+  }
+
+  return (
+    <Box pos="relative" w={16} h={26}>
+      <ThemeIcon color={color} variant="subtle">
+        <Arrow size={16} style={{position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)"}} />
+      </ThemeIcon>
+    </Box>
+  )
+}
 
 export default function Page() {
   const isBrowser = typeof window !== "undefined"
@@ -25,6 +72,45 @@ export default function Page() {
       }).then((res) => res.json()),
   })
 
+  const {data} = useTopTen()
+
+  return (
+    <DataTable
+      records={data.ratings}
+      columns={[
+        {
+          accessor: "player.country",
+        },
+        {
+          accessor: "player.race",
+        },
+        {
+          accessor: "player.tag",
+        },
+        {
+          accessor: "current.rating",
+          render: (entry) => <Rating value={entry.current.rating} />,
+        },
+        {
+          accessor: "current.vp",
+          render: (entry) => <Rating value={entry.current.rating + entry.current.vp} />,
+        },
+        {
+          accessor: "current.vt",
+          render: (entry) => <Rating value={entry.current.rating + entry.current.vt} />,
+        },
+        {
+          accessor: "current.vz",
+          render: (entry) => <Rating value={entry.current.rating + entry.current.vz} />,
+        },
+        {
+          accessor: "current.vz",
+          render: (entry) => <Arrows magnitude={-3} />,
+        }
+      ]}
+    />
+  )
+
   return (
     <>
       <h1>My Vike app</h1>
@@ -45,6 +131,7 @@ export default function Page() {
           </button>
         </li>
         <li>{JSON.stringify(context.urlParsed.search)}</li>
+        <li>{JSON.stringify(data)}</li>
       </ul>
     </>
   )

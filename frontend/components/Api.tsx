@@ -1,7 +1,8 @@
 import { notifications } from "@mantine/notifications"
 import { createContext, type ReactNode, useContext, useState } from "react"
 import { usePageContext } from "vike-react/usePageContext"
-import type { LoginRequest, LoginResponse } from "./models"
+import type { LoginRequest, LoginResponse, TopTenResponse } from "./models"
+import { useSuspenseQuery } from "@tanstack/react-query"
 
 export const computeApiBase = () => {
   const isBrowser = typeof window !== "undefined"
@@ -26,6 +27,14 @@ const login = async (apiBase: string, request: LoginRequest): Promise<LoginRespo
     throw new Error()
   }
   return (await response.json()) as LoginResponse
+}
+
+const topTen = async (apiBase: string): Promise<TopTenResponse> => {
+  const response = await fetch(`${apiBase}/topten`)
+  if (!response.ok) {
+    throw new Error()
+  }
+  return (await response.json()) as TopTenResponse
 }
 
 interface Api {
@@ -98,4 +107,12 @@ export const useUser = () => {
     login: api.login,
     logout: api.logout,
   }
+}
+
+export const useTopTen = () => {
+  const api = useContext(ApiContext)
+  return useSuspenseQuery({
+    queryKey: ["topten"],
+    queryFn: () => topTen(api.apiBase),
+  })
 }

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from base64 import b64encode
+from collections.abc import Sequence
 from datetime import date, datetime
 from decimal import Decimal
 from hashlib import pbkdf2_hmac
 from typing import TYPE_CHECKING, Self
 
-from sqlalchemy import ForeignKey, select
+from sqlalchemy import ForeignKey, Index, select
 from sqlalchemy.ext.asyncio import (
     AsyncAttrs,
     AsyncEngine,
@@ -14,11 +15,14 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, selectinload
 
 
 if TYPE_CHECKING:
     from types import TracebackType
+
+
+INACTIVE_THRESHOLD = 4
 
 
 type Session = AsyncSession
@@ -290,6 +294,13 @@ class Period(Base):
     dom_t: Mapped[float | None]
     dom_z: Mapped[float | None]
 
+    @staticmethod
+    async def latest(session: Session) -> Period:
+        result = await session.execute(
+            select(Period).where(Period.computed).order_by(Period.start.desc()).limit(1)
+        )
+        return result.scalar_one()
+
 
 class Player(Base):
     __tablename__ = "player"
@@ -356,6 +367,7 @@ class PreMatch(Base):
 
 class Rating(Base):
     __tablename__ = "rating"
+    __table_args__ = (Index("ix_rating_period_decay", "period_id", "decay"),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -395,6 +407,24 @@ class Rating(Base):
 
     decay: Mapped[int]
     domination: Mapped[float | None]
+
+    player: Mapped[Player] = relationship(foreign_keys="Rating.player_id")
+    prev: Mapped[Rating | None] = relationship(foreign_keys="Rating.prev_id", remote_side="Rating.id")
+
+    @staticmethod
+    async def ranking(session: Session, period_id: int, start: int = 0, limit: int = 10) -> Sequence[Rating]:
+        result = await session.execute(
+            select(Rating)
+            .where(Rating.period_id == period_id, Rating.decay <= INACTIVE_THRESHOLD)
+            .order_by(Rating.rating.desc())
+            .offset(start)
+            .limit(limit)
+            .options(
+                selectinload(Rating.player),
+                selectinload(Rating.prev),
+            )
+        )
+        return result.scalars().all()
 
 
 class Story(Base):

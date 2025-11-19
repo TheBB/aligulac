@@ -4,14 +4,15 @@ import {
   IconChartLine,
   IconHome,
   IconInfoCircle,
+  IconMicroscope,
   IconScoreboard,
   IconSend,
   IconTrophy,
   IconUsersGroup,
 } from "@tabler/icons-react"
 import logoUrl from "../assets/caligula-transparent-tight.png"
-import { LinksGroup } from "./NavbarLinksGroup"
-import classes from "./NavbarNested.module.scss"
+import { LinksGroup } from "./LinkGroup"
+import classes from "./Navbar.module.scss"
 
 const mockdata = [
   {
@@ -25,7 +26,7 @@ const mockdata = [
     initiallyOpened: true,
     links: [
       { label: "Current", link: "/periods/latest" },
-      { label: "History", link: "/periods" },
+      { label: "History", link: "/periods", exact: true },
       { label: "Earnings", link: "/earnings" },
     ],
   },
@@ -53,10 +54,15 @@ const mockdata = [
     label: "Results",
     icon: IconScoreboard,
     links: [
-      { label: "By date", link: "/results" },
+      { label: "By date", link: "/results", exact: true },
       { label: "By event", link: "/results/events" },
       { label: "Search", link: "/results/search" },
     ],
+  },
+  {
+    label: "Predict",
+    icon: IconMicroscope,
+    link: "/inference",
   },
   {
     label: "Misc",
@@ -81,7 +87,7 @@ const mockdata = [
     label: "Submit",
     icon: IconSend,
     links: [
-      { label: "Matches", link: "/add" },
+      { label: "Matches", link: "/add", exact: true },
       { label: "Review", link: "/add/review" },
       { label: "Events", link: "/add/events" },
       { label: "Open events", link: "/add/open_events" },
@@ -91,7 +97,7 @@ const mockdata = [
   },
 ]
 
-export function NavbarNested() {
+export function Navbar() {
   const links = mockdata.map((item) => (
     <LinksGroup {...item} key={item.label} />
   ))

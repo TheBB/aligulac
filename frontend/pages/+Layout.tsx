@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css"
 import type { MantineThemeOverride } from "@mantine/core"
 import { AppShell, createTheme, MantineProvider } from "@mantine/core"
-import { NavbarNested } from "../components/NavbarNested"
+import { Navbar } from "../components/Navbar"
 
 import "./root.css"
 
@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         padding="md"
       >
         <AppShell.Navbar>
-          <NavbarNested />
+          <Navbar />
         </AppShell.Navbar>
         <AppShell.Main> {children} </AppShell.Main>
       </AppShell>

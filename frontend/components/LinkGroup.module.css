@@ -1,19 +1,49 @@
 .control {
+  font-weight: 500;
   display: block;
   width: 100%;
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-  padding-top: var(--mantine-spacing-xs);
-  padding-bottom: var(--mantine-spacing-xs);
   font-size: var(--mantine-font-size-sm);
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7)
+    );
+  }
+}
+
+.barelink {
+  font-weight: 500;
+  width: 100%;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7)
+    );
+  }
 }
 
 .link {
+  width: calc(var(--app-shell-navbar-width) - var(--mantine-spacing-xl) - 1px);
+  font-weight: 500;
   display: block;
-  /* width: calc(var(--app-shell-navbar-width) - var(--mantine-spacing-xs) * ); */
-  /* border-left: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4)); */
-  /* padding-left: -10px; */
-  /* margin-left: var(--mantine-spacing-sm); */
-  /* margin-right: var(--mantine-spacing-xl); */
+  text-decoration: none;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  padding-left: var(--mantine-spacing-md);
+  margin-left: var(--mantine-spacing-xl);
+  font-size: var(--mantine-font-size-sm);
+  border-left: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7)
+    );
+  }
 }
 
 .chevron {

@@ -6,15 +6,20 @@ interface LinkProps {
   href: string
   label: string
   className?: string
-  icon?: FC
+  icon?: FC<{ size?: number }>
   leftSection?: ReactNode
+  exact?: boolean
 }
 
-const Link: FC<LinkProps> = ({ href, label, className, icon: Icon }) => {
+const Link: FC<LinkProps> = ({ href, label, className, icon: Icon, exact }) => {
   const pageContext = usePageContext()
-  const { urlPathname } = pageContext
-  const isActive =
-    href === "/" ? urlPathname === href : urlPathname.startsWith(href)
+  const { urlPathname, urlOriginal } = pageContext
+  const isActive = href.includes("?")
+    ? urlOriginal === href
+    : href === "/" || exact
+      ? urlPathname === href
+      : urlPathname.startsWith(href)
+
   return (
     <NavLink
       href={href}

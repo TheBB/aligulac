@@ -1,18 +1,39 @@
-import { Group, ScrollArea, Title } from "@mantine/core"
+import { ActionIcon, Anchor, Group, ScrollArea, Text, Title, useComputedColorScheme, useMantineColorScheme } from "@mantine/core"
 import {
   IconCategory2,
   IconChartLine,
   IconHome,
   IconInfoCircle,
   IconMicroscope,
+  IconMoon,
   IconScoreboard,
   IconSend,
+  IconSun,
   IconTrophy,
   IconUsersGroup,
 } from "@tabler/icons-react"
 import logoUrl from "../assets/caligula-transparent-tight.png"
 import { LinksGroup } from "./LinkGroup"
-import classes from "./Navbar.module.scss"
+import classes from "./Navbar.module.css"
+
+
+const ThemeSelector = () => {
+  const { setColorScheme } = useMantineColorScheme()
+  const computedColorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true })
+
+  return (
+    <ActionIcon
+      onClick={() => setColorScheme(computedColorScheme == "light" ? "dark" : "light")}
+      variant="default"
+      size="xl"
+      radius="md"
+    >
+      <IconSun size={22} className={classes.light} />
+      <IconMoon size={22} className={classes.dark} />
+    </ActionIcon>
+  )
+}
+
 
 const menu = [
   {
@@ -106,15 +127,17 @@ export function Navbar() {
   return (
     <nav className={classes.navbar}>
       <div className={classes.header}>
-        <Group justify="flex-start">
-          <img src={logoUrl} style={{ width: 40 }} alt="Logo" />
-          <Title
-            order={2}
-            style={{ fontFamily: "Marcellus SC", letterSpacing: "0.2em" }}
-          >
-            ALIGULAC
-          </Title>
-        </Group>
+        <Anchor href="/" underline="never" c="inherit">
+          <Group justify="flex-start">
+            <img src={logoUrl} style={{ width: 40 }} alt="Logo" />
+            <Title
+              order={2}
+              style={{ fontFamily: "Marcellus SC", letterSpacing: "0.2em" }}
+            >
+              ALIGULAC
+            </Title>
+          </Group>
+        </Anchor>
       </div>
 
       <ScrollArea className={classes.links}>
@@ -122,8 +145,10 @@ export function Navbar() {
       </ScrollArea>
 
       <div className={classes.footer}>
-        <div>User button</div>
-        {/* <UserButton /> */}
+        <Group justify="space-between">
+          <Text>Not logged in</Text>
+          <ThemeSelector />
+        </Group>
       </div>
     </nav>
   )

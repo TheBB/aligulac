@@ -1,9 +1,11 @@
 import "@mantine/core/styles.css"
 import type { MantineThemeOverride } from "@mantine/core"
-import { AppShell, createTheme, MantineProvider } from "@mantine/core"
+import { ActionIcon, AppShell, createTheme, MantineProvider, useComputedColorScheme, useMantineColorScheme } from "@mantine/core"
 import { Navbar } from "../components/Navbar"
 
 import "./root.css"
+import { IconMoon, IconSun } from "@tabler/icons-react"
+
 
 const theme: MantineThemeOverride = createTheme({
   primaryColor: "violet",

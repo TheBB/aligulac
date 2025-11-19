@@ -14,7 +14,7 @@ import logoUrl from "../assets/caligula-transparent-tight.png"
 import { LinksGroup } from "./LinkGroup"
 import classes from "./Navbar.module.scss"
 
-const mockdata = [
+const menu = [
   {
     label: "Home",
     icon: IconHome,
@@ -23,7 +23,6 @@ const mockdata = [
   {
     label: "Ratings",
     icon: IconChartLine,
-    initiallyOpened: true,
     links: [
       { label: "Current", link: "/periods/latest" },
       { label: "History", link: "/periods", exact: true },
@@ -44,10 +43,14 @@ const mockdata = [
     links: [
       { label: "History", link: "/records/history" },
       { label: "Hall of Fame", link: "/records/hof" },
-      { label: "All races", link: "/records/race?race=all" },
-      { label: "Protoss", link: "/records/race?race=P" },
-      { label: "Terran", link: "/records/race?race=T" },
-      { label: "Zerg", link: "/records/race?race=Z" },
+      {
+        label: "All races",
+        link: "/records/race?race=all",
+        params: { race: "all" },
+      },
+      { label: "Protoss", link: "/records/race?race=P", params: { race: "P" } },
+      { label: "Terran", link: "/records/race?race=T", params: { race: "T" } },
+      { label: "Zerg", link: "/records/race?race=Z", params: { race: "Z" } },
     ],
   },
   {
@@ -98,9 +101,7 @@ const mockdata = [
 ]
 
 export function Navbar() {
-  const links = mockdata.map((item) => (
-    <LinksGroup {...item} key={item.label} />
-  ))
+  const links = menu.map((item) => <LinksGroup {...item} key={item.label} />)
 
   return (
     <nav className={classes.navbar}>

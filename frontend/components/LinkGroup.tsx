@@ -1,14 +1,21 @@
 import { Box, Collapse, Group, ThemeIcon, UnstyledButton } from "@mantine/core"
 import { IconChevronRight } from "@tabler/icons-react"
 import { useState } from "react"
-import Link from "./Link"
+import { usePageContext } from "vike-react/usePageContext"
+import { isLinkActive, Link } from "./Link"
 import classes from "./LinkGroup.module.css"
 
 interface LinksGroupProps {
   icon: React.FC<{ size?: number }>
   label: string
   initiallyOpened?: boolean
-  links?: { label: string; link: string; icon?: React.FC; exact?: boolean }[]
+  links?: {
+    label: string
+    link: string
+    icon?: React.FC
+    exact?: boolean
+    params?: { [k: string]: string }
+  }[]
   link?: string
 }
 
@@ -20,17 +27,27 @@ export function LinksGroup({
   link,
 }: LinksGroupProps) {
   const hasLinks = Array.isArray(links)
-  const [opened, setOpened] = useState(initiallyOpened || false)
-  const items = (hasLinks ? links : []).map(({ link, label, icon, exact }) => (
-    <Link
-      key={link}
-      href={link}
-      label={label}
-      className={classes.link}
-      icon={icon}
-      exact={exact}
-    />
-  ))
+  const pageContext = usePageContext()
+  const [opened, setOpened] = useState(
+    initiallyOpened ||
+      (hasLinks &&
+        links.some(({ link, exact }) =>
+          isLinkActive(pageContext, link, exact),
+        )),
+  )
+  const items = (hasLinks ? links : []).map(
+    ({ link, label, icon, exact, params }) => (
+      <Link
+        key={link}
+        href={link}
+        label={label}
+        className={classes.link}
+        icon={icon}
+        exact={exact}
+        params={params}
+      />
+    ),
+  )
 
   return hasLinks ? (
     <>

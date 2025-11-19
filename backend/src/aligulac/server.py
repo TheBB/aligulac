@@ -11,10 +11,9 @@ from litestar.di import Provide
 from litestar.exceptions import NotAuthorizedException
 from litestar.handlers import HTTPRouteHandler
 from litestar.security.jwt import JWTCookieAuth, Token
-from pydantic import BaseModel
 from sqlalchemy.exc import NoResultFound
 
-from . import db
+from . import db, models
 
 
 if TYPE_CHECKING:
@@ -31,6 +30,7 @@ type User = db.AuthUser
 type Auth = JWTCookieAuth[User]
 type AsgiConnection = LitestarASGIConnection[HTTPRouteHandler, User, Auth, State]
 type Request = LitestarRequest[User, Auth, State]
+type Session = db.Session
 
 
 def db_connection(url: str) -> Callable[[Litestar], AbstractAsyncContextManager[None]]:
@@ -47,13 +47,13 @@ async def database_provider(state: State) -> db.Database:
     return state.database
 
 
-async def session_provider(database: db.Database) -> AsyncIterator[db.Session]:
+async def session_provider(database: db.Database) -> AsyncIterator[Session]:
     async with database.session.begin() as session:
         yield session
 
 
 @asynccontextmanager
-async def session_context(app: Litestar) -> AsyncIterator[db.Session]:
+async def session_context(app: Litestar) -> AsyncIterator[Session]:
     database: db.Database = app.state.database
     session_provider = app.dependencies["session"]
     session_it = (await session_provider(database=database)).__aiter__()
@@ -67,14 +67,15 @@ async def session_context(app: Litestar) -> AsyncIterator[db.Session]:
 
 
 @get("/api/web/whoami")
-async def whoami(request: Request) -> dict:
-    return {
-        "username": request.user.username,
-    }
+async def whoami(request: Request) -> models.LoginResponse:
+    """Return the ID of the currently logged-in user.
+
+    This endpoint is protected, so will trigger a 401 error if nobody is logged in."""
+    return models.LoginResponse(username=request.user.username)
 
 
 @get("/api/web/player")
-async def get_player(player_id: int, session: db.Session) -> dict:
+async def get_player(player_id: int, session: Session) -> dict:
     player = await db.Player.from_pk(session, player_id)
     return {
         "tag": player.tag,
@@ -87,13 +88,8 @@ async def favicon() -> None:
     return None
 
 
-class LoginData(BaseModel):
-    username: str
-    password: str
-
-
 @post("/api/web/login")
-async def login(data: LoginData, session: db.Session) -> Response:
+async def login(data: models.LoginRequest, session: Session) -> Response[models.LoginResponse]:
     try:
         user = await db.AuthUser.from_username(session, data.username)
     except NoResultFound:
@@ -102,7 +98,10 @@ async def login(data: LoginData, session: db.Session) -> Response:
     if not user.password_valid(data.password):
         raise NotAuthorizedException
 
-    return jwt_auth.login(identifier=data.username, response_body={"username": data.username})
+    return jwt_auth.login(
+        identifier=data.username,
+        response_body=models.LoginResponse(username=data.username),
+    )
 
 
 @post("/api/web/logout")

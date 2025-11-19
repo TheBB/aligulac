@@ -1,6 +1,13 @@
+# Dev targets
+
 .PHONY: dev
 dev:
 	foreman start -f dev.procfile
+
+.PHONY: schema
+schema:
+	make -C backend schema
+	make -C frontend schema
 
 
 # Linting targets

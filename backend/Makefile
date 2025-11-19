@@ -1,3 +1,10 @@
+# Dev targets
+
+.PHONY: schema
+schema:
+	uv run python models-to-ts.py
+
+
 # Linting targets
 
 .PHONY: format

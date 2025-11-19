@@ -1,3 +1,10 @@
+# Dev targets
+
+.PHONY: schema
+schema:
+	node_modules/.bin/json2ts ../backend/schema.json -o components/models.ts --unreachableDefinitions
+
+
 # Linting targets
 
 .PHONY: format

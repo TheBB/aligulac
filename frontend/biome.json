@@ -39,7 +39,8 @@
       "!**/*.ts.build-*.mjs",
       "!dist/*",
       "!node_modules/*",
-      "!**/.DS_Store"
+      "!**/.DS_Store",
+      "!components/models.ts"
     ]
   },
   "vcs": {

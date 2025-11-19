@@ -32,6 +32,7 @@ import {
 import logoUrl from "../assets/caligula-transparent-tight.png"
 import { useUser } from "./Api"
 import { LinksGroup } from "./LinkGroup"
+import type { LoginRequest } from "./models"
 import classes from "./Navbar.module.css"
 
 const ThemeSelector = () => {
@@ -53,7 +54,7 @@ const ThemeSelector = () => {
   )
 }
 
-const UserMenu = ({ username, onLogout }: { username: string; onLogout: () => Promise<void> }) => {
+const UserMenu = ({ username, onLogout }: { username: string; onLogout: () => void }) => {
   return (
     <Menu>
       <Menu.Target>
@@ -69,12 +70,12 @@ const UserMenu = ({ username, onLogout }: { username: string; onLogout: () => Pr
   )
 }
 
-const LoginButton = ({ onLogin }: { onLogin: (username: string, password: string) => Promise<void> }) => {
+const LoginButton = ({ onLogin }: { onLogin: (request: LoginRequest) => void }) => {
   const [opened, { close, toggle }] = useDisclosure(false)
 
   const onSubmit = (username: string, password: string) => {
     close()
-    onLogin(username, password)
+    onLogin({ username, password })
   }
 
   const form = useForm({

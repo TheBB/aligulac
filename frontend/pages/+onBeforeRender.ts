@@ -1,15 +1,15 @@
 import type { PageContext } from "vike/types"
+import { LoginResponse } from "../components/models"
+import { computeApiBase } from "../components/Api"
 
 export default async function onBeforeRender(pageContext: PageContext) {
-  const isBrowser = typeof window !== "undefined"
-  const isDev = import.meta.env.DEV
-  const apiBase = isBrowser ? "" : isDev ? "http://localhost:8000" : "http://backend:8000"
+  const apiBase = computeApiBase()
 
   try {
-    const response = await fetch(`${apiBase}/api/web/whoami`, {
+    const response = await fetch(`${apiBase}/whoami`, {
       headers: { Cookie: pageContext.headers?.cookie ?? "" },
     })
-    const data = await response.json()
+    const data = await response.json() as LoginResponse
 
     return {
       pageContext: {

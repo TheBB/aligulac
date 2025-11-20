@@ -22,7 +22,8 @@
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off",
-        "noDuplicateProperties": "off"
+        "noDuplicateProperties": "off",
+        "noArrayIndexKey": "off"
       }
     },
     "domains": {

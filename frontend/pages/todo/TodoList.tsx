@@ -10,7 +10,6 @@ export function TodoList() {
     <>
       <ul>
         {todoItems.map((todoItem, index) => (
-          // biome-ignore lint: example
           <li key={index}>{todoItem.text}</li>
         ))}
       </ul>

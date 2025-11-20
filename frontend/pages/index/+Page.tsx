@@ -1,20 +1,17 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { FC, useState } from "react"
-import { usePageContext } from "vike-react/usePageContext"
-import { DataTable } from "mantine-datatable"
-import { Counter } from "./Counter.js"
-import { useTopTen } from "../../components/Api.js"
 import { Box, NumberFormatter, ThemeIcon } from "@mantine/core"
-import { IconCaretDown, IconCaretDownFilled, IconCaretUpFilled } from "@tabler/icons-react"
+import { IconCaretDownFilled, IconCaretUpFilled } from "@tabler/icons-react"
+import { DataTable } from "mantine-datatable"
+import type React from "react"
+import { useTopTen } from "../../components/Api.js"
 
-const Rating: FC<{value: number}> = ({value}) => {
-  return (
-    <NumberFormatter value={(value + 1) * 1000} decimalScale={0} />
-  )
+const Rating: React.FC<{ value: number }> = ({ value }) => {
+  return <NumberFormatter value={(value + 1) * 1000} decimalScale={0} />
 }
 
-const Arrows: FC<{magnitude: number}> = ({magnitude}) => {
-  if (magnitude === 0) { return null }
+const Arrows: React.FC<{ magnitude: number }> = ({ magnitude }) => {
+  if (magnitude === 0) {
+    return null
+  }
   const Arrow = magnitude > 0 ? IconCaretUpFilled : IconCaretDownFilled
   const color = magnitude > 0 ? "green" : "red"
 
@@ -22,9 +19,18 @@ const Arrows: FC<{magnitude: number}> = ({magnitude}) => {
     return (
       <Box pos="relative" w={16} h={26}>
         <ThemeIcon color={color} variant="subtle">
-          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 13px)", left: "calc(50% - 8px)"}} />
-          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)"}} />
-          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 3px)", left: "calc(50% - 8px)"}} />
+          <Arrow
+            size={16}
+            style={{ position: "absolute", top: "calc(50% - 13px)", left: "calc(50% - 8px)" }}
+          />
+          <Arrow
+            size={16}
+            style={{ position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)" }}
+          />
+          <Arrow
+            size={16}
+            style={{ position: "absolute", top: "calc(50% - 3px)", left: "calc(50% - 8px)" }}
+          />
         </ThemeIcon>
       </Box>
     )
@@ -34,8 +40,14 @@ const Arrows: FC<{magnitude: number}> = ({magnitude}) => {
     return (
       <Box pos="relative" w={16} h={26}>
         <ThemeIcon color={color} variant="subtle">
-          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 10px)", left: "calc(50% - 8px)"}} />
-          <Arrow size={16} style={{position: "absolute", top: "calc(50% - 5px)", left: "calc(50% - 8px)"}} />
+          <Arrow
+            size={16}
+            style={{ position: "absolute", top: "calc(50% - 10px)", left: "calc(50% - 8px)" }}
+          />
+          <Arrow
+            size={16}
+            style={{ position: "absolute", top: "calc(50% - 5px)", left: "calc(50% - 8px)" }}
+          />
         </ThemeIcon>
       </Box>
     )
@@ -44,39 +56,40 @@ const Arrows: FC<{magnitude: number}> = ({magnitude}) => {
   return (
     <Box pos="relative" w={16} h={26}>
       <ThemeIcon color={color} variant="subtle">
-        <Arrow size={16} style={{position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)"}} />
+        <Arrow size={16} style={{ position: "absolute", top: "calc(50% - 8px)", left: "calc(50% - 8px)" }} />
       </ThemeIcon>
     </Box>
   )
 }
 
 export default function Page() {
-  const isBrowser = typeof window !== "undefined"
-  const isDev = import.meta.env.DEV
-  const context = usePageContext()
+  // const isBrowser = typeof window !== "undefined"
+  // const isDev = import.meta.env.DEV
+  // const context = usePageContext()
 
-  const apiBase = isBrowser ? "" : isDev ? "http://localhost:8000" : "http://backend:8000"
-  const [playerId, setPlayerId] = useState(1)
+  // const apiBase = isBrowser ? "" : isDev ? "http://localhost:8000" : "http://backend:8000"
+  // const [playerId, setPlayerId] = useState(1)
 
-  const result = useSuspenseQuery({
-    queryKey: ["player", playerId],
-    queryFn: () => fetch(`${apiBase}/api/web/player?player_id=${playerId}`).then((res) => res.json()),
-  })
+  // const result = useSuspenseQuery({
+  //   queryKey: ["player", playerId],
+  //   queryFn: () => fetch(`${apiBase}/api/web/player?player_id=${playerId}`).then((res) => res.json()),
+  // })
 
-  // Server-side query to protected page
-  const bob = useSuspenseQuery({
-    queryKey: ["protected"],
-    queryFn: () =>
-      fetch(`${apiBase}/api/web/protected`, {
-        headers: { Cookie: context.headers?.cookie ?? "" },
-      }).then((res) => res.json()),
-  })
+  // // Server-side query to protected page
+  // const bob = useSuspenseQuery({
+  //   queryKey: ["protected"],
+  //   queryFn: () =>
+  //     fetch(`${apiBase}/api/web/protected`, {
+  //       headers: { Cookie: context.headers?.cookie ?? "" },
+  //     }).then((res) => res.json()),
+  // })
 
-  const {data} = useTopTen()
+  const { data } = useTopTen()
 
   return (
     <DataTable
       records={data.ratings}
+      idAccessor="player.id"
       columns={[
         {
           accessor: "player.country",
@@ -104,35 +117,35 @@ export default function Page() {
           render: (entry) => <Rating value={entry.current.rating + entry.current.vz} />,
         },
         {
-          accessor: "current.vz",
-          render: (entry) => <Arrows magnitude={-3} />,
-        }
+          accessor: "current.vz.diff",
+          render: (_entry) => <Arrows magnitude={-3} />,
+        },
       ]}
     />
   )
 
-  return (
-    <>
-      <h1>My Vike app</h1>
-      <p>This page is:</p>
-      <ul>
-        {/* <li>cookies: {context.headers?.cookie}</li> */}
-        <li>{JSON.stringify(bob.data)}</li>
-        <li>Rendered to HTML.</li>
-        <li>
-          Interactive. <Counter />
-        </li>
-        <li>{JSON.stringify(result.data)}</li>
-        {/* <li>{JSON.stringify({ browser: isBrowser, dev: isDev })}</li> */}
-        <li>
-          Player {playerId}{" "}
-          <button type="button" onClick={() => setPlayerId((p) => p + 1)}>
-            Inc
-          </button>
-        </li>
-        <li>{JSON.stringify(context.urlParsed.search)}</li>
-        <li>{JSON.stringify(data)}</li>
-      </ul>
-    </>
-  )
+  // return (
+  //   <>
+  //     <h1>My Vike app</h1>
+  //     <p>This page is:</p>
+  //     <ul>
+  //       {/* <li>cookies: {context.headers?.cookie}</li> */}
+  //       <li>{JSON.stringify(bob.data)}</li>
+  //       <li>Rendered to HTML.</li>
+  //       <li>
+  //         Interactive. <Counter />
+  //       </li>
+  //       <li>{JSON.stringify(result.data)}</li>
+  //       {/* <li>{JSON.stringify({ browser: isBrowser, dev: isDev })}</li> */}
+  //       <li>
+  //         Player {playerId}{" "}
+  //         <button type="button" onClick={() => setPlayerId((p) => p + 1)}>
+  //           Inc
+  //         </button>
+  //       </li>
+  //       <li>{JSON.stringify(context.urlParsed.search)}</li>
+  //       <li>{JSON.stringify(data)}</li>
+  //     </ul>
+  //   </>
+  // )
 }

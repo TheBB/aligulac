@@ -70,12 +70,13 @@ async def session_context(app: Litestar) -> AsyncIterator[Session]:
 async def top_ten(session: Session) -> models.TopTenResponse:
     period = await db.Period.latest(session)
     ratings = await db.Rating.ranking(session, period_id=period.id)
-    return models.TopTenResponse.model_validate({
-        "period_start": period.start,
-        "period_end": period.end,
-        "ratings": ratings,
-    })
-
+    return models.TopTenResponse.model_validate(
+        {
+            "period_start": period.start,
+            "period_end": period.end,
+            "ratings": ratings,
+        }
+    )
 
 
 @get("/api/web/whoami")
@@ -163,9 +164,7 @@ def create_app() -> Litestar:
             favicon,
             get_player,
             protected,
-
             top_ten,
-
             login,
             logout,
             whoami,

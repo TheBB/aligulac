@@ -2,7 +2,7 @@ import { Button, Group, Menu, ThemeIcon } from "@mantine/core"
 import { IconChevronDown, IconChevronLeft, IconLogin, IconLogout, IconUserFilled } from "@tabler/icons-react"
 import type React from "react"
 import { usePageContext } from "vike-react/usePageContext"
-import { useUser } from "./Api"
+import { useAuth } from "./Api"
 import { isLinkActive } from "./Link"
 
 interface UserMenuSectionProps {
@@ -10,7 +10,7 @@ interface UserMenuSectionProps {
 }
 
 const UserMenuSection: React.FC<UserMenuSectionProps> = ({ onLogin }) => {
-  const { username, logout } = useUser()
+  const { username, logout } = useAuth()
 
   return (
     <>

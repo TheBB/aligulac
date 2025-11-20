@@ -1,64 +1,26 @@
 import { notifications } from "@mantine/notifications"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
-import type { LoginRequest, LoginResponse, TopTenResponse } from "./models"
+import { login, logout, topTen, whoami } from "./api"
+import type { LoginRequest } from "./models"
 
-export const computeApiBase = () => {
-  const isBrowser = typeof window !== "undefined"
-  const isDev = import.meta.env.DEV
-  return isBrowser ? "/api/web" : isDev ? "http://localhost:8000/api/web" : "http://backend:8000/api/web"
-}
-
-const logout = async (apiBase: string): Promise<void> => {
-  const response = await fetch(`${apiBase}/logout`, { method: "POST" })
-  if (!response.ok) {
-    throw new Error()
-  }
-}
-
-const login = async (apiBase: string, request: LoginRequest): Promise<LoginResponse> => {
-  const response = await fetch(`${apiBase}/login`, { method: "POST", body: JSON.stringify(request) })
-  if (!response.ok) {
-    throw new Error()
-  }
-  return (await response.json()) as LoginResponse
-}
-
-const whoami = async (apiBase: string): Promise<LoginResponse> => {
-  const response = await fetch(`${apiBase}/whoami`)
-  if (!response.ok) {
-    throw new Error()
-  }
-  return (await response.json()) as LoginResponse
-}
-
-const topTen = async (apiBase: string): Promise<TopTenResponse> => {
-  const response = await fetch(`${apiBase}/topten`)
-  if (!response.ok) {
-    throw new Error()
-  }
-  return (await response.json()) as TopTenResponse
-}
-
-interface Api {
+interface Auth {
   username?: string
-  apiBase: string
   login: (request: LoginRequest) => void
   logout: () => void
 }
 
-const ApiContext = createContext<Api>({} as Api)
+const AuthContext = createContext<Auth>({} as Auth)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const apiBase = computeApiBase()
   const [username, setUsername] = useState<string | undefined>()
 
   useEffect(() => {
-    whoami(apiBase).then((response) => setUsername(response.username))
-  }, [apiBase])
+    whoami().then((response) => setUsername(response.username))
+  }, [])
 
   const handleLogin = (data: LoginRequest) => {
-    login(apiBase, data)
+    login(data)
       .then((response) => {
         setUsername(response.username)
         notifications.show({
@@ -76,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const handleLogout = () => {
-    logout(apiBase)
+    logout()
       .then(() => {
         setUsername(undefined)
         notifications.show({
@@ -94,29 +56,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <ApiContext.Provider value={{ username, apiBase, login: handleLogin, logout: handleLogout }}>
+    <AuthContext.Provider value={{ username, login: handleLogin, logout: handleLogout }}>
       {children}
-    </ApiContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
-export const useApi = () => {
-  return useContext(ApiContext)
-}
-
-export const useUser = () => {
-  const api = useContext(ApiContext)
-  return {
-    username: api.username,
-    login: api.login,
-    logout: api.logout,
-  }
+export const useAuth = () => {
+  return useContext(AuthContext)
 }
 
 export const useTopTen = () => {
-  const api = useContext(ApiContext)
   return useSuspenseQuery({
     queryKey: ["topten"],
-    queryFn: () => topTen(api.apiBase),
+    queryFn: () => topTen(),
   })
 }

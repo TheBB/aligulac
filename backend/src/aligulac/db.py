@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from base64 import b64encode
-from collections.abc import Sequence
 from datetime import date, datetime
 from decimal import Decimal
 from hashlib import pbkdf2_hmac
 from typing import TYPE_CHECKING, Self
 
-from sqlalchemy import ForeignKey, Index, select
+from sqlalchemy import ForeignKey, Function, Index, func, select
 from sqlalchemy.ext.asyncio import (
     AsyncAttrs,
     AsyncEngine,
@@ -19,10 +18,13 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship,
 
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from types import TracebackType
 
 
 INACTIVE_THRESHOLD = 4
+
+ROW_NUMBER: Function[int] = func.row_number()
 
 
 type Session = AsyncSession
@@ -413,10 +415,12 @@ class Rating(Base):
 
     @staticmethod
     async def ranking(session: Session, period_id: int, start: int = 0, limit: int = 10) -> Sequence[Rating]:
+        order = Rating.rating.desc()
+
         result = await session.execute(
             select(Rating)
             .where(Rating.period_id == period_id, Rating.decay <= INACTIVE_THRESHOLD)
-            .order_by(Rating.rating.desc())
+            .order_by(order)
             .offset(start)
             .limit(limit)
             .options(
@@ -424,6 +428,7 @@ class Rating(Base):
                 selectinload(Rating.prev),
             )
         )
+
         return result.scalars().all()
 
 

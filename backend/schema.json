@@ -14,8 +14,15 @@
           "$ref": "#/$defs/Race"
         },
         "country": {
-          "title": "Country",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Country"
         }
       },
       "required": [
@@ -33,24 +40,72 @@
           "title": "Rating",
           "type": "number"
         },
-        "vp": {
-          "title": "Vp",
+        "rating_vp": {
+          "title": "Rating Vp",
           "type": "number"
         },
-        "vt": {
-          "title": "Vt",
+        "rating_vt": {
+          "title": "Rating Vt",
           "type": "number"
         },
-        "vz": {
-          "title": "Vz",
+        "rating_vz": {
+          "title": "Rating Vz",
           "type": "number"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Position"
+        },
+        "position_vp": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Position Vp"
+        },
+        "position_vt": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Position Vt"
+        },
+        "position_vz": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Position Vz"
         }
       },
       "required": [
         "rating",
-        "vp",
-        "vt",
-        "vz"
+        "rating_vp",
+        "rating_vt",
+        "rating_vz",
+        "position",
+        "position_vp",
+        "position_vt",
+        "position_vz"
       ],
       "title": "ListedRating",
       "type": "object"

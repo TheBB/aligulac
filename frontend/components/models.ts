@@ -12,11 +12,15 @@ export type Tag = string;
  * via the `definition` "Race".
  */
 export type Race = "P" | "T" | "Z" | "R";
-export type Country = string;
+export type Country = string | null;
 export type Rating = number;
-export type Vp = number;
-export type Vt = number;
-export type Vz = number;
+export type RatingVp = number;
+export type RatingVt = number;
+export type RatingVz = number;
+export type Position = number | null;
+export type PositionVp = number | null;
+export type PositionVt = number | null;
+export type PositionVz = number | null;
 export type Username = string;
 export type Password = string;
 export type Username1 = string;
@@ -44,9 +48,13 @@ export interface ListedPlayer {
  */
 export interface ListedRating {
   rating: Rating;
-  vp: Vp;
-  vt: Vt;
-  vz: Vz;
+  rating_vp: RatingVp;
+  rating_vt: RatingVt;
+  rating_vz: RatingVz;
+  position: Position;
+  position_vp: PositionVp;
+  position_vt: PositionVt;
+  position_vz: PositionVz;
   [k: string]: unknown;
 }
 /**

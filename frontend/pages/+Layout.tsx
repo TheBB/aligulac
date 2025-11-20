@@ -16,7 +16,7 @@ import {
 import { Notifications } from "@mantine/notifications"
 import { IconSearch } from "@tabler/icons-react"
 import logoUrl from "../assets/caligula-transparent-tight.png"
-import { AuthProvider, useUser } from "../components/Api"
+import { AuthProvider, useAuth } from "../components/Api"
 
 import "@mantine/notifications/styles.css"
 import "mantine-datatable/styles.layer.css"
@@ -38,7 +38,7 @@ interface LoginModalProps {
 }
 
 const LoginModal: FC<LoginModalProps> = ({ opened, onClose }) => {
-  const { login } = useUser()
+  const { login } = useAuth()
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {

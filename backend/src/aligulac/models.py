@@ -24,11 +24,11 @@ class ListedPlayer(BaseModel):
     id: int
     tag: str
     race: Race
-    country: str
+    country: str | None
 
     @model_validator(mode="before")
     @classmethod
-    def validate(cls, data: Any) -> Any:
+    def pre_validate(cls, data: Any) -> Any:
         if isinstance(data, db.Player):
             return {
                 "id": data.id,
@@ -41,19 +41,28 @@ class ListedPlayer(BaseModel):
 
 class ListedRating(BaseModel):
     rating: float
-    vp: float
-    vt: float
-    vz: float
+    rating_vp: float
+    rating_vt: float
+    rating_vz: float
+
+    position: int | None
+    position_vp: int | None
+    position_vt: int | None
+    position_vz: int | None
 
     @model_validator(mode="before")
     @classmethod
-    def validate(cls, data: Any) -> Any:
+    def pre_validate(cls, data: Any) -> Any:
         if isinstance(data, db.Rating):
             return {
                 "rating": data.rating,
-                "vp": data.rating_vp,
-                "vt": data.rating_vt,
-                "vz": data.rating_vz,
+                "rating_vp": data.rating_vp,
+                "rating_vt": data.rating_vt,
+                "rating_vz": data.rating_vz,
+                "position": data.position,
+                "position_vp": data.position_vp,
+                "position_vt": data.position_vt,
+                "position_vz": data.position_vz,
             }
         return data
 
@@ -65,7 +74,7 @@ class ListedRatingEntry(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def validate(cls, data: Any) -> Any:
+    def pre_validate(cls, data: Any) -> Any:
         if isinstance(data, db.Rating):
             return {
                 "player": data.player,

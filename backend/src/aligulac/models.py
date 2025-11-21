@@ -40,6 +40,8 @@ class ListedPlayer(BaseModel):
 
 
 class ListedRating(BaseModel):
+    period_id: int
+
     rating: float
     rating_vp: float
     rating_vt: float
@@ -50,11 +52,14 @@ class ListedRating(BaseModel):
     position_vt: int | None
     position_vz: int | None
 
+    decay: int
+
     @model_validator(mode="before")
     @classmethod
     def pre_validate(cls, data: Any) -> Any:
         if isinstance(data, db.Rating):
             return {
+                "period_id": data.period_id,
                 "rating": data.rating,
                 "rating_vp": data.rating_vp,
                 "rating_vt": data.rating_vt,
@@ -63,6 +68,7 @@ class ListedRating(BaseModel):
                 "position_vp": data.position_vp,
                 "position_vt": data.position_vt,
                 "position_vz": data.position_vz,
+                "decay": data.decay,
             }
         return data
 
@@ -70,7 +76,7 @@ class ListedRating(BaseModel):
 class ListedRatingEntry(BaseModel):
     player: ListedPlayer
     current: ListedRating
-    previous: ListedRating
+    previous: ListedRating | None
 
     @model_validator(mode="before")
     @classmethod

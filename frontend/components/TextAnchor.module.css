@@ -1,0 +1,19 @@
+.anchor {
+  text-decoration: none;
+
+  @mixin dark {
+    color: var(--mantine-color-blue-3) !important;
+
+    &:hover {
+      color: var(--mantine-color-blue-2) !important;
+    }
+  }
+
+  @mixin light {
+    color: var(--mantine-color-blue-7) !important;
+
+    &:hover {
+      color: var(--mantine-color-blue-5) !important;
+    }
+  }
+}

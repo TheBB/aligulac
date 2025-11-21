@@ -1,4 +1,4 @@
-import "@mantine/core/styles.css"
+import "@mantine/core/styles.layer.css"
 
 import type { MantineThemeOverride } from "@mantine/core"
 import {
@@ -13,24 +13,22 @@ import {
   Stack,
   TextInput,
 } from "@mantine/core"
+import { useForm } from "@mantine/form"
+import { useDisclosure } from "@mantine/hooks"
 import { Notifications } from "@mantine/notifications"
 import { IconSearch } from "@tabler/icons-react"
+import type React from "react"
+import type { FC } from "react"
 import logoUrl from "../assets/caligula-transparent-tight.png"
 import { AuthProvider, useAuth } from "../components/Api"
+import MainMenu from "../components/Menu"
+import ThemeSelector from "../components/ThemeSelector"
 
 import "@mantine/notifications/styles.css"
 import "mantine-datatable/styles.layer.css"
 import "./root.css"
-import { useForm } from "@mantine/form"
-import { useDisclosure } from "@mantine/hooks"
-import type React from "react"
-import type { FC } from "react"
-import MainMenu from "../components/Menu"
-import ThemeSelector from "../components/ThemeSelector"
 
-const theme: MantineThemeOverride = createTheme({
-  primaryColor: "violet",
-})
+const theme: MantineThemeOverride = createTheme({})
 
 interface LoginModalProps {
   opened: boolean

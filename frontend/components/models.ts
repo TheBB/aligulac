@@ -13,6 +13,7 @@ export type Tag = string;
  */
 export type Race = "P" | "T" | "Z" | "R";
 export type Country = string | null;
+export type PeriodId = number;
 export type Rating = number;
 export type RatingVp = number;
 export type RatingVt = number;
@@ -21,6 +22,7 @@ export type Position = number | null;
 export type PositionVp = number | null;
 export type PositionVt = number | null;
 export type PositionVz = number | null;
+export type Decay = number;
 export type Username = string;
 export type Password = string;
 export type Username1 = string;
@@ -47,6 +49,7 @@ export interface ListedPlayer {
  * via the `definition` "ListedRating".
  */
 export interface ListedRating {
+  period_id: PeriodId;
   rating: Rating;
   rating_vp: RatingVp;
   rating_vt: RatingVt;
@@ -55,6 +58,7 @@ export interface ListedRating {
   position_vp: PositionVp;
   position_vt: PositionVt;
   position_vz: PositionVz;
+  decay: Decay;
   [k: string]: unknown;
 }
 /**
@@ -64,7 +68,7 @@ export interface ListedRating {
 export interface ListedRatingEntry {
   player: ListedPlayer;
   current: ListedRating;
-  previous: ListedRating;
+  previous: ListedRating | null;
   [k: string]: unknown;
 }
 /**

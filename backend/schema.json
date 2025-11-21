@@ -36,6 +36,10 @@
     },
     "ListedRating": {
       "properties": {
+        "period_id": {
+          "title": "Period Id",
+          "type": "integer"
+        },
         "rating": {
           "title": "Rating",
           "type": "number"
@@ -95,9 +99,14 @@
             }
           ],
           "title": "Position Vz"
+        },
+        "decay": {
+          "title": "Decay",
+          "type": "integer"
         }
       },
       "required": [
+        "period_id",
         "rating",
         "rating_vp",
         "rating_vt",
@@ -105,7 +114,8 @@
         "position",
         "position_vp",
         "position_vt",
-        "position_vz"
+        "position_vz",
+        "decay"
       ],
       "title": "ListedRating",
       "type": "object"
@@ -119,7 +129,14 @@
           "$ref": "#/$defs/ListedRating"
         },
         "previous": {
-          "$ref": "#/$defs/ListedRating"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ListedRating"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [

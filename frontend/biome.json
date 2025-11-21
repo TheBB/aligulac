@@ -24,6 +24,9 @@
         "noUnknownAtRules": "off",
         "noDuplicateProperties": "off",
         "noArrayIndexKey": "off"
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     },
     "domains": {

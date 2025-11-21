@@ -1,6 +1,5 @@
 .P {
   height: 1.2em;
-  display: inline;
   color: green;
 
   @mixin dark {
@@ -14,7 +13,6 @@
 
 .T {
   height: 1.2em;
-  display: inline;
 
   @mixin dark {
     filter: invert(48%) sepia(60%) saturate(6122%) hue-rotate(189deg) brightness(87%) contrast(104%);
@@ -28,7 +26,6 @@
 
 .Z {
   height: 1.2em;
-  display: inline;
 
   @mixin dark {
     filter: invert(39%) sepia(74%) saturate(2715%) hue-rotate(258deg) brightness(91%) contrast(96%);
@@ -41,7 +38,6 @@
 
 .R {
   height: 1.2em;
-  display: inline;
 
   @mixin dark {
     filter: invert(58%) sepia(61%) saturate(610%) hue-rotate(2deg) brightness(94%) contrast(84%);

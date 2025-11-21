@@ -189,6 +189,10 @@
     },
     "TopTenResponse": {
       "properties": {
+        "period_id": {
+          "title": "Period Id",
+          "type": "integer"
+        },
         "period_start": {
           "format": "date",
           "title": "Period Start",
@@ -208,6 +212,7 @@
         }
       },
       "required": [
+        "period_id",
         "period_start",
         "period_end",
         "ratings"

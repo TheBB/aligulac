@@ -17,12 +17,13 @@ import { Notifications } from "@mantine/notifications"
 import { IconSearch } from "@tabler/icons-react"
 import type React from "react"
 import type { FC } from "react"
-import logoUrl from "../assets/caligula-transparent-tight.png"
 import { AuthProvider, useAuth } from "../components/Api"
 import MainMenu from "../components/Menu"
 import ThemeSelector from "../components/ThemeSelector"
 
 import "./global.css"
+import Header from "../components/Header"
+import Body from "../components/Body"
 
 const theme: MantineThemeOverride = createTheme({})
 
@@ -86,22 +87,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           padding="md"
         >
           <AppShell.Header>
-            <Group justify="space-between" align="center" h="100%" px="md">
-              <Anchor href="/" underline="never" c="inherit">
-                <Group align="center" h="100%">
-                  <img src={logoUrl} style={{ width: 40 }} alt="Logo" />
-                </Group>
-              </Anchor>
-
-              <MainMenu onLogin={openLogin} />
-
-              <Group>
-                <TextInput w="12em" rightSection={<IconSearch />} />
-                <ThemeSelector />
-              </Group>
-            </Group>
+            <Header openLogin={openLogin} />
           </AppShell.Header>
-          <AppShell.Main>{children}</AppShell.Main>
+          <AppShell.Main>
+            <Body>{children}</Body>
+          </AppShell.Main>
         </AppShell>
       </AuthProvider>
     </MantineProvider>

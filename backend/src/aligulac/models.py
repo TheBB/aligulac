@@ -91,6 +91,7 @@ class ListedRatingEntry(BaseModel):
 
 
 class TopTenResponse(BaseModel):
+    period_id: int
     period_start: date
     period_end: date
     ratings: list[ListedRatingEntry]

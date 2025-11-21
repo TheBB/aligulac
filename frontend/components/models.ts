@@ -26,6 +26,7 @@ export type Decay = number;
 export type Username = string;
 export type Password = string;
 export type Username1 = string;
+export type PeriodId1 = number;
 export type PeriodStart = string;
 export type PeriodEnd = string;
 export type Ratings = ListedRatingEntry[];
@@ -93,6 +94,7 @@ export interface LoginResponse {
  * via the `definition` "TopTenResponse".
  */
 export interface TopTenResponse {
+  period_id: PeriodId1;
   period_start: PeriodStart;
   period_end: PeriodEnd;
   ratings: Ratings;

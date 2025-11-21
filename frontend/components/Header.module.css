@@ -1,0 +1,5 @@
+.header {
+    max-width: var(--body-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}

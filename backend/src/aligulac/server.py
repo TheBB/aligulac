@@ -72,6 +72,7 @@ async def top_ten(session: Session) -> models.TopTenResponse:
     ratings = await db.Rating.ranking(session, period_id=period.id)
     return models.TopTenResponse.model_validate(
         {
+            "period_id": period.id,
             "period_start": period.start,
             "period_end": period.end,
             "ratings": ratings,

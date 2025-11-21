@@ -3,3 +3,24 @@
 @import "@mantine/core/styles.css" layer(mantine);
 @import "@mantine/notifications/styles.css" layer(mantine);
 @import "mantine-datatable/styles.css" layer(mantine);
+
+:root {
+  --body-max-width: 1140px;
+}
+
+h1 {
+  text-transform: uppercase;
+  font-size: 25px;
+  width: 100;
+  border-bottom: solid 1px;
+  padding-left: 0.3em;
+  margin: 0.1em 0 0.4em 0;
+
+  @mixin light {
+    border-bottom-color: var(--mantine-color-gray-3);
+  }
+
+  @mixin dark {
+    border-bottom-color: var(--mantine-color-gray-8);
+  }
+}

@@ -1,5 +1,3 @@
-import "@mantine/core/styles.layer.css"
-
 import type { MantineThemeOverride } from "@mantine/core"
 import {
   Anchor,
@@ -24,9 +22,7 @@ import { AuthProvider, useAuth } from "../components/Api"
 import MainMenu from "../components/Menu"
 import ThemeSelector from "../components/ThemeSelector"
 
-import "@mantine/notifications/styles.css"
-import "mantine-datatable/styles.layer.css"
-import "./root.css"
+import "./global.css"
 
 const theme: MantineThemeOverride = createTheme({})
 

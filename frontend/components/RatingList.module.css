@@ -1,14 +1,9 @@
 .arrows {
-  padding-left: 0px !important;
-  /* padding-right: 0; */
-}
-
-.rating {
-  /* padding-right: 0px !important; */
+  padding-left: 0px;
 }
 
 .race {
-  padding-left: 0 !important;
+  padding-left: 0;
 
   img {
     display: block;
@@ -17,17 +12,11 @@
   }
 }
 
-.country {
-  /* padding-right: 0 !important; */
-  /* padding-left: 0; */
-  /* padding-right: calc(var(--mantine-spacing-xs) - 2px); */
-}
-
 .detail {
-  padding-right: 0px !important;
+  padding-right: 0px;
 
   button {
-    display: block !important;
+    display: block;
     margin-left: auto;
     margin-right: 5px;
   }

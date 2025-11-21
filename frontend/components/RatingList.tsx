@@ -22,7 +22,6 @@ const ARROWS_STYLE: Partial<DataTableColumn<ListedRatingEntry>> = {
 
 const RATING_STYLE: Partial<DataTableColumn<ListedRatingEntry>> = {
   width: "6em",
-  cellsClassName: classes.rating,
   textAlign: "right",
 }
 
@@ -31,10 +30,6 @@ interface RatingListProps {
 }
 
 const RatingList: React.FC<RatingListProps> = ({ data }) => {
-  // return (
-  //   <DataT
-  // )
-
   return (
     <DataTable
       records={data}
@@ -61,7 +56,6 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
           title: "",
           textAlign: "right",
           width: "50px",
-          cellsClassName: classes.country,
           render: (entry) => <CountryFlag code={entry.player.country} />,
         },
         {

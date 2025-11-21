@@ -2,18 +2,18 @@
   text-decoration: none;
 
   @mixin dark {
-    color: var(--mantine-color-blue-3) !important;
+    color: var(--mantine-color-blue-3);
 
     &:hover {
-      color: var(--mantine-color-blue-2) !important;
+      color: var(--mantine-color-blue-2);
     }
   }
 
   @mixin light {
-    color: var(--mantine-color-blue-7) !important;
+    color: var(--mantine-color-blue-8);
 
     &:hover {
-      color: var(--mantine-color-blue-5) !important;
+      color: var(--mantine-color-blue-6);
     }
   }
 }

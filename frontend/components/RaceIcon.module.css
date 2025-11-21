@@ -19,7 +19,6 @@
   }
 
   @mixin light {
-    /* filter: invert(13%) sepia(82%) saturate(7037%) hue-rotate(252deg) brightness(63%) contrast(132%); */
     filter: invert(15%) sepia(41%) saturate(7384%) hue-rotate(245deg) brightness(90%) contrast(94%);
   }
 }

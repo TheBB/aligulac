@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from datetime import date
-from typing import Annotated, Any, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 from pydantic import AfterValidator, BaseModel, model_validator
 
 from . import db
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def is_at_most(hi: int, desc: str) -> Callable[[int], int]:

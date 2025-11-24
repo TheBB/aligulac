@@ -1,6 +1,5 @@
 import type { MantineThemeOverride } from "@mantine/core"
 import {
-  Anchor,
   AppShell,
   Button,
   createTheme,
@@ -14,16 +13,13 @@ import {
 import { useForm } from "@mantine/form"
 import { useDisclosure } from "@mantine/hooks"
 import { Notifications } from "@mantine/notifications"
-import { IconSearch } from "@tabler/icons-react"
 import type React from "react"
 import type { FC } from "react"
 import { AuthProvider, useAuth } from "../components/Api"
-import MainMenu from "../components/Menu"
-import ThemeSelector from "../components/ThemeSelector"
 
 import "./global.css"
-import Header from "../components/Header"
 import Body from "../components/Body"
+import Header from "../components/Header"
 
 const theme: MantineThemeOverride = createTheme({})
 

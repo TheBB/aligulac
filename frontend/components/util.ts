@@ -1,5 +1,4 @@
-import { parse, format } from "date-fns"
-
+import { format, parse } from "date-fns"
 
 const filterUrl = (name: string): string => {
   return encodeURIComponent(name.replaceAll(" ", "-").replaceAll("/", ""))

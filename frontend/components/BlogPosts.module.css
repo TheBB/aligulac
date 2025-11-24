@@ -1,0 +1,9 @@
+.author {
+  width: 100%;
+  text-align: right;
+}
+
+.text {
+  margin-top: -0.5em;
+  margin-bottom: var(--mantine-spacing-xl);
+}

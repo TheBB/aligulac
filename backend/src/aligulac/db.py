@@ -6,7 +6,7 @@ from decimal import Decimal
 from hashlib import pbkdf2_hmac
 from typing import TYPE_CHECKING, Self
 
-from sqlalchemy import ForeignKey, Function, Index, func, select
+from sqlalchemy import ForeignKey, Function, Index, func, select, text
 from sqlalchemy.ext.asyncio import (
     AsyncAttrs,
     AsyncEngine,
@@ -114,6 +114,7 @@ class BalanceEntry(Base):
 
 class BlogPost(Base):
     __tablename__ = "blog_post"
+    __table_args__ = (Index("ix_blog_post_date", text("date DESC")),)
 
     id: Mapped[int] = mapped_column(primary_key=True)
     date: Mapped[date]
@@ -124,10 +125,7 @@ class BlogPost(Base):
     @staticmethod
     async def posts(session: Session, start: int = 0, limit: int = 10) -> Sequence[BlogPost]:
         result = await session.execute(
-            select(BlogPost)
-            .order_by(BlogPost.date.desc())
-            .offset(start)
-            .limit(limit)
+            select(BlogPost).order_by(BlogPost.date.desc()).offset(start).limit(limit)
         )
 
         return result.scalars().all()
@@ -475,7 +473,7 @@ class Database:
         self.url = url
 
     async def __aenter__(self) -> Self:
-        engine = create_async_engine(self.url, echo=True)
+        engine = create_async_engine(self.url)
         self._engine = engine
         self.session = async_sessionmaker(engine, expire_on_commit=False)
         return self

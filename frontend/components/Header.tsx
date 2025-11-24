@@ -1,16 +1,12 @@
 import { Anchor, Group, TextInput } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react"
-
-import ThemeSelector from "./ThemeSelector"
-import MainMenu from "./Menu"
-
 import logoUrl from "../assets/caligula-transparent-tight.png"
-
 import classes from "./Header.module.css"
-
+import MainMenu from "./Menu"
+import ThemeSelector from "./ThemeSelector"
 
 interface HeaderProps {
-  openLogin: () => void,
+  openLogin: () => void
 }
 
 const Header: React.FC<HeaderProps> = ({ openLogin }) => {

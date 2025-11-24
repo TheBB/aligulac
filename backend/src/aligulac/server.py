@@ -4,8 +4,8 @@ import json
 import os
 import sys
 from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
-from typing import TYPE_CHECKING, Annotated
 from pathlib import Path
+from typing import TYPE_CHECKING, Annotated
 
 from litestar import Litestar, Response, get, post
 from litestar import Request as LitestarRequest
@@ -163,7 +163,6 @@ jwt_auth = JWTCookieAuth[User](
         "/schema",
         "/api/web/login",
         "/api/web/logout",
-
         "/api/web/blog",
         "/api/web/player",
         "/api/web/topten",
@@ -183,10 +182,8 @@ def create_app() -> Litestar:
             favicon,
             get_player,
             protected,
-
             top_ten,
             blog,
-
             login,
             logout,
             whoami,

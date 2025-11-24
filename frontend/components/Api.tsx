@@ -3,7 +3,6 @@ import { createContext, type ReactNode, useContext, useEffect, useState } from "
 import { login, logout, whoami } from "./api"
 import type { components } from "./models"
 
-
 type LoginRequest = components["schemas"]["LoginRequest"]
 
 interface Auth {
@@ -18,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<string | undefined>()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { data } = await whoami()
       if (data !== undefined) {
         setUsername(data.username)
@@ -33,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUsername(data.username)
       notifications.show({
         title: "Success",
-        message: `Logged in as ${data.username}`
+        message: `Logged in as ${data.username}`,
       })
     } else {
       notifications.show({

@@ -9,7 +9,6 @@ import classes from "./RatingList.module.css"
 import TextAnchor from "./TextAnchor"
 import { playerPeriodUrl, playerUrl } from "./util"
 
-
 type ListedRatingEntry = components["schemas"]["ListedRatingEntry"]
 
 const Rating: React.FC<{ value: number }> = ({ value }) => {

@@ -1,4 +1,4 @@
-import { usePageContext } from "vike-react/usePageContext";
+import { usePageContext } from "vike-react/usePageContext"
 
 export default function Page() {
   const pageContext = usePageContext()

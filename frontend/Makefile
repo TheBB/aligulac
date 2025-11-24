@@ -2,7 +2,7 @@
 
 .PHONY: schema
 schema:
-	node_modules/.bin/json2ts ../backend/schema.json -o components/models.ts --unreachableDefinitions
+	node_modules/.bin/openapi-typescript ../backend/schema.json -o components/models.ts
 
 
 # Linting targets

@@ -1,8 +1,10 @@
 import { notifications } from "@mantine/notifications"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
-import { login, logout, topTen, whoami } from "./api"
-import type { LoginRequest } from "./models"
+import { login, logout, whoami } from "./api"
+import type { components } from "./models"
+
+
+type LoginRequest = components["schemas"]["LoginRequest"]
 
 interface Auth {
   username?: string
@@ -16,43 +18,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<string | undefined>()
 
   useEffect(() => {
-    whoami().then((response) => setUsername(response.username))
+    (async () => {
+      const { data } = await whoami()
+      if (data !== undefined) {
+        setUsername(data.username)
+      }
+    })()
   }, [])
 
-  const handleLogin = (data: LoginRequest) => {
-    login(data)
-      .then((response) => {
-        setUsername(response.username)
-        notifications.show({
-          title: "Success",
-          message: `Logged in as ${data.username}`,
-        })
+  const handleLogin = async (request: LoginRequest) => {
+    const { data, error } = await login(request)
+
+    if (data !== undefined) {
+      setUsername(data.username)
+      notifications.show({
+        title: "Success",
+        message: `Logged in as ${data.username}`
       })
-      .catch((_) => {
-        notifications.show({
-          title: "Error",
-          message: "Unable to log in",
-          color: "red",
-        })
+    } else {
+      notifications.show({
+        title: "Unable to log in",
+        message: error.detail,
+        color: "red",
       })
+    }
   }
 
-  const handleLogout = () => {
-    logout()
-      .then(() => {
-        setUsername(undefined)
-        notifications.show({
-          title: "Success",
-          message: "Logged out",
-        })
-      })
-      .catch((_) => {
-        notifications.show({
-          title: "Error",
-          message: "Unable to log out",
-          color: "red",
-        })
-      })
+  const handleLogout = async () => {
+    await logout()
+    setUsername(undefined)
+    notifications.show({
+      title: "Success",
+      message: "Logged out",
+    })
   }
 
   return (
@@ -64,11 +62,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext)
-}
-
-export const useTopTen = () => {
-  return useSuspenseQuery({
-    queryKey: ["topten"],
-    queryFn: () => topTen(),
-  })
 }

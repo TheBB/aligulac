@@ -2,7 +2,7 @@
 
 .PHONY: schema
 schema:
-	uv run python models-to-ts.py
+	uv run python -m aligulac.server schema.json
 
 
 # Linting targets

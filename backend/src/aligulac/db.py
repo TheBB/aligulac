@@ -121,6 +121,17 @@ class BlogPost(Base):
     title: Mapped[str]
     text: Mapped[str]
 
+    @staticmethod
+    async def posts(session: Session, start: int = 0, limit: int = 10) -> Sequence[BlogPost]:
+        result = await session.execute(
+            select(BlogPost)
+            .order_by(BlogPost.date.desc())
+            .offset(start)
+            .limit(limit)
+        )
+
+        return result.scalars().all()
+
 
 class Earning(Base):
     __tablename__ = "earnings"
@@ -464,7 +475,7 @@ class Database:
         self.url = url
 
     async def __aenter__(self) -> Self:
-        engine = create_async_engine(self.url)
+        engine = create_async_engine(self.url, echo=True)
         self._engine = engine
         self.session = async_sessionmaker(engine, expire_on_commit=False)
         return self

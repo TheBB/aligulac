@@ -7,7 +7,7 @@ const getCountryFlagEmoji = (countryCode: string) => {
 }
 
 interface CountryFlagProps {
-  code: string | null
+  code: string | null | undefined
 }
 
 const CountryFlag: React.FC<CountryFlagProps> = ({ code }) => {

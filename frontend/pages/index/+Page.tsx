@@ -1,8 +1,7 @@
 import { Text, Title } from "@mantine/core"
-import { useTopTen } from "../../components/Api.js"
+import { useTopTen } from "../../components/api.js"
 import RatingList from "../../components/RatingList.js"
 import { periodUrl, renderDate } from "../../components/util.js"
-import { previousWednesday } from "date-fns"
 import TextAnchor from "../../components/TextAnchor.js"
 
 export default function Page() {

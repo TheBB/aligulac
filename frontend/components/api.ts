@@ -1,36 +1,24 @@
-import type { LoginRequest, LoginResponse, TopTenResponse } from "./models"
+import createFetchClient from "openapi-fetch"
+import createClient from "openapi-react-query"
+import type { paths, components } from "./models"
 
 const IS_BROWSER = typeof window !== "undefined"
 const IS_DEV = import.meta.env.DEV
 const API_ROOT = IS_BROWSER
-  ? "/api/web"
+  ? "/"
   : IS_DEV
-    ? "http://localhost:8000/api/web"
-    : "http://backend:8000/api/web"
+    ? "http://localhost:8000/"
+    : "http://backend:8000/"
 
-type HttpMethod = "GET" | "POST"
+const fetchClient = createFetchClient<paths>({ baseUrl: API_ROOT })
 
-const apiRequest = async <I, R>(path: string, method: HttpMethod, body: I): Promise<R> => {
-  const response = await fetch(`${API_ROOT}/${path}`, {
-    method,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  })
-  if (!response.ok) {
-    throw new Error()
-  }
-  return (await response.json()) as R
+export const login = async (request: components["schemas"]["LoginRequest"]) =>
+  await fetchClient.POST("/api/web/login", { body: request })
+export const logout = async () => await fetchClient.POST("/api/web/logout")
+export const whoami = async () => await fetchClient.GET("/api/web/whoami")
+
+const api = createClient(fetchClient)
+
+export const useTopTen = () => {
+  return api.useSuspenseQuery("get", "/api/web/topten")
 }
-
-const get =
-  <R>(path: string) =>
-  (): Promise<R> =>
-    apiRequest<undefined, R>(path, "GET", undefined)
-const post =
-  <I = undefined, R = undefined>(path: string) =>
-  (body: I) =>
-    apiRequest<I, R>(path, "POST", body)
-
-export const login = post<LoginRequest, LoginResponse>("login")
-export const logout = () => post("logout")(undefined)
-export const whoami = get<LoginResponse>("whoami")
-export const topTen = get<TopTenResponse>("topten")

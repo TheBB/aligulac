@@ -3,11 +3,14 @@ import { IconCaretRightFilled } from "@tabler/icons-react"
 import { DataTable, type DataTableColumn } from "mantine-datatable"
 import { PositionArrows, RatingArrows } from "./Arrows"
 import CountryFlag from "./CountryFlag"
-import type { ListedRatingEntry, TopTenResponse } from "./models"
+import type { components } from "./models"
 import RaceIcon from "./RaceIcon"
 import classes from "./RatingList.module.css"
 import TextAnchor from "./TextAnchor"
 import { playerPeriodUrl, playerUrl } from "./util"
+
+
+type ListedRatingEntry = components["schemas"]["ListedRatingEntry"]
 
 const Rating: React.FC<{ value: number }> = ({ value }) => {
   return <NumberFormatter value={(value + 1) * 1000} decimalScale={0} />
@@ -26,7 +29,7 @@ const RATING_STYLE: Partial<DataTableColumn<ListedRatingEntry>> = {
 }
 
 interface RatingListProps {
-  data: TopTenResponse["ratings"]
+  data: ListedRatingEntry[]
 }
 
 const RatingList: React.FC<RatingListProps> = ({ data }) => {

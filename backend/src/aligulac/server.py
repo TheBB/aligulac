@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
+import sys
 from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
+from pathlib import Path
 
 from litestar import Litestar, Response, get, post
 from litestar import Request as LitestarRequest
@@ -10,6 +13,8 @@ from litestar.datastructures import State as LitestarState
 from litestar.di import Provide
 from litestar.exceptions import NotAuthorizedException
 from litestar.handlers import HTTPRouteHandler
+from litestar.openapi.config import OpenAPIConfig
+from litestar.params import Parameter
 from litestar.security.jwt import JWTCookieAuth, Token
 from sqlalchemy.exc import NoResultFound
 
@@ -64,6 +69,16 @@ async def session_context(app: Litestar) -> AsyncIterator[Session]:
     finally:
         with suppress(StopAsyncIteration):
             await session_it.__anext__()
+
+
+@get("/api/web/blog")
+async def blog(
+    session: Session,
+    start: Annotated[int, Parameter(ge=0)] = 0,
+    limit: Annotated[int, Parameter(ge=1, le=10)] = 10,
+) -> models.BlogResponse:
+    posts = await db.BlogPost.posts(session, start, limit)
+    return models.BlogResponse.model_validate({"posts": posts})
 
 
 @get("/api/web/topten")
@@ -145,8 +160,11 @@ jwt_auth = JWTCookieAuth[User](
     token_secret=os.environ.get("ALIGULAC_SECRET", "dev-secret"),
     exclude=[
         "/favicon.ico",
+        "/schema",
         "/api/web/login",
         "/api/web/logout",
+
+        "/api/web/blog",
         "/api/web/player",
         "/api/web/topten",
     ],
@@ -165,7 +183,10 @@ def create_app() -> Litestar:
             favicon,
             get_player,
             protected,
+
             top_ten,
+            blog,
+
             login,
             logout,
             whoami,
@@ -177,5 +198,18 @@ def create_app() -> Litestar:
             "database": Provide(database_provider),
             "session": Provide(session_provider),
         },
+        openapi_config=OpenAPIConfig(title="Aligulac", version="0.0.1"),
         middleware=[jwt_auth.middleware],
     )
+
+
+def dump_openapi() -> None:
+    path = Path(sys.argv[1])
+    schema = create_app().openapi_schema.to_schema()
+
+    with path.open("w") as f:
+        json.dump(schema, f, indent=2)
+
+
+if __name__ == "__main__":
+    dump_openapi()

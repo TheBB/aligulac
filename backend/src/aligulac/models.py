@@ -1,11 +1,21 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import date
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, model_validator
+from pydantic import AfterValidator, BaseModel, model_validator
 
 from . import db
+
+
+def is_at_most(hi: int, desc: str) -> Callable[[int], int]:
+    def validator(value: int) -> int:
+        if value > hi:
+            raise ValueError(f"{desc} cannot be more than {hi}")
+        return value
+
+    return validator
 
 
 type Race = Literal["P", "T", "Z", "R"]
@@ -18,6 +28,34 @@ class LoginRequest(BaseModel):
 
 class LoginResponse(BaseModel):
     username: str
+
+
+class BlogRequest(BaseModel):
+    start: int = 0
+    limit: Annotated[int, AfterValidator(is_at_most(10, "limit"))] = 10
+
+
+class BlogPost(BaseModel):
+    date: date
+    author: str
+    title: str
+    text: str
+
+    @model_validator(mode="before")
+    @classmethod
+    def pre_validate(cls, data: Any) -> Any:
+        if isinstance(data, db.BlogPost):
+            return {
+                "date": data.date,
+                "author": data.author,
+                "title": data.title,
+                "text": data.text,
+            }
+        return data
+
+
+class BlogResponse(BaseModel):
+    posts: list[BlogPost]
 
 
 class ListedPlayer(BaseModel):

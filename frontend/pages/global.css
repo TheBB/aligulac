@@ -29,17 +29,5 @@ h1 {
 h2 {
   font-variant: small-caps;
   font-size: 20px;
-  width: 100%;
-  border-bottom: solid 1px;
-  /* padding-left: 0.3em; */
-  /* margin: 0.4em 0 0.4em 0; */
   font-weight: 600;
-
-  @mixin light {
-    border-bottom-color: var(--mantine-color-gray-3);
-  }
-
-  @mixin dark {
-    border-bottom-color: var(--mantine-color-gray-8);
-  }
 }

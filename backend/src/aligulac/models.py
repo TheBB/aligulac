@@ -59,6 +59,7 @@ class BlogPost(BaseModel):
 
 class BlogResponse(BaseModel):
     posts: list[BlogPost]
+    next_offset: int | None
 
 
 class ListedPlayer(BaseModel):
@@ -131,8 +132,9 @@ class ListedRatingEntry(BaseModel):
         return data
 
 
-class TopTenResponse(BaseModel):
+class RatingList(BaseModel):
     period_id: int
     period_start: date
     period_end: date
     ratings: list[ListedRatingEntry]
+    next_offset: int | None

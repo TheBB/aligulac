@@ -52,7 +52,7 @@ export const PositionArrows: React.FC<PositionArrowsProps> = ({ current, previou
     return null
   }
 
-  return <Arrows magnitude={current > previous ? 1 : -1} />
+  return <Arrows magnitude={current < previous ? 1 : -1} />
 }
 
 interface RatingArrowsProps {
@@ -73,7 +73,7 @@ export const RatingArrows: React.FC<RatingArrowsProps> = ({ current, previous })
 
   const absDiff = Math.abs(current - previous)
   const magnitude = absDiff > 0.1 ? 3 : absDiff > 0.04 ? 2 : 1
-  const sign = current > previous ? -1 : 1
+  const sign = current < previous ? -1 : 1
 
   return <Arrows magnitude={magnitude * sign} />
 }

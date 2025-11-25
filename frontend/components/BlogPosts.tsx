@@ -1,4 +1,4 @@
-import { Text, Title } from "@mantine/core"
+import { Group, Text, Title } from "@mantine/core"
 import Markdown from "react-markdown"
 import classes from "./BlogPosts.module.css"
 import type { components } from "./models"
@@ -13,11 +13,15 @@ interface BlogPostProps {
 const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
   return (
     <>
-      <Title order={2}>{post.title}</Title>
-      <Text className={classes.author} c="dimmed" size="sm">
-        {post.author} on {renderDate(post.date)}
-      </Text>
-      <Text className={classes.text}>
+      <Group justify="space-between" align="end" className={classes.title} mt="md">
+        <Title order={2} style={{ display: "inline" }}>
+          {post.title}
+        </Title>
+        <Text c="dimmed" size="sm" component="span">
+          {post.author} on {renderDate(post.date)}
+        </Text>
+      </Group>
+      <Text mb="xl">
         <Markdown>{post.text}</Markdown>
       </Text>
     </>

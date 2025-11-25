@@ -55,15 +55,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/web/topten": {
+    "/api/web/ratinglist": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** TopTen */
-        get: operations["ApiWebToptenTopTen"];
+        /** RatingList */
+        get: operations["ApiWebRatinglistRatingList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -155,6 +155,7 @@ export interface components {
         /** BlogResponse */
         BlogResponse: {
             posts: components["schemas"]["BlogPost"][];
+            next_offset?: number | null;
         };
         /** ListedPlayer */
         ListedPlayer: {
@@ -192,14 +193,15 @@ export interface components {
         LoginResponse: {
             username: string;
         };
-        /** TopTenResponse */
-        TopTenResponse: {
+        /** RatingList */
+        RatingList: {
             period_id: number;
             /** Format: date */
             period_start: string;
             /** Format: date */
             period_end: string;
             ratings: components["schemas"]["ListedRatingEntry"][];
+            next_offset?: number | null;
         };
     };
     responses: never;
@@ -285,9 +287,15 @@ export interface operations {
             };
         };
     };
-    ApiWebToptenTopTen: {
+    ApiWebRatinglistRatingList: {
         parameters: {
-            query?: never;
+            query: {
+                period_id: number | "latest";
+                offset?: number;
+                limit?: number;
+                sort_by?: "rating" | "vt" | "vp" | "vz";
+                order?: "desc" | "asc";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -300,7 +308,22 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TopTenResponse"];
+                    "application/json": components["schemas"]["RatingList"];
+                };
+            };
+            /** @description Bad request syntax or unsupported method */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status_code: number;
+                        detail: string;
+                        extra?: null | {
+                            [key: string]: unknown;
+                        } | unknown[];
+                    };
                 };
             };
         };
@@ -308,7 +331,7 @@ export interface operations {
     ApiWebBlogBlog: {
         parameters: {
             query?: {
-                start?: number;
+                offset?: number;
                 limit?: number;
             };
             header?: never;

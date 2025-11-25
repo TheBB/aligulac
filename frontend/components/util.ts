@@ -13,7 +13,7 @@ export const playerPeriodUrl = (player: { id: number; tag: string }, periodId: n
 }
 
 export const periodUrl = (periodId: number): string => {
-  return `period/${periodId}`
+  return `periods/${periodId}`
 }
 
 export const renderDate = (date: string): string => {

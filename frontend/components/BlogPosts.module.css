@@ -1,9 +1,11 @@
-.author {
-  width: 100%;
-  text-align: right;
-}
+.title {
+  border-bottom: solid 1px;
 
-.text {
-  margin-top: -0.5em;
-  margin-bottom: var(--mantine-spacing-xl);
+  @mixin light {
+    border-bottom-color: var(--mantine-color-gray-3);
+  }
+
+  @mixin dark {
+    border-bottom-color: var(--mantine-color-gray-8);
+  }
 }

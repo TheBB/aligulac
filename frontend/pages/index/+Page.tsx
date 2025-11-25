@@ -1,13 +1,13 @@
 import { Text, Title } from "@mantine/core"
 import { IconArrowRight } from "@tabler/icons-react"
-import { useRecentBlog, useTopTen } from "../../components/api.js"
+import { useRatingList, useRecentBlog } from "../../components/api.js"
 import BlogPosts from "../../components/BlogPosts.js"
 import RatingList from "../../components/RatingList.js"
 import TextAnchor from "../../components/TextAnchor.js"
 import { periodUrl, renderDate } from "../../components/util.js"
 
 export default function Page() {
-  const { data: topTen } = useTopTen()
+  const { data: topTen } = useRatingList("latest", { limit: 10 })
   const { data: blog } = useRecentBlog()
 
   return (

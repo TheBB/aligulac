@@ -123,12 +123,16 @@ class BlogPost(Base):
     text: Mapped[str]
 
     @staticmethod
-    async def posts(session: Session, start: int = 0, limit: int = 10) -> Sequence[BlogPost]:
+    async def posts(session: Session, offset: int = 0, limit: int = 10) -> tuple[Sequence[BlogPost], bool]:
         result = await session.execute(
-            select(BlogPost).order_by(BlogPost.date.desc()).offset(start).limit(limit)
+            select(BlogPost).order_by(BlogPost.date.desc()).offset(offset).limit(limit + 1)
         )
 
-        return result.scalars().all()
+        rows = result.scalars().all()
+        has_more = len(rows) == limit + 1
+        if has_more:
+            rows = rows[:-1]
+        return rows, has_more
 
 
 class Earning(Base):
@@ -312,6 +316,11 @@ class Period(Base):
         )
         return result.scalar_one()
 
+    @staticmethod
+    async def from_pk(session: Session, period_id: int) -> Period:
+        result = await session.execute(select(Period).where(Period.id == period_id))
+        return result.scalar_one()
+
 
 class Player(Base):
     __tablename__ = "player"
@@ -423,22 +432,44 @@ class Rating(Base):
     prev: Mapped[Rating | None] = relationship(foreign_keys="Rating.prev_id", remote_side="Rating.id")
 
     @staticmethod
-    async def ranking(session: Session, period_id: int, start: int = 0, limit: int = 10) -> Sequence[Rating]:
-        order = Rating.rating.desc()
-
+    async def ranking(
+        session: Session,
+        period_id: int,
+        offset: int = 0,
+        limit: int = 10,
+    ) -> tuple[Sequence[Rating], bool]:
         result = await session.execute(
             select(Rating)
-            .where(Rating.period_id == period_id, Rating.decay <= INACTIVE_THRESHOLD)
-            .order_by(order)
-            .offset(start)
-            .limit(limit)
+            .where(
+                Rating.period_id == period_id,
+                Rating.decay < INACTIVE_THRESHOLD,
+            )
+            .order_by(Rating.rating.desc())
+            .offset(offset)
+            .limit(limit + 1)
             .options(
                 selectinload(Rating.player),
                 selectinload(Rating.prev),
             )
         )
 
-        return result.scalars().all()
+        rows = result.scalars().all()
+        has_more = len(rows) > limit
+        if has_more:
+            rows = rows[:-1]
+        return rows, has_more
+
+    @staticmethod
+    async def posts(session: Session, offset: int = 0, limit: int = 10) -> tuple[Sequence[BlogPost], bool]:
+        result = await session.execute(
+            select(BlogPost).order_by(BlogPost.date.desc()).offset(offset).limit(limit + 1)
+        )
+
+        rows = result.scalars().all()
+        has_more = len(rows) > limit
+        if has_more:
+            rows = rows[:-1]
+        return rows, has_more
 
 
 class Story(Base):

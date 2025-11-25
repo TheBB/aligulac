@@ -5,7 +5,7 @@ import os
 import sys
 from contextlib import AbstractAsyncContextManager, asynccontextmanager, suppress
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Literal
 
 from litestar import Litestar, Response, get, post
 from litestar import Request as LitestarRequest
@@ -74,23 +74,54 @@ async def session_context(app: Litestar) -> AsyncIterator[Session]:
 @get("/api/web/blog")
 async def blog(
     session: Session,
-    start: Annotated[int, Parameter(ge=0)] = 0,
+    offset: Annotated[int, Parameter(ge=0)] = 0,
     limit: Annotated[int, Parameter(ge=1, le=10)] = 10,
 ) -> models.BlogResponse:
-    posts = await db.BlogPost.posts(session, start, limit)
-    return models.BlogResponse.model_validate({"posts": posts})
+    posts, has_more = await db.BlogPost.posts(session, offset, limit)
+    return models.BlogResponse.model_validate(
+        {
+            "posts": posts,
+            "next_offset": offset + len(posts) if has_more else None,
+        }
+    )
 
 
-@get("/api/web/topten")
-async def top_ten(session: Session) -> models.TopTenResponse:
-    period = await db.Period.latest(session)
-    ratings = await db.Rating.ranking(session, period_id=period.id)
-    return models.TopTenResponse.model_validate(
+# @get("/api/web/topten")
+# async def top_ten(session: Session) -> models.TopTenResponse:
+#     period = await db.Period.latest(session)
+#     ratings = await db.Rating.ranking(session, period_id=period.id)
+#     return models.TopTenResponse.model_validate(
+#         {
+#             "period_id": period.id,
+#             "period_start": period.start,
+#             "period_end": period.end,
+#             "ratings": ratings,
+#         }
+#     )
+
+
+@get("/api/web/ratinglist")
+async def rating_list(
+    session: Session,
+    period_id: int | Literal["latest"],
+    offset: Annotated[int, Parameter(ge=0)] = 0,
+    limit: Annotated[int, Parameter(ge=1, le=40)] = 40,
+    sort_by: Literal["rating", "vt", "vp", "vz"] = "rating",
+    order: Literal["desc", "asc"] = "desc",
+) -> models.RatingList:
+    if period_id == "latest":
+        period = await db.Period.latest(session)
+    else:
+        period = await db.Period.from_pk(session, period_id)
+
+    ratings, has_more = await db.Rating.ranking(session, period.id, offset, limit)
+    return models.RatingList.model_validate(
         {
             "period_id": period.id,
             "period_start": period.start,
             "period_end": period.end,
             "ratings": ratings,
+            "next_offset": offset + len(ratings) if has_more else None,
         }
     )
 
@@ -165,7 +196,7 @@ jwt_auth = JWTCookieAuth[User](
         "/api/web/logout",
         "/api/web/blog",
         "/api/web/player",
-        "/api/web/topten",
+        "/api/web/ratinglist",
     ],
     key="access_token",
     secure=bool(os.environ.get("ALIGULAC_PROD")),
@@ -182,7 +213,8 @@ def create_app() -> Litestar:
             favicon,
             get_player,
             protected,
-            top_ten,
+            # top_ten,
+            rating_list,
             blog,
             login,
             logout,

@@ -12,8 +12,11 @@ export const playerPeriodUrl = (player: { id: number; tag: string }, periodId: n
   return `${playerUrl(player)}/period/${periodId}`
 }
 
-export const periodUrl = (periodId: number): string => {
-  return `/periods/${periodId}`
+export const periodUrl = (periodId: number | "latest", page?: number): string => {
+  const base = `/periods/${periodId}`
+  if (page === undefined) { return base }
+  const params = new URLSearchParams({page: page.toString()}).toString()
+  return `${base}?${params}`
 }
 
 export const renderDate = (date: string): string => {

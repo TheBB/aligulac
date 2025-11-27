@@ -86,18 +86,18 @@ async def blog(
     )
 
 
-# @get("/api/web/topten")
-# async def top_ten(session: Session) -> models.TopTenResponse:
-#     period = await db.Period.latest(session)
-#     ratings = await db.Rating.ranking(session, period_id=period.id)
-#     return models.TopTenResponse.model_validate(
-#         {
-#             "period_id": period.id,
-#             "period_start": period.start,
-#             "period_end": period.end,
-#             "ratings": ratings,
-#         }
-#     )
+@get("/api/web/topten")
+async def top_ten(session: Session) -> models.TopTen:
+    period = await db.Period.latest(session)
+    ratings, _ = await db.Rating.ranking(session, period.id, offset=0, limit=10)
+    return models.TopTen.model_validate(
+        {
+            "period_id": period.id,
+            "period_start": period.start,
+            "period_end": period.end,
+            "ratings": ratings,
+        }
+    )
 
 
 @get("/api/web/ratinglist")
@@ -111,17 +111,23 @@ async def rating_list(
 ) -> models.RatingList:
     if period_id == "latest":
         period = await db.Period.latest(session)
+        last_period_id = period.id
     else:
         period = await db.Period.from_pk(session, period_id)
+        last_period_id = (await db.Period.latest(session)).id
 
-    ratings, has_more = await db.Rating.ranking(session, period.id, offset, limit)
+    first_period_id = (await db.Period.first(session)).id
+
+    ratings, count = await db.Rating.ranking(session, period.id, offset, limit)
     return models.RatingList.model_validate(
         {
             "period_id": period.id,
             "period_start": period.start,
             "period_end": period.end,
+            "first_period_id": first_period_id,
+            "last_period_id": last_period_id,
             "ratings": ratings,
-            "next_offset": offset + len(ratings) if has_more else None,
+            "count": count,
         }
     )
 
@@ -197,6 +203,7 @@ jwt_auth = JWTCookieAuth[User](
         "/api/web/blog",
         "/api/web/player",
         "/api/web/ratinglist",
+        "/api/web/topten",
     ],
     key="access_token",
     secure=bool(os.environ.get("ALIGULAC_PROD")),
@@ -213,7 +220,7 @@ def create_app() -> Litestar:
             favicon,
             get_player,
             protected,
-            # top_ten,
+            top_ten,
             rating_list,
             blog,
             login,

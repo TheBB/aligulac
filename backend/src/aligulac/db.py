@@ -317,6 +317,13 @@ class Period(Base):
         return result.scalar_one()
 
     @staticmethod
+    async def first(session: Session) -> Period:
+        result = await session.execute(
+            select(Period).where(Period.computed).order_by(Period.start.asc()).limit(1)
+        )
+        return result.scalar_one()
+
+    @staticmethod
     async def from_pk(session: Session, period_id: int) -> Period:
         result = await session.execute(select(Period).where(Period.id == period_id))
         return result.scalar_one()
@@ -437,27 +444,29 @@ class Rating(Base):
         period_id: int,
         offset: int = 0,
         limit: int = 10,
-    ) -> tuple[Sequence[Rating], bool]:
+    ) -> tuple[Sequence[Rating], int]:
+        filters = [
+            Rating.period_id == period_id,
+            Rating.decay < INACTIVE_THRESHOLD,
+        ]
+
+        result_count = await session.execute(select(func.count()).select_from(Rating).where(*filters))
+        count = result_count.scalar_one()
+
         result = await session.execute(
             select(Rating)
-            .where(
-                Rating.period_id == period_id,
-                Rating.decay < INACTIVE_THRESHOLD,
-            )
+            .where(*filters)
             .order_by(Rating.rating.desc())
             .offset(offset)
-            .limit(limit + 1)
+            .limit(limit)
             .options(
                 selectinload(Rating.player),
                 selectinload(Rating.prev),
             )
         )
-
         rows = result.scalars().all()
-        has_more = len(rows) > limit
-        if has_more:
-            rows = rows[:-1]
-        return rows, has_more
+
+        return rows, count
 
     @staticmethod
     async def posts(session: Session, offset: int = 0, limit: int = 10) -> tuple[Sequence[BlogPost], bool]:

@@ -7,7 +7,9 @@ const Page = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteBlog()
   return (
     <>
-      {data.pages.map((page, i) => <BlogPosts key={i} posts={page.posts} />)}
+      {data.pages.map((page, i) => (
+        <BlogPosts key={i} posts={page.posts} />
+      ))}
       {hasNextPage && (
         <Box ta="right">
           <Button

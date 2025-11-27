@@ -31,6 +31,10 @@ export const useRatingList = (periodId: number | "latest", options: UseRatingLis
   })
 }
 
+export const useTopTen = () => {
+  return api.useSuspenseQuery("get", "/api/web/topten")
+}
+
 export const useRecentBlog = () => {
   return api.useSuspenseQuery("get", "/api/web/blog", { params: { query: { limit: 3 } } })
 }

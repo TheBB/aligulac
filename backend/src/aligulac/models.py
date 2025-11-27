@@ -136,5 +136,14 @@ class RatingList(BaseModel):
     period_id: int
     period_start: date
     period_end: date
+    first_period_id: int
+    last_period_id: int
+    count: int
     ratings: list[ListedRatingEntry]
-    next_offset: int | None
+
+
+class TopTen(BaseModel):
+    period_id: int
+    period_start: date
+    period_end: date
+    ratings: list[ListedRatingEntry]

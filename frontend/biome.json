@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded"
+    }
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 110
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noUnknownAtRules": "off",
+        "noDuplicateProperties": "off",
+        "noArrayIndexKey": "off"
+      }
+    },
+    "domains": {
+      "react": "recommended"
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!*.cjs",
+      "!*.js",
+      "!*.mjs",
+      "!*.spec.ts",
+      "!**/*.ts.build-*.mjs",
+      "!dist/*",
+      "!node_modules/*",
+      "!**/.DS_Store",
+      "!components/models.ts"
+    ]
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}

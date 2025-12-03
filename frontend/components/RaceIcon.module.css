@@ -1,0 +1,48 @@
+.P {
+  height: 1.2em;
+  color: green;
+
+  @mixin dark {
+    filter: invert(62%) sepia(99%) saturate(3661%) hue-rotate(81deg) brightness(110%) contrast(115%);
+  }
+
+  @mixin light {
+    filter: invert(19%) sepia(88%) saturate(5741%) hue-rotate(149deg) brightness(95%) contrast(101%);
+  }
+}
+
+.T {
+  height: 1.2em;
+
+  @mixin dark {
+    filter: invert(48%) sepia(60%) saturate(6122%) hue-rotate(189deg) brightness(87%) contrast(104%);
+  }
+
+  @mixin light {
+    filter: invert(15%) sepia(41%) saturate(7384%) hue-rotate(245deg) brightness(90%) contrast(94%);
+  }
+}
+
+.Z {
+  height: 1.2em;
+
+  @mixin dark {
+    filter: invert(39%) sepia(74%) saturate(2715%) hue-rotate(258deg) brightness(91%) contrast(96%);
+  }
+
+  @mixin light {
+    filter: invert(35%) sepia(67%) saturate(6513%) hue-rotate(276deg) brightness(79%) contrast(128%);
+  }
+}
+
+.R {
+  height: 1.2em;
+
+  @mixin dark {
+    filter: invert(58%) sepia(61%) saturate(610%) hue-rotate(2deg) brightness(94%) contrast(84%);
+  }
+
+  @mixin light {
+    filter: invert(32%) sepia(21%) saturate(6707%) hue-rotate(23deg) brightness(90%) contrast(84%);
+  }
+}

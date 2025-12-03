@@ -1,0 +1,23 @@
+.arrows {
+  padding-left: 0px;
+}
+
+.race {
+  padding-left: 0;
+
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.detail {
+  padding-right: 0px;
+
+  a {
+    display: block;
+    margin-left: auto;
+    margin-right: 5px;
+  }
+}

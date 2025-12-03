@@ -1,0 +1,19 @@
+.red {
+  @mixin light {
+    color: var(--mantine-color-red-8);
+  }
+
+  @mixin dark {
+    color: var(--mantine-color-red-7);
+  }
+}
+
+.green {
+  @mixin light {
+    color: var(--mantine-color-green-8);
+  }
+
+  @mixin dark {
+    color: var(--mantine-color-green-8);
+  }
+}

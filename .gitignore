@@ -198,3 +198,5 @@ aligulac/bugrep/
 
 # Virtualenv
 .venv
+
+auth_poc.py

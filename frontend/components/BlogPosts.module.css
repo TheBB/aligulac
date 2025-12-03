@@ -1,0 +1,11 @@
+.title {
+  border-bottom: solid 1px;
+
+  @mixin light {
+    border-bottom-color: var(--mantine-color-gray-3);
+  }
+
+  @mixin dark {
+    border-bottom-color: var(--mantine-color-gray-8);
+  }
+}

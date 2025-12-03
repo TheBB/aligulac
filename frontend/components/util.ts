@@ -1,7 +1,5 @@
 import { format, parse } from "date-fns"
 
-// import { URLSearchParams } from "url";
-
 const filterUrl = (name: string): string => {
   return encodeURIComponent(name.replaceAll(" ", "-").replaceAll("/", ""))
 }
@@ -14,14 +12,17 @@ export const playerPeriodUrl = (player: { id: number; tag: string }, periodId: n
   return `${playerUrl(player)}/period/${periodId}`
 }
 
-export const periodUrl = (
-  periodId: number | "latest",
-  page?: number,
-  sort?: "vp" | "vt" | "vz",
-  nationality?: string,
-): string => {
+interface PeriodUrlOptions {
+  page?: number
+  sort?: "vp" | "vt" | "vz"
+  nats?: string
+  race?: string
+}
+
+export const periodUrl = (periodId: number | "latest", options?: PeriodUrlOptions): string => {
   const base = `/periods/${periodId}`
   const params = new URLSearchParams()
+  const { page, sort, nats, race } = options ?? {}
 
   if (page !== undefined) {
     params.append("page", page.toString())
@@ -31,8 +32,12 @@ export const periodUrl = (
     params.append("sort", sort)
   }
 
-  if (nationality !== undefined) {
-    params.append("nats", nationality)
+  if (nats !== undefined) {
+    params.append("nats", nats)
+  }
+
+  if (race !== undefined) {
+    params.append("race", race)
   }
 
   if (params.size === 0) {

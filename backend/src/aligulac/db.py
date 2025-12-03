@@ -463,6 +463,7 @@ class Rating(Base):
         limit: int = 10,
         sort: Literal["vp", "vt", "vz"] | None = None,
         nats: str | None = None,
+        race: str | None = None,
     ) -> tuple[Sequence[Rating], int]:
         filters = [
             Rating.period_id == period_id,
@@ -473,6 +474,9 @@ class Rating(Base):
             filters.append(Rating.player.has(Player.country != "KR"))
         elif nats is not None:
             filters.append(Rating.player.has(Player.country == nats))
+
+        if race is not None:
+            filters.append(Rating.player.has(Player.race.in_(list(race.upper()))))
 
         match sort:
             case None:

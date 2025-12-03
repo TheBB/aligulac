@@ -23,13 +23,23 @@ interface UseRatingListOptions {
   limit?: number
   sort?: "vp" | "vt" | "vz"
   nats?: string
+  race?: string
 }
 
 export const useRatingList = (periodId: number | "latest", options: UseRatingListOptions) => {
   const limit = options?.limit ?? 40
   const offset = options?.offset ?? 0
   return api.useSuspenseQuery("get", "/api/web/ratinglist", {
-    params: { query: { limit, offset, period_id: periodId, sort: options?.sort, nats: options?.nats } },
+    params: {
+      query: {
+        limit,
+        offset,
+        period_id: periodId,
+        sort: options?.sort,
+        nats: options?.nats,
+        race: options?.race,
+      },
+    },
   })
 }
 

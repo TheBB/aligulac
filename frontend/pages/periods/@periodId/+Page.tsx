@@ -4,6 +4,7 @@ import {
   IconChevronRightPipe,
   IconChevronsLeft,
   IconChevronsRight,
+  IconRotate,
   IconWorld,
 } from "@tabler/icons-react"
 import { navigate } from "vike/client/router"
@@ -20,15 +21,17 @@ interface Params {
   page: number
   sort?: "vp" | "vt" | "vz"
   nats?: string
+  race?: string
 }
 
 const useParams = (): Params => {
   const pageContext = usePageContext()
   const { periodId } = pageContext.routeParams as { periodId: string }
-  const { page, sort, nats } = pageContext.urlParsed.search as {
+  const { page, sort, nats, race } = pageContext.urlParsed.search as {
     page?: string
     sort?: "vp" | "vt" | "vz"
     nats?: string
+    race?: string
   }
 
   return {
@@ -36,6 +39,7 @@ const useParams = (): Params => {
     page: page === undefined ? 1 : Number(page),
     sort,
     nats,
+    race,
   }
 }
 
@@ -92,21 +96,39 @@ const Controller: React.FC<ControllerProps> = ({
 interface CountryListProps {
   nationalities: string[]
   currentNat?: string
+  currentRace?: string
   onSetNationality: (country?: string) => void
+  onSetRace: (races?: string) => void
+  onReset: () => void
 }
 
-const FilterList: React.FC<CountryListProps> = ({ nationalities, currentNat, onSetNationality }) => {
+const FilterList: React.FC<CountryListProps> = ({
+  nationalities,
+  currentNat,
+  currentRace,
+  onSetNationality,
+  onSetRace,
+  onReset,
+}) => {
   const dispNames = new Intl.DisplayNames(["en"], { type: "region" })
   const toEnglish = (cc: string) => dispNames.of(cc) ?? cc
   const countryData = nationalities
     .map((cc) => ({ label: toEnglish(cc), value: cc }))
     .toSorted(({ label: labelA }, { label: labelB }) => (labelA < labelB ? -1 : 1))
 
-  const handleOnChange = (value: string | null) => {
+  const handleSetNationality = (value: string | null) => {
     if (value === null || value === "all") {
       onSetNationality()
     } else {
       onSetNationality(value)
+    }
+  }
+
+  const handleSetRace = (value: string | null) => {
+    if (value === null || value === "all") {
+      onSetRace()
+    } else {
+      onSetRace(value)
     }
   }
 
@@ -124,43 +146,73 @@ const FilterList: React.FC<CountryListProps> = ({ nationalities, currentNat, onS
 
   return (
     <form>
-      <Select
-        data={[
-          {
-            group: "",
-            items: [
-              { label: "All", value: "all" },
-              { label: "Non-Koreans", value: "foreigners" },
-            ],
-          },
-          { group: "Countries", items: countryData },
-        ]}
-        value={currentNat ?? "all"}
-        onChange={handleOnChange}
-        renderOption={renderCountry}
-        searchable
-      />
+      <Group justify="flex-end">
+        <Select
+          data={[
+            { label: "All races", value: "all" },
+            { label: "Protoss", value: "p" },
+            { label: "Terran", value: "t" },
+            { label: "Zerg", value: "z" },
+            { label: "No Protoss", value: "tzrs" },
+            { label: "No Terran", value: "pzrs" },
+            { label: "No Zerg", value: "ptrs" },
+            { label: "Random", value: "r" },
+            { label: "Race Switchers", value: "s" },
+            { label: "Randoms and race switchers", value: "rs" },
+          ]}
+          value={currentRace ?? "all"}
+          onChange={handleSetRace}
+        />
+        <Select
+          data={[
+            {
+              group: "",
+              items: [
+                { label: "All nationalities", value: "all" },
+                { label: "Non-Koreans", value: "foreigners" },
+              ],
+            },
+            { group: "Countries", items: countryData },
+          ]}
+          value={currentNat ?? "all"}
+          onChange={handleSetNationality}
+          renderOption={renderCountry}
+          searchable
+        />
+        <ActionIcon onClick={onReset} variant="subtle" radius="lg" size="lg">
+          <IconRotate />
+        </ActionIcon>
+      </Group>
     </form>
   )
 }
 
 const Page = () => {
-  const { periodId, page, sort, nats } = useParams()
+  const { periodId, ...options } = useParams()
+  const { page, sort, nats, race } = options
   const offset = (page - 1) * PER_PAGE
 
-  const { data } = useRatingList(periodId, { limit: PER_PAGE, offset, sort, nats })
+  const { data } = useRatingList(periodId, { limit: PER_PAGE, offset, sort, nats, race })
   const nPages = Math.ceil(data.count / PER_PAGE)
 
   const handleSetPage = (page: number) => {
-    navigate(periodUrl(periodId, page, sort, nats))
+    navigate(periodUrl(periodId, { ...options, page }))
   }
 
   const handleSetSort = (sort?: "vp" | "vt" | "vz") => {
-    navigate(periodUrl(periodId, page, sort, nats))
+    navigate(periodUrl(periodId, { ...options, sort }))
   }
 
   const handleSetNationality = (nats?: string) => {
-    navigate(periodUrl(periodId, page, sort, nats))
+    navigate(periodUrl(periodId, { ...options, nats }))
+  }
+
+  const handleSetRace = (race?: string) => {
+    navigate(periodUrl(periodId, { ...options, race }))
+  }
+
+  const handleReset = () => {
+    navigate(periodUrl(periodId, { page, sort }))
   }
 
   const Ctrl = () => (
@@ -180,7 +232,10 @@ const Page = () => {
       <FilterList
         nationalities={data.nationalities}
         currentNat={nats}
+        currentRace={race}
         onSetNationality={handleSetNationality}
+        onSetRace={handleSetRace}
+        onReset={handleReset}
       />
       <Ctrl />
       <RatingList data={data.ratings} onSetSort={handleSetSort} sort={sort} offset={offset + 1} />

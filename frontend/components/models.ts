@@ -343,7 +343,8 @@ export interface operations {
                 offset?: number;
                 limit?: number;
                 sort?: "vt" | "vp" | "vz" | null;
-                order?: "desc" | "asc";
+                nats?: string | null;
+                race?: string | null;
             };
             header?: never;
             path?: never;

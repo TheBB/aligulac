@@ -11,6 +11,9 @@ interface CountryFlagProps {
 }
 
 const CountryFlag: React.FC<CountryFlagProps> = ({ code }) => {
+  if (code === "UK") {
+    code = "GB"
+  }
   return code ? getCountryFlagEmoji(code) : null
 }
 

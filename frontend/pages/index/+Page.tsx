@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <>
       <Title order={1}>Current top 10</Title>
-      <RatingList data={topTen.ratings} />
+      <RatingList data={topTen.ratings} offset={1} />
       <Text c="dimmed" ta="right" mt="sm" mb="lg">
         This is a preview of the next rating list, which will be finalized on {renderDate(topTen.period_end)}.{" "}
         <TextAnchor href={periodUrl(topTen.period_id)}>Full list</TextAnchor>.

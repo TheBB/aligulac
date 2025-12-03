@@ -221,6 +221,7 @@ export interface components {
             last_period_id: number;
             count: number;
             ratings: components["schemas"]["ListedRatingEntry"][];
+            nationalities: string[];
         };
         /** TopTen */
         TopTen: {
@@ -341,7 +342,7 @@ export interface operations {
                 period_id: number | "latest";
                 offset?: number;
                 limit?: number;
-                sort_by?: "rating" | "vt" | "vp" | "vz";
+                sort?: "vt" | "vp" | "vz" | null;
                 order?: "desc" | "asc";
             };
             header?: never;

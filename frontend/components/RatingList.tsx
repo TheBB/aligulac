@@ -1,5 +1,5 @@
 import { ActionIcon, NumberFormatter } from "@mantine/core"
-import { IconCaretRightFilled } from "@tabler/icons-react"
+import { IconCaretRightFilled, IconChevronDown, IconChevronUp } from "@tabler/icons-react"
 import { DataTable, type DataTableColumn } from "mantine-datatable"
 import { PositionArrows, RatingArrows } from "./Arrows"
 import CountryFlag from "./CountryFlag"
@@ -29,9 +29,27 @@ const RATING_STYLE: Partial<DataTableColumn<ListedRatingEntry>> = {
 
 interface RatingListProps {
   data: ListedRatingEntry[]
+  onSetSort?: (sort?: "vp" | "vz" | "vt") => void
+  sort?: "vp" | "vt" | "vz"
+  offset: number
 }
 
-const RatingList: React.FC<RatingListProps> = ({ data }) => {
+const RatingList: React.FC<RatingListProps> = ({ data, onSetSort, sort, offset }) => {
+  const handleSort = ({ columnAccessor }: { columnAccessor: string }) => {
+    if (!onSetSort) {
+      return
+    }
+    if (columnAccessor === "current.rating") {
+      onSetSort()
+    } else if (columnAccessor === "current.rating_vp") {
+      onSetSort("vp")
+    } else if (columnAccessor === "current.rating_vt") {
+      onSetSort("vt")
+    } else if (columnAccessor === "current.rating_vz") {
+      onSetSort("vz")
+    }
+  }
+
   return (
     <DataTable
       records={data}
@@ -39,12 +57,22 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
       verticalAlign="center"
       striped
       highlightOnHover
+      sortStatus={{
+        columnAccessor: sort ? `current.rating_${sort}` : "current.rating",
+        direction: "desc",
+      }}
+      sortIcons={{
+        sorted: <IconChevronUp size={14} />,
+        unsorted: <IconChevronDown size={14} />,
+      }}
+      onSortStatusChange={handleSort}
       columns={[
         {
           accessor: "current.position",
           title: "#",
           width: "50px",
           textAlign: "right",
+          render: (_, i) => `${offset + i}`,
         },
         {
           ...ARROWS_STYLE,
@@ -77,6 +105,7 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
           ...RATING_STYLE,
           accessor: "current.rating",
           title: "Rating",
+          sortable: onSetSort && true,
           render: (entry) => <Rating value={entry.current.rating} />,
         },
         {
@@ -90,6 +119,7 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
           ...RATING_STYLE,
           accessor: "current.rating_vp",
           title: "vP",
+          sortable: onSetSort && true,
           render: (entry) => <Rating value={entry.current.rating + entry.current.rating_vp} />,
         },
         {
@@ -106,6 +136,7 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
           ...RATING_STYLE,
           accessor: "current.rating_vt",
           title: "vT",
+          sortable: onSetSort && true,
           render: (entry) => <Rating value={entry.current.rating + entry.current.rating_vt} />,
         },
         {
@@ -122,6 +153,7 @@ const RatingList: React.FC<RatingListProps> = ({ data }) => {
           ...RATING_STYLE,
           accessor: "current.rating_vz",
           title: "vZ",
+          sortable: onSetSort && true,
           render: (entry) => <Rating value={entry.current.rating + entry.current.rating_vz} />,
         },
         {

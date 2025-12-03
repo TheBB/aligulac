@@ -140,6 +140,7 @@ class RatingList(BaseModel):
     last_period_id: int
     count: int
     ratings: list[ListedRatingEntry]
+    nationalities: list[str]
 
 
 class TopTen(BaseModel):

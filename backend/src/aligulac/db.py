@@ -4,7 +4,7 @@ from base64 import b64encode
 from datetime import date, datetime
 from decimal import Decimal
 from hashlib import pbkdf2_hmac
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Literal, Self, cast
 
 from sqlalchemy import ForeignKey, Function, Index, func, select, text
 from sqlalchemy.ext.asyncio import (
@@ -328,6 +328,23 @@ class Period(Base):
         result = await session.execute(select(Period).where(Period.id == period_id))
         return result.scalar_one()
 
+    async def active_nationalities(self, session: Session) -> Sequence[str]:
+        filters = [
+            Rating.period_id == self.id,
+            Rating.decay < INACTIVE_THRESHOLD,
+        ]
+
+        result = await session.execute(
+            select(Player.country)
+            .join(Rating, Rating.player_id == Player.id)
+            .join(Period, Rating.period_id == Period.id)
+            .where(*filters, Player.country.is_not(None))
+            .distinct()
+        )
+
+        # We have filtered away null countries, so this cast should be safe
+        return cast("Sequence[str]", result.scalars().all())
+
 
 class Player(Base):
     __tablename__ = "player"
@@ -444,11 +461,28 @@ class Rating(Base):
         period_id: int,
         offset: int = 0,
         limit: int = 10,
+        sort: Literal["vp", "vt", "vz"] | None = None,
+        nats: str | None = None,
     ) -> tuple[Sequence[Rating], int]:
         filters = [
             Rating.period_id == period_id,
             Rating.decay < INACTIVE_THRESHOLD,
         ]
+
+        if nats == "foreigners":
+            filters.append(Rating.player.has(Player.country != "KR"))
+        elif nats is not None:
+            filters.append(Rating.player.has(Player.country == nats))
+
+        match sort:
+            case None:
+                sort_expr = Rating.rating.desc()
+            case "vp":
+                sort_expr = (Rating.rating_vp + Rating.rating).desc()
+            case "vt":
+                sort_expr = (Rating.rating_vt + Rating.rating).desc()
+            case "vz":
+                sort_expr = (Rating.rating_vz + Rating.rating).desc()
 
         result_count = await session.execute(select(func.count()).select_from(Rating).where(*filters))
         count = result_count.scalar_one()
@@ -456,7 +490,7 @@ class Rating(Base):
         result = await session.execute(
             select(Rating)
             .where(*filters)
-            .order_by(Rating.rating.desc())
+            .order_by(sort_expr)
             .offset(offset)
             .limit(limit)
             .options(

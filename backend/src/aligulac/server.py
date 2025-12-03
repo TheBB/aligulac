@@ -106,8 +106,8 @@ async def rating_list(
     period_id: int | Literal["latest"],
     offset: Annotated[int, Parameter(ge=0)] = 0,
     limit: Annotated[int, Parameter(ge=1, le=40)] = 40,
-    sort_by: Literal["rating", "vt", "vp", "vz"] = "rating",
-    order: Literal["desc", "asc"] = "desc",
+    sort: Literal["vt", "vp", "vz"] | None = None,
+    nats: str | None = None,
 ) -> models.RatingList:
     if period_id == "latest":
         period = await db.Period.latest(session)
@@ -116,9 +116,13 @@ async def rating_list(
         period = await db.Period.from_pk(session, period_id)
         last_period_id = (await db.Period.latest(session)).id
 
+    nationalities = await period.active_nationalities(session)
+
     first_period_id = (await db.Period.first(session)).id
 
-    ratings, count = await db.Rating.ranking(session, period.id, offset, limit)
+    ratings, count = await db.Rating.ranking(
+        session, period.id, offset=offset, limit=limit, sort=sort, nats=nats
+    )
     return models.RatingList.model_validate(
         {
             "period_id": period.id,
@@ -128,6 +132,7 @@ async def rating_list(
             "last_period_id": last_period_id,
             "ratings": ratings,
             "count": count,
+            "nationalities": nationalities,
         }
     )
 

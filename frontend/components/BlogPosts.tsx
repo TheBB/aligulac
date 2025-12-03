@@ -21,9 +21,9 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
           {post.author} on {renderDate(post.date)}
         </Text>
       </Group>
-      <Text mb="xl">
-        <Markdown>{post.text}</Markdown>
-      </Text>
+      {/* <Text mb="xl"> */}
+      <Markdown>{post.text}</Markdown>
+      {/* </Text> */}
     </>
   )
 }

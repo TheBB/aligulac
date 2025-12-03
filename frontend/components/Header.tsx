@@ -21,7 +21,9 @@ const Header: React.FC<HeaderProps> = ({ openLogin }) => {
       <MainMenu onLogin={openLogin} />
 
       <Group>
-        <TextInput w="12em" rightSection={<IconSearch />} />
+        <form>
+          <TextInput w="12em" rightSection={<IconSearch />} />
+        </form>
         <ThemeSelector />
       </Group>
     </Group>
